@@ -205,7 +205,7 @@ bool SkySystem::InitSky(EngineContext *engine)
 		mCaelumSystem->getCaelumCameraNode()->setOrientation(rot);
 
 		//have sky use SBS scaling factor
-		Real scale = 1 / engine->GetSystem()->UnitScale;
+		Real scale = 1 / engine->GetSystem()->GetUnitScale();
 		mCaelumSystem->getCaelumGroundNode()->setScale(scale, scale, scale);
 		mCaelumSystem->getCaelumCameraNode()->setScale(scale, scale, scale);
 	}

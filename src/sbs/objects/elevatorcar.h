@@ -31,6 +31,8 @@ namespace SBS {
 class SBSIMPEXP ElevatorCar : public Object
 {
 	friend class Elevator;
+	friend class RouteController;
+
 public:
 
 	int Number; //car number

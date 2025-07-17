@@ -151,6 +151,7 @@
 
 
 
+
           = 2.24</font></p>
       <p align="left"><strong>7. Altitude</strong> - this parameter is
         optional and is only recommended if the first level has an
@@ -218,11 +219,13 @@
 
 
 
+
           <em>name, texturename</em>, <em>thickness, x1</em>, <em>z1</em>,
           <em>x2</em>, <em>z2</em>, <em>voffset1</em>, <em>voffset2,
             reverse_axis, texture_direction, tw</em>, <em>th,
             isexternal</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">AddFloor
+
 
 
 
@@ -328,11 +331,13 @@
 
 
 
+
           <em>name, texturename</em>, <em>thickness, x1</em>, <em>z1</em>,
           <em>x2</em>, <em>z2</em>, <em>height1</em>, <em>height2</em>,
           <em>voffset1</em>, <em>voffset2</em>, <em>tw</em>, <em>th</em>,
           <em>isexternal</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">AddWall
+
 
 
 
@@ -432,10 +437,12 @@
 
 
 
+
           <em>name, texturename</em>, <em>thickness, x1</em>, <em>z1</em>,
           <em>x2</em>, <em>z2</em>, <em>voffset1</em>, <em>voffset2,
             reverse_axis, texture_direction, tw</em>, <em>th</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">AddInterfloorFloor
+
 
 
 
@@ -486,6 +493,7 @@
       <p align="left"><strong>5. AddInterfloorWall</strong> - adds a
         textured wall below the floor of the current floor/level<br>
         Syntax: <font size="2" face="Courier New, Courier, mono">AddInterfloorWall
+
 
 
 
@@ -579,10 +587,12 @@
 
 
 
+
           <em>number, name, texturename</em>, <em>thickness, x1</em>, <em>z1</em>,
           <em>x2</em>, <em>z2</em>, <em>voffset1</em>, <em>voffset2,
             reverse_axis, texture_direction, tw</em>, <em>th</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">AddShaftFloor
+
 
 
 
@@ -635,6 +645,7 @@
       <p align="left"><strong>7. AddShaftWall</strong> - adds a textured
         wall to the specified shaft, on the current floor<br>
         Syntax: <font size="2" face="Courier New, Courier, mono">AddShaftWall
+
 
 
 
@@ -730,10 +741,12 @@
 
 
 
+
           <em>number, name, texturename</em>, <em>thickness, x1</em>, <em>z1</em>,
           <em>x2</em>, <em>z2</em>, <em>voffset1</em>, <em>voffset2,
             reverse_axis, texture_direction, tw</em>, <em>th</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">AddStairsFloor
+
 
 
 
@@ -784,6 +797,7 @@
       <p align="left"><strong>9. AddStairsWall</strong> - adds a
         textured wall to the specified stairwell, on the current floor<br>
         Syntax: <font size="2" face="Courier New, Courier, mono">AddStairsWall
+
 
 
 
@@ -880,10 +894,12 @@
 
 
 
+
           <em>name, texturename</em>, <em>x1</em>, <em>x2</em>, <em>z1</em>,
           <em>z2</em>, <em>height</em>, <em>voffset</em>, <em>tw</em>,
           <em>th, inside, outside, top, bottom </em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">ColumnWallBox
+
 
 
 
@@ -977,10 +993,12 @@
 
 
 
+
           <em>name, texturename</em>, <em>centerx</em>, <em>centerz</em>,
           <em>widthx</em>, <em>lengthz</em>, <em>height</em>, <em>voffset</em>,
           <em>tw</em>, <em>th</em><em>, inside, outside, top, bottom </em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">ColumnWallBox2
+
 
 
 
@@ -1074,6 +1092,7 @@
 
 
 
+
           = 1, 2, 3, 4<br>
         </font> Example: <font size="2" face="Courier New, Courier,
           mono">CallButtonElevators = 1 - 4</font><br>
@@ -1081,6 +1100,7 @@
       <p align="left"><strong>13. CreateCallButtons</strong> - creates a
         call button set<br>
         Syntax: <font size="2" face="Courier New, Courier, mono">CreateCallButtons
+
 
 
 
@@ -1220,10 +1240,12 @@
 
 
 
+
           <em>number, name, riser_texture, tread_texture, direction,
             CenterX, CenterZ, width, risersize, treadsize, num_stairs,
             voffset, tw, th</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">AddStairs
+
 
 
 
@@ -1330,12 +1352,15 @@
 
 
 
+
           <em>opensound, closesound, open, texturename, thickness</em>,
           <em>direction, speed, CenterX</em>, <em>CenterZ</em>, <em>width</em>,
-          <em>height</em>, <em>voffset</em>, <em>tw</em>, <em>th<br>
+          <em>height</em>, <em>voffset</em>, <em>tw</em>, <em>th,
+            side_tw, side_th, name<br>
           </em></font>Example:<font size="2" face="Courier New, Courier,
           mono">&nbsp;AddDoor , , False, DoorTexture, 0.2, 1, 0, -8.5,
-          0, 3.5, 8, 0, 1, 1</font></p>
+          0, 3.5, 8, 0, 1, 1, 1, 1, MyDoor<br>
+        </font></p>
       <p align="left"><em>Direction</em> specifies the direction the
         door faces (the side in which the handle is on the left) and
         also the direction it opens. These are the values:<br>
@@ -1401,16 +1426,19 @@
 
 
 
+
           <em>number, opensound, closesound, open, texturename,
             thickness</em>, <em>direction, speed, CenterX</em>, <em>CenterZ</em>,
           <em>width</em>, <em>height</em>, <em>voffset</em>, <em>tw</em>,
-          <em>th</em></font></p>
+          <em>th, side_tw, side_th, name<br>
+          </em></font></p>
       <p align="left"><em>Number</em> specifies the stairwell number. <em>Direction</em>
         specifies the direction the door faces and also the direction it
         opens. For values of this, look at the AddDoor command above.
         Leave the <em>sound</em> fields blank for no sounds to be
         played.</p>
       <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>17.
+
 
 
 
@@ -1502,10 +1530,11 @@
 
 
 
+
           <em>number, opensound, closesound, open, texturename,
             thickness</em>, <em>direction, speed, CenterX</em>, <em>CenterZ</em>,
           <em>width</em>, <em>height</em>, <em>voffset</em>, <em>tw</em>,
-          <em>th</em></font><em><br>
+          <em>th, side_tw, side_th, name</em></font><em><br>
           <br>
           Number</em> specifies the shaft number. <em>Direction</em>
         specifies the direction the door faces and also the direction it
@@ -1559,17 +1588,21 @@
 
 
 
+
           <em>opensound, closesound, open, texturename, thickness</em>,
           <em>direction, speed, CenterX</em>, <em>CenterZ</em>, <em>width</em>,
-          <em>height</em>, <em>voffset</em>, <em>tw</em>, <em>th<br>
+          <em>height</em>, <em>voffset</em>, <em>tw</em>, <em>th,
+            side_tw, side_th, name<br>
           </em></font>Example:<font size="2" face="Courier New, Courier,
           mono">&nbsp;AddExternalDoor , , False, DoorTexture, 0.2, 1, 0,
-          -8.5, 0, 3.5, 8, 0, 1, 1</font></p>
+          -8.5, 0, 3.5, 8, 0, 1, 1, 1, 1, MyDoor<br>
+        </font></p>
       <p></p>
       <p align="left"><strong>19. AddDirectionalIndicator</strong> -
         creates a single elevator directional indicator/lantern on the
         current floor (similar to the CreateCallButtons command) <br>
         Syntax: <font size="2" face="Courier New, Courier, mono">AddDirectionalIndicator<em>&nbsp;Elevator:Car,
+
 
 
 
@@ -1712,10 +1745,12 @@
 
 
 
+
             number, lefttexture, righttexture</em>, <em>thickness,
             CenterX, CenterZ, voffset, tw, th</em></font><br>
         Syntax (with old SetShaftDoors command): <font size="2"
           face="Courier New, Courier, mono">AddShaftDoor<em>&nbsp;elevator,
+
 
 
 
@@ -1789,6 +1824,7 @@
 
 
 
+
             relative, texture_prefix, blank_texture, direction, CenterX,
             CenterZ, width, height, voffset</em></font> </p>
       <p align="left">The AddFloorIndicator command creates a floor
@@ -1808,6 +1844,7 @@
       <p align="left"><strong>22. Cut</strong> - performs a manual box
         cut on an area within the current floor<br>
         Syntax: <font size="2" face="Courier New, Courier, mono">Cut <em>x1,
+
 
 
 
@@ -1919,6 +1956,7 @@
 
 
 
+
           <em>texture, thickness, CenterX, CenterZ, width, height,
             voffset, direction, tw, th, isexternal</em><br>
         </font>Example: <font size="2" face="Courier New, Courier,
@@ -1934,6 +1972,7 @@
       <p align="left"><strong>25. AddSound</strong> - creates a
         user-defined sound at the specified position<br>
         Syntax: <font size="2" face="Courier New, Courier, mono">AddSound
+
 
 
 
@@ -2023,6 +2062,7 @@
 
 
 
+
           MySound, sound.wav, 10, 100, 5, true<br>
         </font>Example 2: <font size="2" face="Courier New, Courier,
           mono">AddSound MySound, sound.wav, 10, 100, 5, true, 1, 100,
@@ -2036,6 +2076,7 @@
         creates a single shaft door component, used for creating custom
         door styles<br>
         Syntax: <font size="2" face="Courier New, Courier, mono">AddShaftDoorComponent
+
 
 
 
@@ -2139,12 +2180,14 @@
 
 
 
+
             number[, door_walls, track_walls]</em></font></p>
       <p align="left">This command is almost identical to the
         FinishDoors command (in the elevator section below - see that
         for more information) except that it's used for finishing a
         shaft door.</p>
       <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>28.
+
 
 
 
@@ -2240,6 +2283,7 @@ filename,
 
 
 
+
             center, CenterX, CenterY, CenterZ, RotationX, RotationY,
             RotationZ, MaxRenderDistance, ScaleMultiplier,
             EnablePhysics, Restitution, Friction, Mass</em><em><br>
@@ -2289,9 +2333,11 @@ filename,
 
 
 
+
           MyModel, cube.mesh, true, 0, 0, 0, 0, 0, 0, 0, 1, true, 0.1,
           0.5, 0.1</font><br>
         Example 3:<font size="2" face="Courier New, Courier, mono">&nbsp;AddModel
+
 
 
 
@@ -2398,6 +2444,7 @@ filename,
 
 
 
+
             name, filename, center, CenterX, CenterY, CenterZ,
             RotationX, RotationY, RotationZ, MaxRenderDistance,
             ScaleMultiplier, EnablePhysics, Restitution, Friction, Mass</em><em><br>
@@ -2410,6 +2457,7 @@ filename,
         model to the specified shaft, on the current floor. See the
         AddModel command above for parameter information.<br>
         Syntax: <font size="2" face="Courier New, Courier, mono">AddShaftModel<em>&nbsp;number,
+
 
 
 
@@ -2503,9 +2551,11 @@ filename,
 
 
 
+
           AddActionControl</strong> - creates a custom control that uses
         a specific action defined by AddAction.<br>
         Syntax: <font size="2" face="Courier New, Courier, mono">AddActionControl
+
 
 
 
@@ -2612,10 +2662,12 @@ filename,
 
 
 
+
           AddShaftActionControl</strong> - creates a custom control in a
         specified shaft that uses a specific action defined by
         AddAction.<br>
         Syntax: <font size="2" face="Courier New, Courier, mono">AddShaftActionControl
+
 
 
 
@@ -2722,10 +2774,12 @@ filename,
 
 
 
+
           AddStairsActionControl</strong> - creates a custom control in
         a specified stairwell that uses a specific action defined by
         AddAction.<br>
         Syntax: <font size="2" face="Courier New, Courier, mono">AddStairsActionControl
+
 
 
 
@@ -2832,10 +2886,12 @@ filename,
 
 
 
+
           AddTrigger</strong> - creates a trigger that is used to signal
         an action when the user's camera enters or leaves the defined
         area.<br>
         Syntax:&nbsp;<font size="2" face="Courier New, Courier, mono">AddTrigger
+
 
 
 
@@ -2938,7 +2994,9 @@ filename,
 
 
 
+
           <em>name, run, sound, texturename, thickness</em>, <em>clockwise,
+
 
 
 
@@ -3025,10 +3083,12 @@ filename,
 
 
 
+
           <em>name, run, speed, sound_file, riser_texture,
             tread_texture, direction, CenterX, CenterZ, width,
             risersize, treadsize, num_steps, voffset, tw, th</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">AddEscalator
+
 
 
 
@@ -3134,9 +3194,11 @@ filename,
 
 
 
+
           <em>name, run, speed, sound_file, texture, direction, CenterX,
             CenterZ, width, treadsize, num_steps, voffset, tw, th</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">AddMovingWalkway
+
 
 
 
@@ -3236,8 +3298,10 @@ filename,
 
 
 
+
           <em>name, type, x, y, z, min_distance, max_distance</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">AddReverb
+
 
 
 

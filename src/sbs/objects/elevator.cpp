@@ -37,6 +37,7 @@
 #include "texture.h"
 #include "controller.h"
 #include "random.h"
+#include "elevroute.h"
 #include "elevator.h"
 
 #include <time.h>
@@ -69,10 +70,6 @@ Elevator::Elevator(Object *parent, int number) : Object(parent)
 	Name = "";
 	Type = "Local";
 	ID = ToString(Number);
-	QueuePositionDirection = 0;
-	LastQueueDirection = 0;
-	LastQueueFloor[0] = 0;
-	LastQueueFloor[1] = 0;
 	UpSpeed = 0;
 	DownSpeed = 0;
 	MoveElevator = false;
@@ -130,7 +127,6 @@ Elevator::Elevator(Object *parent, int number) : Object(parent)
 	ManualGo = false;
 	Created = false;
 	MotorPosition = Vector3::ZERO;
-	QueueResets = sbs->GetConfigBool("Skyscraper.SBS.Elevator.QueueResets", false);
 	FirstRun = true;
 	ParkingFloor = 0;
 	ParkingDelay = 0;
@@ -158,12 +154,6 @@ Elevator::Elevator(Object *parent, int number) : Object(parent)
 	ManualUp = false;
 	ManualDown = false;
 	InspectionSpeed = sbs->GetConfigFloat("Skyscraper.SBS.Elevator.InspectionSpeed", 0.6);
-	LimitQueue = sbs->GetConfigBool("Skyscraper.SBS.Elevator.LimitQueue", false);
-	UpQueueEmpty = false;
-	DownQueueEmpty = false;
-	UpCall = false;
-	DownCall = false;
-	QueuePending = false;
 	ReOpen = sbs->GetConfigBool("Skyscraper.SBS.Elevator.ReOpen", true);
 	LastChimeDirection = 0;
 	AutoDoors = sbs->GetConfigBool("Skyscraper.SBS.Elevator.AutoDoors", true);
@@ -196,6 +186,9 @@ Elevator::Elevator(Object *parent, int number) : Object(parent)
 	Error = false;
 	RandomProbability = sbs->GetConfigInt("Skyscraper.SBS.Elevator.RandomProbability", 20);
 	RandomFrequency = sbs->GetConfigFloat("Skyscraper.SBS.Elevator.RandomFrequency", 5);
+
+	//create route controller instance
+	route_controller = new RouteController(this);
 
 	//initialize random number generators
 	rnd_time = new RandomGen((unsigned int)(time(0) + GetNumber()));
@@ -335,6 +328,13 @@ Elevator::~Elevator()
 		delete motoridlesound;
 	}
 	motoridlesound = 0;
+
+	if (route_controller)
+	{
+		route_controller->parent_deleting = true;
+		delete route_controller;
+	}
+	route_controller = 0;
 
 	//unregister from parent
 	if (sbs->FastDelete == false && parent_deleting == false)
@@ -562,121 +562,7 @@ bool Elevator::AddRoute(int floor, int direction, int call_type)
 	//directions are either 1 for up, or -1 for down
 	//call type is 0 for a car call, 1 for a hall call, 2 for a system call
 
-	//only run if power is enabled
-	if (sbs->GetPower() == false)
-		return false;
-
-	if (Running == false)
-		return ReportError("Elevator not running");
-
-	Floor *floorobj = sbs->GetFloor(floor);
-
-	if (!floorobj)
-		return ReportError("Invalid floor " + ToString(floor));
-
-	//if doors are open or moving in independent service mode, quit
-	if (IndependentService == true && (AreDoorsOpen() == false || AreDoorsMoving() != 0))
-		return ReportError("floor button must be pressed before closing doors while in independent service");
-
-	//do not add routes if in inspection service or fire phase 1 modes
-	if (InspectionService == true)
-		return ReportError("cannot add route while in inspection service mode");
-
-	if (FireServicePhase2 == 2)
-		return ReportError("cannot add route while hold is enabled");
-
-	//discard route if direction opposite queue search direction
-	if (LimitQueue == true && direction != QueuePositionDirection && QueuePositionDirection != 0)
-	{
-		//only allow if any queue entries exist
-		if ((QueuePositionDirection == 1 && UpQueue.size() > 0) || (QueuePositionDirection == -1 && DownQueue.size() > 0))
-			return ReportError("cannot add route in opposite direction of queue search");
-	}
-
-	//get related car number
-	ElevatorCar *car = GetCarForFloor(floor);
-
-	if (!car)
-		return ReportError("floor " + ToString(floor) + " is not a serviced floor");
-
-	//if car is on the same floor, perform an arrival
-	if (car->IsOnFloor(floor))
-	{
-		if (QueuePositionDirection == direction ||
-			QueuePositionDirection == 0 ||
-			(QueuePositionDirection == 1 && UpQueue.size() == 0) ||
-			(QueuePositionDirection == -1 && DownQueue.size() == 0))
-		{
-			SameFloorArrival(floor, direction);
-			return true;
-		}
-	}
-
-	//add route in related direction queue
-	if (direction == 1)
-	{
-		//exit if entry already exists
-		if (RouteExists(true, floor) == true)
-			return ReportError("route to floor " + ToString(floor) + " (" + floorobj->ID + ") already exists");
-
-		//add floor to up queue
-		UpQueue.emplace_back(QueueEntry(floor, call_type, car->Number, 1));
-		//sort queue
-		std::sort(UpQueue.begin(), UpQueue.end());
-		QueuePending = true;
-
-		LastQueueFloor[0] = floor;
-		LastQueueFloor[1] = 1;
-
-		//add car number info if needed
-		std::string car_msg = "";
-		if (GetCarCount() > 1)
-			car_msg = " for car " + ToString(car->Number);
-
-		Report("adding route to floor " + ToString(floor) + " (" + floorobj->ID + ") direction Up" + car_msg);
-	}
-	else
-	{
-		//exit if entry already exists
-		if (RouteExists(false, floor) == true)
-			return ReportError("route to floor " + ToString(floor) + " (" + floorobj->ID + ") already exists");
-
-		//add floor to down queue
-		DownQueue.emplace_back(QueueEntry(floor, call_type, car->Number, -1));
-		//sort queue
-		std::sort(DownQueue.begin(), DownQueue.end());
-		QueuePending = true;
-
-		LastQueueFloor[0] = floor;
-		LastQueueFloor[1] = -1;
-
-		//add car number info if needed
-		std::string car_msg = "";
-		if (GetCarCount() > 1)
-			car_msg = " for car " + ToString(car->Number);
-
-		Report("adding route to floor " + ToString(floor) + " (" + floorobj->ID + ") direction Down" + car_msg);
-	}
-
-	//make sure the car's GotoFloor status is set, if this is an additional car heading the same route
-	ProcessGotoFloor(floor, direction);
-
-	//turn on button lights for a car call, or a Destination Dispatch hall call
-	if (call_type == 0)
-		ChangeLight(floor, true);
-
-	//go to ACP floor if ACP mode is enabled
-	if (ACP == true && floor != ACPFloor)
-	{
-		//only add ACP route if original route will pass ACP floor
-		if ((car->GetFloor() < ACPFloor && floor > ACPFloor) || (car->GetFloor() > ACPFloor && floor < ACPFloor))
-		{
-			Report("adding ACP route");
-			AddRoute(ACPFloor, direction, 2);
-		}
-	}
-
-	return true;
+	return route_controller->AddRoute(floor, direction, call_type);
 }
 
 bool Elevator::DeleteRoute(int floor, int direction)
@@ -684,132 +570,28 @@ bool Elevator::DeleteRoute(int floor, int direction)
 	//Delete call route from elevator routing table
 	//directions are either 1 for up, or -1 for down
 
-	//only run if power is enabled
-	if (sbs->GetPower() == false)
-		return false;
-
-	if (Running == false)
-		return ReportError("Elevator not running");
-
-	Floor *floorobj = sbs->GetFloor(floor);
-
-	if (!floorobj)
-		return ReportError("Invalid floor " + ToString(floor));
-
-	if (direction == 1)
-	{
-		//delete floor entry from up queue
-		for (size_t i = 0; i < UpQueue.size(); i++)
-		{
-			if (UpQueue[i].floor == floor)
-			{
-				Report("deleting route to floor " + ToString(floor) + " (" + floorobj->ID + ") direction Up");
-				UpQueue.erase(UpQueue.begin() + i);
-				break;
-			}
-		}
-		if (UpQueue.size() == 0)
-			UpQueueEmpty = true;
-	}
-	else
-	{
-		//delete floor entry from down queue
-		for (size_t i = 0; i < DownQueue.size(); i++)
-		{
-			if (DownQueue[i].floor == floor)
-			{
-				Report("deleting route to floor " + ToString(floor) + " (" + floorobj->ID + ") direction Down");
-				DownQueue.erase(DownQueue.begin() + i);
-				break;
-			}
-		}
-		if (DownQueue.size() == 0)
-			DownQueueEmpty = true;
-	}
-
-	HandleDequeue(direction);
-
-	//turn off button lights
-	if (sbs->Verbose)
-		Report("DeleteRoute: turning off button lights for floor " + ToString(floor));
-	ChangeLight(floor, false);
-	return true;
+	return route_controller->DeleteRoute(floor, direction);
 }
 
 bool Elevator::RouteExists(bool direction, int floor)
 {
 	//return true if a floor route exists in the specified directional queue
 
-	//only run if power is enabled
-	if (sbs->GetPower() == false)
-		return false;
-
-	if (direction == true)
-	{
-		for (size_t i = 0; i < UpQueue.size(); i++)
-		{
-			if (UpQueue[i].floor == floor)
-				return true;
-		}
-	}
-	else
-	{
-		for (size_t i = 0; i < DownQueue.size(); i++)
-		{
-			if (DownQueue[i].floor == floor)
-				return true;
-		}
-	}
-
-	return false;
+	return route_controller->RouteExists(direction, floor);
 }
 
 bool Elevator::CallCancel()
 {
 	//cancel the last route
 
-	//only run if power is enabled
-	if (sbs->GetPower() == false)
-		return false;
-
-	if (Running == false)
-		return ReportError("Elevator not running");
-
-	if (LastQueueFloor[1] == 0)
-	{
-		if (sbs->Verbose)
-			ReportError("CallCancel: no valid routes");
-		return false;
-	}
-
-	DeleteRoute(LastQueueFloor[0], LastQueueFloor[1]);
-	Report("cancelled last call");
-
-	return true;
+	return route_controller->CallCancel();
 }
 
 bool Elevator::CallCancelAll()
 {
 	//cancels all added routes
 
-	//only run if power is enabled
-	if (sbs->GetPower() == false)
-		return false;
-
-	if (Running == false)
-		return ReportError("Elevator not running");
-
-	if (LastQueueFloor[1] == 0)
-	{
-		if (sbs->Verbose)
-			ReportError("CallCancel: no valid routes");
-		return false;
-	}
-
-	Report("cancelled all calls");
-	ResetQueue(true, true);
-
-	return true;
+	return route_controller->CallCancelAll();
 }
 
 bool Elevator::Stop(bool emergency)
@@ -843,7 +625,7 @@ bool Elevator::Stop(bool emergency)
 		Report("emergency stop");
 
 		//clear elevator queues
-		ResetQueue(true, true);
+		route_controller->ResetQueue(true, true);
 	}
 	else
 	{
@@ -851,332 +633,6 @@ bool Elevator::Stop(bool emergency)
 		Report("stopping elevator");
 	}
 	return true;
-}
-
-void Elevator::ProcessCallQueue()
-{
-	//Processes the elevator's call queue, and sends elevators to called floors
-	SBS_PROFILE("Elevator::ProcessCallQueue");
-
-	//only run if power is enabled
-	if (sbs->GetPower() == false)
-		return;
-
-	//exit if elevator is not running
-	if (Running == false)
-		return;
-
-	//exit if in inspection service mode
-	if (InspectionService == true)
-		return;
-
-	//exit if stopping
-	if (EmergencyStop > 0)
-		return;
-
-	//exit if moving manually
-	if (ManualMove > 0)
-		return;
-
-	//exit if Go function is active
-	if (GoPending == true)
-		return;
-
-	//if both queues are empty
-	if (UpQueue.empty() && DownQueue.empty())
-	{
-		UpQueueEmpty = false;
-		DownQueueEmpty = false;
-
-		if (DownPeak == true || UpPeak == true)
-		{
-			int TopFloor = GetCar(1)->GetTopFloor();
-			int BottomFloor = GetCar(1)->GetBottomFloor();
-
-			//if DownPeak mode is active, send elevator to the top serviced floor if not already there
-			if (GetCar(1)->GetFloor() != TopFloor && DownPeak == true && IsMoving == false)
-			{
-				if (sbs->Verbose)
-					Report("ProcessCallQueue: sending elevator to top floor for DownPeak mode");
-				AddRoute(TopFloor, 1, 2);
-				return;
-			}
-			//if UpPeak mode is active, send elevator to the bottom serviced floor if not already there
-			else if (GetCar(1)->GetFloor() != BottomFloor && UpPeak == true && IsMoving == false)
-			{
-				if (sbs->Verbose)
-					Report("ProcessCallQueue: sending elevator to bottom floor for UpPeak mode");
-				AddRoute(BottomFloor, -1, 2);
-				return;
-			}
-		}
-
-		if (IsIdle() == true && QueuePositionDirection != 0)
-		{
-			//set search direction to 0 if idle
-			if (sbs->Verbose)
-				Report("ProcessCallQueue: resetting search direction due to idle");
-			LastQueueDirection = QueuePositionDirection;
-			QueuePositionDirection = 0;
-		}
-		return;
-	}
-	else if (QueuePositionDirection == 0)
-	{
-		if (UpQueue.empty() == false)
-		{
-			if (sbs->Verbose)
-				Report("ProcessCallQueue: setting search direction to up");
-			QueuePositionDirection = 1;
-		}
-		else if (DownQueue.empty() == false)
-		{
-			if (sbs->Verbose)
-				Report("ProcessCallQueue: setting search direction to down");
-			QueuePositionDirection = -1;
-		}
-		LastQueueDirection = 0;
-	}
-
-	//reverse queues if related queue empty flag is set
-	if (QueuePositionDirection == 1 && UpQueueEmpty == true && DownQueue.empty() == false && (NotifyEarly <= 0 || NotifyEarly == 3))
-	{
-		if (UpCall == false)
-		{
-			if (sbs->Verbose)
-				Report("ProcessCallQueue: setting search direction to down");
-			LastQueueDirection = QueuePositionDirection;
-			QueuePositionDirection = -1;
-		}
-	}
-	if (QueuePositionDirection == -1 && DownQueueEmpty == true && UpQueue.empty() == false && (NotifyEarly <= 0 || NotifyEarly == 3))
-	{
-		if (DownCall == false)
-		{
-			if (sbs->Verbose)
-				Report("ProcessCallQueue: setting search direction to up");
-			LastQueueDirection = QueuePositionDirection;
-			QueuePositionDirection = 1;
-		}
-	}
-
-	UpQueueEmpty = false;
-	DownQueueEmpty = false;
-	UpCall = false;
-	DownCall = false;
-
-	//set search direction to 0 if any related queue is empty, and if doors are not open or moving
-	if (AreDoorsOpen() == false && AreDoorsMoving() == 0)
-	{
-		if (QueuePositionDirection == 1 && UpQueue.empty())
-		{
-			if (sbs->Verbose)
-				Report("ProcessCallQueue: resetting search direction due to empty up queue");
-			QueuePositionDirection = 0;
-			LastQueueDirection = 1;
-		}
-		if (QueuePositionDirection == -1 && DownQueue.empty())
-		{
-			if (sbs->Verbose)
-				Report("ProcessCallQueue: resetting search direction due to empty down queue");
-			QueuePositionDirection = 0;
-			LastQueueDirection = -1;
-		}
-	}
-	else if (UpPeak == false && DownPeak == false)
-		return; //don't process the main queue code if doors are open or moving
-
-	//Search through queue lists and find next valid floor call
-	if (QueuePositionDirection == 1)
-	{
-		//search through up queue
-		for (size_t i = 0; i < UpQueue.size(); i++)
-		{
-			ElevatorCar *car = GetCarForFloor(UpQueue[i].floor);
-			if (!car)
-				return;
-
-			std::string car_msg = "";
-			if (GetCarCount() > 1)
-				car_msg = " for car " + ToString(car->Number);
-
-			//if the queued floor number is a higher floor, dispatch the elevator to that floor
-			if (UpQueue[i].floor >= car->CurrentFloor)
-			{
-				if (MoveElevator == false)
-				{
-					if (sbs->Verbose)
-						Report("ProcessCallQueue up: standard dispatch, floor " + ToString(UpQueue[i].floor) + car_msg);
-					ActiveCall = UpQueue[i];
-					GotoFloor = UpQueue[i].floor;
-					GotoFloorCar = car->Number;
-					car->GotoFloor = true;
-					if (FireServicePhase2 == 0 || UpPeak == true || DownPeak == true)
-					{
-						WaitForDoors = true;
-						CloseDoors();
-					}
-					MoveElevator = true;
-					LastQueueDirection = 1;
-					QueuePending = false;
-					ProcessGotoFloor(GotoFloor, QueuePositionDirection);
-				}
-				else if (Leveling == false && ActiveDirection == 1)
-				{
-					//if elevator is moving and not leveling, change destination floor if not beyond decel marker of that floor
-					if (GotoFloor != UpQueue[i].floor)
-					{
-						if (car == GetCar(GotoFloorCar)) //make sure car is the same
-						{
-							Real tmpdestination = GetDestinationAltitude(UpQueue[i].floor);
-							if (BeyondDecelMarker(1, tmpdestination) == false && sbs->GetFloor(GotoFloor))
-							{
-								ActiveCall = UpQueue[i];
-								GotoFloor = UpQueue[i].floor;
-								GotoFloorCar = car->Number;
-								Destination = tmpdestination;
-								Report("changing destination floor to " + ToString(GotoFloor) + " (" + sbs->GetFloor(GotoFloor)->ID + ")" + car_msg);
-							}
-							else if (sbs->Verbose)
-								Report("ProcessCallQueue up: cannot change destination floor to " + ToString(UpQueue[i].floor) + car_msg);
-						}
-					}
-				}
-				return;
-			}
-			//if the queued floor number is a lower floor
-			if (UpQueue[i].floor < car->CurrentFloor && MoveElevator == false)
-			{
-				//dispatch elevator if it's idle
-				if (IsIdle() == true && LastQueueDirection == 0)
-				{
-					if (sbs->Verbose)
-						Report("ProcessCallQueue up: dispatching idle lower elevator, floor " + ToString(UpQueue[i].floor) + car_msg);
-					ActiveCall = UpQueue[i];
-					GotoFloor = UpQueue[i].floor;
-					GotoFloorCar = car->Number;
-					car->GotoFloor = true;
-					if (FireServicePhase2 == 0 || UpPeak == true || DownPeak == true)
-					{
-						WaitForDoors = true;
-						CloseDoors();
-					}
-					MoveElevator = true;
-					LastQueueDirection = 1;
-					QueuePending = false;
-					ProcessGotoFloor(GotoFloor, QueuePositionDirection);
-					return;
-				}
-				//reset search direction if it's the last entry and idle
-				if (i == UpQueue.size() - 1 && IsIdle() == true && QueuePositionDirection != 0)
-				{
-					if (sbs->Verbose)
-						Report("ProcessCallQueue up: resetting search direction since last entry is lower" + car_msg);
-					LastQueueDirection = QueuePositionDirection;
-					QueuePositionDirection = 0;
-					return;
-				}
-				//otherwise skip it if it's not the last entry
-				if (sbs->Verbose)
-					Report("ProcessCallQueue up: skipping floor entry " + ToString(UpQueue[i].floor) + car_msg);
-			}
-		}
-	}
-	else if (QueuePositionDirection == -1)
-	{
-		//search through down queue (search order is reversed since calls need to be processed in descending order)
-		for (size_t i = DownQueue.size() - 1; i < DownQueue.size(); --i)
-		{
-			ElevatorCar *car = GetCarForFloor(DownQueue[i].floor);
-			if (!car)
-				return;
-
-			std::string car_msg = "";
-			if (GetCarCount() > 1)
-				car_msg = " for car " + ToString(car->Number);
-
-			//if the queued floor number is a lower floor, dispatch the elevator to that floor
-			if (DownQueue[i].floor <= car->CurrentFloor)
-			{
-				if (MoveElevator == false)
-				{
-					if (sbs->Verbose)
-						Report("ProcessCallQueue down: standard dispatch, floor " + ToString(DownQueue[i].floor) + car_msg);
-					ActiveCall = DownQueue[i];
-					GotoFloor = DownQueue[i].floor;
-					GotoFloorCar = car->Number;
-					car->GotoFloor = true;
-					if (FireServicePhase2 == 0 || UpPeak == true || DownPeak == true)
-					{
-						WaitForDoors = true;
-						CloseDoors();
-					}
-					MoveElevator = true;
-					LastQueueDirection = -1;
-					QueuePending = false;
-					ProcessGotoFloor(GotoFloor, QueuePositionDirection);
-				}
-				else if (Leveling == false && ActiveDirection == -1)
-				{
-					//if elevator is moving and not leveling, change destination floor if not beyond decel marker of that floor
-					if (GotoFloor != DownQueue[i].floor)
-					{
-						if (car == GetCar(GotoFloorCar)) //make sure car is the same
-						{
-							Real tmpdestination = GetDestinationAltitude(DownQueue[i].floor);
-							if (BeyondDecelMarker(-1, tmpdestination) == false && sbs->GetFloor(GotoFloor))
-							{
-								ActiveCall = DownQueue[i];
-								GotoFloor = DownQueue[i].floor;
-								GotoFloorCar = car->Number;
-								Destination = tmpdestination;
-								Report("changing destination floor to " + ToString(GotoFloor) + " (" + sbs->GetFloor(GotoFloor)->ID + ")" + car_msg);
-							}
-							else if (sbs->Verbose)
-								Report("ProcessCallQueue down: cannot change destination floor to " + ToString(DownQueue[i].floor) + car_msg);
-						}
-					}
-				}
-				return;
-			}
-			//if the queued floor number is an upper floor
-			if (DownQueue[i].floor > car->CurrentFloor && MoveElevator == false)
-			{
-				//dispatch elevator if idle
-				if (IsIdle() == true && LastQueueDirection == 0)
-				{
-					if (sbs->Verbose)
-						Report("ProcessCallQueue down: dispatching idle higher elevator, floor " + ToString(DownQueue[i].floor) + car_msg);
-					ActiveCall = DownQueue[i];
-					GotoFloor = DownQueue[i].floor;
-					GotoFloorCar = car->Number;
-					car->GotoFloor = true;
-					if (FireServicePhase2 == 0 || UpPeak == true || DownPeak == true)
-					{
-						WaitForDoors = true;
-						CloseDoors();
-					}
-					MoveElevator = true;
-					LastQueueDirection = -1;
-					QueuePending = false;
-					ProcessGotoFloor(GotoFloor, QueuePositionDirection);
-					return;
-				}
-				//reset search direction if it's the last entry and idle
-				if (i == 0 && IsIdle() == true && QueuePositionDirection != 0)
-				{
-					if (sbs->Verbose)
-						Report("ProcessCallQueue down: resetting search direction since last entry is higher" + car_msg);
-					LastQueueDirection = QueuePositionDirection;
-					QueuePositionDirection = 0;
-					return;
-				}
-				//otherwise skip it if it's not the last entry
-				if (sbs->Verbose)
-					Report("ProcessCallQueue down: skipping floor entry " + ToString(DownQueue[i].floor) + car_msg);
-			}
-		}
-	}
 }
 
 void Elevator::Loop()
@@ -1299,7 +755,7 @@ void Elevator::Loop()
 		SetHoistwayAccess(HoistwayAccessFloor, HoistwayAccess);
 
 	//call queue processor
-	ProcessCallQueue();
+	route_controller->ProcessCallQueue();
 
 	//enable auto-park timer if specified
 	if (parking_timer->IsRunning() == false && ParkingDelay > 0 && Running == true && IsIdle() == true && InServiceMode() == false && AutoDoors == true)
@@ -1349,7 +805,7 @@ void Elevator::MoveElevatorToFloor()
 		MoveElevator = false;
 		MovementRunning = false;
 		Error = true;
-		DeleteActiveRoute();
+		route_controller->DeleteActiveRoute();
 		return;
 	}
 
@@ -1397,7 +853,7 @@ void Elevator::MoveElevatorToFloor()
 			MoveElevator = false;
 			MovementRunning = false;
 			Error = true;
-			DeleteActiveRoute();
+			route_controller->DeleteActiveRoute();
 			return;
 		}
 
@@ -1408,7 +864,7 @@ void Elevator::MoveElevatorToFloor()
 			MoveElevator = false;
 			MovementRunning = false;
 			Error = true;
-			DeleteActiveRoute();
+			route_controller->DeleteActiveRoute();
 			return;
 		}
 
@@ -1468,7 +924,7 @@ void Elevator::MoveElevatorToFloor()
 			MovementRunning = false;
 			Error = true;
 			Direction = 0;
-			DeleteActiveRoute();
+			route_controller->DeleteActiveRoute();
 			return;
 		}
 
@@ -1490,7 +946,7 @@ void Elevator::MoveElevatorToFloor()
 					MoveElevator = false;
 					MovementRunning = false;
 					Error = true;
-					DeleteActiveRoute();
+					route_controller->DeleteActiveRoute();
 					return;
 				}
 			}
@@ -1506,7 +962,7 @@ void Elevator::MoveElevatorToFloor()
 					MoveElevator = false;
 					MovementRunning = false;
 					Error = true;
-					DeleteActiveRoute();
+					route_controller->DeleteActiveRoute();
 					return;
 				}
 			}
@@ -1988,7 +1444,7 @@ finish:
 
 	//dequeue floor route
 	if (EmergencyStop == 0 && IsManuallyStopped() == false)
-		DeleteActiveRoute();
+		route_controller->DeleteActiveRoute();
 
 	//reset cars' GotoFloor states
 	for (int i = 1; i <= GetCarCount(); i++)
@@ -2106,7 +1562,7 @@ void Elevator::FinishMove()
 				NotifyArrival(false);
 
 			//get status of call buttons before switching off
-			GetCallStatus(GotoFloor, UpCall, DownCall);
+			GetCallStatus(GotoFloor, route_controller->UpCall, route_controller->DownCall);
 
 			for (int i = 1; i <= GetCarCount(); i++)
 			{
@@ -2125,29 +1581,29 @@ void Elevator::FinishMove()
 		}
 
 		//reset queues if specified
-		if (QueueResets == true)
+		if (route_controller->QueueResets == true)
 		{
 			//if last entry in current queue, reset opposite queue
-			if (QueuePositionDirection == 1 && UpQueue.size() <= 1 && DownQueue.empty() == false)
-				ResetQueue(false, true, false);
-			else if (QueuePositionDirection == -1 && DownQueue.size() <= 1 && UpQueue.empty() == false)
-				ResetQueue(true, false, false);
+			if (route_controller->QueuePositionDirection == 1 && route_controller->UpQueue.size() <= 1 && route_controller->DownQueue.empty() == false)
+				route_controller->ResetQueue(false, true, false);
+			else if (route_controller->QueuePositionDirection == -1 && route_controller->DownQueue.size() <= 1 && route_controller->UpQueue.empty() == false)
+				route_controller->ResetQueue(true, false, false);
 		}
 
 		//reverse queues if at either top or bottom of serviced floors
-		if (QueuePositionDirection == 1 && GotoFloor == GetCar(GotoFloorCar)->GetTopFloor())
+		if (route_controller->QueuePositionDirection == 1 && GotoFloor == GetCar(GotoFloorCar)->GetTopFloor())
 		{
 			if (sbs->Verbose)
 				Report("at top floor; setting queue search direction to down");
-			LastQueueDirection = QueuePositionDirection;
-			QueuePositionDirection = -1;
+			route_controller->LastQueueDirection = route_controller->QueuePositionDirection;
+			route_controller->QueuePositionDirection = -1;
 		}
-		else if (QueuePositionDirection == -1 && GotoFloor == GetCar(GotoFloorCar)->GetBottomFloor())
+		else if (route_controller->QueuePositionDirection == -1 && GotoFloor == GetCar(GotoFloorCar)->GetBottomFloor())
 		{
 			if (sbs->Verbose)
 				Report("at bottom floor; setting queue search direction to up");
-			LastQueueDirection = QueuePositionDirection;
-			QueuePositionDirection = 1;
+			route_controller->LastQueueDirection = route_controller->QueuePositionDirection;
+			route_controller->QueuePositionDirection = 1;
 		}
 
 		//open doors
@@ -2214,48 +1670,7 @@ void Elevator::DumpQueues()
 {
 	//dump both (up and down) elevator queues
 
-	Object::Report("\n--- " + GetName() + "'s Queues ---\n");
-
-	if (UpQueue.size() > 0)
-		Object::Report("Up:");
-
-	for (size_t i = 0; i < UpQueue.size(); i++)
-	{
-		std::string type = "Car";
-		if (UpQueue[i].call_type == 1)
-			type = "Hall";
-		if (UpQueue[i].call_type == 2)
-			type = "System";
-		if (UpQueue[i].call_type == 3)
-			type = "Destination";
-
-		std::string car;
-		if (GetCarCount() > 1)
-			car = "\t-\tCar: " + ToString(UpQueue[i].car);
-
-		Object::Report("Entry: " + ToString((int)i) + "\t-\tFloor: " + ToString(UpQueue[i].floor) + "\t-\tCall type: " + type + car);
-	}
-
-	if (DownQueue.size() > 0)
-		Object::Report("Down:");
-
-	for (size_t i = 0; i < DownQueue.size(); i++)
-	{
-		std::string type = "Car";
-		if (DownQueue[i].call_type == 1)
-			type = "Hall";
-		if (DownQueue[i].call_type == 2)
-			type = "System";
-		if (DownQueue[i].call_type == 3)
-			type = "Destination";
-
-		std::string car;
-		if (GetCarCount() > 1)
-			car = "\t-\tCar: " + ToString(DownQueue[i].car);
-
-		Object::Report("Entry: " + ToString((int)i) + "\t-\tFloor: " + ToString(DownQueue[i].floor) + "\t-\tCall type: " + type + car);
-	}
-	Object::Report("");
+	route_controller->DumpQueues();
 }
 
 void Elevator::Enabled(bool value)
@@ -2468,7 +1883,7 @@ void Elevator::GoToRecallFloor()
 	}
 
 	//reset queues (this will also stop the elevator)
-	ResetQueue(true, true);
+	route_controller->ResetQueue(true, true);
 
 	if (OnRecallFloor() == true)
 	{
@@ -2725,7 +2140,7 @@ bool Elevator::EnableIndependentService(bool value, int car_number)
 		EnableACP(false);
 		EnableUpPeak(false);
 		EnableDownPeak(false);
-		ResetQueue(true, true); //this will also stop the elevator
+		route_controller->ResetQueue(true, true); //this will also stop the elevator
 		car->HoldDoors(); //turn off door timers for selected car
 		car->ResetNudgeTimer(false); //switch off nudge timer for selected car
 		DirectionalIndicatorsOff(); //switch off directional indicators on current floor
@@ -2739,7 +2154,7 @@ bool Elevator::EnableIndependentService(bool value, int car_number)
 	{
 		IndependentService = false;
 		IndependentServiceCar = 0;
-		ResetQueue(true, true); //this will also stop the elevator
+		route_controller->ResetQueue(true, true); //this will also stop the elevator
 		ResetDoors();
 		ResetNudgeTimers();
 		SetControls("indoff");
@@ -2773,7 +2188,7 @@ bool Elevator::EnableInspectionService(bool value)
 		EnableIndependentService(false);
 		EnableFireService1(0);
 		EnableFireService2(0, true);
-		ResetQueue(true, true); //this will also stop the elevator
+		route_controller->ResetQueue(true, true); //this will also stop the elevator
 		HoldDoors(); //turn off door timers
 		ResetNudgeTimers(false); //switch off nudge timer
 		DirectionalIndicatorsOff(); //switch off directional indicators on current floor
@@ -2972,7 +2387,7 @@ bool Elevator::EnableFireService2(int value, int car_number, bool force)
 		EnableUpPeak(false);
 		EnableDownPeak(false);
 		EnableIndependentService(false);
-		ResetQueue(true, true); //this will also stop the elevator
+		route_controller->ResetQueue(true, true); //this will also stop the elevator
 		car->HoldDoors(); //disable all door timers for selected car
 		car->ResetNudgeTimer(false); //switch off nudge timer for selected car
 
@@ -3311,69 +2726,6 @@ bool Elevator::IsIdle()
 		return false;
 }
 
-void Elevator::ResetQueue(bool up, bool down, bool stop_if_empty)
-{
-	//reset queues
-	//if stop_if_empty is true, the elevator will stop when the related queue is empty
-
-	QueuePending = false;
-
-	if (up == true)
-	{
-		if (sbs->Verbose)
-			Report("QueueReset: resetting up queue");
-		UpQueue.clear();
-		HandleDequeue(1, stop_if_empty);
-	}
-	if (down == true)
-	{
-		if (sbs->Verbose)
-			Report("QueueReset: resetting down queue");
-		DownQueue.clear();
-		HandleDequeue(-1, stop_if_empty);
-	}
-
-	ResetLights();
-}
-
-void Elevator::DeleteActiveRoute()
-{
-	//only run if power is enabled
-	if (sbs->GetPower() == false)
-		return;
-
-	if (Running == false)
-	{
-		ReportError("Elevator not running");
-		return;
-	}
-
-	//deletes the active route
-	if (sbs->Verbose)
-		Report("deleting active route");
-	DeleteRoute(ActiveCall.floor, ActiveCall.direction);
-
-	//delete associated routes for any other cars
-	for (int i = 1; i <= GetCarCount(); i++)
-	{
-		int floor = GetFloorForCar(i, ActiveCall.floor);
-		if (IsQueued(floor, ActiveCall.direction) == true)
-			DeleteRoute(floor, ActiveCall.direction);
-	}
-
-	ActiveCall.floor = 0;
-	ActiveCall.direction = 0;
-	ActiveCall.call_type = 0;
-	ActiveCall.car = 0;
-}
-
-bool Elevator::IsQueueActive()
-{
-	if (QueuePositionDirection != 0)
-		return true;
-	return false;
-}
-
 bool Elevator::BeyondDecelMarker(int direction, Real destination)
 {
 	//return true if elevator is beyond the deceleration marker for the specified direction
@@ -3457,32 +2809,6 @@ void Elevator::Timer::Notify()
 	}
 }
 
-bool Elevator::IsQueued(int floor, int queue)
-{
-	//return true if the given floor is in either queue
-	//if queue is 0, check both queues; otherwise up queue with 1, and down queue with -1
-
-	if (queue == 0 || queue == 1)
-	{
-		for (size_t i = 0; i < UpQueue.size(); i++)
-		{
-			if (UpQueue[i].floor == floor)
-				return true;
-		}
-	}
-
-	if (queue == 0 || queue == -1)
-	{
-		for (size_t i = 0; i < DownQueue.size(); i++)
-		{
-			if (DownQueue[i].floor == floor)
-				return true;
-		}
-	}
-
-	return false;
-}
-
 void Elevator::NotifyArrival(bool early)
 {
 	//notify on elevator arrival (play chime and turn on related directional indicator lantern)
@@ -3522,73 +2848,73 @@ bool Elevator::GetArrivalDirection(int floor)
 		return true; //turn on up light if on bottom floor
 
 	//chime queue direction if queue resets are on
-	if (QueueResets == true)
+	if (route_controller->QueueResets == true)
 	{
-		if (QueuePositionDirection == 1)
+		if (route_controller->QueuePositionDirection == 1)
 			return true;
-		else if (QueuePositionDirection == -1)
+		else if (route_controller->QueuePositionDirection == -1)
 			return false;
 	}
 
 	//check for active hall calls
 	bool UpStatus, DownStatus;
 	GetCallStatus(floor, UpStatus, DownStatus);
-	if (UpStatus == true && QueuePositionDirection == 1)
+	if (UpStatus == true && route_controller->QueuePositionDirection == 1)
 		return true;
-	if (DownStatus == true && QueuePositionDirection == -1)
+	if (DownStatus == true && route_controller->QueuePositionDirection == -1)
 		return false;
 
 	if (NotifyEarly <= 0 || NotifyEarly == 3)
 	{
-		if (QueuePositionDirection == 1 && UpQueue.size() > 0 && UpQueueEmpty == false)
-			newfloor = UpQueue[0].floor;
+		if (route_controller->QueuePositionDirection == 1 && route_controller->UpQueue.size() > 0 && route_controller->UpQueueEmpty == false)
+			newfloor = route_controller->UpQueue[0].floor;
 
-		if (QueuePositionDirection == -1 && DownQueue.size() > 0 && DownQueueEmpty == false)
-			newfloor = DownQueue[DownQueue.size() - 1].floor;
+		if (route_controller->QueuePositionDirection == -1 && route_controller->DownQueue.size() > 0 && route_controller->DownQueueEmpty == false)
+			newfloor = route_controller->DownQueue[route_controller->DownQueue.size() - 1].floor;
 
-		if (QueuePositionDirection == 1 && DownQueue.size() > 0 && UpQueueEmpty == true)
-			newfloor = DownQueue[DownQueue.size() - 1].floor;
+		if (route_controller->QueuePositionDirection == 1 && route_controller->DownQueue.size() > 0 && route_controller->UpQueueEmpty == true)
+			newfloor = route_controller->DownQueue[route_controller->DownQueue.size() - 1].floor;
 
-		if (QueuePositionDirection == -1 && UpQueue.size() > 0 && DownQueueEmpty == true)
-			newfloor = UpQueue[0].floor;
+		if (route_controller->QueuePositionDirection == -1 && route_controller->UpQueue.size() > 0 && route_controller->DownQueueEmpty == true)
+			newfloor = route_controller->UpQueue[0].floor;
 	}
 	else
 	{
-		if (QueuePositionDirection == 1 && UpQueue.size() > 1)
-			newfloor = UpQueue[1].floor;
+		if (route_controller->QueuePositionDirection == 1 && route_controller->UpQueue.size() > 1)
+			newfloor = route_controller->UpQueue[1].floor;
 
-		if (QueuePositionDirection == -1 && DownQueue.size() > 1)
-			newfloor = DownQueue[DownQueue.size() - 2].floor;
+		if (route_controller->QueuePositionDirection == -1 && route_controller->DownQueue.size() > 1)
+			newfloor = route_controller->DownQueue[route_controller->DownQueue.size() - 2].floor;
 
-		if (QueuePositionDirection == 1 && UpQueue.size() == 1)
+		if (route_controller->QueuePositionDirection == 1 && route_controller->UpQueue.size() == 1)
 		{
-			if (DownQueue.size() > 0)
-				newfloor = DownQueue[DownQueue.size() - 1].floor;
+			if (route_controller->DownQueue.size() > 0)
+				newfloor = route_controller->DownQueue[route_controller->DownQueue.size() - 1].floor;
 			else
 				return true;
 		}
 
-		if (QueuePositionDirection == -1 && DownQueue.size() == 1)
+		if (route_controller->QueuePositionDirection == -1 && route_controller->DownQueue.size() == 1)
 		{
-			if (UpQueue.size() > 0)
-				newfloor = UpQueue[0].floor;
+			if (route_controller->UpQueue.size() > 0)
+				newfloor = route_controller->UpQueue[0].floor;
 			else
 				return false;
 		}
 	}
 
-	if (QueuePositionDirection == 1 && UpQueue.size() == 0 && DownQueue.size() == 0)
+	if (route_controller->QueuePositionDirection == 1 && route_controller->UpQueue.size() == 0 && route_controller->DownQueue.size() == 0)
 		return true;
 
-	if (QueuePositionDirection == -1 && UpQueue.size() == 0 && DownQueue.size() == 0)
+	if (route_controller->QueuePositionDirection == -1 && route_controller->UpQueue.size() == 0 && route_controller->DownQueue.size() == 0)
 		return false;
 
 	//return direction of queue if floors are the same
 	if (newfloor == floor)
 	{
-		if (QueuePositionDirection == 1 && UpQueue.size() > 0)
+		if (route_controller->QueuePositionDirection == 1 && route_controller->UpQueue.size() > 0)
 			return true;
-		else if (QueuePositionDirection == -1 && DownQueue.size() > 0)
+		else if (route_controller->QueuePositionDirection == -1 && route_controller->DownQueue.size() > 0)
 			return false;
 	}
 
@@ -3706,13 +3032,13 @@ int Elevator::AvailableForCall(bool destination, int floor, int direction, bool 
 				if (InServiceMode() == false)
 				{
 					//and if no queue changes are pending, unless doors are open on the same floor as call
-					if (QueuePending == false || ((AreDoorsOpen() == true || AreDoorsOpening() == true) && car->GetFloor() == floor))
+					if (route_controller->QueuePending == false || ((AreDoorsOpen() == true || AreDoorsOpening() == true) && car->GetFloor() == floor))
 					{
 						//and if elevator either has limitqueue off, or has limitqueue on and queue direction is the same
-						if (LimitQueue == false || (LimitQueue == true && (QueuePositionDirection == direction || QueuePositionDirection == 0)))
+						if (route_controller->LimitQueue == false || (route_controller->LimitQueue == true && (route_controller->QueuePositionDirection == direction || route_controller->QueuePositionDirection == 0)))
 						{
 							//and if elevator either has queueresets off, or has queueresets on and queue direction is the same
-							if (QueueResets == false || (QueueResets == true && (QueuePositionDirection == direction || QueuePositionDirection == 0)))
+							if (route_controller->QueueResets == false || (route_controller->QueueResets == true && (route_controller->QueuePositionDirection == direction || route_controller->QueuePositionDirection == 0)))
 							{
 								//and if doors are not being held or elevator is waiting in a peak mode
 								if (GetHoldStatus() == false || PeakWaiting() == true)
@@ -3728,8 +3054,8 @@ int Elevator::AvailableForCall(bool destination, int floor, int direction, bool 
 											if ((car->GetFloor() > floor && direction == -1) || (car->GetFloor() < floor && direction == 1) || (car->GetFloor() == floor && MoveElevator == false) || IsIdle() || car->RespondingToCall(floor, direction) == true)
 											{
 												//and if it's either going the same direction as the call, or queue is not active, or idle, or on the same floor with the queues empty
-												if (QueuePositionDirection == direction || QueuePositionDirection == 0 || IsIdle() ||
-														(destination == true && car->GetFloor() == floor && MoveElevator == false && QueuePositionDirection != 0 && UpQueue.size() == 0 && DownQueue.size() == 0)) //this is an exception if a controller is used
+												if (route_controller->QueuePositionDirection == direction || route_controller->QueuePositionDirection == 0 || IsIdle() ||
+														(destination == true && car->GetFloor() == floor && MoveElevator == false && route_controller->QueuePositionDirection != 0 && route_controller->UpQueue.size() == 0 && route_controller->DownQueue.size() == 0)) //this is an exception if a controller is used
 												{
 													if (sbs->Verbose)
 														Report("Available for call");
@@ -3881,11 +3207,11 @@ bool Elevator::SelectFloor(int floor)
 				{
 					int dir = 0;
 
-					if (IsQueueActive() == true)
+					if (route_controller->IsQueueActive() == true)
 					{
 						dir = LastChimeDirection;
 						if (dir == 0)
-							dir = LastQueueDirection;
+							dir = route_controller->LastQueueDirection;
 					}
 
 					if (ChimeOnArrival == true)
@@ -4113,21 +3439,6 @@ CallStation* Elevator::GetPrimaryCallStation()
 	if (floor)
 		return floor->GetCallStationForElevator(Number);
 	return 0;
-}
-
-int Elevator::GetActiveCallFloor()
-{
-	return ActiveCall.floor;
-}
-
-int Elevator::GetActiveCallDirection()
-{
-	return ActiveCall.direction;
-}
-
-int Elevator::GetActiveCallType()
-{
-	return ActiveCall.call_type;
 }
 
 bool Elevator::InElevator()
@@ -4419,28 +3730,6 @@ void Elevator::CancelHallCall(int floor, int direction)
 	}
 
 	DeleteRoute(floor, direction);
-}
-
-void Elevator::HandleDequeue(int direction, bool stop_if_empty)
-{
-	//handle elevator behavior on dequeue
-	//if stop_if_empty is true, this will stop the elevator if the related queue is empty
-
-	if (stop_if_empty == true && MoveElevator == true && EmergencyStop == 0)
-	{
-		if ((direction == 1 && UpQueue.empty()) ||
-				(direction == -1 && DownQueue.empty()))
-			Stop();
-	}
-
-	//reset active call status if queues are empty
-	if (DownQueue.empty() == true && UpQueue.empty() == true)
-	{
-		ActiveCall.floor = 0;
-		ActiveCall.direction = 0;
-		ActiveCall.call_type = 0;
-		ActiveCall.car = 0;
-	}
 }
 
 bool Elevator::IsManuallyStopped()
@@ -4818,7 +4107,7 @@ void Elevator::ProcessGotoFloor(int floor, int direction)
 		if (i == GotoFloorCar)
 			continue;
 
-		if (IsQueued(GetFloorForCar(i, floor), direction) == true)
+		if (route_controller->IsQueued(GetFloorForCar(i, floor), direction) == true)
 			GetCar(i)->GotoFloor = true;
 	}
 }
@@ -5064,7 +4353,7 @@ void Elevator::Malfunction()
 		//full malfunction
 		Stop(true);
 		SetRunState(false);
-		ResetQueue(true, true);
+		route_controller->ResetQueue(true, true);
 
 		for (size_t i = 0; i < Cars.size(); i++)
 		{
@@ -5083,8 +4372,13 @@ void Elevator::Malfunction()
 	else if (type == 2)
 	{
 		//partial malfunction (reset queues)
-		ResetQueue(true, true);
+		route_controller->ResetQueue(true, true);
 	}
+}
+
+RouteController* Elevator::GetRouteController()
+{
+	return route_controller;
 }
 
 }

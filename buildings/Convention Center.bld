@@ -266,7 +266,7 @@ Cut Landscape, -80, -1, 105, 80, 1, 305, false, true
 
 <Floor 1>
     ID = A
-    Name = Front Atrium
+    Name = Atrium Level
     Type = Atrium
     Height = 15
     InterfloorHeight = 0

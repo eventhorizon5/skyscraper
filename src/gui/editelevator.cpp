@@ -29,6 +29,7 @@
 #include "camera.h"
 #include "floor.h"
 #include "elevator.h"
+#include "elevroute.h"
 #include "elevatordoor.h"
 #include "elevatorcar.h"
 #include "debugpanel.h"
@@ -1206,16 +1207,16 @@ void editelevator::On_bCall_Click(wxCommandEvent& event)
 	if (elevator && car)
 	{
 		if (car->GetFloor() > Simcore->camera->CurrentFloor)
-			elevator->AddRoute(Simcore->camera->CurrentFloor, -1, 1);
+			elevator->GetRouteController()->AddRoute(Simcore->camera->CurrentFloor, -1, 1);
 		if (car->GetFloor() <= Simcore->camera->CurrentFloor)
-			elevator->AddRoute(Simcore->camera->CurrentFloor, 1, 1);
+			elevator->GetRouteController()->AddRoute(Simcore->camera->CurrentFloor, 1, 1);
 	}
 }
 
 void editelevator::On_bEnqueueUp_Click(wxCommandEvent& event)
 {
 	if (elevator)
-		elevator->AddRoute(floor_number, 1, 0);
+		elevator->GetRouteController()->AddRoute(floor_number, 1, 0);
 }
 
 void editelevator::On_bGo_Click(wxCommandEvent& event)
@@ -1227,7 +1228,7 @@ void editelevator::On_bGo_Click(wxCommandEvent& event)
 void editelevator::On_bEnqueueDown_Click(wxCommandEvent& event)
 {
 	if (elevator)
-		elevator->AddRoute(floor_number, -1, 0);
+		elevator->GetRouteController()->AddRoute(floor_number, -1, 0);
 }
 
 void editelevator::On_bOpen_Click(wxCommandEvent& event)
@@ -1293,7 +1294,7 @@ void editelevator::On_bDumpFloors_Click(wxCommandEvent& event)
 void editelevator::On_bDumpQueues_Click(wxCommandEvent& event)
 {
 	if (elevator)
-		elevator->DumpQueues();
+		elevator->GetRouteController()->DumpQueues();
 }
 
 void editelevator::OnInit()
@@ -1432,9 +1433,9 @@ void editelevator::Loop()
 	txtNumber->SetValue(ToString(elevator->Number));
 	txtOriginFloor->SetValue(ToString(car->StartingFloor));
 	txtPosition->SetValue(TruncateNumber(elevator->GetPosition().x, 2) + wxT(", ") + TruncateNumber(elevator->GetPosition().y, 2) + wxT(", ") + TruncateNumber(elevator->GetPosition().z, 2));
-	txtQueueDirection->SetValue(ToString(elevator->QueuePositionDirection));
-	txtQueueLastDown->SetValue(ToString(elevator->LastQueueFloor[0]));
-	txtQueueLastUp->SetValue(ToString(elevator->LastQueueFloor[1]));
+	txtQueueDirection->SetValue(ToString(elevator->GetRouteController()->QueuePositionDirection));
+	txtQueueLastDown->SetValue(ToString(elevator->GetRouteController()->LastQueueFloor[0]));
+	txtQueueLastUp->SetValue(ToString(elevator->GetRouteController()->LastQueueFloor[1]));
 	txtRate->SetValue(TruncateNumber(elevator->ElevatorRate, 2));
 	txtShaft->SetValue(ToString(elevator->AssignedShaft));
 	txtStop->SetValue(ToString(elevator->GetEmergencyStopStatus()));
@@ -1444,7 +1445,7 @@ void editelevator::Loop()
 	txtIsMoving->SetValue(BoolToString(elevator->IsMoving));
 	txtOnFloor->SetValue(BoolToString(elevator->OnFloor));
 	txtAlarm->SetValue(BoolToString(car->AlarmActive));
-	txtQueueLastDirection->SetValue(ToString(elevator->LastQueueDirection));
+	txtQueueLastDirection->SetValue(ToString(elevator->GetRouteController()->LastQueueDirection));
 	txtIsIdle->SetValue(BoolToString(elevator->IsIdle()));
 	txtWaitForDoors->SetValue(BoolToString(elevator->WaitForDoors));
 	txtMotor->SetValue(TruncateNumber(elevator->MotorPosition.x, 2) + wxT(", ") + TruncateNumber(elevator->MotorPosition.y, 2) + wxT(", ") + TruncateNumber(elevator->MotorPosition.z, 2));
@@ -1452,8 +1453,8 @@ void editelevator::Loop()
 	txtManualGo->SetValue(BoolToString(elevator->ManualGo));
 	txtLeveling->SetValue(BoolToString(elevator->Leveling));
 	txtParking->SetValue(BoolToString(elevator->Parking));
-	txtQueueResets->SetValue(BoolToString(elevator->QueueResets));
-	txtLimitQueue->SetValue(BoolToString(elevator->LimitQueue));
+	txtQueueResets->SetValue(BoolToString(elevator->GetRouteController()->QueueResets));
+	txtLimitQueue->SetValue(BoolToString(elevator->GetRouteController()->LimitQueue));
 	txtNudgeMode->SetValue(BoolToString(car->IsNudgeModeActive()));
 	txtNotified->SetValue(BoolToString(elevator->Notified));
 	txtWaitForTimer->SetValue(BoolToString(elevator->WaitForTimer));
@@ -1468,7 +1469,7 @@ void editelevator::Loop()
 	txtOpenOnStart->SetValue(BoolToString(elevator->OpenOnStart));
 	txtInterlocks->SetValue(BoolToString(elevator->Interlocks));
 	txtLastChimeDirection->SetValue(ToString(elevator->LastChimeDirection));
-	txtActiveCallFloor->SetValue(ToString(elevator->GetActiveCallFloor()));
+	txtActiveCallFloor->SetValue(ToString(elevator->GetRouteController()->GetActiveCallFloor()));
 	txtActiveDirection->SetValue(ToString(elevator->ActiveDirection));
 	txtManualMove->SetValue(ToString(elevator->ManualMove));
 	txtMusicPosition->SetValue(TruncateNumber(car->MusicPosition.x, 2) + wxT(", ") + TruncateNumber(car->MusicPosition.y, 2) + wxT(", ") + TruncateNumber(car->MusicPosition.z, 2));
@@ -1508,8 +1509,8 @@ void editelevator::Loop()
 	//set call direction/type value
 	{
 		std::string direction = "", type;
-		int dir = elevator->GetActiveCallDirection();
-		int t = elevator->GetActiveCallType();
+		int dir = elevator->GetRouteController()->GetActiveCallDirection();
+		int t = elevator->GetRouteController()->GetActiveCallType();
 		if (dir == 1)
 			direction = "Up";
 		else if (dir == -1)
@@ -1790,7 +1791,7 @@ void editelevator::On_bDown_Toggle(wxCommandEvent& event)
 void editelevator::On_bResetQueues_Click(wxCommandEvent& event)
 {
 	if (elevator)
-		elevator->ResetQueue(true, true);
+		elevator->GetRouteController()->ResetQueue(true, true);
 }
 
 void editelevator::On_bSetParkingFloor_Click(wxCommandEvent& event)

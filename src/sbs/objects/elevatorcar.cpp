@@ -50,6 +50,7 @@
 #include "indicator.h"
 #include "timer.h"
 #include "controller.h"
+#include "elevroute.h"
 #include "reverb.h"
 
 #include <time.h>
@@ -940,7 +941,8 @@ void ElevatorCar::Loop()
 		//reset door timer if peak mode is enabled and a movement is pending
 		if ((parent->UpPeak == true || parent->DownPeak == true))
 		{
-			if ((parent->UpQueue.empty() == false || parent->DownQueue.empty() == false) && (AreDoorsOpen() == true && AreDoorsMoving() == 0))
+			RouteController *controller = parent->GetRouteController();
+			if ((controller->UpQueue.empty() == false || controller->DownQueue.empty() == false) && (AreDoorsOpen() == true && AreDoorsMoving() == 0))
 			{
 				if (door)
 				{
@@ -2868,7 +2870,7 @@ bool ElevatorCar::PlayMessageSound(bool type)
 	if (parent->InServiceMode() == true)
 		return false;
 
-	if (parent->IsQueueActive() == false && type == true && MessageOnClose == true)
+	if (parent->GetRouteController()->IsQueueActive() == false && type == true && MessageOnClose == true)
 		return false;
 
 	std::string newsound;
@@ -2895,7 +2897,7 @@ bool ElevatorCar::PlayMessageSound(bool type)
 			direction = parent->LastChimeDirection;
 
 			if (parent->LastChimeDirection == 0)
-				direction = parent->LastQueueDirection;
+				direction = parent->GetRouteController()->LastQueueDirection;
 		}
 		else
 			direction = parent->ActiveDirection;
@@ -3544,12 +3546,13 @@ bool ElevatorCar::RespondingToCall(int floor, int direction)
 	//returns true if the car is responding to a call on the specified floor
 
 	Elevator *e = GetElevator();
+	RouteController *r = e->GetRouteController();
 
 	//if proceeding to call floor for a call
-	if (GotoFloor == true && e->GotoFloor == floor && e->GetActiveCallFloor() == e->GotoFloor)
+	if (GotoFloor == true && e->GotoFloor == floor && r->GetActiveCallFloor() == e->GotoFloor)
 	{
 		//and if a hall call, with the same call direction
-		if (e->GetActiveCallType() == 1 && e->GetActiveCallDirection() == direction)
+		if (r->GetActiveCallType() == 1 && r->GetActiveCallDirection() == direction)
 			return true;
 	}
 
@@ -3561,13 +3564,14 @@ int ElevatorCar::RespondingToCall(int floor)
 	//same as other function, but returns the direction of the call
 
 	Elevator *e = GetElevator();
+	RouteController *r = e->GetRouteController();
 
 	//if proceeding to call floor for a call
-	if (GotoFloor == true && e->GotoFloor == floor && e->GetActiveCallFloor() == e->GotoFloor)
+	if (GotoFloor == true && e->GotoFloor == floor && r->GetActiveCallFloor() == e->GotoFloor)
 	{
 		//and if a hall call, with the same call direction
-		if (e->GetActiveCallType() == 1)
-			return e->GetActiveCallDirection();
+		if (r->GetActiveCallType() == 1)
+			return r->GetActiveCallDirection();
 	}
 
 	return 0;
@@ -3595,6 +3599,7 @@ void ElevatorCar::Requested(int floor)
 	std::string message = "Requested";
 
 	Elevator* e = GetElevator();
+	RouteController *r = e->GetRouteController();
 
 	//show an error if a floor hasn't been selected due to different factors
 	if (e->InspectionService == true)
@@ -3607,9 +3612,9 @@ void ElevatorCar::Requested(int floor)
 		KeypadError();
 	else if (e->FireServicePhase2 == 2)
 		KeypadError();
-	else if (e->LimitQueue == true && ((e->QueuePositionDirection == 1 && floor < GetFloor() && e->UpQueue.empty() == false) || (e->QueuePositionDirection == -1 && floor > GetFloor() && e->DownQueue.empty() == false)))
+	else if (r->LimitQueue == true && ((r->QueuePositionDirection == 1 && floor < GetFloor() && r->UpQueue.empty() == false) || (r->QueuePositionDirection == -1 && floor > GetFloor() && r->DownQueue.empty() == false)))
 		KeypadError();
-	else if (e->LimitQueue == true && e->IsMoving == true && floor == GetFloor())
+	else if (r->LimitQueue == true && e->IsMoving == true && floor == GetFloor())
 		KeypadError();
 	else if (GetFloorIndex(floor) == -1)
 		KeypadError();

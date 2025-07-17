@@ -114,6 +114,7 @@ namespace SBS {
 	class CustomObject;
 	class Reverb;
 	class Map;
+	class RouteController;
 
 	typedef std::vector<Vector3> PolyArray;
 	typedef std::vector<PolyArray> PolygonSet;
@@ -182,7 +183,6 @@ public:
 	int FloorDisplayRange; //number of floors to display while in elevator, if shaft's ShowFloors is true
 	std::string SkyName; //base filename of sky texture pack
 	bool DeleteColliders; //true if system should delete mesh colliders on each modification
-	Real UnitScale; //scale of 3D positions; this value equals 1 3D unit
 	bool Verbose; //set to true to enable verbose mode
 	bool InterfloorOnTop; //set to true to have interfloor area on top (it's on the bottom by default)
 	bool FastDelete; //used internally for quick object deletion
@@ -387,6 +387,7 @@ public:
 	PolyMesh* GetPolyMesh();
 	Trigger* GetAreaTrigger();
 	MeshObject* GetLandscapeMesh();
+	Real GetUnitScale();
 
 	//Meshes
 	MeshObject* Buildings;
