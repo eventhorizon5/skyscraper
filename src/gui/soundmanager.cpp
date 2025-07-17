@@ -401,7 +401,14 @@ void SoundManager::BuildHandleList()
 		HandleList->Clear();
 
 		for (int i = 0; i < count; i++)
-			HandleList->Append(SBS::ToString(i + 1) + wxT(": ") + sound->handles[i]->GetName());
+		{
+			std::string name;
+			if (sound->handles[i])
+				name = sound->handles[i]->GetName();
+			else
+				name = "(error)";
+			HandleList->Append(SBS::ToString(i + 1) + wxT(": ") + name);
+		}
 
 		if (count > 0)
 		{
