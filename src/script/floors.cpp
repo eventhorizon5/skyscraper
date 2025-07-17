@@ -2161,7 +2161,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 	if (StartsWithNoCase(LineData, "addshafttrigger"))
 	{
 		//get data
-		int params = SplitData(LineData, 17);
+		int params = SplitData(LineData, 16);
 
 		if (params < 10)
 			return ScriptError("Incorrect number of parameters");
