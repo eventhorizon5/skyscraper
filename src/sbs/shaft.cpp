@@ -1057,7 +1057,7 @@ Light* Shaft::Level::AddLight(const std::string &name, int type)
 {
 	//add a global light
 
-	Light* light = new Light(mesh, name, type);
+	Light* light = new Light(this, name, type);
 	lights.emplace_back(light);
 	return light;
 }
@@ -1076,7 +1076,7 @@ Model* Shaft::Level::AddModel(const std::string &name, const std::string &filena
 {
 	//add a model
 
-	Model* model = new Model(mesh, name, filename, center, position, rotation, max_render_distance, scale_multiplier, enable_physics, restitution, friction, mass);
+	Model* model = new Model(this, name, filename, center, position, rotation, max_render_distance, scale_multiplier, enable_physics, restitution, friction, mass);
 	if (model->load_error == true)
 	{
 		delete model;
@@ -1155,7 +1155,7 @@ Control* Shaft::Level::AddControl(const std::string &name, const std::string &so
 	//add a control
 
 	std::vector<Action*> actionnull; //not used
-	Control* control = new Control(mesh, name, false, sound, action_names, actionnull, textures, direction, width, height, true, selection_position);
+	Control* control = new Control(this, name, false, sound, action_names, actionnull, textures, direction, width, height, true, selection_position);
 	control->Move(CenterX, voffset, CenterZ);
 	ControlArray.emplace_back(control);
 	return control;
@@ -1165,7 +1165,7 @@ Trigger* Shaft::Level::AddTrigger(const std::string &name, const std::string &so
 {
 	//add a trigger
 
-	Trigger* trigger = new Trigger(mesh, name, false, sound_file, area_min, area_max, action_names);
+	Trigger* trigger = new Trigger(this, name, false, sound_file, area_min, area_max, action_names);
 	TriggerArray.emplace_back(trigger);
 	return trigger;
 }
