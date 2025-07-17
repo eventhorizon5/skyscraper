@@ -39,6 +39,7 @@
 #include "profiler.h"
 #include "cameratexture.h"
 #include "utility.h"
+#include "trigger.h"
 #include "stairs.h"
 
 namespace SBS {
@@ -538,7 +539,7 @@ Stairwell::Level::~Level()
 	}
 
 	//delete triggers
-	/*for (size_t i = 0; i < TriggerArray.size(); i++)
+	for (size_t i = 0; i < TriggerArray.size(); i++)
 	{
 		if (TriggerArray[i])
 		{
@@ -546,7 +547,7 @@ Stairwell::Level::~Level()
 			delete TriggerArray[i];
 		}
 		TriggerArray[i] = 0;
-	}*/
+	}
 
 	//delete models
 	for (size_t i = 0; i < ModelArray.size(); i++)
@@ -803,11 +804,11 @@ void Stairwell::Level::Enabled(bool value)
 		}
 
 		//triggers
-		/*for (size_t i = 0; i < TriggerArray.size(); i++)
+		for (size_t i = 0; i < TriggerArray.size(); i++)
 		{
 			if (TriggerArray[i])
 				TriggerArray[i]->Enabled(value);
-		}*/
+		}
 
 		//models
 		for (size_t i = 0; i < ModelArray.size(); i++)
@@ -1045,14 +1046,14 @@ void Stairwell::Level::RemoveControl(Control *control)
 void Stairwell::Level::RemoveTrigger(Trigger *trigger)
 {
 	//remove a trigger reference (does not delete the object itself)
-	/*for (size_t i = 0; i < TriggerArray.size(); i++)
+	for (size_t i = 0; i < TriggerArray.size(); i++)
 	{
 		if (TriggerArray[i] == trigger)
 		{
 			TriggerArray.erase(TriggerArray.begin() + i);
 			return;
 		}
-	}*/
+	}
 }
 
 Light* Stairwell::Level::AddLight(const std::string &name, int type)
@@ -1173,17 +1174,11 @@ Control* Stairwell::Level::AddControl(const std::string &name, const std::string
 
 Trigger* Stairwell::Level::AddTrigger(const std::string &name, const std::string &sound_file, Vector3 &area_min, Vector3 &area_max, std::vector<std::string> &action_names)
 {
-	//triggers are disabled for now
-
 	//add a trigger
-
-	//exit if floor is invalid
-	/*if (!IsValid())
-		return 0;
 
 	Trigger* trigger = new Trigger(mesh, name, false, sound_file, area_min, area_max, action_names);
 	TriggerArray.emplace_back(trigger);
-	return trigger;*/
+	return trigger;
 	return 0;
 }
 
