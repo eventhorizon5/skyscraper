@@ -555,7 +555,7 @@ bool HAL::LoadSystem(const std::string &data_path, std::vector<Ogre::RenderWindo
 		for (int i = 0; i < cameras; i++)
 		{
 			mCameras.emplace_back(mSceneMgr->createCamera("Camera " + ToString(i + 1)));
-			for (size_t j = 0; j < mRenderWindows.size(); j++)
+			for (size_t j = 0; j < mRenderWindows.size() - 1; j++)
 			{
 				mViewports.emplace_back(mRenderWindows[j]->addViewport(mCameras[i], (cameras - 1) - i, j, 0, 1, 1));
 				mCameras[i]->setAspectRatio(Real(mViewports[i]->getActualWidth()) / Real(mViewports[i]->getActualHeight()));
