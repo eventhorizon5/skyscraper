@@ -78,9 +78,17 @@ void SkySystem::CreateSky(EngineContext *engine)
 {
 	//create sky system
 
-	//load Caelum plugin
-	if (vm->GetHAL()->GetConfigBool(vm->GetHAL()->configfile, "Skyscraper.Frontend.Caelum", true) == true)
+	bool use_caelum = vm->GetHAL()->GetConfigBool(vm->GetHAL()->configfile, "Skyscraper.Frontend.Caelum", true);
+
+	if (use_caelum == false)
 	{
+		//load old SBS skybox if Caelum is disabled
+		engine->GetSystem()->CreateSky();
+		return;
+	}
+	else
+	{
+		//load Caelum plugin
 		try
 		{
 			new Caelum::CaelumPlugin();
@@ -101,7 +109,7 @@ void SkySystem::CreateSky(EngineContext *engine)
 	}*/
 
 	bool sky_result = true;
-	if (vm->GetHAL()->GetConfigBool(vm->GetHAL()->configfile, "Skyscraper.Frontend.Caelum", true) == true)
+	if (use_caelum == true)
 		sky_result = InitSky(engine);
 
 	//create old sky if Caelum is turned off, or failed to initialize
