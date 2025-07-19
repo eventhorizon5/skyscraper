@@ -586,10 +586,8 @@ bool HAL::LoadSystem(const std::string &data_path, Ogre::RenderWindow *renderwin
 	if (filtermode < 3)
 		maxanisotropy = 1;
 
-	Ogre::TextureFilterOptions filter;
-	if (filtermode == 0)
-		filter = Ogre::TFO_NONE;
-	else if (filtermode == 1)
+	Ogre::TextureFilterOptions filter = Ogre::TFO_NONE;
+	if (filtermode == 1)
 		filter = Ogre::TFO_BILINEAR;
 	else if (filtermode == 2)
 		filter = Ogre::TFO_TRILINEAR;
