@@ -730,15 +730,23 @@ void SBS::CreateSky()
 		ResetLighting();
 	}
 
+	//create a mesh for the skybox
 	SkyBox = new MeshObject(this, "SkyBox");
-	SkyBox->create_collider = false;
+	SkyBox->create_collider = false; //disable collisions on skybox
 
-	//create a skybox that extends by default 30 miles (30 * 5280 ft) in each direction
+	//create a skybox size that extends by default 30 miles (30 * 5280 ft) in each direction
 	Real skysize = GetConfigInt("Skyscraper.SBS.HorizonDistance", 30) * 5280.0;
 
+	//reset texture mapping to default
 	texturemanager->ResetTextureMapping(true);
+
+	//set textures that the skybox will use
 	GetTextureManager()->SetTextureOverride("SkyFront", "SkyBack", "SkyLeft", "SkyRight", "SkyTop", "SkyBottom");
+
+	//create a wall box, using the skysize value
 	polymesh->CreateWallBox(SkyBox, "SkyBox", "SkyFront", -skysize, skysize, -skysize, skysize, skysize, -skysize / 2, 1, 1, true, true, true, true, false);
+
+	//restore previous texture mapping
 	texturemanager->ResetTextureMapping();
 }
 
