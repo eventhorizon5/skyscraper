@@ -396,7 +396,7 @@ void VM::HandleEngineShutdown()
 	}
 
 	//clean up empty engine slots at the end of the list
-	if (deleted == true)
+	if (deleted == true && engines.size() > 0)
 	{
 		for (size_t i = engines.size() - 1; i < engines.size(); --i)
 		{
