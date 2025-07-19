@@ -1526,8 +1526,8 @@ void SBS::CreateSky()
 	if (result == true)
 	{
 		SetLighting();
-		texturemanager->LoadTexture("sky/up.jpg", "SkyTop", 1, 1, false, false, false, 0);
-		texturemanager->LoadTexture("sky/down.jpg", "SkyBottom", 1, 1, false, false, false, 0);
+		texturemanager->LoadTexture("sky/up.jpg", "SkyTop", -1, -1, false, false, false, 0);
+		texturemanager->LoadTexture("sky/down.jpg", "SkyBottom", -1, -1, false, false, false, 0);
 		texturemanager->LoadTexture("sky/left.jpg", "SkyLeft", 1, 1, false, false, false, 0);
 		texturemanager->LoadTexture("sky/right.jpg", "SkyRight", 1, 1, false, false, false, 0);
 		texturemanager->LoadTexture("sky/front.jpg", "SkyFront", 1, 1, false, false, false, 0);
@@ -1540,52 +1540,10 @@ void SBS::CreateSky()
 
 	//create a skybox that extends by default 30 miles (30 * 5280 ft) in each direction
 	Real skysize = GetConfigInt("Skyscraper.SBS.HorizonDistance", 30) * 5280.0;
+
 	texturemanager->ResetTextureMapping(true);
-	Wall *wall = new Wall(SkyBox);
-
-	wall->AddQuad( //front
-		"SkyFront",
-		"SkyFront",
-		Vector3(-skysize, -skysize, -skysize),
-		Vector3(skysize, -skysize, -skysize),
-		Vector3(skysize, skysize, -skysize),
-		Vector3(-skysize, skysize, -skysize), 1, 1, false);
-	wall->AddQuad( //right
-		"SkyRight",
-		"SkyRight",
-		Vector3(skysize, -skysize, -skysize),
-		Vector3(skysize, -skysize, skysize),
-		Vector3(skysize, skysize, skysize),
-		Vector3(skysize, skysize, -skysize), 1, 1, false);
-	wall->AddQuad( //back
-		"SkyBack",
-		"SkyBack",
-		Vector3(skysize, -skysize, skysize),
-		Vector3(-skysize, -skysize, skysize),
-		Vector3(-skysize, skysize, skysize),
-		Vector3(skysize, skysize, skysize), 1, 1, false);
-	wall->AddQuad( //left
-		"SkyLeft",
-		"SkyLeft",
-		Vector3(-skysize, -skysize, skysize),
-		Vector3(-skysize, -skysize, -skysize),
-		Vector3(-skysize, skysize, -skysize),
-		Vector3(-skysize, skysize, skysize), 1, 1, false);
-	wall->AddQuad( //bottom
-		"SkyBottom",
-		"SkyBottom",
-		Vector3(-skysize, -skysize, skysize),
-		Vector3(skysize, -skysize, skysize),
-		Vector3(skysize, -skysize, -skysize),
-		Vector3(-skysize, -skysize, -skysize), 1, -1, false);
-	wall->AddQuad( //top
-		"SkyTop",
-		"SkyTop",
-		Vector3(-skysize, skysize, -skysize),
-		Vector3(skysize, skysize, -skysize),
-		Vector3(skysize, skysize, skysize),
-		Vector3(-skysize, skysize, skysize), -1, -1, false);
-
+	GetTextureManager()->SetTextureOverride("SkyFront", "SkyBack", "SkyLeft", "SkyRight", "SkyTop", "SkyBottom");
+	polymesh->CreateWallBox(SkyBox, "SkyBox", "SkyFront", -skysize, skysize, -skysize, skysize, skysize, -skysize / 2, 1, 1, true, true, true, true, false);
 	texturemanager->ResetTextureMapping();
 }
 
