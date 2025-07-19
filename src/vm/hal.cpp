@@ -445,7 +445,7 @@ bool HAL::LoadSystem(const std::string &data_path, Ogre::RenderWindow *renderwin
 	Renderer = mRoot->getRenderSystem()->getCapabilities()->getRenderSystemName();
 
 	//shorten name
-	int loc = Renderer.find("Rendering Subsystem");
+	size_t loc = Renderer.find("Rendering Subsystem");
 	Renderer = Renderer.substr(0, loc - 1);
 
 	//load resource configuration
