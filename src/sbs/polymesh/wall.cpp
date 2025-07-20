@@ -35,12 +35,19 @@
 
 namespace SBS {
 
-Wall::Wall(MeshObject* wrapper) : Object(wrapper)
+Wall::Wall(MeshObject* wrapper, const std::string &name) : Object(wrapper)
 {
 	//wall object constructor
+
+	SetValues("Wall", name, false, true);
 	meshwrapper = wrapper;
 	polymesh = sbs->GetPolyMesh();
 	parent_array = 0;
+
+	if (!meshwrapper)
+		return;
+
+	SetParentArray(meshwrapper->Walls);
 
 	polymesh->WallCount++;
 }
