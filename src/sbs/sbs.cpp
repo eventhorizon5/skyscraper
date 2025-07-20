@@ -585,7 +585,7 @@ void SBS::PrintBanner()
 	Report(" Copyright (C)2004-2024 Ryan Thoryk");
 	Report(" This software comes with ABSOLUTELY NO WARRANTY. This is free");
 	Report(" software, and you are welcome to redistribute it under certain");
-	Report(" conditions. For details, see the file gpl.txt\n");
+	Report(" conditions. For details, see the file named LICENSE\n");
 }
 
 void SBS::Loop(bool loading, bool isready)
