@@ -217,7 +217,7 @@ void ElevatorDoor::AddServicedFloor(int floor)
 	if (ShaftDoors.empty() == true)
 	{
 		ShaftDoors.resize(1);
-		ShaftDoors[1] = 0;
+		ShaftDoors[0] = 0;
 		return;
 	}
 
