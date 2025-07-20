@@ -40,7 +40,7 @@ public:
 	bool QueueResets; //true if system should use automatic queue resets for normal operation
 
 	//functions
-	RouteController(Elevator *parent);
+	explicit RouteController(Elevator *parent);
 	~RouteController();
 	bool AddRoute(int floor, int direction, int call_type);
 	bool DeleteRoute(int floor, int direction);

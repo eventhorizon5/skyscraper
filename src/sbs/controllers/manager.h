@@ -29,7 +29,7 @@ namespace SBS {
 class SBSIMPEXP Manager : public Object
 {
 public:
-	Manager(Object* parent);
+	explicit Manager(Object* parent);
 	virtual ~Manager() {};
 	virtual int GetCount() = 0;
 	virtual void Loop() = 0;
@@ -38,7 +38,7 @@ public:
 class SBSIMPEXP FloorManager : public Manager
 {
 public:
-	FloorManager(Object *parent);
+	explicit FloorManager(Object *parent);
 	~FloorManager() override;
 	Floor* Create(int number);
 	int GetCount() override; //all floors including basements
@@ -75,7 +75,7 @@ private:
 class SBSIMPEXP ElevatorManager : public Manager
 {
 public:
-	ElevatorManager(Object* parent);
+	explicit ElevatorManager(Object* parent);
 	~ElevatorManager() override;
 	Elevator* Create(int number);
 	int GetCount() override;
@@ -102,7 +102,7 @@ private:
 class SBSIMPEXP ShaftManager : public Manager
 {
 public:
-	ShaftManager(Object* parent);
+	explicit ShaftManager(Object* parent);
 	~ShaftManager() override;
 	Shaft* Create(int number, Real CenterX, Real CenterZ, int _startfloor, int _endfloor);
 	int GetCount() override;
@@ -129,7 +129,7 @@ private:
 class SBSIMPEXP StairwellManager : public Manager
 {
 public:
-	StairwellManager(Object* parent);
+	explicit StairwellManager(Object* parent);
 	~StairwellManager() override;
 	Stairwell* Create(int number, Real CenterX, Real CenterZ, int _startfloor, int _endfloor);
 	int GetCount() override;
@@ -156,7 +156,7 @@ private:
 class SBSIMPEXP DoorManager : public Manager
 {
 public:
-	DoorManager(Object* parent);
+	explicit DoorManager(Object* parent);
 	~DoorManager() override;
 	Door* AddDoor(std::string name, const std::string &open_sound, const std::string &close_sound, bool open_state, const std::string &texture, const std::string &side_texture, Real thickness, const std::string &face_direction, const std::string &open_direction, bool rotate, Real open_speed, Real close_speed, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th, Real side_tw, Real side_th);
 	Door* CreateDoor(std::string name, const std::string &open_sound, const std::string &close_sound, bool rotate);
@@ -174,7 +174,7 @@ private:
 class SBSIMPEXP RevolvingDoorManager : public Manager
 {
 public:
-	RevolvingDoorManager(Object* parent);
+	explicit RevolvingDoorManager(Object* parent);
 	~RevolvingDoorManager() override;
 	RevolvingDoor* AddDoor(std::string name, bool run, const std::string &soundfile, const std::string &texture, Real thickness, bool clockwise, int segments, Real speed, Real rotation, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th);
 	void RemoveDoor(RevolvingDoor *door);
@@ -190,7 +190,7 @@ private:
 class SBSIMPEXP VehicleManager : public Manager
 {
 public:
-	VehicleManager(Object* parent);
+	explicit VehicleManager(Object* parent);
 	~VehicleManager() override;
 	Vehicle* Create(int number);
 	int GetCount() override;
@@ -216,7 +216,7 @@ private:
 class SBSIMPEXP ControllerManager : public Manager
 {
 public:
-	ControllerManager(Object* parent);
+	explicit ControllerManager(Object* parent);
 	~ControllerManager() override;
 	DispatchController* Create(int number);
 	int GetCount() override;

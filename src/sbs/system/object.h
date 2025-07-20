@@ -34,7 +34,7 @@ class SBSIMPEXP ObjectBase
 	friend class Object;
 
 public:
-	ObjectBase(Object *parent);
+	explicit ObjectBase(Object *parent);
 	virtual ~ObjectBase() {};
 	Object* GetParent();
 	SBS* GetRoot();
@@ -64,7 +64,7 @@ public:
 	bool parent_deleting; //true if object's parent is deleting object
 
 	//functions
-	Object(Object *parent);
+	explicit Object(Object *parent);
 	virtual ~Object();
 	void SetValues(const std::string &type, const std::string &name, bool is_permanent, bool is_movable = true);
 	bool IsPermanent();

@@ -39,7 +39,7 @@ public:
 	bool TextureOverride; //if enabled, overrides textures with ones set with SetTextureOverride()
 	bool FlipTexture; //if enabled, flips textures according to parameters set in SetTextureFlip()
 
-	TextureManager(Object *parent);
+	explicit TextureManager(Object *parent);
 	~TextureManager();
 	bool LoadTexture(const std::string &filename, const std::string &name, Real widthmult, Real heightmult, bool enable_force = false, bool force_mode = false, int mipmaps = -1, bool use_alpha_color = false, Ogre::ColourValue alpha_color = Ogre::ColourValue::Black);
 	bool LoadAnimatedTexture(std::vector<std::string> filenames, const std::string &name, Real duration, Real widthmult, Real heightmult, bool enable_force = false, bool force_mode = false, int mipmaps = -1, bool use_alpha_color = false, Ogre::ColourValue alpha_color = Ogre::ColourValue::Black);

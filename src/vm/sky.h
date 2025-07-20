@@ -37,7 +37,7 @@ class EngineContext;
 class VMIMPEXP SkySystem
 {
 public:
-    SkySystem(VM *vm);
+    explicit SkySystem(VM *vm);
     ~SkySystem();
 	void CreateSky(EngineContext *engine);
 	void UnloadSky();

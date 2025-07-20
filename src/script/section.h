@@ -30,7 +30,7 @@ class ScriptProcessor::Section
 friend class ScriptProcessor;
 
 public:
-	Section(ScriptProcessor* parent);
+	explicit Section(ScriptProcessor* parent);
 	virtual ~Section() {}
 	virtual void Reset() {}
 	virtual int Run(std::string &LineData) { return 0; }
