@@ -12,9 +12,35 @@ Version 2.1
 -SBS: Move() functions should allow local space moves instead of just parent space
 -SBS: add relative parameter to SetRotation()
 -GUI: added relative movement/rotation checkbox for objects
+-SBS: made PolyMesh a client object of SBS root instead of MeshObject
+-SBS: moved remaining geometry code from core into PolyMesh
+-SBS: Moved UnitScale into Utility component
+-SBS: moved elevator call routing code into a new Route Controller object
+-SBS: PolyMesh function call cleanups
 
 Version 2.0
 -------------------------
+-PolyMesh: code cleanups and safety checks for Wall object
+-PolyMesh: move wall initialization code into wall object constructor
+-HAL: Use size_t for renderer name processing
+-VM: when cleaning up empty engine slots, make sure engine count is greater than 0
+-HAL: clean up filtermode code
+-SBS: remade CreateSky() function, this fixes the old sky system
+-Some initialization fixes for the old skybox system
+-SBS: shaft and stairwell objects should not use the mesh as their parent, use the shaft/stairwell level instead.  Fixes some crashes.
+-ScriptProc: fix parameter handling of AddShaftTrigger command
+-GUI: check sound handle before access, to prevent a crash
+-SBS: re-enabled AddShaftTrigger and AddStairsTrigger commands; they should perform more efficiently due to recent engine code modernization
+-VM: simplify display output of ListPlayingSounds() function
+-Guide: added SBS page
+-Guide: added "Starting Skyscraper" page
+-ScriptProc: added side tiling and name parameters to AddExternalDoor command
+-ScriptProc: added name parameters to door commands
+-ScriptProc: added side tiling parameters to AddStairsDoor and AddDoor commands
+-ScriptProc: fixed side tiling parameters of AddShaftStdDoor command
+-SBS: moved some system functions into Utility object
+-added user's guide page on VR support
+-SBS: add texture override support to AddPolygon function, which allows texture overrides to work in the AddPolygon, AddCustomWall, AddCustomFloor, and AddTriangleWall commands
 -VMConsole: add build number to uname command
 -SBS: Use GetDerivedOrientation() function instead of an ogre call
 -SBS: replaced SetPositionRelative() functions with a relative parameter to SetPosition()
