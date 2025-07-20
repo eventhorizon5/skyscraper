@@ -106,7 +106,7 @@ MoveObject::MoveObject(DebugPanel* root, wxWindow* parent,wxWindowID id, EngineC
 	GridSizer1 = new wxGridSizer(0, 2, 0, 0);
 	StaticText1 = new wxStaticText(this, ID_STATICTEXT1, _("Position:"), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE, _T("ID_STATICTEXT1"));
 	GridSizer1->Add(StaticText1, 1, wxALL|wxEXPAND, 5);
-	lblPosition = new wxStaticText(this, ID_lblPosition, _("0, 0, 0"), wxDefaultPosition, wxDefaultSize, wxST_NO_AUTORESIZE|wxALIGN_CENTRE, _T("ID_lblPosition"));
+	lblPosition = new wxStaticText(this, ID_lblPosition, _("0, 0, 0"), wxDefaultPosition, wxSize(150,-1), wxST_NO_AUTORESIZE|wxALIGN_CENTRE, _T("ID_lblPosition"));
 	GridSizer1->Add(lblPosition, 1, wxALL|wxEXPAND, 5);
 	StaticText3 = new wxStaticText(this, ID_STATICTEXT3, _("Relative Position:"), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE, _T("ID_STATICTEXT3"));
 	GridSizer1->Add(StaticText3, 1, wxALL|wxEXPAND, 5);

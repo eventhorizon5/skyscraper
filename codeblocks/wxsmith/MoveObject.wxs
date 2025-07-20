@@ -32,6 +32,7 @@
 											<object class="sizeritem">
 												<object class="wxStaticText" name="ID_lblPosition" variable="lblPosition" member="yes">
 													<label>0, 0, 0</label>
+													<size>150,-1</size>
 													<style>wxST_NO_AUTORESIZE|wxALIGN_CENTRE</style>
 												</object>
 												<flag>wxALL|wxEXPAND</flag>
