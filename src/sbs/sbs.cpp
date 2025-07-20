@@ -1550,7 +1550,7 @@ void SBS::CreateSky()
 	texturemanager->SetTextureOverride("SkyFront", "SkyBack", "SkyLeft", "SkyRight", "SkyTop", "SkyBottom");
 
 	//create a wall box, using the skysize value
-	polymesh->CreateWallBox(SkyBox, "SkyBox", "SkyFront", -skysize, skysize, -skysize, skysize, skysize, -skysize / 2, 1, 1, true, true, true, true, false);
+	CreateWallBox(SkyBox, "SkyBox", "SkyFront", -skysize, skysize, -skysize, skysize, skysize, -skysize / 2, 1, 1, true, true, true, true, false);
 
 	//restore previous texture mapping
 	texturemanager->ResetTextureMapping();
