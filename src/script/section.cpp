@@ -162,7 +162,10 @@ std::string ScriptProcessor::Section::GetBeforeEquals(const std::string &string,
 	std::string str2;
 
 	if (loc2 == -1)
-		str2 = str.substr(loc);
+	{
+		if (loc >= 0)
+			str2 = str.substr(loc);
+	}
 	else
 		str2 = str.substr(loc2);
 	TrimString(str2);
