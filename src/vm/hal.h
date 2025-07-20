@@ -78,7 +78,7 @@ public:
 	void Report(const std::string &message, const std::string &prompt);
 	bool ReportError(const std::string &message, const std::string &prompt);
 	bool ReportFatalError(const std::string &message, const std::string &prompt);
-	void LoadConfiguration(const std::string data_path, bool show_console);
+	void LoadConfiguration(const std::string &data_path, bool show_console);
 	bool LoadSystem(const std::string &data_path, Ogre::RenderWindow *renderwindow);
 	void ConsoleOut(const std::string &message, const std::string &color = "white");
 	std::string GetColors(const std::string &color);

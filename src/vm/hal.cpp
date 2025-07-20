@@ -949,7 +949,7 @@ bool HAL::ReportFatalError(const std::string &message)
 	return ReportFatalError(message, "hal:");
 }
 
-void HAL::LoadConfiguration(const std::string data_path, bool show_console)
+void HAL::LoadConfiguration(const std::string &data_path, bool show_console)
 {
 	//load configuration files
 
