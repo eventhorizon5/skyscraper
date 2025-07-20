@@ -2,7 +2,7 @@
 	Skyscraper 2.1 - Object Information Dialog
 	Copyright (C)2003-2025 Ryan Thoryk
 	https://www.skyscrapersim.net
-	https://sourceforge.net/projects/skyscraper/	
+	https://sourceforge.net/projects/skyscraper/
 	Contact - ryan@skyscrapersim.net
 
 	This program is free software; you can redistribute it and/or
@@ -48,6 +48,7 @@ const long ObjectInfo::ID_ObjectTree = wxNewId();
 const long ObjectInfo::ID_bDelete = wxNewId();
 const long ObjectInfo::ID_bMove = wxNewId();
 const long ObjectInfo::ID_bCreate = wxNewId();
+const long ObjectInfo::ID_chkEnabled = wxNewId();
 const long ObjectInfo::ID_bViewScript = wxNewId();
 const long ObjectInfo::ID_bReset = wxNewId();
 const long ObjectInfo::ID_bOK = wxNewId();
@@ -66,6 +67,8 @@ const long ObjectInfo::ID_STATICTEXT6 = wxNewId();
 const long ObjectInfo::ID_tParentName = wxNewId();
 const long ObjectInfo::ID_STATICTEXT4 = wxNewId();
 const long ObjectInfo::ID_tParentType = wxNewId();
+const long ObjectInfo::ID_STATICTEXT13 = wxNewId();
+const long ObjectInfo::ID_txtMovable = wxNewId();
 const long ObjectInfo::ID_STATICLINE1 = wxNewId();
 const long ObjectInfo::ID_STATICTEXT7 = wxNewId();
 const long ObjectInfo::ID_tLineNum = wxNewId();
@@ -112,6 +115,9 @@ ObjectInfo::ObjectInfo(DebugPanel* parent,wxWindowID id,const wxPoint& pos,const
 	bCreate = new wxButton(this, ID_bCreate, _("Create"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bCreate"));
 	bCreate->SetToolTip(_("Create a new object"));
 	BoxSizer2->Add(bCreate, 1, wxALL|wxALIGN_TOP, 5);
+	chkEnabled = new wxCheckBox(this, ID_chkEnabled, _("Enabled"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_chkEnabled"));
+	chkEnabled->SetValue(false);
+	BoxSizer2->Add(chkEnabled, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	FlexGridSizer4->Add(BoxSizer2, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer3 = new wxBoxSizer(wxHORIZONTAL);
 	bViewScript = new wxButton(this, ID_bViewScript, _("View Script"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bViewScript"));
@@ -158,6 +164,10 @@ ObjectInfo::ObjectInfo(DebugPanel* parent,wxWindowID id,const wxPoint& pos,const
 	FlexGridSizer1->Add(StaticText4, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	tParentType = new wxTextCtrl(this, ID_tParentType, wxEmptyString, wxDefaultPosition, wxSize(125,-1), wxTE_READONLY|wxTE_CENTRE, wxDefaultValidator, _T("ID_tParentType"));
 	FlexGridSizer1->Add(tParentType, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	StaticText13 = new wxStaticText(this, ID_STATICTEXT13, _("Is Movable:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT13"));
+	FlexGridSizer1->Add(StaticText13, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	txtMovable = new wxTextCtrl(this, ID_txtMovable, wxEmptyString, wxDefaultPosition, wxSize(125,-1), wxTE_READONLY|wxTE_CENTRE, wxDefaultValidator, _T("ID_txtMovable"));
+	FlexGridSizer1->Add(txtMovable, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	FlexGridSizer2->Add(FlexGridSizer1, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	StaticLine1 = new wxStaticLine(this, ID_STATICLINE1, wxDefaultPosition, wxSize(10,-1), wxLI_HORIZONTAL, _T("ID_STATICLINE1"));
 	FlexGridSizer2->Add(StaticLine1, 1, wxALL|wxEXPAND, 5);
@@ -190,7 +200,6 @@ ObjectInfo::ObjectInfo(DebugPanel* parent,wxWindowID id,const wxPoint& pos,const
 	FlexGridSizer2->Add(tScriptCommand2, 1, wxALL|wxEXPAND, 5);
 	BoxSizer1->Add(FlexGridSizer2, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	SetSizer(BoxSizer1);
-	BoxSizer1->Fit(this);
 	BoxSizer1->SetSizeHints(this);
 	Center();
 
@@ -198,6 +207,7 @@ ObjectInfo::ObjectInfo(DebugPanel* parent,wxWindowID id,const wxPoint& pos,const
 	Connect(ID_bDelete,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&ObjectInfo::On_bDelete_Click);
 	Connect(ID_bMove,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&ObjectInfo::On_bMove_Click);
 	Connect(ID_bCreate,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&ObjectInfo::On_bCreate_Click);
+	Connect(ID_chkEnabled,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&ObjectInfo::On_chkEnabled_Click);
 	Connect(ID_bViewScript,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&ObjectInfo::On_bViewScript_Click);
 	Connect(ID_bReset,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&ObjectInfo::On_bReset_Click);
 	Connect(ID_bOK,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&ObjectInfo::On_bOK_Click);
@@ -313,6 +323,8 @@ void ObjectInfo::Loop()
 		tScriptCommand2->SetValue(object->command_processed);
 		tContext->SetValue(object->context);
 		tPermanent->SetValue(BoolToString(object->IsPermanent()));
+		//chkEnabled->SetValue(object->IsEnabled());
+		txtMovable->SetValue(BoolToString(object->IsMovable()));
 
 		Object *parent = object->GetParent();
 		if (parent)
@@ -468,6 +480,24 @@ void ObjectInfo::On_bReset_Click(wxCommandEvent& event)
 	Object *obj = Simcore->GetObject(number);
 	if (obj)
 		obj->ResetState();
+}
+
+void ObjectInfo::On_chkEnabled_Click(wxCommandEvent& event)
+{
+	wxTreeItemId sel = ObjectTree->GetSelection();
+
+	if (!sel.IsOk())
+		return;
+
+	TreeItemData *data = (TreeItemData*) ObjectTree->GetItemData(sel);
+	wxString num;
+	num = data->GetDesc();
+	int number = atoi(num);
+
+	//call SBS to reset object state
+	Object *obj = Simcore->GetObject(number);
+	if (obj)
+		obj->Enabled(chkEnabled->GetValue());
 }
 
 }
