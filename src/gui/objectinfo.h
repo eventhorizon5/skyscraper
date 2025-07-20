@@ -25,6 +25,7 @@
 
 //(*Headers(ObjectInfo)
 #include <wx/button.h>
+#include <wx/checkbox.h>
 #include <wx/dialog.h>
 #include <wx/sizer.h>
 #include <wx/statline.h>
@@ -50,10 +51,12 @@ class ObjectInfo: public wxDialog
 		wxButton* bReset;
 		wxButton* bSave;
 		wxButton* bViewScript;
+		wxCheckBox* chkEnabled;
 		wxStaticLine* StaticLine1;
 		wxStaticText* StaticText10;
 		wxStaticText* StaticText11;
 		wxStaticText* StaticText12;
+		wxStaticText* StaticText13;
 		wxStaticText* StaticText1;
 		wxStaticText* StaticText2;
 		wxStaticText* StaticText3;
@@ -75,6 +78,7 @@ class ObjectInfo: public wxDialog
 		wxTextCtrl* tScriptCommand2;
 		wxTextCtrl* tScriptCommand;
 		wxTextCtrl* tType;
+		wxTextCtrl* txtMovable;
 		wxTreeCtrl* ObjectTree;
 		//*)
 		void Loop();
@@ -90,6 +94,7 @@ class ObjectInfo: public wxDialog
 		static const long ID_bDelete;
 		static const long ID_bMove;
 		static const long ID_bCreate;
+		static const long ID_chkEnabled;
 		static const long ID_bViewScript;
 		static const long ID_bReset;
 		static const long ID_bOK;
@@ -108,6 +113,8 @@ class ObjectInfo: public wxDialog
 		static const long ID_tParentName;
 		static const long ID_STATICTEXT4;
 		static const long ID_tParentType;
+		static const long ID_STATICTEXT13;
+		static const long ID_txtMovable;
 		static const long ID_STATICLINE1;
 		static const long ID_STATICTEXT7;
 		static const long ID_tLineNum;
@@ -134,6 +141,7 @@ class ObjectInfo: public wxDialog
 		void On_bViewScript_Click(wxCommandEvent& event);
 		void On_bMove_Click(wxCommandEvent& event);
 		void On_bReset_Click(wxCommandEvent& event);
+		void On_chkEnabled_Click(wxCommandEvent& event);
 		//*)
 		void AddChildren(SBS::Object *parent, const wxTreeItemId& treeparent);
 		bool changed;

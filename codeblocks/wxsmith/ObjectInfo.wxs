@@ -59,6 +59,15 @@
 								<border>5</border>
 								<option>1</option>
 							</object>
+							<object class="sizeritem">
+								<object class="wxCheckBox" name="ID_chkEnabled" variable="chkEnabled" member="yes">
+									<label>Enabled</label>
+									<handler function="On_chkEnabled_Click" entry="EVT_CHECKBOX" />
+								</object>
+								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
 						</object>
 						<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 						<border>5</border>
@@ -234,6 +243,23 @@
 							</object>
 							<object class="sizeritem">
 								<object class="wxTextCtrl" name="ID_tParentType" variable="tParentType" member="yes">
+									<size>125,-1</size>
+									<style>wxTE_READONLY|wxTE_CENTRE</style>
+								</object>
+								<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxStaticText" name="ID_STATICTEXT13" variable="StaticText13" member="yes">
+									<label>Is Movable:</label>
+								</object>
+								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxTextCtrl" name="ID_txtMovable" variable="txtMovable" member="yes">
 									<size>125,-1</size>
 									<style>wxTE_READONLY|wxTE_CENTRE</style>
 								</object>
