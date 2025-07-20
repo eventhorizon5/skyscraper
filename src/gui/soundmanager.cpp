@@ -351,6 +351,9 @@ void SoundManager::On_bOK_Click(wxCommandEvent& event)
 
 void SoundManager::BuildSoundList()
 {
+	if (!Simcore->GetSoundSystem())
+		return;
+
 	int count = Simcore->GetSoundSystem()->GetSoundCount();
 
 	if (count != lastcount)
@@ -438,7 +441,10 @@ void SoundManager::BuildHandleList()
 void SoundManager::On_bListPlaying_Click(wxCommandEvent& event)
 {
 	if (Simcore)
-		Simcore->GetSoundSystem()->ShowPlayingSounds();
+	{
+		if (Simcore->GetSoundSystem())
+			Simcore->GetSoundSystem()->ShowPlayingSounds();
+	}
 }
 
 void SoundManager::On_bSetVolume_Click(wxCommandEvent& event)
@@ -504,7 +510,10 @@ void SoundManager::On_bUnload_Click(wxCommandEvent& event)
 void SoundManager::On_bCleanup_Click(wxCommandEvent& event)
 {
 	if (Simcore)
-		Simcore->GetSoundSystem()->Cleanup();
+	{
+		if (Simcore->GetSoundSystem())
+			Simcore->GetSoundSystem()->Cleanup();
+	}
 }
 
 void SoundManager::On_bMove_Click(wxCommandEvent& event)

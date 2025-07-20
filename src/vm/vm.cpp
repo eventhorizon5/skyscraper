@@ -1033,9 +1033,13 @@ void VM::ListPlayingSounds()
 		
 		if (Simcore)
 		{
-			Simcore->GetSoundSystem()->ShowPlayingSounds(false);
-			if (i == engines.size() - 1)
-				Simcore->GetSoundSystem()->ShowPlayingTotal();
+			SoundSystem* soundsys = Simcore->GetSoundSystem();
+			if (soundsys)
+			{
+				soundsys->ShowPlayingSounds(false);
+				if (i == engines.size() - 1)
+					soundsys->ShowPlayingTotal();
+			}
 		}
 	}
 }
