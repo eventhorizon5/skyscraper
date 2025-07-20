@@ -1179,7 +1179,6 @@ Trigger* Stairwell::Level::AddTrigger(const std::string &name, const std::string
 	Trigger* trigger = new Trigger(this, name, false, sound_file, area_min, area_max, action_names);
 	TriggerArray.emplace_back(trigger);
 	return trigger;
-	return 0;
 }
 
 Model* Stairwell::Level::GetModel(std::string name)
