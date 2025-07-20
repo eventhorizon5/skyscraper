@@ -1026,17 +1026,19 @@ void Floor::AddFillerWalls(const std::string &texture, Real thickness, Real Cent
 		return;
 	}
 
-	if (sbs->GetPolyMesh()->GetWallOrientation() == 0)
+	PolyMesh* polymesh = sbs->GetPolyMesh();
+
+	if (polymesh->GetWallOrientation() == 0)
 	{
 		depth1 = 0;
 		depth2 = thickness;
 	}
-	if (sbs->GetPolyMesh()->GetWallOrientation() == 1)
+	if (polymesh->GetWallOrientation() == 1)
 	{
 		depth1 = thickness / 2;
 		depth2 = thickness / 2;
 	}
-	if (sbs->GetPolyMesh()->GetWallOrientation() == 2)
+	if (polymesh->GetWallOrientation() == 2)
 	{
 		depth1 = thickness;
 		depth2 = 0;
@@ -1066,21 +1068,21 @@ void Floor::AddFillerWalls(const std::string &texture, Real thickness, Real Cent
 		CutAll(Vector3(x1, voffset, z1), Vector3(x2, voffset + height, z2), true, false);
 
 	//create walls
-	sbs->GetPolyMesh()->DrawWalls(false, true, false, false, false, false);
+	polymesh->DrawWalls(false, true, false, false, false, false);
 	if (direction == false)
 		AddWall("FillerWallLeft", texture, 0, x1, z1, x2, z1, height, height, voffset, voffset, tw, th, isexternal);
 	else
 		AddWall("FillerWallLeft", texture, 0, x1, z1, x1, z2, height, height, voffset, voffset, tw, th, isexternal);
-	sbs->GetPolyMesh()->ResetWalls();
+	polymesh->ResetWalls();
 
-	sbs->GetPolyMesh()->DrawWalls(true, false, false, false, false, false);
+	polymesh->DrawWalls(true, false, false, false, false, false);
 	if (direction == false)
 		AddWall("FillerWallRight", texture, 0, x1, z2, x2, z2, height, height, voffset, voffset, tw, th, isexternal);
 	else
 		AddWall("FillerWallRight", texture, 0, x2, z1, x2, z2, height, height, voffset, voffset, tw, th, isexternal);
 
 	AddFloor("FillerWallTop", texture, 0, x1, z1, x2, z2, height + voffset, height + voffset, false, false, tw, th, isexternal);
-	sbs->GetPolyMesh()->ResetWalls();
+	polymesh->ResetWalls();
 }
 
 Sound* Floor::AddSound(const std::string &name, const std::string &filename, Vector3 position, bool loop, Real volume, int speed, Real min_distance, Real max_distance, Real doppler_level, Real cone_inside_angle, Real cone_outside_angle, Real cone_outside_volume, Vector3 direction)

@@ -70,6 +70,8 @@ Control::Control(Object *parent, const std::string &name, bool permanent, const 
 
 	std::string texture = GetTexture(selection_position);
 
+	PolyMesh* polymesh = sbs->GetPolyMesh();
+
 	sbs->TexelOverride = true;
 	Wall *wall;
 	if (Direction == "front")
@@ -80,9 +82,9 @@ Control::Control(Object *parent, const std::string &name, bool permanent, const 
 			x = -width / 2;
 			y = width / 2;
 		}
-		sbs->GetPolyMesh()->DrawWalls(true, false, false, false, false, false);
+		polymesh->DrawWalls(true, false, false, false, false, false);
 		wall = ControlMesh->CreateWallObject(name);
-		sbs->GetPolyMesh()->AddWallMain(wall, name, texture, 0, x, 0, y, 0, height, height, 0, 0, 1, 1, false);
+		polymesh->AddWallMain(wall, name, texture, 0, x, 0, y, 0, height, height, 0, 0, 1, 1, false);
 	}
 	if (Direction == "back")
 	{
@@ -92,9 +94,9 @@ Control::Control(Object *parent, const std::string &name, bool permanent, const 
 			x = width / 2;
 			y = -width / 2;
 		}
-		sbs->GetPolyMesh()->DrawWalls(false, true, false, false, false, false);
+		polymesh->DrawWalls(false, true, false, false, false, false);
 		wall = ControlMesh->CreateWallObject(name);
-		sbs->GetPolyMesh()->AddWallMain(wall, name, texture, 0, x, 0, y, 0, height, height, 0, 0, 1, 1, false);
+		polymesh->AddWallMain(wall, name, texture, 0, x, 0, y, 0, height, height, 0, 0, 1, 1, false);
 	}
 	if (Direction == "left")
 	{
@@ -104,9 +106,9 @@ Control::Control(Object *parent, const std::string &name, bool permanent, const 
 			x = width / 2;
 			y = -width / 2;
 		}
-		sbs->GetPolyMesh()->DrawWalls(true, false, false, false, false, false);
+		polymesh->DrawWalls(true, false, false, false, false, false);
 		wall = ControlMesh->CreateWallObject(name);
-		sbs->GetPolyMesh()->AddWallMain(wall, name, texture, 0, 0, x, 0, y, height, height, 0, 0, 1, 1, false);
+		polymesh->AddWallMain(wall, name, texture, 0, 0, x, 0, y, height, height, 0, 0, 1, 1, false);
 	}
 	if (Direction == "right")
 	{
@@ -116,11 +118,11 @@ Control::Control(Object *parent, const std::string &name, bool permanent, const 
 			x = -width / 2;
 			y = width / 2;
 		}
-		sbs->GetPolyMesh()->DrawWalls(false, true, false, false, false, false);
+		polymesh->DrawWalls(false, true, false, false, false, false);
 		wall = ControlMesh->CreateWallObject(name);
-		sbs->GetPolyMesh()->AddWallMain(wall, name, texture, 0, 0, x, 0, y, height, height, 0, 0, 1, 1, false);
+		polymesh->AddWallMain(wall, name, texture, 0, 0, x, 0, y, height, height, 0, 0, 1, 1, false);
 	}
-	sbs->GetPolyMesh()->ResetWalls();
+	polymesh->ResetWalls();
 	sbs->TexelOverride = false;
 
 	//create sound object

@@ -1874,6 +1874,8 @@ bool ElevatorCar::AddFloorSigns(int door_number, bool relative, const std::strin
 	sbs->GetTextureManager()->GetAutoSize(autosize_x, autosize_y);
 	sbs->GetTextureManager()->SetAutoSize(false, false);
 
+	PolyMesh* polymesh = sbs->GetPolyMesh();
+
 	for (size_t i = 0; i < ServicedFloors.size(); i++)
 	{
 		bool door_result = false;
@@ -1890,15 +1892,15 @@ bool ElevatorCar::AddFloorSigns(int door_number, bool relative, const std::strin
 			SetCase(tmpdirection, false);
 
 			if (tmpdirection == "front" || tmpdirection == "left")
-				sbs->GetPolyMesh()->DrawWalls(true, false, false, false, false, false);
+				polymesh->DrawWalls(true, false, false, false, false, false);
 			else
-				sbs->GetPolyMesh()->DrawWalls(false, true, false, false, false, false);
+				polymesh->DrawWalls(false, true, false, false, false, false);
 
 			if (tmpdirection == "front" || tmpdirection == "back")
 				sbs->GetFloor(floor)->AddWall("Floor Sign", texture, 0, x - (width / 2), z, x + (width / 2), z, height, height, base + voffset, base + voffset, 1, 1, false);
 			else
 				sbs->GetFloor(floor)->AddWall("Floor Sign", texture, 0, x, z - (width / 2), x, z + (width / 2), height, height, base + voffset, base + voffset, 1, 1, false);
-			sbs->GetPolyMesh()->ResetWalls();
+			polymesh->ResetWalls();
 		}
 	}
 	sbs->GetTextureManager()->SetAutoSize(autosize_x, autosize_y);
@@ -3807,6 +3809,8 @@ bool ElevatorCar::AddElevatorIDSigns(int door_number, bool relative, const std::
 	sbs->GetTextureManager()->GetAutoSize(autosize_x, autosize_y);
 	sbs->GetTextureManager()->SetAutoSize(false, false);
 
+	PolyMesh* polymesh = sbs->GetPolyMesh();
+
 	for (size_t i = 0; i < ServicedFloors.size(); i++)
 	{
 		bool door_result = false;
@@ -3823,15 +3827,15 @@ bool ElevatorCar::AddElevatorIDSigns(int door_number, bool relative, const std::
 			SetCase(tmpdirection, false);
 
 			if (tmpdirection == "front" || tmpdirection == "left")
-				sbs->GetPolyMesh()->DrawWalls(true, false, false, false, false, false);
+				polymesh->DrawWalls(true, false, false, false, false, false);
 			else
-				sbs->GetPolyMesh()->DrawWalls(false, true, false, false, false, false);
+				polymesh->DrawWalls(false, true, false, false, false, false);
 
 			if (tmpdirection == "front" || tmpdirection == "back")
 				sbs->GetFloor(floor)->AddWall("Elevator ID Sign", texture, 0, x - (width / 2), z, x + (width / 2), z, height, height, base + voffset, base + voffset, 1, 1, false);
 			else
 				sbs->GetFloor(floor)->AddWall("Elevator ID Sign", texture, 0, x, z - (width / 2), x, z + (width / 2), height, height, base + voffset, base + voffset, 1, 1, false);
-			sbs->GetPolyMesh()->ResetWalls();
+			polymesh->ResetWalls();
 		}
 	}
 	sbs->GetTextureManager()->SetAutoSize(autosize_x, autosize_y);

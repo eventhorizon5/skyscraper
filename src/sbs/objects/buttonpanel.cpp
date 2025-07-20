@@ -65,31 +65,33 @@ ButtonPanel::ButtonPanel(Object *parent, int index, const std::string &texture, 
 	SetName(name);
 	mesh = new MeshObject(this, name, 0, "", "", sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 
+	PolyMesh* polymesh = sbs->GetPolyMesh();
+
 	//create panel back
 	if (texture != "")
 	{
 		sbs->GetTextureManager()->ResetTextureMapping(true);
 		if (Direction == "front")
 		{
-			sbs->GetPolyMesh()->DrawWalls(true, false, false, false, false, false);
+			polymesh->DrawWalls(true, false, false, false, false, false);
 			AddWall("Panel", texture, 0, -(Width / 2), 0, Width / 2, 0, Height, Height, 0, 0, tw, th, autosize);
 		}
 		if (Direction == "back")
 		{
-			sbs->GetPolyMesh()->DrawWalls(false, true, false, false, false, false);
+			polymesh->DrawWalls(false, true, false, false, false, false);
 			AddWall("Panel", texture, 0, -(Width / 2), 0, Width / 2, 0, Height, Height, 0, 0, tw, th, autosize);
 		}
 		if (Direction == "left")
 		{
-			sbs->GetPolyMesh()->DrawWalls(true, false, false, false, false, false);
+			polymesh->DrawWalls(true, false, false, false, false, false);
 			AddWall("Panel", texture, 0, 0, -(Width / 2), 0, Width / 2, Height, Height, 0, 0, tw, th, autosize);
 		}
 		if (Direction == "right")
 		{
-			sbs->GetPolyMesh()->DrawWalls(false, true, false, false, false, false);
+			polymesh->DrawWalls(false, true, false, false, false, false);
 			AddWall("Panel", texture, 0, 0, -(Width / 2), 0, Width / 2, Height, Height, 0, 0, tw, th, autosize);
 		}
-		sbs->GetPolyMesh()->ResetWalls();
+		polymesh->ResetWalls();
 		sbs->GetTextureManager()->ResetTextureMapping();
 	}
 

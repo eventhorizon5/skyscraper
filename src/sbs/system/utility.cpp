@@ -552,21 +552,23 @@ Wall* Utility::AddDoorwayWalls(MeshObject* mesh, const std::string &wallname, co
 		//false if doorway is facing left/right
 		bool direction = std::abs(extents_x.x - extents_x.y) > std::abs(extents_z.x - extents_z.y);
 
-		sbs->GetPolyMesh()->DrawWalls(false, true, false, false, false, false);
-		if (direction == true)
-			sbs->GetPolyMesh()->AddWallMain(wall, "DoorwayLeft", texture, 0, extents_x.x, extents_z.x, extents_x.x, extents_z.y, extents_y.y - extents_y.x, extents_y.y - extents_y.x, extents_y.x, extents_y.x, tw, th, true);
-		else
-			sbs->GetPolyMesh()->AddWallMain(wall, "DoorwayLeft", texture, 0, extents_x.x, extents_z.x, extents_x.y, extents_z.x, extents_y.y - extents_y.x, extents_y.y - extents_y.x, extents_y.x, extents_y.x, tw, th, true);
-		sbs->GetPolyMesh()->ResetWalls();
+		PolyMesh* polymesh = sbs->GetPolyMesh();
 
-		sbs->GetPolyMesh()->DrawWalls(true, false, false, false, false, false);
+		polymesh->DrawWalls(false, true, false, false, false, false);
 		if (direction == true)
-			sbs->GetPolyMesh()->AddWallMain(wall, "DoorwayRight", texture, 0, extents_x.y, extents_z.x, extents_x.y, extents_z.y, extents_y.y - extents_y.x, extents_y.y - extents_y.x, extents_y.x, extents_y.x, tw, th, true);
+			polymesh->AddWallMain(wall, "DoorwayLeft", texture, 0, extents_x.x, extents_z.x, extents_x.x, extents_z.y, extents_y.y - extents_y.x, extents_y.y - extents_y.x, extents_y.x, extents_y.x, tw, th, true);
 		else
-			sbs->GetPolyMesh()->AddWallMain(wall, "DoorwayRight", texture, 0, extents_x.x, extents_z.y, extents_x.y, extents_z.y, extents_y.y - extents_y.x, extents_y.y - extents_y.x, extents_y.x, extents_y.x, tw, th, true);
+			polymesh->AddWallMain(wall, "DoorwayLeft", texture, 0, extents_x.x, extents_z.x, extents_x.y, extents_z.x, extents_y.y - extents_y.x, extents_y.y - extents_y.x, extents_y.x, extents_y.x, tw, th, true);
+		polymesh->ResetWalls();
 
-		sbs->GetPolyMesh()->AddFloorMain(wall, "DoorwayTop", texture, 0, extents_x.x, extents_z.x, extents_x.y, extents_z.y, extents_y.y, extents_y.y, false, false, tw, th, true);
-		sbs->GetPolyMesh()->ResetWalls();
+		polymesh->DrawWalls(true, false, false, false, false, false);
+		if (direction == true)
+			polymesh->AddWallMain(wall, "DoorwayRight", texture, 0, extents_x.y, extents_z.x, extents_x.y, extents_z.y, extents_y.y - extents_y.x, extents_y.y - extents_y.x, extents_y.x, extents_y.x, tw, th, true);
+		else
+			polymesh->AddWallMain(wall, "DoorwayRight", texture, 0, extents_x.x, extents_z.y, extents_x.y, extents_z.y, extents_y.y - extents_y.x, extents_y.y - extents_y.x, extents_y.x, extents_y.x, tw, th, true);
+
+		polymesh->AddFloorMain(wall, "DoorwayTop", texture, 0, extents_x.x, extents_z.x, extents_x.y, extents_z.y, extents_y.y, extents_y.y, false, false, tw, th, true);
+		polymesh->ResetWalls();
 
 		ResetDoorwayWalls();
 

@@ -74,8 +74,10 @@ RevolvingDoor::RevolvingDoor(Object *parent, DynamicMesh *wrapper, const std::st
 	if (soundfile != "")
 		sound = new Sound(this, "DoorSound", true);
 
+	PolyMesh* polymesh = sbs->GetPolyMesh();
+
 	//create door
-	sbs->GetPolyMesh()->DrawWalls(true, true, true, true, true, true);
+	polymesh->DrawWalls(true, true, true, true, true, true);
 	sbs->GetTextureManager()->ResetTextureMapping(true);
 
 	Wall *wall = DoorMesh->CreateWallObject(name);
@@ -85,26 +87,26 @@ RevolvingDoor::RevolvingDoor(Object *parent, DynamicMesh *wrapper, const std::st
 	if (Segments == 3)
 	{
 		sbs->GetTextureManager()->SetTextureFlip(1, 0, 0, 0, 0, 0); //flip texture on rear side of door
-		sbs->GetPolyMesh()->AddWallMain(wall, name, texture, thickness, -width, -width, 0, 0, height, height, 0, 0, tw, th, false);
-		sbs->GetPolyMesh()->AddWallMain(wall, name, texture, thickness, 0, 0, width, -width, height, height, 0, 0, tw, th, false);
+		polymesh->AddWallMain(wall, name, texture, thickness, -width, -width, 0, 0, height, height, 0, 0, tw, th, false);
+		polymesh->AddWallMain(wall, name, texture, thickness, 0, 0, width, -width, height, height, 0, 0, tw, th, false);
 		sbs->GetTextureManager()->SetTextureFlip(0, 1, 0, 0, 0, 0); //flip texture on rear side of door
-		sbs->GetPolyMesh()->AddWallMain(wall, name, texture, thickness, 0, 0, 0, width, height, height, 0, 0, tw, th, false);
+		polymesh->AddWallMain(wall, name, texture, thickness, 0, 0, 0, width, height, height, 0, 0, tw, th, false);
 	}
 	else
 	{
 		sbs->GetTextureManager()->SetTextureFlip(0, 1, 0, 0, 0, 0); //flip texture on rear side of door
-		sbs->GetPolyMesh()->AddWallMain(wall, name, texture, thickness, -width, 0, 0, 0, height, height, 0, 0, tw, th, false);
+		polymesh->AddWallMain(wall, name, texture, thickness, -width, 0, 0, 0, height, height, 0, 0, tw, th, false);
 		sbs->GetTextureManager()->SetTextureFlip(1, 0, 0, 0, 0, 0); //flip texture on rear side of door
-		sbs->GetPolyMesh()->AddWallMain(wall, name, texture, thickness, 0, 0, width, 0, height, height, 0, 0, tw, th, false);
+		polymesh->AddWallMain(wall, name, texture, thickness, 0, 0, width, 0, height, height, 0, 0, tw, th, false);
 		if (Segments == 4)
 		{
 			sbs->GetTextureManager()->SetTextureFlip(1, 0, 0, 0, 0, 0); //flip texture on rear side of door
-			sbs->GetPolyMesh()->AddWallMain(wall, name, texture, thickness, 0, -width, 0, 0, height, height, 0, 0, tw, th, false);
+			polymesh->AddWallMain(wall, name, texture, thickness, 0, -width, 0, 0, height, height, 0, 0, tw, th, false);
 			sbs->GetTextureManager()->SetTextureFlip(0, 1, 0, 0, 0, 0); //flip texture on rear side of door
-			sbs->GetPolyMesh()->AddWallMain(wall, name, texture, thickness, 0, 0, 0, width, height, height, 0, 0, tw, th, false);
+			polymesh->AddWallMain(wall, name, texture, thickness, 0, 0, 0, width, height, height, 0, 0, tw, th, false);
 		}
 	}
-	sbs->GetPolyMesh()->ResetWalls();
+	polymesh->ResetWalls();
 	sbs->GetTextureManager()->ResetTextureMapping();
 
 	Rotate(GetRotation().x, rotation, GetRotation().z);

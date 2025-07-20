@@ -470,8 +470,9 @@ Wall* Elevator::CreateCounterweight(const std::string &frame_texture, const std:
 	sbs->GetTextureManager()->GetAutoSize(autosize_x, autosize_y);
 	sbs->GetTextureManager()->SetAutoSize(false, false);
 
-	Wall *frame = sbs->GetPolyMesh()->CreateWallBox(WeightMesh, "Counterweight Frame", frame_texture, -size.x / 2, size.x / 2, -size.z / 2, size.z / 2, size.y, 0, 1, 1, true, true, false, false, false);
-	Wall *counterweight = sbs->GetPolyMesh()->CreateWallBox(WeightMesh, "Counterweight", weight_texture, (-size.x / 2) + 0.01, (size.x / 2) - 0.01, (-size.z / 2) + 0.01, (size.z / 2) - 0.01, size.y / 2, weight_voffset, 1, 1);
+	PolyMesh* polymesh = sbs->GetPolyMesh();
+	Wall *frame = polymesh->CreateWallBox(WeightMesh, "Counterweight Frame", frame_texture, -size.x / 2, size.x / 2, -size.z / 2, size.z / 2, size.y, 0, 1, 1, true, true, false, false, false);
+	Wall *counterweight = polymesh->CreateWallBox(WeightMesh, "Counterweight", weight_texture, (-size.x / 2) + 0.01, (size.x / 2) - 0.01, (-size.z / 2) + 0.01, (size.z / 2) - 0.01, size.y / 2, weight_voffset, 1, 1);
 
 	Floor *topfloor, *carfloor, *topcarfloor, *bottomfloor;
 	topfloor = sbs->GetFloor(GetTopFloor());
@@ -489,16 +490,16 @@ Wall* Elevator::CreateCounterweight(const std::string &frame_texture, const std:
 	Real counterweight_rope_height = MotorPosition.y - (WeightMesh->GetPosition().y + (size.y - 0.5));
 	Wall *c_rope;
 	if (size.x > size.z)
-		c_rope = sbs->GetPolyMesh()->AddWall(WeightRopeMesh, "Counterweight Rope", RopeTexture, 0, -size.x / 4, 0, size.x / 4, 0, counterweight_rope_height, counterweight_rope_height, 0, 0, 1, 1);
+		c_rope = polymesh->AddWall(WeightRopeMesh, "Counterweight Rope", RopeTexture, 0, -size.x / 4, 0, size.x / 4, 0, counterweight_rope_height, counterweight_rope_height, 0, 0, 1, 1);
 	else
-		c_rope = sbs->GetPolyMesh()->AddWall(WeightRopeMesh, "Counterweight Rope", RopeTexture, 0, 0, -size.z / 4, 0, size.z / 4, counterweight_rope_height, counterweight_rope_height, 0, 0, 1, 1);
+		c_rope = polymesh->AddWall(WeightRopeMesh, "Counterweight Rope", RopeTexture, 0, 0, -size.z / 4, 0, size.z / 4, counterweight_rope_height, counterweight_rope_height, 0, 0, 1, 1);
 
 	Real rope_height = MotorPosition.y - RopeMesh->GetPosition().y;
 	Wall *rope;
 	if (size.x > size.z)
-		rope = sbs->GetPolyMesh()->AddWall(RopeMesh, "Rope", RopeTexture, 0, -size.x / 4, 0, size.x / 4, 0, rope_height, rope_height, 0, 0, 1, 1);
+		rope = polymesh->AddWall(RopeMesh, "Rope", RopeTexture, 0, -size.x / 4, 0, size.x / 4, 0, rope_height, rope_height, 0, 0, 1, 1);
 	else
-		rope = sbs->GetPolyMesh()->AddWall(RopeMesh, "Rope", RopeTexture, 0, 0, -size.z / 4, 0, size.z / 4, rope_height, rope_height, 0, 0, 1, 1);
+		rope = polymesh->AddWall(RopeMesh, "Rope", RopeTexture, 0, 0, -size.z / 4, 0, size.z / 4, rope_height, rope_height, 0, 0, 1, 1);
 
 	counterweightsound = new Sound(WeightMesh, "Counterweight Sound", true);
 

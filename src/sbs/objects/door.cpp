@@ -371,19 +371,21 @@ DoorWrapper* Door::AddDoorComponent(const std::string &name, const std::string &
 	else
 		sbs->GetTextureManager()->SetTextureFlip(1, 0, 0, 0, 0, 0); //flip texture on rear side of door
 
+	PolyMesh* polymesh = sbs->GetPolyMesh();
+
 	//add main walls
-	sbs->GetPolyMesh()->DrawWalls(true, true, false, false, false, false);
+	polymesh->DrawWalls(true, true, false, false, false, false);
 	Wall *wall;
 	wall = component->mesh->CreateWallObject(name);
-	sbs->GetPolyMesh()->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height, height, voffset, voffset, tw, th, false);
-	sbs->GetPolyMesh()->ResetWalls();
+	polymesh->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height, height, voffset, voffset, tw, th, false);
+	polymesh->ResetWalls();
 	sbs->GetTextureManager()->ResetTextureMapping();
 
 	//add side walls
-	sbs->GetPolyMesh()->DrawWalls(false, false, true, true, true, true);
+	polymesh->DrawWalls(false, false, true, true, true, true);
 	wall = component->mesh->CreateWallObject(name);
-	sbs->GetPolyMesh()->AddWallMain(wall, name, sidetexture, thickness, x1, z1, x2, z2, height, height, voffset, voffset, side_tw, side_th, false);
-	sbs->GetPolyMesh()->ResetWalls();
+	polymesh->AddWallMain(wall, name, sidetexture, thickness, x1, z1, x2, z2, height, height, voffset, voffset, side_tw, side_th, false);
+	polymesh->ResetWalls();
 
 	//store extents
 	if (x1 < x2)
