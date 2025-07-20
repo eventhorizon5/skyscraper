@@ -39,9 +39,9 @@ class SBSIMPEXP FloorManager : public Manager
 {
 public:
 	FloorManager(Object *parent);
-	~FloorManager();
+	~FloorManager() override;
 	Floor* Create(int number);
-	int GetCount(); //all floors including basements
+	int GetCount() override; //all floors including basements
 	Floor* Get(int number);
 	Floor* GetIndex(int index);
 	Floor* GetByID(const std::string &id);
@@ -51,7 +51,7 @@ public:
 	DynamicMesh* GetFloorDynMesh() { return floors; }
 	DynamicMesh* GetIFloorDynMesh() { return interfloors; }
 	DynamicMesh* GetColumnDynMesh() { return columnframes; }
-	void Loop();
+	void Loop() override;
 
 private:
 	struct Map
@@ -76,14 +76,14 @@ class SBSIMPEXP ElevatorManager : public Manager
 {
 public:
 	ElevatorManager(Object* parent);
-	~ElevatorManager();
+	~ElevatorManager() override;
 	Elevator* Create(int number);
-	int GetCount();
+	int GetCount() override;
 	Elevator* Get(int number);
 	Elevator* GetIndex(int index);
 	void Remove(Elevator *elevator);
 	void EnableAll(bool value);
-	void Loop();
+	void Loop() override;
 
 private:
 	struct Map
@@ -103,14 +103,14 @@ class SBSIMPEXP ShaftManager : public Manager
 {
 public:
 	ShaftManager(Object* parent);
-	~ShaftManager();
+	~ShaftManager() override;
 	Shaft* Create(int number, Real CenterX, Real CenterZ, int _startfloor, int _endfloor);
-	int GetCount();
+	int GetCount() override;
 	Shaft* Get(int number);
 	Shaft* GetIndex(int index);
 	void Remove(Shaft *shaft);
 	void EnableAll(bool value);
-	void Loop();
+	void Loop() override;
 
 private:
 	struct Map
@@ -130,14 +130,14 @@ class SBSIMPEXP StairwellManager : public Manager
 {
 public:
 	StairwellManager(Object* parent);
-	~StairwellManager();
+	~StairwellManager() override;
 	Stairwell* Create(int number, Real CenterX, Real CenterZ, int _startfloor, int _endfloor);
-	int GetCount();
+	int GetCount() override;
 	Stairwell* Get(int number);
 	Stairwell* GetIndex(int index);
 	void Remove(Stairwell *stairs);
 	void EnableAll(bool value);
-	void Loop();
+	void Loop() override;
 
 private:
 	struct Map
@@ -157,14 +157,14 @@ class SBSIMPEXP DoorManager : public Manager
 {
 public:
 	DoorManager(Object* parent);
-	~DoorManager();
+	~DoorManager() override;
 	Door* AddDoor(std::string name, const std::string &open_sound, const std::string &close_sound, bool open_state, const std::string &texture, const std::string &side_texture, Real thickness, const std::string &face_direction, const std::string &open_direction, bool rotate, Real open_speed, Real close_speed, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th, Real side_tw, Real side_th);
 	Door* CreateDoor(std::string name, const std::string &open_sound, const std::string &close_sound, bool rotate);
 	Door* GetDoor(const std::string &name);
 	void RemoveDoor(Door *door);
-	int GetCount();
+	int GetCount() override;
 	Door* GetIndex(int index);
-	void Loop();
+	void Loop() override;
 
 private:
 	std::vector<Door*> Array;
@@ -175,12 +175,12 @@ class SBSIMPEXP RevolvingDoorManager : public Manager
 {
 public:
 	RevolvingDoorManager(Object* parent);
-	~RevolvingDoorManager();
+	~RevolvingDoorManager() override;
 	RevolvingDoor* AddDoor(std::string name, bool run, const std::string &soundfile, const std::string &texture, Real thickness, bool clockwise, int segments, Real speed, Real rotation, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th);
 	void RemoveDoor(RevolvingDoor *door);
-	int GetCount();
+	int GetCount() override;
 	RevolvingDoor* GetIndex(int index);
-	void Loop();
+	void Loop() override;
 
 private:
 	std::vector<RevolvingDoor*> Array;
@@ -191,13 +191,13 @@ class SBSIMPEXP VehicleManager : public Manager
 {
 public:
 	VehicleManager(Object* parent);
-	~VehicleManager();
+	~VehicleManager() override;
 	Vehicle* Create(int number);
-	int GetCount();
+	int GetCount() override;
 	Vehicle* Get(int number);
 	Vehicle* GetIndex(int index);
 	void Remove(Vehicle *elevator);
-	void Loop();
+	void Loop() override;
 
 private:
 	struct Map
@@ -217,13 +217,13 @@ class SBSIMPEXP ControllerManager : public Manager
 {
 public:
 	ControllerManager(Object* parent);
-	~ControllerManager();
+	~ControllerManager() override;
 	DispatchController* Create(int number);
-	int GetCount();
+	int GetCount() override;
 	DispatchController* Get(int number);
 	DispatchController* GetIndex(int index);
 	void Remove(DispatchController *controller);
-	void Loop();
+	void Loop() override;
 
 private:
 	struct Map
