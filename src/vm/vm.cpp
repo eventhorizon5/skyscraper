@@ -160,7 +160,7 @@ EngineContext* VM::CreateEngine(EngineContext *parent, const Vector3 &position, 
 	return engine;
 }
 
-bool VM::DeleteEngine(EngineContext *engine)
+bool VM::DeleteEngine(const EngineContext *engine)
 {
 	//delete a specified sim engine instance
 
@@ -513,7 +513,7 @@ void VM::SwitchEngines()
 	active_engine->RevertMovement();
 }
 
-bool VM::IsValidEngine(EngineContext *engine)
+bool VM::IsValidEngine(const EngineContext *engine)
 {
 	//returns true if the specified engine is valid (currently running)
 
@@ -528,7 +528,7 @@ bool VM::IsValidEngine(EngineContext *engine)
 	return false;
 }
 
-bool VM::IsValidSystem(::SBS::SBS *sbs)
+bool VM::IsValidSystem(const ::SBS::SBS *sbs)
 {
 	//returns true if the specified SBS instance is valid (being used by an engine context)
 

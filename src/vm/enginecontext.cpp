@@ -701,7 +701,7 @@ void EngineContext::AddChild(EngineContext *engine)
 		children.emplace_back(engine);
 }
 
-void EngineContext::RemoveChild(EngineContext *engine)
+void EngineContext::RemoveChild(const EngineContext *engine)
 {
 	for (size_t i = 0; i < children.size(); i++)
 	{

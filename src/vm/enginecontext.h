@@ -77,7 +77,7 @@ public:
 	void OnExit();
 	void CutForEngine(EngineContext *engine);
 	void AddChild(EngineContext *engine);
-	void RemoveChild(EngineContext *engine);
+	void RemoveChild(const EngineContext *engine);
 	void RemoveParent() { parent = 0; }
 	void Move(Vector3 &position, bool move_children = false);
 	EngineContext* GetParent() { return parent; }

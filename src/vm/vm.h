@@ -82,15 +82,15 @@ public:
 	EngineContext* GetActiveEngine() { return active_engine; }
 	EngineContext* GetEngine(int number);
 	EngineContext* CreateEngine(EngineContext *parent = 0, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
-	bool DeleteEngine(EngineContext *engine);
+	bool DeleteEngine(const EngineContext *engine);
 	void DeleteEngines();
 	int GetEngineCount(bool loading_only = false);
 	int GetEngineListSize() { return (int)engines.size(); }
 	EngineContext* FindActiveEngine();
 	void SetActiveEngine(int number, bool switch_engines = false, bool force = false);
 	bool IsEngineLoading();
-	bool IsValidEngine(EngineContext *engine);
-	bool IsValidSystem(::SBS::SBS *sbs);
+	bool IsValidEngine(const EngineContext *engine);
+	bool IsValidSystem(const ::SBS::SBS *sbs);
 	int RegisterEngine(EngineContext *engine);
 	EngineContext* GetFirstValidEngine();
 	int GetFreeInstanceNumber();
