@@ -284,7 +284,7 @@ bool ScriptProcessor::Section::IfProc(const std::string &expression)
 		}
 		else
 			break;
-	} while (1 == 1);
+	} while (true);
 	//find number of operators and recurse if multiple found
 	int operators;
 	int operators2;
@@ -346,7 +346,7 @@ bool ScriptProcessor::Section::IfProc(const std::string &expression)
 		}
 		else
 			break;
-	} while (1 == 1);
+	} while (true);
 	//return value if none found
 	if (operators == 0)
 		return ToBool(tmpcalc);
@@ -1086,11 +1086,12 @@ MeshObject* ScriptProcessor::Section::GetMeshObject(std::string name)
 
 			std::string num, modelname;
 			int marker = (int)name.find(":");
-			if (marker > 0)
-				modelname = name.substr(marker + 1);
 
 			if (marker > 0)
+			{
+				modelname = name.substr(marker + 1);
 				num = name.substr(5, (int)name.length() - marker - 1);
+			}
 			else
 				num = name.substr(5);
 
@@ -1135,11 +1136,12 @@ MeshObject* ScriptProcessor::Section::GetMeshObject(std::string name)
 
 			std::string num, modelname;
 			int marker = (int)name.find(":");
-			if (marker > 0)
-				modelname = name.substr(marker + 1);
 
 			if (marker > 0)
+			{
+				modelname = name.substr(marker + 1);
 				num = name.substr(9, (int)name.length() - marker - 1);
+			}
 			else
 				num = name.substr(9);
 
