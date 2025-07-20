@@ -570,7 +570,8 @@ bool SBS::Start(std::vector<Ogre::Camera*> &cameras)
 	}
 
 	//print a memory report
-	MemoryReport();
+	if (Verbose == true)
+		MemoryReport();
 
 	IsRunning = true;
 
