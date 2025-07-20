@@ -94,7 +94,7 @@ Polygon* Wall::AddPolygon(const std::string &name, const std::string &texture, P
 
 	Matrix3 tm;
 	Vector3 tv;
-	std::vector<Extents> index_extents;
+	//std::vector<Extents> index_extents;
 	std::vector<std::vector<Polygon::Geometry> > geometry;
 	std::vector<Triangle> triangles;
 	PolygonSet converted_vertices;

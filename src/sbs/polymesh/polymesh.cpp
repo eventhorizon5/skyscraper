@@ -210,7 +210,6 @@ bool PolyMesh::CreateMesh(MeshObject *mesh, const std::string &name, const std::
 	}
 
 	//initialize geometry arrays
-	size_t size = 0;
 	geometry.resize(trimesh_size);
 
 	for (size_t i = 0; i < trimesh_size; i++)
