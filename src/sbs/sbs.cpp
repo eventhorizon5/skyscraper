@@ -771,7 +771,12 @@ int SBS::GetFloorNumber(Real altitude, int lastfloor, bool checklastfloor)
 		Real lastfloor_altitude = GetFloor(lastfloor)->Altitude;
 		Real upperfloor_altitude;
 		if (lastfloor < Floors - 1)
-			upperfloor_altitude = GetFloor(lastfloor + 1)->Altitude;
+		{
+			if (GetFloor(lastfloor + 1))
+				upperfloor_altitude = GetFloor(lastfloor + 1)->Altitude;
+			else
+				upperfloor_altitude = GetFloor(lastfloor)->Altitude + GetFloor(lastfloor)->FullHeight();
+		}
 		else
 			upperfloor_altitude = GetFloor(lastfloor)->Altitude + GetFloor(lastfloor)->FullHeight();
 
@@ -784,6 +789,8 @@ int SBS::GetFloorNumber(Real altitude, int lastfloor, bool checklastfloor)
 			{
 				for (int i = lastfloor - 1; i >= -Basements; i--)
 				{
+					if (!GetFloor(i + 1) || !GetFloor(i))
+						continue;
 					if (GetFloor(i + 1)->Altitude > altitude && GetFloor(i)->Altitude <= altitude)
 						return i;
 				}
@@ -792,8 +799,13 @@ int SBS::GetFloorNumber(Real altitude, int lastfloor, bool checklastfloor)
 			{
 				for (int i = lastfloor + 1; i < Floors; i++)
 				{
-					if (GetFloor(i - 1)->Altitude <= altitude && GetFloor(i)->Altitude > altitude)
-						return i - 1;
+					if (!GetFloor(i))
+						continue;
+					if (GetFloor(i - 1))
+					{
+						if (GetFloor(i - 1)->Altitude <= altitude && GetFloor(i)->Altitude > altitude)
+							return i - 1;
+					}
 					if (i == Floors - 1 && GetFloor(i)->Altitude <= altitude)
 						return i; //return top floor if on top
 				}
@@ -804,10 +816,16 @@ int SBS::GetFloorNumber(Real altitude, int lastfloor, bool checklastfloor)
 	//otherwise do a slow linear search through floors
 	for (int i = -Basements + 1; i < Floors; i++)
 	{
+		if (!GetFloor(i))
+			continue;
+
 		//check to see if altitude is within a floor (between the current floor's base and
 		//the lower floor's base)
-		if ((GetFloor(i)->Altitude > altitude) && (GetFloor(i - 1)->Altitude <= altitude))
-			return i - 1;
+		if (GetFloor(i - 1))
+		{
+			if ((GetFloor(i)->Altitude > altitude) && (GetFloor(i - 1)->Altitude <= altitude))
+				return i - 1;
+		}
 		//check to see if altitude is above top floor's altitude
 		if ((i == Floors - 1) && (altitude > GetFloor(i)->Altitude))
 			return i;
