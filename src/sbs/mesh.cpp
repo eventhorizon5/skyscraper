@@ -209,9 +209,7 @@ Wall* MeshObject::CreateWallObject(const std::string &name)
 {
 	//create a new wall object in the given array
 
-	Wall *wall = new Wall(this);
-	wall->SetParentArray(Walls);
-	wall->SetValues("Wall", name, false, true);
+	Wall *wall = new Wall(this, name);
 	Walls.emplace_back(wall);
 	return wall;
 }
