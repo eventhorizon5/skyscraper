@@ -2887,7 +2887,7 @@ bool ElevatorCar::PlayMessageSound(bool type)
 
 		if (MessageOnMove == false)
 		{
-			if (parent->LastChimeDirection == 0) //FIXME
+			if (parent->LastChimeDirection == 0)
 				return false;
 
 			if (parent->NotifyLate == false && parent->NotifyEarly == -1)
@@ -2895,8 +2895,8 @@ bool ElevatorCar::PlayMessageSound(bool type)
 
 			direction = parent->LastChimeDirection;
 
-			if (parent->LastChimeDirection == 0) //FIXME
-				direction = parent->GetRouteController()->LastQueueDirection;
+			//if (parent->LastChimeDirection == 0)
+				//direction = parent->GetRouteController()->LastQueueDirection;
 		}
 		else
 			direction = parent->ActiveDirection;
