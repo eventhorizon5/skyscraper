@@ -459,6 +459,11 @@ void DebugPanel::OnInit()
 	chkMalfunctions->SetValue(Simcore->Malfunctions);
 	chkPower->SetValue(Simcore->GetPower());
 
+	//disable sound manager button if sound is disabled
+#ifdef DISABLE_SOUND
+	bSoundManager->Enable(false);
+#endif
+
 	if (!timer)
 		timer = new Timer(this, Simcore);
 	else
