@@ -691,7 +691,7 @@ void ElevatorCar::Alarm()
 			alarm->Play();
 		}
 	}
-	else if (AlarmActive == true && sbs->camera->MouseDown() == false)
+	else if (sbs->camera->MouseDown() == false)
 	{
 		//stop alarm
 		AlarmActive = false;
@@ -845,7 +845,7 @@ void ElevatorCar::Loop()
 				}
 			}
 		}
-		else if (MusicAlwaysOn == true) //always-on mode
+		else //always-on mode
 		{
 			if (musicsound->IsPlaying() == false && MusicOn == true && MusicOnMove == false)
 			{
@@ -2887,18 +2887,15 @@ bool ElevatorCar::PlayMessageSound(bool type)
 
 		if (MessageOnMove == false)
 		{
-			if (type == true)
-			{
-				if (parent->LastChimeDirection == 0)
-					return false;
+			if (parent->LastChimeDirection == 0) //FIXME
+				return false;
 
-				if (parent->NotifyLate == false && parent->NotifyEarly == -1)
-					return false;
-			}
+			if (parent->NotifyLate == false && parent->NotifyEarly == -1)
+				return false;
 
 			direction = parent->LastChimeDirection;
 
-			if (parent->LastChimeDirection == 0)
+			if (parent->LastChimeDirection == 0) //FIXME
 				direction = parent->GetRouteController()->LastQueueDirection;
 		}
 		else
