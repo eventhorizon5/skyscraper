@@ -329,7 +329,7 @@ public:
 	void EnableRandomActivity(bool value);
 	void EnableMalfunctions(bool value);
 	SoundSystem* GetSoundSystem();
-	bool IsObjectValid(Object* object, std::string type = "");
+	bool IsObjectValid(Object* object, const std::string &type = "");
 	bool IsActionValid(Action* action);
 	std::vector<ElevatorRoute*> GetRouteToFloor(int StartingFloor, int DestinationFloor, bool service_access = false);
 	Person* CreatePerson(std::string name = "", int floor = 0, bool service_access = false);

@@ -2817,7 +2817,7 @@ void SBS::EnableRandomActivity(bool value)
 		//enable random activity on the person
 		person->EnableRandomActivity(true);
 	}
-	else if (value == false)
+	else
 	{
 		for (size_t i = 0; i < PersonArray.size(); i++)
 		{
@@ -2858,7 +2858,7 @@ void SBS::EnableMalfunctions(bool value)
 	Malfunctions = value;
 }
 
-bool SBS::IsObjectValid(Object *object, std::string type)
+bool SBS::IsObjectValid(Object *object, const std::string &type)
 {
 	//test if an object is valid
 
