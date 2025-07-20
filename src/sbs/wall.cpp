@@ -145,6 +145,9 @@ void Wall::DeletePolygons(bool recreate_collider)
 {
 	//delete polygons
 
+	if (!meshwrapper)
+		return;
+
 	for (size_t i = polygons.size() - 1; i < polygons.size(); --i)
 	{
 		delete polygons[i];
@@ -165,6 +168,9 @@ void Wall::DeletePolygons(bool recreate_collider)
 void Wall::DeletePolygon(int index, bool recreate_colliders)
 {
 	//delete a single polygon
+
+	if (!meshwrapper)
+		return;
 
 	if (index > -1 && index < (int)polygons.size())
 	{
@@ -190,7 +196,10 @@ int Wall::GetPolygonCount()
 Polygon* Wall::GetPolygon(int index)
 {
 	if (index > -1 && index < (int)polygons.size())
-		return polygons[index];
+	{
+		if (polygons[index])
+			return polygons[index];
+	}
 	return 0;
 }
 
@@ -202,6 +211,9 @@ int Wall::FindPolygon(const std::string &name)
 
 	for (size_t i = 0; i < polygons.size(); i++)
 	{
+		if (!polygons[i])
+			continue;
+
 		if (name == polygons[i]->GetName())
 			return (int)i;
 	}
@@ -225,6 +237,9 @@ bool Wall::IntersectsWall(Vector3 start, Vector3 end, Vector3 &isect, bool conve
 
 	for (size_t i = 0; i < polygons.size(); i++)
 	{
+		if (!polygons[i])
+			continue;
+
 		if (polygons[i]->IntersectSegment(start, end, cur_isect, &pr, normal))
 		{
 			if (pr < best_pr)
@@ -246,13 +261,17 @@ void Wall::Move(const Vector3 &vector, Real speed)
 {
 	//move a wall object
 
+	if (!meshwrapper)
+		return;
+
 	//move base object
 	Object::Move(vector, speed);
 
 	//move polygons
 	for (size_t i = 0; i < polygons.size(); i++)
 	{
-		polygons[i]->Move(vector, speed);
+		if (polygons[i])
+			polygons[i]->Move(vector, speed);
 	}
 
 	//prepare mesh
@@ -292,8 +311,13 @@ Vector3 Wall::GetWallExtents(Real altitude, bool get_max)
 {
 	//return the X and Z extents of this wall object at a specific altitude, by doing a double plane cut
 
+	Utility* utility = sbs->GetUtility();
+
 	for (int i = 0; i < GetPolygonCount(); i++)
 	{
+		if (!polygons[i])
+			continue;
+
 		PolyArray poly, tmp1, tmp2;
 		for (size_t j = 0; j < polygons[i]->geometry[0].size(); j++)
 		{
@@ -301,29 +325,29 @@ Vector3 Wall::GetWallExtents(Real altitude, bool get_max)
 		}
 
 		//if given altitude is outside of polygon's range, return 0
-		Vector2 yextents = sbs->GetUtility()->GetExtents(poly, 2);
+		Vector2 yextents = utility->GetExtents(poly, 2);
 		Real tmpaltitude = altitude;
 		if (tmpaltitude < yextents.x || tmpaltitude > yextents.y)
 			return Vector3(0, 0, 0);
 
 		//get upper
-		sbs->GetUtility()->SplitWithPlane(1, poly, tmp1, tmp2, tmpaltitude - 0.001);
+		utility->SplitWithPlane(1, poly, tmp1, tmp2, tmpaltitude - 0.001);
 
 		//get lower part of upper
-		sbs->GetUtility()->SplitWithPlane(1, tmp2, poly, tmp1, tmpaltitude + 0.001);
+		utility->SplitWithPlane(1, tmp2, poly, tmp1, tmpaltitude + 0.001);
 
 		Vector3 result;
 		if (get_max == false)
 		{
 			//get minimum extents
-			result.x = sbs->GetUtility()->GetExtents(poly, 1).x;
-			result.z = sbs->GetUtility()->GetExtents(poly, 3).x;
+			result.x = utility->GetExtents(poly, 1).x;
+			result.z = utility->GetExtents(poly, 3).x;
 		}
 		else
 		{
 			//get maximum extents
-			result.x = sbs->GetUtility()->GetExtents(poly, 1).y;
-			result.z = sbs->GetUtility()->GetExtents(poly, 3).y;
+			result.x = utility->GetExtents(poly, 1).y;
+			result.z = utility->GetExtents(poly, 3).y;
 		}
 		result.y = altitude;
 		return result; //only check the first polygon for now
@@ -336,9 +360,13 @@ void Wall::ChangeHeight(Real newheight)
 {
 	//change height of a wall object
 
+	if (!meshwrapper)
+		return;
+
 	for (size_t i = 0; i < polygons.size(); i++)
 	{
-		polygons[i]->ChangeHeight(newheight);
+		if (polygons[i])
+			polygons[i]->ChangeHeight(newheight);
 	}
 
 	//prepare mesh
@@ -353,7 +381,8 @@ unsigned int Wall::GetVertexCount()
 	unsigned int total = 0;
 	for (size_t i = 0; i < polygons.size(); i++)
 	{
-		total += polygons[i]->vertex_count;
+		if (polygons[i])
+			total += polygons[i]->vertex_count;
 	}
 	return total;
 }
@@ -363,7 +392,8 @@ unsigned int Wall::GetTriangleCount()
 	unsigned int total = 0;
 	for (size_t i = 0; i < polygons.size(); i++)
 	{
-		total += polygons[i]->triangles.size();
+		if (polygons[i])
+			total += polygons[i]->triangles.size();
 	}
 	return total;
 }
@@ -375,6 +405,9 @@ bool Wall::ReplaceTexture(const std::string &oldtexture, const std::string &newt
 	for (int i = 0; i < GetPolygonCount(); i++)
 	{
 		Polygon *poly = GetPolygon(i);
+		if (!poly)
+			continue;
+
 		bool result = poly->ReplaceTexture(oldtexture, newtexture);
 		if (result == true)
 			found = true;
@@ -389,6 +422,9 @@ bool Wall::ChangeTexture(const std::string &texture, bool matcheck)
 	for (int i = 0; i < GetPolygonCount(); i++)
 	{
 		Polygon *poly = GetPolygon(i);
+		if (!poly)
+			continue;
+
 		bool result = poly->ChangeTexture(texture, matcheck);
 		if (result == true)
 			found = true;
