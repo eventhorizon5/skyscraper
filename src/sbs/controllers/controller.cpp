@@ -37,7 +37,7 @@ DispatchController::DispatchController(Object *parent, int number) : Object(pare
 	//create a dispatch controller object
 
 	//set up SBS object
-	SetValues("DispatchController", "Dispatch Controller " + ToString(number), false);
+	SetValues("DispatchController", "Dispatch Controller " + ToString(number), false, false);
 
 	Number = number;
 	Range = 5;
