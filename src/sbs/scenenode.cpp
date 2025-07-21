@@ -25,6 +25,7 @@
 #include <OgreSceneNode.h>
 #include "globals.h"
 #include "sbs.h"
+#include "trigger.h"
 #include "scenenode.h"
 
 namespace SBS {
@@ -104,6 +105,17 @@ void SceneNode::SetPosition(const Vector3 &position, bool relative)
 
 	if (!node)
 		return;
+
+	//prevent setting position outside of sim engine boundaries
+	if (sbs->GetAreaTrigger())
+	{
+		if (sbs->GetAreaTrigger()->IsOutside(position) == true)
+		{
+			if (sbs->Verbose)
+				ReportError("Cannot move outside of engine boundaries");
+			return;
+		}
+	}
 
 	if (relative == false)
 	{
@@ -239,6 +251,18 @@ void SceneNode::Move(const Vector3 &vector, Real speed)
 		return;
 
 	Vector3 v = vector * speed;
+
+	//prevent movement outside sim engine boundaries
+        if (sbs->GetAreaTrigger())
+        {
+                if (sbs->GetAreaTrigger()->IsOutside(GetPosition() + v) == true)
+                {
+                        if (sbs->Verbose)
+                                ReportError("Cannot move outside of engine boundaries");
+                        return;
+                }
+        }
+
 	node->translate(sbs->ToRemote(v));
 
 	Update();

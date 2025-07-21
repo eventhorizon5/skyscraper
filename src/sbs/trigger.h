@@ -54,6 +54,7 @@ public:
 	Ogre::AxisAlignedBox GetBounds(bool relative = false);
 	Vector3 GetMin();
 	Vector3 GetMax();
+	bool IsOutside(Vector3 position);
 	bool IsOutside(Vector3 v1, Vector3 v2);
 	virtual void OnEntry() {}
 	virtual void OnExit() {}
