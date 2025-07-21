@@ -1657,7 +1657,7 @@ MovingWalkway* Floor::AddMovingWalkway(const std::string &name, int run, Real sp
 void Floor::SetAltitude(Real altitude)
 {
 	//position object at altitude
-	SetPositionY(altitude);
+	SetPositionY(altitude, true);
 	Altitude = altitude;
 	AltitudeSet = true;
 }
