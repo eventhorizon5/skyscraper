@@ -360,7 +360,7 @@ bool PolyMesh::AddWallMain(Wall* wallobject, const std::string &name, const std:
 		Vector3 v1x = wallobject->GetMesh()->GetPosition() + v1;
 		Vector3 v2x = wallobject->GetMesh()->GetPosition() + v3;
 		if (sbs->GetAreaTrigger()->IsOutside(v1x, v2x) == true)
-			return false;
+			return ReportError("Cannot create wall outside of engine boundaries");
 	}
 
 	//expand to specified thickness
@@ -639,7 +639,7 @@ bool PolyMesh::AddFloorMain(Wall* wallobject, const std::string &name, const std
 		Vector3 v1x = wallobject->GetMesh()->GetPosition() + v1;
 		Vector3 v2x = wallobject->GetMesh()->GetPosition() + v3;
 		if (sbs->GetAreaTrigger()->IsOutside(v1x, v2x) == true)
-			return false;
+			return ReportError("Cannot create wall outside of engine boundaries");
 	}
 
 	//expand to specified thickness
