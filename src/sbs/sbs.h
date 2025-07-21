@@ -417,6 +417,7 @@ public:
 	void EnableMap(bool value);
 	int GetTextureCount();
 	Trigger* GetAreaTrigger();
+	Vector3 GetCenter();
 
 	//Meshes
 	MeshObject* Buildings;
