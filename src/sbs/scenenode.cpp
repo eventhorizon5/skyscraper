@@ -109,11 +109,11 @@ void SceneNode::SetPosition(const Vector3 &position, bool relative)
 	//prevent setting position outside of sim engine boundaries
 	if (sbs->GetAreaTrigger())
 	{
-		if (sbs->GetAreaTrigger()->IsOutside(position) == true)
+		if (sbs->GetAreaTrigger()->IsOutside(position) == true && relative == false)
 		{
 			if (sbs->Verbose)
 				ReportError("Cannot move outside of engine boundaries");
-			return;
+			//return;
 		}
 	}
 
@@ -253,15 +253,15 @@ void SceneNode::Move(const Vector3 &vector, Real speed)
 	Vector3 v = vector * speed;
 
 	//prevent movement outside sim engine boundaries
-        if (sbs->GetAreaTrigger())
-        {
-                if (sbs->GetAreaTrigger()->IsOutside(GetPosition() + v) == true)
-                {
-                        if (sbs->Verbose)
-                                ReportError("Cannot move outside of engine boundaries");
-                        return;
-                }
-        }
+	if (sbs->GetAreaTrigger())
+	{
+		if (sbs->GetAreaTrigger()->IsOutside(GetPosition() + v) == true)
+		{
+			if (sbs->Verbose)
+				ReportError("Cannot move outside of engine boundaries");
+			//return;
+		}
+	}
 
 	node->translate(sbs->ToRemote(v));
 
