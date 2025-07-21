@@ -1498,7 +1498,7 @@ void ElevatorDoor::Enabled(bool value)
 bool ElevatorDoor::IsEnabled()
 {
 	//are doors enabled?
-	return Doors->IsEnabled;
+	return Doors->IsEnabled();
 }
 
 int ElevatorDoor::GetWhichDoors()

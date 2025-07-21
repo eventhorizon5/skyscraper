@@ -75,7 +75,7 @@ Floor::Floor(Object *parent, FloorManager *manager, int number) : Object(parent)
 	ColumnFrame = new MeshObject(this, "ColumnFrame " + num, manager->GetColumnDynMesh());
 
 	//set enabled flags
-	IsEnabled = true;
+	is_enabled = true;
 	IsColumnFrameEnabled = true;
 	IsInterfloorEnabled = true;
 
@@ -379,12 +379,12 @@ void Floor::Enabled(bool value)
 {
 	//turns floor on/off
 
-	if (IsEnabled == value)
+	if (is_enabled == value)
 		return;
 
 	SBS_PROFILE("Floor::Enabled");
 	Level->Enabled(value);
-	IsEnabled = value;
+	is_enabled = value;
 
 	EnableLoop(value);
 
@@ -405,7 +405,7 @@ void Floor::Enabled(bool value)
 			Floor *floor = sbs->GetFloor(Number - 1);
 			if (floor)
 			{
-				if (floor->IsEnabled == false)
+				if (floor->IsEnabled() == false)
 					EnableInterfloor(false);
 			}
 			else
@@ -415,7 +415,7 @@ void Floor::Enabled(bool value)
 			floor = sbs->GetFloor(Number + 1);
 			if (floor)
 			{
-				if (floor->IsEnabled == false)
+				if (floor->IsEnabled() == false)
 					floor->EnableInterfloor(false);
 			}
 		}
@@ -425,7 +425,7 @@ void Floor::Enabled(bool value)
 			Floor *floor = sbs->GetFloor(Number + 1);
 			if (floor)
 			{
-				if (floor->IsEnabled == false)
+				if (floor->IsEnabled() == false)
 					EnableInterfloor(false);
 			}
 			else
@@ -435,7 +435,7 @@ void Floor::Enabled(bool value)
 			floor = sbs->GetFloor(Number - 1);
 			if (floor)
 			{
-				if (floor->IsEnabled == false)
+				if (floor->IsEnabled() == false)
 					floor->EnableInterfloor(false);
 			}
 		}
@@ -570,6 +570,10 @@ void Floor::Enabled(bool value)
 	}
 }
 
+bool Floor::IsEnabled()
+{
+	return is_enabled;
+}
 Real Floor::FullHeight()
 {
 	//calculate full height of a floor
@@ -957,7 +961,7 @@ void Floor::Loop()
 {
 	//floor object main loop; runs if camera is currently on this floor
 
-	if (IsEnabled == false)
+	if (is_enabled == false)
 		return;
 
 	SBS_PROFILE("Floor::Loop");

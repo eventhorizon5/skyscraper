@@ -141,6 +141,11 @@ void CallStation::Enabled(bool value)
 	}
 }
 
+bool CallStation::IsEnabled()
+{
+	return is_enabled;
+}
+
 void CallStation::Report(const std::string &message)
 {
 	//general reporting function

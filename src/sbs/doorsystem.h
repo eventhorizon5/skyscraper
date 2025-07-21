@@ -74,6 +74,7 @@ struct DoorWrapper : public Object
 
 	DoorComponent* CreateDoor(const std::string &doorname, const std::string &Direction, bool OpenClockwise, Real OpenSpeed, Real CloseSpeed, DynamicMesh *dynmesh);
 	void Enabled(bool value);
+	bool IsEnabled();
 	bool CheckDoorsOpen();
 	bool IsFinished();
 	void ResetFinished();
@@ -86,7 +87,7 @@ struct DoorWrapper : public Object
 	std::vector<DoorComponent*> doors;
 	std::string name;
 	bool Open;
-	bool IsEnabled;
+	bool is_enabled;
 	Real Width;
 	Real Height;
 	Real Thickness;

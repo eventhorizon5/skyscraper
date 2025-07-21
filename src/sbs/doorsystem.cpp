@@ -590,7 +590,7 @@ DoorWrapper::DoorWrapper(Object *parent_obj, ElevatorDoor *door_object, bool sha
 	parent_elevdoor = door_object;
 	parent_door = 0;
 	Open = false;
-	IsEnabled = true;
+	is_enabled = true;
 	Width = 0;
 	Height = 0;
 	Thickness = 0;
@@ -617,7 +617,7 @@ DoorWrapper::DoorWrapper(Door *parent, bool rotate) : Object(parent)
 	parent_elevdoor = 0;
 	parent_door = parent;
 	Open = false;
-	IsEnabled = true;
+	is_enabled = true;
 	Width = 0;
 	Height = 0;
 	Thickness = 0;
@@ -661,7 +661,7 @@ void DoorWrapper::Enabled(bool value)
 {
 	//enable/disable door meshes
 
-	if (value == IsEnabled)
+	if (value == is_enabled)
 		return;
 
 	for (size_t i = 0; i < doors.size(); i++)
@@ -670,7 +670,12 @@ void DoorWrapper::Enabled(bool value)
 			doors[i]->mesh->Enabled(value);
 	}
 
-	IsEnabled = value;
+	is_enabled = value;
+}
+
+bool DoorWrapper::IsEnabled()
+{
+	return is_enabled;
 }
 
 void DoorWrapper::MoveDoors(bool open, bool manual)

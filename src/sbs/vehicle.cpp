@@ -306,7 +306,13 @@ void Vehicle::Loop()
 
 void Vehicle::Enabled(bool value)
 {
+	is_enabled = value;
 	EnableLoop(value);
+}
+
+bool Vehicle::IsEnabled()
+{
+	return is_enabled;
 }
 
 void Vehicle::OnMove(bool parent)

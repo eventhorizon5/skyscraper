@@ -442,7 +442,7 @@ void Stairwell::Check(Vector3 position, int current_floor, int previous_floor)
 				for (size_t i = 0; i < ShowFloorsList.size(); i++)
 				{
 					Floor *floor = sbs->GetFloor(ShowFloorsList[i]);
-					if (floor->IsEnabled == false)
+					if (floor->IsEnabled() == false)
 					{
 						floor->Enabled(true);
 						//floor->EnableGroup(true);
@@ -468,7 +468,7 @@ void Stairwell::Check(Vector3 position, int current_floor, int previous_floor)
 				if (ShowFloorsList[i] != current_floor)
 				{
 					Floor *floor = sbs->GetFloor(ShowFloorsList[i]);
-					if (floor->IsEnabled == true && floor->IsInGroup(current_floor) == false)
+					if (floor->IsEnabled() == true && floor->IsInGroup(current_floor) == false)
 					{
 						floor->Enabled(false);
 						//floor->EnableGroup(false);
