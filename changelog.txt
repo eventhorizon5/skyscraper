@@ -20,6 +20,29 @@ Version 2.1
 
 Version 2.0
 -------------------------
+-SBS: added a force mode to movement and set position functions, currently used by Floor objects.  Force mode allows objects to pass outside of the simulator engine boundaries.
+-SBS: added GetCenter() function, which returns the position of the bounds center
+-PolyMesh: CreateWallBox() and AddPolygon() functions should report and exit if attempting to create an object outside of the sim engine boundaries
+-PolyMesh: if attempting to create walls/floors outside of the engine bounds, only report if specified.
+-SBS: fixed an issue with call stations not appearing on sim engines that have off-cener bounds, the call station needs to be moved to a position within the engine bounds before creating walls
+-SBS: added GetAreaTrigger() function
+-SBS: rewrote a trigger IsOutside() function and added a variant of IsInside()
+-SBS: prevent movement and setposition outside of sim engine boundaries
+-PolyMesh: report an error if attempting to create a wall outside of engine boundaries
+-PolyMesh: DynamicMesh should report as itself
+-SBS: Abort DynamicMesh mesh creation if provided scenenode doesn't exist.  This avoids a crash if there's an issue with the scenenode.
+-GUI: resized text boxes in Engine Manager window
+-GUI: updated Object Info sizing
+-SBS: added object IsEnabled() function support to remaining objects
+-GUI: added "Is Movable" and Enabled checkbox to Object Info window, the checkbox still needs an IsEnabled() implementation from Object in SBS
+-GUI: resized the Move Object window's coordinates display boxes
+-GUI: sound manager crash fixes, for when sound is disabled
+-SBS: fixed an array index issue in Escalator's CreateSteps() function
+-SBS: fixed an out-of-bounds write in elevator door's AddServicedFloor() function
+-SBS: Fix CreateButtonPanel() function declaration
+-SBS: added pointer safety checks to GetFloorNumber() function
+-SBS: updated banner to reflect new license file name
+-SBS: only print memory report on startup when in verbose mode
 -PolyMesh: code cleanups and safety checks for Wall object
 -PolyMesh: move wall initialization code into wall object constructor
 -HAL: Use size_t for renderer name processing
