@@ -252,7 +252,7 @@ void FloorManager::Loop()
 ElevatorManager::ElevatorManager(Object* parent) : Manager(parent)
 {
 	//set up SBS object
-	SetValues("ElevatorManager", "Elevator Manager", true, false);
+	SetValues("ElevatorManager", "Elevator Manager", true false);
 
 	get_result = 0;
 	get_number = 0;
