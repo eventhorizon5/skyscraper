@@ -4725,4 +4725,9 @@ int SBS::GetTextureCount()
 	return 0;
 }
 
+Trigger* SBS::GetAreaTrigger()
+{
+        return area_trigger;
+}
+
 }

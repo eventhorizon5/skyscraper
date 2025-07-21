@@ -416,6 +416,7 @@ public:
 	int GetReverbCount();
 	void EnableMap(bool value);
 	int GetTextureCount();
+	Trigger* GetAreaTrigger();
 
 	//Meshes
 	MeshObject* Buildings;
