@@ -50,11 +50,12 @@ public:
 	void Loop();
 	bool IsInside();
 	bool IsInside(const Vector3 &position);
+	bool IsInside(const Vector3 &v1, const Vector3 &v2);
 	bool IsEnabled() { return is_enabled; }
 	Ogre::AxisAlignedBox GetBounds(bool relative = false);
 	Vector3 GetMin();
 	Vector3 GetMax();
-	bool IsOutside(Vector3 position);
+	bool IsOutside(const Vector3 &position);
 	bool IsOutside(Vector3 v1, Vector3 v2);
 	virtual void OnEntry() {}
 	virtual void OnExit() {}
