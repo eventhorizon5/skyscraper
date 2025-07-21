@@ -103,8 +103,9 @@ ObjectInfo::ObjectInfo(DebugPanel* parent,wxWindowID id,const wxPoint& pos,const
 	Create(parent, wxID_ANY, _("Object Manager"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE, _T("wxID_ANY"));
 	BoxSizer1 = new wxBoxSizer(wxHORIZONTAL);
 	FlexGridSizer4 = new wxFlexGridSizer(0, 1, 0, 0);
-	ObjectTree = new wxTreeCtrl(this, ID_ObjectTree, wxDefaultPosition, wxSize(300,350), wxTR_DEFAULT_STYLE|wxBORDER_SUNKEN|wxVSCROLL, wxDefaultValidator, _T("ID_ObjectTree"));
+	ObjectTree = new wxTreeCtrl(this, ID_ObjectTree, wxDefaultPosition, wxSize(300,400), wxTR_DEFAULT_STYLE|wxBORDER_SUNKEN|wxVSCROLL, wxDefaultValidator, _T("ID_ObjectTree"));
 	FlexGridSizer4->Add(ObjectTree, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	FlexGridSizer4->Add(0,0,1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer2 = new wxBoxSizer(wxHORIZONTAL);
 	bDelete = new wxButton(this, ID_bDelete, _("Delete"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bDelete"));
 	bDelete->SetToolTip(_("Delete selected object"));
