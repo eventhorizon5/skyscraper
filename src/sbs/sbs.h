@@ -388,6 +388,7 @@ public:
 	Trigger* GetAreaTrigger();
 	MeshObject* GetLandscapeMesh();
 	Real GetUnitScale();
+	Vector3 GetCenter();
 
 	//Meshes
 	MeshObject* Buildings;

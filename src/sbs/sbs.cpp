@@ -3472,4 +3472,14 @@ Real SBS::GetUnitScale()
 	return utility->UnitScale;
 }
 
+Vector3 SBS::GetCenter()
+{
+	//return the center point of this sim engine, based on the bounds
+
+	if (HasBounds() == false)
+		return Vector3(0, 0, 0);
+
+	return area_trigger->GetBounds().getCenter();
+}
+
 }
