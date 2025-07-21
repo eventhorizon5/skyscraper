@@ -734,7 +734,7 @@ bool SBS::AddWallMain(Wall* wallobject, const std::string &name, const std::stri
 		Vector3 v1x = wallobject->GetMesh()->GetPosition() + v1;
 		Vector3 v2x = wallobject->GetMesh()->GetPosition() + v3;
 		if (area_trigger->IsOutside(v1x, v2x) == true)
-			return false;
+			return ReportError("Cannot create wall outside of engine boundaries");
 	}
 
 	//expand to specified thickness
@@ -1012,7 +1012,7 @@ bool SBS::AddFloorMain(Wall* wallobject, const std::string &name, const std::str
 		Vector3 v1x = wallobject->GetMesh()->GetPosition() + v1;
 		Vector3 v2x = wallobject->GetMesh()->GetPosition() + v3;
 		if (area_trigger->IsOutside(v1x, v2x) == true)
-			return false;
+			return ReportError("Cannot create wall outside of engine boundaries");
 	}
 
 	//expand to specified thickness
