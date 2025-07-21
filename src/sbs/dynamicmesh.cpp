@@ -645,6 +645,12 @@ DynamicMesh::Mesh::Mesh(DynamicMesh *parent, const std::string &name, SceneNode 
 	auto_shadows = true;
 	parent_deleting = false;
 
+	if (!node)
+	{
+		sbs->ReportError("Error creating mesh " + meshname + "\n");
+		return;
+	}
+
 	if (filename == "")
 	{
 		this->name = name;
