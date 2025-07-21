@@ -67,6 +67,7 @@ public:
 	void KeyReleased(bool left, bool right, bool down, bool up);
 	void Loop();
 	void Enabled(bool value);
+	bool IsEnabled();
 	bool Create(const Vector3 &position);
 	void OnMove(bool parent);
 	void AttachCamera(bool value);
@@ -96,6 +97,8 @@ private:
 	bool mSteeringRight;
 
 	bool camera_attached;
+
+	bool is_enabled;
 };
 
 }

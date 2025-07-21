@@ -575,7 +575,7 @@ void Shaft::Check(Vector3 position, int current_floor)
 			for (size_t i = 0; i < ShowFloorsList.size(); i++)
 			{
 				Floor *floor = sbs->GetFloor(ShowFloorsList[i]);
-				if (floor->IsEnabled == false)
+				if (floor->IsEnabled() == false)
 				{
 					floor->Enabled(true);
 					//floor->EnableGroup(true);
@@ -612,7 +612,7 @@ void Shaft::Check(Vector3 position, int current_floor)
 			for (size_t i = 0; i < ShowFloorsList.size(); i++)
 			{
 				Floor *floor = sbs->GetFloor(ShowFloorsList[i]);
-				if (floor->IsEnabled == true && sbs->camera->CurrentFloor != floor->Number)
+				if (floor->IsEnabled() == true && sbs->camera->CurrentFloor != floor->Number)
 				{
 					//don't disable floors that were originally enabled as part of the camera floor's group
 					if ((floor->EnabledGroup == true && floor->EnabledGroup_Floor == sbs->camera->CurrentFloor) == false)
@@ -634,7 +634,7 @@ void Shaft::Check(Vector3 position, int current_floor)
 			for (size_t i = 0; i < ShowInterfloorsList.size(); i++)
 			{
 				Floor *floor = sbs->GetFloor(ShowInterfloorsList[i]);
-				if (floor->IsInterfloorEnabled == true && floor->IsEnabled == false)
+				if (floor->IsInterfloorEnabled == true && floor->IsEnabled() == false)
 					floor->EnableInterfloor(false);
 			}
 		}

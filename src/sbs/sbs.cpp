@@ -1015,7 +1015,7 @@ void SBS::EnableFloorRange(int floor, int range, bool value, bool enablegroups, 
 
 					if (showfloor == true && value == true)
 					{
-						if (floorobj->IsEnabled == false)
+						if (floorobj->IsEnabled() == false)
 						{
 							floorobj->Enabled(true);
 							if (enablegroups == true)
@@ -1032,7 +1032,7 @@ void SBS::EnableFloorRange(int floor, int range, bool value, bool enablegroups, 
 								return;
 						}
 
-						if (floorobj->IsEnabled == true)
+						if (floorobj->IsEnabled() == true)
 						{
 							floorobj->Enabled(false);
 							if (enablegroups == true)
@@ -1050,7 +1050,7 @@ void SBS::EnableFloorRange(int floor, int range, bool value, bool enablegroups, 
 
 					if (showfloor == true && value == true)
 					{
-						if (floorobj->IsEnabled == false)
+						if (floorobj->IsEnabled() == false)
 						{
 							floorobj->Enabled(true);
 							if (enablegroups == true)
@@ -1067,7 +1067,7 @@ void SBS::EnableFloorRange(int floor, int range, bool value, bool enablegroups, 
 								return;
 						}
 
-						if (floorobj->IsEnabled == true)
+						if (floorobj->IsEnabled() == true)
 						{
 							floorobj->Enabled(false);
 							if (enablegroups == true)

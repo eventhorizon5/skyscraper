@@ -42,7 +42,7 @@ ButtonPanel::ButtonPanel(Object *parent, int index, const std::string &texture, 
 	//set up SBS object
 	SetValues("ButtonPanel", "", false);
 
-	IsEnabled = true;
+	is_enabled = true;
 	Index = index;
 	Direction = direction;
 	ButtonWidth = buttonwidth;
@@ -257,7 +257,7 @@ void ButtonPanel::Enabled(bool value)
 {
 	//enable or disable button panel
 
-	if (IsEnabled == value)
+	if (is_enabled == value)
 		return;
 
 	mesh->Enabled(value);
@@ -266,7 +266,12 @@ void ButtonPanel::Enabled(bool value)
 	{
 		controls[i]->Enabled(value);
 	}
-	IsEnabled = value;
+	is_enabled = value;
+}
+
+bool ButtonPanel::IsEnabled()
+{
+	return is_enabled;
 }
 
 bool ButtonPanel::AddWall(const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real height1, Real height2, Real voffset1, Real voffset2, Real tw, Real th, bool autosize)
