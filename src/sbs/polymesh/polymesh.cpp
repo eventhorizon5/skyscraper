@@ -649,7 +649,7 @@ bool PolyMesh::AddFloorMain(Wall* wallobject, const std::string &name, const std
 		if (sbs->GetAreaTrigger()->IsOutside(v1x, v2x) == true)
 		{
 			if (report == true)
-				ReportError("Cannot create wall outside of engine boundaries");
+				ReportError("Cannot create floor outside of engine boundaries");
 			return false;
 		}
 	}
@@ -799,7 +799,7 @@ bool PolyMesh::AddFloorMain(Wall* wallobject, const std::string &name, const std
 	return true;
 }
 
-Wall* PolyMesh::CreateWallBox(MeshObject* mesh, const std::string &name, const std::string &texture, Real x1, Real x2, Real z1, Real z2, Real height_in, Real voffset, Real tw, Real th, bool inside, bool outside, bool top, bool bottom, bool autosize)
+Wall* PolyMesh::CreateWallBox(MeshObject* mesh, const std::string &name, const std::string &texture, Real x1, Real x2, Real z1, Real z2, Real height_in, Real voffset, Real tw, Real th, bool inside, bool outside, bool top, bool bottom, bool autosize, bool report)
 {
 	//create 4 walls
 
@@ -830,6 +830,17 @@ Wall* PolyMesh::CreateWallBox(MeshObject* mesh, const std::string &name, const s
 
 	if (z1 > z2)
 		std::swap(z1, z2);
+
+	//exit if outside of the engine boundaries
+	if (sbs->GetAreaTrigger())
+	{
+		if (sbs->GetAreaTrigger()->IsOutside(Vector3(x1, voffset, z1), Vector3(x2, voffset + height_in, z2)) == true)
+		{
+			if (report == true)
+				ReportError("Cannot create wall box outside of engine boundaries");
+			return 0;
+		}
+	}
 
 	TextureManager *texturemanager = sbs->GetTextureManager();
 	bool TextureOverride = texturemanager->TextureOverride;
@@ -1019,7 +1030,7 @@ Wall* PolyMesh::CreateWallBox2(MeshObject* mesh, const std::string &name, const 
 	return CreateWallBox(mesh, name, texture, x1, x2, z1, z2, height_in, voffset, tw, th, inside, outside, top, bottom, autosize);
 }
 
-void PolyMesh::AddPolygon(Wall* wallobject, const std::string &texture, PolyArray &varray, Real tw, Real th)
+void PolyMesh::AddPolygon(Wall* wallobject, const std::string &texture, PolyArray &varray, Real tw, Real th, bool report)
 {
 	//creates a polygon in the specified wall object
 
@@ -1049,6 +1060,20 @@ void PolyMesh::AddPolygon(Wall* wallobject, const std::string &texture, PolyArra
 
 	std::string name = wallobject->GetName();
 	TextureManager *texturemanager = sbs->GetTextureManager();
+
+	//exit if outside of the engine boundaries
+	if (sbs->GetAreaTrigger())
+	{
+		for (size_t i = 0; i < varray1.size(); i++)
+		{
+			if (sbs->GetAreaTrigger()->IsOutside(varray1[i]) == true)
+			{
+				if (report == true)
+					ReportError("Cannot create polygon outside of engine boundaries");
+				return;
+			}
+		}
+	}
 
 	//add the polygons
 	if (DrawMainN == true)
