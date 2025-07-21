@@ -357,6 +357,24 @@ Ogre::AxisAlignedBox Trigger::GetBounds(bool relative)
 	return Ogre::AxisAlignedBox(min, max);
 }
 
+bool Trigger::IsOutside(Vector3 position)
+{
+	//return true if the given position is outside of the trigger area
+	position -= GetPosition();
+
+	Vector3 min = area_box->getMinimum();
+	Vector3 max = area_box->getMaximum();
+
+	if ((position.x < min.x) ||
+		(position.y < min.y) ||
+		(position.z < min.z) ||
+		(position.x > max.x) ||
+		(position.y > max.y) ||
+		(position.z > max.z))
+		return true;
+	return false;
+}
+
 bool Trigger::IsOutside(Vector3 v1, Vector3 v2)
 {
 	//return true if the given rectangle is outside of the trigger area
