@@ -323,7 +323,7 @@ void ObjectInfo::Loop()
 		tScriptCommand2->SetValue(object->command_processed);
 		tContext->SetValue(object->context);
 		tPermanent->SetValue(BoolToString(object->IsPermanent()));
-		//chkEnabled->SetValue(object->IsEnabled());
+		chkEnabled->SetValue(object->IsEnabled());
 		txtMovable->SetValue(BoolToString(object->IsMovable()));
 
 		Object *parent = object->GetParent();
