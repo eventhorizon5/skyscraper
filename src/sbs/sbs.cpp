@@ -1171,7 +1171,7 @@ bool SBS::AddFloorMain(Wall* wallobject, const std::string &name, const std::str
 	return true;
 }
 
-Wall* SBS::CreateWallBox(MeshObject* mesh, const std::string &name, const std::string &texture, Real x1, Real x2, Real z1, Real z2, Real height_in, Real voffset, Real tw, Real th, bool inside, bool outside, bool top, bool bottom, bool autosize)
+Wall* SBS::CreateWallBox(MeshObject* mesh, const std::string &name, const std::string &texture, Real x1, Real x2, Real z1, Real z2, Real height_in, Real voffset, Real tw, Real th, bool inside, bool outside, bool top, bool bottom, bool autosize, bool report)
 {
 	//create 4 walls
 
@@ -1202,6 +1202,17 @@ Wall* SBS::CreateWallBox(MeshObject* mesh, const std::string &name, const std::s
 
 	if (z1 > z2)
 		std::swap(z1, z2);
+
+	//exit if outside of the engine boundaries
+	if (sbs->GetAreaTrigger())
+	{
+		if (sbs->GetAreaTrigger()->IsOutside(Vector3(x1, voffset, z1), Vector3(x2, voffset + height_in, z2)) == true)
+		{
+			if (report == true)
+				ReportError("Cannot create wall box outside of engine boundaries");
+			return 0;
+		}
+	}
 
 	bool TextureOverride = texturemanager->TextureOverride;
 
@@ -1378,7 +1389,7 @@ Wall* SBS::CreateWallBox(MeshObject* mesh, const std::string &name, const std::s
 	return wall;
 }
 
-Wall* SBS::CreateWallBox2(MeshObject* mesh, const std::string &name, const std::string &texture, Real CenterX, Real CenterZ, Real WidthX, Real LengthZ, Real height_in, Real voffset, Real tw, Real th, bool inside, bool outside, bool top, bool bottom, bool autosize)
+Wall* SBS::CreateWallBox2(MeshObject* mesh, const std::string &name, const std::string &texture, Real CenterX, Real CenterZ, Real WidthX, Real LengthZ, Real height_in, Real voffset, Real tw, Real th, bool inside, bool outside, bool top, bool bottom, bool autosize, bool report)
 {
 	//create 4 walls from a central point
 
@@ -1387,10 +1398,10 @@ Wall* SBS::CreateWallBox2(MeshObject* mesh, const std::string &name, const std::
 	Real z1 = CenterZ - (LengthZ / 2);
 	Real z2 = CenterZ + (LengthZ / 2);
 
-	return CreateWallBox(mesh, name, texture, x1, x2, z1, z2, height_in, voffset, tw, th, inside, outside, top, bottom, autosize);
+	return CreateWallBox(mesh, name, texture, x1, x2, z1, z2, height_in, voffset, tw, th, inside, outside, top, bottom, autosize, report);
 }
 
-void SBS::AddPolygon(Wall* wallobject, const std::string &texture, PolyArray &varray, Real tw, Real th)
+void SBS::AddPolygon(Wall* wallobject, const std::string &texture, PolyArray &varray, Real tw, Real th, bool report)
 {
 	//creates a polygon in the specified wall object
 
@@ -1419,6 +1430,20 @@ void SBS::AddPolygon(Wall* wallobject, const std::string &texture, PolyArray &va
 		std::swap(varray1, varray2);
 
 	std::string name = wallobject->GetName();
+
+	//exit if outside of the engine boundaries
+	if (sbs->GetAreaTrigger())
+	{
+		for (size_t i = 0; i < varray1.size(); i++)
+		{
+			if (sbs->GetAreaTrigger()->IsOutside(varray1[i]) == true)
+			{
+				if (report == true)
+					ReportError("Cannot create polygon outside of engine boundaries");
+				return;
+			}
+		}
+	}
 
 	//add the polygons
 	if (DrawMainN == true)
