@@ -45,7 +45,7 @@ Manager::Manager(Object* parent) : Object(parent)
 FloorManager::FloorManager(Object* parent) : Manager(parent)
 {
 	//set up SBS object
-	SetValues("FloorManager", "Floor Manager", true, false);
+	SetValues("FloorManager", "Floor Manager", true);
 
 	get_result = 0;
 	get_number = 0;
@@ -252,7 +252,7 @@ void FloorManager::Loop()
 ElevatorManager::ElevatorManager(Object* parent) : Manager(parent)
 {
 	//set up SBS object
-	SetValues("ElevatorManager", "Elevator Manager", true false);
+	SetValues("ElevatorManager", "Elevator Manager", true);
 
 	get_result = 0;
 	get_number = 0;
@@ -698,7 +698,7 @@ void StairwellManager::Loop()
 DoorManager::DoorManager(Object* parent) : Manager(parent)
 {
 	//set up SBS object
-	SetValues("DoorManager", "Door Manager", true, false);
+	SetValues("DoorManager", "Door Manager", true);
 
 	//create a dynamic mesh for doors
 	wrapper = new DynamicMesh(this, GetSceneNode(), "Door Container", 0, true);
@@ -795,7 +795,7 @@ void DoorManager::Loop()
 RevolvingDoorManager::RevolvingDoorManager(Object* parent) : Manager(parent)
 {
 	//set up SBS object
-	SetValues("RevolvingDoorManager", "Revolving Door Manager", true, false);
+	SetValues("RevolvingDoorManager", "Revolving Door Manager", true);
 
 	//create a dynamic mesh for doors
 	wrapper = new DynamicMesh(this, GetSceneNode(), "Revolving Door Container", 0, true);
@@ -870,7 +870,7 @@ void RevolvingDoorManager::Loop()
 VehicleManager::VehicleManager(Object* parent) : Manager(parent)
 {
 	//set up SBS object
-	SetValues("VehicleManager", "Vehicle Manager", true, false);
+	SetValues("VehicleManager", "Vehicle Manager", true);
 
 	get_result = 0;
 	get_number = 0;
