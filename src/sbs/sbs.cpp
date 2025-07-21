@@ -687,9 +687,11 @@ void SBS::CalculateFrameRate()
 	}
 }
 
-bool SBS::AddWallMain(Wall* wallobject, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real height_in1, Real height_in2, Real altitude1, Real altitude2, Real tw, Real th, bool autosize)
+bool SBS::AddWallMain(Wall* wallobject, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real height_in1, Real height_in2, Real altitude1, Real altitude2, Real tw, Real th, bool autosize, bool report)
 {
 	//Adds a wall with the specified dimensions
+
+	//if report is true, report if trying to create a wall outside of the engine boundary
 
 	//exit if coordinates are invalid
 	if (x1 == x2 && z1 == z2)
@@ -734,7 +736,11 @@ bool SBS::AddWallMain(Wall* wallobject, const std::string &name, const std::stri
 		Vector3 v1x = wallobject->GetMesh()->GetPosition() + v1;
 		Vector3 v2x = wallobject->GetMesh()->GetPosition() + v3;
 		if (area_trigger->IsOutside(v1x, v2x) == true)
-			return ReportError("Cannot create wall outside of engine boundaries");
+		{
+			if (report == true)
+				ReportError("Cannot create wall outside of engine boundaries");
+			return false;
+		}
 	}
 
 	//expand to specified thickness
@@ -918,13 +924,15 @@ bool SBS::AddWallMain(Wall* wallobject, const std::string &name, const std::stri
 	return true;
 }
 
-bool SBS::AddFloorMain(Wall* wallobject, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real altitude1, Real altitude2, bool reverse_axis, bool texture_direction, Real tw, Real th, bool autosize, bool legacy_behavior)
+bool SBS::AddFloorMain(Wall* wallobject, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real altitude1, Real altitude2, bool reverse_axis, bool texture_direction, Real tw, Real th, bool autosize, bool legacy_behavior, bool report)
 {
 	//Adds a floor with the specified dimensions and vertical offset
 
 	//direction determines the direction of slope (for different altitude values):
 	//false - left/right from altitude1 to altitude2, or legacy (broken) "ReverseAxis = false" behavior if legacy_behavior is true
 	//true - back/forwards from altitude1 to altitude2, or legacy (broken) "ReverseAxis = true" behavior if legacy_behavior is true
+
+	//if report is true, report if trying to create a floor outside of the engine boundary
 
 	//exit if coordinates are invalid
 	if (x1 == x2 || z1 == z2)
@@ -1012,7 +1020,11 @@ bool SBS::AddFloorMain(Wall* wallobject, const std::string &name, const std::str
 		Vector3 v1x = wallobject->GetMesh()->GetPosition() + v1;
 		Vector3 v2x = wallobject->GetMesh()->GetPosition() + v3;
 		if (area_trigger->IsOutside(v1x, v2x) == true)
-			return ReportError("Cannot create wall outside of engine boundaries");
+		{
+			if (report == true)
+				ReportError("Cannot create floor outside of engine boundaries");
+			return false;
+		}
 	}
 
 	//expand to specified thickness
@@ -1968,7 +1980,7 @@ Wall* SBS::AddGround(const std::string &name, const std::string &texture, Real x
 				sizez = (Real)tile_z;
 
 			DrawWalls(true, true, false, false, false, false);
-			AddFloorMain(wall, name, texture, 0, i, j, i + sizex, j + sizez, altitude, altitude, false, false, 1, 1, false);
+			AddFloorMain(wall, name, texture, 0, i, j, i + sizex, j + sizez, altitude, altitude, false, false, 1, 1, false, false, false);
 			ResetWalls(false);
 		}
 	}
