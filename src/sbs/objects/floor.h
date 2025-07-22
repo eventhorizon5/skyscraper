@@ -43,7 +43,6 @@ public:
 	Real Altitude; //floor altitude
 	Real Height; //floor height (not including interfloor height)
 	Real InterfloorHeight; //height of interfloor area
-	bool IsEnabled; //is floor enabled?
 	bool IsColumnFrameEnabled; //is columnframe enabled?
 	bool IsInterfloorEnabled; //is interfloor enabled?
 	std::vector<CallStation*> CallStationArray; //pointer array to call station objects
@@ -61,6 +60,7 @@ public:
 	Wall* AddWall(const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real height_in1, Real height_in2, Real voffset1, Real voffset2, Real tw, Real th, bool isexternal);
 	Wall* AddInterfloorWall(const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real height_in1, Real height_in2, Real voffset1, Real voffset2, Real tw, Real th);
 	void Enabled(bool value);
+	bool IsEnabled();
 	Real FullHeight();
 	CallStation* AddCallButtons(int controller, const std::string &sound_file_up, const std::string &sound_file_down, const std::string &BackTexture, const std::string &UpButtonTexture, const std::string &UpButtonTexture_Lit, const std::string &DownButtonTexture, const std::string &DownButtonTexture_Lit, Real CenterX, Real CenterZ, Real voffset, const std::string &direction, Real BackWidth, Real BackHeight, bool ShowBack, Real tw, Real th);
 	CallStation* AddCallStation(int number);
@@ -146,6 +146,8 @@ public:
 	Reverb* GetReverb(int index);
 
 private:
+	bool is_enabled; //is floor enabled?
+
 	//sound objects
 	std::vector<Sound*> sounds;
 

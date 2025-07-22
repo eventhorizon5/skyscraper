@@ -178,7 +178,7 @@ void MeshControl::Loop()
 	SBS::Floor *floor = Simcore->GetFloor(Simcore->camera->CurrentFloor);
 	if (floor)
 	{
-		chkFloor->SetValue(floor->IsEnabled);
+		chkFloor->SetValue(floor->IsEnabled());
 		chkColumnFrame->SetValue(floor->IsColumnFrameEnabled);
 		chkInterfloor->SetValue(floor->IsInterfloorEnabled);
 	}

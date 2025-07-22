@@ -329,8 +329,7 @@ bool DispatchController::CallElevator(CallStation *station, bool direction)
 	//make sure this controller has elevators that serve the specified floor
 	if (IsServicedFloor(floor) == false)
 	{
-		if (station)
-			station->Error(1);
+		station->Error(1);
 		return ReportError("No elevators found for floor " + ToString(floor));
 	}
 
@@ -347,8 +346,7 @@ bool DispatchController::CallElevator(CallStation *station, bool direction)
 	}
 	if (isvalid == false)
 	{
-		if (station)
-			station->Error();
+		station->Error();
 		return ReportError("No valid elevators found");
 	}
 

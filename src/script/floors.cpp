@@ -2158,7 +2158,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 	}
 
 	//AddShaftTrigger command
-	/*if (StartsWithNoCase(LineData, "addshafttrigger"))
+	if (StartsWithNoCase(LineData, "addshafttrigger"))
 	{
 		//get data
 		int params = SplitData(LineData, 16);
@@ -2182,7 +2182,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 			action_array.emplace_back(tempdata[i]);
 
 		//check to see if file exists
-		parent->CheckFile("data/" + tempdata[1]);
+		parent->CheckFile("data/" + tempdata[2]);
 
 		//stop here if in Check mode
 		if (config->CheckScript == true)
@@ -2190,10 +2190,16 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 
 		Vector3 min = Vector3(ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]));
 		Vector3 max = Vector3(ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]));
-		if (Simcore->GetShaft(ToInt(tempdata[0])))
-			StoreCommand(Simcore->GetShaft(ToInt(tempdata[0]))->AddTrigger(Current, tempdata[1], tempdata[2], min, max, action_array));
-		else
+		
+		Shaft *shaft = Simcore->GetShaft(ToInt(tempdata[0]));
+		if (!shaft)
 			return ScriptError("Invalid shaft " + tempdata[0]);
+
+		Shaft::Level *level = shaft->GetLevel(config->Current);
+		if (!level)
+			return ScriptError("Invalid shaft level " + ToString(config->Current));
+
+		StoreCommand(level->AddTrigger(tempdata[1], tempdata[2], min, max, action_array));
 		return sNextLine;
 	}
 
@@ -2222,7 +2228,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 			action_array.emplace_back(tempdata[i]);
 
 		//check to see if file exists
-		parent->CheckFile("data/" + tempdata[1]);
+		parent->CheckFile("data/" + tempdata[2]);
 
 		//stop here if in Check mode
 		if (config->CheckScript == true)
@@ -2230,12 +2236,18 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 
 		Vector3 min = Vector3(ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]));
 		Vector3 max = Vector3(ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]));
-		if (Simcore->GetStairs(ToInt(tempdata[0])))
-			StoreCommand(Simcore->GetStairs(ToInt(tempdata[0]))->AddTrigger(Current, tempdata[1], tempdata[2], min, max, action_array));
-		else
+
+		Stairwell *stairs = Simcore->GetStairwell(ToInt(tempdata[0]));
+		if (!stairs)
 			return ScriptError("Invalid stairwell " + tempdata[0]);
+
+		Stairwell::Level *level = stairs->GetLevel(config->Current);
+		if (!level)
+			return ScriptError("Invalid stairwell level " + ToString(config->Current));
+
+		StoreCommand(level->AddTrigger(tempdata[1], tempdata[2], min, max, action_array));
 		return sNextLine;
-	}*/
+	}
 
 	//Cut command
 	if (StartsWithNoCase(LineData, "cut "))

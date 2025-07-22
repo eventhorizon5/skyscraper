@@ -280,7 +280,7 @@ void Escalator::CreateSteps(const std::string &riser_texture, const std::string 
 			else
 				Steps[i - 1]->Move(Vector3(pos, risersize * (i - (buffer_zone_steps * 2)), 0));
 			Steps[i - 1]->vector = Vector3::ZERO;
-			Steps[1 - 1]->speed = 0;
+			Steps[i - 1]->speed = 0;
 
 			if (i == 1)
 				start = Steps[i - 1]->GetPosition();
@@ -304,7 +304,7 @@ void Escalator::CreateSteps(const std::string &riser_texture, const std::string 
 			else
 				Steps[i - 1]->Move(Vector3(pos, risersize * (i - (buffer_zone_steps * 2)), 0));
 			Steps[i - 1]->vector = Vector3::ZERO;
-			Steps[1 - 1]->speed = 0;
+			Steps[i - 1]->speed = 0;
 
 			if (i == 1)
 				start = Steps[i - 1]->GetPosition();
@@ -328,7 +328,7 @@ void Escalator::CreateSteps(const std::string &riser_texture, const std::string 
 			else
 				Steps[i - 1]->Move(Vector3(0, risersize * (i - (buffer_zone_steps * 2)), pos));
 			Steps[i - 1]->vector = Vector3::ZERO;
-			Steps[1 - 1]->speed = 0;
+			Steps[i - 1]->speed = 0;
 
 			if (i == 1)
 				start = Steps[i - 1]->GetPosition();
@@ -352,7 +352,7 @@ void Escalator::CreateSteps(const std::string &riser_texture, const std::string 
 			else
 				Steps[i - 1]->Move(Vector3(0, risersize * (i - (buffer_zone_steps * 2)), pos));
 			Steps[i - 1]->vector = Vector3::ZERO;
-			Steps[1 - 1]->speed = 0;
+			Steps[i - 1]->speed = 0;
 
 			if (i == 1)
 				start = Steps[i - 1]->GetPosition();

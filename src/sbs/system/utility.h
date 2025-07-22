@@ -32,7 +32,7 @@ public:
 
 	Real UnitScale; //scale of 3D positions; this value equals 1 3D unit
 
-	Utility(Object *parent);
+	explicit Utility(Object *parent);
 	~Utility();
 	Vector2 GetExtents(PolyArray &varray, int coord, bool flip_z = false);
 	void Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool cutfloors, int checkwallnumber = 0, bool reset_check = true);

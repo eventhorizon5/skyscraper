@@ -76,7 +76,7 @@ Floor::Floor(Object *parent, FloorManager *manager, int number) : Object(parent)
 	ColumnFrame = new MeshObject(this, "ColumnFrame " + num, manager->GetColumnDynMesh());
 
 	//set enabled flags
-	IsEnabled = true;
+	is_enabled = true;
 	IsColumnFrameEnabled = true;
 	IsInterfloorEnabled = true;
 
@@ -380,12 +380,12 @@ void Floor::Enabled(bool value)
 {
 	//turns floor on/off
 
-	if (IsEnabled == value)
+	if (is_enabled == value)
 		return;
 
 	SBS_PROFILE("Floor::Enabled");
 	Level->Enabled(value);
-	IsEnabled = value;
+	is_enabled = value;
 
 	EnableLoop(value);
 
@@ -406,7 +406,7 @@ void Floor::Enabled(bool value)
 			Floor *floor = sbs->GetFloor(Number - 1);
 			if (floor)
 			{
-				if (floor->IsEnabled == false)
+				if (floor->IsEnabled() == false)
 					EnableInterfloor(false);
 			}
 			else
@@ -416,7 +416,7 @@ void Floor::Enabled(bool value)
 			floor = sbs->GetFloor(Number + 1);
 			if (floor)
 			{
-				if (floor->IsEnabled == false)
+				if (floor->IsEnabled() == false)
 					floor->EnableInterfloor(false);
 			}
 		}
@@ -426,7 +426,7 @@ void Floor::Enabled(bool value)
 			Floor *floor = sbs->GetFloor(Number + 1);
 			if (floor)
 			{
-				if (floor->IsEnabled == false)
+				if (floor->IsEnabled() == false)
 					EnableInterfloor(false);
 			}
 			else
@@ -436,7 +436,7 @@ void Floor::Enabled(bool value)
 			floor = sbs->GetFloor(Number - 1);
 			if (floor)
 			{
-				if (floor->IsEnabled == false)
+				if (floor->IsEnabled() == false)
 					floor->EnableInterfloor(false);
 			}
 		}
@@ -571,6 +571,10 @@ void Floor::Enabled(bool value)
 	}
 }
 
+bool Floor::IsEnabled()
+{
+	return is_enabled;
+}
 Real Floor::FullHeight()
 {
 	//calculate full height of a floor
@@ -590,9 +594,10 @@ CallStation* Floor::AddCallButtons(int controller, const std::string &sound_file
 
 	CallStation *station = AddCallStation(callstation_index++);
 	station->SetController(controller);
+	station->Move(CenterX, 0, CenterZ);
 	station->CreateCallButtons(sound_file_up, sound_file_down, BackTexture, UpButtonTexture, UpButtonTexture_Lit, DownButtonTexture, DownButtonTexture_Lit, direction, BackWidth, BackHeight, ShowBack, tw, th);
 
-	station->Move(CenterX, GetBase(true) + voffset, CenterZ);
+	station->Move(0, GetBase(true) + voffset, 0);
 
 	return station;
 }
@@ -958,7 +963,7 @@ void Floor::Loop()
 {
 	//floor object main loop; runs if camera is currently on this floor
 
-	if (IsEnabled == false)
+	if (is_enabled == false)
 		return;
 
 	SBS_PROFILE("Floor::Loop");
@@ -1026,17 +1031,19 @@ void Floor::AddFillerWalls(const std::string &texture, Real thickness, Real Cent
 		return;
 	}
 
-	if (sbs->GetPolyMesh()->GetWallOrientation() == 0)
+	PolyMesh* polymesh = sbs->GetPolyMesh();
+
+	if (polymesh->GetWallOrientation() == 0)
 	{
 		depth1 = 0;
 		depth2 = thickness;
 	}
-	if (sbs->GetPolyMesh()->GetWallOrientation() == 1)
+	if (polymesh->GetWallOrientation() == 1)
 	{
 		depth1 = thickness / 2;
 		depth2 = thickness / 2;
 	}
-	if (sbs->GetPolyMesh()->GetWallOrientation() == 2)
+	if (polymesh->GetWallOrientation() == 2)
 	{
 		depth1 = thickness;
 		depth2 = 0;
@@ -1066,21 +1073,21 @@ void Floor::AddFillerWalls(const std::string &texture, Real thickness, Real Cent
 		CutAll(Vector3(x1, voffset, z1), Vector3(x2, voffset + height, z2), true, false);
 
 	//create walls
-	sbs->GetPolyMesh()->DrawWalls(false, true, false, false, false, false);
+	polymesh->DrawWalls(false, true, false, false, false, false);
 	if (direction == false)
 		AddWall("FillerWallLeft", texture, 0, x1, z1, x2, z1, height, height, voffset, voffset, tw, th, isexternal);
 	else
 		AddWall("FillerWallLeft", texture, 0, x1, z1, x1, z2, height, height, voffset, voffset, tw, th, isexternal);
-	sbs->GetPolyMesh()->ResetWalls();
+	polymesh->ResetWalls();
 
-	sbs->GetPolyMesh()->DrawWalls(true, false, false, false, false, false);
+	polymesh->DrawWalls(true, false, false, false, false, false);
 	if (direction == false)
 		AddWall("FillerWallRight", texture, 0, x1, z2, x2, z2, height, height, voffset, voffset, tw, th, isexternal);
 	else
 		AddWall("FillerWallRight", texture, 0, x2, z1, x2, z2, height, height, voffset, voffset, tw, th, isexternal);
 
 	AddFloor("FillerWallTop", texture, 0, x1, z1, x2, z2, height + voffset, height + voffset, false, false, tw, th, isexternal);
-	sbs->GetPolyMesh()->ResetWalls();
+	polymesh->ResetWalls();
 }
 
 Sound* Floor::AddSound(const std::string &name, const std::string &filename, Vector3 position, bool loop, Real volume, int speed, Real min_distance, Real max_distance, Real doppler_level, Real cone_inside_angle, Real cone_outside_angle, Real cone_outside_volume, Vector3 direction)
@@ -1650,7 +1657,7 @@ MovingWalkway* Floor::AddMovingWalkway(const std::string &name, int run, Real sp
 void Floor::SetAltitude(Real altitude)
 {
 	//position object at altitude
-	SetPositionY(altitude);
+	SetPositionY(altitude, true);
 	Altitude = altitude;
 	AltitudeSet = true;
 }

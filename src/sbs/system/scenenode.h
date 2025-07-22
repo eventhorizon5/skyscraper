@@ -36,14 +36,14 @@ public:
 	void AddChild(SceneNode *scenenode);
 	void RemoveChild(SceneNode *scenenode);
 	void ShowBoundingBox(bool value);
-	void SetPosition(const Vector3 &position, bool relative = false);
+	void SetPosition(const Vector3 &position, bool relative = false, bool force = false);
 	Vector3 GetPosition(bool relative = false);
 	void SetRotation(const Vector3 &rotation, bool relative = true);
 	Vector3 GetRotation();
 	void Update();
 	Quaternion GetOrientation(bool relative = false);
 	void SetOrientation(const Quaternion &q, bool relative = false);
-	void Move(const Vector3 &vector, Real speed = 1.0, bool local = false);
+	void Move(const Vector3 &vector, Real speed = 1.0, bool local = false, bool force = false);
 	void DetachAllObjects();
 	void AttachObject(Ogre::MovableObject *object);
 	void DetachObject(Ogre::MovableObject *object);

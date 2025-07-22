@@ -256,7 +256,7 @@ void Object::ShowBoundingBox(bool value)
 		node->ShowBoundingBox(value);
 }
 
-void Object::Move(const Vector3 &vector, Real speed, bool local)
+void Object::Move(const Vector3 &vector, Real speed, bool local, bool force)
 {
 	//move an object
 
@@ -265,43 +265,43 @@ void Object::Move(const Vector3 &vector, Real speed, bool local)
 	if (!node)
 		return;
 
-	node->Move(vector, speed, local);
+	node->Move(vector, speed, local, force);
 
 	//notify about movement
 	NotifyMove();
 }
 
-void Object::Move(Real X, Real Y, Real Z, Real speed, bool local)
+void Object::Move(Real X, Real Y, Real Z, Real speed, bool local, bool force)
 {
 	Vector3 pos (X, Y, Z);
-	Move(pos, speed, local);
+	Move(pos, speed, local, force);
 }
 
-void Object::SetPosition(const Vector3 &position, bool relative)
+void Object::SetPosition(const Vector3 &position, bool relative, bool force)
 {
 	//set position of object
 
 	if (!node)
 		return;
 
-	node->SetPosition(position, relative);
+	node->SetPosition(position, relative, force);
 
 	//notify about movement
 	NotifyMove();
 }
 
-void Object::SetPosition(Real X, Real Y, Real Z, bool relative)
+void Object::SetPosition(Real X, Real Y, Real Z, bool relative, bool force)
 {
 	Vector3 pos (X, Y, Z);
-	SetPosition(pos, relative);
+	SetPosition(pos, relative, force);
 }
 
-void Object::SetPositionY(Real value)
+void Object::SetPositionY(Real value, bool force)
 {
 	//set position of only Y vector
 
 	Vector3 pos (GetPosition().x, value, GetPosition().z);
-	SetPosition(pos);
+	SetPosition(pos, false, force);
 }
 
 Vector3 Object::GetPosition(bool relative)

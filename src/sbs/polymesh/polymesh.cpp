@@ -210,7 +210,6 @@ bool PolyMesh::CreateMesh(MeshObject *mesh, const std::string &name, const std::
 	}
 
 	//initialize geometry arrays
-	size_t size = 0;
 	geometry.resize(trimesh_size);
 
 	for (size_t i = 0; i < trimesh_size; i++)
@@ -314,9 +313,11 @@ Vector2* PolyMesh::GetTexels(Matrix3 &tex_matrix, Vector3 &tex_vector, PolygonSe
 	return 0;
 }
 
-bool PolyMesh::AddWallMain(Wall* wallobject, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real height_in1, Real height_in2, Real altitude1, Real altitude2, Real tw, Real th, bool autosize)
+bool PolyMesh::AddWallMain(Wall* wallobject, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real height_in1, Real height_in2, Real altitude1, Real altitude2, Real tw, Real th, bool autosize, bool report)
 {
 	//Adds a wall with the specified dimensions
+
+	//if report is true, report if trying to create a wall outside of the engine boundary
 
 	//exit if coordinates are invalid
 	if (x1 == x2 && z1 == z2)
@@ -361,7 +362,11 @@ bool PolyMesh::AddWallMain(Wall* wallobject, const std::string &name, const std:
 		Vector3 v1x = wallobject->GetMesh()->GetPosition() + v1;
 		Vector3 v2x = wallobject->GetMesh()->GetPosition() + v3;
 		if (sbs->GetAreaTrigger()->IsOutside(v1x, v2x) == true)
+		{
+			if (report == true)
+				ReportError("Cannot create wall outside of engine boundaries");
 			return false;
+		}
 	}
 
 	//expand to specified thickness
@@ -546,13 +551,15 @@ bool PolyMesh::AddWallMain(Wall* wallobject, const std::string &name, const std:
 	return true;
 }
 
-bool PolyMesh::AddFloorMain(Wall* wallobject, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real altitude1, Real altitude2, bool reverse_axis, bool texture_direction, Real tw, Real th, bool autosize, bool legacy_behavior)
+bool PolyMesh::AddFloorMain(Wall* wallobject, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real altitude1, Real altitude2, bool reverse_axis, bool texture_direction, Real tw, Real th, bool autosize, bool legacy_behavior, bool report)
 {
 	//Adds a floor with the specified dimensions and vertical offset
 
 	//direction determines the direction of slope (for different altitude values):
 	//false - left/right from altitude1 to altitude2, or legacy (broken) "ReverseAxis = false" behavior if legacy_behavior is true
 	//true - back/forwards from altitude1 to altitude2, or legacy (broken) "ReverseAxis = true" behavior if legacy_behavior is true
+
+	//if report is true, report if trying to create a floor outside of the engine boundary
 
 	//exit if coordinates are invalid
 	if (x1 == x2 || z1 == z2)
@@ -640,7 +647,11 @@ bool PolyMesh::AddFloorMain(Wall* wallobject, const std::string &name, const std
 		Vector3 v1x = wallobject->GetMesh()->GetPosition() + v1;
 		Vector3 v2x = wallobject->GetMesh()->GetPosition() + v3;
 		if (sbs->GetAreaTrigger()->IsOutside(v1x, v2x) == true)
+		{
+			if (report == true)
+				ReportError("Cannot create floor outside of engine boundaries");
 			return false;
+		}
 	}
 
 	//expand to specified thickness
@@ -788,7 +799,7 @@ bool PolyMesh::AddFloorMain(Wall* wallobject, const std::string &name, const std
 	return true;
 }
 
-Wall* PolyMesh::CreateWallBox(MeshObject* mesh, const std::string &name, const std::string &texture, Real x1, Real x2, Real z1, Real z2, Real height_in, Real voffset, Real tw, Real th, bool inside, bool outside, bool top, bool bottom, bool autosize)
+Wall* PolyMesh::CreateWallBox(MeshObject* mesh, const std::string &name, const std::string &texture, Real x1, Real x2, Real z1, Real z2, Real height_in, Real voffset, Real tw, Real th, bool inside, bool outside, bool top, bool bottom, bool autosize, bool report)
 {
 	//create 4 walls
 
@@ -819,6 +830,17 @@ Wall* PolyMesh::CreateWallBox(MeshObject* mesh, const std::string &name, const s
 
 	if (z1 > z2)
 		std::swap(z1, z2);
+
+	//exit if outside of the engine boundaries
+	if (sbs->GetAreaTrigger())
+	{
+		if (sbs->GetAreaTrigger()->IsOutside(Vector3(x1, voffset, z1), Vector3(x2, voffset + height_in, z2)) == true)
+		{
+			if (report == true)
+				ReportError("Cannot create wall box outside of engine boundaries");
+			return 0;
+		}
+	}
 
 	TextureManager *texturemanager = sbs->GetTextureManager();
 	bool TextureOverride = texturemanager->TextureOverride;
@@ -1008,7 +1030,7 @@ Wall* PolyMesh::CreateWallBox2(MeshObject* mesh, const std::string &name, const 
 	return CreateWallBox(mesh, name, texture, x1, x2, z1, z2, height_in, voffset, tw, th, inside, outside, top, bottom, autosize);
 }
 
-void PolyMesh::AddPolygon(Wall* wallobject, const std::string &texture, PolyArray &varray, Real tw, Real th)
+void PolyMesh::AddPolygon(Wall* wallobject, const std::string &texture, PolyArray &varray, Real tw, Real th, bool report)
 {
 	//creates a polygon in the specified wall object
 
@@ -1038,6 +1060,20 @@ void PolyMesh::AddPolygon(Wall* wallobject, const std::string &texture, PolyArra
 
 	std::string name = wallobject->GetName();
 	TextureManager *texturemanager = sbs->GetTextureManager();
+
+	//exit if outside of the engine boundaries
+	if (sbs->GetAreaTrigger())
+	{
+		for (size_t i = 0; i < varray1.size(); i++)
+		{
+			if (sbs->GetAreaTrigger()->IsOutside(varray1[i]) == true)
+			{
+				if (report == true)
+					ReportError("Cannot create polygon outside of engine boundaries");
+				return;
+			}
+		}
+	}
 
 	//add the polygons
 	if (DrawMainN == true)
@@ -1294,7 +1330,7 @@ Wall* PolyMesh::AddGround(const std::string &name, const std::string &texture, R
 				sizez = (Real)tile_z;
 
 			DrawWalls(true, true, false, false, false, false);
-			AddFloorMain(wall, name, texture, 0, i, j, i + sizex, j + sizez, altitude, altitude, false, false, 1, 1, false);
+			AddFloorMain(wall, name, texture, 0, i, j, i + sizex, j + sizez, altitude, altitude, false, false, 1, 1, false, false, false);
 			ResetWalls(false);
 		}
 	}

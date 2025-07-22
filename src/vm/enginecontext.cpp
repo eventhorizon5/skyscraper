@@ -114,6 +114,7 @@ void EngineContext::Init(EngineContext *parent, VM *vm, Ogre::SceneManager* mSce
 	started = false;
 	prepared = false;
 	NewEngine = true;
+	Paused = false;
 
 	//register this engine, and get it's instance number
 	instance = vm->RegisterEngine(this);
@@ -157,6 +158,10 @@ bool EngineContext::Run()
 
 	if (!Simcore)
 		return false;
+
+	//exit if paused
+	if (Paused == true)
+		return true;
 
 	//run script processor
 	if (processor)
@@ -336,6 +341,7 @@ void EngineContext::DoReload()
 		return;
 
 	reloading = true;
+	Paused = false;
 
 	//store camera state information
 	std::string filename = Simcore->BuildingFilename;
@@ -701,7 +707,7 @@ void EngineContext::AddChild(EngineContext *engine)
 		children.emplace_back(engine);
 }
 
-void EngineContext::RemoveChild(EngineContext *engine)
+void EngineContext::RemoveChild(const EngineContext *engine)
 {
 	for (size_t i = 0; i < children.size(); i++)
 	{

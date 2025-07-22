@@ -645,6 +645,12 @@ DynamicMesh::Mesh::Mesh(DynamicMesh *parent, const std::string &name, SceneNode 
 	auto_shadows = true;
 	parent_deleting = false;
 
+	if (!node)
+	{
+		sbs->ReportError("DynamicMesh: Error creating mesh " + meshname + "\n");
+		return;
+	}
+
 	if (filename == "")
 	{
 		this->name = name;
@@ -662,7 +668,7 @@ DynamicMesh::Mesh::Mesh(DynamicMesh *parent, const std::string &name, SceneNode 
 
 			if (!MeshWrapper)
 			{
-				sbs->ReportError("Error loading mesh " + meshname + "\n");
+				sbs->ReportError("DynamicMesh: Error loading mesh " + meshname + "\n");
 				return;
 			}
 
@@ -679,7 +685,7 @@ DynamicMesh::Mesh::Mesh(DynamicMesh *parent, const std::string &name, SceneNode 
 		}
 		catch (Ogre::Exception &e)
 		{
-			sbs->ReportError("Error loading model " + filename + "\n" + e.getDescription());
+			sbs->ReportError("DynamicMesh: Error loading model " + filename + "\n" + e.getDescription());
 			MeshWrapper = 0;
 			return;
 		}
@@ -713,7 +719,7 @@ DynamicMesh::Mesh::~Mesh()
 	}
 	catch (Ogre::Exception &e)
 	{
-		sbs->ReportError("Error unloading mesh: " + e.getDescription());
+		sbs->ReportError("DynamicMesh: Error unloading mesh: " + e.getDescription());
 	}
 	MeshWrapper = 0;
 }

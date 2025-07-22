@@ -341,6 +341,16 @@ bool Trigger::IsInside(const Vector3 &position)
 	return area_box->contains(position - GetPosition());
 }
 
+bool Trigger::IsInside(const Vector3 &v1, const Vector3 &v2)
+{
+	//return true if the given rectangle is inside the trigger area
+
+	Ogre::AxisAlignedBox box;
+	box.setMinimum(v1);
+	box.setMaximum(v2);
+	return area_box->contains(box);
+}
+
 Ogre::AxisAlignedBox Trigger::GetBounds(bool relative)
 {
 	//get bounds information for this trigger
@@ -355,6 +365,13 @@ Ogre::AxisAlignedBox Trigger::GetBounds(bool relative)
 	}
 
 	return Ogre::AxisAlignedBox(min, max);
+}
+
+bool Trigger::IsOutside(const Vector3 &position)
+{
+	//return true if the given position is outside of the trigger area
+
+	return !IsInside(position);
 }
 
 bool Trigger::IsOutside(Vector3 v1, Vector3 v2)

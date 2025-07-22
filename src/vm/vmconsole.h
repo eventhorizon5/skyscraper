@@ -38,7 +38,7 @@ struct VMConsoleResult
 class VMIMPEXP VMConsole
 {
 public:
-	VMConsole(VM *vm);
+	explicit VMConsole(VM *vm);
 	~VMConsole();
 	void Process(const std::string &text = "", bool echo = true);
 	bool Report(const std::string &text, const std::string &color = "cyan");

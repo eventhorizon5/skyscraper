@@ -26,6 +26,7 @@
 #include "globals.h"
 #include "sbs.h"
 #include "utility.h"
+#include "trigger.h"
 #include "scenenode.h"
 
 namespace SBS {
@@ -99,12 +100,23 @@ void SceneNode::ShowBoundingBox(bool value)
 		node->showBoundingBox(value);
 }
 
-void SceneNode::SetPosition(const Vector3 &position, bool relative)
+void SceneNode::SetPosition(const Vector3 &position, bool relative, bool force)
 {
 	//set position of scene node
 
 	if (!node)
 		return;
+
+	//prevent setting position outside of sim engine boundaries
+	if (sbs->GetAreaTrigger() && force == false)
+	{
+		if (sbs->GetAreaTrigger()->IsOutside(position) == true && relative == false)
+		{
+			if (sbs->Verbose)
+				ReportError("Cannot move outside of engine boundaries");
+			return;
+		}
+	}
 
 	if (relative == false)
 	{
@@ -232,7 +244,7 @@ void SceneNode::SetOrientation(const Quaternion &q, bool relative)
 	Update();
 }
 
-void SceneNode::Move(const Vector3 &vector, Real speed, bool local)
+void SceneNode::Move(const Vector3 &vector, Real speed, bool local, bool force)
 {
 	//move this scene node
 	//if local is true, transform based on local space instead of parent space
@@ -241,6 +253,18 @@ void SceneNode::Move(const Vector3 &vector, Real speed, bool local)
 		return;
 
 	Vector3 v = vector * speed;
+
+	//prevent movement outside sim engine boundaries
+	if (sbs->GetAreaTrigger() && force == false)
+	{
+		if (sbs->GetAreaTrigger()->IsOutside(GetPosition() + v) == true && local == false)
+		{
+			if (sbs->Verbose)
+				ReportError("Cannot move outside of engine boundaries");
+			return;
+		}
+	}
+
 	//by default, move based on parent transformation
 	if (local == false)
 		node->translate(sbs->ToRemote(v), Ogre::Node::TS_PARENT);

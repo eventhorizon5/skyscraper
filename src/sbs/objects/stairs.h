@@ -128,7 +128,7 @@ public:
 		std::vector<Control*> ControlArray;
 
 		//Triggers
-		//std::vector<Trigger*> TriggerArray
+		std::vector<Trigger*> TriggerArray;
 
 		//CameraTextures
 		std::vector<CameraTexture*> CameraTextureArray;

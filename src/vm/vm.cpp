@@ -160,7 +160,7 @@ EngineContext* VM::CreateEngine(EngineContext *parent, const Vector3 &position, 
 	return engine;
 }
 
-bool VM::DeleteEngine(EngineContext *engine)
+bool VM::DeleteEngine(const EngineContext *engine)
 {
 	//delete a specified sim engine instance
 
@@ -400,7 +400,7 @@ void VM::HandleEngineShutdown()
 	}
 
 	//clean up empty engine slots at the end of the list
-	if (deleted == true)
+	if (deleted == true && engines.size() > 0)
 	{
 		for (size_t i = engines.size() - 1; i < engines.size(); --i)
 		{
@@ -487,7 +487,7 @@ void VM::SwitchEngines()
 	//if active engine has a parent, switch to the parent if possible
 	if (parent)
 	{
-		if (parent->IsInside() == true && parent->IsCameraActive() == false)
+		if (parent->IsInside() == true && parent->IsCameraActive() == false && parent->Paused == false)
 		{
 			SetActiveEngine(parent->GetNumber(), true);
 			return;
@@ -500,7 +500,7 @@ void VM::SwitchEngines()
 	{
 		if (engines[i] != active_engine && engines[i])
 		{
-			if (engines[i]->IsInside() == true && engines[i]->IsCameraActive() == false)
+			if (engines[i]->IsInside() == true && engines[i]->IsCameraActive() == false && engines[i]->Paused == false)
 			{
 				SetActiveEngine((int)i, true);
 				return;
@@ -513,7 +513,7 @@ void VM::SwitchEngines()
 	active_engine->RevertMovement();
 }
 
-bool VM::IsValidEngine(EngineContext *engine)
+bool VM::IsValidEngine(const EngineContext *engine)
 {
 	//returns true if the specified engine is valid (currently running)
 
@@ -528,7 +528,7 @@ bool VM::IsValidEngine(EngineContext *engine)
 	return false;
 }
 
-bool VM::IsValidSystem(::SBS::SBS *sbs)
+bool VM::IsValidSystem(const ::SBS::SBS *sbs)
 {
 	//returns true if the specified SBS instance is valid (being used by an engine context)
 
@@ -1023,6 +1023,7 @@ void VM::ListPlayingSounds()
 {
 	//list playing sounds in all engines
 
+	Report("Listing playing sounds in all engines");
 	for (size_t i = 0; i < engines.size(); i++)
 	{
 		if (!engines[i])
@@ -1032,10 +1033,13 @@ void VM::ListPlayingSounds()
 		
 		if (Simcore)
 		{
-			Report("Engine " + ToString(i) + ":");
-			Simcore->GetSoundSystem()->ShowPlayingSounds(false);
-			if (i == engines.size() - 1)
-				Simcore->GetSoundSystem()->ShowPlayingTotal();
+			SoundSystem* soundsys = Simcore->GetSoundSystem();
+			if (soundsys)
+			{
+				soundsys->ShowPlayingSounds(false);
+				if (i == engines.size() - 1)
+					soundsys->ShowPlayingTotal();
+			}
 		}
 	}
 }

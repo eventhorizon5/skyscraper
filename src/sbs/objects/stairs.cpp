@@ -39,6 +39,7 @@
 #include "profiler.h"
 #include "cameratexture.h"
 #include "utility.h"
+#include "trigger.h"
 #include "stairs.h"
 
 namespace SBS {
@@ -442,7 +443,7 @@ void Stairwell::Check(Vector3 position, int current_floor, int previous_floor)
 				for (size_t i = 0; i < ShowFloorsList.size(); i++)
 				{
 					Floor *floor = sbs->GetFloor(ShowFloorsList[i]);
-					if (floor->IsEnabled == false)
+					if (floor->IsEnabled() == false)
 					{
 						floor->Enabled(true);
 						//floor->EnableGroup(true);
@@ -468,7 +469,7 @@ void Stairwell::Check(Vector3 position, int current_floor, int previous_floor)
 				if (ShowFloorsList[i] != current_floor)
 				{
 					Floor *floor = sbs->GetFloor(ShowFloorsList[i]);
-					if (floor->IsEnabled == true && floor->IsInGroup(current_floor) == false)
+					if (floor->IsEnabled() == true && floor->IsInGroup(current_floor) == false)
 					{
 						floor->Enabled(false);
 						//floor->EnableGroup(false);
@@ -538,7 +539,7 @@ Stairwell::Level::~Level()
 	}
 
 	//delete triggers
-	/*for (size_t i = 0; i < TriggerArray.size(); i++)
+	for (size_t i = 0; i < TriggerArray.size(); i++)
 	{
 		if (TriggerArray[i])
 		{
@@ -546,7 +547,7 @@ Stairwell::Level::~Level()
 			delete TriggerArray[i];
 		}
 		TriggerArray[i] = 0;
-	}*/
+	}
 
 	//delete models
 	for (size_t i = 0; i < ModelArray.size(); i++)
@@ -803,11 +804,11 @@ void Stairwell::Level::Enabled(bool value)
 		}
 
 		//triggers
-		/*for (size_t i = 0; i < TriggerArray.size(); i++)
+		for (size_t i = 0; i < TriggerArray.size(); i++)
 		{
 			if (TriggerArray[i])
 				TriggerArray[i]->Enabled(value);
-		}*/
+		}
 
 		//models
 		for (size_t i = 0; i < ModelArray.size(); i++)
@@ -1045,21 +1046,21 @@ void Stairwell::Level::RemoveControl(Control *control)
 void Stairwell::Level::RemoveTrigger(Trigger *trigger)
 {
 	//remove a trigger reference (does not delete the object itself)
-	/*for (size_t i = 0; i < TriggerArray.size(); i++)
+	for (size_t i = 0; i < TriggerArray.size(); i++)
 	{
 		if (TriggerArray[i] == trigger)
 		{
 			TriggerArray.erase(TriggerArray.begin() + i);
 			return;
 		}
-	}*/
+	}
 }
 
 Light* Stairwell::Level::AddLight(const std::string &name, int type)
 {
 	//add a global light
 
-	Light* light = new Light(mesh, name, type);
+	Light* light = new Light(this, name, type);
 	lights.emplace_back(light);
 	return light;
 }
@@ -1085,7 +1086,7 @@ Model* Stairwell::Level::AddModel(const std::string &name, const std::string &fi
 {
 	//add a model
 
-	Model* model = new Model(mesh, name, filename, center, position, rotation, max_render_distance, scale_multiplier, enable_physics, restitution, friction, mass);
+	Model* model = new Model(this, name, filename, center, position, rotation, max_render_distance, scale_multiplier, enable_physics, restitution, friction, mass);
 	if (model->load_error == true)
 	{
 		delete model;
@@ -1165,7 +1166,7 @@ Control* Stairwell::Level::AddControl(const std::string &name, const std::string
 	//add a control
 
 	std::vector<Action*> actionnull; //not used
-	Control* control = new Control(mesh, name, false, sound, action_names, actionnull, textures, direction, width, height, true, selection_position);
+	Control* control = new Control(this, name, false, sound, action_names, actionnull, textures, direction, width, height, true, selection_position);
 	control->Move(CenterX, voffset, CenterZ);
 	ControlArray.emplace_back(control);
 	return control;
@@ -1173,18 +1174,11 @@ Control* Stairwell::Level::AddControl(const std::string &name, const std::string
 
 Trigger* Stairwell::Level::AddTrigger(const std::string &name, const std::string &sound_file, Vector3 &area_min, Vector3 &area_max, std::vector<std::string> &action_names)
 {
-	//triggers are disabled for now
-
 	//add a trigger
 
-	//exit if floor is invalid
-	/*if (!IsValid())
-		return 0;
-
-	Trigger* trigger = new Trigger(mesh, name, false, sound_file, area_min, area_max, action_names);
+	Trigger* trigger = new Trigger(this, name, false, sound_file, area_min, area_max, action_names);
 	TriggerArray.emplace_back(trigger);
-	return trigger;*/
-	return 0;
+	return trigger;
 }
 
 Model* Stairwell::Level::GetModel(std::string name)

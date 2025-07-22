@@ -556,7 +556,8 @@ bool SBS::Start(std::vector<Ogre::Camera*> &cameras)
 	}
 
 	//print a memory report
-	MemoryReport();
+	if (Verbose == true)
+		MemoryReport();
 
 	IsRunning = true;
 
@@ -570,7 +571,7 @@ void SBS::PrintBanner()
 	Report(" Copyright (C)2004-2025 Ryan Thoryk");
 	Report(" This software comes with ABSOLUTELY NO WARRANTY. This is free");
 	Report(" software, and you are welcome to redistribute it under certain");
-	Report(" conditions. For details, see the file gpl.txt\n");
+	Report(" conditions. For details, see the file named LICENSE\n");
 }
 
 void SBS::Loop(bool loading, bool isready)
@@ -715,69 +716,38 @@ void SBS::CreateSky()
 	if (InstanceNumber > 0)
 		return;
 
-	GetUtility()->Mount("sky-" + SkyName + ".zip", "sky");
+	bool result = GetUtility()->Mount("sky-" + SkyName + ".zip", "sky");
 
 	//load textures
-	SetLighting();
-	texturemanager->LoadTexture("sky/up.jpg", "SkyTop", 1, 1, false, false, false, 0);
-	texturemanager->LoadTexture("sky/down.jpg", "SkyBottom", 1, 1, false, false, false, 0);
-	texturemanager->LoadTexture("sky/left.jpg", "SkyLeft", 1, 1, false, false, false, 0);
-	texturemanager->LoadTexture("sky/right.jpg", "SkyRight", 1, 1, false, false, false, 0);
-	texturemanager->LoadTexture("sky/front.jpg", "SkyFront", 1, 1, false, false, false, 0);
-	texturemanager->LoadTexture("sky/back.jpg", "SkyBack", 1, 1, false, false, false, 0);
-	ResetLighting();
+	if (result == true)
+	{
+		SetLighting();
+		texturemanager->LoadTexture("sky/up.jpg", "SkyTop", -1, -1, false, false, false, 0);
+		texturemanager->LoadTexture("sky/down.jpg", "SkyBottom", -1, -1, false, false, false, 0);
+		texturemanager->LoadTexture("sky/left.jpg", "SkyLeft", 1, 1, false, false, false, 0);
+		texturemanager->LoadTexture("sky/right.jpg", "SkyRight", 1, 1, false, false, false, 0);
+		texturemanager->LoadTexture("sky/front.jpg", "SkyFront", 1, 1, false, false, false, 0);
+		texturemanager->LoadTexture("sky/back.jpg", "SkyBack", 1, 1, false, false, false, 0);
+		ResetLighting();
+	}
 
+	//create a mesh for the skybox
 	SkyBox = new MeshObject(this, "SkyBox");
-	SkyBox->create_collider = false;
+	SkyBox->create_collider = false; //disable collisions on skybox
 
-	//create a skybox that extends by default 30 miles (30 * 5280 ft) in each direction
+	//create a skybox size that extends by default 30 miles (30 * 5280 ft) in each direction
 	Real skysize = GetConfigInt("Skyscraper.SBS.HorizonDistance", 30) * 5280.0;
+
+	//reset texture mapping to default
 	texturemanager->ResetTextureMapping(true);
-	Wall *wall = new Wall(SkyBox);
 
-	wall->AddQuad( //front
-		"SkyFront",
-		"SkyFront",
-		Vector3(-skysize, -skysize, -skysize),
-		Vector3(skysize, -skysize, -skysize),
-		Vector3(skysize, skysize, -skysize),
-		Vector3(-skysize, skysize, -skysize), 1, 1, false);
-	wall->AddQuad( //right
-		"SkyRight",
-		"SkyRight",
-		Vector3(skysize, -skysize, -skysize),
-		Vector3(skysize, -skysize, skysize),
-		Vector3(skysize, skysize, skysize),
-		Vector3(skysize, skysize, -skysize), 1, 1, false);
-	wall->AddQuad( //back
-		"SkyBack",
-		"SkyBack",
-		Vector3(skysize, -skysize, skysize),
-		Vector3(-skysize, -skysize, skysize),
-		Vector3(-skysize, skysize, skysize),
-		Vector3(skysize, skysize, skysize), 1, 1, false);
-	wall->AddQuad( //left
-		"SkyLeft",
-		"SkyLeft",
-		Vector3(-skysize, -skysize, skysize),
-		Vector3(-skysize, -skysize, -skysize),
-		Vector3(-skysize, skysize, -skysize),
-		Vector3(-skysize, skysize, skysize), 1, 1, false);
-	wall->AddQuad( //bottom
-		"SkyBottom",
-		"SkyBottom",
-		Vector3(-skysize, -skysize, skysize),
-		Vector3(skysize, -skysize, skysize),
-		Vector3(skysize, -skysize, -skysize),
-		Vector3(-skysize, -skysize, -skysize), 1, -1, false);
-	wall->AddQuad( //top
-		"SkyTop",
-		"SkyTop",
-		Vector3(-skysize, skysize, -skysize),
-		Vector3(skysize, skysize, -skysize),
-		Vector3(skysize, skysize, skysize),
-		Vector3(-skysize, skysize, skysize), -1, -1, false);
+	//set textures that the skybox will use
+	texturemanager->SetTextureOverride("SkyFront", "SkyBack", "SkyLeft", "SkyRight", "SkyTop", "SkyBottom");
 
+	//create a wall box, using the skysize value
+	polymesh->CreateWallBox(SkyBox, "SkyBox", "SkyFront", -skysize, skysize, -skysize, skysize, skysize, -skysize / 2, 1, 1, true, true, true, true, false);
+
+	//restore previous texture mapping
 	texturemanager->ResetTextureMapping();
 }
 
@@ -801,7 +771,12 @@ int SBS::GetFloorNumber(Real altitude, int lastfloor, bool checklastfloor)
 		Real lastfloor_altitude = GetFloor(lastfloor)->Altitude;
 		Real upperfloor_altitude;
 		if (lastfloor < Floors - 1)
-			upperfloor_altitude = GetFloor(lastfloor + 1)->Altitude;
+		{
+			if (GetFloor(lastfloor + 1))
+				upperfloor_altitude = GetFloor(lastfloor + 1)->Altitude;
+			else
+				upperfloor_altitude = GetFloor(lastfloor)->Altitude + GetFloor(lastfloor)->FullHeight();
+		}
 		else
 			upperfloor_altitude = GetFloor(lastfloor)->Altitude + GetFloor(lastfloor)->FullHeight();
 
@@ -814,6 +789,8 @@ int SBS::GetFloorNumber(Real altitude, int lastfloor, bool checklastfloor)
 			{
 				for (int i = lastfloor - 1; i >= -Basements; i--)
 				{
+					if (!GetFloor(i + 1) || !GetFloor(i))
+						continue;
 					if (GetFloor(i + 1)->Altitude > altitude && GetFloor(i)->Altitude <= altitude)
 						return i;
 				}
@@ -822,8 +799,13 @@ int SBS::GetFloorNumber(Real altitude, int lastfloor, bool checklastfloor)
 			{
 				for (int i = lastfloor + 1; i < Floors; i++)
 				{
-					if (GetFloor(i - 1)->Altitude <= altitude && GetFloor(i)->Altitude > altitude)
-						return i - 1;
+					if (!GetFloor(i))
+						continue;
+					if (GetFloor(i - 1))
+					{
+						if (GetFloor(i - 1)->Altitude <= altitude && GetFloor(i)->Altitude > altitude)
+							return i - 1;
+					}
 					if (i == Floors - 1 && GetFloor(i)->Altitude <= altitude)
 						return i; //return top floor if on top
 				}
@@ -834,10 +816,16 @@ int SBS::GetFloorNumber(Real altitude, int lastfloor, bool checklastfloor)
 	//otherwise do a slow linear search through floors
 	for (int i = -Basements + 1; i < Floors; i++)
 	{
+		if (!GetFloor(i))
+			continue;
+
 		//check to see if altitude is within a floor (between the current floor's base and
 		//the lower floor's base)
-		if ((GetFloor(i)->Altitude > altitude) && (GetFloor(i - 1)->Altitude <= altitude))
-			return i - 1;
+		if (GetFloor(i - 1))
+		{
+			if ((GetFloor(i)->Altitude > altitude) && (GetFloor(i - 1)->Altitude <= altitude))
+				return i - 1;
+		}
 		//check to see if altitude is above top floor's altitude
 		if ((i == Floors - 1) && (altitude > GetFloor(i)->Altitude))
 			return i;
@@ -1027,7 +1015,7 @@ void SBS::EnableFloorRange(int floor, int range, bool value, bool enablegroups, 
 
 					if (showfloor == true && value == true)
 					{
-						if (floorobj->IsEnabled == false)
+						if (floorobj->IsEnabled() == false)
 						{
 							floorobj->Enabled(true);
 							if (enablegroups == true)
@@ -1044,7 +1032,7 @@ void SBS::EnableFloorRange(int floor, int range, bool value, bool enablegroups, 
 								return;
 						}
 
-						if (floorobj->IsEnabled == true)
+						if (floorobj->IsEnabled() == true)
 						{
 							floorobj->Enabled(false);
 							if (enablegroups == true)
@@ -1062,7 +1050,7 @@ void SBS::EnableFloorRange(int floor, int range, bool value, bool enablegroups, 
 
 					if (showfloor == true && value == true)
 					{
-						if (floorobj->IsEnabled == false)
+						if (floorobj->IsEnabled() == false)
 						{
 							floorobj->Enabled(true);
 							if (enablegroups == true)
@@ -1079,7 +1067,7 @@ void SBS::EnableFloorRange(int floor, int range, bool value, bool enablegroups, 
 								return;
 						}
 
-						if (floorobj->IsEnabled == true)
+						if (floorobj->IsEnabled() == true)
 						{
 							floorobj->Enabled(false);
 							if (enablegroups == true)
@@ -2829,7 +2817,7 @@ void SBS::EnableRandomActivity(bool value)
 		//enable random activity on the person
 		person->EnableRandomActivity(true);
 	}
-	else if (value == false)
+	else
 	{
 		for (size_t i = 0; i < PersonArray.size(); i++)
 		{
@@ -2870,7 +2858,7 @@ void SBS::EnableMalfunctions(bool value)
 	Malfunctions = value;
 }
 
-bool SBS::IsObjectValid(Object *object, std::string type)
+bool SBS::IsObjectValid(Object *object, const std::string &type)
 {
 	//test if an object is valid
 
@@ -3482,6 +3470,16 @@ Real SBS::GetUnitScale()
 	//get unit scaling factor
 
 	return utility->UnitScale;
+}
+
+Vector3 SBS::GetCenter()
+{
+	//return the center point of this sim engine, based on the bounds
+
+	if (HasBounds() == false)
+		return Vector3(0, 0, 0);
+
+	return area_trigger->GetBounds().getCenter();
 }
 
 }

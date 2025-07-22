@@ -98,7 +98,7 @@ public:
 	int mouse_x, mouse_y;
 
 	//functions
-	Camera(Object *parent);
+	explicit Camera(Object *parent);
 	~Camera();
 	void SetPosition(const Vector3 &position);
 	void SetDirection(const Vector3 &direction);
