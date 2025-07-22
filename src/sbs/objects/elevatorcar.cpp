@@ -684,7 +684,7 @@ void ElevatorCar::Alarm()
 		//ring alarm
 		AlarmActive = true;
 		Report("alarm on");
-		if (AlarmSound != "")
+		if (AlarmSound != "" && alarm)
 		{
 			alarm->Load(AlarmSound);
 			alarm->SetLoopState(true);
@@ -695,7 +695,7 @@ void ElevatorCar::Alarm()
 	{
 		//stop alarm
 		AlarmActive = false;
-		if (AlarmSound != "")
+		if (AlarmSound != "" && alarm)
 		{
 			alarm->Stop();
 			alarm->Load(AlarmSoundStop);
@@ -737,8 +737,11 @@ void ElevatorCar::Loop()
 	//only run if power is enabled
 	if (sbs->GetPower() == false)
 	{
-		idlesound->Stop();
-		musicsound->Stop();
+		if (idlesound && musicsound)
+		{
+			idlesound->Stop();
+			musicsound->Stop();
+		}
 	}
 
 	ControlPressActive = false;
@@ -753,7 +756,7 @@ void ElevatorCar::Loop()
 	}
 
 	//play car idle sound if in elevator, or if doors open
-	if (IdleSound != "" && sbs->GetPower() == true)
+	if (IdleSound != "" && sbs->GetPower() == true && idlesound)
 	{
 		if (idlesound->IsPlaying() == false && Fan == true)
 		{
@@ -787,7 +790,7 @@ void ElevatorCar::Loop()
 	}
 
 	//music processing
-	if ((MusicUp != "" || MusicDown != "") && sbs->GetPower() == true)
+	if ((MusicUp != "" || MusicDown != "") && sbs->GetPower() == true && musicsound)
 	{
 		if (MusicAlwaysOn == false) //standard mode
 		{
@@ -900,6 +903,9 @@ void ElevatorCar::Loop()
 	//turn on lights if in elevator, or if doors are open
 	for (size_t i = 0; i < lights.size(); i++)
 	{
+		if (!lights[i])
+			continue;
+
 		if (lights[i]->IsEnabled() == false)
 		{
 			if (InCar() == true || AreDoorsOpen() == true || AreDoorsMoving(0, true, false) != 0)
@@ -942,12 +948,15 @@ void ElevatorCar::Loop()
 		if ((parent->UpPeak == true || parent->DownPeak == true))
 		{
 			RouteController *controller = parent->GetRouteController();
-			if ((controller->UpQueue.empty() == false || controller->DownQueue.empty() == false) && (AreDoorsOpen() == true && AreDoorsMoving() == 0))
+			if (controller)
 			{
-				if (door)
+				if ((controller->UpQueue.empty() == false || controller->DownQueue.empty() == false) && (AreDoorsOpen() == true && AreDoorsMoving() == 0))
 				{
-					if (door->TimerIsRunning() == false)
-						door->Reset();
+					if (door)
+					{
+						if (door->TimerIsRunning() == false)
+							door->Reset();
+					}
 				}
 			}
 		}
@@ -965,7 +974,8 @@ void ElevatorCar::Loop()
 	}
 
 	//process queued sounds
-	announcesnd->ProcessQueue();
+	if (announcesnd)
+		announcesnd->ProcessQueue();
 
 	//reset message sound status
 	DirMessageSound = false;
