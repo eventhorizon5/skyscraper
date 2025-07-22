@@ -23,6 +23,10 @@ Version 2.1
 
 Version 2.0
 -------------------------
+-SBS: added pointer safety checks to elevator car's Loop() function
+-VM: SwitchEngines() function should not switch to engines in a paused state
+-GUI: added a Paused checkbox to the Engine Manager, to pause/suspend sim engines
+-VM: added support for pausing/suspending sim engines
 -SBS: added a force mode to movement and set position functions, currently used by Floor objects.  Force mode allows objects to pass outside of the simulator engine boundaries.
 -SBS: added GetCenter() function, which returns the position of the bounds center
 -PolyMesh: CreateWallBox() and AddPolygon() functions should report and exit if attempting to create an object outside of the sim engine boundaries
