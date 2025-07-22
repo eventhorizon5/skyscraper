@@ -176,6 +176,8 @@ bool EngineContext::Run()
 			#ifdef USING_WX
 			if (vm->GetGUI()->ProgressCancelled() == true)
 				result = false;
+			if (vm->GetGUI()->ProgressSkipped() == true)
+				processor->IsFinished = true;
 			#endif
 
 			if (result == false)
