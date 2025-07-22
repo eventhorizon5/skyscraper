@@ -78,7 +78,7 @@ VM::VM()
 
 	version = "2.0";
 	version_rev = ToString(GIT_REV);
-	version_state = "RC4";
+	version_state = "RC5";
 	version_full = version + ".0." + version_rev;
 
 	//create HAL instance
