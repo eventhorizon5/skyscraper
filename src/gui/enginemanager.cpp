@@ -37,28 +37,29 @@
 namespace Skyscraper {
 
 //(*IdInit(EngineManager)
-const long EngineManager::ID_EngineList = wxNewId();
-const long EngineManager::ID_STATICTEXT4 = wxNewId();
-const long EngineManager::ID_tPosition = wxNewId();
-const long EngineManager::ID_STATICTEXT3 = wxNewId();
-const long EngineManager::ID_tBoundsMin = wxNewId();
-const long EngineManager::ID_STATICTEXT5 = wxNewId();
-const long EngineManager::ID_tBoundsMax = wxNewId();
-const long EngineManager::ID_STATICTEXT1 = wxNewId();
-const long EngineManager::ID_tActive = wxNewId();
-const long EngineManager::ID_STATICTEXT2 = wxNewId();
-const long EngineManager::ID_tState = wxNewId();
-const long EngineManager::ID_STATICTEXT6 = wxNewId();
-const long EngineManager::ID_tUptime = wxNewId();
-const long EngineManager::ID_STATICLINE2 = wxNewId();
-const long EngineManager::ID_CLoads = wxNewId();
-const long EngineManager::ID_chkRender = wxNewId();
-const long EngineManager::ID_bSetActive = wxNewId();
-const long EngineManager::ID_bReload = wxNewId();
-const long EngineManager::ID_bMove = wxNewId();
-const long EngineManager::ID_bLoad = wxNewId();
-const long EngineManager::ID_bShutdown = wxNewId();
-const long EngineManager::ID_bOk = wxNewId();
+const wxWindowID EngineManager::ID_EngineList = wxNewId();
+const wxWindowID EngineManager::ID_STATICTEXT4 = wxNewId();
+const wxWindowID EngineManager::ID_tPosition = wxNewId();
+const wxWindowID EngineManager::ID_STATICTEXT3 = wxNewId();
+const wxWindowID EngineManager::ID_tBoundsMin = wxNewId();
+const wxWindowID EngineManager::ID_STATICTEXT5 = wxNewId();
+const wxWindowID EngineManager::ID_tBoundsMax = wxNewId();
+const wxWindowID EngineManager::ID_STATICTEXT1 = wxNewId();
+const wxWindowID EngineManager::ID_tActive = wxNewId();
+const wxWindowID EngineManager::ID_STATICTEXT2 = wxNewId();
+const wxWindowID EngineManager::ID_tState = wxNewId();
+const wxWindowID EngineManager::ID_STATICTEXT6 = wxNewId();
+const wxWindowID EngineManager::ID_tUptime = wxNewId();
+const wxWindowID EngineManager::ID_STATICLINE2 = wxNewId();
+const wxWindowID EngineManager::ID_CLoads = wxNewId();
+const wxWindowID EngineManager::ID_chkRender = wxNewId();
+const wxWindowID EngineManager::ID_chkPaused = wxNewId();
+const wxWindowID EngineManager::ID_bSetActive = wxNewId();
+const wxWindowID EngineManager::ID_bReload = wxNewId();
+const wxWindowID EngineManager::ID_bMove = wxNewId();
+const wxWindowID EngineManager::ID_bLoad = wxNewId();
+const wxWindowID EngineManager::ID_bShutdown = wxNewId();
+const wxWindowID EngineManager::ID_bOk = wxNewId();
 //*)
 
 BEGIN_EVENT_TABLE(EngineManager,wxDialog)
@@ -134,6 +135,9 @@ EngineManager::EngineManager(DebugPanel* parent,wxWindowID id,const wxPoint& pos
 	chkRender = new wxCheckBox(this, ID_chkRender, _("Render on Startup"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_chkRender"));
 	chkRender->SetValue(false);
 	BoxSizer7->Add(chkRender, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	chkPaused = new wxCheckBox(this, ID_chkPaused, _("Paused"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_chkPaused"));
+	chkPaused->SetValue(false);
+	BoxSizer7->Add(chkPaused, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	FlexGridSizer4->Add(BoxSizer7, 1, wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer2 = new wxBoxSizer(wxVERTICAL);
 	BoxSizer5 = new wxBoxSizer(wxHORIZONTAL);
@@ -162,14 +166,15 @@ EngineManager::EngineManager(DebugPanel* parent,wxWindowID id,const wxPoint& pos
 	FlexGridSizer1->SetSizeHints(this);
 	Center();
 
-	Connect(ID_CLoads,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&EngineManager::On_chkCLoads_Click);
-	Connect(ID_chkRender,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&EngineManager::On_chkRender_Click);
-	Connect(ID_bSetActive,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&EngineManager::On_bSetActive_Click);
-	Connect(ID_bReload,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&EngineManager::On_bReload_Click);
-	Connect(ID_bMove,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&EngineManager::On_bMove_Click);
-	Connect(ID_bLoad,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&EngineManager::On_bLoad_Click);
-	Connect(ID_bShutdown,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&EngineManager::On_bShutdown_Click);
-	Connect(ID_bOk,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&EngineManager::On_bOk_Click);
+	Connect(ID_CLoads, wxEVT_COMMAND_CHECKBOX_CLICKED, (wxObjectEventFunction)&EngineManager::On_chkCLoads_Click);
+	Connect(ID_chkRender, wxEVT_COMMAND_CHECKBOX_CLICKED, (wxObjectEventFunction)&EngineManager::On_chkRender_Click);
+	Connect(ID_chkPaused, wxEVT_COMMAND_CHECKBOX_CLICKED, (wxObjectEventFunction)&EngineManager::On_chkPaused_Click);
+	Connect(ID_bSetActive, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&EngineManager::On_bSetActive_Click);
+	Connect(ID_bReload, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&EngineManager::On_bReload_Click);
+	Connect(ID_bMove, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&EngineManager::On_bMove_Click);
+	Connect(ID_bLoad, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&EngineManager::On_bLoad_Click);
+	Connect(ID_bShutdown, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&EngineManager::On_bShutdown_Click);
+	Connect(ID_bOk, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&EngineManager::On_bOk_Click);
 	//*)
 	panel = parent;
 	loader = 0;
@@ -266,11 +271,16 @@ void EngineManager::Loop()
 			tState->SetValue("Shutdown");
 		else if (engine->IsLoading() == true)
 			tState->SetValue("Loading");
+		else if (engine->Paused)
+			tState->SetValue("Paused");
 		else if (engine->IsRunning() == true)
 			tState->SetValue("Running");
 
 		//set engine uptime
 		tUptime->SetValue(SBS::ToString(engine->GetSystem()->GetRunTime() / 1000));
+
+		//set paused state
+		chkPaused->SetValue(engine->Paused);
 	}
 	else
 	{
@@ -363,5 +373,17 @@ void EngineManager::On_bMove_Click(wxCommandEvent& event)
 	}
 }
 
+void EngineManager::On_chkPaused_Click(wxCommandEvent& event)
+{
+	int selection = EngineList->GetSelection();
+
+	if (selection >= 0)
+	{
+		EngineContext *engine = panel->GetRoot()->GetEngine(selection);
+
+		if (engine)
+			engine->Paused = chkPaused->GetValue();
+	}
 }
 
+}
