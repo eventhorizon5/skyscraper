@@ -487,7 +487,7 @@ void VM::SwitchEngines()
 	//if active engine has a parent, switch to the parent if possible
 	if (parent)
 	{
-		if (parent->IsInside() == true && parent->IsCameraActive() == false)
+		if (parent->IsInside() == true && parent->IsCameraActive() == false && parent->Paused == false)
 		{
 			SetActiveEngine(parent->GetNumber(), true);
 			return;
@@ -500,7 +500,7 @@ void VM::SwitchEngines()
 	{
 		if (engines[i] != active_engine && engines[i])
 		{
-			if (engines[i]->IsInside() == true && engines[i]->IsCameraActive() == false)
+			if (engines[i]->IsInside() == true && engines[i]->IsCameraActive() == false && engines[i]->Paused == false)
 			{
 				SetActiveEngine((int)i, true);
 				return;
