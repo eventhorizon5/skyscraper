@@ -17,6 +17,9 @@ Version 2.1
 -SBS: Moved UnitScale into Utility component
 -SBS: moved elevator call routing code into a new Route Controller object
 -SBS: PolyMesh function call cleanups
+-VM: const correctness changes
+-SBS: Added override keywords for Manager class
+-Use explicit for classes with one constructor parameter
 
 Version 2.0
 -------------------------
