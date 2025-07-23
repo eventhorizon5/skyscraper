@@ -475,33 +475,45 @@ bool Object::IsGlobal()
 	return (Parent->GetNumber() == 0);
 }
 
-void Object::Init(bool children)
+bool Object::Init(bool children)
 {
 	//initialize object
+
+	bool status = true;
 
 	//call custom object initialization code
 	if (initialized == false)
 	{
-		OnInit();
+		bool result = OnInit();
+		if (!result)
+			return false;
 		initialized = true;
 	}
 
 	//initialize children
 	if (children == true)
-		InitChildren();
+		status = InitChildren();
+	return status;
 }
 
-void Object::InitChildren()
+bool Object::InitChildren()
 {
 	//initialize child objects
 
 	int count = GetChildrenCount();
 
 	if (count == 0)
-		return;
+		return true;
 
+	bool status = true;
 	for (int i = 0; i < count; i++)
-			children[i]->Init();
+	{
+		bool result = children[i]->Init();
+		if (!result)
+			status = false;
+	}
+
+	return status;
 }
 
 void Object::EnableLoop(bool value)

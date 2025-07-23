@@ -100,7 +100,7 @@ public:
 	virtual void ResetState() {} //resets the internal state of an object
 	void ChangeParent(Object *new_parent);
 	bool IsGlobal();
-	void Init(bool children = true); //pre-runloop (first-run) object initialization
+	bool Init(bool children = true); //pre-runloop (first-run) object initialization
 	virtual bool OnInit() { return true; } //called when object is initialized
 	virtual bool Loop() { return true; } //object runloop
 	void RegisterLoop(Object *object);
@@ -128,7 +128,7 @@ protected:
 
 private:
 	void NotifyChildren(bool move, bool rotate);
-	void InitChildren();
+	bool InitChildren();
 
 	bool Permanent; //is object permanent?
 	std::string Type; //object type
