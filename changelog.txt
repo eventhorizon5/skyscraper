@@ -1,5 +1,6 @@
 Version 2.0
 -------------------------
+-ScriptProc: fix direction value processing for AddDoor command
 -SBS: added pointer safety checks to elevator car's Loop() function
 -VM: SwitchEngines() function should not switch to engines in a paused state
 -GUI: added a Paused checkbox to the Engine Manager, to pause/suspend sim engines
