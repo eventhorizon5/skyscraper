@@ -376,15 +376,19 @@ Wall* Floor::AddInterfloorWall(const std::string &name, const std::string &textu
 	return wall;
 }
 
-void Floor::Enabled(bool value)
+bool Floor::Enabled(bool value)
 {
 	//turns floor on/off
 
 	if (is_enabled == value)
-		return;
+		return true;
+
+	bool status = true, result;
 
 	SBS_PROFILE("Floor::Enabled");
-	Level->Enabled(value);
+	result = Level->Enabled(value);
+	if (!result)
+		return false;
 	is_enabled = value;
 
 	EnableLoop(value);
@@ -464,49 +468,77 @@ void Floor::Enabled(bool value)
 	for (size_t i = 0; i < ControlArray.size(); i++)
 	{
 		if (ControlArray[i])
-			ControlArray[i]->Enabled(value);
+		{
+			result = ControlArray[i]->Enabled(value);
+			if (!result)
+				status = false;
+		}
 	}
 
 	//triggers
 	for (size_t i = 0; i < TriggerArray.size(); i++)
 	{
 		if (TriggerArray[i])
-			TriggerArray[i]->Enabled(value);
+		{
+			result = TriggerArray[i]->Enabled(value);
+			if (!result)
+				status = false;
+		}
 	}
 
 	//models
 	for (size_t i = 0; i < ModelArray.size(); i++)
 	{
 		if (ModelArray[i])
-			ModelArray[i]->Enabled(value);
+		{
+			result = ModelArray[i]->Enabled(value);
+			if (!result)
+				status = false;
+		}
 	}
 
 	//primitives
 	for (size_t i = 0; i < PrimArray.size(); i++)
 	{
 		if (PrimArray[i])
-			PrimArray[i]->Enabled(value);
+		{
+			result = PrimArray[i]->Enabled(value);
+			if (!result)
+				status = false;
+		}
 	}
 
 	//custom objects
 	for (size_t i = 0; i < CustomObjectArray.size(); i++)
 	{
 		if (CustomObjectArray[i])
-			CustomObjectArray[i]->Enabled(value);
+		{
+			result = CustomObjectArray[i]->Enabled(value);
+			if (!result)
+				status = false;
+		}
 	}
 
 	//call stations
 	for (size_t i = 0; i < CallStationArray.size(); i++)
 	{
 		if (CallStationArray[i])
-			CallStationArray[i]->Enabled(value);
+		{
+			result = CallStationArray[i]->Enabled(value);
+			if (!result)
+				status = false;
+		}
 	}
 
 	//doors
 	for (size_t i = 0; i < DoorArray.size(); i++)
 	{
 		if (DoorArray[i])
-			DoorArray[i]->Enabled(value);
+		{
+			result = DoorArray[i]->Enabled(value);
+			if (!result)
+				status = false;
+		}
 	}
 	DoorWrapper->Enabled(value);
 
@@ -514,7 +546,11 @@ void Floor::Enabled(bool value)
 	for (size_t i = 0; i < DirIndicatorArray.size(); i++)
 	{
 		if (DirIndicatorArray[i])
-			DirIndicatorArray[i]->Enabled(value);
+		{
+			result = DirIndicatorArray[i]->Enabled(value);
+			if (!result)
+				status = false;
+		}
 	}
 	UpdateDirectionalIndicators();
 
@@ -522,7 +558,11 @@ void Floor::Enabled(bool value)
 	for (size_t i = 0; i < FloorIndicatorArray.size(); i++)
 	{
 		if (FloorIndicatorArray[i])
-			FloorIndicatorArray[i]->Enabled(value);
+		{
+			result = FloorIndicatorArray[i]->Enabled(value);
+			if (!result)
+				status = false;
+		}
 	}
 	//update floor indicator values
 	UpdateFloorIndicators();
@@ -531,14 +571,22 @@ void Floor::Enabled(bool value)
 	for (size_t i = 0; i < EscalatorArray.size(); i++)
 	{
 		if (EscalatorArray[i])
-			EscalatorArray[i]->Enabled(value);
+		{
+			result = EscalatorArray[i]->Enabled(value);
+			if (!result)
+				status = false;
+		}
 	}
 
 	//moving walkways
 	for (size_t i = 0; i < MovingWalkwayArray.size(); i++)
 	{
 		if (MovingWalkwayArray[i])
-			MovingWalkwayArray[i]->Enabled(value);
+		{
+			result = MovingWalkwayArray[i]->Enabled(value);
+			if (!result)
+				status = false;
+		}
 	}
 
 	//sounds
@@ -551,7 +599,11 @@ void Floor::Enabled(bool value)
 				if (value == false)
 					sounds[i]->Stop();
 				else
-					sounds[i]->Play();
+				{
+					result = sounds[i]->Play();
+					if (!result)
+						status = false;
+				}
 			}
 		}
 	}
@@ -560,15 +612,25 @@ void Floor::Enabled(bool value)
 	for (size_t i = 0; i < reverbs.size(); i++)
 	{
 		if (reverbs[i])
-			reverbs[i]->Enabled(value);
+		{
+			result = reverbs[i]->Enabled(value);
+			if (!result)
+				status = false;
+		}
 	}
 
 	//lights
 	for (size_t i = 0; i < lights.size(); i++)
 	{
 		if (lights[i])
-			lights[i]->Enabled(value);
+		{
+			result = lights[i]->Enabled(value);
+			if (!result)
+				status = false;
+		}
 	}
+
+	return status;
 }
 
 bool Floor::IsEnabled()

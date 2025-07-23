@@ -657,20 +657,27 @@ DoorComponent* DoorWrapper::CreateDoor(const std::string &doorname, const std::s
 	return door;
 }
 
-void DoorWrapper::Enabled(bool value)
+bool DoorWrapper::Enabled(bool value)
 {
 	//enable/disable door meshes
 
 	if (value == is_enabled)
-		return;
+		return true;
+
+	bool status = true;
 
 	for (size_t i = 0; i < doors.size(); i++)
 	{
 		if (doors[i])
-			doors[i]->mesh->Enabled(value);
+		{
+			bool result = doors[i]->mesh->Enabled(value);
+			if (!result)
+				status = false;
+		}
 	}
 
 	is_enabled = value;
+	return status;
 }
 
 bool DoorWrapper::IsEnabled()

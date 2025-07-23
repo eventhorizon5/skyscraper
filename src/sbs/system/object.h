@@ -105,7 +105,7 @@ public:
 	virtual bool Loop() { return true; } //object runloop
 	void RegisterLoop(Object *object);
 	void UnregisterLoop(Object *object);
-	virtual void Enabled(bool value) {}
+	virtual bool Enabled(bool value) { return true; }
 	virtual bool IsEnabled() { return true; }
 	std::string GetNameBase();
 

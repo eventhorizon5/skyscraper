@@ -992,12 +992,12 @@ bool ElevatorCar::Loop()
 	return status;
 }
 
-void ElevatorCar::Enabled(bool value)
+bool ElevatorCar::Enabled(bool value)
 {
 	//shows/hides elevator car
 
 	if (IsEnabled == value)
-		return;
+		return true;
 
 	if (sbs->Verbose)
 	{
@@ -1007,7 +1007,12 @@ void ElevatorCar::Enabled(bool value)
 			Report("disabling car");
 	}
 
-	Mesh->Enabled(value);
+	bool status = true;
+
+	bool result = Mesh->Enabled(value);
+	if (!result)
+		status = false;
+
 	EnableDoors(value);
 	IsEnabled = value;
 
@@ -1015,7 +1020,11 @@ void ElevatorCar::Enabled(bool value)
 	for (size_t i = 0; i < FloorIndicatorArray.size(); i++)
 	{
 		if (FloorIndicatorArray[i])
-			FloorIndicatorArray[i]->Enabled(value);
+		{
+			bool result = FloorIndicatorArray[i]->Enabled(value);
+			if (!result)
+				status = false;
+		}
 	}
 
 	//interior directional indicators
@@ -1023,6 +1032,8 @@ void ElevatorCar::Enabled(bool value)
 
 	if (value == false)
 		EnableObjects(false);
+
+	return status;
 }
 
 void ElevatorCar::EnableObjects(bool value)

@@ -113,8 +113,10 @@ bool DynamicMesh::LoadFromMesh(const std::string &meshname)
 	return true;
 }
 
-void DynamicMesh::Enabled(bool value, MeshObject *client)
+bool DynamicMesh::Enabled(bool value, MeshObject *client)
 {
+	bool status = true;
+
 	if (client == 0 || meshes.size() == 1)
 	{
 		//manage client enabled status
@@ -133,14 +135,18 @@ void DynamicMesh::Enabled(bool value, MeshObject *client)
 						continue;
 
 					if (client_enable[i] == true)
-						return;
+						return true;
 				}
 			}
 		}
 
 		//enable all meshes if no client specified
 		for (size_t i = 0; i < meshes.size(); i++)
-			meshes[i]->Enabled(value);
+		{
+			bool result = meshes[i]->Enabled(value);
+			if (!result)
+				status = false;
+		}
 	}
 	else if (meshes.size() > 1)
 	{
@@ -149,8 +155,13 @@ void DynamicMesh::Enabled(bool value, MeshObject *client)
 		int index = GetClientIndex(client);
 
 		if (index >= 0)
-			meshes[index]->Enabled(value);
+		{
+			bool result = meshes[index]->Enabled(value);
+			if (!result)
+				status = false;
+		}
 	}
+	return status;
 }
 
 bool DynamicMesh::ChangeTexture(const std::string &old_texture, const std::string &new_texture, MeshObject *client)
@@ -724,12 +735,12 @@ DynamicMesh::Mesh::~Mesh()
 	MeshWrapper = 0;
 }
 
-void DynamicMesh::Mesh::Enabled(bool value)
+bool DynamicMesh::Mesh::Enabled(bool value)
 {
 	//attach or detach from scenegraph
 
 	if (enabled == value || !node)
-		return;
+		return true;
 
 	if (value == false)
 		node->DetachObject(Movable);
@@ -740,6 +751,7 @@ void DynamicMesh::Mesh::Enabled(bool value)
 		Movable->setCastShadows(value);
 
 	enabled = value;
+	return true;
 }
 
 bool DynamicMesh::Mesh::ChangeTexture(const std::string &old_texture, const std::string &new_texture)

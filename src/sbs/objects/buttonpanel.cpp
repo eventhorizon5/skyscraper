@@ -253,20 +253,28 @@ Control* ButtonPanel::AddControl(const std::string &sound, int row, int column, 
 	return control;
 }
 
-void ButtonPanel::Enabled(bool value)
+bool ButtonPanel::Enabled(bool value)
 {
 	//enable or disable button panel
 
 	if (is_enabled == value)
-		return;
+		return true;
 
-	mesh->Enabled(value);
+	bool status = true;
+
+	bool result = mesh->Enabled(value);
+	if (!result)
+		status = false;
 
 	for (size_t i = 0; i < controls.size(); i++)
 	{
-		controls[i]->Enabled(value);
+		bool result = controls[i]->Enabled(value);
+		if (!result)
+			status = false;
 	}
 	is_enabled = value;
+
+	return status;
 }
 
 bool ButtonPanel::IsEnabled()

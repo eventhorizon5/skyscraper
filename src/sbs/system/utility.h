@@ -64,6 +64,8 @@ public:
 	std::string GetFilesystemPath(std::string filename);
 	std::string GetMountPath(std::string filename, std::string &newfilename);
 	void CacheFilename(const std::string &filename, const std::string &result);
+	template <typename T>
+	bool EnableArray(const std::vector<T> &array, bool value);
 
 private:
 

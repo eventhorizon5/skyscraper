@@ -158,22 +158,30 @@ Escalator::~Escalator()
 	}
 }
 
-void Escalator::Enabled(bool value)
+bool Escalator::Enabled(bool value)
 {
 	//enable or disable escalator
 
 	if (is_enabled == value)
-		return;
+		return true;
+
+	bool status = true;
 
 	EnableLoop(value);
 
 	for (size_t i = 0; i < Steps.size(); i++)
-		Steps[i]->Enabled(value);
+	{
+		bool result = Steps[i]->Enabled(value);
+		if (!result)
+			status = false;
+	}
 
 	if (value == false && sound->IsPlaying() == true)
 		sound->Stop();
 
 	is_enabled = value;
+
+	return status;
 }
 
 void Escalator::SetRun(int value)

@@ -69,15 +69,17 @@ Map::~Map()
 	OrthoCamera = 0;
 }
 
-void Map::Enabled(bool value)
+bool Map::Enabled(bool value)
 {
+	bool status = true;
 	if (OrthoCamera)
-		OrthoCamera->Enabled(value);
+		status = OrthoCamera->Enabled(value);
 	/*if (value == true)
 		timer->Start(10000, false);
 	else
 		timer->Stop();*/
 	enabled = value;
+	return status;
 }
 
 bool Map::IsEnabled()

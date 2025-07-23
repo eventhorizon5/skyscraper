@@ -33,7 +33,7 @@ public:
 	//functions
 	Trigger(Object *parent, const std::string &name, bool permanent, const std::string &sound_file, Vector3 area_min, Vector3 area_max, const std::vector<std::string> &action_names);
 	~Trigger();
-	void Enabled(bool value);
+	bool Enabled(bool value);
 	bool SetSelectPosition(int position);
 	bool ChangeSelectPosition(int position);
 	bool NextSelectPosition(bool check_state = true);

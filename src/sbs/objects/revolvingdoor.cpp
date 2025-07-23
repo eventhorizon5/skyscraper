@@ -178,13 +178,14 @@ void RevolvingDoor::OnHit()
 	brake = false;
 }
 
-void RevolvingDoor::Enabled(bool value)
+bool RevolvingDoor::Enabled(bool value)
 {
 	if (is_enabled == value)
-		return;
+		return true;
 
-	DoorMesh->Enabled(value);
+	bool status = DoorMesh->Enabled(value);
 	is_enabled = value;
+	return status;
 }
 
 bool RevolvingDoor::Loop()

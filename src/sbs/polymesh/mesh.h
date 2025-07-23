@@ -50,7 +50,7 @@ public:
 
 	MeshObject(Object* parent, const std::string &name, DynamicMesh* wrapper = 0, const std::string &filename = "", const std::string &meshname = "", Real max_render_distance = 0, Real scale_multiplier = 1, bool create_collider = true, bool dynamic_buffers = false);
 	virtual ~MeshObject();
-	void Enabled(bool value);
+	bool Enabled(bool value);
 	void EnableCollider(bool value);
 	bool IsEnabled();
 	Wall* CreateWallObject(const std::string &name);

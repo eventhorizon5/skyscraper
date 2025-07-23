@@ -48,7 +48,7 @@ public:
 	//functions
 	DirectionalIndicator(Object *parent, int elevator, int car, int floor, bool active_direction, bool single, bool vertical, const std::string &BackTexture, const std::string &uptexture, const std::string &uptexture_lit, const std::string &downtexture, const std::string &downtexture_lit, Real CenterX, Real CenterZ, Real voffset, const std::string &direction, Real BackWidth, Real BackHeight, bool ShowBack, Real tw, Real th);
 	~DirectionalIndicator();
-	void Enabled(bool value);
+	bool Enabled(bool value);
 	void UpLight(bool value);
 	void DownLight(bool value);
 	void SetLights(int up, int down);

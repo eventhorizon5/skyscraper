@@ -159,10 +159,12 @@ CameraTexture::~CameraTexture()
 	}
 }
 
-void CameraTexture::Enabled(bool value)
+bool CameraTexture::Enabled(bool value)
 {
 	if (renderTexture)
 		renderTexture->setActive(value);
+
+	return true;
 }
 
 bool CameraTexture::IsEnabled()

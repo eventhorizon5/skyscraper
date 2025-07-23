@@ -306,10 +306,11 @@ bool Vehicle::Loop()
 	return true;
 }
 
-void Vehicle::Enabled(bool value)
+bool Vehicle::Enabled(bool value)
 {
 	is_enabled = value;
 	EnableLoop(value);
+	return true;
 }
 
 bool Vehicle::IsEnabled()

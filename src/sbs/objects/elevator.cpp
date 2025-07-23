@@ -1680,13 +1680,14 @@ void Elevator::DumpQueues()
 	route_controller->DumpQueues();
 }
 
-void Elevator::Enabled(bool value)
+bool Elevator::Enabled(bool value)
 {
 	//shows/hides elevator
 
 	if (IsEnabled == value)
-		return;
+		return true;
 
+	bool status = true;
 	EnableLoop(value);
 
 	if (sbs->Verbose)
@@ -1699,9 +1700,12 @@ void Elevator::Enabled(bool value)
 
 	for (size_t i = 0; i < Cars.size(); i++)
 	{
-		Cars[i]->Enabled(value);
+		bool result = Cars[i]->Enabled(value);
+		if (!result)
+			status = false;
 	}
 	IsEnabled = value;
+	return status;
 }
 
 ElevatorCar* Elevator::IsInElevator(const Vector3 &position, bool camera)

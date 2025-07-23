@@ -781,65 +781,58 @@ bool Stairwell::Level::AddFloor(Wall *wall, const std::string &name, const std::
 	return sbs->GetPolyMesh()->AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, voffset1, voffset2, reverse_axis, texture_direction, tw, th, true, legacy_behavior);
 }
 
-void Stairwell::Level::Enabled(bool value)
+bool Stairwell::Level::Enabled(bool value)
 {
 	//turns stairwell on/off for a specific floor
 
 	SBS_PROFILE("Stairwell::Level::Enabled");
+	bool status = true;
+	Utility *utility = sbs->GetUtility();
+
 	if (IsEnabled() != value)
 	{
-		mesh->Enabled(value);
+		bool result = mesh->Enabled(value);
+		if (!result)
+			status = false;
 		enabled = value;
 
 		//doors
-		for (size_t i = 0; i < DoorArray.size(); i++)
-		{
-			if (DoorArray[i])
-				DoorArray[i]->Enabled(value);
-		}
+		result = utility->EnableArray(DoorArray, value);
+		if (!result)
+			status = false;
 
 		//controls
-		for (size_t i = 0; i < ControlArray.size(); i++)
-		{
-			if (ControlArray[i])
-				ControlArray[i]->Enabled(value);
-		}
+		result = utility->EnableArray(ControlArray, value);
+		if (!result)
+			status = false;
 
 		//triggers
-		for (size_t i = 0; i < TriggerArray.size(); i++)
-		{
-			if (TriggerArray[i])
-				TriggerArray[i]->Enabled(value);
-		}
+		result = utility->EnableArray(TriggerArray, value);
+		if (!result)
+			status = false;
 
 		//models
-		for (size_t i = 0; i < ModelArray.size(); i++)
-		{
-			if (ModelArray[i])
-				ModelArray[i]->Enabled(value);
-		}
+		result = utility->EnableArray(ModelArray, value);
+		if (!result)
+			status = false;
 
 		//primitives
-		for (size_t i = 0; i < PrimArray.size(); i++)
-		{
-			if (PrimArray[i])
-				PrimArray[i]->Enabled(value);
-		}
+		result = utility->EnableArray(PrimArray, value);
+		if (!result)
+			status = false;
 
 		//custom objects
-		for (size_t i = 0; i < CustomObjectArray.size(); i++)
-		{
-			if (CustomObjectArray[i])
-				CustomObjectArray[i]->Enabled(value);
-		}
+		result = utility->EnableArray(CustomObjectArray, value);
+		if (!result)
+			status = false;
 
 		//lights
-		for (size_t i = 0; i < lights.size(); i++)
-		{
-			if (lights[i])
-				lights[i]->Enabled(value);
-		}
+		result = utility->EnableArray(lights, value);
+		if (!result)
+			status = false;
 	}
+
+	return status;
 }
 
 Door* Stairwell::Level::AddDoor(std::string name, const std::string &open_sound, const std::string &close_sound, bool open_state, const std::string &texture, const std::string &side_texture, Real thickness, const std::string &face_direction, const std::string &open_direction, bool rotate, Real open_speed, Real close_speed, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th, Real side_tw, Real side_th)

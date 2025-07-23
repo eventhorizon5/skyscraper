@@ -135,7 +135,7 @@ public:
 	bool Stop(bool emergency = false);
 	bool Loop();
 	void DumpQueues();
-	void Enabled(bool value);
+	bool Enabled(bool value);
 	ElevatorCar* IsInElevator(const Vector3 &position, bool camera = false);
 	Real GetElevatorStart();
 	Real GetDestination();

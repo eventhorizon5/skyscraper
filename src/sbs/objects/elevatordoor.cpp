@@ -1496,9 +1496,9 @@ bool ElevatorDoor::Loop()
 	return true;
 }
 
-void ElevatorDoor::Enabled(bool value)
+bool ElevatorDoor::Enabled(bool value)
 {
-	Doors->Enabled(value);
+	return Doors->Enabled(value);
 }
 
 bool ElevatorDoor::IsEnabled()

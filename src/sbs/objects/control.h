@@ -36,7 +36,7 @@ public:
 	//functions
 	Control(Object *parent, const std::string &name, bool permanent, const std::string &sound, const std::vector<std::string> &action_names, const std::vector<Action*> &actions, std::vector<std::string> &textures, const std::string &direction, Real width, Real height, bool center, int selection_position);
 	~Control();
-	void Enabled(bool value);
+	bool Enabled(bool value);
 	bool SetSelectPosition(int position);
 	bool ChangeSelectPosition(int position);
 	bool NextSelectPosition(bool check_state = true);

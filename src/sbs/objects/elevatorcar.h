@@ -106,7 +106,7 @@ public:
 	void OpenHatch();
 	bool OnInit();
 	bool Loop();
-	void Enabled(bool value);
+	bool Enabled(bool value);
 	void EnableObjects(bool value);
 	void UpdateFloorIndicators();
 	int GetTopFloor();

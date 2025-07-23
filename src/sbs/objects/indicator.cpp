@@ -133,15 +133,16 @@ Indicator::~Indicator()
 	}*/
 }
 
-void Indicator::Enabled(bool value)
+bool Indicator::Enabled(bool value)
 {
 	//turns display on/off
 
 	if (is_enabled == value)
-		return;
+		return true;
 
-	Mesh->Enabled(value);
+	bool status = Mesh->Enabled(value);
 	is_enabled = value;
+	return status;
 }
 
 void Indicator::Update(const std::string &text, bool play_sound)

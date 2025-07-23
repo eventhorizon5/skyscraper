@@ -37,7 +37,7 @@ public:
 	Primitive(Object *parent, const std::string &name);
 	~Primitive();
 	bool IsEnabled();
-	void Enabled(bool value);
+	bool Enabled(bool value);
 	bool IsKey();
 	int GetKeyID();
 	void SetKey(int keyid);

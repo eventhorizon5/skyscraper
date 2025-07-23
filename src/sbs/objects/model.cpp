@@ -86,10 +86,11 @@ Model::~Model()
 		RemoveFromParent();
 }
 
-void Model::Enabled(bool value)
+bool Model::Enabled(bool value)
 {
-	mesh->Enabled(value);
+	bool status = mesh->Enabled(value);
 	EnableLoop(value);
+	return status;
 }
 
 bool Model::IsEnabled()

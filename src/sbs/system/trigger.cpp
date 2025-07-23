@@ -99,15 +99,16 @@ Trigger::~Trigger()
 	}
 }
 
-void Trigger::Enabled(bool value)
+bool Trigger::Enabled(bool value)
 {
 	//enable or disable trigger
 
 	if (is_enabled == value)
-		return;
+		return true;
 
 	is_enabled = value;
 	EnableLoop(value);
+	return true;
 }
 
 bool Trigger::SetSelectPosition(int position)

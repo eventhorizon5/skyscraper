@@ -116,22 +116,28 @@ MovingWalkway::~MovingWalkway()
 	}
 }
 
-void MovingWalkway::Enabled(bool value)
+bool MovingWalkway::Enabled(bool value)
 {
 	//enable or disable walkway
 
 	if (is_enabled == value)
-		return;
+		return true;
 
+	bool status = true;
 	EnableLoop(value);
 
 	for (size_t i = 0; i < Steps.size(); i++)
-		Steps[i]->Enabled(value);
+	{
+		bool result = Steps[i]->Enabled(value);
+		if (!result)
+				status = false;
+	}
 
 	if (value == false && sound->IsPlaying() == true)
 		sound->Stop();
 
 	is_enabled = value;
+	return status;
 }
 
 void MovingWalkway::SetRun(int value)

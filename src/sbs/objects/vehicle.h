@@ -66,7 +66,7 @@ public:
 	void KeyPressed(bool left, bool right, bool down, bool up);
 	void KeyReleased(bool left, bool right, bool down, bool up);
 	bool Loop();
-	void Enabled(bool value);
+	bool Enabled(bool value);
 	bool IsEnabled();
 	bool Create(const Vector3 &position);
 	void OnMove(bool parent);

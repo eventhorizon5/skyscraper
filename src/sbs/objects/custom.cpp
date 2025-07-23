@@ -68,13 +68,15 @@ CustomObject::~CustomObject()
 		RemoveFromParent();
 }
 
-void CustomObject::Enabled(bool value)
+bool CustomObject::Enabled(bool value)
 {
 	if (always_visible == true)
 		value = true;
 
-	mesh->Enabled(value);
+	bool status = mesh->Enabled(value);
 	EnableLoop(value);
+
+	return status;
 }
 
 bool CustomObject::IsEnabled()

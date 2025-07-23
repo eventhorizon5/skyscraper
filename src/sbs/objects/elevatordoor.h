@@ -79,7 +79,7 @@ public:
 	void EarlyChime(int floor, bool direction);
 	bool Loop();
 	void MoveSound(const Vector3 &position, bool relative_x, bool relative_y, bool relative_z);
-	void Enabled(bool value);
+	bool Enabled(bool value);
 	bool IsEnabled();
 	void SetShaftDoors(Real thickness, Real CenterX, Real CenterZ);
 	bool ShaftDoorsExist(int floor, bool include_nonserviced = false);

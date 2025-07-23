@@ -40,7 +40,7 @@ public:
 
 	RevolvingDoor(Object *parent, DynamicMesh *wrapper, const std::string &name, bool run, const std::string &soundfile, const std::string &texture, Real thickness, bool clockwise, int segments, Real speed, Real rotation, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th);
 	~RevolvingDoor();
-	void Enabled(bool value);
+	bool Enabled(bool value);
 	void MoveDoor();
 	bool IsEnabled() { return is_enabled; }
 	bool Loop();

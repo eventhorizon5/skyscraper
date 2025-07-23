@@ -908,4 +908,22 @@ void Utility::CacheFilename(const std::string &filename, const std::string &resu
 	verify_results.emplace_back(verify);
 }
 
+template <typename T>
+bool Utility::EnableArray(const std::vector<T> &array, bool value)
+{
+	//enable or disable an object array
+
+	bool status = true;
+	for (size_t i = 0; i < array.size(); i++)
+	{
+		if (array[i])
+		{
+			bool result = array[i]->Enabled(value);
+			if (!result)
+				status = false;
+		}
+	}
+	return status;
+}
+
 }

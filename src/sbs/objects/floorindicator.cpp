@@ -144,15 +144,16 @@ FloorIndicator::~FloorIndicator()
 	}
 }
 
-void FloorIndicator::Enabled(bool value)
+bool FloorIndicator::Enabled(bool value)
 {
 	//turns indicator on/off
 
 	if (is_enabled == value)
-		return;
+		return true;
 
-	FloorIndicatorMesh->Enabled(value);
+	bool status = FloorIndicatorMesh->Enabled(value);
 	is_enabled = value;
+	return status;
 }
 
 void FloorIndicator::Update(bool blank)

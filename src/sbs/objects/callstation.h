@@ -42,7 +42,7 @@ public:
 	CallStation(Object *parent, int floornum, int number);
 	~CallStation();
 	ButtonPanel* CreateButtonPanel(const std::string &texture, int rows, int columns, const std::string &direction, Real width, Real height, Real spacingX, Real spacingY, Real tw, Real th);
-	void Enabled(bool value);
+	bool Enabled(bool value);
 	bool IsEnabled();
 	void Report(const std::string &message);
 	bool ReportError(const std::string &message);

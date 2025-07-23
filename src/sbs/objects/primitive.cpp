@@ -64,13 +64,14 @@ Primitive::~Primitive()
 		RemoveFromParent();
 }
 
-void Primitive::Enabled(bool value)
+bool Primitive::Enabled(bool value)
 {
 	if (always_visible == true)
 		value = true;
 
-	mesh->Enabled(value);
+	bool status = mesh->Enabled(value);
 	EnableLoop(value);
+	return status;
 }
 
 bool Primitive::IsEnabled()

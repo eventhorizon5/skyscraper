@@ -187,13 +187,14 @@ bool Door::IsOpen()
 	return OpenState;
 }
 
-void Door::Enabled(bool value)
+bool Door::Enabled(bool value)
 {
 	if (is_enabled == value)
-		return;
+		return true;
 
-	door->Enabled(value);
+	bool status = door->Enabled(value);
 	is_enabled = value;
+	return status;
 }
 
 bool Door::Loop()
