@@ -63,6 +63,7 @@ class EscalatorControl;
 class WalkwayControl;
 class RevolvingDoorControl;
 class ControllerEditor;
+class ScriptDebug;
 
 class DebugPanel: public wxFrame
 {

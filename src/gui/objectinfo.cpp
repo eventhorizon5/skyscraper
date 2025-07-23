@@ -38,48 +38,49 @@
 #include "moveobject.h"
 #include "objectinfo.h"
 #include "textwindow.h"
+#include "scriptdebug.h"
 
 using namespace SBS;
 
 namespace Skyscraper {
 
 //(*IdInit(ObjectInfo)
-const long ObjectInfo::ID_ObjectTree = wxNewId();
-const long ObjectInfo::ID_bDelete = wxNewId();
-const long ObjectInfo::ID_bMove = wxNewId();
-const long ObjectInfo::ID_bCreate = wxNewId();
-const long ObjectInfo::ID_chkEnabled = wxNewId();
-const long ObjectInfo::ID_bViewScript = wxNewId();
-const long ObjectInfo::ID_bReset = wxNewId();
-const long ObjectInfo::ID_bOK = wxNewId();
-const long ObjectInfo::ID_bSave = wxNewId();
-const long ObjectInfo::ID_STATICTEXT1 = wxNewId();
-const long ObjectInfo::ID_tNumber = wxNewId();
-const long ObjectInfo::ID_STATICTEXT5 = wxNewId();
-const long ObjectInfo::ID_tName = wxNewId();
-const long ObjectInfo::ID_STATICTEXT2 = wxNewId();
-const long ObjectInfo::ID_tType = wxNewId();
-const long ObjectInfo::ID_STATICTEXT11 = wxNewId();
-const long ObjectInfo::ID_tPermanent = wxNewId();
-const long ObjectInfo::ID_STATICTEXT3 = wxNewId();
-const long ObjectInfo::ID_tParent = wxNewId();
-const long ObjectInfo::ID_STATICTEXT6 = wxNewId();
-const long ObjectInfo::ID_tParentName = wxNewId();
-const long ObjectInfo::ID_STATICTEXT4 = wxNewId();
-const long ObjectInfo::ID_tParentType = wxNewId();
-const long ObjectInfo::ID_STATICTEXT13 = wxNewId();
-const long ObjectInfo::ID_txtMovable = wxNewId();
-const long ObjectInfo::ID_STATICLINE1 = wxNewId();
-const long ObjectInfo::ID_STATICTEXT7 = wxNewId();
-const long ObjectInfo::ID_tLineNum = wxNewId();
-const long ObjectInfo::ID_STATICTEXT12 = wxNewId();
-const long ObjectInfo::ID_tIncludeFile = wxNewId();
-const long ObjectInfo::ID_STATICTEXT10 = wxNewId();
-const long ObjectInfo::ID_tContext = wxNewId();
-const long ObjectInfo::ID_STATICTEXT8 = wxNewId();
-const long ObjectInfo::ID_tScriptCommand = wxNewId();
-const long ObjectInfo::ID_STATICTEXT9 = wxNewId();
-const long ObjectInfo::ID_tScriptCommand2 = wxNewId();
+const wxWindowID ObjectInfo::ID_ObjectTree = wxNewId();
+const wxWindowID ObjectInfo::ID_bDelete = wxNewId();
+const wxWindowID ObjectInfo::ID_bMove = wxNewId();
+const wxWindowID ObjectInfo::ID_bCreate = wxNewId();
+const wxWindowID ObjectInfo::ID_chkEnabled = wxNewId();
+const wxWindowID ObjectInfo::ID_bViewScript = wxNewId();
+const wxWindowID ObjectInfo::ID_bReset = wxNewId();
+const wxWindowID ObjectInfo::ID_bOK = wxNewId();
+const wxWindowID ObjectInfo::ID_bDebug = wxNewId();
+const wxWindowID ObjectInfo::ID_STATICTEXT1 = wxNewId();
+const wxWindowID ObjectInfo::ID_tNumber = wxNewId();
+const wxWindowID ObjectInfo::ID_STATICTEXT5 = wxNewId();
+const wxWindowID ObjectInfo::ID_tName = wxNewId();
+const wxWindowID ObjectInfo::ID_STATICTEXT2 = wxNewId();
+const wxWindowID ObjectInfo::ID_tType = wxNewId();
+const wxWindowID ObjectInfo::ID_STATICTEXT11 = wxNewId();
+const wxWindowID ObjectInfo::ID_tPermanent = wxNewId();
+const wxWindowID ObjectInfo::ID_STATICTEXT3 = wxNewId();
+const wxWindowID ObjectInfo::ID_tParent = wxNewId();
+const wxWindowID ObjectInfo::ID_STATICTEXT6 = wxNewId();
+const wxWindowID ObjectInfo::ID_tParentName = wxNewId();
+const wxWindowID ObjectInfo::ID_STATICTEXT4 = wxNewId();
+const wxWindowID ObjectInfo::ID_tParentType = wxNewId();
+const wxWindowID ObjectInfo::ID_STATICTEXT13 = wxNewId();
+const wxWindowID ObjectInfo::ID_txtMovable = wxNewId();
+const wxWindowID ObjectInfo::ID_STATICLINE1 = wxNewId();
+const wxWindowID ObjectInfo::ID_STATICTEXT7 = wxNewId();
+const wxWindowID ObjectInfo::ID_tLineNum = wxNewId();
+const wxWindowID ObjectInfo::ID_STATICTEXT12 = wxNewId();
+const wxWindowID ObjectInfo::ID_tIncludeFile = wxNewId();
+const wxWindowID ObjectInfo::ID_STATICTEXT10 = wxNewId();
+const wxWindowID ObjectInfo::ID_tContext = wxNewId();
+const wxWindowID ObjectInfo::ID_STATICTEXT8 = wxNewId();
+const wxWindowID ObjectInfo::ID_tScriptCommand = wxNewId();
+const wxWindowID ObjectInfo::ID_STATICTEXT9 = wxNewId();
+const wxWindowID ObjectInfo::ID_tScriptCommand2 = wxNewId();
 //*)
 
 BEGIN_EVENT_TABLE(ObjectInfo,wxDialog)
@@ -129,10 +130,8 @@ ObjectInfo::ObjectInfo(DebugPanel* parent,wxWindowID id,const wxPoint& pos,const
 	BoxSizer3->Add(bReset, 1, wxALL|wxALIGN_TOP, 5);
 	bOK = new wxButton(this, ID_bOK, _("OK"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bOK"));
 	BoxSizer3->Add(bOK, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	bSave = new wxButton(this, ID_bSave, _("Save Script"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bSave"));
-	bSave->Disable();
-	bSave->Hide();
-	BoxSizer3->Add(bSave, 1, wxALL|wxALIGN_TOP, 5);
+	bDebug = new wxButton(this, ID_bDebug, _("Script Debug"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bDebug"));
+	BoxSizer3->Add(bDebug, 1, wxALL|wxALIGN_TOP, 5);
 	FlexGridSizer4->Add(BoxSizer3, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer1->Add(FlexGridSizer4, 1, wxALL|wxEXPAND, 5);
 	FlexGridSizer2 = new wxFlexGridSizer(0, 1, 0, 0);
@@ -204,20 +203,21 @@ ObjectInfo::ObjectInfo(DebugPanel* parent,wxWindowID id,const wxPoint& pos,const
 	BoxSizer1->SetSizeHints(this);
 	Center();
 
-	Connect(ID_ObjectTree,wxEVT_COMMAND_TREE_SEL_CHANGED,(wxObjectEventFunction)&ObjectInfo::On_ObjectTree_SelectionChanged);
-	Connect(ID_bDelete,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&ObjectInfo::On_bDelete_Click);
-	Connect(ID_bMove,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&ObjectInfo::On_bMove_Click);
-	Connect(ID_bCreate,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&ObjectInfo::On_bCreate_Click);
-	Connect(ID_chkEnabled,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&ObjectInfo::On_chkEnabled_Click);
-	Connect(ID_bViewScript,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&ObjectInfo::On_bViewScript_Click);
-	Connect(ID_bReset,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&ObjectInfo::On_bReset_Click);
-	Connect(ID_bOK,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&ObjectInfo::On_bOK_Click);
-	Connect(ID_bSave,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&ObjectInfo::On_bSave_Click);
+	Connect(ID_ObjectTree, wxEVT_COMMAND_TREE_SEL_CHANGED, (wxObjectEventFunction)&ObjectInfo::On_ObjectTree_SelectionChanged);
+	Connect(ID_bDelete, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&ObjectInfo::On_bDelete_Click);
+	Connect(ID_bMove, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&ObjectInfo::On_bMove_Click);
+	Connect(ID_bCreate, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&ObjectInfo::On_bCreate_Click);
+	Connect(ID_chkEnabled, wxEVT_COMMAND_CHECKBOX_CLICKED, (wxObjectEventFunction)&ObjectInfo::On_chkEnabled_Click);
+	Connect(ID_bViewScript, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&ObjectInfo::On_bViewScript_Click);
+	Connect(ID_bReset, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&ObjectInfo::On_bReset_Click);
+	Connect(ID_bOK, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&ObjectInfo::On_bOK_Click);
+	Connect(ID_bDebug, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&ObjectInfo::On_bDebug_Click);
 	//*)
 	panel = parent;
 	createobject = 0;
 	modifyobject = 0;
 	moveobject = 0;
+	debugger = 0;
 	OnInit();
 }
 
@@ -271,6 +271,9 @@ void ObjectInfo::Loop()
 
 	if (moveobject)
 		moveobject->Loop();
+
+	if (debugger)
+		debugger->Loop();
 
 	int number = oldobject;
 	if (changed == false)
@@ -416,15 +419,6 @@ void ObjectInfo::On_bModify_Click(wxCommandEvent& event)
 		modifyobject->Show();
 }
 
-void ObjectInfo::On_bSave_Click(wxCommandEvent& event)
-{
-	wxFileDialog Selector (0, _("Save Building Script"), _("buildings/"), _(""), _("Building files (*.bld *.txt)|*.bld;*.txt"), wxFD_SAVE);
-	int result = Selector.ShowModal();
-	if (result == wxID_CANCEL)
-		return;
-	wxString filename = wxT("buildings/") + Selector.GetFilename();
-}
-
 void ObjectInfo::On_bViewScript_Click(wxCommandEvent& event)
 {
 	TextWindow *twindow = new TextWindow(NULL, -1);
@@ -499,6 +493,14 @@ void ObjectInfo::On_chkEnabled_Click(wxCommandEvent& event)
 	Object *obj = Simcore->GetObject(number);
 	if (obj)
 		obj->Enabled(chkEnabled->GetValue());
+}
+
+void ObjectInfo::On_bDebug_Click(wxCommandEvent& event)
+{
+	if (!debugger)
+		debugger = new ScriptDebug(panel, this);
+	if (debugger)
+		debugger->Show();
 }
 
 }
