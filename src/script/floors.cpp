@@ -980,9 +980,9 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		int direction = 0;
 		if (compat == 1)
 			direction = ToInt(tempdata[2]);
-		else if (compat > 1)
+		else if (compat == 2 || compat == 3)
 			direction = ToInt(tempdata[4]);
-		else
+		else if (compat == 4 || compat == 0)
 			direction = ToInt(tempdata[5]);
 		GetDirectionStrings(direction, face_direction, open_direction);
 
