@@ -234,7 +234,7 @@ bool EngineContext::Run()
 		Simcore->CalculateFrameRate();
 
 	//run SBS main loop
-	Simcore->Loop(loading, processor->IsFinished);
+	bool result = Simcore->Loop(loading, processor->IsFinished);
 
 	if (loading == false)
 	{
@@ -245,7 +245,7 @@ bool EngineContext::Run()
 			OnExit();
 	}
 
-	return true;
+	return result;
 }
 
 bool EngineContext::InitSim()

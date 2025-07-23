@@ -220,10 +220,12 @@ bool Indicator::PlaySound()
 	return true;
 }
 
-void Indicator::Loop()
+bool Indicator::Loop()
 {
 	if (sbs->GetPower() == false)
 		Off();
+
+	return true;
 }
 
 }

@@ -202,7 +202,7 @@ bool Escalator::ReportError(const std::string &message)
 	return Object::ReportError("Escalator " + GetName() + ": " + message);
 }
 
-void Escalator::Loop()
+bool Escalator::Loop()
 {
 	//run loop
 
@@ -212,14 +212,14 @@ void Escalator::Loop()
 	if (sbs->GetPower() == false)
 	{
 		sound->Stop();
-		return;
+		return false;
 	}
 
 	if (!IsEnabled() || Run == 0)
 	{
 		if (sound->IsPlaying() == true)
 			sound->Stop();
-		return;
+		return false;
 	}
 
 	if (sound->IsPlaying() == false)
@@ -229,6 +229,8 @@ void Escalator::Loop()
 	}
 
 	MoveSteps();
+
+	return true;
 }
 
 void Escalator::CreateSteps(const std::string &riser_texture, const std::string &tread_texture, const std::string &direction, Real width, Real risersize, Real treadsize, Real tw, Real th)

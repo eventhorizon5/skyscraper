@@ -67,9 +67,9 @@ public:
 	void Report(const std::string &message);
 	bool ReportError(const std::string &message);
 	void ReplaceTexture(const std::string &oldtexture, const std::string &newtexture);
-	void OnInit();
+	bool OnInit();
 	void Check(Vector3 position, int current_floor);
-	void Loop();
+	bool Loop();
 	DynamicMesh* GetShaftDoorContainer() { return ShaftDoorContainer; }
 	void SetShowFull(bool value);
 	bool GetShowFull() { return ShowFullShaft; }
@@ -116,7 +116,7 @@ public:
 		Primitive* GetPrimitive(std::string name);
 		CustomObject* GetCustomObject(std::string name);
 		int GetFloor();
-		void Loop();
+		bool Loop();
 		CameraTexture* AddCameraTexture(const std::string &name, int quality, Real fov, const Vector3 &position, bool use_rotation, const Vector3 &rotation);
 		void RemoveCameraTexture(CameraTexture* camtex);
 

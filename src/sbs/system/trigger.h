@@ -47,7 +47,7 @@ public:
 	void PlaySound();
 	int FindActionPosition(const std::string &name);
 	bool DoAction();
-	void Loop();
+	bool Loop();
 	bool IsInside();
 	bool IsInside(const Vector3 &position);
 	bool IsInside(const Vector3 &v1, const Vector3 &v2);

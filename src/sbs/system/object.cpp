@@ -568,15 +568,21 @@ void Object::UnregisterLoop(Object *object)
 	}
 }
 
-void Object::LoopChildren()
+bool Object::LoopChildren()
 {
 	//run dynamic child runloops
 
+	bool status = true;
 	for (size_t i = 0; i < runloops.size(); i++)
 	{
 		if (runloops[i])
-			runloops[i]->Loop();
+		{
+			bool result = runloops[i]->Loop();
+			if (!result)
+				status = false;
+		}
 	}
+	return status;
 }
 
 bool Object::SelfDestruct()

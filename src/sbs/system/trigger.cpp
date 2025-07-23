@@ -264,12 +264,12 @@ bool Trigger::DoAction()
 	return result;
 }
 
-void Trigger::Loop()
+bool Trigger::Loop()
 {
 	//check for action; should be called in a loop by the parent object
 
 	if (is_enabled == false)
-		return;
+		return true;
 
 	SBS_PROFILE("Trigger::Loop");
 
@@ -308,7 +308,7 @@ void Trigger::Loop()
 
 		//exit without changing position if floor button is currently selected
 		if (name == "off" && IsNumeric(GetSelectPositionAction()) == true)
-			return;
+			return true;
 
 		//change to next control position
 		NextSelectPosition();
@@ -325,6 +325,8 @@ void Trigger::Loop()
 		if (result == false)
 			PreviousSelectPosition();
 	}
+
+	return true;
 }
 
 bool Trigger::IsInside()

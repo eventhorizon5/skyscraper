@@ -770,12 +770,12 @@ std::string Camera::GetClickedObjectCommandP()
 	return object_cmd_processed;
 }
 
-void Camera::Loop()
+bool Camera::Loop()
 {
 	SBS_PROFILE_MAIN("Camera Loop");
 
 	if (Cameras.empty())
-		return;
+		return true;
 
 	//get delta value
 	unsigned long timing;
@@ -849,6 +849,8 @@ void Camera::Loop()
 
 	//sync camera with collider
 	Sync();
+
+	return true;
 }
 
 void Camera::Strafe(Real speed)

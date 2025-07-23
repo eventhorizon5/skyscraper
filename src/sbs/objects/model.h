@@ -40,12 +40,12 @@ public:
 	int GetKeyID();
 	void SetKey(int keyid);
 	bool IsPhysical();
-	void Loop();
+	bool Loop();
 	void PickUp();
 	void Drop();
 	bool IsPickedUp();
 	MeshObject* GetMeshObject() { return mesh; }
-	void OnInit();
+	bool OnInit();
 	bool IsCustom() { return custom; }
 	void OnClick(Vector3 &position, bool shift, bool ctrl, bool alt, bool right);
 

@@ -237,12 +237,14 @@ void FloorIndicator::On()
 	Update();
 }
 
-void FloorIndicator::Loop()
+bool FloorIndicator::Loop()
 {
 	if (sbs->GetPower() == false)
 		Off();
 	else
 		On();
+
+	return true;
 }
 
 }

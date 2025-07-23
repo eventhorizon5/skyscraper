@@ -104,8 +104,8 @@ public:
 	bool CheckServicedFloors();
 	void Alarm();
 	void OpenHatch();
-	void OnInit();
-	void Loop();
+	bool OnInit();
+	bool Loop();
 	void Enabled(bool value);
 	void EnableObjects(bool value);
 	void UpdateFloorIndicators();

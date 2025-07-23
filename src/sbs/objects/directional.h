@@ -54,7 +54,7 @@ public:
 	void SetLights(int up, int down);
 	bool IsEnabled() { return is_enabled; }
 	void Off();
-	void Loop();
+	bool Loop();
 
 private:
 	MeshObject* DirectionalMeshBack; //indicator mesh back object

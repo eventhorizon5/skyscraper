@@ -36,7 +36,7 @@ public:
 	Person(Object *parent, const std::string &name, int floor, bool service_access = false);
 	~Person();
 	void GotoFloor(int floor);
-	void Loop();
+	bool Loop();
 	void ProcessRoute();
 	void Report(const std::string &message);
 	bool ReportError(const std::string &message);

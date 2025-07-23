@@ -150,7 +150,7 @@ void Model::AddToParent()
 		sbs->AddModel(this);
 }
 
-void Model::Loop()
+bool Model::Loop()
 {
 	//runloop, called by parent to allow for switching parents
 
@@ -208,6 +208,8 @@ void Model::Loop()
 			}
 		}
 	}
+
+	return true;
 }
 
 void Model::PickUp()
@@ -268,7 +270,7 @@ bool Model::IsPickedUp()
 	return (GetParent() == sbs->camera);
 }
 
-void Model::OnInit()
+bool Model::OnInit()
 {
 	if (center == true)
 	{
@@ -277,6 +279,8 @@ void Model::OnInit()
 		//move mesh object to specified offset
 		mesh->Move(Offset);
 	}
+
+	return true;
 }
 
 void Model::OnClick(Vector3 &position, bool shift, bool ctrl, bool alt, bool right)

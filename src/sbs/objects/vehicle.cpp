@@ -254,10 +254,10 @@ void Vehicle::KeyReleased(bool left, bool right, bool down, bool up)
 		mEngineForce = 0;
 }
 
-void Vehicle::Loop()
+bool Vehicle::Loop()
 {
 	if (!mVehicle)
-		return;
+		return false;
 
 	// apply engine force on relevant wheels
 	for (size_t i = 0; i < mWheelsEngine.size(); i++)
@@ -302,6 +302,8 @@ void Vehicle::Loop()
 		sbs->camera->SetPosition(GetPosition() + CameraPoint);
 		sbs->camera->SetOrientation(GetOrientation());
 	}
+
+	return true;
 }
 
 void Vehicle::Enabled(bool value)

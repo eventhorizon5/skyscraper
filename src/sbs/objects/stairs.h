@@ -50,12 +50,12 @@ public:
 	void Report(const std::string &message);
 	bool ReportError(const std::string &message);
 	void ReplaceTexture(const std::string &oldtexture, const std::string &newtexture);
-	void OnInit();
+	bool OnInit();
 	void AddShowFloor(int floor);
 	void RemoveShowFloor(int floor);
 	bool IsShowFloor(int floor);
 	void Check(Vector3 position, int current_floor, int previous_floor);
-	void Loop();
+	bool Loop();
 	void SetShowFull(int value);
 	Level* GetLevel(int floor);
 	bool IsValidFloor(int floor);
@@ -100,7 +100,7 @@ public:
 		CustomObject* GetCustomObject(std::string name);
 		void ReplaceTexture(const std::string &oldtexture, const std::string &newtexture);
 		int GetFloor();
-		void Loop();
+		bool Loop();
 		CameraTexture* AddCameraTexture(const std::string &name, int quality, Real fov, const Vector3 &position, bool use_rotation, const Vector3 &rotation);
 		void RemoveCameraTexture(CameraTexture* camtex);
 

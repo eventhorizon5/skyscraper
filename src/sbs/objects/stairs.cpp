@@ -356,7 +356,7 @@ void Stairwell::ReplaceTexture(const std::string &oldtexture, const std::string 
 		Levels[i]->ReplaceTexture(oldtexture, newtexture);
 }
 
-void Stairwell::OnInit()
+bool Stairwell::OnInit()
 {
 	//startup initialization of stairs
 
@@ -364,6 +364,8 @@ void Stairwell::OnInit()
 		EnableWhole(true);
 	else
 		EnableWhole(false);
+
+	return true;
 }
 
 void Stairwell::AddShowFloor(int floor)
@@ -493,11 +495,11 @@ void Stairwell::Check(Vector3 position, int current_floor, int previous_floor)
 	}
 }
 
-void Stairwell::Loop()
+bool Stairwell::Loop()
 {
 	//stairwell runloop
 
-	LoopChildren();
+	return LoopChildren();
 }
 
 DynamicMesh* Stairwell::GetDynamicMesh()
@@ -1236,11 +1238,11 @@ int Stairwell::Level::GetFloor()
 	return floornum;
 }
 
-void Stairwell::Level::Loop()
+bool Stairwell::Level::Loop()
 {
 	//level runloop
 
-	LoopChildren();
+	return LoopChildren();
 }
 
 CameraTexture* Stairwell::Level::AddCameraTexture(const std::string &name, int quality, Real fov, const Vector3 &position, bool use_rotation, const Vector3 &rotation)

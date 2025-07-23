@@ -36,7 +36,7 @@ public:
 	void Enabled(bool value);
 	void Report(const std::string &message);
 	bool ReportError(const std::string &message);
-	void Loop();
+	bool Loop();
 	bool IsEnabled() { return is_enabled; }
 	void OnClick(Vector3 &position, bool shift, bool ctrl, bool alt, bool right);
 	void ResetState();

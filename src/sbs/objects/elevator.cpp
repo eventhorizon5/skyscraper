@@ -636,14 +636,16 @@ bool Elevator::Stop(bool emergency)
 	return true;
 }
 
-void Elevator::Loop()
+bool Elevator::Loop()
 {
 	//Monitors elevator and starts actions if needed
 
 	SBS_PROFILE("Elevator::Loop");
 
 	if (Created == false)
-		return;
+		return false;
+
+	bool status = true;
 
 	//only run if power is enabled
 	if (sbs->GetPower() == false)
@@ -765,12 +767,16 @@ void Elevator::Loop()
 	//run per-car loops
 	for (int i = 1; i <= GetCarCount(); i++)
 	{
-		GetCar(i)->Loop();
+		bool result = GetCar(i)->Loop();
+		if (!result)
+			status = false;
 	}
 
 	//elevator movement
 	if (MoveElevator == true)
 		MoveElevatorToFloor();
+
+	return status;
 }
 
 void Elevator::MoveElevatorToFloor()
@@ -2988,18 +2994,20 @@ Real Elevator::GetDestinationOffset(int floor)
 	return car->GetDestinationOffset(floor);
 }
 
-void Elevator::OnInit()
+bool Elevator::OnInit()
 {
 	//startup elevator initialization
 
 	//exit if not created properly
 	if (Created == false)
-		return;
+		return false;
 
 	bool enable_elevators = sbs->GetConfigBool("Skyscraper.SBS.Elevator.IsEnabled", true);
 
 	if (enable_elevators == false)
 		Enabled(false);
+
+	return true;
 }
 
 int Elevator::AvailableForCall(bool destination, int floor, int direction, bool report_on_failure)

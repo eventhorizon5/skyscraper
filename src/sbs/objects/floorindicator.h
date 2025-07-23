@@ -44,7 +44,7 @@ public:
 	void Flash(bool enabled);
 	void Off();
 	void On();
-	void Loop();
+	bool Loop();
 
 private:
 	MeshObject* FloorIndicatorMesh; //indicator mesh object

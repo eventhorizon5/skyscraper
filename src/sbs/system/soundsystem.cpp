@@ -76,7 +76,7 @@ SoundSystem::~SoundSystem()
 		//delete reverbs[i].object;
 }
 
-void SoundSystem::Loop()
+bool SoundSystem::Loop()
 {
 #ifndef DISABLE_SOUND
 	//update sound
@@ -96,9 +96,11 @@ void SoundSystem::Loop()
 	SetListenerDirection(front, top);
 
 	//update FMOD
-	soundsys->update();
+	FMOD_RESULT result = soundsys->update();
 
 	ProfileManager::Stop_Profile();
+
+	return (result == FMOD_OK);
 #endif
 }
 

@@ -119,7 +119,7 @@ void CustomObject::AddToParent()
 		sbs->AddCustomObject(this);
 }
 
-void CustomObject::Loop()
+bool CustomObject::Loop()
 {
 	//runloop, called by parent to allow for switching parents
 
@@ -177,6 +177,8 @@ void CustomObject::Loop()
 			}
 		}
 	}
+
+	return true;
 }
 
 void CustomObject::PickUp()

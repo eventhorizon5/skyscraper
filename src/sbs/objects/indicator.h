@@ -41,7 +41,7 @@ public:
 	bool IsEnabled() { return is_enabled; }
 	void Off();
 	bool PlaySound();
-	void Loop();
+	bool Loop();
 
 private:
 	MeshObject* Mesh; //mesh object

@@ -160,7 +160,7 @@ bool MovingWalkway::ReportError(const std::string &message)
 	return Object::ReportError("Moving Walkway " + GetName() + ": " + message);
 }
 
-void MovingWalkway::Loop()
+bool MovingWalkway::Loop()
 {
 	//run loop
 
@@ -170,14 +170,14 @@ void MovingWalkway::Loop()
 	if (sbs->GetPower() == false)
 	{
 		sound->Stop();
-		return;
+		return false;
 	}
 
 	if (!IsEnabled() || Run == 0)
 	{
 		if (sound->IsPlaying() == true)
 			sound->Stop();
-		return;
+		return false;
 	}
 
 	if (sound->IsPlaying() == false)
@@ -187,6 +187,7 @@ void MovingWalkway::Loop()
 	}
 
 	MoveSteps();
+	return true;
 }
 
 void MovingWalkway::CreateSteps(const std::string &texture, const std::string &direction, Real width, Real treadsize, Real tw, Real th)

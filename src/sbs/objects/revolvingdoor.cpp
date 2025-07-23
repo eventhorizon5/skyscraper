@@ -187,17 +187,19 @@ void RevolvingDoor::Enabled(bool value)
 	is_enabled = value;
 }
 
-void RevolvingDoor::Loop()
+bool RevolvingDoor::Loop()
 {
 	SBS_PROFILE("RevolvingDoor::Loop");
 
 	if (sbs->GetPower() == false)
-		return;
+		return false;
 
 	if (IsMoving == true)
 		MoveDoor();
 	else
 		EnableLoop(false);
+
+	return true;
 }
 
 void RevolvingDoor::MoveDoor()

@@ -580,10 +580,12 @@ void DirectionalIndicator::Off()
 	SetLights(2, 2);
 }
 
-void DirectionalIndicator::Loop()
+bool DirectionalIndicator::Loop()
 {
 	if (sbs->GetPower() == false)
 		Off();
+
+	return true;
 }
 
 }

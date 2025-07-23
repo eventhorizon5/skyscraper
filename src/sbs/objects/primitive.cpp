@@ -115,7 +115,7 @@ void Primitive::AddToParent()
 		sbs->AddPrimitive(this);
 }
 
-void Primitive::Loop()
+bool Primitive::Loop()
 {
 	//runloop, called by parent to allow for switching parents
 
@@ -173,6 +173,8 @@ void Primitive::Loop()
 			}
 		}
 	}
+
+	return true;
 }
 
 void Primitive::PickUp()

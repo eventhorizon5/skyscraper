@@ -196,7 +196,7 @@ void Door::Enabled(bool value)
 	is_enabled = value;
 }
 
-void Door::Loop()
+bool Door::Loop()
 {
 	SBS_PROFILE("Door::Loop");
 
@@ -204,6 +204,8 @@ void Door::Loop()
 		MoveDoor();
 	else
 		EnableLoop(false);
+
+	return true;
 }
 
 void Door::MoveDoor()

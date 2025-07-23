@@ -202,7 +202,7 @@ public:
 	bool Start(std::vector<Ogre::Camera*> &cameras);
 	void CreateSky();
 	void CalculateFrameRate();
-	void Loop(bool loading, bool isready);
+	bool Loop(bool loading, bool isready);
 	void EnableBuildings(bool value);
 	void EnableLandscape(bool value);
 	void EnableExternal(bool value);

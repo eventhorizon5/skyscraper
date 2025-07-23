@@ -133,7 +133,7 @@ public:
 	bool CallCancel();
 	bool CallCancelAll();
 	bool Stop(bool emergency = false);
-	void Loop();
+	bool Loop();
 	void DumpQueues();
 	void Enabled(bool value);
 	ElevatorCar* IsInElevator(const Vector3 &position, bool camera = false);
@@ -176,7 +176,7 @@ public:
 	bool IsRunning();
 	bool GetArrivalDirection(int floor);
 	void MoveObjects(Real offset);
-	void OnInit();
+	bool OnInit();
 	int AvailableForCall(bool destination, int floor, int direction, bool report_on_failure = true);
 	bool SelectFloor(int floor);
 	bool Check(Vector3 position);

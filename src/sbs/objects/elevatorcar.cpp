@@ -713,26 +713,30 @@ void ElevatorCar::OpenHatch()
 	Report("opening hatch");
 }
 
-void ElevatorCar::OnInit()
+bool ElevatorCar::OnInit()
 {
 	//startup car initialization
 
 	//exit if not created properly
 	if (Created == false)
-		return;
+		return false;
 
 	//disable objects
 	EnableObjects(false);
 
 	//move car (and possibly elevator) to starting position
 	SetFloor(StartingFloor, (Number == 1));
+
+	return true;
 }
 
-void ElevatorCar::Loop()
+bool ElevatorCar::Loop()
 {
 	//elevator car monitor loop
 
 	SBS_PROFILE("ElevatorCar::Loop");
+
+	bool status = true;
 
 	//only run if power is enabled
 	if (sbs->GetPower() == false)
@@ -964,7 +968,11 @@ void ElevatorCar::Loop()
 
 	//run child object runloops
 	if (IsEnabled == true)
-		LoopChildren();
+	{
+		bool result = LoopChildren();
+		if (!result)
+			status = false;
+	}
 
 	//process door sensors
 	for (size_t i = 0; i < DoorArray.size(); i++)
@@ -980,6 +988,8 @@ void ElevatorCar::Loop()
 	//reset message sound status
 	DirMessageSound = false;
 	DoorMessageSound = false;
+
+	return status;
 }
 
 void ElevatorCar::Enabled(bool value)

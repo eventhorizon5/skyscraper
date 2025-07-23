@@ -48,7 +48,7 @@ public:
 	bool IsOpen();
 	void Enabled(bool value);
 	bool IsEnabled() { return is_enabled; }
-	void Loop();
+	bool Loop();
 	void ClickDoor(Vector3 &position);
 	void OnClick(Vector3 &position, bool shift, bool ctrl, bool alt, bool right);
 	void Report(const std::string &message);

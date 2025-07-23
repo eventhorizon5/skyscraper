@@ -41,7 +41,7 @@ public:
 	int GetKeyID();
 	void SetKey(int keyid);
 	bool IsPhysical();
-	void Loop();
+	bool Loop();
 	void PickUp();
 	void Drop();
 	bool IsPickedUp();

@@ -490,7 +490,7 @@ void Shaft::ReplaceTexture(const std::string &oldtexture, const std::string &new
 		Levels[i]->ReplaceTexture(oldtexture, newtexture);
 }
 
-void Shaft::OnInit()
+bool Shaft::OnInit()
 {
 	//startup initialization of shafts
 
@@ -498,6 +498,8 @@ void Shaft::OnInit()
 		EnableWhole(false, true);
 	else
 		EnableWhole(true, true, true);
+
+	return true;
 }
 
 void Shaft::Check(Vector3 position, int current_floor)
@@ -646,11 +648,11 @@ void Shaft::Check(Vector3 position, int current_floor)
 	}
 }
 
-void Shaft::Loop()
+bool Shaft::Loop()
 {
 	//shaft runloop
 
-	LoopChildren();
+	return LoopChildren();
 }
 
 DynamicMesh* Shaft::GetDynamicMesh()
@@ -1226,11 +1228,11 @@ int Shaft::Level::GetFloor()
 	return floornum;
 }
 
-void Shaft::Level::Loop()
+bool Shaft::Level::Loop()
 {
 	//level runloop
 
-	LoopChildren();
+	return LoopChildren();
 }
 
 Door* Shaft::Level::AddDoor(std::string name, const std::string &open_sound, const std::string &close_sound, bool open_state, const std::string &texture, const std::string &side_texture, Real thickness, const std::string &face_direction, const std::string &open_direction, bool rotate, Real open_speed, Real close_speed, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th, Real side_tw, Real side_th)

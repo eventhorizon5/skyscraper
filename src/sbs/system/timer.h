@@ -36,7 +36,7 @@ public:
 	void Stop();
 	virtual void Notify() {}
 	bool IsRunning();
-	void Loop();
+	bool Loop();
 	unsigned long GetCurrentTime();
 	void Report(const std::string &message);
 

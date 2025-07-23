@@ -76,10 +76,10 @@ bool TimerObject::IsRunning()
 	return Running;
 }
 
-void TimerObject::Loop()
+bool TimerObject::Loop()
 {
 	if (Running == false)
-		return;
+		return true;
 
 	CurrentTime = sbs->GetCurrentTime() - StartTime;
 
@@ -94,6 +94,8 @@ void TimerObject::Loop()
 		if (OneShot == true)
 			Stop();
 	}
+
+	return true;
 }
 
 unsigned long TimerObject::GetCurrentTime()

@@ -130,7 +130,7 @@ public:
 	int GetClickedObjectLine();
 	std::string GetClickedObjectCommand();
 	std::string GetClickedObjectCommandP();
-	void Loop();
+	bool Loop();
 	void Strafe(Real speed = 1.0);
 	void Step(Real speed = 1.0);
 	void Float(Real speed = 1.0);

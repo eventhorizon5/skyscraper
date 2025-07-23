@@ -959,16 +959,16 @@ void Floor::UpdateFloorIndicators()
 	}
 }
 
-void Floor::Loop()
+bool Floor::Loop()
 {
 	//floor object main loop; runs if camera is currently on this floor
 
 	if (is_enabled == false)
-		return;
+		return false;
 
 	SBS_PROFILE("Floor::Loop");
 
-	LoopChildren();
+	return LoopChildren();
 }
 
 std::vector<int> Floor::GetCallStations(int elevator)

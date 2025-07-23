@@ -61,19 +61,21 @@ DispatchController::~DispatchController()
 		sbs->RemoveController(this);
 }
 
-void DispatchController::Loop()
+bool DispatchController::Loop()
 {
 	//this function runs for every registered dispatch controller via timer callback
 
 	//only run if power is enabled
 	if (sbs->GetPower() == false)
-		return;
+		return false;
 
 	//process pending requests
 	ProcessRoutes();
 
 	//check arrivals
 	CheckArrivals();
+
+	return true;
 }
 
 void DispatchController::CheckArrivals()

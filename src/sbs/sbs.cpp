@@ -574,16 +574,18 @@ void SBS::PrintBanner()
 	Report(" conditions. For details, see the file named LICENSE\n");
 }
 
-void SBS::Loop(bool loading, bool isready)
+bool SBS::Loop(bool loading, bool isready)
 {
 	//Main simulator loop
 	SBS_PROFILE_MAIN("SBS");
+
+	bool status = true;
 
 	if (RenderOnStartup == true && (loading == true || isready == false))
 		Prepare(false);
 
 	if (loading == true)
-		return;
+		return true;
 
 	//This makes sure all timer steps are the same size, in order to prevent the physics from changing
 	//depending on frame rate
@@ -621,7 +623,11 @@ void SBS::Loop(bool loading, bool isready)
 
 	//update sound
 	if (soundsystem)
-		soundsystem->Loop();
+	{
+		bool result = soundsystem->Loop();
+		if (result == false)
+			status = false;
+	}
 
 	elapsed += remaining_delta;
 
@@ -658,6 +664,8 @@ void SBS::Loop(bool loading, bool isready)
 
 	//process camera loop
 	camera->Loop();
+
+	return status;
 }
 
 void SBS::CalculateFrameRate()

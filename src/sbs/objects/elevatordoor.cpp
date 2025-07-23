@@ -1476,7 +1476,7 @@ bool ElevatorDoor::DoorsStopped()
 	return doors_stopped;
 }
 
-void ElevatorDoor::Loop()
+bool ElevatorDoor::Loop()
 {
 	//main loop
 	SBS_PROFILE("ElevatorDoor::Loop");
@@ -1492,6 +1492,8 @@ void ElevatorDoor::Loop()
 		MoveDoors(true, true);
 	if (OpenDoor == -2)
 		MoveDoors(false, true);
+
+	return true;
 }
 
 void ElevatorDoor::Enabled(bool value)
