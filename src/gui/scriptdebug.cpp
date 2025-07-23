@@ -122,6 +122,19 @@ ScriptDebug::~ScriptDebug()
 void ScriptDebug::OnInit()
 {
     Simcore = panel->GetSystem();
+    scriptproc = panel->GetScriptProcessor();
+
+    if (!Simcore || !scriptproc)
+		return;
+
+    std::vector<std::string> *data = scriptproc->GetBuildingData();
+
+    wxArrayString stringarray;
+    for (int i = 0; i < data->size(); i++)
+    {
+        stringarray.Add(SBS::ToString(i + 1) + ": " + data->at(i));
+    }
+    lstScript->SetStrings(stringarray);
 }
 
 void ScriptDebug::Loop()
@@ -130,15 +143,16 @@ void ScriptDebug::Loop()
 	if (Simcore != panel->GetSystem())
 		OnInit();
 
-    scriptproc = panel->GetScriptProcessor();
-
     if (!Simcore || !scriptproc)
 		return;
 
+    txtLine->SetValue(SBS::ToString(scriptproc->line));
+    //txtFilename->SetValue(scriptproc->)
 }
 
 void ScriptDebug::On_bGoto_Click(wxCommandEvent& event)
 {
+
 }
 
 void ScriptDebug::On_bRun_Click(wxCommandEvent& event)
