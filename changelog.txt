@@ -21,9 +21,14 @@ Version 2.1
 -SBS: Added override keywords for Manager class
 -Use explicit for classes with one constructor parameter
 -added "skip engine" support to both VM and the progress dialog
+-GUI: added Script Debugger
+-SBS: Loop() and OnInit() object functions should return a status, to indicate an object success or malfunction/failure
+-SBS: add support for a return value for Object initialization functions
+-SBS: object Enabled() function should return status.
 
 Version 2.0
 -------------------------
+-ScriptProc: fix direction value processing for AddDoor command
 -SBS: added pointer safety checks to elevator car's Loop() function
 -VM: SwitchEngines() function should not switch to engines in a paused state
 -GUI: added a Paused checkbox to the Engine Manager, to pause/suspend sim engines
