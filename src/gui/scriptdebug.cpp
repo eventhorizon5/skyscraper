@@ -26,9 +26,11 @@
 //*)
 
 #include "globals.h"
+#include "sbs.h"
 #include "vm.h"
 #include "gui.h"
 #include "debugpanel.h"
+#include "scriptproc.h"
 #include "scriptdebug.h"
 
 namespace Skyscraper {
@@ -107,6 +109,8 @@ ScriptDebug::ScriptDebug(DebugPanel* root, wxWindow* parent)
     Connect(ID_bStop, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&ScriptDebug::On_bStop_Click);
     Connect(ID_bReset, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&ScriptDebug::On_bReset_Click);
     //*)
+    this->panel = root;
+    OnInit();
 }
 
 ScriptDebug::~ScriptDebug()
@@ -115,8 +119,21 @@ ScriptDebug::~ScriptDebug()
     //*)
 }
 
+void ScriptDebug::OnInit()
+{
+    Simcore = panel->GetSystem();
+}
+
 void ScriptDebug::Loop()
 {
+	//if active engine has changed, refresh values
+	if (Simcore != panel->GetSystem())
+		OnInit();
+
+    scriptproc = panel->GetScriptProcessor();
+
+    if (!Simcore || !scriptproc)
+		return;
 
 }
 
@@ -139,6 +156,8 @@ void ScriptDebug::On_bStop_Click(wxCommandEvent& event)
 
 void ScriptDebug::On_bReset_Click(wxCommandEvent& event)
 {
+    if (scriptproc)
+        scriptproc->Reset();
 }
 
 }

@@ -57,6 +57,7 @@ class ScriptDebug: public wxDialog
         wxTextCtrl* txtFilename;
         wxTextCtrl* txtLine;
         //*)
+		void OnInit();
 
     protected:
 
@@ -84,6 +85,9 @@ class ScriptDebug: public wxDialog
         void On_bStop_Click(wxCommandEvent& event);
         void On_bReset_Click(wxCommandEvent& event);
         //*)
+		SBS::SBS *Simcore;
+        ScriptProcessor *scriptproc;
+		DebugPanel *panel;
 
         DECLARE_EVENT_TABLE()
 };

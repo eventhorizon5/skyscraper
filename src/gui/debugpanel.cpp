@@ -307,6 +307,7 @@ DebugPanel::DebugPanel(VM *root, wxWindow* parent,wxWindowID id)
 	//*)
 	Simcore = 0;
 	vm = root;
+	scriptproc = 0;
 	mc = 0;
 	ee = 0;
 	cc = 0;
@@ -444,8 +445,9 @@ void DebugPanel::On_bEditElevator_Click(wxCommandEvent& event)
 void DebugPanel::OnInit()
 {
 	Simcore = vm->GetActiveSystem();
+	scriptproc = vm->GetActiveScriptProcessor();
 
-	if (!Simcore)
+	if (!Simcore || !scriptproc)
 		return;
 
 	//set check boxes
@@ -908,6 +910,11 @@ void DebugPanel::On_bControllerEditor_Click(wxCommandEvent& event)
 	ceditor->CenterOnScreen();
 	ceditor->Show();
 	ceditor->Raise();
+}
+
+ScriptProcessor* DebugPanel::GetScriptProcessor()
+{
+	return scriptproc;
 }
 
 }
