@@ -64,8 +64,25 @@ public:
 	std::string GetFilesystemPath(std::string filename);
 	std::string GetMountPath(std::string filename, std::string &newfilename);
 	void CacheFilename(const std::string &filename, const std::string &result);
+
+	//EnableArray() function
 	template <typename T>
-	bool EnableArray(const std::vector<T> &array, bool value);
+	bool EnableArray(const std::vector<T> &array, bool value)
+	{
+		//enable or disable an object array
+
+		bool status = true;
+		for (size_t i = 0; i < array.size(); i++)
+		{
+			if (array[i])
+			{
+				bool result = array[i]->Enabled(value);
+				if (!result)
+					status = false;
+			}
+		}
+		return status;
+	}
 
 private:
 
