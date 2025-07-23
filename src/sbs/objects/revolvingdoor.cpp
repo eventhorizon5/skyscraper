@@ -192,7 +192,7 @@ bool RevolvingDoor::Loop()
 	SBS_PROFILE("RevolvingDoor::Loop");
 
 	if (sbs->GetPower() == false)
-		return false;
+		return true;
 
 	if (IsMoving == true)
 		MoveDoor();

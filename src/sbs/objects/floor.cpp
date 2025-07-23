@@ -964,7 +964,7 @@ bool Floor::Loop()
 	//floor object main loop; runs if camera is currently on this floor
 
 	if (is_enabled == false)
-		return false;
+		return true;
 
 	SBS_PROFILE("Floor::Loop");
 

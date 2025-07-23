@@ -67,7 +67,7 @@ bool DispatchController::Loop()
 
 	//only run if power is enabled
 	if (sbs->GetPower() == false)
-		return false;
+		return true;
 
 	//process pending requests
 	ProcessRoutes();

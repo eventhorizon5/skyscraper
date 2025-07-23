@@ -212,7 +212,7 @@ bool Escalator::Loop()
 	if (sbs->GetPower() == false)
 	{
 		sound->Stop();
-		return false;
+		return true;
 	}
 
 	if (!IsEnabled() || Run == 0)
