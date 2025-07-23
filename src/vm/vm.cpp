@@ -1044,7 +1044,7 @@ void VM::ListPlayingSounds()
 	}
 }
 
-int VM::GetGlobalStats(int &meshes, int &textures, int &actions, int &sounds, int &objects, int &walls, int &polygons)
+unsigned long VM::GetGlobalStats(unsigned long &meshes, unsigned long &textures, unsigned long &actions, unsigned long &sounds, unsigned long &objects, unsigned long &walls, unsigned long &polygons)
 {
 	meshes = 0;
 	textures = 0;
@@ -1053,7 +1053,7 @@ int VM::GetGlobalStats(int &meshes, int &textures, int &actions, int &sounds, in
 	objects = 0;
 	walls = 0;
 	polygons = 0;
-	int total = 0;
+	unsigned long total = 0;
 
 	for (size_t i = 0; i < engines.size(); i++)
 	{

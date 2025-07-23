@@ -304,8 +304,8 @@ void Stats::Loop()
 		//global stats
 		tRunningTime->SetValue(ToString(panel->GetRoot()->Uptime() / 1000));
 
-		int meshes, textures, actions, sounds, objects, walls, polygons;
-		int total = panel->GetRoot()->GetGlobalStats(meshes, textures, actions, sounds, objects, walls, polygons);
+		unsigned long meshes, textures, actions, sounds, objects, walls, polygons;
+		unsigned long total = panel->GetRoot()->GetGlobalStats(meshes, textures, actions, sounds, objects, walls, polygons);
 		tMeshes->SetValue(ToString(meshes));
 		tTextures->SetValue(ToString(textures));
 		tActions->SetValue(ToString(actions));
