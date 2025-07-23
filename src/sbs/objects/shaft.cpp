@@ -144,15 +144,17 @@ Shaft::Level* Shaft::GetLevel(int floor)
 	return 0;
 }
 
-void Shaft::EnableWhole(bool value, bool EnableShaftDoors, bool force)
+bool Shaft::EnableWhole(bool value, bool EnableShaftDoors, bool force)
 {
 	//turn on/off entire shaft
 
 	if (value == false && ShowFullShaft == true)
-		return;
+		return true;
 
 	if (force == true)
 		IsEnabled = !value;
+
+	bool status = true;
 
 	if (IsEnabled == !value && EnableCheck == false)
 	{
@@ -160,18 +162,28 @@ void Shaft::EnableWhole(bool value, bool EnableShaftDoors, bool force)
 		{
 			if (force == true)
 				GetLevel(i)->enabled = !value;
-			GetLevel(i)->Enabled(value, EnableShaftDoors);
+			bool result = GetLevel(i)->Enabled(value, EnableShaftDoors);
+			if (!result)
+				status = false;
 		}
 	}
 
 	//enable/disable dynamic meshes
-	dynamic_mesh->Enabled(value);
-	ShaftDoorContainer->Enabled(value);
-	DoorWrapper->Enabled(value);
+	bool result = dynamic_mesh->Enabled(value);
+	if (!result)
+		status = false;
+	result = ShaftDoorContainer->Enabled(value);
+	if (!result)
+		status = false;
+	result = DoorWrapper->Enabled(value);
+	if (!result)
+		status = false;
 
 	IsEnabled = value;
 	if (ShowFullShaft == true)
 		EnableCheck = true;
+
+	return status;
 }
 
 bool Shaft::IsInside(const Vector3 &position)

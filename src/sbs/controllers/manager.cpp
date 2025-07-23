@@ -33,6 +33,7 @@
 #include "vehicle.h"
 #include "controller.h"
 #include "profiler.h"
+#include "utility.h"
 #include "manager.h"
 
 namespace SBS {
@@ -230,16 +231,30 @@ void FloorManager::Remove(Floor *floor)
 	}
 }
 
-void FloorManager::EnableAll(bool value)
+bool FloorManager::EnableAll(bool value)
 {
 	//enable or disable all floors
+
+	bool status = true;
 	for (size_t i = 0; i < Array.size(); i++)
-		Array[i].object->Enabled(value);
+	{
+		bool result = Array[i].object->Enabled(value);
+		if (!result)
+			status = false;
+	}
 
 	//enable/disable dynamic meshes
-	floors->Enabled(value);
-	interfloors->Enabled(value);
-	columnframes->Enabled(value);
+	bool result = floors->Enabled(value);
+	if (!result)
+		status = false;
+	result = interfloors->Enabled(value);
+	if (!result)
+		status = false;
+	result = columnframes->Enabled(value);
+	if (!result)
+		status = false;
+
+	return status;
 }
 
 bool FloorManager::Loop()
@@ -363,10 +378,11 @@ void ElevatorManager::Remove(Elevator *elevator)
 	}
 }
 
-void ElevatorManager::EnableAll(bool value)
+bool ElevatorManager::EnableAll(bool value)
 {
 	//turn off elevators, if the related shaft is only partially shown
 
+	bool status = true;
 	for (size_t i = 0; i < Array.size(); i++)
 	{
 		Shaft *shaft = Array[i].object->GetShaft();
@@ -374,8 +390,11 @@ void ElevatorManager::EnableAll(bool value)
 		if (value == false)
 			value = shaft->GetShowFull();
 
-		Array[i].object->Enabled(value);
+		bool result = Array[i].object->Enabled(value);
+		if (!result)
+			status = false;
 	}
+	return status;
 }
 
 bool ElevatorManager::Loop()
@@ -529,11 +548,17 @@ void ShaftManager::Remove(Shaft *shaft)
 	}
 }
 
-void ShaftManager::EnableAll(bool value)
+bool ShaftManager::EnableAll(bool value)
 {
 	//enable or disable all shafts
+	bool status = true;
 	for (size_t i = 0; i < Array.size(); i++)
-		Array[i].object->EnableWhole(value, true, true);
+	{
+		bool result = Array[i].object->EnableWhole(value, true, true);
+		if (!result)
+			status = false;
+	}
+	return status;
 }
 
 bool ShaftManager::Loop()
@@ -683,11 +708,17 @@ void StairwellManager::Remove(Stairwell *stairs)
 	}
 }
 
-void StairwellManager::EnableAll(bool value)
+bool StairwellManager::EnableAll(bool value)
 {
 	//enable or disable all stairwells
+	bool status = true;
 	for (size_t i = 0; i < Array.size(); i++)
-		Array[i].object->EnableWhole(value, true);
+	{
+		bool result = Array[i].object->EnableWhole(value, true);
+		if (!result)
+			status = false;
+	}
+	return status;
 }
 
 bool StairwellManager::Loop()

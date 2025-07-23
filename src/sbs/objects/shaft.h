@@ -48,7 +48,7 @@ public:
 
 	Shaft(Object *parent, int number, Real CenterX, Real CenterZ, int startfloor, int endfloor);
 	~Shaft();
-	void EnableWhole(bool value, bool EnableShaftDoors, bool force = false);
+	bool EnableWhole(bool value, bool EnableShaftDoors, bool force = false);
 	bool IsInside(const Vector3 &position);
 	void CutFloors(bool relative, const Vector2 &start, const Vector2 &end, Real startvoffset, Real endvoffset);
 	void EnableRange(int floor, int range, bool value, bool EnableShaftDoors);

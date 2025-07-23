@@ -107,7 +107,7 @@ public:
 	bool OnInit();
 	bool Loop();
 	bool Enabled(bool value);
-	void EnableObjects(bool value);
+	bool EnableObjects(bool value);
 	void UpdateFloorIndicators();
 	int GetTopFloor();
 	int GetBottomFloor();

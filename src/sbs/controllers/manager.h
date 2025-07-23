@@ -47,7 +47,7 @@ public:
 	Floor* GetByID(const std::string &id);
 	Floor* GetByNumberID(const std::string &id);
 	void Remove(Floor *floor);
-	void EnableAll(bool value);
+	bool EnableAll(bool value);
 	DynamicMesh* GetFloorDynMesh() { return floors; }
 	DynamicMesh* GetIFloorDynMesh() { return interfloors; }
 	DynamicMesh* GetColumnDynMesh() { return columnframes; }
@@ -82,7 +82,7 @@ public:
 	Elevator* Get(int number);
 	Elevator* GetIndex(int index);
 	void Remove(Elevator *elevator);
-	void EnableAll(bool value);
+	bool EnableAll(bool value);
 	bool Loop() override;
 
 private:
@@ -109,7 +109,7 @@ public:
 	Shaft* Get(int number);
 	Shaft* GetIndex(int index);
 	void Remove(Shaft *shaft);
-	void EnableAll(bool value);
+	bool EnableAll(bool value);
 	bool Loop() override;
 
 private:
@@ -136,7 +136,7 @@ public:
 	Stairwell* Get(int number);
 	Stairwell* GetIndex(int index);
 	void Remove(Stairwell *stairs);
-	void EnableAll(bool value);
+	bool EnableAll(bool value);
 	bool Loop() override;
 
 private:

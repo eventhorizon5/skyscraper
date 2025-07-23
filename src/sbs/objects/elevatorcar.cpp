@@ -51,6 +51,7 @@
 #include "timer.h"
 #include "controller.h"
 #include "elevroute.h"
+#include "utility.h"
 #include "reverb.h"
 
 #include <time.h>
@@ -1036,12 +1037,14 @@ bool ElevatorCar::Enabled(bool value)
 	return status;
 }
 
-void ElevatorCar::EnableObjects(bool value)
+bool ElevatorCar::EnableObjects(bool value)
 {
 	//enable or disable interior objects, such as floor indicators and button panels
 
 	if (AutoEnable == false)
-		return;
+		return true;
+
+	bool status = true;
 
 	//SBS_PROFILE("ElevatorCar::EnableObjects");
 	if (sbs->Verbose)
@@ -1053,53 +1056,42 @@ void ElevatorCar::EnableObjects(bool value)
 	}
 
 	//floor indicators
-	/*for (size_t i = 0; i < FloorIndicatorArray.size(); i++)
-	{
-		if (FloorIndicatorArray[i])
-			FloorIndicatorArray[i]->Enabled(value);
-	}*/
+	/*bool result = sbs->GetUtility()->EnableArray(FloorIndicatorArray, value);
+	if (!result)
+		status = false;*/
 
 	//interior directional indicators
 	//EnableDirectionalIndicators(value);
 
 	//controls
-	for (size_t i = 0; i < ControlArray.size(); i++)
-	{
-		if (ControlArray[i])
-			ControlArray[i]->Enabled(value);
-	}
+	bool result = sbs->GetUtility()->EnableArray(ControlArray, value);
+	if (!result)
+		status = false;
 
 	//triggers
-	for (size_t i = 0; i < TriggerArray.size(); i++)
-	{
-		if (TriggerArray[i])
-			TriggerArray[i]->Enabled(value);
-	}
+	result = sbs->GetUtility()->EnableArray(TriggerArray, value);
+	if (!result)
+		status = false;
 
 	//models
-	for (size_t i = 0; i < ModelArray.size(); i++)
-	{
-		if (ModelArray[i])
-			ModelArray[i]->Enabled(value);
-	}
+	result = sbs->GetUtility()->EnableArray(ModelArray, value);
+	if (!result)
+		status = false;
 
 	//panels
-	for (size_t i = 0; i < PanelArray.size(); i++)
-		PanelArray[i]->Enabled(value);
+	result = sbs->GetUtility()->EnableArray(PanelArray, value);
+	if (!result)
+		status = false;
 
 	//primitives
-	for (size_t i = 0; i < PrimArray.size(); i++)
-	{
-		if (PrimArray[i])
-			PrimArray[i]->Enabled(value);
-	}
+	result = sbs->GetUtility()->EnableArray(PrimArray, value);
+	if (!result)
+		status = false;
 
 	//custom objects
-	for (size_t i = 0; i < CustomObjectArray.size(); i++)
-	{
-		if (CustomObjectArray[i])
-			CustomObjectArray[i]->Enabled(value);
-	}
+	result = sbs->GetUtility()->EnableArray(CustomObjectArray, value);
+	if (!result)
+		status = false;
 
 	//sounds
 	for (size_t i = 0; i < sounds.size(); i++)
@@ -1111,7 +1103,11 @@ void ElevatorCar::EnableObjects(bool value)
 				if (value == false)
 					sounds[i]->Stop();
 				else
-					sounds[i]->Play();
+				{
+					bool result = sounds[i]->Play();
+					if (!result)
+						status = false;
+				}
 			}
 		}
 	}
@@ -1119,6 +1115,8 @@ void ElevatorCar::EnableObjects(bool value)
 	//reverb
 	if (reverb)
 		reverb->Enabled(value);
+
+	return status;
 }
 
 void ElevatorCar::UpdateFloorIndicators()

@@ -384,6 +384,7 @@ bool Floor::Enabled(bool value)
 		return true;
 
 	bool status = true, result;
+	Utility* utility = sbs->GetUtility();
 
 	SBS_PROFILE("Floor::Enabled");
 	result = Level->Enabled(value);
@@ -465,129 +466,64 @@ bool Floor::Enabled(bool value)
 	EnableColumnFrame(value);
 
 	//controls
-	for (size_t i = 0; i < ControlArray.size(); i++)
-	{
-		if (ControlArray[i])
-		{
-			result = ControlArray[i]->Enabled(value);
-			if (!result)
-				status = false;
-		}
-	}
+	result = utility->EnableArray(ControlArray, value);
+	if (!result)
+		status = false;
 
 	//triggers
-	for (size_t i = 0; i < TriggerArray.size(); i++)
-	{
-		if (TriggerArray[i])
-		{
-			result = TriggerArray[i]->Enabled(value);
-			if (!result)
-				status = false;
-		}
-	}
+	result = utility->EnableArray(TriggerArray, value);
+	if (!result)
+		status = false;
 
 	//models
-	for (size_t i = 0; i < ModelArray.size(); i++)
-	{
-		if (ModelArray[i])
-		{
-			result = ModelArray[i]->Enabled(value);
-			if (!result)
-				status = false;
-		}
-	}
+	result = utility->EnableArray(ModelArray, value);
+	if (!result)
+		status = false;
 
 	//primitives
-	for (size_t i = 0; i < PrimArray.size(); i++)
-	{
-		if (PrimArray[i])
-		{
-			result = PrimArray[i]->Enabled(value);
-			if (!result)
-				status = false;
-		}
-	}
+	result = sbs->GetUtility()->EnableArray(PrimArray, value);
+	if (!result)
+		status = false;
 
 	//custom objects
-	for (size_t i = 0; i < CustomObjectArray.size(); i++)
-	{
-		if (CustomObjectArray[i])
-		{
-			result = CustomObjectArray[i]->Enabled(value);
-			if (!result)
-				status = false;
-		}
-	}
+	result = utility->EnableArray(CustomObjectArray, value);
+	if (!result)
+		status = false;
 
 	//call stations
-	for (size_t i = 0; i < CallStationArray.size(); i++)
-	{
-		if (CallStationArray[i])
-		{
-			result = CallStationArray[i]->Enabled(value);
-			if (!result)
-				status = false;
-		}
-	}
+	result = utility->EnableArray(CallStationArray, value);
+	if (!result)
+		status = false;
 
 	//doors
-	for (size_t i = 0; i < DoorArray.size(); i++)
-	{
-		if (DoorArray[i])
-		{
-			result = DoorArray[i]->Enabled(value);
-			if (!result)
-				status = false;
-		}
-	}
+	result = utility->EnableArray(DoorArray, value);
+	if (!result)
+		status = false;
 	DoorWrapper->Enabled(value);
 
 	//turn on/off directional indicators
-	for (size_t i = 0; i < DirIndicatorArray.size(); i++)
-	{
-		if (DirIndicatorArray[i])
-		{
-			result = DirIndicatorArray[i]->Enabled(value);
-			if (!result)
-				status = false;
-		}
-	}
+	result = utility->EnableArray(DirIndicatorArray, value);
+	if (!result)
+		status = false;
 	UpdateDirectionalIndicators();
 
 	//floor indicators
-	for (size_t i = 0; i < FloorIndicatorArray.size(); i++)
-	{
-		if (FloorIndicatorArray[i])
-		{
-			result = FloorIndicatorArray[i]->Enabled(value);
-			if (!result)
-				status = false;
-		}
-	}
+	result = utility->EnableArray(FloorIndicatorArray, value);
+	if (!result)
+		status = false;
+
 	//update floor indicator values
 	UpdateFloorIndicators();
 
 	//escalators
-	for (size_t i = 0; i < EscalatorArray.size(); i++)
-	{
-		if (EscalatorArray[i])
-		{
-			result = EscalatorArray[i]->Enabled(value);
-			if (!result)
-				status = false;
-		}
-	}
+	result = utility->EnableArray(EscalatorArray, value);
+	if (!result)
+		status = false;
 
 	//moving walkways
-	for (size_t i = 0; i < MovingWalkwayArray.size(); i++)
-	{
-		if (MovingWalkwayArray[i])
-		{
-			result = MovingWalkwayArray[i]->Enabled(value);
-			if (!result)
-				status = false;
-		}
-	}
+	result = utility->EnableArray(MovingWalkwayArray, value);
+	if (!result)
+		status = false;
 
 	//sounds
 	for (size_t i = 0; i < sounds.size(); i++)
@@ -609,26 +545,14 @@ bool Floor::Enabled(bool value)
 	}
 
 	//reverbs
-	for (size_t i = 0; i < reverbs.size(); i++)
-	{
-		if (reverbs[i])
-		{
-			result = reverbs[i]->Enabled(value);
-			if (!result)
-				status = false;
-		}
-	}
+	result = utility->EnableArray(reverbs, value);
+	if (!result)
+		status = false;
 
 	//lights
-	for (size_t i = 0; i < lights.size(); i++)
-	{
-		if (lights[i])
-		{
-			result = lights[i]->Enabled(value);
-			if (!result)
-				status = false;
-		}
-	}
+	result = utility->EnableArray(lights, value);
+	if (!result)
+		status = false;
 
 	return status;
 }
