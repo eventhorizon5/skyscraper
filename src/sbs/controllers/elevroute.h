@@ -92,6 +92,8 @@ private:
 	Elevator* elevator;
 
 	void HandleDequeue(int direction, bool stop_if_empty = true);
+	void Report(const std::string &message);
+	bool ReportError(const std::string &message);
 
 	std::vector<QueueEntry> UpQueue; //up call queue
 	std::vector<QueueEntry> DownQueue; //down call queue
