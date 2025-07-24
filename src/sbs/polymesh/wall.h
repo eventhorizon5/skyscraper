@@ -39,7 +39,7 @@ class SBSIMPEXP Wall : public Object
 public:
 
 	//functions
-	Wall(MeshObject* wrapper);
+	Wall(MeshObject* wrapper, const std::string &name);
 	~Wall();
 	Polygon* AddQuad(const std::string &name, const std::string &texture, const Vector3 &v1, const Vector3 &v2, const Vector3 &v3, const Vector3 &v4, Real tw, Real th, bool autosize);
 	Polygon* AddPolygon(const std::string &name, const std::string &texture, PolyArray &vertices, Real tw, Real th, bool autosize);
@@ -49,7 +49,6 @@ public:
 	int GetPolygonCount();
 	Polygon* GetPolygon(int index);
 	int FindPolygon(const std::string &name);
-	//void GetGeometry(int index, PolygonSet &vertices, bool firstonly = false, bool convert = true, bool rescale = true, bool relative = true, bool reverse = false);
 	bool IntersectsWall(Vector3 start, Vector3 end, Vector3 &isect, bool convert = true);
 	void Move(const Vector3 &vector, Real speed = 1.0);
 	MeshObject* GetMesh();
@@ -65,6 +64,9 @@ public:
 private:
 	//mesh wrapper
 	MeshObject* meshwrapper;
+
+	//polymesh system
+	PolyMesh* polymesh;
 
 	//polygon array
 	std::vector<Polygon*> polygons;

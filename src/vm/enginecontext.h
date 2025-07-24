@@ -38,6 +38,7 @@ public:
 	bool started;
 	bool NewEngine; //true if this is a new engine
 	unsigned long current_time, time_stat;
+	bool Paused;
 
 	EngineContext(EngineContext *parent, VM *vm, Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
 	EngineContext(EngineContext *parent, VM *vm, Ogre::SceneManager* mSceneManager, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
@@ -78,7 +79,7 @@ public:
 	void OnExit();
 	void CutForEngine(EngineContext *engine);
 	void AddChild(EngineContext *engine);
-	void RemoveChild(EngineContext *engine);
+	void RemoveChild(const EngineContext *engine);
 	void RemoveParent() { parent = 0; }
 	void Move(Vector3 &position, bool move_children = false);
 	EngineContext* GetParent() { return parent; }

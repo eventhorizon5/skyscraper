@@ -42,7 +42,7 @@
 #include "shaft.h"
 #include "camera.h"
 #include "dynamicmesh.h"
-#include "texture.h"
+#include "texman.h"
 #include "profiler.h"
 #include "cameratexture.h"
 #include "elevatorcar.h"
@@ -50,6 +50,8 @@
 #include "indicator.h"
 #include "timer.h"
 #include "controller.h"
+#include "elevroute.h"
+#include "utility.h"
 #include "reverb.h"
 
 #include <time.h>
@@ -488,7 +490,7 @@ Wall* ElevatorCar::AddWall(const std::string &name, const std::string &texture, 
 	//Adds a wall with the specified dimensions
 
 	Wall *wall = Mesh->CreateWallObject(name);
-	sbs->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height1, height2, voffset1, voffset2, tw, th, true);
+	sbs->GetPolyMesh()->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height1, height2, voffset1, voffset2, tw, th, true);
 	return wall;
 }
 
@@ -497,7 +499,7 @@ Wall* ElevatorCar::AddFloor(const std::string &name, const std::string &texture,
 	//Adds a floor with the specified dimensions and vertical offset
 
 	Wall *wall = Mesh->CreateWallObject(name);
-	sbs->AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, voffset1, voffset2, reverse_axis, texture_direction, tw, th, true, legacy_behavior);
+	sbs->GetPolyMesh()->AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, voffset1, voffset2, reverse_axis, texture_direction, tw, th, true, legacy_behavior);
 	return wall;
 }
 
@@ -683,18 +685,18 @@ void ElevatorCar::Alarm()
 		//ring alarm
 		AlarmActive = true;
 		Report("alarm on");
-		if (AlarmSound != "")
+		if (AlarmSound != "" && alarm)
 		{
 			alarm->Load(AlarmSound);
 			alarm->SetLoopState(true);
 			alarm->Play();
 		}
 	}
-	else if (AlarmActive == true && sbs->camera->MouseDown() == false)
+	else if (sbs->camera->MouseDown() == false)
 	{
 		//stop alarm
 		AlarmActive = false;
-		if (AlarmSound != "")
+		if (AlarmSound != "" && alarm)
 		{
 			alarm->Stop();
 			alarm->Load(AlarmSoundStop);
@@ -712,32 +714,39 @@ void ElevatorCar::OpenHatch()
 	Report("opening hatch");
 }
 
-void ElevatorCar::OnInit()
+bool ElevatorCar::OnInit()
 {
 	//startup car initialization
 
 	//exit if not created properly
 	if (Created == false)
-		return;
+		return false;
 
 	//disable objects
 	EnableObjects(false);
 
 	//move car (and possibly elevator) to starting position
 	SetFloor(StartingFloor, (Number == 1));
+
+	return true;
 }
 
-void ElevatorCar::Loop()
+bool ElevatorCar::Loop()
 {
 	//elevator car monitor loop
 
 	SBS_PROFILE("ElevatorCar::Loop");
 
+	bool status = true;
+
 	//only run if power is enabled
 	if (sbs->GetPower() == false)
 	{
-		idlesound->Stop();
-		musicsound->Stop();
+		if (idlesound && musicsound)
+		{
+			idlesound->Stop();
+			musicsound->Stop();
+		}
 	}
 
 	ControlPressActive = false;
@@ -752,7 +761,7 @@ void ElevatorCar::Loop()
 	}
 
 	//play car idle sound if in elevator, or if doors open
-	if (IdleSound != "" && sbs->GetPower() == true)
+	if (IdleSound != "" && sbs->GetPower() == true && idlesound)
 	{
 		if (idlesound->IsPlaying() == false && Fan == true)
 		{
@@ -786,7 +795,7 @@ void ElevatorCar::Loop()
 	}
 
 	//music processing
-	if ((MusicUp != "" || MusicDown != "") && sbs->GetPower() == true)
+	if ((MusicUp != "" || MusicDown != "") && sbs->GetPower() == true && musicsound)
 	{
 		if (MusicAlwaysOn == false) //standard mode
 		{
@@ -844,7 +853,7 @@ void ElevatorCar::Loop()
 				}
 			}
 		}
-		else if (MusicAlwaysOn == true) //always-on mode
+		else //always-on mode
 		{
 			if (musicsound->IsPlaying() == false && MusicOn == true && MusicOnMove == false)
 			{
@@ -899,6 +908,9 @@ void ElevatorCar::Loop()
 	//turn on lights if in elevator, or if doors are open
 	for (size_t i = 0; i < lights.size(); i++)
 	{
+		if (!lights[i])
+			continue;
+
 		if (lights[i]->IsEnabled() == false)
 		{
 			if (InCar() == true || AreDoorsOpen() == true || AreDoorsMoving(0, true, false) != 0)
@@ -940,12 +952,16 @@ void ElevatorCar::Loop()
 		//reset door timer if peak mode is enabled and a movement is pending
 		if ((parent->UpPeak == true || parent->DownPeak == true))
 		{
-			if ((parent->UpQueue.empty() == false || parent->DownQueue.empty() == false) && (AreDoorsOpen() == true && AreDoorsMoving() == 0))
+			RouteController *controller = parent->GetRouteController();
+			if (controller)
 			{
-				if (door)
+				if ((controller->UpQueue.empty() == false || controller->DownQueue.empty() == false) && (AreDoorsOpen() == true && AreDoorsMoving() == 0))
 				{
-					if (door->TimerIsRunning() == false)
-						door->Reset();
+					if (door)
+					{
+						if (door->TimerIsRunning() == false)
+							door->Reset();
+					}
 				}
 			}
 		}
@@ -953,7 +969,11 @@ void ElevatorCar::Loop()
 
 	//run child object runloops
 	if (IsEnabled == true)
-		LoopChildren();
+	{
+		bool result = LoopChildren();
+		if (!result)
+			status = false;
+	}
 
 	//process door sensors
 	for (size_t i = 0; i < DoorArray.size(); i++)
@@ -963,19 +983,22 @@ void ElevatorCar::Loop()
 	}
 
 	//process queued sounds
-	announcesnd->ProcessQueue();
+	if (announcesnd)
+		announcesnd->ProcessQueue();
 
 	//reset message sound status
 	DirMessageSound = false;
 	DoorMessageSound = false;
+
+	return status;
 }
 
-void ElevatorCar::Enabled(bool value)
+bool ElevatorCar::Enabled(bool value)
 {
 	//shows/hides elevator car
 
 	if (IsEnabled == value)
-		return;
+		return true;
 
 	if (sbs->Verbose)
 	{
@@ -985,7 +1008,12 @@ void ElevatorCar::Enabled(bool value)
 			Report("disabling car");
 	}
 
-	Mesh->Enabled(value);
+	bool status = true;
+
+	bool result = Mesh->Enabled(value);
+	if (!result)
+		status = false;
+
 	EnableDoors(value);
 	IsEnabled = value;
 
@@ -993,7 +1021,11 @@ void ElevatorCar::Enabled(bool value)
 	for (size_t i = 0; i < FloorIndicatorArray.size(); i++)
 	{
 		if (FloorIndicatorArray[i])
-			FloorIndicatorArray[i]->Enabled(value);
+		{
+			bool result = FloorIndicatorArray[i]->Enabled(value);
+			if (!result)
+				status = false;
+		}
 	}
 
 	//interior directional indicators
@@ -1001,14 +1033,18 @@ void ElevatorCar::Enabled(bool value)
 
 	if (value == false)
 		EnableObjects(false);
+
+	return status;
 }
 
-void ElevatorCar::EnableObjects(bool value)
+bool ElevatorCar::EnableObjects(bool value)
 {
 	//enable or disable interior objects, such as floor indicators and button panels
 
 	if (AutoEnable == false)
-		return;
+		return true;
+
+	bool status = true;
 
 	//SBS_PROFILE("ElevatorCar::EnableObjects");
 	if (sbs->Verbose)
@@ -1020,53 +1056,42 @@ void ElevatorCar::EnableObjects(bool value)
 	}
 
 	//floor indicators
-	/*for (size_t i = 0; i < FloorIndicatorArray.size(); i++)
-	{
-		if (FloorIndicatorArray[i])
-			FloorIndicatorArray[i]->Enabled(value);
-	}*/
+	/*bool result = sbs->GetUtility()->EnableArray(FloorIndicatorArray, value);
+	if (!result)
+		status = false;*/
 
 	//interior directional indicators
 	//EnableDirectionalIndicators(value);
 
 	//controls
-	for (size_t i = 0; i < ControlArray.size(); i++)
-	{
-		if (ControlArray[i])
-			ControlArray[i]->Enabled(value);
-	}
+	bool result = sbs->GetUtility()->EnableArray(ControlArray, value);
+	if (!result)
+		status = false;
 
 	//triggers
-	for (size_t i = 0; i < TriggerArray.size(); i++)
-	{
-		if (TriggerArray[i])
-			TriggerArray[i]->Enabled(value);
-	}
+	result = sbs->GetUtility()->EnableArray(TriggerArray, value);
+	if (!result)
+		status = false;
 
 	//models
-	for (size_t i = 0; i < ModelArray.size(); i++)
-	{
-		if (ModelArray[i])
-			ModelArray[i]->Enabled(value);
-	}
+	result = sbs->GetUtility()->EnableArray(ModelArray, value);
+	if (!result)
+		status = false;
 
 	//panels
-	for (size_t i = 0; i < PanelArray.size(); i++)
-		PanelArray[i]->Enabled(value);
+	result = sbs->GetUtility()->EnableArray(PanelArray, value);
+	if (!result)
+		status = false;
 
 	//primitives
-	for (size_t i = 0; i < PrimArray.size(); i++)
-	{
-		if (PrimArray[i])
-			PrimArray[i]->Enabled(value);
-	}
+	result = sbs->GetUtility()->EnableArray(PrimArray, value);
+	if (!result)
+		status = false;
 
 	//custom objects
-	for (size_t i = 0; i < CustomObjectArray.size(); i++)
-	{
-		if (CustomObjectArray[i])
-			CustomObjectArray[i]->Enabled(value);
-	}
+	result = sbs->GetUtility()->EnableArray(CustomObjectArray, value);
+	if (!result)
+		status = false;
 
 	//sounds
 	for (size_t i = 0; i < sounds.size(); i++)
@@ -1078,7 +1103,11 @@ void ElevatorCar::EnableObjects(bool value)
 				if (value == false)
 					sounds[i]->Stop();
 				else
-					sounds[i]->Play();
+				{
+					bool result = sounds[i]->Play();
+					if (!result)
+						status = false;
+				}
 			}
 		}
 	}
@@ -1086,6 +1115,8 @@ void ElevatorCar::EnableObjects(bool value)
 	//reverb
 	if (reverb)
 		reverb->Enabled(value);
+
+	return status;
 }
 
 void ElevatorCar::UpdateFloorIndicators()
@@ -1872,6 +1903,8 @@ bool ElevatorCar::AddFloorSigns(int door_number, bool relative, const std::strin
 	sbs->GetTextureManager()->GetAutoSize(autosize_x, autosize_y);
 	sbs->GetTextureManager()->SetAutoSize(false, false);
 
+	PolyMesh* polymesh = sbs->GetPolyMesh();
+
 	for (size_t i = 0; i < ServicedFloors.size(); i++)
 	{
 		bool door_result = false;
@@ -1888,15 +1921,15 @@ bool ElevatorCar::AddFloorSigns(int door_number, bool relative, const std::strin
 			SetCase(tmpdirection, false);
 
 			if (tmpdirection == "front" || tmpdirection == "left")
-				sbs->DrawWalls(true, false, false, false, false, false);
+				polymesh->DrawWalls(true, false, false, false, false, false);
 			else
-				sbs->DrawWalls(false, true, false, false, false, false);
+				polymesh->DrawWalls(false, true, false, false, false, false);
 
 			if (tmpdirection == "front" || tmpdirection == "back")
 				sbs->GetFloor(floor)->AddWall("Floor Sign", texture, 0, x - (width / 2), z, x + (width / 2), z, height, height, base + voffset, base + voffset, 1, 1, false);
 			else
 				sbs->GetFloor(floor)->AddWall("Floor Sign", texture, 0, x, z - (width / 2), x, z + (width / 2), height, height, base + voffset, base + voffset, 1, 1, false);
-			sbs->ResetWalls();
+			polymesh->ResetWalls();
 		}
 	}
 	sbs->GetTextureManager()->SetAutoSize(autosize_x, autosize_y);
@@ -2868,7 +2901,7 @@ bool ElevatorCar::PlayMessageSound(bool type)
 	if (parent->InServiceMode() == true)
 		return false;
 
-	if (parent->IsQueueActive() == false && type == true && MessageOnClose == true)
+	if (parent->GetRouteController()->IsQueueActive() == false && type == true && MessageOnClose == true)
 		return false;
 
 	std::string newsound;
@@ -2883,19 +2916,16 @@ bool ElevatorCar::PlayMessageSound(bool type)
 
 		if (MessageOnMove == false)
 		{
-			if (type == true)
-			{
-				if (parent->LastChimeDirection == 0)
-					return false;
+			if (parent->LastChimeDirection == 0)
+				return false;
 
-				if (parent->NotifyLate == false && parent->NotifyEarly == -1)
-					return false;
-			}
+			if (parent->NotifyLate == false && parent->NotifyEarly == -1)
+				return false;
 
 			direction = parent->LastChimeDirection;
 
-			if (parent->LastChimeDirection == 0)
-				direction = parent->LastQueueDirection;
+			//if (parent->LastChimeDirection == 0)
+				//direction = parent->GetRouteController()->LastQueueDirection;
 		}
 		else
 			direction = parent->ActiveDirection;
@@ -3086,15 +3116,15 @@ Real ElevatorCar::SetHeight()
 
 		//position sounds at top of elevator car
 		Vector3 top = Vector3(0, Height, 0);
-		idlesound->SetPositionRelative(top);
-		alarm->SetPositionRelative(top);
-		floorbeep->SetPositionRelative(top);
-		announcesnd->SetPositionRelative(top);
+		idlesound->SetPosition(top, true);
+		alarm->SetPosition(top, true);
+		floorbeep->SetPosition(top, true);
+		announcesnd->SetPosition(top, true);
 
 		//set default music position to elevator height
 		if (MusicPosition == Vector3(0, 0, 0) && Height > 0)
 			MusicPosition = top;
-		musicsound->SetPositionRelative(MusicPosition);
+		musicsound->SetPosition(MusicPosition, true);
 	}
 
 	return Height;
@@ -3544,12 +3574,13 @@ bool ElevatorCar::RespondingToCall(int floor, int direction)
 	//returns true if the car is responding to a call on the specified floor
 
 	Elevator *e = GetElevator();
+	RouteController *r = e->GetRouteController();
 
 	//if proceeding to call floor for a call
-	if (GotoFloor == true && e->GotoFloor == floor && e->GetActiveCallFloor() == e->GotoFloor)
+	if (GotoFloor == true && e->GotoFloor == floor && r->GetActiveCallFloor() == e->GotoFloor)
 	{
 		//and if a hall call, with the same call direction
-		if (e->GetActiveCallType() == 1 && e->GetActiveCallDirection() == direction)
+		if (r->GetActiveCallType() == 1 && r->GetActiveCallDirection() == direction)
 			return true;
 	}
 
@@ -3561,13 +3592,14 @@ int ElevatorCar::RespondingToCall(int floor)
 	//same as other function, but returns the direction of the call
 
 	Elevator *e = GetElevator();
+	RouteController *r = e->GetRouteController();
 
 	//if proceeding to call floor for a call
-	if (GotoFloor == true && e->GotoFloor == floor && e->GetActiveCallFloor() == e->GotoFloor)
+	if (GotoFloor == true && e->GotoFloor == floor && r->GetActiveCallFloor() == e->GotoFloor)
 	{
 		//and if a hall call, with the same call direction
-		if (e->GetActiveCallType() == 1)
-			return e->GetActiveCallDirection();
+		if (r->GetActiveCallType() == 1)
+			return r->GetActiveCallDirection();
 	}
 
 	return 0;
@@ -3595,6 +3627,7 @@ void ElevatorCar::Requested(int floor)
 	std::string message = "Requested";
 
 	Elevator* e = GetElevator();
+	RouteController *r = e->GetRouteController();
 
 	//show an error if a floor hasn't been selected due to different factors
 	if (e->InspectionService == true)
@@ -3607,9 +3640,9 @@ void ElevatorCar::Requested(int floor)
 		KeypadError();
 	else if (e->FireServicePhase2 == 2)
 		KeypadError();
-	else if (e->LimitQueue == true && ((e->QueuePositionDirection == 1 && floor < GetFloor() && e->UpQueue.empty() == false) || (e->QueuePositionDirection == -1 && floor > GetFloor() && e->DownQueue.empty() == false)))
+	else if (r->LimitQueue == true && ((r->QueuePositionDirection == 1 && floor < GetFloor() && r->UpQueue.empty() == false) || (r->QueuePositionDirection == -1 && floor > GetFloor() && r->DownQueue.empty() == false)))
 		KeypadError();
-	else if (e->LimitQueue == true && e->IsMoving == true && floor == GetFloor())
+	else if (r->LimitQueue == true && e->IsMoving == true && floor == GetFloor())
 		KeypadError();
 	else if (GetFloorIndex(floor) == -1)
 		KeypadError();
@@ -3802,6 +3835,8 @@ bool ElevatorCar::AddElevatorIDSigns(int door_number, bool relative, const std::
 	sbs->GetTextureManager()->GetAutoSize(autosize_x, autosize_y);
 	sbs->GetTextureManager()->SetAutoSize(false, false);
 
+	PolyMesh* polymesh = sbs->GetPolyMesh();
+
 	for (size_t i = 0; i < ServicedFloors.size(); i++)
 	{
 		bool door_result = false;
@@ -3818,15 +3853,15 @@ bool ElevatorCar::AddElevatorIDSigns(int door_number, bool relative, const std::
 			SetCase(tmpdirection, false);
 
 			if (tmpdirection == "front" || tmpdirection == "left")
-				sbs->DrawWalls(true, false, false, false, false, false);
+				polymesh->DrawWalls(true, false, false, false, false, false);
 			else
-				sbs->DrawWalls(false, true, false, false, false, false);
+				polymesh->DrawWalls(false, true, false, false, false, false);
 
 			if (tmpdirection == "front" || tmpdirection == "back")
 				sbs->GetFloor(floor)->AddWall("Elevator ID Sign", texture, 0, x - (width / 2), z, x + (width / 2), z, height, height, base + voffset, base + voffset, 1, 1, false);
 			else
 				sbs->GetFloor(floor)->AddWall("Elevator ID Sign", texture, 0, x, z - (width / 2), x, z + (width / 2), height, height, base + voffset, base + voffset, 1, 1, false);
-			sbs->ResetWalls();
+			polymesh->ResetWalls();
 		}
 	}
 	sbs->GetTextureManager()->SetAutoSize(autosize_x, autosize_y);

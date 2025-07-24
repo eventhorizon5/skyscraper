@@ -23,6 +23,7 @@
 
 #include "globals.h"
 #include "sbs.h"
+#include "polymesh.h"
 #include "manager.h"
 #include "dynamicmesh.h"
 #include "mesh.h"
@@ -75,7 +76,7 @@ Floor::Floor(Object *parent, FloorManager *manager, int number) : Object(parent)
 	ColumnFrame = new MeshObject(this, "ColumnFrame " + num, manager->GetColumnDynMesh());
 
 	//set enabled flags
-	IsEnabled = true;
+	is_enabled = true;
 	IsColumnFrameEnabled = true;
 	IsInterfloorEnabled = true;
 
@@ -323,14 +324,14 @@ Wall* Floor::AddFloor(const std::string &name, const std::string &texture, Real 
 	if (isexternal == false)
 	{
 		wall = Level->CreateWallObject(name);
-		sbs->AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, GetBase(true) + voffset1, GetBase(true) + voffset2, reverse_axis, texture_direction, tw, th, true, legacy_behavior);
+		sbs->GetPolyMesh()->AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, GetBase(true) + voffset1, GetBase(true) + voffset2, reverse_axis, texture_direction, tw, th, true, legacy_behavior);
 	}
 	else
 	{
 		if (sbs->External)
 		{
 			wall = sbs->External->CreateWallObject(name);
-			sbs->AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, Altitude + voffset1, Altitude + voffset2, reverse_axis, texture_direction, tw, th, true, legacy_behavior);
+			sbs->GetPolyMesh()->AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, Altitude + voffset1, Altitude + voffset2, reverse_axis, texture_direction, tw, th, true, legacy_behavior);
 		}
 	}
 	return wall;
@@ -341,7 +342,7 @@ Wall* Floor::AddInterfloorFloor(const std::string &name, const std::string &text
 	//Adds an interfloor floor with the specified dimensions and vertical offset
 
 	Wall *wall = Interfloor->CreateWallObject(name);
-	sbs->AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, voffset1, voffset2, reverse_axis, texture_direction, tw, th, true, legacy_behavior);
+	sbs->GetPolyMesh()->AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, voffset1, voffset2, reverse_axis, texture_direction, tw, th, true, legacy_behavior);
 	return wall;
 }
 
@@ -353,14 +354,14 @@ Wall* Floor::AddWall(const std::string &name, const std::string &texture, Real t
 	if (isexternal == false)
 	{
 		wall = Level->CreateWallObject(name);
-		sbs->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, GetBase(true) + voffset1, GetBase(true) + voffset2, tw, th, true);
+		sbs->GetPolyMesh()->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, GetBase(true) + voffset1, GetBase(true) + voffset2, tw, th, true);
 	}
 	else
 	{
 		if (sbs->External)
 		{
 			wall = sbs->External->CreateWallObject(name);
-			sbs->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, Altitude + voffset1, Altitude + voffset2, tw, th, true);
+			sbs->GetPolyMesh()->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, Altitude + voffset1, Altitude + voffset2, tw, th, true);
 		}
 	}
 	return wall;
@@ -371,20 +372,25 @@ Wall* Floor::AddInterfloorWall(const std::string &name, const std::string &textu
 	//Adds an interfloor wall with the specified dimensions
 
 	Wall *wall = Interfloor->CreateWallObject(name);
-	sbs->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, voffset1, voffset2, tw, th, true);
+	sbs->GetPolyMesh()->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, voffset1, voffset2, tw, th, true);
 	return wall;
 }
 
-void Floor::Enabled(bool value)
+bool Floor::Enabled(bool value)
 {
 	//turns floor on/off
 
-	if (IsEnabled == value)
-		return;
+	if (is_enabled == value)
+		return true;
+
+	bool status = true, result;
+	Utility* utility = sbs->GetUtility();
 
 	SBS_PROFILE("Floor::Enabled");
-	Level->Enabled(value);
-	IsEnabled = value;
+	result = Level->Enabled(value);
+	if (!result)
+		return false;
+	is_enabled = value;
 
 	EnableLoop(value);
 
@@ -405,7 +411,7 @@ void Floor::Enabled(bool value)
 			Floor *floor = sbs->GetFloor(Number - 1);
 			if (floor)
 			{
-				if (floor->IsEnabled == false)
+				if (floor->IsEnabled() == false)
 					EnableInterfloor(false);
 			}
 			else
@@ -415,7 +421,7 @@ void Floor::Enabled(bool value)
 			floor = sbs->GetFloor(Number + 1);
 			if (floor)
 			{
-				if (floor->IsEnabled == false)
+				if (floor->IsEnabled() == false)
 					floor->EnableInterfloor(false);
 			}
 		}
@@ -425,7 +431,7 @@ void Floor::Enabled(bool value)
 			Floor *floor = sbs->GetFloor(Number + 1);
 			if (floor)
 			{
-				if (floor->IsEnabled == false)
+				if (floor->IsEnabled() == false)
 					EnableInterfloor(false);
 			}
 			else
@@ -435,7 +441,7 @@ void Floor::Enabled(bool value)
 			floor = sbs->GetFloor(Number - 1);
 			if (floor)
 			{
-				if (floor->IsEnabled == false)
+				if (floor->IsEnabled() == false)
 					floor->EnableInterfloor(false);
 			}
 		}
@@ -460,85 +466,64 @@ void Floor::Enabled(bool value)
 	EnableColumnFrame(value);
 
 	//controls
-	for (size_t i = 0; i < ControlArray.size(); i++)
-	{
-		if (ControlArray[i])
-			ControlArray[i]->Enabled(value);
-	}
+	result = utility->EnableArray(ControlArray, value);
+	if (!result)
+		status = false;
 
 	//triggers
-	for (size_t i = 0; i < TriggerArray.size(); i++)
-	{
-		if (TriggerArray[i])
-			TriggerArray[i]->Enabled(value);
-	}
+	result = utility->EnableArray(TriggerArray, value);
+	if (!result)
+		status = false;
 
 	//models
-	for (size_t i = 0; i < ModelArray.size(); i++)
-	{
-		if (ModelArray[i])
-			ModelArray[i]->Enabled(value);
-	}
+	result = utility->EnableArray(ModelArray, value);
+	if (!result)
+		status = false;
 
 	//primitives
-	for (size_t i = 0; i < PrimArray.size(); i++)
-	{
-		if (PrimArray[i])
-			PrimArray[i]->Enabled(value);
-	}
+	result = sbs->GetUtility()->EnableArray(PrimArray, value);
+	if (!result)
+		status = false;
 
 	//custom objects
-	for (size_t i = 0; i < CustomObjectArray.size(); i++)
-	{
-		if (CustomObjectArray[i])
-			CustomObjectArray[i]->Enabled(value);
-	}
+	result = utility->EnableArray(CustomObjectArray, value);
+	if (!result)
+		status = false;
 
 	//call stations
-	for (size_t i = 0; i < CallStationArray.size(); i++)
-	{
-		if (CallStationArray[i])
-			CallStationArray[i]->Enabled(value);
-	}
+	result = utility->EnableArray(CallStationArray, value);
+	if (!result)
+		status = false;
 
 	//doors
-	for (size_t i = 0; i < DoorArray.size(); i++)
-	{
-		if (DoorArray[i])
-			DoorArray[i]->Enabled(value);
-	}
+	result = utility->EnableArray(DoorArray, value);
+	if (!result)
+		status = false;
 	DoorWrapper->Enabled(value);
 
 	//turn on/off directional indicators
-	for (size_t i = 0; i < DirIndicatorArray.size(); i++)
-	{
-		if (DirIndicatorArray[i])
-			DirIndicatorArray[i]->Enabled(value);
-	}
+	result = utility->EnableArray(DirIndicatorArray, value);
+	if (!result)
+		status = false;
 	UpdateDirectionalIndicators();
 
 	//floor indicators
-	for (size_t i = 0; i < FloorIndicatorArray.size(); i++)
-	{
-		if (FloorIndicatorArray[i])
-			FloorIndicatorArray[i]->Enabled(value);
-	}
+	result = utility->EnableArray(FloorIndicatorArray, value);
+	if (!result)
+		status = false;
+
 	//update floor indicator values
 	UpdateFloorIndicators();
 
 	//escalators
-	for (size_t i = 0; i < EscalatorArray.size(); i++)
-	{
-		if (EscalatorArray[i])
-			EscalatorArray[i]->Enabled(value);
-	}
+	result = utility->EnableArray(EscalatorArray, value);
+	if (!result)
+		status = false;
 
 	//moving walkways
-	for (size_t i = 0; i < MovingWalkwayArray.size(); i++)
-	{
-		if (MovingWalkwayArray[i])
-			MovingWalkwayArray[i]->Enabled(value);
-	}
+	result = utility->EnableArray(MovingWalkwayArray, value);
+	if (!result)
+		status = false;
 
 	//sounds
 	for (size_t i = 0; i < sounds.size(); i++)
@@ -550,26 +535,32 @@ void Floor::Enabled(bool value)
 				if (value == false)
 					sounds[i]->Stop();
 				else
-					sounds[i]->Play();
+				{
+					result = sounds[i]->Play();
+					if (!result)
+						status = false;
+				}
 			}
 		}
 	}
 
 	//reverbs
-	for (size_t i = 0; i < reverbs.size(); i++)
-	{
-		if (reverbs[i])
-			reverbs[i]->Enabled(value);
-	}
+	result = utility->EnableArray(reverbs, value);
+	if (!result)
+		status = false;
 
 	//lights
-	for (size_t i = 0; i < lights.size(); i++)
-	{
-		if (lights[i])
-			lights[i]->Enabled(value);
-	}
+	result = utility->EnableArray(lights, value);
+	if (!result)
+		status = false;
+
+	return status;
 }
 
+bool Floor::IsEnabled()
+{
+	return is_enabled;
+}
 Real Floor::FullHeight()
 {
 	//calculate full height of a floor
@@ -589,9 +580,10 @@ CallStation* Floor::AddCallButtons(int controller, const std::string &sound_file
 
 	CallStation *station = AddCallStation(callstation_index++);
 	station->SetController(controller);
+	station->Move(CenterX, 0, CenterZ);
 	station->CreateCallButtons(sound_file_up, sound_file_down, BackTexture, UpButtonTexture, UpButtonTexture_Lit, DownButtonTexture, DownButtonTexture_Lit, direction, BackWidth, BackHeight, ShowBack, tw, th);
 
-	station->Move(CenterX, GetBase(true) + voffset, CenterZ);
+	station->Move(0, GetBase(true) + voffset, 0);
 
 	return station;
 }
@@ -892,14 +884,14 @@ Wall* Floor::ColumnWallBox(const std::string &name, const std::string &texture, 
 {
 	//create columnframe wall box
 
-	return sbs->CreateWallBox(ColumnFrame, name, texture, x1, x2, z1, z2, height_in, voffset, tw, th, inside, outside, top, bottom, true);
+	return sbs->GetPolyMesh()->CreateWallBox(ColumnFrame, name, texture, x1, x2, z1, z2, height_in, voffset, tw, th, inside, outside, top, bottom, true);
 }
 
 Wall* Floor::ColumnWallBox2(const std::string &name, const std::string &texture, Real CenterX, Real CenterZ, Real WidthX, Real LengthZ, Real height_in, Real voffset, Real tw, Real th, bool inside, bool outside, bool top, bool bottom)
 {
 	//create columnframe wall box from a central location
 
-	return sbs->CreateWallBox2(ColumnFrame, name, texture, CenterX, CenterZ, WidthX, LengthZ, height_in, voffset, tw, th, inside, outside, top, bottom, true);
+	return sbs->GetPolyMesh()->CreateWallBox2(ColumnFrame, name, texture, CenterX, CenterZ, WidthX, LengthZ, height_in, voffset, tw, th, inside, outside, top, bottom, true);
 }
 
 FloorIndicator* Floor::AddFloorIndicator(int elevator, int car, bool relative, const std::string &texture_prefix, const std::string &blank_texture, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset)
@@ -953,16 +945,16 @@ void Floor::UpdateFloorIndicators()
 	}
 }
 
-void Floor::Loop()
+bool Floor::Loop()
 {
 	//floor object main loop; runs if camera is currently on this floor
 
-	if (IsEnabled == false)
-		return;
+	if (is_enabled == false)
+		return true;
 
 	SBS_PROFILE("Floor::Loop");
 
-	LoopChildren();
+	return LoopChildren();
 }
 
 std::vector<int> Floor::GetCallStations(int elevator)
@@ -1025,17 +1017,19 @@ void Floor::AddFillerWalls(const std::string &texture, Real thickness, Real Cent
 		return;
 	}
 
-	if (sbs->GetWallOrientation() == 0)
+	PolyMesh* polymesh = sbs->GetPolyMesh();
+
+	if (polymesh->GetWallOrientation() == 0)
 	{
 		depth1 = 0;
 		depth2 = thickness;
 	}
-	if (sbs->GetWallOrientation() == 1)
+	if (polymesh->GetWallOrientation() == 1)
 	{
 		depth1 = thickness / 2;
 		depth2 = thickness / 2;
 	}
-	if (sbs->GetWallOrientation() == 2)
+	if (polymesh->GetWallOrientation() == 2)
 	{
 		depth1 = thickness;
 		depth2 = 0;
@@ -1065,21 +1059,21 @@ void Floor::AddFillerWalls(const std::string &texture, Real thickness, Real Cent
 		CutAll(Vector3(x1, voffset, z1), Vector3(x2, voffset + height, z2), true, false);
 
 	//create walls
-	sbs->DrawWalls(false, true, false, false, false, false);
+	polymesh->DrawWalls(false, true, false, false, false, false);
 	if (direction == false)
 		AddWall("FillerWallLeft", texture, 0, x1, z1, x2, z1, height, height, voffset, voffset, tw, th, isexternal);
 	else
 		AddWall("FillerWallLeft", texture, 0, x1, z1, x1, z2, height, height, voffset, voffset, tw, th, isexternal);
-	sbs->ResetWalls();
+	polymesh->ResetWalls();
 
-	sbs->DrawWalls(true, false, false, false, false, false);
+	polymesh->DrawWalls(true, false, false, false, false, false);
 	if (direction == false)
 		AddWall("FillerWallRight", texture, 0, x1, z2, x2, z2, height, height, voffset, voffset, tw, th, isexternal);
 	else
 		AddWall("FillerWallRight", texture, 0, x2, z1, x2, z2, height, height, voffset, voffset, tw, th, isexternal);
 
 	AddFloor("FillerWallTop", texture, 0, x1, z1, x2, z2, height + voffset, height + voffset, false, false, tw, th, isexternal);
-	sbs->ResetWalls();
+	polymesh->ResetWalls();
 }
 
 Sound* Floor::AddSound(const std::string &name, const std::string &filename, Vector3 position, bool loop, Real volume, int speed, Real min_distance, Real max_distance, Real doppler_level, Real cone_inside_angle, Real cone_outside_angle, Real cone_outside_volume, Vector3 direction)
@@ -1649,7 +1643,7 @@ MovingWalkway* Floor::AddMovingWalkway(const std::string &name, int run, Real sp
 void Floor::SetAltitude(Real altitude)
 {
 	//position object at altitude
-	SetPositionY(altitude);
+	SetPositionY(altitude, true);
 	Altitude = altitude;
 	AltitudeSet = true;
 }

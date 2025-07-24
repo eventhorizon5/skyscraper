@@ -28,6 +28,7 @@
 
 #include "globals.h"
 #include "sbs.h"
+#include "utility.h"
 #include "camera.h"
 #include "sound.h"
 #include "profiler.h"
@@ -75,7 +76,7 @@ SoundSystem::~SoundSystem()
 		//delete reverbs[i].object;
 }
 
-void SoundSystem::Loop()
+bool SoundSystem::Loop()
 {
 #ifndef DISABLE_SOUND
 	//update sound
@@ -95,9 +96,11 @@ void SoundSystem::Loop()
 	SetListenerDirection(front, top);
 
 	//update FMOD
-	soundsys->update();
+	FMOD_RESULT result = soundsys->update();
 
 	ProfileManager::Stop_Profile();
+
+	return (result == FMOD_OK);
 #endif
 }
 
@@ -123,7 +126,7 @@ void SoundSystem::SetListenerPosition(const Vector3 &position)
 
 	Position = position;
 
-	Vector3 global_position = sbs->ToGlobal(position);
+	Vector3 global_position = sbs->GetUtility()->ToGlobal(position);
 
 	listener_position.x = (float)global_position.x;
 	listener_position.y = (float)global_position.y;
@@ -251,8 +254,8 @@ SoundData* SoundSystem::Load(const std::string &filename)
 	//load new sound
 	std::string full_filename1 = "data/";
 	full_filename1.append(filename);
-	std::string processed = sbs->VerifyFile(full_filename1);
-	std::string full_filename = sbs->GetFilesystemPath(processed);
+	std::string processed = sbs->GetUtility()->VerifyFile(full_filename1);
+	std::string full_filename = sbs->GetUtility()->GetFilesystemPath(processed);
 
 #if (FMOD_VERSION >> 16 == 4)
 	FMOD_RESULT result = soundsys->createSound(full_filename.c_str(), (FMOD_MODE)(FMOD_3D | FMOD_ACCURATETIME | FMOD_SOFTWARE | FMOD_LOOP_NORMAL), 0, &data->sound);

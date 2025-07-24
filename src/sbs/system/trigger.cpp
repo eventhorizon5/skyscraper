@@ -99,15 +99,16 @@ Trigger::~Trigger()
 	}
 }
 
-void Trigger::Enabled(bool value)
+bool Trigger::Enabled(bool value)
 {
 	//enable or disable trigger
 
 	if (is_enabled == value)
-		return;
+		return true;
 
 	is_enabled = value;
 	EnableLoop(value);
+	return true;
 }
 
 bool Trigger::SetSelectPosition(int position)
@@ -264,12 +265,12 @@ bool Trigger::DoAction()
 	return result;
 }
 
-void Trigger::Loop()
+bool Trigger::Loop()
 {
 	//check for action; should be called in a loop by the parent object
 
 	if (is_enabled == false)
-		return;
+		return true;
 
 	SBS_PROFILE("Trigger::Loop");
 
@@ -308,7 +309,7 @@ void Trigger::Loop()
 
 		//exit without changing position if floor button is currently selected
 		if (name == "off" && IsNumeric(GetSelectPositionAction()) == true)
-			return;
+			return true;
 
 		//change to next control position
 		NextSelectPosition();
@@ -325,6 +326,8 @@ void Trigger::Loop()
 		if (result == false)
 			PreviousSelectPosition();
 	}
+
+	return true;
 }
 
 bool Trigger::IsInside()
@@ -341,6 +344,16 @@ bool Trigger::IsInside(const Vector3 &position)
 	return area_box->contains(position - GetPosition());
 }
 
+bool Trigger::IsInside(const Vector3 &v1, const Vector3 &v2)
+{
+	//return true if the given rectangle is inside the trigger area
+
+	Ogre::AxisAlignedBox box;
+	box.setMinimum(v1);
+	box.setMaximum(v2);
+	return area_box->contains(box);
+}
+
 Ogre::AxisAlignedBox Trigger::GetBounds(bool relative)
 {
 	//get bounds information for this trigger
@@ -355,6 +368,13 @@ Ogre::AxisAlignedBox Trigger::GetBounds(bool relative)
 	}
 
 	return Ogre::AxisAlignedBox(min, max);
+}
+
+bool Trigger::IsOutside(const Vector3 &position)
+{
+	//return true if the given position is outside of the trigger area
+
+	return !IsInside(position);
 }
 
 bool Trigger::IsOutside(Vector3 v1, Vector3 v2)

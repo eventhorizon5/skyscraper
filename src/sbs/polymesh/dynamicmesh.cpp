@@ -34,7 +34,7 @@
 #include "polymesh.h"
 #include "polygon.h"
 #include "triangle.h"
-#include "texture.h"
+#include "texman.h"
 #include "scenenode.h"
 #include "profiler.h"
 #include "dynamicmesh.h"
@@ -113,8 +113,10 @@ bool DynamicMesh::LoadFromMesh(const std::string &meshname)
 	return true;
 }
 
-void DynamicMesh::Enabled(bool value, MeshObject *client)
+bool DynamicMesh::Enabled(bool value, MeshObject *client)
 {
+	bool status = true;
+
 	if (client == 0 || meshes.size() == 1)
 	{
 		//manage client enabled status
@@ -133,14 +135,18 @@ void DynamicMesh::Enabled(bool value, MeshObject *client)
 						continue;
 
 					if (client_enable[i] == true)
-						return;
+						return true;
 				}
 			}
 		}
 
 		//enable all meshes if no client specified
 		for (size_t i = 0; i < meshes.size(); i++)
-			meshes[i]->Enabled(value);
+		{
+			bool result = meshes[i]->Enabled(value);
+			if (!result)
+				status = false;
+		}
 	}
 	else if (meshes.size() > 1)
 	{
@@ -149,8 +155,13 @@ void DynamicMesh::Enabled(bool value, MeshObject *client)
 		int index = GetClientIndex(client);
 
 		if (index >= 0)
-			meshes[index]->Enabled(value);
+		{
+			bool result = meshes[index]->Enabled(value);
+			if (!result)
+				status = false;
+		}
 	}
+	return status;
 }
 
 bool DynamicMesh::ChangeTexture(const std::string &old_texture, const std::string &new_texture, MeshObject *client)
@@ -645,6 +656,12 @@ DynamicMesh::Mesh::Mesh(DynamicMesh *parent, const std::string &name, SceneNode 
 	auto_shadows = true;
 	parent_deleting = false;
 
+	if (!node)
+	{
+		sbs->ReportError("DynamicMesh: Error creating mesh " + meshname + "\n");
+		return;
+	}
+
 	if (filename == "")
 	{
 		this->name = name;
@@ -662,7 +679,7 @@ DynamicMesh::Mesh::Mesh(DynamicMesh *parent, const std::string &name, SceneNode 
 
 			if (!MeshWrapper)
 			{
-				sbs->ReportError("Error loading mesh " + meshname + "\n");
+				sbs->ReportError("DynamicMesh: Error loading mesh " + meshname + "\n");
 				return;
 			}
 
@@ -679,7 +696,7 @@ DynamicMesh::Mesh::Mesh(DynamicMesh *parent, const std::string &name, SceneNode 
 		}
 		catch (Ogre::Exception &e)
 		{
-			sbs->ReportError("Error loading model " + filename + "\n" + e.getDescription());
+			sbs->ReportError("DynamicMesh: Error loading model " + filename + "\n" + e.getDescription());
 			MeshWrapper = 0;
 			return;
 		}
@@ -713,17 +730,17 @@ DynamicMesh::Mesh::~Mesh()
 	}
 	catch (Ogre::Exception &e)
 	{
-		sbs->ReportError("Error unloading mesh: " + e.getDescription());
+		sbs->ReportError("DynamicMesh: Error unloading mesh: " + e.getDescription());
 	}
 	MeshWrapper = 0;
 }
 
-void DynamicMesh::Mesh::Enabled(bool value)
+bool DynamicMesh::Mesh::Enabled(bool value)
 {
 	//attach or detach from scenegraph
 
 	if (enabled == value || !node)
-		return;
+		return true;
 
 	if (value == false)
 		node->DetachObject(Movable);
@@ -734,6 +751,7 @@ void DynamicMesh::Mesh::Enabled(bool value)
 		Movable->setCastShadows(value);
 
 	enabled = value;
+	return true;
 }
 
 bool DynamicMesh::Mesh::ChangeTexture(const std::string &old_texture, const std::string &new_texture)

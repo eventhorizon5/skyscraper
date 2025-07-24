@@ -27,7 +27,7 @@ class StartScreen
 {
 public:
 
-	StartScreen(Skyscraper* frontend);
+	explicit StartScreen(Skyscraper* frontend);
 	~StartScreen();
 	bool DrawBackground();
 	bool GetMenuInput();

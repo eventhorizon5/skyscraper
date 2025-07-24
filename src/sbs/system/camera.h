@@ -98,7 +98,7 @@ public:
 	int mouse_x, mouse_y;
 
 	//functions
-	Camera(Object *parent);
+	explicit Camera(Object *parent);
 	~Camera();
 	void SetPosition(const Vector3 &position);
 	void SetDirection(const Vector3 &direction);
@@ -130,7 +130,7 @@ public:
 	int GetClickedObjectLine();
 	std::string GetClickedObjectCommand();
 	std::string GetClickedObjectCommandP();
-	void Loop();
+	bool Loop();
 	void Strafe(Real speed = 1.0);
 	void Step(Real speed = 1.0);
 	void Float(Real speed = 1.0);

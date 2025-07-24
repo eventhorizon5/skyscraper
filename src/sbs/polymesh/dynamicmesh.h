@@ -34,7 +34,7 @@ public:
 
 	DynamicMesh(Object *parent, SceneNode *node, const std::string &name, Real max_render_distance = 0, bool dynamic_buffers = false);
 	~DynamicMesh();
-	void Enabled(bool value, MeshObject *client = 0);
+	bool Enabled(bool value, MeshObject *client = 0);
 	bool ChangeTexture(const std::string &old_texture, const std::string &new_texture, MeshObject *client = 0);
 	void EnableDebugView(bool value, MeshObject *client = 0);
 	bool IsVisible(MeshObject *client = 0);
@@ -73,7 +73,7 @@ private:
 
 		Mesh(DynamicMesh *parent, const std::string &name, SceneNode *node, Real max_render_distance, const std::string &filename = "", const std::string &meshname = "", const std::string & path = "");
 		~Mesh();
-		void Enabled(bool value);
+		bool Enabled(bool value);
 		bool ChangeTexture(const std::string &old_texture, const std::string &new_texture);
 		int FindMatchingSubMesh(const std::string &material);
 		Submesh* CreateSubMesh(const std::string &material);

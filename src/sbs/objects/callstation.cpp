@@ -29,7 +29,7 @@
 #include "indicator.h"
 #include "timer.h"
 #include "manager.h"
-#include "texture.h"
+#include "texman.h"
 #include "control.h"
 #include "callstation.h"
 #include "profiler.h"
@@ -120,17 +120,19 @@ ButtonPanel* CallStation::CreateButtonPanel(const std::string &texture, int rows
 	return panel;
 }
 
-void CallStation::Enabled(bool value)
+bool CallStation::Enabled(bool value)
 {
 	//turns station on/off
 	if (is_enabled == value)
-		return;
+		return true;
 
 	is_enabled = value;
 
+	bool status = true;
+
 	//enable or disable the button panel
 	if (panel)
-		panel->Enabled(value);
+		status = panel->Enabled(value);
 
 	if (sbs->Verbose)
 	{
@@ -139,6 +141,13 @@ void CallStation::Enabled(bool value)
 		else
 			Report("Disabled");
 	}
+
+	return status;
+}
+
+bool CallStation::IsEnabled()
+{
+	return is_enabled;
 }
 
 void CallStation::Report(const std::string &message)

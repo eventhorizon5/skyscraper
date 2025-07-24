@@ -23,9 +23,10 @@
 
 #include "globals.h"
 #include "sbs.h"
+#include "polymesh.h"
 #include "mesh.h"
 #include "manager.h"
-#include "texture.h"
+#include "texman.h"
 #include "timer.h"
 #include "sound.h"
 #include "indicator.h"
@@ -64,26 +65,28 @@ Indicator::Indicator(Object *parent, const std::string &sound, const std::string
 	std::string tmpdirection = direction;
 	SetCase(tmpdirection, false);
 
+	PolyMesh* polymesh = sbs->GetPolyMesh();
+
 	Wall *wall = Mesh->CreateWallObject("Indicator");
 	if (tmpdirection == "front" || tmpdirection == "back")
 	{
 		if (tmpdirection == "front")
-			sbs->DrawWalls(true, false, false, false, false, false);
+			polymesh->DrawWalls(true, false, false, false, false, false);
 		else
-			sbs->DrawWalls(false, true, false, false, false, false);
+			polymesh->DrawWalls(false, true, false, false, false, false);
 
-		sbs->AddWallMain(wall, "Indicator", Blank, 0, -width / 2, 0, width / 2, 0, height, height, 0, 0, 1, 1, false);
+		polymesh->AddWallMain(wall, "Indicator", Blank, 0, -width / 2, 0, width / 2, 0, height, height, 0, 0, 1, 1, false);
 	}
 	else if (tmpdirection == "left" || tmpdirection == "right")
 	{
 		if (tmpdirection == "left")
-			sbs->DrawWalls(true, false, false, false, false, false);
+			polymesh->DrawWalls(true, false, false, false, false, false);
 		else
-			sbs->DrawWalls(false, true, false, false, false, false);
+			polymesh->DrawWalls(false, true, false, false, false, false);
 
-		sbs->AddWallMain(wall, "Indicator", Blank, 0, 0, width / 2, 0, -width / 2, height, height, 0, 0, 1, 1, false);
+		polymesh->AddWallMain(wall, "Indicator", Blank, 0, 0, width / 2, 0, -width / 2, height, height, 0, 0, 1, 1, false);
 	}
-	sbs->ResetWalls();
+	polymesh->ResetWalls();
 
 	//create sound
 	if (sound != "")
@@ -130,15 +133,16 @@ Indicator::~Indicator()
 	}*/
 }
 
-void Indicator::Enabled(bool value)
+bool Indicator::Enabled(bool value)
 {
 	//turns display on/off
 
 	if (is_enabled == value)
-		return;
+		return true;
 
-	Mesh->Enabled(value);
+	bool status = Mesh->Enabled(value);
 	is_enabled = value;
+	return status;
 }
 
 void Indicator::Update(const std::string &text, bool play_sound)
@@ -217,10 +221,12 @@ bool Indicator::PlaySound()
 	return true;
 }
 
-void Indicator::Loop()
+bool Indicator::Loop()
 {
 	if (sbs->GetPower() == false)
 		Off();
+
+	return true;
 }
 
 }

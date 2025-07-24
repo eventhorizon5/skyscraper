@@ -55,6 +55,7 @@ const wxWindowID EngineManager::ID_tThread = wxNewId();
 const wxWindowID EngineManager::ID_STATICLINE2 = wxNewId();
 const wxWindowID EngineManager::ID_CLoads = wxNewId();
 const wxWindowID EngineManager::ID_chkRender = wxNewId();
+const wxWindowID EngineManager::ID_chkPaused = wxNewId();
 const wxWindowID EngineManager::ID_bSetActive = wxNewId();
 const wxWindowID EngineManager::ID_bReload = wxNewId();
 const wxWindowID EngineManager::ID_bMove = wxNewId();
@@ -97,32 +98,32 @@ EngineManager::EngineManager(DebugPanel* parent,wxWindowID id,const wxPoint& pos
 	StaticText4 = new wxStaticText(this, ID_STATICTEXT4, _("Position:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT4"));
 	FlexGridSizer2->Add(StaticText4, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	tPosition = new wxTextCtrl(this, ID_tPosition, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY|wxTE_CENTRE, wxDefaultValidator, _T("ID_tPosition"));
-	tPosition->SetMinSize(wxSize(125,-1));
+	tPosition->SetMinSize(wxSize(200,-1));
 	FlexGridSizer2->Add(tPosition, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	StaticText3 = new wxStaticText(this, ID_STATICTEXT3, _("Bounds Min:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT3"));
 	FlexGridSizer2->Add(StaticText3, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	tBoundsMin = new wxTextCtrl(this, ID_tBoundsMin, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY|wxTE_CENTRE, wxDefaultValidator, _T("ID_tBoundsMin"));
-	tBoundsMin->SetMinSize(wxSize(125,-1));
+	tBoundsMin->SetMinSize(wxSize(200,-1));
 	FlexGridSizer2->Add(tBoundsMin, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	StaticText5 = new wxStaticText(this, ID_STATICTEXT5, _("Bounds Max:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT5"));
 	FlexGridSizer2->Add(StaticText5, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	tBoundsMax = new wxTextCtrl(this, ID_tBoundsMax, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY|wxTE_CENTRE, wxDefaultValidator, _T("ID_tBoundsMax"));
-	tBoundsMax->SetMinSize(wxSize(125,-1));
+	tBoundsMax->SetMinSize(wxSize(200,-1));
 	FlexGridSizer2->Add(tBoundsMax, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	StaticText1 = new wxStaticText(this, ID_STATICTEXT1, _("Camera Active:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT1"));
 	FlexGridSizer2->Add(StaticText1, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	tActive = new wxTextCtrl(this, ID_tActive, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY|wxTE_CENTRE, wxDefaultValidator, _T("ID_tActive"));
-	tActive->SetMinSize(wxSize(125,-1));
+	tActive->SetMinSize(wxSize(200,-1));
 	FlexGridSizer2->Add(tActive, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	StaticText2 = new wxStaticText(this, ID_STATICTEXT2, _("State:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT2"));
 	FlexGridSizer2->Add(StaticText2, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	tState = new wxTextCtrl(this, ID_tState, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY|wxTE_CENTRE, wxDefaultValidator, _T("ID_tState"));
-	tState->SetMinSize(wxSize(125,-1));
-	FlexGridSizer2->Add(tState, 1, wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	tState->SetMinSize(wxSize(200,-1));
+	FlexGridSizer2->Add(tState, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	StaticText6 = new wxStaticText(this, ID_STATICTEXT6, _("Uptime:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT6"));
 	FlexGridSizer2->Add(StaticText6, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	tUptime = new wxTextCtrl(this, ID_tUptime, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY|wxTE_CENTRE, wxDefaultValidator, _T("ID_tUptime"));
-	tUptime->SetMinSize(wxSize(125,-1));
+	tUptime->SetMinSize(wxSize(200,-1));
 	FlexGridSizer2->Add(tUptime, 1, wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	StaticText7 = new wxStaticText(this, ID_STATICTEXT7, _("Thread ID:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT7"));
 	FlexGridSizer2->Add(StaticText7, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
@@ -141,6 +142,9 @@ EngineManager::EngineManager(DebugPanel* parent,wxWindowID id,const wxPoint& pos
 	chkRender = new wxCheckBox(this, ID_chkRender, _("Render on Startup"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_chkRender"));
 	chkRender->SetValue(false);
 	BoxSizer7->Add(chkRender, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	chkPaused = new wxCheckBox(this, ID_chkPaused, _("Paused"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_chkPaused"));
+	chkPaused->SetValue(false);
+	BoxSizer7->Add(chkPaused, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	FlexGridSizer4->Add(BoxSizer7, 1, wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer2 = new wxBoxSizer(wxVERTICAL);
 	BoxSizer5 = new wxBoxSizer(wxHORIZONTAL);
@@ -171,6 +175,7 @@ EngineManager::EngineManager(DebugPanel* parent,wxWindowID id,const wxPoint& pos
 
 	Connect(ID_CLoads, wxEVT_COMMAND_CHECKBOX_CLICKED, (wxObjectEventFunction)&EngineManager::On_chkCLoads_Click);
 	Connect(ID_chkRender, wxEVT_COMMAND_CHECKBOX_CLICKED, (wxObjectEventFunction)&EngineManager::On_chkRender_Click);
+	Connect(ID_chkPaused, wxEVT_COMMAND_CHECKBOX_CLICKED, (wxObjectEventFunction)&EngineManager::On_chkPaused_Click);
 	Connect(ID_bSetActive, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&EngineManager::On_bSetActive_Click);
 	Connect(ID_bReload, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&EngineManager::On_bReload_Click);
 	Connect(ID_bMove, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&EngineManager::On_bMove_Click);
@@ -273,6 +278,8 @@ void EngineManager::Loop()
 			tState->SetValue("Shutdown");
 		else if (engine->IsLoading() == true)
 			tState->SetValue("Loading");
+		else if (engine->Paused)
+			tState->SetValue("Paused");
 		else if (engine->IsRunning() == true)
 			tState->SetValue("Running");
 
@@ -281,6 +288,9 @@ void EngineManager::Loop()
 
 		//set thread id
 		tThread->SetValue(engine->GetThreadID());
+
+		//set paused state
+		chkPaused->SetValue(engine->Paused);
 	}
 	else
 	{
@@ -373,5 +383,17 @@ void EngineManager::On_bMove_Click(wxCommandEvent& event)
 	}
 }
 
+void EngineManager::On_chkPaused_Click(wxCommandEvent& event)
+{
+	int selection = EngineList->GetSelection();
+
+	if (selection >= 0)
+	{
+		EngineContext *engine = panel->GetRoot()->GetEngine(selection);
+
+		if (engine)
+			engine->Paused = chkPaused->GetValue();
+	}
 }
 
+}

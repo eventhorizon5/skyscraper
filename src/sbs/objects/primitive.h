@@ -37,12 +37,12 @@ public:
 	Primitive(Object *parent, const std::string &name);
 	~Primitive();
 	bool IsEnabled();
-	void Enabled(bool value);
+	bool Enabled(bool value);
 	bool IsKey();
 	int GetKeyID();
 	void SetKey(int keyid);
 	bool IsPhysical();
-	void Loop();
+	bool Loop();
 	void PickUp();
 	void Drop();
 	bool IsPickedUp();

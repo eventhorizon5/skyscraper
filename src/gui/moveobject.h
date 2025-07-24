@@ -55,6 +55,7 @@ class MoveObject: public wxDialog
 		static const long ID_rRotation;
 		static const long ID_STATICTEXT28;
 		static const long ID_txtMoveSpeed;
+		static const long ID_chkRelative;
 		static const long ID_bZPlus;
 		static const long ID_bYPlus;
 		static const long ID_bXNeg;
@@ -136,6 +137,7 @@ class MoveObject: public wxDialog
 		wxButton* bZNeg;
 		wxButton* bZPlus;
 		wxCheckBox* chkHold;
+		wxCheckBox* chkRelative;
 		wxRadioButton* rPosition;
 		wxRadioButton* rRotation;
 		wxStaticLine* StaticLine1;

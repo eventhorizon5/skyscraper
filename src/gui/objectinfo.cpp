@@ -2,7 +2,7 @@
 	Skyscraper 2.1 - Object Information Dialog
 	Copyright (C)2003-2025 Ryan Thoryk
 	https://www.skyscrapersim.net
-	https://sourceforge.net/projects/skyscraper/	
+	https://sourceforge.net/projects/skyscraper/
 	Contact - ryan@skyscrapersim.net
 
 	This program is free software; you can redistribute it and/or
@@ -38,45 +38,49 @@
 #include "moveobject.h"
 #include "objectinfo.h"
 #include "textwindow.h"
+#include "scriptdebug.h"
 
 using namespace SBS;
 
 namespace Skyscraper {
 
 //(*IdInit(ObjectInfo)
-const long ObjectInfo::ID_ObjectTree = wxNewId();
-const long ObjectInfo::ID_bDelete = wxNewId();
-const long ObjectInfo::ID_bMove = wxNewId();
-const long ObjectInfo::ID_bCreate = wxNewId();
-const long ObjectInfo::ID_bViewScript = wxNewId();
-const long ObjectInfo::ID_bReset = wxNewId();
-const long ObjectInfo::ID_bOK = wxNewId();
-const long ObjectInfo::ID_bSave = wxNewId();
-const long ObjectInfo::ID_STATICTEXT1 = wxNewId();
-const long ObjectInfo::ID_tNumber = wxNewId();
-const long ObjectInfo::ID_STATICTEXT5 = wxNewId();
-const long ObjectInfo::ID_tName = wxNewId();
-const long ObjectInfo::ID_STATICTEXT2 = wxNewId();
-const long ObjectInfo::ID_tType = wxNewId();
-const long ObjectInfo::ID_STATICTEXT11 = wxNewId();
-const long ObjectInfo::ID_tPermanent = wxNewId();
-const long ObjectInfo::ID_STATICTEXT3 = wxNewId();
-const long ObjectInfo::ID_tParent = wxNewId();
-const long ObjectInfo::ID_STATICTEXT6 = wxNewId();
-const long ObjectInfo::ID_tParentName = wxNewId();
-const long ObjectInfo::ID_STATICTEXT4 = wxNewId();
-const long ObjectInfo::ID_tParentType = wxNewId();
-const long ObjectInfo::ID_STATICLINE1 = wxNewId();
-const long ObjectInfo::ID_STATICTEXT7 = wxNewId();
-const long ObjectInfo::ID_tLineNum = wxNewId();
-const long ObjectInfo::ID_STATICTEXT12 = wxNewId();
-const long ObjectInfo::ID_tIncludeFile = wxNewId();
-const long ObjectInfo::ID_STATICTEXT10 = wxNewId();
-const long ObjectInfo::ID_tContext = wxNewId();
-const long ObjectInfo::ID_STATICTEXT8 = wxNewId();
-const long ObjectInfo::ID_tScriptCommand = wxNewId();
-const long ObjectInfo::ID_STATICTEXT9 = wxNewId();
-const long ObjectInfo::ID_tScriptCommand2 = wxNewId();
+const wxWindowID ObjectInfo::ID_ObjectTree = wxNewId();
+const wxWindowID ObjectInfo::ID_bDelete = wxNewId();
+const wxWindowID ObjectInfo::ID_bMove = wxNewId();
+const wxWindowID ObjectInfo::ID_bCreate = wxNewId();
+const wxWindowID ObjectInfo::ID_chkEnabled = wxNewId();
+const wxWindowID ObjectInfo::ID_bViewScript = wxNewId();
+const wxWindowID ObjectInfo::ID_bReset = wxNewId();
+const wxWindowID ObjectInfo::ID_bOK = wxNewId();
+const wxWindowID ObjectInfo::ID_bDebug = wxNewId();
+const wxWindowID ObjectInfo::ID_STATICTEXT1 = wxNewId();
+const wxWindowID ObjectInfo::ID_tNumber = wxNewId();
+const wxWindowID ObjectInfo::ID_STATICTEXT5 = wxNewId();
+const wxWindowID ObjectInfo::ID_tName = wxNewId();
+const wxWindowID ObjectInfo::ID_STATICTEXT2 = wxNewId();
+const wxWindowID ObjectInfo::ID_tType = wxNewId();
+const wxWindowID ObjectInfo::ID_STATICTEXT11 = wxNewId();
+const wxWindowID ObjectInfo::ID_tPermanent = wxNewId();
+const wxWindowID ObjectInfo::ID_STATICTEXT3 = wxNewId();
+const wxWindowID ObjectInfo::ID_tParent = wxNewId();
+const wxWindowID ObjectInfo::ID_STATICTEXT6 = wxNewId();
+const wxWindowID ObjectInfo::ID_tParentName = wxNewId();
+const wxWindowID ObjectInfo::ID_STATICTEXT4 = wxNewId();
+const wxWindowID ObjectInfo::ID_tParentType = wxNewId();
+const wxWindowID ObjectInfo::ID_STATICTEXT13 = wxNewId();
+const wxWindowID ObjectInfo::ID_txtMovable = wxNewId();
+const wxWindowID ObjectInfo::ID_STATICLINE1 = wxNewId();
+const wxWindowID ObjectInfo::ID_STATICTEXT7 = wxNewId();
+const wxWindowID ObjectInfo::ID_tLineNum = wxNewId();
+const wxWindowID ObjectInfo::ID_STATICTEXT12 = wxNewId();
+const wxWindowID ObjectInfo::ID_tIncludeFile = wxNewId();
+const wxWindowID ObjectInfo::ID_STATICTEXT10 = wxNewId();
+const wxWindowID ObjectInfo::ID_tContext = wxNewId();
+const wxWindowID ObjectInfo::ID_STATICTEXT8 = wxNewId();
+const wxWindowID ObjectInfo::ID_tScriptCommand = wxNewId();
+const wxWindowID ObjectInfo::ID_STATICTEXT9 = wxNewId();
+const wxWindowID ObjectInfo::ID_tScriptCommand2 = wxNewId();
 //*)
 
 BEGIN_EVENT_TABLE(ObjectInfo,wxDialog)
@@ -100,8 +104,9 @@ ObjectInfo::ObjectInfo(DebugPanel* parent,wxWindowID id,const wxPoint& pos,const
 	Create(parent, wxID_ANY, _("Object Manager"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE, _T("wxID_ANY"));
 	BoxSizer1 = new wxBoxSizer(wxHORIZONTAL);
 	FlexGridSizer4 = new wxFlexGridSizer(0, 1, 0, 0);
-	ObjectTree = new wxTreeCtrl(this, ID_ObjectTree, wxDefaultPosition, wxSize(300,350), wxTR_DEFAULT_STYLE|wxBORDER_SUNKEN|wxVSCROLL, wxDefaultValidator, _T("ID_ObjectTree"));
+	ObjectTree = new wxTreeCtrl(this, ID_ObjectTree, wxDefaultPosition, wxSize(300,400), wxTR_DEFAULT_STYLE|wxBORDER_SUNKEN|wxVSCROLL, wxDefaultValidator, _T("ID_ObjectTree"));
 	FlexGridSizer4->Add(ObjectTree, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	FlexGridSizer4->Add(-1,-1,1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer2 = new wxBoxSizer(wxHORIZONTAL);
 	bDelete = new wxButton(this, ID_bDelete, _("Delete"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bDelete"));
 	bDelete->SetToolTip(_("Delete selected object"));
@@ -112,6 +117,9 @@ ObjectInfo::ObjectInfo(DebugPanel* parent,wxWindowID id,const wxPoint& pos,const
 	bCreate = new wxButton(this, ID_bCreate, _("Create"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bCreate"));
 	bCreate->SetToolTip(_("Create a new object"));
 	BoxSizer2->Add(bCreate, 1, wxALL|wxALIGN_TOP, 5);
+	chkEnabled = new wxCheckBox(this, ID_chkEnabled, _("Enabled"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_chkEnabled"));
+	chkEnabled->SetValue(false);
+	BoxSizer2->Add(chkEnabled, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	FlexGridSizer4->Add(BoxSizer2, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer3 = new wxBoxSizer(wxHORIZONTAL);
 	bViewScript = new wxButton(this, ID_bViewScript, _("View Script"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bViewScript"));
@@ -122,42 +130,44 @@ ObjectInfo::ObjectInfo(DebugPanel* parent,wxWindowID id,const wxPoint& pos,const
 	BoxSizer3->Add(bReset, 1, wxALL|wxALIGN_TOP, 5);
 	bOK = new wxButton(this, ID_bOK, _("OK"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bOK"));
 	BoxSizer3->Add(bOK, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	bSave = new wxButton(this, ID_bSave, _("Save Script"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bSave"));
-	bSave->Disable();
-	bSave->Hide();
-	BoxSizer3->Add(bSave, 1, wxALL|wxALIGN_TOP, 5);
+	bDebug = new wxButton(this, ID_bDebug, _("Script Debug"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bDebug"));
+	BoxSizer3->Add(bDebug, 1, wxALL|wxALIGN_TOP, 5);
 	FlexGridSizer4->Add(BoxSizer3, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer1->Add(FlexGridSizer4, 1, wxALL|wxEXPAND, 5);
 	FlexGridSizer2 = new wxFlexGridSizer(0, 1, 0, 0);
 	FlexGridSizer1 = new wxFlexGridSizer(0, 2, 0, 0);
 	StaticText1 = new wxStaticText(this, ID_STATICTEXT1, _("Number:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT1"));
 	FlexGridSizer1->Add(StaticText1, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	tNumber = new wxTextCtrl(this, ID_tNumber, wxEmptyString, wxDefaultPosition, wxSize(125,-1), wxTE_READONLY|wxTE_CENTRE, wxDefaultValidator, _T("ID_tNumber"));
+	tNumber = new wxTextCtrl(this, ID_tNumber, wxEmptyString, wxDefaultPosition, wxSize(200,-1), wxTE_READONLY|wxTE_CENTRE, wxDefaultValidator, _T("ID_tNumber"));
 	FlexGridSizer1->Add(tNumber, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	StaticText5 = new wxStaticText(this, ID_STATICTEXT5, _("Name:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT5"));
 	FlexGridSizer1->Add(StaticText5, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	tName = new wxTextCtrl(this, ID_tName, wxEmptyString, wxDefaultPosition, wxSize(125,-1), wxTE_READONLY|wxTE_CENTRE, wxDefaultValidator, _T("ID_tName"));
+	tName = new wxTextCtrl(this, ID_tName, wxEmptyString, wxDefaultPosition, wxSize(200,-1), wxTE_READONLY|wxTE_CENTRE, wxDefaultValidator, _T("ID_tName"));
 	FlexGridSizer1->Add(tName, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	StaticText2 = new wxStaticText(this, ID_STATICTEXT2, _("Type:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT2"));
 	FlexGridSizer1->Add(StaticText2, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	tType = new wxTextCtrl(this, ID_tType, wxEmptyString, wxDefaultPosition, wxSize(125,-1), wxTE_READONLY|wxTE_CENTRE, wxDefaultValidator, _T("ID_tType"));
+	tType = new wxTextCtrl(this, ID_tType, wxEmptyString, wxDefaultPosition, wxSize(200,-1), wxTE_READONLY|wxTE_CENTRE, wxDefaultValidator, _T("ID_tType"));
 	FlexGridSizer1->Add(tType, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	StaticText11 = new wxStaticText(this, ID_STATICTEXT11, _("Permanent:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT11"));
 	FlexGridSizer1->Add(StaticText11, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	tPermanent = new wxTextCtrl(this, ID_tPermanent, wxEmptyString, wxDefaultPosition, wxSize(125,-1), wxTE_READONLY|wxTE_CENTRE, wxDefaultValidator, _T("ID_tPermanent"));
+	tPermanent = new wxTextCtrl(this, ID_tPermanent, wxEmptyString, wxDefaultPosition, wxSize(200,-1), wxTE_READONLY|wxTE_CENTRE, wxDefaultValidator, _T("ID_tPermanent"));
 	FlexGridSizer1->Add(tPermanent, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	StaticText3 = new wxStaticText(this, ID_STATICTEXT3, _("Parent:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT3"));
 	FlexGridSizer1->Add(StaticText3, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	tParent = new wxTextCtrl(this, ID_tParent, wxEmptyString, wxDefaultPosition, wxSize(125,-1), wxTE_READONLY|wxTE_CENTRE, wxDefaultValidator, _T("ID_tParent"));
+	tParent = new wxTextCtrl(this, ID_tParent, wxEmptyString, wxDefaultPosition, wxSize(200,-1), wxTE_READONLY|wxTE_CENTRE, wxDefaultValidator, _T("ID_tParent"));
 	FlexGridSizer1->Add(tParent, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	StaticText6 = new wxStaticText(this, ID_STATICTEXT6, _("Parent Name:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT6"));
 	FlexGridSizer1->Add(StaticText6, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	tParentName = new wxTextCtrl(this, ID_tParentName, wxEmptyString, wxDefaultPosition, wxSize(125,-1), wxTE_READONLY|wxTE_CENTRE, wxDefaultValidator, _T("ID_tParentName"));
+	tParentName = new wxTextCtrl(this, ID_tParentName, wxEmptyString, wxDefaultPosition, wxSize(200,-1), wxTE_READONLY|wxTE_CENTRE, wxDefaultValidator, _T("ID_tParentName"));
 	FlexGridSizer1->Add(tParentName, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	StaticText4 = new wxStaticText(this, ID_STATICTEXT4, _("Parent Type:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT4"));
 	FlexGridSizer1->Add(StaticText4, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	tParentType = new wxTextCtrl(this, ID_tParentType, wxEmptyString, wxDefaultPosition, wxSize(125,-1), wxTE_READONLY|wxTE_CENTRE, wxDefaultValidator, _T("ID_tParentType"));
+	tParentType = new wxTextCtrl(this, ID_tParentType, wxEmptyString, wxDefaultPosition, wxSize(200,-1), wxTE_READONLY|wxTE_CENTRE, wxDefaultValidator, _T("ID_tParentType"));
 	FlexGridSizer1->Add(tParentType, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	StaticText13 = new wxStaticText(this, ID_STATICTEXT13, _("Is Movable:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT13"));
+	FlexGridSizer1->Add(StaticText13, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	txtMovable = new wxTextCtrl(this, ID_txtMovable, wxEmptyString, wxDefaultPosition, wxSize(200,-1), wxTE_READONLY|wxTE_CENTRE, wxDefaultValidator, _T("ID_txtMovable"));
+	FlexGridSizer1->Add(txtMovable, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	FlexGridSizer2->Add(FlexGridSizer1, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	StaticLine1 = new wxStaticLine(this, ID_STATICLINE1, wxDefaultPosition, wxSize(10,-1), wxLI_HORIZONTAL, _T("ID_STATICLINE1"));
 	FlexGridSizer2->Add(StaticLine1, 1, wxALL|wxEXPAND, 5);
@@ -190,23 +200,24 @@ ObjectInfo::ObjectInfo(DebugPanel* parent,wxWindowID id,const wxPoint& pos,const
 	FlexGridSizer2->Add(tScriptCommand2, 1, wxALL|wxEXPAND, 5);
 	BoxSizer1->Add(FlexGridSizer2, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	SetSizer(BoxSizer1);
-	BoxSizer1->Fit(this);
 	BoxSizer1->SetSizeHints(this);
 	Center();
 
-	Connect(ID_ObjectTree,wxEVT_COMMAND_TREE_SEL_CHANGED,(wxObjectEventFunction)&ObjectInfo::On_ObjectTree_SelectionChanged);
-	Connect(ID_bDelete,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&ObjectInfo::On_bDelete_Click);
-	Connect(ID_bMove,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&ObjectInfo::On_bMove_Click);
-	Connect(ID_bCreate,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&ObjectInfo::On_bCreate_Click);
-	Connect(ID_bViewScript,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&ObjectInfo::On_bViewScript_Click);
-	Connect(ID_bReset,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&ObjectInfo::On_bReset_Click);
-	Connect(ID_bOK,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&ObjectInfo::On_bOK_Click);
-	Connect(ID_bSave,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&ObjectInfo::On_bSave_Click);
+	Connect(ID_ObjectTree, wxEVT_COMMAND_TREE_SEL_CHANGED, (wxObjectEventFunction)&ObjectInfo::On_ObjectTree_SelectionChanged);
+	Connect(ID_bDelete, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&ObjectInfo::On_bDelete_Click);
+	Connect(ID_bMove, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&ObjectInfo::On_bMove_Click);
+	Connect(ID_bCreate, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&ObjectInfo::On_bCreate_Click);
+	Connect(ID_chkEnabled, wxEVT_COMMAND_CHECKBOX_CLICKED, (wxObjectEventFunction)&ObjectInfo::On_chkEnabled_Click);
+	Connect(ID_bViewScript, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&ObjectInfo::On_bViewScript_Click);
+	Connect(ID_bReset, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&ObjectInfo::On_bReset_Click);
+	Connect(ID_bOK, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&ObjectInfo::On_bOK_Click);
+	Connect(ID_bDebug, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&ObjectInfo::On_bDebug_Click);
 	//*)
 	panel = parent;
 	createobject = 0;
 	modifyobject = 0;
 	moveobject = 0;
+	debugger = 0;
 	OnInit();
 }
 
@@ -261,6 +272,9 @@ void ObjectInfo::Loop()
 	if (moveobject)
 		moveobject->Loop();
 
+	if (debugger)
+		debugger->Loop();
+
 	int number = oldobject;
 	if (changed == false)
 	{
@@ -313,6 +327,8 @@ void ObjectInfo::Loop()
 		tScriptCommand2->SetValue(object->command_processed);
 		tContext->SetValue(object->context);
 		tPermanent->SetValue(BoolToString(object->IsPermanent()));
+		chkEnabled->SetValue(object->IsEnabled());
+		txtMovable->SetValue(BoolToString(object->IsMovable()));
 
 		Object *parent = object->GetParent();
 		if (parent)
@@ -403,15 +419,6 @@ void ObjectInfo::On_bModify_Click(wxCommandEvent& event)
 		modifyobject->Show();
 }
 
-void ObjectInfo::On_bSave_Click(wxCommandEvent& event)
-{
-	wxFileDialog Selector (0, _("Save Building Script"), _("buildings/"), _(""), _("Building files (*.bld *.txt)|*.bld;*.txt"), wxFD_SAVE);
-	int result = Selector.ShowModal();
-	if (result == wxID_CANCEL)
-		return;
-	wxString filename = wxT("buildings/") + Selector.GetFilename();
-}
-
 void ObjectInfo::On_bViewScript_Click(wxCommandEvent& event)
 {
 	TextWindow *twindow = new TextWindow(NULL, -1);
@@ -468,6 +475,36 @@ void ObjectInfo::On_bReset_Click(wxCommandEvent& event)
 	Object *obj = Simcore->GetObject(number);
 	if (obj)
 		obj->ResetState();
+}
+
+void ObjectInfo::On_chkEnabled_Click(wxCommandEvent& event)
+{
+	wxTreeItemId sel = ObjectTree->GetSelection();
+
+	if (!sel.IsOk())
+		return;
+
+	TreeItemData *data = (TreeItemData*) ObjectTree->GetItemData(sel);
+	wxString num;
+	num = data->GetDesc();
+	int number = atoi(num);
+
+	//call SBS to reset object state
+	Object *obj = Simcore->GetObject(number);
+	if (obj)
+		obj->Enabled(chkEnabled->GetValue());
+}
+
+void ObjectInfo::On_bDebug_Click(wxCommandEvent& event)
+{
+	if (!debugger)
+		debugger = new ScriptDebug(panel, this);
+	if (debugger)
+	{
+		debugger->CenterOnScreen();
+		debugger->Show();
+		debugger->Raise();
+	}
 }
 
 }

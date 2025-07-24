@@ -53,7 +53,7 @@ public:
 	//functions
 	DispatchController(Object *parent, int number);
 	~DispatchController();
-	void Loop();
+	bool Loop();
 	bool RequestRoute(CallStation *station, int starting_floor, int destination_floor);
 	bool AddElevator(int elevator);
 	bool RemoveElevator(int elevator);

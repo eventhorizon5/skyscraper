@@ -26,6 +26,7 @@
 //*)
 #include "globals.h"
 #include "sbs.h"
+#include "polymesh.h"
 #include "vm.h"
 #include "hal.h"
 #include "debugpanel.h"
@@ -257,7 +258,7 @@ void Stats::OnInit()
 {
 	Simcore = panel->GetSystem();
 
-	tFrontendVersion->SetValue(panel->GetRoot()->version_frontend);
+	tFrontendVersion->SetValue(panel->GetRoot()->version_full);
 	tSBSVersion->SetValue(Simcore->version);
 	tPlatform->SetValue(panel->GetRoot()->Platform);
 	tRenderer->SetValue(panel->GetRoot()->GetHAL()->Renderer);
@@ -290,8 +291,8 @@ void Stats::Loop()
 		tInShaft->SetValue(BoolToString(Simcore->InShaft));
 		tRunningTime->SetValue(TruncateNumber(Simcore->running_time, 2));
 		tObjects->SetValue(ToString(Simcore->GetObjectCount()));
-		tWalls->SetValue(ToString(Simcore->GetWallCount()));
-		tPolygons->SetValue(ToString(Simcore->GetPolygonCount()));
+		tWalls->SetValue(ToString(Simcore->GetPolyMesh()->GetWallCount()));
+		tPolygons->SetValue(ToString(Simcore->GetPolyMesh()->GetPolygonCount()));
 		tFloors->SetValue(ToString(Simcore->Floors));
 		tBasements->SetValue(ToString(Simcore->Basements));
 		tElevators->SetValue(ToString(Simcore->GetElevatorCount()));
@@ -303,8 +304,8 @@ void Stats::Loop()
 		//global stats
 		tRunningTime->SetValue(ToString(panel->GetRoot()->Uptime() / 1000));
 
-		int meshes, textures, actions, sounds, objects, walls, polygons;
-		int total = panel->GetRoot()->GetGlobalStats(meshes, textures, actions, sounds, objects, walls, polygons);
+		unsigned long meshes, textures, actions, sounds, objects, walls, polygons;
+		unsigned long total = panel->GetRoot()->GetGlobalStats(meshes, textures, actions, sounds, objects, walls, polygons);
 		tMeshes->SetValue(ToString(meshes));
 		tTextures->SetValue(ToString(textures));
 		tActions->SetValue(ToString(actions));

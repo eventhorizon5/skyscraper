@@ -23,6 +23,7 @@
 
 #include "globals.h"
 #include "sbs.h"
+#include "polymesh.h"
 #include "floor.h"
 #include "elevator.h"
 #include "elevatorcar.h"
@@ -40,6 +41,7 @@
 #include "profiler.h"
 #include "cameratexture.h"
 #include "utility.h"
+#include "trigger.h"
 #include "shaft.h"
 
 namespace SBS {
@@ -142,15 +144,17 @@ Shaft::Level* Shaft::GetLevel(int floor)
 	return 0;
 }
 
-void Shaft::EnableWhole(bool value, bool EnableShaftDoors, bool force)
+bool Shaft::EnableWhole(bool value, bool EnableShaftDoors, bool force)
 {
 	//turn on/off entire shaft
 
 	if (value == false && ShowFullShaft == true)
-		return;
+		return true;
 
 	if (force == true)
 		IsEnabled = !value;
+
+	bool status = true;
 
 	if (IsEnabled == !value && EnableCheck == false)
 	{
@@ -158,18 +162,28 @@ void Shaft::EnableWhole(bool value, bool EnableShaftDoors, bool force)
 		{
 			if (force == true)
 				GetLevel(i)->enabled = !value;
-			GetLevel(i)->Enabled(value, EnableShaftDoors);
+			bool result = GetLevel(i)->Enabled(value, EnableShaftDoors);
+			if (!result)
+				status = false;
 		}
 	}
 
 	//enable/disable dynamic meshes
-	dynamic_mesh->Enabled(value);
-	ShaftDoorContainer->Enabled(value);
-	DoorWrapper->Enabled(value);
+	bool result = dynamic_mesh->Enabled(value);
+	if (!result)
+		status = false;
+	result = ShaftDoorContainer->Enabled(value);
+	if (!result)
+		status = false;
+	result = DoorWrapper->Enabled(value);
+	if (!result)
+		status = false;
 
 	IsEnabled = value;
 	if (ShowFullShaft == true)
 		EnableCheck = true;
+
+	return status;
 }
 
 bool Shaft::IsInside(const Vector3 &position)
@@ -488,7 +502,7 @@ void Shaft::ReplaceTexture(const std::string &oldtexture, const std::string &new
 		Levels[i]->ReplaceTexture(oldtexture, newtexture);
 }
 
-void Shaft::OnInit()
+bool Shaft::OnInit()
 {
 	//startup initialization of shafts
 
@@ -496,6 +510,8 @@ void Shaft::OnInit()
 		EnableWhole(false, true);
 	else
 		EnableWhole(true, true, true);
+
+	return true;
 }
 
 void Shaft::Check(Vector3 position, int current_floor)
@@ -573,7 +589,7 @@ void Shaft::Check(Vector3 position, int current_floor)
 			for (size_t i = 0; i < ShowFloorsList.size(); i++)
 			{
 				Floor *floor = sbs->GetFloor(ShowFloorsList[i]);
-				if (floor->IsEnabled == false)
+				if (floor->IsEnabled() == false)
 				{
 					floor->Enabled(true);
 					//floor->EnableGroup(true);
@@ -610,7 +626,7 @@ void Shaft::Check(Vector3 position, int current_floor)
 			for (size_t i = 0; i < ShowFloorsList.size(); i++)
 			{
 				Floor *floor = sbs->GetFloor(ShowFloorsList[i]);
-				if (floor->IsEnabled == true && sbs->camera->CurrentFloor != floor->Number)
+				if (floor->IsEnabled() == true && sbs->camera->CurrentFloor != floor->Number)
 				{
 					//don't disable floors that were originally enabled as part of the camera floor's group
 					if ((floor->EnabledGroup == true && floor->EnabledGroup_Floor == sbs->camera->CurrentFloor) == false)
@@ -632,7 +648,7 @@ void Shaft::Check(Vector3 position, int current_floor)
 			for (size_t i = 0; i < ShowInterfloorsList.size(); i++)
 			{
 				Floor *floor = sbs->GetFloor(ShowInterfloorsList[i]);
-				if (floor->IsInterfloorEnabled == true && floor->IsEnabled == false)
+				if (floor->IsInterfloorEnabled == true && floor->IsEnabled() == false)
 					floor->EnableInterfloor(false);
 			}
 		}
@@ -644,11 +660,11 @@ void Shaft::Check(Vector3 position, int current_floor)
 	}
 }
 
-void Shaft::Loop()
+bool Shaft::Loop()
 {
 	//shaft runloop
 
-	LoopChildren();
+	return LoopChildren();
 }
 
 DynamicMesh* Shaft::GetDynamicMesh()
@@ -705,7 +721,7 @@ Shaft::Level::~Level()
 	}
 
 	//delete triggers
-	/*for (size_t i = 0; i < TriggerArray.size(); i++)
+	for (size_t i = 0; i < TriggerArray.size(); i++)
 	{
 		if (TriggerArray[i])
 		{
@@ -713,7 +729,7 @@ Shaft::Level::~Level()
 			delete TriggerArray[i];
 		}
 		TriggerArray[i] = 0;
-	}*/
+	}
 
 	//delete models
 	for (size_t i = 0; i < ModelArray.size(); i++)
@@ -806,7 +822,7 @@ bool Shaft::Level::AddWall(Wall *wall, const std::string &name, const std::strin
 	/*if (IsValidFloor(floor) == false)
 		return ReportError("AddWall: Floor " + ToString(floor) + " out of range");*/
 
-	return sbs->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height1, height2, voffset1, voffset2, tw, th, true);
+	return sbs->GetPolyMesh()->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height1, height2, voffset1, voffset2, tw, th, true);
 }
 
 Wall* Shaft::Level::AddFloor(const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real voffset1, Real voffset2, bool reverse_axis, bool texture_direction, Real tw, Real th, bool legacy_behavior)
@@ -842,67 +858,58 @@ bool Shaft::Level::AddFloor(Wall *wall, const std::string &name, const std::stri
 	if (altitude + voffset2 > parent->top)
 		parent->top = altitude + voffset2;
 
-	return sbs->AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, voffset1, voffset2, reverse_axis, texture_direction, tw, th, true, legacy_behavior);
+	return sbs->GetPolyMesh()->AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, voffset1, voffset2, reverse_axis, texture_direction, tw, th, true, legacy_behavior);
 }
 
-void Shaft::Level::Enabled(bool value, bool EnableShaftDoors)
+bool Shaft::Level::Enabled(bool value, bool EnableShaftDoors)
 {
 	SBS_PROFILE("Shaft::Enabled");
+	bool status = true;
+	Utility *utility = sbs->GetUtility();
+
 	if (IsEnabled() != value && parent->EnableCheck == false)
 	{
 		//turns shaft on/off for a specific floor
 
-		mesh->Enabled(value);
+		bool result = mesh->Enabled(value);
+		if (!result)
+			status = false;
 		enabled = value;
 
 		//doors
-		for (size_t i = 0; i < DoorArray.size(); i++)
-		{
-			if (DoorArray[i])
-				DoorArray[i]->Enabled(value);
-		}
+		result = utility->EnableArray(DoorArray, value);
+		if (!result)
+			status = false;
 
 		//controls
-		for (size_t i = 0; i < ControlArray.size(); i++)
-		{
-			if (ControlArray[i])
-				ControlArray[i]->Enabled(value);
-		}
+		result = utility->EnableArray(ControlArray, value);
+		if (!result)
+			status = false;
 
 		//triggers
-		/*for (size_t i = 0; i < TriggerArray.size(); i++)
-		{
-			if (TriggerArray[i])
-				TriggerArray[i]->Enabled(value);
-		}*/
+		result = utility->EnableArray(TriggerArray, value);
+		if (!result)
+			status = false;
 
 		//models
-		for (size_t i = 0; i < ModelArray.size(); i++)
-		{
-			if (ModelArray[i])
-				ModelArray[i]->Enabled(value);
-		}
+		result = utility->EnableArray(ModelArray, value);
+		if (!result)
+			status = false;
 
 		//primitives
-		for (size_t i = 0; i < PrimArray.size(); i++)
-		{
-			if (PrimArray[i])
-				PrimArray[i]->Enabled(value);
-		}
+		result = utility->EnableArray(PrimArray, value);
+		if (!result)
+			status = false;
 
 		//custom objects
-		for (size_t i = 0; i < CustomObjectArray.size(); i++)
-		{
-			if (CustomObjectArray[i])
-				CustomObjectArray[i]->Enabled(value);
-		}
+		result = utility->EnableArray(CustomObjectArray, value);
+		if (!result)
+			status = false;
 
 		//lights
-		for (size_t i = 0; i < lights.size(); i++)
-		{
-			if (lights[i])
-				lights[i]->Enabled(value);
-		}
+		result = utility->EnableArray(lights, value);
+		if (!result)
+			status = false;
 
 		if (EnableShaftDoors == true)
 		{
@@ -925,6 +932,8 @@ void Shaft::Level::Enabled(bool value, bool EnableShaftDoors)
 			}
 		}
 	}
+
+	return status;
 }
 
 bool Shaft::Level::Cut(bool relative, const Vector3 &start, const Vector3 &end, bool cutwalls, bool cutfloors, int checkwallnumber)
@@ -1035,14 +1044,14 @@ void Shaft::Level::RemoveControl(Control *control)
 void Shaft::Level::RemoveTrigger(Trigger *trigger)
 {
 	//remove a trigger reference (does not delete the object itself)
-	/*for (size_t i = 0; i < TriggerArray.size(); i++)
+	for (size_t i = 0; i < TriggerArray.size(); i++)
 	{
 		if (TriggerArray[i] == trigger)
 		{
 			TriggerArray.erase(TriggerArray.begin() + i);
 			return;
 		}
-	}*/
+	}
 }
 
 MeshObject* Shaft::Level::GetMeshObject()
@@ -1056,7 +1065,7 @@ Light* Shaft::Level::AddLight(const std::string &name, int type)
 {
 	//add a global light
 
-	Light* light = new Light(mesh, name, type);
+	Light* light = new Light(this, name, type);
 	lights.emplace_back(light);
 	return light;
 }
@@ -1075,7 +1084,7 @@ Model* Shaft::Level::AddModel(const std::string &name, const std::string &filena
 {
 	//add a model
 
-	Model* model = new Model(mesh, name, filename, center, position, rotation, max_render_distance, scale_multiplier, enable_physics, restitution, friction, mass);
+	Model* model = new Model(this, name, filename, center, position, rotation, max_render_distance, scale_multiplier, enable_physics, restitution, friction, mass);
 	if (model->load_error == true)
 	{
 		delete model;
@@ -1154,7 +1163,7 @@ Control* Shaft::Level::AddControl(const std::string &name, const std::string &so
 	//add a control
 
 	std::vector<Action*> actionnull; //not used
-	Control* control = new Control(mesh, name, false, sound, action_names, actionnull, textures, direction, width, height, true, selection_position);
+	Control* control = new Control(this, name, false, sound, action_names, actionnull, textures, direction, width, height, true, selection_position);
 	control->Move(CenterX, voffset, CenterZ);
 	ControlArray.emplace_back(control);
 	return control;
@@ -1162,18 +1171,11 @@ Control* Shaft::Level::AddControl(const std::string &name, const std::string &so
 
 Trigger* Shaft::Level::AddTrigger(const std::string &name, const std::string &sound_file, Vector3 &area_min, Vector3 &area_max, std::vector<std::string> &action_names)
 {
-	//triggers are disabled for now
-
 	//add a trigger
 
-	//exit if floor is invalid
-	/*if (!IsValid())
-		return 0;
-
-	Trigger* trigger = new Trigger(mesh, name, false, sound_file, area_min, area_max, action_names);
+	Trigger* trigger = new Trigger(this, name, false, sound_file, area_min, area_max, action_names);
 	TriggerArray.emplace_back(trigger);
-	return trigger;*/
-	return 0;
+	return trigger;
 }
 
 Model* Shaft::Level::GetModel(std::string name)
@@ -1231,11 +1233,11 @@ int Shaft::Level::GetFloor()
 	return floornum;
 }
 
-void Shaft::Level::Loop()
+bool Shaft::Level::Loop()
 {
 	//level runloop
 
-	LoopChildren();
+	return LoopChildren();
 }
 
 Door* Shaft::Level::AddDoor(std::string name, const std::string &open_sound, const std::string &close_sound, bool open_state, const std::string &texture, const std::string &side_texture, Real thickness, const std::string &face_direction, const std::string &open_direction, bool rotate, Real open_speed, Real close_speed, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th, Real side_tw, Real side_th)

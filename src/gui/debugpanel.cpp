@@ -26,11 +26,12 @@
 //*)
 #include "globals.h"
 #include "sbs.h"
+#include "utility.h"
 #include "camera.h"
 #include "floor.h"
 #include "elevator.h"
 #include "elevatorcar.h"
-#include "texture.h"
+#include "texman.h"
 #include "debugpanel.h"
 #include "scriptproc.h"
 #include "vm.h"
@@ -306,6 +307,7 @@ DebugPanel::DebugPanel(VM *root, wxWindow* parent,wxWindowID id)
 	//*)
 	Simcore = 0;
 	vm = root;
+	scriptproc = 0;
 	mc = 0;
 	ee = 0;
 	cc = 0;
@@ -443,8 +445,9 @@ void DebugPanel::On_bEditElevator_Click(wxCommandEvent& event)
 void DebugPanel::OnInit()
 {
 	Simcore = vm->GetActiveSystem();
+	scriptproc = vm->GetActiveScriptProcessor();
 
-	if (!Simcore)
+	if (!Simcore || !scriptproc)
 		return;
 
 	//set check boxes
@@ -496,7 +499,7 @@ void DebugPanel::Loop()
 	if (floor)
 		t_floorname->SetLabel(floor->Name);
 
-	Vector3 globalpos = Simcore->ToGlobal(Simcore->camera->GetPosition());
+	Vector3 globalpos = Simcore->GetUtility()->ToGlobal(Simcore->camera->GetPosition());
 
 	t_camerap->SetLabel(TruncateNumber(Simcore->camera->GetPosition().x, 2) + wxT(", ") + TruncateNumber(Simcore->camera->GetPosition().y, 2) + wxT(", ") + TruncateNumber(Simcore->camera->GetPosition().z, 2));
 	t_rotation->SetLabel(TruncateNumber(Simcore->camera->GetRotation().x, 2) + wxT(", ") + TruncateNumber(Simcore->camera->GetRotation().y, 2) + wxT(", ") + TruncateNumber(Simcore->camera->GetRotation().z, 2));
@@ -907,6 +910,11 @@ void DebugPanel::On_bControllerEditor_Click(wxCommandEvent& event)
 	ceditor->CenterOnScreen();
 	ceditor->Show();
 	ceditor->Raise();
+}
+
+ScriptProcessor* DebugPanel::GetScriptProcessor()
+{
+	return scriptproc;
 }
 
 }

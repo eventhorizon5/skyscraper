@@ -36,12 +36,12 @@ public:
 	CustomObject(Object *parent, const std::string &name, const Vector3 &position, const Vector3 &rotation, Real max_render_distance = 0, Real scale_multiplier = 1);
 	~CustomObject();
 	bool IsEnabled();
-	void Enabled(bool value);
+	bool Enabled(bool value);
 	bool IsKey();
 	int GetKeyID();
 	void SetKey(int keyid);
 	bool IsPhysical();
-	void Loop();
+	bool Loop();
 	void PickUp();
 	void Drop();
 	bool IsPickedUp();

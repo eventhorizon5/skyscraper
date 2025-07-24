@@ -33,6 +33,7 @@
 #include "dylib.hpp"
 #include "globals.h"
 #include "sbs.h"
+#include "polymesh.h"
 #include "vm.h"
 #include "camera.h"
 #include "scenenode.h"
@@ -42,6 +43,7 @@
 #include "sky.h"
 #include "gui.h"
 #include "profiler.h"
+#include "gitrev.h"
 #include "vmconsole.h"
 
 using namespace SBS;
@@ -78,6 +80,7 @@ VM::VM()
 	macos_major = 0;
 	macos_minor = 0;
 
+<<<<<<< HEAD
 	//initialize loader info
 	loadinfo.filename = "";
 	loadinfo.need_process = false;
@@ -86,6 +89,12 @@ VM::VM()
 	loadinfo.parent = 0;
 	loadinfo.position = Vector3::ZERO;
 	loadinfo.rotation = 0.0;
+=======
+	version = "2.1";
+	version_rev = ToString(GIT_REV);
+	version_state = "Alpha";
+	version_full = version + ".0." + version_rev;
+>>>>>>> master
 
 	//create HAL instance
 	hal = new HAL(this);
@@ -164,7 +173,7 @@ EngineContext* VM::CreateEngine(EngineContext *parent, const Vector3 &position, 
 	return engine;
 }
 
-bool VM::DeleteEngine(EngineContext *engine)
+bool VM::DeleteEngine(const EngineContext *engine)
 {
 	//delete a specified sim engine instance
 
@@ -404,7 +413,7 @@ void VM::HandleEngineShutdown()
 	}
 
 	//clean up empty engine slots at the end of the list
-	if (deleted == true)
+	if (deleted == true && engines.size() > 0)
 	{
 		for (size_t i = engines.size() - 1; i < engines.size(); --i)
 		{
@@ -491,7 +500,7 @@ void VM::SwitchEngines()
 	//if active engine has a parent, switch to the parent if possible
 	if (parent)
 	{
-		if (parent->IsInside() == true && parent->IsCameraActive() == false)
+		if (parent->IsInside() == true && parent->IsCameraActive() == false && parent->Paused == false)
 		{
 			SetActiveEngine(parent->GetNumber(), true);
 			return;
@@ -504,7 +513,7 @@ void VM::SwitchEngines()
 	{
 		if (engines[i] != active_engine && engines[i])
 		{
-			if (engines[i]->IsInside() == true && engines[i]->IsCameraActive() == false)
+			if (engines[i]->IsInside() == true && engines[i]->IsCameraActive() == false && engines[i]->Paused == false)
 			{
 				SetActiveEngine((int)i, true);
 				return;
@@ -517,7 +526,7 @@ void VM::SwitchEngines()
 	active_engine->RevertMovement();
 }
 
-bool VM::IsValidEngine(EngineContext *engine)
+bool VM::IsValidEngine(const EngineContext *engine)
 {
 	//returns true if the specified engine is valid (currently running)
 
@@ -532,7 +541,7 @@ bool VM::IsValidEngine(EngineContext *engine)
 	return false;
 }
 
-bool VM::IsValidSystem(::SBS::SBS *sbs)
+bool VM::IsValidSystem(const ::SBS::SBS *sbs)
 {
 	//returns true if the specified SBS instance is valid (being used by an engine context)
 
@@ -1081,6 +1090,7 @@ void VM::ListPlayingSounds()
 {
 	//list playing sounds in all engines
 
+	Report("Listing playing sounds in all engines");
 	for (size_t i = 0; i < engines.size(); i++)
 	{
 		if (!engines[i])
@@ -1090,15 +1100,18 @@ void VM::ListPlayingSounds()
 		
 		if (Simcore)
 		{
-			Report("Engine " + ToString(i) + ":");
-			Simcore->GetSoundSystem()->ShowPlayingSounds(false);
-			if (i == engines.size() - 1)
-				Simcore->GetSoundSystem()->ShowPlayingTotal();
+			SoundSystem* soundsys = Simcore->GetSoundSystem();
+			if (soundsys)
+			{
+				soundsys->ShowPlayingSounds(false);
+				if (i == engines.size() - 1)
+					soundsys->ShowPlayingTotal();
+			}
 		}
 	}
 }
 
-int VM::GetGlobalStats(int &meshes, int &textures, int &actions, int &sounds, int &objects, int &walls, int &polygons)
+unsigned long VM::GetGlobalStats(unsigned long &meshes, unsigned long &textures, unsigned long &actions, unsigned long &sounds, unsigned long &objects, unsigned long &walls, unsigned long &polygons)
 {
 	meshes = 0;
 	textures = 0;
@@ -1107,7 +1120,7 @@ int VM::GetGlobalStats(int &meshes, int &textures, int &actions, int &sounds, in
 	objects = 0;
 	walls = 0;
 	polygons = 0;
-	int total = 0;
+	unsigned long total = 0;
 
 	for (size_t i = 0; i < engines.size(); i++)
 	{
@@ -1124,8 +1137,8 @@ int VM::GetGlobalStats(int &meshes, int &textures, int &actions, int &sounds, in
 			actions += Simcore->GetActionCount();
 			sounds += Simcore->GetSoundCount();
 			objects += Simcore->GetObjectCount();
-			walls += Simcore->GetWallCount();
-			polygons += Simcore->GetPolygonCount();
+			walls += Simcore->GetPolyMesh()->GetWallCount();
+			polygons += Simcore->GetPolyMesh()->GetPolygonCount();
 		}
 	}
 

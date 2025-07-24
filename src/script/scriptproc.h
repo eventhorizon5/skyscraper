@@ -45,7 +45,7 @@ public:
 	class ControllerSection;
 	class CallStationSection;
 
-	ScriptProcessor(EngineContext *instance);
+	explicit ScriptProcessor(EngineContext *instance);
 	~ScriptProcessor();
 	bool Run();
 	bool LoadDataFile(const std::string &filename, bool insert = false, int insert_line = 0);

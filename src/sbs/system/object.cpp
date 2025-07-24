@@ -256,7 +256,7 @@ void Object::ShowBoundingBox(bool value)
 		node->ShowBoundingBox(value);
 }
 
-void Object::Move(const Vector3 &vector, Real speed)
+void Object::Move(const Vector3 &vector, Real speed, bool local, bool force)
 {
 	//move an object
 
@@ -265,63 +265,43 @@ void Object::Move(const Vector3 &vector, Real speed)
 	if (!node)
 		return;
 
-	node->Move(vector, speed);
+	node->Move(vector, speed, local, force);
 
 	//notify about movement
 	NotifyMove();
 }
 
-void Object::Move(Real X, Real Y, Real Z, Real speed)
+void Object::Move(Real X, Real Y, Real Z, Real speed, bool local, bool force)
 {
 	Vector3 pos (X, Y, Z);
-	Move(pos, speed);
+	Move(pos, speed, local, force);
 }
 
-void Object::SetPosition(const Vector3 &position)
+void Object::SetPosition(const Vector3 &position, bool relative, bool force)
 {
 	//set position of object
 
 	if (!node)
 		return;
 
-	node->SetPosition(position);
+	node->SetPosition(position, relative, force);
 
 	//notify about movement
 	NotifyMove();
 }
 
-void Object::SetPositionRelative(const Vector3 &position)
-{
-	//set position of object
-	//position is relative of parent object
-
-	if (!node)
-		return;
-
-	node->SetPositionRelative(position);
-
-	//notify about movement
-	NotifyMove();
-}
-
-void Object::SetPosition(Real X, Real Y, Real Z)
+void Object::SetPosition(Real X, Real Y, Real Z, bool relative, bool force)
 {
 	Vector3 pos (X, Y, Z);
-	SetPosition(pos);
+	SetPosition(pos, relative, force);
 }
 
-void Object::SetPositionRelative(Real X, Real Y, Real Z)
-{
-	Vector3 pos (X, Y, Z);
-	SetPositionRelative(pos);
-}
-
-void Object::SetPositionY(Real value)
+void Object::SetPositionY(Real value, bool force)
 {
 	//set position of only Y vector
 
 	Vector3 pos (GetPosition().x, value, GetPosition().z);
-	SetPosition(pos);
+	SetPosition(pos, false, force);
 }
 
 Vector3 Object::GetPosition(bool relative)
@@ -335,7 +315,7 @@ Vector3 Object::GetPosition(bool relative)
 	return node->GetPosition(relative);
 }
 
-void Object::SetRotation(const Vector3 &rotation)
+void Object::SetRotation(const Vector3 &rotation, bool relative)
 {
 	//rotate object
 
@@ -344,30 +324,30 @@ void Object::SetRotation(const Vector3 &rotation)
 	if (!node)
 		return;
 
-	node->SetRotation(rotation);
+	node->SetRotation(rotation, relative);
 
 	//notify about rotation
 	NotifyRotate();
 }
 
-void Object::SetRotation(Real X, Real Y, Real Z)
+void Object::SetRotation(Real X, Real Y, Real Z, bool relative)
 {
 	Vector3 rot (X, Y, Z);
-	SetRotation(rot);
+	SetRotation(rot, relative);
 }
 
-void Object::Rotate(const Vector3 &vector, Real speed)
+void Object::Rotate(const Vector3 &vector, Real speed, bool relative)
 {
 	//rotates object in a relative amount
 
 	Vector3 rot = GetRotation() + (vector * speed);
-	SetRotation(rot);
+	SetRotation(rot, relative);
 }
 
-void Object::Rotate(Real X, Real Y, Real Z, Real speed)
+void Object::Rotate(Real X, Real Y, Real Z, Real speed, bool relative)
 {
 	Vector3 rot (X, Y, Z);
-	Rotate(rot, speed);
+	Rotate(rot, speed, relative);
 }
 
 Vector3 Object::GetRotation()
@@ -495,33 +475,45 @@ bool Object::IsGlobal()
 	return (Parent->GetNumber() == 0);
 }
 
-void Object::Init(bool children)
+bool Object::Init(bool children)
 {
 	//initialize object
+
+	bool status = true;
 
 	//call custom object initialization code
 	if (initialized == false)
 	{
-		OnInit();
+		bool result = OnInit();
+		if (!result)
+			return false;
 		initialized = true;
 	}
 
 	//initialize children
 	if (children == true)
-		InitChildren();
+		status = InitChildren();
+	return status;
 }
 
-void Object::InitChildren()
+bool Object::InitChildren()
 {
 	//initialize child objects
 
 	int count = GetChildrenCount();
 
 	if (count == 0)
-		return;
+		return true;
 
+	bool status = true;
 	for (int i = 0; i < count; i++)
-			children[i]->Init();
+	{
+		bool result = children[i]->Init();
+		if (!result)
+			status = false;
+	}
+
+	return status;
 }
 
 void Object::EnableLoop(bool value)
@@ -588,15 +580,21 @@ void Object::UnregisterLoop(Object *object)
 	}
 }
 
-void Object::LoopChildren()
+bool Object::LoopChildren()
 {
 	//run dynamic child runloops
 
+	bool status = true;
 	for (size_t i = 0; i < runloops.size(); i++)
 	{
 		if (runloops[i])
-			runloops[i]->Loop();
+		{
+			bool result = runloops[i]->Loop();
+			if (!result)
+				status = false;
+		}
 	}
+	return status;
 }
 
 bool Object::SelfDestruct()

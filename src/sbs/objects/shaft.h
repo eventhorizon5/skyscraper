@@ -48,7 +48,7 @@ public:
 
 	Shaft(Object *parent, int number, Real CenterX, Real CenterZ, int startfloor, int endfloor);
 	~Shaft();
-	void EnableWhole(bool value, bool EnableShaftDoors, bool force = false);
+	bool EnableWhole(bool value, bool EnableShaftDoors, bool force = false);
 	bool IsInside(const Vector3 &position);
 	void CutFloors(bool relative, const Vector2 &start, const Vector2 &end, Real startvoffset, Real endvoffset);
 	void EnableRange(int floor, int range, bool value, bool EnableShaftDoors);
@@ -67,9 +67,9 @@ public:
 	void Report(const std::string &message);
 	bool ReportError(const std::string &message);
 	void ReplaceTexture(const std::string &oldtexture, const std::string &newtexture);
-	void OnInit();
+	bool OnInit();
 	void Check(Vector3 position, int current_floor);
-	void Loop();
+	bool Loop();
 	DynamicMesh* GetShaftDoorContainer() { return ShaftDoorContainer; }
 	void SetShowFull(bool value);
 	bool GetShowFull() { return ShowFullShaft; }
@@ -87,7 +87,7 @@ public:
 		bool AddWall(Wall *wall, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real height1, Real height2, Real voffset1, Real voffset2, Real tw, Real th);
 		Wall* AddFloor(const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real voffset1, Real voffset2, bool reverse_axis, bool texture_direction, Real tw, Real th, bool legacy_behavior = false);
 		bool AddFloor(Wall *wall, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real voffset1, Real voffset2, bool reverse_axis, bool texture_direction, Real tw, Real th, bool legacy_behavior = false);
-		void Enabled(bool value, bool EnableShaftDoors);
+		bool Enabled(bool value, bool EnableShaftDoors);
 		bool Cut(bool relative, const Vector3 &start, const Vector3 &end, bool cutwalls, bool cutfloors, int checkwallnumber = 0);
 		bool IsEnabled();
 		void RemoveLight(Light *light);
@@ -116,7 +116,7 @@ public:
 		Primitive* GetPrimitive(std::string name);
 		CustomObject* GetCustomObject(std::string name);
 		int GetFloor();
-		void Loop();
+		bool Loop();
 		CameraTexture* AddCameraTexture(const std::string &name, int quality, Real fov, const Vector3 &position, bool use_rotation, const Vector3 &rotation);
 		void RemoveCameraTexture(CameraTexture* camtex);
 
@@ -144,7 +144,7 @@ public:
 		std::vector<Control*> ControlArray;
 
 		//Triggers
-		//std::vector<Trigger*> TriggerArray;
+		std::vector<Trigger*> TriggerArray;
 
 		//CameraTextures
 		std::vector<CameraTexture*> CameraTextureArray;

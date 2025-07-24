@@ -343,7 +343,7 @@ bool HAL::Initialize(const std::string &data_path, Ogre::Root *root, Ogre::Overl
 			}
 
 			//report on system startup
-			Report("Skyscraper version " + vm->version_frontend + " starting...\n", "");
+			Report("Skyscraper version " + vm->version_full + " starting...\n", "");
 
 			//load OGRE
 			Report("Loading OGRE...");
@@ -448,7 +448,7 @@ bool HAL::LoadSystem(const std::string &data_path, Ogre::RenderWindow *renderwin
 	Renderer = mRoot->getRenderSystem()->getCapabilities()->getRenderSystemName();
 
 	//shorten name
-	int loc = Renderer.find("Rendering Subsystem");
+	size_t loc = Renderer.find("Rendering Subsystem");
 	Renderer = Renderer.substr(0, loc - 1);
 
 	//load resource configuration
@@ -589,10 +589,8 @@ bool HAL::LoadSystem(const std::string &data_path, Ogre::RenderWindow *renderwin
 	if (filtermode < 3)
 		maxanisotropy = 1;
 
-	Ogre::TextureFilterOptions filter;
-	if (filtermode == 0)
-		filter = Ogre::TFO_NONE;
-	else if (filtermode == 1)
+	Ogre::TextureFilterOptions filter = Ogre::TFO_NONE;
+	if (filtermode == 1)
 		filter = Ogre::TFO_BILINEAR;
 	else if (filtermode == 2)
 		filter = Ogre::TFO_TRILINEAR;
@@ -954,7 +952,7 @@ bool HAL::ReportFatalError(const std::string &message)
 	return ReportFatalError(message, "hal:");
 }
 
-void HAL::LoadConfiguration(const std::string data_path, bool show_console)
+void HAL::LoadConfiguration(const std::string &data_path, bool show_console)
 {
 	//load configuration files
 

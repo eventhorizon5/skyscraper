@@ -82,15 +82,15 @@ public:
 	EngineContext* GetActiveEngine() { return active_engine; }
 	EngineContext* GetEngine(int number);
 	EngineContext* CreateEngine(EngineContext *parent = 0, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
-	bool DeleteEngine(EngineContext *engine);
+	bool DeleteEngine(const EngineContext *engine);
 	void DeleteEngines();
 	int GetEngineCount(bool loading_only = false);
 	int GetEngineListSize() { return (int)engines.size(); }
 	EngineContext* FindActiveEngine();
 	void SetActiveEngine(int number, bool switch_engines = false, bool force = false);
 	bool IsEngineLoading();
-	bool IsValidEngine(EngineContext *engine);
-	bool IsValidSystem(::SBS::SBS *sbs);
+	bool IsValidEngine(const EngineContext *engine);
+	bool IsValidSystem(const ::SBS::SBS *sbs);
 	int RegisterEngine(EngineContext *engine);
 	EngineContext* GetFirstValidEngine();
 	int GetFreeInstanceNumber();
@@ -115,7 +115,7 @@ public:
 	unsigned long Uptime();
 	unsigned long GetElapsedTime(int instance);
 	void ListPlayingSounds();
-	int GetGlobalStats(int &meshes, int &textures, int &actions, int &sounds, int &objects, int &walls, int &polygons);
+	unsigned long GetGlobalStats(unsigned long &meshes, unsigned long &textures, unsigned long &actions, unsigned long &sounds, unsigned long &objects, unsigned long &walls, unsigned long &polygons);
 
 	bool Shutdown;
 	bool ConcurrentLoads; //set to true for buildings to be loaded while another sim is active and rendering
@@ -132,7 +132,7 @@ public:
 	std::string version;
 	std::string version_rev;
 	std::string version_state;
-	std::string version_frontend;
+	std::string version_full;
 
 	std::string Bits;
 	std::string Platform;

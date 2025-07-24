@@ -22,10 +22,11 @@
 
 #include "globals.h"
 #include "sbs.h"
+#include "polymesh.h"
 #include "enginecontext.h"
 #include "floor.h"
 #include "camera.h"
-#include "texture.h"
+#include "texman.h"
 #include "mesh.h"
 #include "soundsystem.h"
 #include "sound.h"
@@ -61,6 +62,8 @@ ScriptProcessor::CommandsSection::CommandsSection(ScriptProcessor *parent) : Sec
 int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 {
 	//process global commands
+
+	PolyMesh *polymesh = Simcore->GetPolyMesh();
 
 	//IF/While statement
 	int IsIf = 0;
@@ -156,7 +159,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 			return sNextLine;
 
 		//create triangle wall
-		StoreCommand(Simcore->AddTriangleWall(mesh, tempdata[1], tempdata[2], ToFloat(tempdata[3]), voffset1, ToFloat(tempdata[5]), ToFloat(tempdata[6]), voffset2, ToFloat(tempdata[8]), ToFloat(tempdata[9]), voffset3, ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13])));
+		StoreCommand(polymesh->AddTriangleWall(mesh, tempdata[1], tempdata[2], ToFloat(tempdata[3]), voffset1, ToFloat(tempdata[5]), ToFloat(tempdata[6]), voffset2, ToFloat(tempdata[8]), ToFloat(tempdata[9]), voffset3, ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13])));
 
 		return sNextLine;
 	}
@@ -189,7 +192,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 			return sNextLine;
 
 		//create wall
-		StoreCommand(Simcore->AddWall(mesh, tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13])));
+		StoreCommand(polymesh->AddWall(mesh, tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13])));
 		return sNextLine;
 	}
 
@@ -242,9 +245,9 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 
 		//create floor
 		if (compat == true)
-			StoreCommand(Simcore->AddFloor(mesh, tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), config->ReverseAxis, false, ToFloat(tempdata[10]), ToFloat(tempdata[11]), true));
+			StoreCommand(polymesh->AddFloor(mesh, tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), config->ReverseAxis, false, ToFloat(tempdata[10]), ToFloat(tempdata[11]), true));
 		else
-			StoreCommand(Simcore->AddFloor(mesh, tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToBool(tempdata[10]), ToBool(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13])));
+			StoreCommand(polymesh->AddFloor(mesh, tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToBool(tempdata[10]), ToBool(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13])));
 		return sNextLine;
 	}
 
@@ -269,7 +272,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 			return sNextLine;
 
 		//create tiled ground
-		StoreCommand(Simcore->AddGround(tempdata[0], tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToInt(tempdata[7]), ToInt(tempdata[8])));
+		StoreCommand(polymesh->AddGround(tempdata[0], tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToInt(tempdata[7]), ToInt(tempdata[8])));
 		return sNextLine;
 	}
 
@@ -390,7 +393,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 				voffset += Real(Simcore->GetFloor(config->Current)->GetBase());
 		}
 
-		StoreCommand(Simcore->CreateWallBox2(mesh, tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), voffset, ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToBool(tempdata[11]), ToBool(tempdata[12]), ToBool(tempdata[13]), ToBool(tempdata[14])));
+		StoreCommand(polymesh->CreateWallBox2(mesh, tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), voffset, ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToBool(tempdata[11]), ToBool(tempdata[12]), ToBool(tempdata[13]), ToBool(tempdata[14])));
 
 		return sNextLine;
 	}
@@ -432,7 +435,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 				voffset += Real(Simcore->GetFloor(config->Current)->GetBase());
 		}
 
-		StoreCommand(Simcore->CreateWallBox(mesh, tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), voffset, ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToBool(tempdata[11]), ToBool(tempdata[12]), ToBool(tempdata[13]), ToBool(tempdata[14])));
+		StoreCommand(polymesh->CreateWallBox(mesh, tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), voffset, ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToBool(tempdata[11]), ToBool(tempdata[12]), ToBool(tempdata[13]), ToBool(tempdata[14])));
 
 		return sNextLine;
 	}
@@ -497,7 +500,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		for (int i = start; i < params - 2; i += 3)
 			varray.emplace_back(Vector3(ToFloat(tempdata[i]), ToFloat(tempdata[i + 1]) + voffset, ToFloat(tempdata[i + 2])));
 
-		StoreCommand(Simcore->AddCustomWall(mesh, tempdata[1], tempdata[2], varray, ToFloat(tempdata[params - 2]), ToFloat(tempdata[params - 1])));
+		StoreCommand(polymesh->AddCustomWall(mesh, tempdata[1], tempdata[2], varray, ToFloat(tempdata[params - 2]), ToFloat(tempdata[params - 1])));
 
 		return sNextLine;
 	}
@@ -540,7 +543,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		for (int i = 3; i < params - 3; i += 2)
 			varray.emplace_back(Vector2(ToFloat(tempdata[i]), ToFloat(tempdata[i + 1])));
 
-		StoreCommand(Simcore->AddCustomFloor(mesh, tempdata[1], tempdata[2], varray, altitude, ToFloat(tempdata[params - 2]), ToFloat(tempdata[params - 1])));
+		StoreCommand(polymesh->AddCustomFloor(mesh, tempdata[1], tempdata[2], varray, altitude, ToFloat(tempdata[params - 2]), ToFloat(tempdata[params - 1])));
 
 		return sNextLine;
 	}
@@ -588,7 +591,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		for (int i = 3; i < params - 2; i += 3)
 			varray.emplace_back(Vector3(ToFloat(tempdata[i]), ToFloat(tempdata[i + 1]) + voffset, ToFloat(tempdata[i + 2])));
 
-		Simcore->AddPolygon(wall, tempdata[2], varray, ToFloat(tempdata[params - 2]), ToFloat(tempdata[params - 1]));
+		polymesh->AddPolygon(wall, tempdata[2], varray, ToFloat(tempdata[params - 2]), ToFloat(tempdata[params - 1]));
 
 		return sNextLine;
 	}
@@ -985,7 +988,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		bool equals;
 		std::string value = GetAfterEquals(LineData, equals);
 
-		if (!Simcore->SetWallOrientation(value))
+		if (!polymesh->SetWallOrientation(value))
 			return ScriptError();
 		return sNextLine;
 	}
@@ -997,7 +1000,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		bool equals;
 		std::string value = GetAfterEquals(LineData, equals);
 
-		if (!Simcore->SetFloorOrientation(value))
+		if (!polymesh->SetFloorOrientation(value))
 			return ScriptError();
 		return sNextLine;
 	}
@@ -1010,7 +1013,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (params != 6)
 			return ScriptError("Incorrect number of parameters");
 
-		Simcore->DrawWalls(ToBool(tempdata[0]),
+		polymesh->DrawWalls(ToBool(tempdata[0]),
 					ToBool(tempdata[1]),
 					ToBool(tempdata[2]),
 					ToBool(tempdata[3]),
@@ -1303,7 +1306,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (params != 2)
 			return ScriptError("Incorrect number of parameters");
 
-		if (!Simcore->Mount(tempdata[0], tempdata[1]))
+		if (!Simcore->GetUtility()->Mount(tempdata[0], tempdata[1]))
 			return ScriptError();
 
 		return sNextLine;
@@ -3497,7 +3500,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (!object)
 			return ScriptError("Invalid custom object " + tempdata[1] + " in " + name);
 
-		StoreCommand(Simcore->AddWall(object->GetMeshObject(), tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14])));
+		StoreCommand(polymesh->AddWall(object->GetMeshObject(), tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14])));
 
 		return sNextLine;
 	}
@@ -3572,7 +3575,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (!object)
 			return ScriptError("Invalid custom object " + tempdata[1] + " in " + name);
 
-		StoreCommand(Simcore->AddFloor(object->GetMeshObject(), tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToBool(tempdata[11]), ToBool(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]), false));
+		StoreCommand(polymesh->AddFloor(object->GetMeshObject(), tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToBool(tempdata[11]), ToBool(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]), false));
 
 		return sNextLine;
 	}
@@ -3644,7 +3647,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (!object)
 			return ScriptError("Invalid custom object " + tempdata[1] + " in " + name);
 
-		StoreCommand(Simcore->CreateWallBox(object->GetMeshObject(), tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToBool(tempdata[12]), ToBool(tempdata[13]), ToBool(tempdata[14]), ToBool(tempdata[15]), ToBool(tempdata[16])));
+		StoreCommand(polymesh->CreateWallBox(object->GetMeshObject(), tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToBool(tempdata[12]), ToBool(tempdata[13]), ToBool(tempdata[14]), ToBool(tempdata[15]), ToBool(tempdata[16])));
 
 		return sNextLine;
 	}
@@ -3716,7 +3719,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (!object)
 			return ScriptError("Invalid custom object " + tempdata[1] + " in " + name);
 
-		StoreCommand(Simcore->CreateWallBox2(object->GetMeshObject(), tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToBool(tempdata[12]), ToBool(tempdata[13]), ToBool(tempdata[14]), ToBool(tempdata[15]), ToBool(tempdata[16])));
+		StoreCommand(polymesh->CreateWallBox2(object->GetMeshObject(), tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToBool(tempdata[12]), ToBool(tempdata[13]), ToBool(tempdata[14]), ToBool(tempdata[15]), ToBool(tempdata[16])));
 
 		return sNextLine;
 	}
@@ -3911,7 +3914,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 			return sNextLine;
 
 		//rotate object
-		obj->SetPositionRelative(ToFloat(tempdata[1]), ToFloat(tempdata[2]), ToFloat(tempdata[3]));
+		obj->SetPosition(ToFloat(tempdata[1]), ToFloat(tempdata[2]), ToFloat(tempdata[3]), true);
 
 		return sNextLine;
 	}

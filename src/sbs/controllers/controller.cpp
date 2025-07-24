@@ -61,19 +61,21 @@ DispatchController::~DispatchController()
 		sbs->RemoveController(this);
 }
 
-void DispatchController::Loop()
+bool DispatchController::Loop()
 {
 	//this function runs for every registered dispatch controller via timer callback
 
 	//only run if power is enabled
 	if (sbs->GetPower() == false)
-		return;
+		return true;
 
 	//process pending requests
 	ProcessRoutes();
 
 	//check arrivals
 	CheckArrivals();
+
+	return true;
 }
 
 void DispatchController::CheckArrivals()
@@ -329,8 +331,7 @@ bool DispatchController::CallElevator(CallStation *station, bool direction)
 	//make sure this controller has elevators that serve the specified floor
 	if (IsServicedFloor(floor) == false)
 	{
-		if (station)
-			station->Error(1);
+		station->Error(1);
 		return ReportError("No elevators found for floor " + ToString(floor));
 	}
 
@@ -347,8 +348,7 @@ bool DispatchController::CallElevator(CallStation *station, bool direction)
 	}
 	if (isvalid == false)
 	{
-		if (station)
-			station->Error();
+		station->Error();
 		return ReportError("No valid elevators found");
 	}
 

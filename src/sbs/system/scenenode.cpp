@@ -25,6 +25,8 @@
 #include <OgreSceneNode.h>
 #include "globals.h"
 #include "sbs.h"
+#include "utility.h"
+#include "trigger.h"
 #include "scenenode.h"
 
 namespace SBS {
@@ -98,30 +100,38 @@ void SceneNode::ShowBoundingBox(bool value)
 		node->showBoundingBox(value);
 }
 
-void SceneNode::SetPosition(const Vector3 &position)
+void SceneNode::SetPosition(const Vector3 &position, bool relative, bool force)
 {
 	//set position of scene node
 
 	if (!node)
 		return;
 
-	if (IsRoot() == false)
-		node->_setDerivedPosition(sbs->ToRemote(sbs->ToGlobal(position)));
+	//prevent setting position outside of sim engine boundaries
+	if (sbs->GetAreaTrigger() && force == false)
+	{
+		if (sbs->GetAreaTrigger()->IsOutside(position) == true && relative == false)
+		{
+			if (sbs->Verbose)
+				ReportError("Cannot move outside of engine boundaries");
+			return;
+		}
+	}
+
+	if (relative == false)
+	{
+		//set absolute position
+		if (IsRoot() == false)
+			node->_setDerivedPosition(sbs->ToRemote(sbs->GetUtility()->ToGlobal(position)));
+		else
+			node->_setDerivedPosition(sbs->ToRemote(position));
+	}
 	else
-		node->_setDerivedPosition(sbs->ToRemote(position));
-	Update();
-}
-
-void SceneNode::SetPositionRelative(const Vector3 &position)
-{
-	//set position of scene node
-	//position is relative of parent scene node
-
-	if (!node)
-		return;
-
-	Vector3 pos = sbs->ToRemote(position);
-	node->setPosition(pos);
+	{
+		//set relative position
+		Vector3 pos = sbs->ToRemote(position);
+		node->setPosition(pos);
+	}
 	Update();
 }
 
@@ -137,7 +147,7 @@ Vector3 SceneNode::GetPosition(bool relative)
 	{
 		Vector3 pos = GetDerivedPosition();
 		if (IsRoot() == false)
-			return sbs->FromGlobal(pos);
+			return sbs->GetUtility()->FromGlobal(pos);
 		else
 			return pos;
 	}
@@ -145,7 +155,7 @@ Vector3 SceneNode::GetPosition(bool relative)
 	return sbs->ToLocal(node->getPosition());
 }
 
-void SceneNode::SetRotation(const Vector3 &rotation)
+void SceneNode::SetRotation(const Vector3 &rotation, bool relative)
 {
 	//set rotation of scene node in degrees
 	//this sets the rotation of all three vectors
@@ -173,7 +183,7 @@ void SceneNode::SetRotation(const Vector3 &rotation)
 	Quaternion z(Degree(Rotation.z), Vector3::UNIT_Z);
 	Quaternion rot = x * y * z;
 
-	SetOrientation(rot, true);
+	SetOrientation(rot, relative);
 }
 
 Vector3 SceneNode::GetRotation()
@@ -203,7 +213,7 @@ Quaternion SceneNode::GetOrientation(bool relative)
 		if (relative == false)
 		{
 			if (IsRoot() == false)
-				return sbs->FromGlobal(GetDerivedOrientation());
+				return sbs->GetUtility()->FromGlobal(GetDerivedOrientation());
 			else
 				return GetDerivedOrientation();
 		}
@@ -224,7 +234,7 @@ void SceneNode::SetOrientation(const Quaternion &q, bool relative)
 	if (relative == false)
 	{
 		if (IsRoot() == false)
-			node->_setDerivedOrientation(sbs->ToGlobal(q));
+			node->_setDerivedOrientation(sbs->GetUtility()->ToGlobal(q));
 		else
 			node->_setDerivedOrientation(q);
 	}
@@ -234,15 +244,32 @@ void SceneNode::SetOrientation(const Quaternion &q, bool relative)
 	Update();
 }
 
-void SceneNode::Move(const Vector3 &vector, Real speed)
+void SceneNode::Move(const Vector3 &vector, Real speed, bool local, bool force)
 {
 	//move this scene node
+	//if local is true, transform based on local space instead of parent space
 
 	if (!node)
 		return;
 
 	Vector3 v = vector * speed;
-	node->translate(sbs->ToRemote(v));
+
+	//prevent movement outside sim engine boundaries
+	if (sbs->GetAreaTrigger() && force == false)
+	{
+		if (sbs->GetAreaTrigger()->IsOutside(GetPosition() + v) == true && local == false)
+		{
+			if (sbs->Verbose)
+				ReportError("Cannot move outside of engine boundaries");
+			return;
+		}
+	}
+
+	//by default, move based on parent transformation
+	if (local == false)
+		node->translate(sbs->ToRemote(v), Ogre::Node::TS_PARENT);
+	else
+		node->translate(sbs->ToRemote(v), Ogre::Node::TS_LOCAL);
 
 	Update();
 }

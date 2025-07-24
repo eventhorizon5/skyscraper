@@ -133,9 +133,10 @@ void Light::SetRenderingDistance(Real distance)
 	light->setRenderingDistance(sbs->ToRemote(distance));
 }
 
-void Light::Enabled(bool value)
+bool Light::Enabled(bool value)
 {
 	light->setVisible(value);
+	return true;
 }
 
 bool Light::IsEnabled()

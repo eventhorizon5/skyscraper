@@ -289,7 +289,7 @@ void GUI::ShowProgressDialog()
 {
 	gui_mtx.lock();
 	if (!progdialog)
-		progdialog = new wxProgressDialog(wxT("Loading..."), prog_text, 100, vm->GetParent(), wxPD_AUTO_HIDE|wxPD_APP_MODAL|wxPD_CAN_ABORT|wxPD_ELAPSED_TIME|wxPD_ESTIMATED_TIME);
+		progdialog = new wxProgressDialog(wxT("Loading..."), prog_text, 100, vm->GetParent(), wxPD_AUTO_HIDE|wxPD_APP_MODAL|wxPD_CAN_ABORT|wxPD_ELAPSED_TIME|wxPD_ESTIMATED_TIME|wxPD_CAN_SKIP);
 
 	show_progress = false;
 	gui_mtx.unlock();
@@ -318,6 +318,14 @@ bool GUI::ProgressCancelled()
 	bool cancelled = progdialog->WasCancelled();
 	gui_mtx.unlock();
 	return cancelled;
+}
+
+bool GUI::ProgressSkipped()
+{
+	if (!progdialog)
+		return false;
+
+	return progdialog->WasSkipped();
 }
 
 void GUI::RefreshConsole()

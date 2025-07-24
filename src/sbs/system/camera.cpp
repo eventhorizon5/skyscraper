@@ -27,6 +27,7 @@
 #include <OgreBulletCollisionsCapsuleShape.h>
 #include "globals.h"
 #include "sbs.h"
+#include "utility.h"
 #include "manager.h"
 #include "floor.h"
 #include "elevator.h"
@@ -39,7 +40,6 @@
 #include "wall.h"
 #include "profiler.h"
 #include "scenenode.h"
-#include "manager.h"
 #include "vehicle.h"
 #include "camera.h"
 
@@ -242,7 +242,7 @@ void Camera::SetRotation(const Vector3 &rotation)
 	}
 
 	if (EnableBullet == true)
-		mCharacter->setOrientation(sbs->ToGlobal(bodyrot));
+		mCharacter->setOrientation(sbs->GetUtility()->ToGlobal(bodyrot));
 
 	OnRotate(false);
 }
@@ -269,7 +269,7 @@ void Camera::GetDirection(Vector3 &front, Vector3 &top, bool global)
 
 	Quaternion dir;
 	if (global == false)
-		dir = sbs->FromGlobal(Cameras[0]->getDerivedOrientation());
+		dir = sbs->GetUtility()->FromGlobal(Cameras[0]->getDerivedOrientation());
 	else
 		dir = Cameras[0]->getDerivedOrientation();
 
@@ -335,7 +335,7 @@ bool Camera::Move(Vector3 vector, Real speed, bool flip)
 	Quaternion orientation;
 
 	if (EnableBullet == true)
-		orientation = GetSceneNode()->GetRawSceneNode()->_getDerivedOrientation();
+		orientation = GetSceneNode()->GetDerivedOrientation();
 	else
 		orientation = Cameras[0]->getOrientation();
 
@@ -419,7 +419,7 @@ void Camera::RotateLocal(const Vector3 &rotation, Real speed)
 		if (EnableBullet == true)
 		{
 			//rotate character collider
-			mCharacter->setOrientation(sbs->ToGlobal(rot));
+			mCharacter->setOrientation(sbs->GetUtility()->ToGlobal(rot));
 
 			//rotate camera
 			Cameras[i]->pitch(Degree(xdeg));
@@ -585,7 +585,7 @@ Real Camera::ClickedObject(Camera *camera, bool shift, bool ctrl, bool alt, bool
 	Ray ray = camera->GetOgreCamera()->getCameraToViewportRay(x, y);
 
 	//convert ray's origin and direction to engine-relative values
-	ray.setOrigin(sbs->ToRemote(sbs->FromGlobal(sbs->ToLocal(ray.getOrigin()))));
+	ray.setOrigin(sbs->ToRemote(sbs->GetUtility()->FromGlobal(sbs->ToLocal(ray.getOrigin()))));
 	ray.setDirection(sbs->GetOrientation().Inverse() * ray.getDirection());
 
 	MeshObject* mesh = 0;
@@ -770,12 +770,12 @@ std::string Camera::GetClickedObjectCommandP()
 	return object_cmd_processed;
 }
 
-void Camera::Loop()
+bool Camera::Loop()
 {
 	SBS_PROFILE_MAIN("Camera Loop");
 
 	if (Cameras.empty())
-		return;
+		return true;
 
 	//get delta value
 	unsigned long timing;
@@ -849,6 +849,8 @@ void Camera::Loop()
 
 	//sync camera with collider
 	Sync();
+
+	return true;
 }
 
 void Camera::Strafe(Real speed)
@@ -1448,7 +1450,7 @@ CameraState Camera::GetCameraState()
 	//the position value is in a global/absolute scene format, not engine-relative
 
 	CameraState state;
-	state.position = sbs->ToGlobal(GetPosition());
+	state.position = sbs->GetUtility()->ToGlobal(GetPosition());
 	state.rotation = GetRotation() + sbs->GetRotation();
 	state.floor = CurrentFloor;
 	state.collisions = CollisionsEnabled();
@@ -1469,7 +1471,7 @@ void Camera::SetCameraState(const CameraState &state, bool set_floor)
 	//sets camera state
 	//the position value is in a global/absolute scene format, not engine-relative
 
-	Vector3 position = sbs->FromGlobal(state.position);
+	Vector3 position = sbs->GetUtility()->FromGlobal(state.position);
 	if (set_floor == true)
 		GotoFloor(state.floor, true);
 	else

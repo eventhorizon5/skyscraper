@@ -65,8 +65,9 @@ public:
 	bool AddWheel(bool engine, bool steerable, bool IsFrontWheel, Real radius, const Vector3 &ConnectionPoint, const Vector3 &Direction = Vector3(0, -1, 0), const Vector3 &Axle = Vector3(-1, 0, 0));
 	void KeyPressed(bool left, bool right, bool down, bool up);
 	void KeyReleased(bool left, bool right, bool down, bool up);
-	void Loop();
-	void Enabled(bool value);
+	bool Loop();
+	bool Enabled(bool value);
+	bool IsEnabled();
 	bool Create(const Vector3 &position);
 	void OnMove(bool parent);
 	void AttachCamera(bool value);
@@ -96,6 +97,8 @@ private:
 	bool mSteeringRight;
 
 	bool camera_attached;
+
+	bool is_enabled;
 };
 
 }

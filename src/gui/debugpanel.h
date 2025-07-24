@@ -63,6 +63,8 @@ class EscalatorControl;
 class WalkwayControl;
 class RevolvingDoorControl;
 class ControllerEditor;
+class ScriptDebug;
+class ScriptProcessor;
 
 class DebugPanel: public wxFrame
 {
@@ -133,6 +135,7 @@ class DebugPanel: public wxFrame
 		void Loop();
 		VM* GetRoot() { return vm; }
 		SBS::SBS* GetSystem() { return Simcore; }
+		ScriptProcessor* GetScriptProcessor();
 		void ShowControlReference();
 		class Timer : public wxTimer
 		{
@@ -145,6 +148,7 @@ class DebugPanel: public wxFrame
 		Timer *timer;
 		SBS::SBS *Simcore;
 		VM* vm;
+		ScriptProcessor *scriptproc;
 
 	protected:
 

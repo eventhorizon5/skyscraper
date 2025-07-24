@@ -51,6 +51,7 @@ class EngineManager: public wxDialog
 		wxButton* bSetActive;
 		wxButton* bShutdown;
 		wxCheckBox* chkCLoads;
+		wxCheckBox* chkPaused;
 		wxCheckBox* chkRender;
 		wxListBox* EngineList;
 		wxStaticLine* StaticLine2;
@@ -92,6 +93,7 @@ class EngineManager: public wxDialog
 		static const wxWindowID ID_STATICLINE2;
 		static const wxWindowID ID_CLoads;
 		static const wxWindowID ID_chkRender;
+		static const wxWindowID ID_chkPaused;
 		static const wxWindowID ID_bSetActive;
 		static const wxWindowID ID_bReload;
 		static const wxWindowID ID_bMove;
@@ -112,6 +114,7 @@ class EngineManager: public wxDialog
 		void On_chkRender_Click(wxCommandEvent& event);
 		void On_bOk_Click(wxCommandEvent& event);
 		void On_bMove_Click(wxCommandEvent& event);
+		void On_chkPaused_Click(wxCommandEvent& event);
 		//*)
 
 		EngineContext *engine;

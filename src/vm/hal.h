@@ -51,7 +51,7 @@ namespace Skyscraper {
 class VMIMPEXP HAL : public Ogre::LogListener
 {
 public:
-    HAL(VM *vm);
+	explicit HAL(VM *vm);
     ~HAL();
 	bool Initialize(const std::string &data_path, Ogre::Root *root = 0, Ogre::OverlaySystem *overlay = 0);
 	bool Render();
@@ -78,7 +78,7 @@ public:
 	void Report(const std::string &message, const std::string &prompt);
 	bool ReportError(const std::string &message, const std::string &prompt);
 	bool ReportFatalError(const std::string &message, const std::string &prompt);
-	void LoadConfiguration(const std::string data_path, bool show_console);
+	void LoadConfiguration(const std::string &data_path, bool show_console);
 	bool LoadSystem(const std::string &data_path, Ogre::RenderWindow *renderwindow);
 	void NotifyBegin();
 	void NotifyThreadStarted();

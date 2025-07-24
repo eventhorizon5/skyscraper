@@ -30,6 +30,7 @@ class SBSIMPEXP Elevator : public Object
 {
 	friend class ElevatorDoor;
 	friend class ElevatorCar;
+	friend class RouteController;
 
 public:
 	int Number; //elevator number
@@ -37,9 +38,6 @@ public:
 	std::string ID; //identifier for Destination Dispatch
 	std::string Type; //type of elevator: standard, express, service, freight
 	bool Created; //has elevator been created with the CreateElevator function?
-	int QueuePositionDirection; //queue processing direction
-	int LastQueueDirection; //last queue processing direction
-	int LastQueueFloor[2]; //last route added to either queue; element 0 is the floor, and element 1 is the direction
 	Real UpSpeed; //maximum up elevator speed
 	Real DownSpeed; //maximum down elevator speed
 	bool MoveElevator; //tells elevator to start going to specified floor
@@ -84,7 +82,6 @@ public:
 	bool ManualUp; //up toggle for inspection service mode
 	bool ManualDown;  //down toggle for inspection service mode
 	Vector3 MotorPosition; //position of motor sound emitter
-	bool QueueResets; //true if system should use automatic queue resets for normal operation
 	int ParkingFloor; //floor to automatically park the elevator on when idle
 	Real ParkingDelay; //time to wait in idle mode before parking
 	bool Leveling; //is elevator in leveling mode?
@@ -101,7 +98,6 @@ public:
 	Real ArrivalDelay; //delay in seconds between elevator arrival and door opening
 	bool WaitForTimer; //true if elevator is waiting for the arrival/departure timers to finish before moving
 	Real InspectionSpeed; //inspection service speed multiplier
-	bool LimitQueue; //true to only allow floor selections in the same queue direction
 	bool ReOpen; //true if elevator should reopen doors if the same floor is selected
 	int LastChimeDirection; //direction of last arrival chime
 	bool AutoDoors; //true if doors should be automatic (automatically open when reaching destination and refuse to open if off floor)
@@ -137,10 +133,9 @@ public:
 	bool CallCancel();
 	bool CallCancelAll();
 	bool Stop(bool emergency = false);
-	void ProcessCallQueue();
-	void Loop();
+	bool Loop();
 	void DumpQueues();
-	void Enabled(bool value);
+	bool Enabled(bool value);
 	ElevatorCar* IsInElevator(const Vector3 &position, bool camera = false);
 	Real GetElevatorStart();
 	Real GetDestination();
@@ -174,18 +169,14 @@ public:
 	int GetBottomFloor();
 	void UpdateDirectionalIndicators();
 	bool IsIdle();
-	void ResetQueue(bool up, bool down, bool stop_if_empty = true);
-	void DeleteActiveRoute();
-	bool IsQueueActive();
 	bool BeyondDecelMarker(int direction, Real destination);
 	void Report(const std::string &message);
 	bool ReportError(const std::string &message);
-	bool IsQueued(int floor, int queue = 0);
 	void SetRunState(bool value);
 	bool IsRunning();
 	bool GetArrivalDirection(int floor);
 	void MoveObjects(Real offset);
-	void OnInit();
+	bool OnInit();
 	int AvailableForCall(bool destination, int floor, int direction, bool report_on_failure = true);
 	bool SelectFloor(int floor);
 	bool Check(Vector3 position);
@@ -198,9 +189,6 @@ public:
 	bool Down(bool value);
 	Shaft* GetShaft();
 	CallStation* GetPrimaryCallStation();
-	int GetActiveCallFloor();
-	int GetActiveCallDirection();
-	int GetActiveCallType();
 	bool InElevator();
 	bool PeakWaiting();
 	bool OnPeakFloor();
@@ -243,6 +231,7 @@ public:
 	int GetMotorRoom();
 	void EnableMalfunctions(bool value);
 	void Malfunction();
+	RouteController* GetRouteController();
 
 	ElevatorCar* AddCar();
 	ElevatorCar* GetCar(int number);
@@ -254,34 +243,7 @@ public:
 
 private:
 
-	struct QueueEntry
-	{
-		int floor; //floor number
-		int call_type; //0 = car call, 1 = hall call, 2 = system call
-		int car; //car number
-		int direction; //queue direction
-
-		QueueEntry()
-		{
-			floor = 0;
-			call_type = 0;
-			car = 0;
-			direction = 0;
-		}
-
-		QueueEntry(int floor, int call_type, int car, int direction)
-		{
-			this->floor = floor;
-			this->call_type = call_type;
-			this->car = car;
-			this->direction = direction;
-		}
-
-		bool operator < (const QueueEntry& element) const
-		{
-			return floor < element.floor;
-		}
-	};
+	RouteController *route_controller; //elevator route controller
 
 	class Timer; //internal timer class
 
@@ -299,8 +261,6 @@ private:
 
 	//Internal elevator simulation data
 	std::vector<ElevatorCar*> Cars; //car objects
-	std::vector<QueueEntry> UpQueue; //up call queue
-	std::vector<QueueEntry> DownQueue; //down call queue
 	Real ElevatorStart; //elevator vertical starting location
 	Real Destination; //elevator destination Y value
 	Real StoppingDistance; //distance needed to stop the elevator
@@ -309,14 +269,8 @@ private:
 	int EmergencyStop; //internal stop status; 0 for off, 1 for standard stop, 2 for emergency stop
 	Real JerkRate; //current jerk value, used as an acceleration/deceleration multiplier
 	Real JerkPos; //temporary storage for the elevator rate at the end of the jerkrate increments
-	QueueEntry ActiveCall; //active call (that the elevator's currently responding to)
 	bool FirstRun; //used for setting first-run items in the run loop
 	bool Running; //is elevator in run mode?
-	bool UpQueueEmpty;
-	bool DownQueueEmpty;
-	bool UpCall;
-	bool DownCall;
-	bool QueuePending; //true if either queue has changed, and needs to be processed
 	int GoActiveFloor; //associated floor number for GoActive flag
 	bool ManualStop; //true if elevator has been manually stopped
 	int HoistwayAccess; //INS mode Hoistway Access; -1 for Down, 0 for Off, 1 for Up
@@ -330,7 +284,6 @@ private:
 	void PlayStartingSounds();
 	void PlayStoppingSounds(bool emergency = false);
 	void PlayMovingSounds();
-	void HandleDequeue(int direction, bool stop_if_empty = true);
 	void StopSounds();
 	Real GetDestinationAltitude(int floor);
 	Real GetDestinationOffset(int floor);

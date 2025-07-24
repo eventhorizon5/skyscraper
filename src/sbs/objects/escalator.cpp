@@ -23,11 +23,12 @@
 
 #include "globals.h"
 #include "sbs.h"
+#include "polymesh.h"
 #include "camera.h"
 #include "mesh.h"
 #include "floor.h"
 #include "sound.h"
-#include "texture.h"
+#include "texman.h"
 #include "profiler.h"
 #include "dynamicmesh.h"
 #include "step.h"
@@ -157,22 +158,30 @@ Escalator::~Escalator()
 	}
 }
 
-void Escalator::Enabled(bool value)
+bool Escalator::Enabled(bool value)
 {
 	//enable or disable escalator
 
 	if (is_enabled == value)
-		return;
+		return true;
+
+	bool status = true;
 
 	EnableLoop(value);
 
 	for (size_t i = 0; i < Steps.size(); i++)
-		Steps[i]->Enabled(value);
+	{
+		bool result = Steps[i]->Enabled(value);
+		if (!result)
+			status = false;
+	}
 
 	if (value == false && sound->IsPlaying() == true)
 		sound->Stop();
 
 	is_enabled = value;
+
+	return status;
 }
 
 void Escalator::SetRun(int value)
@@ -201,7 +210,7 @@ bool Escalator::ReportError(const std::string &message)
 	return Object::ReportError("Escalator " + GetName() + ": " + message);
 }
 
-void Escalator::Loop()
+bool Escalator::Loop()
 {
 	//run loop
 
@@ -211,14 +220,14 @@ void Escalator::Loop()
 	if (sbs->GetPower() == false)
 	{
 		sound->Stop();
-		return;
+		return true;
 	}
 
 	if (!IsEnabled() || Run == 0)
 	{
 		if (sound->IsPlaying() == true)
 			sound->Stop();
-		return;
+		return false;
 	}
 
 	if (sound->IsPlaying() == false)
@@ -228,6 +237,8 @@ void Escalator::Loop()
 	}
 
 	MoveSteps();
+
+	return true;
 }
 
 void Escalator::CreateSteps(const std::string &riser_texture, const std::string &tread_texture, const std::string &direction, Real width, Real risersize, Real treadsize, Real tw, Real th)
@@ -247,9 +258,11 @@ void Escalator::CreateSteps(const std::string &riser_texture, const std::string 
 
 	sbs->GetTextureManager()->ResetTextureMapping(true);
 	if (Direction == "right" || Direction == "back")
-		sbs->SetWallOrientation("right");
+		sbs->GetPolyMesh()->SetWallOrientation("right");
 	if (Direction == "left" || Direction == "front")
-		sbs->SetWallOrientation("left");
+		sbs->GetPolyMesh()->SetWallOrientation("left");
+
+	PolyMesh *polymesh = sbs->GetPolyMesh();
 
 	for (int i = 1; i <= num_steps; i++)
 	{
@@ -264,11 +277,11 @@ void Escalator::CreateSteps(const std::string &riser_texture, const std::string 
 		if (Direction == "right")
 		{
 			pos = ((treadsize * num_steps + 1) / 2) - (treadsize * i);
-			sbs->DrawWalls(true, true, true, true, false, true);
-			sbs->AddWallMain(wall, base + "-riser", riser_texture, thickness, treadsize, -(width / 2), treadsize, width / 2, risersize, risersize, 0, 0, tw, th, true);
+			polymesh->DrawWalls(true, true, true, true, false, true);
+			polymesh->AddWallMain(wall, base + "-riser", riser_texture, thickness, treadsize, -(width / 2), treadsize, width / 2, risersize, risersize, 0, 0, tw, th, true);
 
-			sbs->DrawWalls(false, true, false, false, false, false);
-			sbs->AddFloorMain(wall, base + "-tread", tread_texture, 0, 0, -(width / 2), treadsize, width / 2, risersize, risersize, false, false, tw, th, true);
+			polymesh->DrawWalls(false, true, false, false, false, false);
+			polymesh->AddFloorMain(wall, base + "-tread", tread_texture, 0, 0, -(width / 2), treadsize, width / 2, risersize, risersize, false, false, tw, th, true);
 
 			if (i < (buffer_zone_steps + 1))
 				Steps[i - 1]->Move(Vector3(pos, -risersize, 0));
@@ -277,7 +290,7 @@ void Escalator::CreateSteps(const std::string &riser_texture, const std::string 
 			else
 				Steps[i - 1]->Move(Vector3(pos, risersize * (i - (buffer_zone_steps * 2)), 0));
 			Steps[i - 1]->vector = Vector3::ZERO;
-			Steps[1 - 1]->speed = 0;
+			Steps[i - 1]->speed = 0;
 
 			if (i == 1)
 				start = Steps[i - 1]->GetPosition();
@@ -288,11 +301,11 @@ void Escalator::CreateSteps(const std::string &riser_texture, const std::string 
 		if (Direction == "left")
 		{
 			pos = -((treadsize * num_steps + 1) / 2) + (treadsize * i);
-			sbs->DrawWalls(true, true, true, true, false, true);
-			sbs->AddWallMain(wall, base + "-riser", riser_texture, thickness, -treadsize, width / 2, -treadsize, -(width / 2), risersize, risersize, 0, 0, tw, th, true);
+			polymesh->DrawWalls(true, true, true, true, false, true);
+			polymesh->AddWallMain(wall, base + "-riser", riser_texture, thickness, -treadsize, width / 2, -treadsize, -(width / 2), risersize, risersize, 0, 0, tw, th, true);
 
-			sbs->DrawWalls(false, true, false, false, false, false);
-			sbs->AddFloorMain(wall, base + "-tread", tread_texture, 0, -treadsize, -(width / 2), 0, width / 2, risersize, risersize, false, false, tw, th, true);
+			polymesh->DrawWalls(false, true, false, false, false, false);
+			polymesh->AddFloorMain(wall, base + "-tread", tread_texture, 0, -treadsize, -(width / 2), 0, width / 2, risersize, risersize, false, false, tw, th, true);
 
 			if (i < (buffer_zone_steps + 1))
 				Steps[i - 1]->Move(Vector3(pos, -risersize, 0));
@@ -301,7 +314,7 @@ void Escalator::CreateSteps(const std::string &riser_texture, const std::string 
 			else
 				Steps[i - 1]->Move(Vector3(pos, risersize * (i - (buffer_zone_steps * 2)), 0));
 			Steps[i - 1]->vector = Vector3::ZERO;
-			Steps[1 - 1]->speed = 0;
+			Steps[i - 1]->speed = 0;
 
 			if (i == 1)
 				start = Steps[i - 1]->GetPosition();
@@ -312,11 +325,11 @@ void Escalator::CreateSteps(const std::string &riser_texture, const std::string 
 		if (Direction == "back")
 		{
 			pos = ((treadsize * num_steps + 1) / 2) - (treadsize * i);
-			sbs->DrawWalls(true, true, true, true, false, true);
-			sbs->AddWallMain(wall, base + "-riser", riser_texture, thickness, width / 2, treadsize, -(width / 2), treadsize, risersize, risersize, 0, 0, tw, th, true);
+			polymesh->DrawWalls(true, true, true, true, false, true);
+			polymesh->AddWallMain(wall, base + "-riser", riser_texture, thickness, width / 2, treadsize, -(width / 2), treadsize, risersize, risersize, 0, 0, tw, th, true);
 
-			sbs->DrawWalls(false, true, false, false, false, false);
-			sbs->AddFloorMain(wall, base + "-tread", tread_texture, 0, -(width / 2), 0, width / 2, treadsize, risersize, risersize, false, false, tw, th, true);
+			polymesh->DrawWalls(false, true, false, false, false, false);
+			polymesh->AddFloorMain(wall, base + "-tread", tread_texture, 0, -(width / 2), 0, width / 2, treadsize, risersize, risersize, false, false, tw, th, true);
 
 			if (i < (buffer_zone_steps + 1))
 				Steps[i - 1]->Move(Vector3(0, -risersize, pos));
@@ -325,7 +338,7 @@ void Escalator::CreateSteps(const std::string &riser_texture, const std::string 
 			else
 				Steps[i - 1]->Move(Vector3(0, risersize * (i - (buffer_zone_steps * 2)), pos));
 			Steps[i - 1]->vector = Vector3::ZERO;
-			Steps[1 - 1]->speed = 0;
+			Steps[i - 1]->speed = 0;
 
 			if (i == 1)
 				start = Steps[i - 1]->GetPosition();
@@ -336,11 +349,11 @@ void Escalator::CreateSteps(const std::string &riser_texture, const std::string 
 		if (Direction == "front")
 		{
 			pos = -((treadsize * num_steps + 1) / 2) + (treadsize * i);
-			sbs->DrawWalls(true, true, true, true, false, true);
-			sbs->AddWallMain(wall, base + "-riser", riser_texture, thickness, -(width / 2), -treadsize, width / 2, -treadsize, risersize, risersize, 0, 0, tw, th, true);
+			polymesh->DrawWalls(true, true, true, true, false, true);
+			polymesh->AddWallMain(wall, base + "-riser", riser_texture, thickness, -(width / 2), -treadsize, width / 2, -treadsize, risersize, risersize, 0, 0, tw, th, true);
 
-			sbs->DrawWalls(false, true, false, false, false, false);
-			sbs->AddFloorMain(wall, base + "-tread", tread_texture, 0, -(width / 2), -treadsize, width / 2, 0, risersize, risersize, false, false, tw, th, true);
+			polymesh->DrawWalls(false, true, false, false, false, false);
+			polymesh->AddFloorMain(wall, base + "-tread", tread_texture, 0, -(width / 2), -treadsize, width / 2, 0, risersize, risersize, false, false, tw, th, true);
 
 			if (i < (buffer_zone_steps + 1))
 				Steps[i - 1]->Move(Vector3(0, -risersize, pos));
@@ -349,7 +362,7 @@ void Escalator::CreateSteps(const std::string &riser_texture, const std::string 
 			else
 				Steps[i - 1]->Move(Vector3(0, risersize * (i - (buffer_zone_steps * 2)), pos));
 			Steps[i - 1]->vector = Vector3::ZERO;
-			Steps[1 - 1]->speed = 0;
+			Steps[i - 1]->speed = 0;
 
 			if (i == 1)
 				start = Steps[i - 1]->GetPosition();
@@ -358,7 +371,7 @@ void Escalator::CreateSteps(const std::string &riser_texture, const std::string 
 			Steps[i - 1]->start = Steps[i - 1]->GetPosition();
 		}
 	}
-	sbs->ResetWalls(true);
+	polymesh->ResetWalls(true);
 	sbs->GetTextureManager()->ResetTextureMapping();
 }
 

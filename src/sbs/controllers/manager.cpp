@@ -33,6 +33,7 @@
 #include "vehicle.h"
 #include "controller.h"
 #include "profiler.h"
+#include "utility.h"
 #include "manager.h"
 
 namespace SBS {
@@ -230,23 +231,37 @@ void FloorManager::Remove(Floor *floor)
 	}
 }
 
-void FloorManager::EnableAll(bool value)
+bool FloorManager::EnableAll(bool value)
 {
 	//enable or disable all floors
+
+	bool status = true;
 	for (size_t i = 0; i < Array.size(); i++)
-		Array[i].object->Enabled(value);
+	{
+		bool result = Array[i].object->Enabled(value);
+		if (!result)
+			status = false;
+	}
 
 	//enable/disable dynamic meshes
-	floors->Enabled(value);
-	interfloors->Enabled(value);
-	columnframes->Enabled(value);
+	bool result = floors->Enabled(value);
+	if (!result)
+		status = false;
+	result = interfloors->Enabled(value);
+	if (!result)
+		status = false;
+	result = columnframes->Enabled(value);
+	if (!result)
+		status = false;
+
+	return status;
 }
 
-void FloorManager::Loop()
+bool FloorManager::Loop()
 {
 	SBS_PROFILE("FloorManager::Loop");
 
-	LoopChildren();
+	return LoopChildren();
 }
 
 ElevatorManager::ElevatorManager(Object* parent) : Manager(parent)
@@ -363,10 +378,11 @@ void ElevatorManager::Remove(Elevator *elevator)
 	}
 }
 
-void ElevatorManager::EnableAll(bool value)
+bool ElevatorManager::EnableAll(bool value)
 {
 	//turn off elevators, if the related shaft is only partially shown
 
+	bool status = true;
 	for (size_t i = 0; i < Array.size(); i++)
 	{
 		Shaft *shaft = Array[i].object->GetShaft();
@@ -374,16 +390,21 @@ void ElevatorManager::EnableAll(bool value)
 		if (value == false)
 			value = shaft->GetShowFull();
 
-		Array[i].object->Enabled(value);
+		bool result = Array[i].object->Enabled(value);
+		if (!result)
+			status = false;
 	}
+	return status;
 }
 
-void ElevatorManager::Loop()
+bool ElevatorManager::Loop()
 {
 	SBS_PROFILE("ElevatorManager::Loop");
 
 	if (sbs->ProcessElevators == true)
-		LoopChildren();
+		return LoopChildren();
+
+	return true;
 }
 
 ShaftManager::ShaftManager(Object* parent) : Manager(parent)
@@ -527,18 +548,24 @@ void ShaftManager::Remove(Shaft *shaft)
 	}
 }
 
-void ShaftManager::EnableAll(bool value)
+bool ShaftManager::EnableAll(bool value)
 {
 	//enable or disable all shafts
+	bool status = true;
 	for (size_t i = 0; i < Array.size(); i++)
-		Array[i].object->EnableWhole(value, true, true);
+	{
+		bool result = Array[i].object->EnableWhole(value, true, true);
+		if (!result)
+			status = false;
+	}
+	return status;
 }
 
-void ShaftManager::Loop()
+bool ShaftManager::Loop()
 {
 	SBS_PROFILE("ShaftManager::Loop");
 
-	LoopChildren();
+	return LoopChildren();
 }
 
 StairwellManager::StairwellManager(Object* parent) : Manager(parent)
@@ -681,18 +708,24 @@ void StairwellManager::Remove(Stairwell *stairs)
 	}
 }
 
-void StairwellManager::EnableAll(bool value)
+bool StairwellManager::EnableAll(bool value)
 {
 	//enable or disable all stairwells
+	bool status = true;
 	for (size_t i = 0; i < Array.size(); i++)
-		Array[i].object->EnableWhole(value, true);
+	{
+		bool result = Array[i].object->EnableWhole(value, true);
+		if (!result)
+			status = false;
+	}
+	return status;
 }
 
-void StairwellManager::Loop()
+bool StairwellManager::Loop()
 {
 	SBS_PROFILE("StairwellManager::Loop");
 
-	LoopChildren();
+	return LoopChildren();
 }
 
 DoorManager::DoorManager(Object* parent) : Manager(parent)
@@ -785,11 +818,11 @@ Door* DoorManager::GetIndex(int index)
 	return Array[index];
 }
 
-void DoorManager::Loop()
+bool DoorManager::Loop()
 {
 	SBS_PROFILE("DoorManager::Loop");
 
-	LoopChildren();
+	return LoopChildren();
 }
 
 RevolvingDoorManager::RevolvingDoorManager(Object* parent) : Manager(parent)
@@ -860,11 +893,11 @@ RevolvingDoor* RevolvingDoorManager::GetIndex(int index)
 	return Array[index];
 }
 
-void RevolvingDoorManager::Loop()
+bool RevolvingDoorManager::Loop()
 {
 	SBS_PROFILE("RevolvingDoorManager::Loop");
 
-	LoopChildren();
+	return LoopChildren();
 }
 
 VehicleManager::VehicleManager(Object* parent) : Manager(parent)
@@ -981,11 +1014,11 @@ void VehicleManager::Remove(Vehicle *vehicle)
 	}
 }
 
-void VehicleManager::Loop()
+bool VehicleManager::Loop()
 {
 	SBS_PROFILE("VehicleManager::Loop");
 
-	LoopChildren();
+	return LoopChildren();
 }
 
 ControllerManager::ControllerManager(Object* parent) : Manager(parent)
@@ -1109,11 +1142,11 @@ void ControllerManager::Remove(DispatchController *controller)
 	}
 }
 
-void ControllerManager::Loop()
+bool ControllerManager::Loop()
 {
 	SBS_PROFILE("ControllerManager::Loop");
 
-	LoopChildren();
+	return LoopChildren();
 }
 
 

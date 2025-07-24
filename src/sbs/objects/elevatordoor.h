@@ -77,9 +77,9 @@ public:
 	DoorWrapper* AddShaftDoor(int floor, const std::string &lefttexture, const std::string &righttexture, Real thickness, Real CenterX, Real CenterZ, Real voffset, Real tw, Real th);
 	void Chime(int floor, bool direction);
 	void EarlyChime(int floor, bool direction);
-	void Loop();
+	bool Loop();
 	void MoveSound(const Vector3 &position, bool relative_x, bool relative_y, bool relative_z);
-	void Enabled(bool value);
+	bool Enabled(bool value);
 	bool IsEnabled();
 	void SetShaftDoors(Real thickness, Real CenterX, Real CenterZ);
 	bool ShaftDoorsExist(int floor, bool include_nonserviced = false);
