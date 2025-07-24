@@ -34,8 +34,6 @@ class SBSIMPEXP TextureManager : public Object
 {
 public:
 
-	struct TextureInfo;
-
 	bool TextureOverride; //if enabled, overrides textures with ones set with SetTextureOverride()
 	bool FlipTexture; //if enabled, flips textures according to parameters set in SetTextureFlip()
 
@@ -81,8 +79,8 @@ public:
 	void DecrementTextureCount();
 	void IncrementMaterialCount();
 	void DecrementMaterialCount();
-	void RegisterTextureInfo(const std::string &name, const std::string &material_name, const std::string &filename, Real widthmult, Real heightmult, bool enable_force, bool force_mode, size_t tex_size, size_t mat_size);
-	bool UnregisterTextureInfo(std::string name, std::string material_name = "");
+	void RegisterTexture(const std::string &name, const std::string &material_name, const std::string &filename, Real widthmult, Real heightmult, bool enable_force, bool force_mode, size_t tex_size, size_t mat_size);
+	bool UnregisterTexture(std::string name, std::string material_name = "");
 	Ogre::MaterialPtr CreateMaterial(const std::string &name, const std::string &path);
 	Ogre::MaterialPtr GetMaterialByName(const std::string &name, const std::string &group = "General");
 	Ogre::TextureUnitState* BindTextureToMaterial(Ogre::MaterialPtr mMat, std::string texture_name, bool has_alpha);
@@ -98,9 +96,6 @@ public:
 	bool ComputeTextureMap(Matrix3 &t_matrix, Vector3 &t_vector, PolyArray &vertices, const Vector3 &p1, const Vector3 &p2, const Vector3 &p3, Real tw, Real th);
 	void EnableLighting(const std::string &material_name, bool value);
 	void EnableShadows(const std::string &material_name, bool value);
-	int GetTextureInfoCount();
-	bool GetTextureInfo(int index, TextureInfo &info);
-	bool SetTextureInfo(int index, TextureInfo &info);
 	void IncrementTextureUsage(const std::string &name);
 	void DecrementTextureUsage(const std::string &name);
 	void SetCulling(const std::string &material_name, int mode = 1);
@@ -108,6 +103,8 @@ public:
 	size_t GetMemoryUsage();
 	bool GetTextureImage(Ogre::TexturePtr texture);
 	bool MaterialExists(const std::string &name);
+	int GetTextureObjectCount();
+	Texture* GetTextureObject(size_t index);
 
 	//override textures
 	std::string mainnegtex, mainpostex, sidenegtex, sidepostex, toptex, bottomtex;
@@ -116,21 +113,6 @@ public:
 	int mainnegflip, mainposflip, sidenegflip, sideposflip, topflip, bottomflip;
 	std::vector<Real> widthscale;
 	std::vector<Real> heightscale;
-
-	//texture information structure
-	struct TextureInfo
-	{
-		std::string name;
-		std::string material_name; //used if material is loaded instead of texture, as an alias
-		std::string filename;
-		Real widthmult;
-		Real heightmult;
-		bool enable_force; //enable forcing of tile or stretch mode?
-		bool force_mode; //false to disable autosizing, true to enable autosizing
-		int dependencies; //number of submeshes depending on this texture
-		size_t tex_size; //size of texture resource in bytes
-		size_t mat_size; //size of material resource in bytes
-	};
 
 private:
 
@@ -160,7 +142,7 @@ private:
 	void UnloadMaterials();
 	bool ComputeTextureSpace(Matrix3 &m, Vector3 &v, const Vector3 &v_orig, const Vector3 &v1, Real len1, const Vector3 &v2, Real len2);
 
-	std::vector<TextureInfo> textureinfo;
+	std::vector<Texture*> textures;
 	std::vector<Ogre::TexturePtr> manual_textures;
 
 	//textures/materials count

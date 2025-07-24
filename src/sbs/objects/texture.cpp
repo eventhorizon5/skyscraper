@@ -29,12 +29,27 @@
 
 namespace SBS {
 
-Texture::Texture(TextureManager* manager, const std::string &name) : Object(manager)
+Texture::Texture(TextureManager* manager, const std::string &name, const std::string &material_name, const std::string &filename, Real widthmult, Real heightmult, bool enable_force, bool force_mode, size_t tex_size, size_t mat_size) : Object(manager)
 {
 	//set up SBS object
-	SetValues("Texture", name, false);
+	SetValues("Texture", name, false, false);
 
     this->manager = manager;
+
+	if (widthmult == 0.0)
+		widthmult = 1.0;
+	if (heightmult == 0.0)
+		heightmult = 1.0;
+
+	this->material_name = material_name;
+	this->filename = filename;
+	this->widthmult = widthmult;
+	this->heightmult = heightmult;
+	this->enable_force = enable_force;
+	this->force_mode = force_mode;
+	this->dependencies = 0;
+	this->tex_size = tex_size;
+	this->mat_size = mat_size;
 }
 
 Texture::~Texture()

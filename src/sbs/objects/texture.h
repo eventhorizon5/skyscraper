@@ -29,8 +29,18 @@ namespace SBS {
 class SBSIMPEXP Texture : public Object
 {
 public:
-	explicit Texture(TextureManager *manager, const std::string &name);
-	~Texture();
+	std::string material_name; //used if material is loaded instead of texture, as an alias
+	std::string filename;
+	Real widthmult;
+	Real heightmult;
+	bool enable_force; //enable forcing of tile or stretch mode?
+	bool force_mode; //false to disable autosizing, true to enable autosizing
+	int dependencies; //number of submeshes depending on this texture
+	size_t tex_size; //size of texture resource in bytes
+	size_t mat_size; //size of material resource in bytes
+
+    explicit Texture(TextureManager *manager, const std::string &name, const std::string &material_name, const std::string &filename, Real widthmult, Real heightmult, bool enable_force, bool force_mode, size_t tex_size, size_t mat_size);
+    ~Texture();
 
 private:
 
