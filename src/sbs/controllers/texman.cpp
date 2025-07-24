@@ -34,13 +34,15 @@
 #include "globals.h"
 #include "sbs.h"
 #include "utility.h"
+#include "texture.h"
 #include "texman.h"
 
 namespace SBS {
 
-TextureManager::TextureManager(Object *parent) : ObjectBase(parent)
+TextureManager::TextureManager(Object *parent) : Object(parent)
 {
-	SetName("Texture Manager");
+	//set up SBS object
+	SetValues("TextureManager", "Texture Manager", true);
 
 	AutoX = true;
 	AutoY = true;

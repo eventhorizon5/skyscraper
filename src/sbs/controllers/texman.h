@@ -21,8 +21,8 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-#ifndef _SBS_TEXTURE_H
-#define _SBS_TEXTURE_H
+#ifndef _SBS_TEXMAN_H
+#define _SBS_TEXMAN_H
 
 #include <OgreOverlayPrerequisites.h>
 #include <OgreColourValue.h>
@@ -30,7 +30,7 @@
 
 namespace SBS {
 
-class SBSIMPEXP TextureManager : public ObjectBase
+class SBSIMPEXP TextureManager : public Object
 {
 public:
 
