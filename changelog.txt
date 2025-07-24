@@ -1,5 +1,6 @@
 Version 2.0
 -------------------------
+-SBS: if a texture material is already loaded, report an error and exit before trying to create a new texture.  This fixes an issue where new textures with the same name as existing ones would cause a sim engine to have a fatal error and shut down
 -ScriptProc: fix direction value processing for AddDoor command
 -SBS: added pointer safety checks to elevator car's Loop() function
 -VM: SwitchEngines() function should not switch to engines in a paused state
