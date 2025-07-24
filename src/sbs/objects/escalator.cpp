@@ -28,7 +28,7 @@
 #include "mesh.h"
 #include "floor.h"
 #include "sound.h"
-#include "texture.h"
+#include "texman.h"
 #include "profiler.h"
 #include "dynamicmesh.h"
 #include "step.h"

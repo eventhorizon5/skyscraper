@@ -24,7 +24,7 @@
 #include <OgreProcedural/Procedural.h>
 #include "globals.h"
 #include "sbs.h"
-#include "texture.h"
+#include "texman.h"
 #include "mesh.h"
 #include "geometry.h"
 

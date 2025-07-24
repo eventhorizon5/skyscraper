@@ -44,7 +44,7 @@
 #include "stairs.h"
 #include "action.h"
 #include "person.h"
-#include "texture.h"
+#include "texman.h"
 #include "light.h"
 #include "wall.h"
 #include "control.h"

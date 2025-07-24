@@ -34,7 +34,7 @@
 #include "elevatorcar.h"
 #include "timer.h"
 #include "profiler.h"
-#include "texture.h"
+#include "texman.h"
 #include "controller.h"
 #include "random.h"
 #include "elevroute.h"

@@ -26,7 +26,7 @@
 #include "trigger.h"
 #include "camera.h"
 #include "wall.h"
-#include "texture.h"
+#include "texman.h"
 #include "profiler.h"
 #include "utility.h"
 #include "polymesh.h"

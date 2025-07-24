@@ -32,7 +32,7 @@
 #include <OgreImage.h>
 #include "globals.h"
 #include "sbs.h"
-#include "texture.h"
+#include "texman.h"
 #include "scenenode.h"
 #include "elevatorcar.h"
 #include "floor.h"

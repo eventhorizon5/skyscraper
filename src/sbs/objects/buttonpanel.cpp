@@ -25,7 +25,7 @@
 #include "sbs.h"
 #include "polymesh.h"
 #include "mesh.h"
-#include "texture.h"
+#include "texman.h"
 #include "elevatorcar.h"
 #include "action.h"
 #include "control.h"

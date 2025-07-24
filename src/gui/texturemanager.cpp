@@ -28,7 +28,7 @@
 
 #include "globals.h"
 #include "sbs.h"
-#include "texture.h"
+#include "texman.h"
 #include "debugpanel.h"
 #include "vm.h"
 #include "texturemanager.h"

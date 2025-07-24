@@ -27,7 +27,7 @@
 #include "manager.h"
 #include "mesh.h"
 #include "floor.h"
-#include "texture.h"
+#include "texman.h"
 #include "sound.h"
 #include "profiler.h"
 #include "revolvingdoor.h"

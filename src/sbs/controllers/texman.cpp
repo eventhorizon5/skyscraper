@@ -34,7 +34,7 @@
 #include "globals.h"
 #include "sbs.h"
 #include "utility.h"
-#include "texture.h"
+#include "texman.h"
 
 namespace SBS {
 

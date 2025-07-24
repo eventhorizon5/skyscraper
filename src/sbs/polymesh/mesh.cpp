@@ -33,7 +33,7 @@
 #include "sbs.h"
 #include "camera.h"
 #include "wall.h"
-#include "texture.h"
+#include "texman.h"
 #include "profiler.h"
 #include "scenenode.h"
 #include "dynamicmesh.h"

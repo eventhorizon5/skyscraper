@@ -34,7 +34,7 @@
 #include "polymesh.h"
 #include "polygon.h"
 #include "triangle.h"
-#include "texture.h"
+#include "texman.h"
 #include "scenenode.h"
 #include "profiler.h"
 #include "dynamicmesh.h"

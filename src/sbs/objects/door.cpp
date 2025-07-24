@@ -30,7 +30,7 @@
 #include "elevatorcar.h"
 #include "shaft.h"
 #include "stairs.h"
-#include "texture.h"
+#include "texman.h"
 #include "sound.h"
 #include "timer.h"
 #include "doorsystem.h"

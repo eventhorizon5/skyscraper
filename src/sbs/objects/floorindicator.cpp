@@ -30,7 +30,7 @@
 #include "profiler.h"
 #include "floor.h"
 #include "timer.h"
-#include "texture.h"
+#include "texman.h"
 #include "floorindicator.h"
 
 namespace SBS {

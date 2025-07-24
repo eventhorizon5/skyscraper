@@ -29,7 +29,7 @@
 #include "indicator.h"
 #include "timer.h"
 #include "manager.h"
-#include "texture.h"
+#include "texman.h"
 #include "control.h"
 #include "callstation.h"
 #include "profiler.h"

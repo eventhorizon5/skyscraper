@@ -26,7 +26,7 @@
 #include "enginecontext.h"
 #include "floor.h"
 #include "camera.h"
-#include "texture.h"
+#include "texman.h"
 #include "mesh.h"
 #include "soundsystem.h"
 #include "sound.h"

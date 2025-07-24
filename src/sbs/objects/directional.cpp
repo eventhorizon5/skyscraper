@@ -26,7 +26,7 @@
 #include "polymesh.h"
 #include "floor.h"
 #include "mesh.h"
-#include "texture.h"
+#include "texman.h"
 #include "elevator.h"
 #include "elevatorcar.h"
 #include "timer.h"

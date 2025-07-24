@@ -42,7 +42,7 @@
 #include "shaft.h"
 #include "camera.h"
 #include "dynamicmesh.h"
-#include "texture.h"
+#include "texman.h"
 #include "profiler.h"
 #include "cameratexture.h"
 #include "elevatorcar.h"

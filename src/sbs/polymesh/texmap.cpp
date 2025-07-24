@@ -23,7 +23,7 @@
 #include "globals.h"
 #include "sbs.h"
 #include "polygon.h"
-#include "texture.h"
+#include "texman.h"
 #include "utility.h"
 
 namespace SBS {

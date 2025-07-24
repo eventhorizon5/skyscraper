@@ -34,7 +34,7 @@
 #include "model.h"
 #include "primitive.h"
 #include "custom.h"
-#include "texture.h"
+#include "texman.h"
 #include "light.h"
 #include "profiler.h"
 #include "cameratexture.h"

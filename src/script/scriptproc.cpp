@@ -35,7 +35,7 @@
 #include "vm.h"
 #include "sky.h"
 #include "enginecontext.h"
-#include "texture.h"
+#include "texman.h"
 #include "floor.h"
 #include "camera.h"
 #include "random.h"

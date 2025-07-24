@@ -31,7 +31,7 @@
 #include "floor.h"
 #include "elevator.h"
 #include "elevatorcar.h"
-#include "texture.h"
+#include "texman.h"
 #include "debugpanel.h"
 #include "scriptproc.h"
 #include "vm.h"

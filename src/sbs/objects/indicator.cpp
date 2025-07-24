@@ -26,7 +26,7 @@
 #include "polymesh.h"
 #include "mesh.h"
 #include "manager.h"
-#include "texture.h"
+#include "texman.h"
 #include "timer.h"
 #include "sound.h"
 #include "indicator.h"

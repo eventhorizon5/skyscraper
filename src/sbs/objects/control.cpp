@@ -30,7 +30,7 @@
 #include "shaft.h"
 #include "stairs.h"
 #include "buttonpanel.h"
-#include "texture.h"
+#include "texman.h"
 #include "sound.h"
 #include "mesh.h"
 #include "control.h"

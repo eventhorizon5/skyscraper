@@ -28,7 +28,7 @@
 #include "polygon.h"
 #include "polymesh.h"
 #include "triangle.h"
-#include "texture.h"
+#include "texman.h"
 #include "profiler.h"
 #include "utility.h"
 #include "wall.h"

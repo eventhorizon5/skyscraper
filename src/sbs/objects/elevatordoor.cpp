@@ -30,7 +30,7 @@
 #include "shaft.h"
 #include "mesh.h"
 #include "camera.h"
-#include "texture.h"
+#include "texman.h"
 #include "trigger.h"
 #include "profiler.h"
 #include "sound.h"
