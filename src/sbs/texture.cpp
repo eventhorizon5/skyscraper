@@ -125,6 +125,10 @@ bool TextureManager::LoadTexture(const std::string &filename, const std::string 
 	//first verify the filename
 	std::string filename2 = sbs->VerifyFile(filename);
 
+	//exit if already loaded
+	if (MaterialExists(name))
+		return ReportError("Texture " + name + " already exists");
+
 	//load texture
 	bool has_alpha = false;
 	Ogre::TexturePtr mTex = LoadTexture(filename2, mipmaps, has_alpha, use_alpha_color, alpha_color);
@@ -159,6 +163,10 @@ bool TextureManager::LoadAnimatedTexture(std::vector<std::string> filenames, con
 	std::vector<std::string> filenames2;
 
 	size_t num_frames = filenames.size();
+
+	//exit if already loaded
+	if (MaterialExists(name))
+		return ReportError("Texture " + name + " already exists");
 
 	//first verify the filenames
 	for (size_t i = 0; i < filenames.size(); i++)
@@ -224,6 +232,10 @@ bool TextureManager::LoadAlphaBlendTexture(const std::string &filename, const st
 	std::string filename2 = sbs->VerifyFile(filename);
 	std::string specular_filename2 = sbs->VerifyFile(specular_filename);
 	std::string blend_filename2 = sbs->VerifyFile(blend_filename);
+
+	//exit if already loaded
+	if (MaterialExists(name))
+		return ReportError("Texture " + name + " already exists");
 
 	//load texture
 	bool has_alpha = false, has_alpha2 = false;
@@ -378,6 +390,10 @@ bool TextureManager::LoadTextureCropped(const std::string &filename, const std::
 	Ogre::ColourValue alpha_color = Ogre::ColourValue::Black;
 	int mipmaps = -1;
 	bool use_alpha_color = false;
+
+	//exit if already loaded
+	if (MaterialExists(name))
+		return ReportError("Texture " + name + " already exists");
 
 	//first verify the filename
 	std::string filename2 = sbs->VerifyFile(filename);
@@ -673,6 +689,10 @@ bool TextureManager::AddTextToTexture(const std::string &origname, const std::st
 
 	std::string font_filename2 = sbs->VerifyFile(font_filename);
 
+	//exit if already loaded
+	if (MaterialExists(name))
+		return ReportError("Texture " + name + " already exists");
+
 	//load font
 	Ogre::FontPtr font;
 	std::string fontname = font_filename2 + ToString(font_size);
@@ -819,6 +839,10 @@ bool TextureManager::AddTextureOverlay(const std::string &orig_texture, const st
 	std::string Name = name;
 	std::string Origname = orig_texture;
 	std::string Overlay = overlay_texture;
+
+	//exit if already loaded
+	if (MaterialExists(name))
+		return ReportError("Texture " + name + " already exists");
 
 	//get original texture
 	Ogre::MaterialPtr ptr = GetMaterialByName(Origname);
@@ -2403,6 +2427,18 @@ size_t TextureManager::GetMemoryUsage()
 	}
 
 	return result;
+}
+
+bool TextureManager::MaterialExists(const std::string &name)
+{
+	//returns true if the specified registered texture name exists
+
+	for (size_t i = 0; i < textureinfo.size(); i++)
+	{
+		if (textureinfo[i].name == name)
+			return true;
+	}
+	return false;
 }
 
 }
