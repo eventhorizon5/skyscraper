@@ -29,7 +29,7 @@ namespace SBS {
 class SBSIMPEXP Texture : public Object
 {
 public:
-	explicit Texture(TextureManager *manager);
+	explicit Texture(TextureManager *manager, const std::string &name);
 	~Texture();
 
 private:

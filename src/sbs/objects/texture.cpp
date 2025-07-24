@@ -29,9 +29,11 @@
 
 namespace SBS {
 
-Texture::Texture(TextureManager* manager) : Object(manager)
+Texture::Texture(TextureManager* manager, const std::string &name) : Object(manager)
 {
-	SetName("Texture Manager");
+	//set up SBS object
+	SetValues("Texture", name, false);
+
     this->manager = manager;
 }
 
