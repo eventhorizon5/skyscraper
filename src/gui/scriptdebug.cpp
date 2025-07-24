@@ -158,7 +158,12 @@ void ScriptDebug::Loop()
 
 void ScriptDebug::On_bGoto_Click(wxCommandEvent& event)
 {
+    int selection = lstScript->GetSelection();
+    if (selection == wxNOT_FOUND)
+        return;
 
+    if (scriptproc)
+        scriptproc->line = selection;
 }
 
 void ScriptDebug::On_bRun_Click(wxCommandEvent& event)
