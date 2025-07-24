@@ -500,7 +500,11 @@ void ObjectInfo::On_bDebug_Click(wxCommandEvent& event)
 	if (!debugger)
 		debugger = new ScriptDebug(panel, this);
 	if (debugger)
+	{
+		debugger->CenterOnScreen();
 		debugger->Show();
+		debugger->Raise();
+	}
 }
 
 }

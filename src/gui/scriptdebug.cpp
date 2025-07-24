@@ -63,24 +63,29 @@ ScriptDebug::ScriptDebug(DebugPanel* root, wxWindow* parent)
     wxFlexGridSizer* FlexGridSizer3;
     wxFlexGridSizer* FlexGridSizer4;
     wxFlexGridSizer* FlexGridSizer5;
+    wxStaticBoxSizer* StaticBoxSizer1;
+    wxStaticBoxSizer* StaticBoxSizer2;
 
     Create(parent, wxID_ANY, _("Script Debugger"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE, _T("wxID_ANY"));
     FlexGridSizer1 = new wxFlexGridSizer(0, 2, 0, 0);
     FlexGridSizer2 = new wxFlexGridSizer(0, 3, 0, 0);
-    lstScript = new wxEditableListBox(this, ID_lstScript, _("Script Code"), wxDefaultPosition, wxDefaultSize, wxEL_ALLOW_NEW|wxEL_ALLOW_EDIT|wxEL_ALLOW_DELETE, _T("ID_lstScript"));
-    FlexGridSizer2->Add(lstScript, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    StaticBoxSizer1 = new wxStaticBoxSizer(wxHORIZONTAL, this, _("Script"));
+    lstScript = new wxListBox(this, ID_lstScript, wxDefaultPosition, wxDefaultSize, 0, 0, wxLB_HSCROLL, wxDefaultValidator, _T("ID_lstScript"));
+    lstScript->SetMinSize(wxSize(300,300));
+    StaticBoxSizer1->Add(lstScript, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    FlexGridSizer2->Add(StaticBoxSizer1, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     FlexGridSizer1->Add(FlexGridSizer2, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     FlexGridSizer3 = new wxFlexGridSizer(0, 3, 0, 0);
     StaticText1 = new wxStaticText(this, ID_STATICTEXT1, _("Filename:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT1"));
     FlexGridSizer3->Add(StaticText1, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     txtFilename = new wxTextCtrl(this, ID_txtFilename, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_txtFilename"));
     FlexGridSizer3->Add(txtFilename, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-    FlexGridSizer3->Add(0,0,1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    FlexGridSizer3->Add(-1,-1,1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     StaticText2 = new wxStaticText(this, ID_STATICTEXT2, _("Line:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT2"));
     FlexGridSizer3->Add(StaticText2, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     txtLine = new wxTextCtrl(this, ID_txtLine, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_txtLine"));
     FlexGridSizer3->Add(txtLine, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-    FlexGridSizer3->Add(0,0,1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    FlexGridSizer3->Add(-1,-1,1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     StaticText3 = new wxStaticText(this, ID_STATICTEXT3, _("Label"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT3"));
     FlexGridSizer3->Add(StaticText3, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     FlexGridSizer1->Add(FlexGridSizer3, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
@@ -97,8 +102,11 @@ ScriptDebug::ScriptDebug(DebugPanel* root, wxWindow* parent)
     FlexGridSizer4->Add(bReset, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     FlexGridSizer1->Add(FlexGridSizer4, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     FlexGridSizer5 = new wxFlexGridSizer(0, 3, 0, 0);
-    lstVariables = new wxEditableListBox(this, ID_lstVariables, _("Variables"), wxDefaultPosition, wxDefaultSize, wxEL_ALLOW_NEW|wxEL_ALLOW_EDIT|wxEL_ALLOW_DELETE, _T("ID_lstVariables"));
-    FlexGridSizer5->Add(lstVariables, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    StaticBoxSizer2 = new wxStaticBoxSizer(wxHORIZONTAL, this, _("Variables"));
+    lstVariables = new wxListBox(this, ID_lstVariables, wxDefaultPosition, wxDefaultSize, 0, 0, wxLB_HSCROLL, wxDefaultValidator, _T("ID_lstVariables"));
+    lstVariables->SetMinSize(wxSize(150,150));
+    StaticBoxSizer2->Add(lstVariables, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    FlexGridSizer5->Add(StaticBoxSizer2, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     FlexGridSizer1->Add(FlexGridSizer5, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     SetSizer(FlexGridSizer1);
     FlexGridSizer1->SetSizeHints(this);
@@ -129,12 +137,10 @@ void ScriptDebug::OnInit()
 
     std::vector<std::string> *data = scriptproc->GetBuildingData();
 
-    wxArrayString stringarray;
     for (int i = 0; i < data->size(); i++)
     {
-        stringarray.Add(SBS::ToString(i + 1) + ": " + data->at(i));
+        lstScript->Append(SBS::ToString(i + 1) + ": " + data->at(i));
     }
-    lstScript->SetStrings(stringarray);
 }
 
 void ScriptDebug::Loop()

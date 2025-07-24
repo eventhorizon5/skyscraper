@@ -9,9 +9,18 @@
 				<object class="wxFlexGridSizer" variable="FlexGridSizer2" member="no">
 					<cols>3</cols>
 					<object class="sizeritem">
-						<object class="wxEditableListBox" name="ID_lstScript" variable="lstScript" member="yes">
-							<label>Script Code</label>
-							<style>wxEL_ALLOW_NEW|wxEL_ALLOW_EDIT|wxEL_ALLOW_DELETE</style>
+						<object class="wxStaticBoxSizer" variable="StaticBoxSizer1" member="no">
+							<label>Script</label>
+							<object class="sizeritem">
+								<object class="wxListBox" name="ID_lstScript" variable="lstScript" member="yes">
+									<default>-1</default>
+									<minsize>300,300</minsize>
+									<style>wxLB_HSCROLL</style>
+								</object>
+								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
 						</object>
 						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 						<border>5</border>
@@ -133,9 +142,18 @@
 				<object class="wxFlexGridSizer" variable="FlexGridSizer5" member="no">
 					<cols>3</cols>
 					<object class="sizeritem">
-						<object class="wxEditableListBox" name="ID_lstVariables" variable="lstVariables" member="yes">
+						<object class="wxStaticBoxSizer" variable="StaticBoxSizer2" member="no">
 							<label>Variables</label>
-							<style>wxEL_ALLOW_NEW|wxEL_ALLOW_EDIT|wxEL_ALLOW_DELETE</style>
+							<object class="sizeritem">
+								<object class="wxListBox" name="ID_lstVariables" variable="lstVariables" member="yes">
+									<default>-1</default>
+									<minsize>150,150</minsize>
+									<style>wxLB_HSCROLL</style>
+								</object>
+								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
 						</object>
 						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 						<border>5</border>

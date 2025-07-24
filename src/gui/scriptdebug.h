@@ -24,10 +24,9 @@
 #define SCRIPTDEBUG_H
 
 //(*Headers(ScriptDebug)
-#include <wx/arrstr.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
-#include <wx/editlbox.h>
+#include <wx/listbox.h>
 #include <wx/sizer.h>
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
@@ -49,8 +48,8 @@ class ScriptDebug: public wxDialog
         wxButton* bRun;
         wxButton* bStart;
         wxButton* bStop;
-        wxEditableListBox* lstScript;
-        wxEditableListBox* lstVariables;
+        wxListBox* lstScript;
+        wxListBox* lstVariables;
         wxStaticText* StaticText1;
         wxStaticText* StaticText2;
         wxStaticText* StaticText3;
