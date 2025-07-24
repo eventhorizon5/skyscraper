@@ -118,6 +118,7 @@ ScriptDebug::ScriptDebug(DebugPanel* root, wxWindow* parent)
     Connect(ID_bReset, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&ScriptDebug::On_bReset_Click);
     //*)
     this->panel = root;
+    variable_count = 0;
     OnInit();
 }
 
@@ -154,6 +155,18 @@ void ScriptDebug::Loop()
 
     txtLine->SetValue(SBS::ToString(scriptproc->line));
     //txtFilename->SetValue(scriptproc->)
+
+    size_t temp_count = scriptproc->variables.size();
+    if (variable_count != temp_count)
+    {
+        variable_count = temp_count;
+        for (size_t i = 0; i < variable_count; i++)
+        {
+            std::string name = scriptproc->variables[i].name;
+            std::string value = scriptproc->variables[i].value;
+            lstVariables->Append(SBS::ToString(i + 1) + ": " + name + " - " + value);
+        }
+    }
 }
 
 void ScriptDebug::On_bGoto_Click(wxCommandEvent& event)

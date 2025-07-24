@@ -87,6 +87,7 @@ class ScriptDebug: public wxDialog
 		SBS::SBS *Simcore;
         ScriptProcessor *scriptproc;
 		DebugPanel *panel;
+        size_t variable_count;
 
         DECLARE_EVENT_TABLE()
 };
