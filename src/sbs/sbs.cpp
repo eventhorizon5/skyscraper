@@ -1118,7 +1118,7 @@ bool SBS::UnregisterTimerCallback(TimerObject *timer)
 	if (!timer)
 		return false;
 
-	return sbs->GetUtility()->RemoveArrayElement(timercallbacks, timer);
+	return RemoveArrayElement(timercallbacks, timer);
 }
 
 void SBS::ProcessTimers()
@@ -1703,7 +1703,7 @@ void SBS::RemoveSound(Sound *sound)
 	//remove a sound from the array
 	//this does not delete the object
 
-	sbs->GetUtility()->RemoveArrayElement(sounds, sound);
+	RemoveArrayElement(sounds, sound);
 }
 
 void SBS::RemoveReverb(Reverb *reverb)
@@ -1711,49 +1711,49 @@ void SBS::RemoveReverb(Reverb *reverb)
 	//remove a reverb from the array
 	//this does not delete the object
 
-	sbs->GetUtility()->RemoveArrayElement(reverbs, reverb);
+	RemoveArrayElement(reverbs, reverb);
 }
 
 void SBS::RemoveLight(Light *light)
 {
 	//remove a light reference (does not delete the object itself)
 
-	sbs->GetUtility()->RemoveArrayElement(lights, light);
+	RemoveArrayElement(lights, light);
 }
 
 void SBS::RemoveModel(Model *model)
 {
 	//remove a model reference (does not delete the object itself)
 
-	sbs->GetUtility()->RemoveArrayElement(ModelArray, model);
+	RemoveArrayElement(ModelArray, model);
 }
 
 void SBS::RemovePrimitive(Primitive *prim)
 {
 	//remove a prim reference (does not delete the object itself)
 
-	sbs->GetUtility()->RemoveArrayElement(PrimArray, prim);
+	RemoveArrayElement(PrimArray, prim);
 }
 
 void SBS::RemoveCustomObject(CustomObject *object)
 {
 	//remove a custom object reference (does not delete the object itself)
 
-	sbs->GetUtility()->RemoveArrayElement(CustomObjectArray, object);
+	RemoveArrayElement(CustomObjectArray, object);
 }
 
 void SBS::RemoveControl(Control *control)
 {
 	//remove a control reference (does not delete the object itself)
 
-	sbs->GetUtility()->RemoveArrayElement(ControlArray, control);
+	RemoveArrayElement(ControlArray, control);
 }
 
 void SBS::RemoveTrigger(Trigger *trigger)
 {
 	//remove a trigger reference (does not delete the object itself)
 
-	sbs->GetUtility()->RemoveArrayElement(TriggerArray, trigger);
+	RemoveArrayElement(TriggerArray, trigger);
 }
 
 void SBS::RemoveController(DispatchController *controller)
@@ -1815,12 +1815,12 @@ Light* SBS::AddLight(const std::string &name, int type)
 
 void SBS::AddMeshHandle(MeshObject* handle)
 {
-	sbs->GetUtility()->AddArrayElement(meshes, handle);
+	AddArrayElement(meshes, handle);
 }
 
 void SBS::DeleteMeshHandle(MeshObject* handle)
 {
-	sbs->GetUtility()->RemoveArrayElement(meshes, handle);
+	RemoveArrayElement(meshes, handle);
 }
 
 MeshObject* SBS::FindMeshObject(const std::string &name)
@@ -2590,14 +2590,14 @@ void SBS::RegisterControl(Control *control)
 {
 	//add control to index
 
-	sbs->GetUtility()->AddArrayElement(control_index, control);
+	AddArrayElement(control_index, control);
 }
 
 void SBS::UnregisterControl(Control *control)
 {
 	//remove control from index
 
-	sbs->GetUtility()->RemoveArrayElement(control_index, control);
+	RemoveArrayElement(control_index, control);
 }
 
 void SBS::ShowFloorList()
@@ -2885,7 +2885,7 @@ void SBS::RemovePerson(Person *person)
 {
 	//remove a person (does not delete the object)
 
-	sbs->GetUtility()->RemoveArrayElement(PersonArray, person);
+	RemoveArrayElement(PersonArray, person);
 }
 
 bool SBS::AttachCamera(std::vector<Ogre::Camera*> &cameras, bool init_state)
@@ -3116,14 +3116,14 @@ void SBS::RegisterDynamicMesh(DynamicMesh *dynmesh)
 {
 	//register a dynamic mesh with the system
 
-	sbs->GetUtility()->AddArrayElement(dynamic_meshes, dynmesh);
+	AddArrayElement(dynamic_meshes, dynmesh);
 }
 
 void SBS::UnregisterDynamicMesh(DynamicMesh *dynmesh)
 {
 	//unregister a dynamic mesh from the system
 
-	sbs->GetUtility()->RemoveArrayElement(dynamic_meshes, dynmesh);
+	RemoveArrayElement(dynamic_meshes, dynmesh);
 }
 
 SoundSystem* SBS::GetSoundSystem()
@@ -3190,14 +3190,14 @@ void SBS::RegisterCameraTexture(CameraTexture *camtex)
 {
 	//register a camera texture
 
-	sbs->GetUtility()->AddArrayElement(camtexarray, camtex);
+	AddArrayElement(camtexarray, camtex);
 }
 
 void SBS::UnregisterCameraTexture(CameraTexture *camtex)
 {
 	//unregister a camera texture
 
-	sbs->GetUtility()->RemoveArrayElement(camtexarray, camtex);
+	RemoveArrayElement(camtexarray, camtex);
 }
 
 int SBS::GetCameraTextureCount()
@@ -3245,14 +3245,14 @@ void SBS::RegisterEscalator(Escalator *escalator)
 {
 	//add escalator to index
 
-	sbs->GetUtility()->AddArrayElement(EscalatorArray, escalator);
+	AddArrayElement(EscalatorArray, escalator);
 }
 
 void SBS::UnregisterEscalator(Escalator *escalator)
 {
 	//remove escalator from index
 
-	sbs->GetUtility()->RemoveArrayElement(EscalatorArray, escalator);
+	RemoveArrayElement(EscalatorArray, escalator);
 }
 
 Escalator* SBS::GetEscalator(int index)
@@ -3266,14 +3266,14 @@ void SBS::RegisterMovingWalkway(MovingWalkway *walkway)
 {
 	//add moving walkway to index
 
-	sbs->GetUtility()->AddArrayElement(MovingWalkwayArray, walkway);
+	AddArrayElement(MovingWalkwayArray, walkway);
 }
 
 void SBS::UnregisterMovingWalkway(MovingWalkway *walkway)
 {
 	//remove moving walkway from index
 
-	sbs->GetUtility()->RemoveArrayElement(MovingWalkwayArray, walkway);
+	RemoveArrayElement(MovingWalkwayArray, walkway);
 }
 
 MovingWalkway* SBS::GetMovingWalkway(int index)
@@ -3293,7 +3293,7 @@ void SBS::UnregisterRevolvingDoor(RevolvingDoor* door)
 {
 	//remove revolving door from index
 
-	sbs->GetUtility()->RemoveArrayElement(RevolvingDoorArray, door);
+	RemoveArrayElement(RevolvingDoorArray, door);
 }
 
 RevolvingDoor* SBS::GetRevolvingDoor(int index)

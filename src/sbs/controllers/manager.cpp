@@ -795,7 +795,7 @@ void DoorManager::RemoveDoor(Door *door)
 	//remove a door from the array
 	//this does not delete the object
 
-	sbs->GetUtility()->RemoveArrayElement(Array, door);
+	RemoveArrayElement(Array, door);
 }
 
 int DoorManager::GetCount()
@@ -864,7 +864,7 @@ void RevolvingDoorManager::RemoveDoor(RevolvingDoor *door)
 	//remove a door from the array
 	//this does not delete the object
 
-	sbs->GetUtility()->RemoveArrayElement(Array, door);
+	RemoveArrayElement(Array, door);
 }
 
 int RevolvingDoorManager::GetCount()

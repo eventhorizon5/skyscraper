@@ -65,75 +65,6 @@ public:
 	std::string GetMountPath(std::string filename, std::string &newfilename);
 	void CacheFilename(const std::string &filename, const std::string &result);
 
-	//EnableArray() function
-	template <typename T>
-	bool EnableArray(const std::vector<T> &array, bool value)
-	{
-		//enable or disable an object array
-
-		bool status = true;
-		for (size_t i = 0; i < array.size(); i++)
-		{
-			if (array[i])
-			{
-				bool result = array[i]->Enabled(value);
-				if (!result)
-					status = false;
-			}
-		}
-		return status;
-	}
-
-	//AddArrayElement() function
-	template <typename T>
-	bool AddArrayElement(std::vector<T*> &array, T* object, bool check = false)
-	{
-		//add an element to an array
-
-		if (!object)
-			return false;
-
-		if (check == true)
-		{
-			for (size_t i = 0; i < array.size(); i++)
-			{
-				//exit if already registered
-				if (array[i] == object)
-					return false;
-			}
-		}
-
-		array.emplace_back(object);
-		return true;
-	}
-
-	//RemoveArrayElement() function
-	template <typename T>
-	bool RemoveArrayElement(std::vector<T*> &array, T* object)
-	{
-		if (!object)
-			return false;
-
-		if (array.empty())
-			return false;
-
-		if (array.back() == object)
-		{
-			array.pop_back();
-			return true;
-		}
-
-		for (size_t i = 0; i < array.size(); i++)
-		{
-			if (array[i] == object)
-			{
-				array.erase(array.begin() + i);
-				return true;
-			}
-		}
-		return false;
-	}
-
 private:
 
 	//Cut function work polygons
@@ -156,6 +87,75 @@ private:
 	//file listing cache
 	Ogre::StringVectorPtr filesystem_listing;
 };
+
+//EnableArray() function
+template <typename T>
+bool EnableArray(const std::vector<T> &array, bool value)
+{
+	//enable or disable an object array
+
+	bool status = true;
+	for (size_t i = 0; i < array.size(); i++)
+	{
+		if (array[i])
+		{
+			bool result = array[i]->Enabled(value);
+			if (!result)
+				status = false;
+		}
+	}
+	return status;
+}
+
+//AddArrayElement() function
+template <typename T>
+bool AddArrayElement(std::vector<T*> &array, T* object, bool check = false)
+{
+	//add an element to an array
+
+	if (!object)
+		return false;
+
+	if (check == true)
+	{
+		for (size_t i = 0; i < array.size(); i++)
+		{
+			//exit if already registered
+			if (array[i] == object)
+				return false;
+		}
+	}
+
+	array.emplace_back(object);
+	return true;
+}
+
+//RemoveArrayElement() function
+template <typename T>
+bool RemoveArrayElement(std::vector<T*> &array, T* object)
+{
+	if (!object)
+		return false;
+
+	if (array.empty())
+		return false;
+
+	if (array.back() == object)
+	{
+		array.pop_back();
+		return true;
+	}
+
+	for (size_t i = 0; i < array.size(); i++)
+	{
+		if (array[i] == object)
+		{
+			array.erase(array.begin() + i);
+			return true;
+		}
+	}
+	return false;
+}
 
 }
 

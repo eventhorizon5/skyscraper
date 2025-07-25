@@ -466,49 +466,49 @@ bool Floor::Enabled(bool value)
 	EnableColumnFrame(value);
 
 	//controls
-	result = utility->EnableArray(ControlArray, value);
+	result = EnableArray(ControlArray, value);
 	if (!result)
 		status = false;
 
 	//triggers
-	result = utility->EnableArray(TriggerArray, value);
+	result = EnableArray(TriggerArray, value);
 	if (!result)
 		status = false;
 
 	//models
-	result = utility->EnableArray(ModelArray, value);
+	result = EnableArray(ModelArray, value);
 	if (!result)
 		status = false;
 
 	//primitives
-	result = sbs->GetUtility()->EnableArray(PrimArray, value);
+	result = EnableArray(PrimArray, value);
 	if (!result)
 		status = false;
 
 	//custom objects
-	result = utility->EnableArray(CustomObjectArray, value);
+	result = EnableArray(CustomObjectArray, value);
 	if (!result)
 		status = false;
 
 	//call stations
-	result = utility->EnableArray(CallStationArray, value);
+	result = EnableArray(CallStationArray, value);
 	if (!result)
 		status = false;
 
 	//doors
-	result = utility->EnableArray(DoorArray, value);
+	result = EnableArray(DoorArray, value);
 	if (!result)
 		status = false;
 	DoorWrapper->Enabled(value);
 
 	//turn on/off directional indicators
-	result = utility->EnableArray(DirIndicatorArray, value);
+	result = EnableArray(DirIndicatorArray, value);
 	if (!result)
 		status = false;
 	UpdateDirectionalIndicators();
 
 	//floor indicators
-	result = utility->EnableArray(FloorIndicatorArray, value);
+	result = EnableArray(FloorIndicatorArray, value);
 	if (!result)
 		status = false;
 
@@ -516,12 +516,12 @@ bool Floor::Enabled(bool value)
 	UpdateFloorIndicators();
 
 	//escalators
-	result = utility->EnableArray(EscalatorArray, value);
+	result = EnableArray(EscalatorArray, value);
 	if (!result)
 		status = false;
 
 	//moving walkways
-	result = utility->EnableArray(MovingWalkwayArray, value);
+	result = EnableArray(MovingWalkwayArray, value);
 	if (!result)
 		status = false;
 
@@ -545,12 +545,12 @@ bool Floor::Enabled(bool value)
 	}
 
 	//reverbs
-	result = utility->EnableArray(reverbs, value);
+	result = EnableArray(reverbs, value);
 	if (!result)
 		status = false;
 
 	//lights
-	result = utility->EnableArray(lights, value);
+	result = EnableArray(lights, value);
 	if (!result)
 		status = false;
 
@@ -1309,7 +1309,7 @@ void Floor::RemoveCallStation(CallStation* station)
 {
 	//remove a call station reference (does not delete the object itself)
 
-	sbs->GetUtility()->RemoveArrayElement(CallStationArray, station);
+	RemoveArrayElement(CallStationArray, station);
 }
 
 void Floor::RemoveFloorIndicator(FloorIndicator *indicator)
@@ -1317,7 +1317,7 @@ void Floor::RemoveFloorIndicator(FloorIndicator *indicator)
 	//remove a floor indicator from the array
 	//this does not delete the object
 
-	sbs->GetUtility()->RemoveArrayElement(FloorIndicatorArray, indicator);
+	RemoveArrayElement(FloorIndicatorArray, indicator);
 }
 
 void Floor::RemoveDirectionalIndicator(DirectionalIndicator *indicator)
@@ -1325,7 +1325,7 @@ void Floor::RemoveDirectionalIndicator(DirectionalIndicator *indicator)
 	//remove a directional indicator from the array
 	//this does not delete the object
 
-	sbs->GetUtility()->RemoveArrayElement(DirIndicatorArray, indicator);
+	RemoveArrayElement(DirIndicatorArray, indicator);
 }
 
 void Floor::RemoveDoor(Door *door)
@@ -1333,7 +1333,7 @@ void Floor::RemoveDoor(Door *door)
 	//remove a door from the array
 	//this does not delete the object
 
-	sbs->GetUtility()->RemoveArrayElement(DoorArray, door);
+	RemoveArrayElement(DoorArray, door);
 }
 
 void Floor::RemoveSound(Sound *sound)
@@ -1341,70 +1341,70 @@ void Floor::RemoveSound(Sound *sound)
 	//remove a sound from the array
 	//this does not delete the object
 
-	sbs->GetUtility()->RemoveArrayElement(sounds, sound);
+	RemoveArrayElement(sounds, sound);
 }
 
 void Floor::RemoveLight(Light *light)
 {
 	//remove a light reference (does not delete the object itself)
 
-	sbs->GetUtility()->RemoveArrayElement(lights, light);
+	RemoveArrayElement(lights, light);
 }
 
 void Floor::RemoveModel(Model *model)
 {
 	//remove a model reference (does not delete the object itself)
 
-	sbs->GetUtility()->RemoveArrayElement(ModelArray, model);
+	RemoveArrayElement(ModelArray, model);
 }
 
 void Floor::RemovePrimitive(Primitive *prim)
 {
 	//remove a prim reference (does not delete the object itself)
 
-	sbs->GetUtility()->RemoveArrayElement(PrimArray, prim);
+	RemoveArrayElement(PrimArray, prim);
 }
 
 void Floor::RemoveCustomObject(CustomObject *object)
 {
 	//remove a custom object reference (does not delete the object itself)
 
-	sbs->GetUtility()->RemoveArrayElement(CustomObjectArray, object);
+	RemoveArrayElement(CustomObjectArray, object);
 }
 
 void Floor::RemoveControl(Control *control)
 {
 	//remove a control reference (does not delete the object itself)
 
-	sbs->GetUtility()->RemoveArrayElement(ControlArray, control);
+	RemoveArrayElement(ControlArray, control);
 }
 
 void Floor::RemoveTrigger(Trigger *trigger)
 {
 	//remove a trigger reference (does not delete the object itself)
 
-	sbs->GetUtility()->RemoveArrayElement(TriggerArray, trigger);
+	RemoveArrayElement(TriggerArray, trigger);
 }
 
 void Floor::RemoveCameraTexture(CameraTexture *cameratexture)
 {
 	//remove a camera texture reference (does not delete the object itself)
 
-	sbs->GetUtility()->RemoveArrayElement(CameraTextureArray, cameratexture);
+	RemoveArrayElement(CameraTextureArray, cameratexture);
 }
 
 void Floor::RemoveEscalator(Escalator *escalator)
 {
 	//remove an escalator reference (does not delete the object itself)
 
-	sbs->GetUtility()->RemoveArrayElement(EscalatorArray, escalator);
+	RemoveArrayElement(EscalatorArray, escalator);
 }
 
 void Floor::RemoveMovingWalkway(MovingWalkway *walkway)
 {
 	//remove an escalator reference (does not delete the object itself)
 
-	sbs->GetUtility()->RemoveArrayElement(MovingWalkwayArray, walkway);
+	RemoveArrayElement(MovingWalkwayArray, walkway);
 }
 
 Light* Floor::AddLight(const std::string &name, int type)
@@ -1839,7 +1839,7 @@ void Floor::RemoveRevolvingDoor(RevolvingDoor *door)
 	//remove a door from the array
 	//this does not delete the object
 
-	sbs->GetUtility()->RemoveArrayElement(RDoorArray, door);
+	RemoveArrayElement(RDoorArray, door);
 }
 
 RevolvingDoor* Floor::GetRevolvingDoor(int number)
@@ -1899,7 +1899,7 @@ void Floor::RemoveReverb(Reverb *reverb)
 	//remove a reverb from the array
 	//this does not delete the object
 
-	sbs->GetUtility()->RemoveArrayElement(reverbs, reverb);
+	RemoveArrayElement(reverbs, reverb);
 }
 
 int Floor::GetReverbCount()

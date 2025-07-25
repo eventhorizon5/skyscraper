@@ -543,14 +543,14 @@ void Object::RegisterLoop(Object *object)
 {
 	//register a child object dynamic runloop
 
-	sbs->GetUtility()->AddArrayElement(runloops, object);
+	AddArrayElement(runloops, object);
 }
 
 void Object::UnregisterLoop(Object *object)
 {
 	//unregister a child object dynamic runloop
 
-	sbs->GetUtility()->RemoveArrayElement(runloops, object);
+	RemoveArrayElement(runloops, object);
 }
 
 bool Object::LoopChildren()

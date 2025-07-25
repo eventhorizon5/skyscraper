@@ -1090,7 +1090,7 @@ void DispatchController::RegisterCallStation(CallStation *station)
 	if (sbs->GetPower() == false)
 		return;
 
-	sbs->GetUtility()->AddArrayElement(CallStations, station);
+	AddArrayElement(CallStations, station);
 }
 
 void DispatchController::UnregisterCallStation(CallStation *station)
@@ -1101,7 +1101,7 @@ void DispatchController::UnregisterCallStation(CallStation *station)
 	if (sbs->GetPower() == false)
 		return;
 
-	sbs->GetUtility()->RemoveArrayElement(CallStations, station);
+	RemoveArrayElement(CallStations, station);
 }
 
 std::vector<CallStation*> DispatchController::GetCallStations(int floor)

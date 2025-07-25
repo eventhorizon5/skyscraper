@@ -877,37 +877,37 @@ bool Shaft::Level::Enabled(bool value, bool EnableShaftDoors)
 		enabled = value;
 
 		//doors
-		result = utility->EnableArray(DoorArray, value);
+		result = EnableArray(DoorArray, value);
 		if (!result)
 			status = false;
 
 		//controls
-		result = utility->EnableArray(ControlArray, value);
+		result = EnableArray(ControlArray, value);
 		if (!result)
 			status = false;
 
 		//triggers
-		result = utility->EnableArray(TriggerArray, value);
+		result = EnableArray(TriggerArray, value);
 		if (!result)
 			status = false;
 
 		//models
-		result = utility->EnableArray(ModelArray, value);
+		result = EnableArray(ModelArray, value);
 		if (!result)
 			status = false;
 
 		//primitives
-		result = utility->EnableArray(PrimArray, value);
+		result = EnableArray(PrimArray, value);
 		if (!result)
 			status = false;
 
 		//custom objects
-		result = utility->EnableArray(CustomObjectArray, value);
+		result = EnableArray(CustomObjectArray, value);
 		if (!result)
 			status = false;
 
 		//lights
-		result = utility->EnableArray(lights, value);
+		result = EnableArray(lights, value);
 		if (!result)
 			status = false;
 
@@ -980,42 +980,42 @@ void Shaft::Level::RemoveLight(Light *light)
 {
 	//remove a light reference (does not delete the object itself)
 
-	sbs->GetUtility()->RemoveArrayElement(lights, light);
+	RemoveArrayElement(lights, light);
 }
 
 void Shaft::Level::RemoveModel(Model *model)
 {
 	//remove a model reference (does not delete the object itself)
 
-	sbs->GetUtility()->AddArrayElement(ModelArray, model);
+	AddArrayElement(ModelArray, model);
 }
 
 void Shaft::Level::RemovePrimitive(Primitive *prim)
 {
 	//remove a prim reference (does not delete the object itself)
 
-	sbs->GetUtility()->AddArrayElement(PrimArray, prim);
+	AddArrayElement(PrimArray, prim);
 }
 
 void Shaft::Level::RemoveCustomObject(CustomObject *object)
 {
 	//remove a custom object reference (does not delete the object itself)
 
-	sbs->GetUtility()->AddArrayElement(CustomObjectArray, object);
+	AddArrayElement(CustomObjectArray, object);
 }
 
 void Shaft::Level::RemoveControl(Control *control)
 {
 	//remove a control reference (does not delete the object itself)
 
-	sbs->GetUtility()->AddArrayElement(ControlArray, control);
+	AddArrayElement(ControlArray, control);
 }
 
 void Shaft::Level::RemoveTrigger(Trigger *trigger)
 {
 	//remove a trigger reference (does not delete the object itself)
 
-	sbs->GetUtility()->AddArrayElement(TriggerArray, trigger);
+	AddArrayElement(TriggerArray, trigger);
 }
 
 MeshObject* Shaft::Level::GetMeshObject()
@@ -1065,7 +1065,7 @@ void Shaft::Level::AddModel(Model *model)
 	if (!model)
 		return;
 
-	sbs->GetUtility()->AddArrayElement(ModelArray, model);
+	AddArrayElement(ModelArray, model);
 }
 
 Primitive* Shaft::Level::AddPrimitive(const std::string &name)
@@ -1083,7 +1083,7 @@ void Shaft::Level::AddPrimitive(Primitive *primitive)
 	if (!primitive)
 		return;
 
-	sbs->GetUtility()->AddArrayElement(PrimArray, primitive);
+	AddArrayElement(PrimArray, primitive);
 }
 
 CustomObject* Shaft::Level::AddCustomObject(const std::string &name, const Vector3 &position, const Vector3 &rotation, Real max_render_distance, Real scale_multiplier)
@@ -1101,7 +1101,7 @@ void Shaft::Level::AddCustomObject(CustomObject *object)
 	if (!object)
 		return;
 
-	sbs->GetUtility()->AddArrayElement(CustomObjectArray, object);
+	AddArrayElement(CustomObjectArray, object);
 }
 
 Control* Shaft::Level::AddControl(const std::string &name, const std::string &sound, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, int selection_position, std::vector<std::string> &action_names, std::vector<std::string> &textures)
@@ -1274,7 +1274,7 @@ void Shaft::Level::RemoveDoor(Door *door)
 {
 	//remove a door reference (this does not delete the object)
 
-	sbs->GetUtility()->AddArrayElement(DoorArray, door);
+	AddArrayElement(DoorArray, door);
 }
 
 CameraTexture* Shaft::Level::AddCameraTexture(const std::string &name, int quality, Real fov, const Vector3 &position, bool use_rotation, const Vector3 &rotation)
@@ -1289,7 +1289,7 @@ void Shaft::Level::RemoveCameraTexture(CameraTexture* camtex)
 {
 	//remove a cameratexture reference (does not delete the object itself)
 
-	sbs->GetUtility()->AddArrayElement(CameraTextureArray, camtex);
+	AddArrayElement(CameraTextureArray, camtex);
 }
 
 }

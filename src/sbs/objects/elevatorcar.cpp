@@ -1056,7 +1056,7 @@ bool ElevatorCar::EnableObjects(bool value)
 	}
 
 	//floor indicators
-	/*bool result = sbs->GetUtility()->EnableArray(FloorIndicatorArray, value);
+	/*bool result = EnableArray(FloorIndicatorArray, value);
 	if (!result)
 		status = false;*/
 
@@ -1064,32 +1064,32 @@ bool ElevatorCar::EnableObjects(bool value)
 	//EnableDirectionalIndicators(value);
 
 	//controls
-	bool result = sbs->GetUtility()->EnableArray(ControlArray, value);
+	bool result = EnableArray(ControlArray, value);
 	if (!result)
 		status = false;
 
 	//triggers
-	result = sbs->GetUtility()->EnableArray(TriggerArray, value);
+	result = EnableArray(TriggerArray, value);
 	if (!result)
 		status = false;
 
 	//models
-	result = sbs->GetUtility()->EnableArray(ModelArray, value);
+	result = EnableArray(ModelArray, value);
 	if (!result)
 		status = false;
 
 	//panels
-	result = sbs->GetUtility()->EnableArray(PanelArray, value);
+	result = EnableArray(PanelArray, value);
 	if (!result)
 		status = false;
 
 	//primitives
-	result = sbs->GetUtility()->EnableArray(PrimArray, value);
+	result = EnableArray(PrimArray, value);
 	if (!result)
 		status = false;
 
 	//custom objects
-	result = sbs->GetUtility()->EnableArray(CustomObjectArray, value);
+	result = EnableArray(CustomObjectArray, value);
 	if (!result)
 		status = false;
 
@@ -2224,21 +2224,21 @@ void ElevatorCar::RemovePanel(ButtonPanel* panel)
 {
 	//remove a button panel reference (does not delete the object itself)
 
-	sbs->GetUtility()->RemoveArrayElement(PanelArray, panel);
+	RemoveArrayElement(PanelArray, panel);
 }
 
 void ElevatorCar::RemoveDirectionalIndicator(DirectionalIndicator* indicator)
 {
 	//remove a directional indicator reference (does not delete the object itself)
 
-	sbs->GetUtility()->RemoveArrayElement(DirIndicatorArray, indicator);
+	RemoveArrayElement(DirIndicatorArray, indicator);
 }
 
 void ElevatorCar::RemoveElevatorDoor(ElevatorDoor* door)
 {
 	//remove an elevator door reference (does not delete the object itself)
 
-	bool result = sbs->GetUtility()->RemoveArrayElement(DoorArray, door);
+	bool result = RemoveArrayElement(DoorArray, door);
 
 	if (result == true)
 	{
@@ -2254,63 +2254,63 @@ void ElevatorCar::RemoveFloorIndicator(FloorIndicator* indicator)
 {
 	//remove a floor indicator reference (does not delete the object itself)
 
-	sbs->GetUtility()->RemoveArrayElement(FloorIndicatorArray, indicator);
+	RemoveArrayElement(FloorIndicatorArray, indicator);
 }
 
 void ElevatorCar::RemoveDoor(Door* door)
 {
 	//remove a door reference (does not delete the object itself)
 
-	sbs->GetUtility()->RemoveArrayElement(StdDoorArray, door);
+	RemoveArrayElement(StdDoorArray, door);
 }
 
 void ElevatorCar::RemoveSound(Sound *sound)
 {
 	//remove a sound reference (does not delete the object itself)
 
-	sbs->GetUtility()->RemoveArrayElement(sounds, sound);
+	RemoveArrayElement(sounds, sound);
 }
 
 void ElevatorCar::RemoveLight(Light *light)
 {
 	//remove a light reference (does not delete the object itself)
 
-	sbs->GetUtility()->RemoveArrayElement(lights, light);
+	RemoveArrayElement(lights, light);
 }
 
 void ElevatorCar::RemoveModel(Model *model)
 {
 	//remove a model reference (does not delete the object itself)
 
-	sbs->GetUtility()->RemoveArrayElement(ModelArray, model);
+	RemoveArrayElement(ModelArray, model);
 }
 
 void ElevatorCar::RemovePrimitive(Primitive *prim)
 {
 	//remove a prim reference (does not delete the object itself)
 
-	sbs->GetUtility()->RemoveArrayElement(PrimArray, prim);
+	RemoveArrayElement(PrimArray, prim);
 }
 
 void ElevatorCar::RemoveCustomObject(CustomObject *object)
 {
 	//remove a custom object reference (does not delete the object itself)
 
-	sbs->GetUtility()->RemoveArrayElement(CustomObjectArray, object);
+	RemoveArrayElement(CustomObjectArray, object);
 }
 
 void ElevatorCar::RemoveControl(Control *control)
 {
 	//remove a control reference (does not delete the object itself)
 
-	sbs->GetUtility()->RemoveArrayElement(ControlArray, control);
+	RemoveArrayElement(ControlArray, control);
 }
 
 void ElevatorCar::RemoveTrigger(Trigger *trigger)
 {
 	//remove a trigger reference (does not delete the object itself)
 
-	sbs->GetUtility()->RemoveArrayElement(TriggerArray, trigger);
+	RemoveArrayElement(TriggerArray, trigger);
 }
 
 bool ElevatorCar::IsNudgeModeActive(int number)
@@ -3492,7 +3492,7 @@ void ElevatorCar::RemoveCameraTexture(CameraTexture* camtex)
 {
 	//remove a cameratexture reference (does not delete the object itself)
 
-	sbs->GetUtility()->RemoveArrayElement(CameraTextureArray, camtex);
+	RemoveArrayElement(CameraTextureArray, camtex);
 }
 
 bool ElevatorCar::RespondingToCall(int floor, int direction)

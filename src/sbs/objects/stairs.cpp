@@ -806,37 +806,37 @@ bool Stairwell::Level::Enabled(bool value)
 		enabled = value;
 
 		//doors
-		result = utility->EnableArray(DoorArray, value);
+		result = EnableArray(DoorArray, value);
 		if (!result)
 			status = false;
 
 		//controls
-		result = utility->EnableArray(ControlArray, value);
+		result = EnableArray(ControlArray, value);
 		if (!result)
 			status = false;
 
 		//triggers
-		result = utility->EnableArray(TriggerArray, value);
+		result = EnableArray(TriggerArray, value);
 		if (!result)
 			status = false;
 
 		//models
-		result = utility->EnableArray(ModelArray, value);
+		result = EnableArray(ModelArray, value);
 		if (!result)
 			status = false;
 
 		//primitives
-		result = utility->EnableArray(PrimArray, value);
+		result = EnableArray(PrimArray, value);
 		if (!result)
 			status = false;
 
 		//custom objects
-		result = utility->EnableArray(CustomObjectArray, value);
+		result = EnableArray(CustomObjectArray, value);
 		if (!result)
 			status = false;
 
 		//lights
-		result = utility->EnableArray(lights, value);
+		result = EnableArray(lights, value);
 		if (!result)
 			status = false;
 	}
@@ -973,49 +973,49 @@ void Stairwell::Level::RemoveDoor(Door *door)
 {
 	//remove a door reference (this does not delete the object)
 
-	sbs->GetUtility()->RemoveArrayElement(DoorArray, door);
+	RemoveArrayElement(DoorArray, door);
 }
 
 void Stairwell::Level::RemoveLight(Light *light)
 {
 	//remove a light reference (does not delete the object itself)
 
-	sbs->GetUtility()->RemoveArrayElement(lights, light);
+	RemoveArrayElement(lights, light);
 }
 
 void Stairwell::Level::RemoveModel(Model *model)
 {
 	//remove a model reference (does not delete the object itself)
 
-	sbs->GetUtility()->RemoveArrayElement(ModelArray, model);
+	RemoveArrayElement(ModelArray, model);
 }
 
 void Stairwell::Level::RemovePrimitive(Primitive *prim)
 {
 	//remove a prim reference (does not delete the object itself)
 
-	sbs->GetUtility()->RemoveArrayElement(PrimArray, prim);
+	RemoveArrayElement(PrimArray, prim);
 }
 
 void Stairwell::Level::RemoveCustomObject(CustomObject *object)
 {
 	//remove a custom object reference (does not delete the object itself)
 
-	sbs->GetUtility()->RemoveArrayElement(CustomObjectArray, object);
+	RemoveArrayElement(CustomObjectArray, object);
 }
 
 void Stairwell::Level::RemoveControl(Control *control)
 {
 	//remove a control reference (does not delete the object itself)
 
-	sbs->GetUtility()->RemoveArrayElement(ControlArray, control);
+	RemoveArrayElement(ControlArray, control);
 }
 
 void Stairwell::Level::RemoveTrigger(Trigger *trigger)
 {
 	//remove a trigger reference (does not delete the object itself)
 
-	sbs->GetUtility()->RemoveArrayElement(TriggerArray, trigger);
+	RemoveArrayElement(TriggerArray, trigger);
 }
 
 Light* Stairwell::Level::AddLight(const std::string &name, int type)
@@ -1065,7 +1065,7 @@ void Stairwell::Level::AddModel(Model *model)
 	if (!model)
 		return;
 
-	sbs->GetUtility()->AddArrayElement(ModelArray, model);
+	AddArrayElement(ModelArray, model);
 }
 
 Primitive* Stairwell::Level::AddPrimitive(const std::string &name)
@@ -1083,7 +1083,7 @@ void Stairwell::Level::AddPrimitive(Primitive *primitive)
 	if (!primitive)
 		return;
 
-	sbs->GetUtility()->AddArrayElement(PrimArray, primitive);
+	AddArrayElement(PrimArray, primitive);
 }
 
 CustomObject* Stairwell::Level::AddCustomObject(const std::string &name, const Vector3 &position, const Vector3 &rotation, Real max_render_distance, Real scale_multiplier)
@@ -1101,7 +1101,7 @@ void Stairwell::Level::AddCustomObject(CustomObject *object)
 	if (!object)
 		return;
 
-	sbs->GetUtility()->AddArrayElement(CustomObjectArray, object);
+	AddArrayElement(CustomObjectArray, object);
 }
 
 
@@ -1199,7 +1199,7 @@ void Stairwell::Level::RemoveCameraTexture(CameraTexture* camtex)
 {
 	//remove a cameratexture reference (does not delete the object itself)
 
-	sbs->GetUtility()->RemoveArrayElement(CameraTextureArray, camtex);
+	RemoveArrayElement(CameraTextureArray, camtex);
 }
 
 }
