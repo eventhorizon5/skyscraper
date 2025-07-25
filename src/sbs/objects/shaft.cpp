@@ -979,79 +979,43 @@ bool Shaft::Level::IsEnabled()
 void Shaft::Level::RemoveLight(Light *light)
 {
 	//remove a light reference (does not delete the object itself)
-	for (size_t i = 0; i < lights.size(); i++)
-	{
-		if (lights[i] == light)
-		{
-			lights.erase(lights.begin() + i);
-			return;
-		}
-	}
+
+	sbs->GetUtility()->RemoveArrayElement(lights, light);
 }
 
 void Shaft::Level::RemoveModel(Model *model)
 {
 	//remove a model reference (does not delete the object itself)
-	for (size_t i = 0; i < ModelArray.size(); i++)
-	{
-		if (ModelArray[i] == model)
-		{
-			ModelArray.erase(ModelArray.begin() + i);
-			return;
-		}
-	}
+
+	sbs->GetUtility()->AddArrayElement(ModelArray, model);
 }
 
 void Shaft::Level::RemovePrimitive(Primitive *prim)
 {
 	//remove a prim reference (does not delete the object itself)
-	for (size_t i = 0; i < PrimArray.size(); i++)
-	{
-		if (PrimArray[i] == prim)
-		{
-			PrimArray.erase(PrimArray.begin() + i);
-			return;
-		}
-	}
+
+	sbs->GetUtility()->AddArrayElement(PrimArray, prim);
 }
 
 void Shaft::Level::RemoveCustomObject(CustomObject *object)
 {
 	//remove a custom object reference (does not delete the object itself)
-	for (size_t i = 0; i < CustomObjectArray.size(); i++)
-	{
-		if (CustomObjectArray[i] == object)
-		{
-			CustomObjectArray.erase(CustomObjectArray.begin() + i);
-			return;
-		}
-	}
+
+	sbs->GetUtility()->AddArrayElement(CustomObjectArray, object);
 }
 
 void Shaft::Level::RemoveControl(Control *control)
 {
 	//remove a control reference (does not delete the object itself)
-	for (size_t i = 0; i < ControlArray.size(); i++)
-	{
-		if (ControlArray[i] == control)
-		{
-			ControlArray.erase(ControlArray.begin() + i);
-			return;
-		}
-	}
+
+	sbs->GetUtility()->AddArrayElement(ControlArray, control);
 }
 
 void Shaft::Level::RemoveTrigger(Trigger *trigger)
 {
 	//remove a trigger reference (does not delete the object itself)
-	for (size_t i = 0; i < TriggerArray.size(); i++)
-	{
-		if (TriggerArray[i] == trigger)
-		{
-			TriggerArray.erase(TriggerArray.begin() + i);
-			return;
-		}
-	}
+
+	sbs->GetUtility()->AddArrayElement(TriggerArray, trigger);
 }
 
 MeshObject* Shaft::Level::GetMeshObject()
@@ -1101,13 +1065,7 @@ void Shaft::Level::AddModel(Model *model)
 	if (!model)
 		return;
 
-	for (size_t i = 0; i < ModelArray.size(); i++)
-	{
-		if (ModelArray[i] == model)
-			return;
-	}
-
-	ModelArray.emplace_back(model);
+	sbs->GetUtility()->AddArrayElement(ModelArray, model);
 }
 
 Primitive* Shaft::Level::AddPrimitive(const std::string &name)
@@ -1125,13 +1083,7 @@ void Shaft::Level::AddPrimitive(Primitive *primitive)
 	if (!primitive)
 		return;
 
-	for (size_t i = 0; i < PrimArray.size(); i++)
-	{
-		if (PrimArray[i] == primitive)
-			return;
-	}
-
-	PrimArray.emplace_back(primitive);
+	sbs->GetUtility()->AddArrayElement(PrimArray, primitive);
 }
 
 CustomObject* Shaft::Level::AddCustomObject(const std::string &name, const Vector3 &position, const Vector3 &rotation, Real max_render_distance, Real scale_multiplier)
@@ -1149,13 +1101,7 @@ void Shaft::Level::AddCustomObject(CustomObject *object)
 	if (!object)
 		return;
 
-	for (size_t i = 0; i < CustomObjectArray.size(); i++)
-	{
-		if (CustomObjectArray[i] == object)
-			return;
-	}
-
-	CustomObjectArray.emplace_back(object);
+	sbs->GetUtility()->AddArrayElement(CustomObjectArray, object);
 }
 
 Control* Shaft::Level::AddControl(const std::string &name, const std::string &sound, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, int selection_position, std::vector<std::string> &action_names, std::vector<std::string> &textures)
@@ -1327,14 +1273,8 @@ Door* Shaft::Level::GetDoor(const std::string &name)
 void Shaft::Level::RemoveDoor(Door *door)
 {
 	//remove a door reference (this does not delete the object)
-	for (size_t i = 0; i < DoorArray.size(); i++)
-	{
-		if (DoorArray[i] == door)
-		{
-			DoorArray.erase(DoorArray.begin() + i);
-			return;
-		}
-	}
+
+	sbs->GetUtility()->AddArrayElement(DoorArray, door);
 }
 
 CameraTexture* Shaft::Level::AddCameraTexture(const std::string &name, int quality, Real fov, const Vector3 &position, bool use_rotation, const Vector3 &rotation)
@@ -1348,14 +1288,8 @@ CameraTexture* Shaft::Level::AddCameraTexture(const std::string &name, int quali
 void Shaft::Level::RemoveCameraTexture(CameraTexture* camtex)
 {
 	//remove a cameratexture reference (does not delete the object itself)
-	for (size_t i = 0; i < CameraTextureArray.size(); i++)
-	{
-		if (CameraTextureArray[i] == camtex)
-		{
-			CameraTextureArray.erase(CameraTextureArray.begin() + i);
-			return;
-		}
-	}
+
+	sbs->GetUtility()->AddArrayElement(CameraTextureArray, camtex);
 }
 
 }

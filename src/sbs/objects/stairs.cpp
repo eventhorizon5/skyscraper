@@ -972,92 +972,50 @@ bool Stairwell::Level::IsEnabled()
 void Stairwell::Level::RemoveDoor(Door *door)
 {
 	//remove a door reference (this does not delete the object)
-	for (size_t i = 0; i < DoorArray.size(); i++)
-	{
-		if (DoorArray[i] == door)
-		{
-			DoorArray.erase(DoorArray.begin() + i);
-			return;
-		}
-	}
+
+	sbs->GetUtility()->RemoveArrayElement(DoorArray, door);
 }
 
 void Stairwell::Level::RemoveLight(Light *light)
 {
 	//remove a light reference (does not delete the object itself)
-	for (size_t i = 0; i < lights.size(); i++)
-	{
-		if (lights[i] == light)
-		{
-			lights.erase(lights.begin() + i);
-			return;
-		}
-	}
+
+	sbs->GetUtility()->RemoveArrayElement(lights, light);
 }
 
 void Stairwell::Level::RemoveModel(Model *model)
 {
 	//remove a model reference (does not delete the object itself)
-	for (size_t i = 0; i < ModelArray.size(); i++)
-	{
-		if (ModelArray[i] == model)
-		{
-			ModelArray.erase(ModelArray.begin() + i);
-			return;
-		}
-	}
+
+	sbs->GetUtility()->RemoveArrayElement(ModelArray, model);
 }
 
 void Stairwell::Level::RemovePrimitive(Primitive *prim)
 {
 	//remove a prim reference (does not delete the object itself)
-	for (size_t i = 0; i < PrimArray.size(); i++)
-	{
-		if (PrimArray[i] == prim)
-		{
-			PrimArray.erase(PrimArray.begin() + i);
-			return;
-		}
-	}
+
+	sbs->GetUtility()->RemoveArrayElement(PrimArray, prim);
 }
 
 void Stairwell::Level::RemoveCustomObject(CustomObject *object)
 {
 	//remove a custom object reference (does not delete the object itself)
-	for (size_t i = 0; i < CustomObjectArray.size(); i++)
-	{
-		if (CustomObjectArray[i] == object)
-		{
-			CustomObjectArray.erase(CustomObjectArray.begin() + i);
-			return;
-		}
-	}
+
+	sbs->GetUtility()->RemoveArrayElement(CustomObjectArray, object);
 }
 
 void Stairwell::Level::RemoveControl(Control *control)
 {
 	//remove a control reference (does not delete the object itself)
-	for (size_t i = 0; i < ControlArray.size(); i++)
-	{
-		if (ControlArray[i] == control)
-		{
-			ControlArray.erase(ControlArray.begin() + i);
-			return;
-		}
-	}
+
+	sbs->GetUtility()->RemoveArrayElement(ControlArray, control);
 }
 
 void Stairwell::Level::RemoveTrigger(Trigger *trigger)
 {
 	//remove a trigger reference (does not delete the object itself)
-	for (size_t i = 0; i < TriggerArray.size(); i++)
-	{
-		if (TriggerArray[i] == trigger)
-		{
-			TriggerArray.erase(TriggerArray.begin() + i);
-			return;
-		}
-	}
+
+	sbs->GetUtility()->RemoveArrayElement(TriggerArray, trigger);
 }
 
 Light* Stairwell::Level::AddLight(const std::string &name, int type)
@@ -1107,13 +1065,7 @@ void Stairwell::Level::AddModel(Model *model)
 	if (!model)
 		return;
 
-	for (size_t i = 0; i < ModelArray.size(); i++)
-	{
-		if (ModelArray[i] == model)
-			return;
-	}
-
-	ModelArray.emplace_back(model);
+	sbs->GetUtility()->AddArrayElement(ModelArray, model);
 }
 
 Primitive* Stairwell::Level::AddPrimitive(const std::string &name)
@@ -1131,13 +1083,7 @@ void Stairwell::Level::AddPrimitive(Primitive *primitive)
 	if (!primitive)
 		return;
 
-	for (size_t i = 0; i < PrimArray.size(); i++)
-	{
-		if (PrimArray[i] == primitive)
-			return;
-	}
-
-	PrimArray.emplace_back(primitive);
+	sbs->GetUtility()->AddArrayElement(PrimArray, primitive);
 }
 
 CustomObject* Stairwell::Level::AddCustomObject(const std::string &name, const Vector3 &position, const Vector3 &rotation, Real max_render_distance, Real scale_multiplier)
@@ -1155,13 +1101,7 @@ void Stairwell::Level::AddCustomObject(CustomObject *object)
 	if (!object)
 		return;
 
-	for (size_t i = 0; i < CustomObjectArray.size(); i++)
-	{
-		if (CustomObjectArray[i] == object)
-			return;
-	}
-
-	CustomObjectArray.emplace_back(object);
+	sbs->GetUtility()->AddArrayElement(CustomObjectArray, object);
 }
 
 
@@ -1258,14 +1198,8 @@ CameraTexture* Stairwell::Level::AddCameraTexture(const std::string &name, int q
 void Stairwell::Level::RemoveCameraTexture(CameraTexture* camtex)
 {
 	//remove a cameratexture reference (does not delete the object itself)
-	for (size_t i = 0; i < CameraTextureArray.size(); i++)
-	{
-		if (CameraTextureArray[i] == camtex)
-		{
-			CameraTextureArray.erase(CameraTextureArray.begin() + i);
-			return;
-		}
-	}
+
+	sbs->GetUtility()->RemoveArrayElement(CameraTextureArray, camtex);
 }
 
 }

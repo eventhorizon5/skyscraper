@@ -84,6 +84,56 @@ public:
 		return status;
 	}
 
+	//AddArrayElement() function
+	template <typename T>
+	bool AddArrayElement(std::vector<T*> &array, T* object, bool check = false)
+	{
+		//add an element to an array
+
+		if (!object)
+			return false;
+
+		if (check == true)
+		{
+			for (size_t i = 0; i < array.size(); i++)
+			{
+				//exit if already registered
+				if (array[i] == object)
+					return false;
+			}
+		}
+
+		array.emplace_back(object);
+		return true;
+	}
+
+	//RemoveArrayElement() function
+	template <typename T>
+	bool RemoveArrayElement(std::vector<T*> &array, T* object)
+	{
+		if (!object)
+			return false;
+
+		if (array.empty())
+			return false;
+
+		if (array.back() == object)
+		{
+			array.pop_back();
+			return true;
+		}
+
+		for (size_t i = 0; i < array.size(); i++)
+		{
+			if (array[i] == object)
+			{
+				array.erase(array.begin() + i);
+				return true;
+			}
+		}
+		return false;
+	}
+
 private:
 
 	//Cut function work polygons
