@@ -80,7 +80,6 @@ VM::VM()
 	macos_major = 0;
 	macos_minor = 0;
 
-<<<<<<< HEAD
 	//initialize loader info
 	loadinfo.filename = "";
 	loadinfo.need_process = false;
@@ -89,12 +88,11 @@ VM::VM()
 	loadinfo.parent = 0;
 	loadinfo.position = Vector3::ZERO;
 	loadinfo.rotation = 0.0;
-=======
+
 	version = "2.1";
 	version_rev = ToString(GIT_REV);
 	version_state = "Alpha";
 	version_full = version + ".0." + version_rev;
->>>>>>> master
 
 	//create HAL instance
 	hal = new HAL(this);
