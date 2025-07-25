@@ -141,8 +141,11 @@ private:
 	Ogre::TexturePtr LoadTexture(const std::string &filename, int mipmaps, bool &has_alpha, bool use_alpha_color = false, Ogre::ColourValue alpha_color = Ogre::ColourValue::Black);
 	void UnloadMaterials();
 	bool ComputeTextureSpace(Matrix3 &m, Vector3 &v, const Vector3 &v_orig, const Vector3 &v1, Real len1, const Vector3 &v2, Real len2);
+	void Report(const std::string &message);
+	bool ReportError(const std::string &message);
 
 	std::vector<Texture*> textures;
+	std::vector<TextureImage*> texture_images;
 	std::vector<Ogre::TexturePtr> manual_textures;
 
 	//textures/materials count
