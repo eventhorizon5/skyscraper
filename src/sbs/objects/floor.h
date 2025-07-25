@@ -190,6 +190,9 @@ private:
 	std::vector<MovingWalkway*> MovingWalkwayArray;
 
 	int callstation_index;
+
+	//Container object
+	Container *container;
 };
 
 }
