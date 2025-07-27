@@ -1110,7 +1110,7 @@ void PolyMesh::AddPolygon(Wall* wallobject, const std::string &texture, const st
 			std::string NewName = name;
 			if (DrawMainN == true)
 				NewName.append(":" + ToString(i));
-			std::string final_texture = texture;
+			std::string final_texture = side_texture;
 			if (texturemanager->TextureOverride == true)
 			{
 				if (DrawSideN == true)
