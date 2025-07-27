@@ -1030,7 +1030,7 @@ Wall* PolyMesh::CreateWallBox2(MeshObject* mesh, const std::string &name, const 
 	return CreateWallBox(mesh, name, texture, x1, x2, z1, z2, height_in, voffset, tw, th, inside, outside, top, bottom, autosize);
 }
 
-void PolyMesh::AddPolygon(Wall* wallobject, const std::string &texture, PolyArray &varray, Real tw, Real th, bool report)
+void PolyMesh::AddPolygon(Wall* wallobject, const std::string &texture, const std::string &side_texture, Real thickness, PolyArray &varray, Real tw, Real th, bool report)
 {
 	//creates a polygon in the specified wall object
 
@@ -1051,7 +1051,7 @@ void PolyMesh::AddPolygon(Wall* wallobject, const std::string &texture, PolyArra
 	//create 2 polygons (front and back) from the vertex array
 
 	//get polygon native direction
-	Vector3 direction = sbs->GetUtility()->GetPolygonDirection(varray1);
+	Vector3 direction = sbs->GetUtility()->GetPolygonDirection(varray);
 
 	//if the polygon is facing right, down or to the back, reverse faces
 	//to keep the vertices clockwise
@@ -1075,6 +1075,13 @@ void PolyMesh::AddPolygon(Wall* wallobject, const std::string &texture, PolyArra
 		}
 	}
 
+	//extrude given polygon
+	PolygonSet polyset;
+	ExtrudePolygon(varray1, thickness, polyset);
+
+	if (polyset.size() < 2)
+		return;
+
 	//add the polygons
 	if (DrawMainN == true)
 	{
@@ -1084,7 +1091,7 @@ void PolyMesh::AddPolygon(Wall* wallobject, const std::string &texture, PolyArra
 		std::string final_texture = texture;
 		if (texturemanager->TextureOverride == true)
 			final_texture = texturemanager->mainnegtex;
-		wallobject->AddPolygon(NewName, final_texture, varray1, tw, th, true);
+		wallobject->AddPolygon(NewName, final_texture, polyset[0], tw, th, true);
 	}
 	if (DrawMainP == true)
 	{
@@ -1094,11 +1101,29 @@ void PolyMesh::AddPolygon(Wall* wallobject, const std::string &texture, PolyArra
 		std::string final_texture = texture;
 		if (texturemanager->TextureOverride == true)
 			final_texture = texturemanager->mainpostex;
-		wallobject->AddPolygon(NewName, final_texture, varray2, tw, th, true);
+		wallobject->AddPolygon(NewName, final_texture, polyset[1], tw, th, true);
+	}
+	if ((DrawSideN || DrawSideP) && polyset.size() > 2 && thickness > 0.0)
+	{
+		for (size_t i = 2; i < polyset.size(); ++i)
+		{
+			std::string NewName = name;
+			if (DrawMainN == true)
+				NewName.append(":" + ToString(i));
+			std::string final_texture = texture;
+			if (texturemanager->TextureOverride == true)
+			{
+				if (DrawSideN == true)
+					final_texture = texturemanager->sidenegtex;
+				else
+					final_texture = texturemanager->sidepostex;
+			}
+			wallobject->AddPolygon(NewName, final_texture, polyset[i], tw, th, true);
+		}
 	}
 }
 
-Wall* PolyMesh::AddCustomWall(MeshObject* mesh, const std::string &name, const std::string &texture, PolyArray &varray, Real tw, Real th)
+Wall* PolyMesh::AddCustomWall(MeshObject* mesh, const std::string &name, const std::string &texture, const std::string &side_texture, Real thickness, PolyArray &varray, Real tw, Real th)
 {
 	//Adds a wall from a specified array of 3D vectors
 
@@ -1109,12 +1134,12 @@ Wall* PolyMesh::AddCustomWall(MeshObject* mesh, const std::string &name, const s
 	Wall *wall = mesh->CreateWallObject(name);
 
 	//create polygon in wall object
-	AddPolygon(wall, texture, varray, tw, th);
+	AddPolygon(wall, texture, side_texture, thickness, varray, tw, th);
 
 	return wall;
 }
 
-Wall* PolyMesh::AddCustomFloor(MeshObject* mesh, const std::string &name, const std::string &texture, std::vector<Vector2> &varray, Real altitude, Real tw, Real th)
+Wall* PolyMesh::AddCustomFloor(MeshObject* mesh, const std::string &name, const std::string &texture, const std::string &side_texture, Real thickness, std::vector<Vector2> &varray, Real altitude, Real tw, Real th)
 {
 	//Same as AddCustomWall, with only one altitude value value
 	PolyArray varray3;
@@ -1127,10 +1152,10 @@ Wall* PolyMesh::AddCustomFloor(MeshObject* mesh, const std::string &name, const 
 	}
 
 	//pass data on to AddCustomWall function
-	return AddCustomWall(mesh, name, texture, varray3, tw, th);
+	return AddCustomWall(mesh, name, texture, side_texture, thickness, varray3, tw, th);
 }
 
-Wall* PolyMesh::AddTriangleWall(MeshObject* mesh, const std::string &name, const std::string &texture, Real x1, Real y1, Real z1, Real x2, Real y2, Real z2, Real x3, Real y3, Real z3, Real tw, Real th)
+Wall* PolyMesh::AddTriangleWall(MeshObject* mesh, const std::string &name, const std::string &texture, const std::string &side_texture, Real thickness, Real x1, Real y1, Real z1, Real x2, Real y2, Real z2, Real x3, Real y3, Real z3, Real tw, Real th)
 {
 	//Adds a triangular wall with the specified dimensions
 	PolyArray varray;
@@ -1142,7 +1167,7 @@ Wall* PolyMesh::AddTriangleWall(MeshObject* mesh, const std::string &name, const
 	varray.emplace_back(Vector3(x3, y3, z3));
 
 	//pass data on to AddCustomWall function
-	return AddCustomWall(mesh, name, texture, varray, tw, th);
+	return AddCustomWall(mesh, name, texture, side_texture, thickness, varray, tw, th);
 }
 
 bool PolyMesh::SetWallOrientation(std::string direction)
@@ -1348,6 +1373,45 @@ int PolyMesh::GetPolygonCount()
 {
 	//return total number of registered polygons
 	return PolygonCount;
+}
+
+void PolyMesh::ExtrudePolygon(PolyArray &polygon, Real thickness, PolygonSet &output_faces)
+{
+	//extrude the given polygon to the specified thickness
+	//output_faces will contain the resulting polygons
+
+	Real d;
+	Vector3 normal = sbs->GetUtility()->ComputeNormal(polygon, d);
+	PolyArray polygon2;
+	for (const auto& v : polygon)
+	{
+		polygon2.emplace_back(v + normal * thickness);
+	}
+
+	//add top face (original polygon)
+	output_faces.emplace_back(polygon);
+
+	//bottom face (extruded polygon) must be clockwise, so reverse the order of vertices
+    PolyArray reversed(polygon2.rbegin(), polygon2.rend());
+    output_faces.emplace_back(reversed);
+
+	//exit if no side faces needed
+	if (thickness == 0)
+		return;
+
+	//add side faces
+	size_t n = polygon.size();
+	for (size_t i = 0; i < n; ++i)
+	{
+		Vector3 v0 = polygon[i];
+		Vector3 v1 = polygon[(i + 1) % n];
+		Vector3 v2 = polygon2[(i + 1) % n];
+		Vector3 v3 = polygon2[i];
+
+		//side face as quad: v0, v1, v2, v3, reversed
+		PolyArray array {v3, v2, v1, v0};
+		output_faces.emplace_back(array);
+	}
 }
 
 }

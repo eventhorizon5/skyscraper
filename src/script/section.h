@@ -83,6 +83,9 @@ public:
 	bool InWhile;
 	bool setshaftdoors;
 	bool CheckScript; //if true, quick-checks script execution, and exits
+	std::string extrusion_texture; //side texture used for polygon extrusion
+	Real extrusion_thickness; //polygon extrusion thickness
+	bool extrude;
 };
 
 class ScriptProcessor::GlobalsSection : public ScriptProcessor::Section
