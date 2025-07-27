@@ -88,11 +88,11 @@ bool TimerObject::Loop()
 		if (sbs->Verbose)
 			Report("Notify");
 
-		Notify();
-		LastHit = CurrentTime;
-
 		if (OneShot == true)
 			Stop();
+
+		Notify();
+		LastHit = CurrentTime;
 	}
 
 	return true;
