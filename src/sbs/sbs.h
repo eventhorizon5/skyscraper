@@ -117,7 +117,6 @@ namespace SBS {
 	class RouteController;
 	class Texture;
 	class TextureImage;
-	class Container;
 
 	typedef std::vector<Vector3> PolyArray;
 	typedef std::vector<PolyArray> PolygonSet;
