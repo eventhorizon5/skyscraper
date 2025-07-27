@@ -36,9 +36,23 @@
 #include "utility.h"
 #include "texture.h"
 #include "teximage.h"
+#include "timer.h"
 #include "texman.h"
 
 namespace SBS {
+
+class TextureManager::Timer : public TimerObject
+{
+public:
+	TextureManager *parent;
+	Slideshow *slideshow;
+	Timer(const std::string &name, TextureManager *parent, Slideshow *slideshow) : TimerObject(parent, name)
+	{
+		this->parent = parent;
+		this->slideshow = slideshow;
+	}
+	virtual void Notify();
+};
 
 TextureManager::TextureManager(Object *parent) : Object(parent)
 {
@@ -105,6 +119,13 @@ TextureManager::TextureManager(Object *parent) : Object(parent)
 
 TextureManager::~TextureManager()
 {
+	//delete slideshow objects
+	for (size_t i = 0; i < slideshows.size(); i++)
+	{
+		if (slideshows[i])
+			delete slideshows[i];
+	}
+
 	//delete materials
 	UnloadMaterials();
 
@@ -134,6 +155,24 @@ TextureManager::~TextureManager()
 		if (texture_images[i])
 			delete texture_images[i];
 	}
+}
+
+void TextureManager::Timer::Notify()
+{
+	//slideshow timer
+
+	if (!slideshow)
+		return;
+
+	slideshow->iterator++;
+	if (slideshow->iterator >= slideshow->filenames.size())
+		slideshow->iterator = 0;
+
+	//change texture
+	parent->SetTexture(slideshow->name, slideshow->filenames[slideshow->iterator]);
+ 
+	//set timer interval for next run, and enable timer
+	Start(slideshow->durations[slideshow->iterator] * 1000, true);
 }
 
 bool TextureManager::LoadTexture(const std::string &filename, const std::string &name, Real widthmult, Real heightmult, bool enable_force, bool force_mode, int mipmaps, bool use_alpha_color, Ogre::ColourValue alpha_color)
@@ -170,6 +209,87 @@ bool TextureManager::LoadTexture(const std::string &filename, const std::string 
 		Report("Loaded texture '" + filename2 + "' as '" + matname + "', size " + ToString((int)mTex->getSize()));
 	else
 		Report("Loaded texture '" + filename2 + "' as '" + matname + "'");
+
+	return true;
+}
+
+bool TextureManager::CreateSlideshow(const std::string &name, std::vector<std::string> filenames, std::vector<Real> durations, Real widthmult, Real heightmult, bool enable_force, bool force_mode, int mipmaps, bool use_alpha_color, Ogre::ColourValue alpha_color)
+{
+	//creates an animated slideshow
+	//this is similar to the LoadAnimatedTexture command, but each image frame has a separate duration
+
+	if (filenames.size() == 0 || durations.size() == 0)
+		return false;
+	if (filenames.size() != durations.size())
+		return false;
+
+	std::vector<std::string> filenames2;
+
+	size_t num_frames = filenames.size();
+
+	//exit if already loaded
+	if (MaterialExists(name))
+		return ReportError("Texture " + name + " already exists");
+
+	//first verify the filenames
+	for (size_t i = 0; i < filenames.size(); i++)
+	{
+		TrimString(filenames[i]);
+		filenames2.emplace_back(sbs->GetUtility()->VerifyFile(filenames[i]));
+	}
+
+	bool has_alpha = false;
+
+	size_t size = 0;
+	for (size_t i = 0; i < filenames2.size(); i++)
+	{
+		bool has_alpha2 = false;
+
+		//load texture
+		Ogre::TexturePtr mTex = LoadTexture(filenames2[i], mipmaps, has_alpha2, use_alpha_color, alpha_color);
+
+		if (!mTex)
+			return false;
+		std::string texturename = mTex->getName();
+
+		if (has_alpha2 == true)
+			has_alpha = true;
+
+		size += mTex->getSize();
+
+		if (sbs->Verbose)
+			Report("Loaded texture " + filenames2[i] + ", size " + ToString((int)mTex->getSize()));
+	}
+
+	//create a new material
+	std::string matname = TrimStringCopy(name);
+	Ogre::MaterialPtr mMat = CreateMaterial(matname, "General");
+
+	//bind first texture to material
+	Ogre::TextureUnitState* state = BindTextureToMaterial(mMat, filenames2[0], has_alpha);
+
+	//create slideshow object
+	if (state)
+	{
+		Slideshow *slideshow = new Slideshow();
+		slideshow->name = name;
+		slideshow->filenames = filenames2;
+		slideshow->durations = durations;
+		slideshow->iterator = 0;
+		slideshow->material = mMat;
+		slideshow->has_alpha = has_alpha;
+		slideshow->timer = new Timer(name + " Timer", this, slideshow);
+		slideshows.emplace_back(slideshow);
+		slideshow->timer->Start(durations[0] * 1000, true); //start slideshow timer
+	}
+	else
+		return false;
+
+	//add texture multipliers
+	RegisterTexture(name, "", "", widthmult, heightmult, enable_force, force_mode, size, mMat->getSize());
+
+	if (sbs->Verbose)
+		Report("Loaded animated texture " + matname);
 
 	return true;
 }
@@ -2199,6 +2319,7 @@ Ogre::MaterialPtr TextureManager::GetMaterialByName(const std::string &name, con
 
 Ogre::TextureUnitState* TextureManager::BindTextureToMaterial(Ogre::MaterialPtr mMat, std::string texture_name, bool has_alpha)
 {
+	//set texture filename of material
 	Ogre::TextureUnitState *state = mMat->getTechnique(0)->getPass(0)->createTextureUnitState(texture_name);
 
 	//enable alpha blending for related textures
@@ -2408,6 +2529,23 @@ bool TextureManager::ReportError(const std::string &message)
 	//general error reporting function
 	std::string msg = "Texture Manager: " + message;
 	return Object::ReportError(msg);
+}
+
+bool TextureManager::SetTexture(const std::string &name, const std::string &texture)
+{
+	//get texture unit state
+	Ogre::MaterialPtr mMat = GetMaterialByName(name);
+	Ogre::TextureUnitState *state = mMat->getTechnique(0)->getPass(0)->getTextureUnitState(0);
+	try
+	{
+		//set texture unit's texture image
+		state->setTextureName(texture);
+	}
+	catch (Ogre::Exception &e)
+	{
+		return ReportError("Error setting texture " + name + " to filename " + texture + "\n" + e.getDescription());
+	}
+	return true;
 }
 
 }

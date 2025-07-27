@@ -121,6 +121,36 @@ int ScriptProcessor::TexturesSection::Run(std::string &LineData)
 		return sNextLine;
 	}
 
+	//CreateSlideshow command
+	if (StartsWithNoCase(LineData, "createslideshow"))
+	{
+		//get data
+		int params = SplitData(LineData, 15, false);
+
+		if (params < 8)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = (params - 3); i <= (params - 2); i++)
+		{
+			if (!IsNumeric(tempdata[i]))
+				return ScriptError("Invalid value: " + tempdata[i]);
+		}
+
+		std::vector<std::string> filenames;
+		std::vector<Real> durations;
+		for (int i = 1; i < params - 5; i++)
+		{
+			parent->CheckFile(tempdata[i]); //check existence of file
+			filenames.emplace_back(tempdata[i]);
+			i++;
+			durations.emplace_back(ToFloat(tempdata[i]));
+		}
+
+		texturemanager->CreateSlideshow(tempdata[0], filenames, durations, ToFloat(tempdata[params - 3]), ToFloat(tempdata[params - 2]), ToBool(tempdata[params - 1]));
+		return sNextLine;
+	}
+
 	//LoadAlphaBlend command
 	if (StartsWithNoCase(LineData, "loadalphablend"))
 	{
