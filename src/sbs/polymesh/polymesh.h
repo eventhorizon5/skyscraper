@@ -74,6 +74,16 @@ public:
 	int GetWallCount();
 	int GetPolygonCount();
 	void ExtrudePolygon(PolyArray &polygon, Real thickness, PolygonSet &output_faces);
+	Vector2 GetExtents(PolyArray &varray, int coord, bool flip_z = false);
+	void Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool cutfloors, int checkwallnumber = 0, bool reset_check = true);
+	void GetDoorwayExtents(MeshObject *mesh, int checknumber, PolyArray &polygon);
+	Vector3 GetPolygonDirection(PolyArray &polygon);
+	Vector2 GetEndPoint(const Vector2 &StartPoint, Real angle, Real distance);
+	Plane ComputePlane(PolyArray &vertices, bool flip_normal = true);
+	void SplitWithPlane(int axis, PolyArray &orig, PolyArray &poly1, PolyArray &poly2, Real value);
+	Vector3 ComputeNormal(PolyArray &vertices, Real &D);
+	void ResetDoorwayWalls();
+	Wall* AddDoorwayWalls(MeshObject* mesh, const std::string &wallname, const std::string &texture, Real tw, Real th);
 
 private:
 
@@ -97,6 +107,15 @@ private:
 	bool DrawTopOld; //or back, if floor
 	bool DrawBottomOld; //or front, if floor
 
+	//Cut function work polygons
+	PolyArray temppoly, temppoly2, temppoly3, temppoly4, temppoly5, worker;
+	PolygonSet newpolys;
+
+	PolyArray newpoly;
+
+	//doorway data
+	bool wall1a, wall1b, wall2a, wall2b;
+	Vector2 wall_extents_x, wall_extents_z, wall_extents_y;
 };
 
 }

@@ -1206,7 +1206,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 			return sNextLine;
 
 		Vector2 startpoint (ToFloat(tempdata[0]), ToFloat(tempdata[1]));
-		Vector2 endpoint = Simcore->GetUtility()->GetEndPoint(startpoint, ToFloat(tempdata[2]), ToFloat(tempdata[3]));
+		Vector2 endpoint = Simcore->GetPolyMesh()->GetEndPoint(startpoint, ToFloat(tempdata[2]), ToFloat(tempdata[3]));
 
 		buffer = LineData.substr(0, found) + ToString(endpoint.x) + ", " + ToString(endpoint.y) + LineData.substr(loc2 + 1);
 		LineData = buffer;

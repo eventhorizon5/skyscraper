@@ -612,7 +612,7 @@ void Floor::Cut(const Vector3 &start, const Vector3 &end, bool cutwalls, bool cu
 		if (i > 0)
 			reset = false;
 
-		sbs->GetUtility()->Cut(Level->Walls[i], Vector3(start.x, start.y, start.z), Vector3(end.x, end.y, end.z), cutwalls, cutfloors, checkwallnumber, reset);
+		sbs->GetPolyMesh()->Cut(Level->Walls[i], Vector3(start.x, start.y, start.z), Vector3(end.x, end.y, end.z), cutwalls, cutfloors, checkwallnumber, reset);
 	}
 	if (fast == false)
 	{
@@ -621,7 +621,7 @@ void Floor::Cut(const Vector3 &start, const Vector3 &end, bool cutwalls, bool cu
 			if (!Interfloor->Walls[i])
 				continue;
 
-			sbs->GetUtility()->Cut(Interfloor->Walls[i], Vector3(start.x, start.y, start.z), Vector3(end.x, end.y, end.z), cutwalls, cutfloors, checkwallnumber, false);
+			sbs->GetPolyMesh()->Cut(Interfloor->Walls[i], Vector3(start.x, start.y, start.z), Vector3(end.x, end.y, end.z), cutwalls, cutfloors, checkwallnumber, false);
 		}
 	}
 }
@@ -664,7 +664,7 @@ void Floor::CutAll(const Vector3 &start, const Vector3 &end, bool cutwalls, bool
 			if (!sbs->External->Walls[i])
 				continue;
 
-			sbs->GetUtility()->Cut(sbs->External->Walls[i], Vector3(start.x, Altitude + start.y, start.z), Vector3(end.x, Altitude + end.y, end.z), cutwalls, cutfloors);
+			sbs->GetPolyMesh()->Cut(sbs->External->Walls[i], Vector3(start.x, Altitude + start.y, start.z), Vector3(end.x, Altitude + end.y, end.z), cutwalls, cutfloors);
 		}
 	}
 }

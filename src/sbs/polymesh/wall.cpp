@@ -111,7 +111,7 @@ Polygon* Wall::AddPolygon(const std::string &name, const std::string &texture, P
 	std::string material = sbs->GetTextureManager()->GetTextureMaterial(texture, result, true, name);
 
 	//compute plane
-	Plane plane = sbs->GetUtility()->ComputePlane(converted_vertices[0]);
+	Plane plane = sbs->GetPolyMesh()->ComputePlane(converted_vertices[0]);
 
 	Polygon* poly = new Polygon(this, name, meshwrapper, geometry, triangles, tm, tv, material, plane);
 	polygons.emplace_back(poly);
@@ -135,7 +135,7 @@ Polygon* Wall::AddPolygonSet(const std::string &name, const std::string &materia
 		return 0;
 
 	//compute plane
-	Plane plane = sbs->GetUtility()->ComputePlane(converted_vertices[0]);
+	Plane plane = sbs->GetPolyMesh()->ComputePlane(converted_vertices[0]);
 
 	Polygon* poly = new Polygon(this, name, meshwrapper, geometry, triangles, tex_matrix, tex_vector, material, plane);
 	polygons.emplace_back(poly);
@@ -313,7 +313,7 @@ Vector3 Wall::GetWallExtents(Real altitude, bool get_max)
 {
 	//return the X and Z extents of this wall object at a specific altitude, by doing a double plane cut
 
-	Utility* utility = sbs->GetUtility();
+	PolyMesh* polymesh = sbs->GetPolyMesh();
 
 	for (int i = 0; i < GetPolygonCount(); i++)
 	{
@@ -327,29 +327,29 @@ Vector3 Wall::GetWallExtents(Real altitude, bool get_max)
 		}
 
 		//if given altitude is outside of polygon's range, return 0
-		Vector2 yextents = utility->GetExtents(poly, 2);
+		Vector2 yextents = polymesh->GetExtents(poly, 2);
 		Real tmpaltitude = altitude;
 		if (tmpaltitude < yextents.x || tmpaltitude > yextents.y)
 			return Vector3(0, 0, 0);
 
 		//get upper
-		utility->SplitWithPlane(1, poly, tmp1, tmp2, tmpaltitude - 0.001);
+		polymesh->SplitWithPlane(1, poly, tmp1, tmp2, tmpaltitude - 0.001);
 
 		//get lower part of upper
-		utility->SplitWithPlane(1, tmp2, poly, tmp1, tmpaltitude + 0.001);
+		polymesh->SplitWithPlane(1, tmp2, poly, tmp1, tmpaltitude + 0.001);
 
 		Vector3 result;
 		if (get_max == false)
 		{
 			//get minimum extents
-			result.x = utility->GetExtents(poly, 1).x;
-			result.z = utility->GetExtents(poly, 3).x;
+			result.x = polymesh->GetExtents(poly, 1).x;
+			result.z = polymesh->GetExtents(poly, 3).x;
 		}
 		else
 		{
 			//get maximum extents
-			result.x = utility->GetExtents(poly, 1).y;
-			result.z = utility->GetExtents(poly, 3).y;
+			result.x = polymesh->GetExtents(poly, 1).y;
+			result.z = polymesh->GetExtents(poly, 3).y;
 		}
 		result.y = altitude;
 		return result; //only check the first polygon for now
