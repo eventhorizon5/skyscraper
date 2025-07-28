@@ -180,9 +180,12 @@ bool TextureManager::LoadTexture(const std::string &filename, const std::string 
 	//first verify the filename
 	std::string filename2 = sbs->GetUtility()->VerifyFile(filename);
 
-	//exit if already loaded
+	//unload texture if already loaded
 	if (MaterialExists(name))
-		return ReportError("Texture " + name + " already exists");
+	{
+		if (UnloadMaterial(name, "General") == true)
+			UnregisterTexture(name);
+	}
 
 	//load texture
 	bool has_alpha = false;
@@ -227,9 +230,12 @@ bool TextureManager::CreateSlideshow(const std::string &name, std::vector<std::s
 
 	size_t num_frames = filenames.size();
 
-	//exit if already loaded
+	//unload texture if already loaded
 	if (MaterialExists(name))
-		return ReportError("Texture " + name + " already exists");
+	{
+		if (UnloadMaterial(name, "General") == true)
+			UnregisterTexture(name);
+	}
 
 	//first verify the filenames
 	for (size_t i = 0; i < filenames.size(); i++)
@@ -300,9 +306,12 @@ bool TextureManager::LoadAnimatedTexture(std::vector<std::string> filenames, con
 
 	size_t num_frames = filenames.size();
 
-	//exit if already loaded
+	//unload texture if already loaded
 	if (MaterialExists(name))
-		return ReportError("Texture " + name + " already exists");
+	{
+		if (UnloadMaterial(name, "General") == true)
+			UnregisterTexture(name);
+	}
 
 	//first verify the filenames
 	for (size_t i = 0; i < filenames.size(); i++)
@@ -369,9 +378,12 @@ bool TextureManager::LoadAlphaBlendTexture(const std::string &filename, const st
 	std::string specular_filename2 = sbs->GetUtility()->VerifyFile(specular_filename);
 	std::string blend_filename2 = sbs->GetUtility()->VerifyFile(blend_filename);
 
-	//exit if already loaded
+	//unload texture if already loaded
 	if (MaterialExists(name))
-		return ReportError("Texture " + name + " already exists");
+	{
+		if (UnloadMaterial(name, "General") == true)
+			UnregisterTexture(name);
+	}
 
 	//load texture
 	bool has_alpha = false, has_alpha2 = false;
@@ -520,9 +532,12 @@ bool TextureManager::LoadTextureCropped(const std::string &filename, const std::
 	int mipmaps = -1;
 	bool use_alpha_color = false;
 
-	//exit if already loaded
+	//unload texture if already loaded
 	if (MaterialExists(name))
-		return ReportError("Texture " + name + " already exists");
+	{
+		if (UnloadMaterial(name, "General") == true)
+			UnregisterTexture(name);
+	}
 
 	//first verify the filename
 	std::string filename2 = sbs->GetUtility()->VerifyFile(filename);
@@ -818,9 +833,12 @@ bool TextureManager::AddTextToTexture(const std::string &origname, const std::st
 
 	std::string font_filename2 = sbs->GetUtility()->VerifyFile(font_filename);
 
-	//exit if already loaded
+	//unload texture if already loaded
 	if (MaterialExists(name))
-		return ReportError("Texture " + name + " already exists");
+	{
+		if (UnloadMaterial(name, "General") == true)
+			UnregisterTexture(name);
+	}
 
 	//load font
 	Ogre::FontPtr font;
@@ -969,9 +987,12 @@ bool TextureManager::AddTextureOverlay(const std::string &orig_texture, const st
 	std::string Origname = orig_texture;
 	std::string Overlay = overlay_texture;
 
-	//exit if already loaded
+	//unload texture if already loaded
 	if (MaterialExists(name))
-		return ReportError("Texture " + name + " already exists");
+	{
+		if (UnloadMaterial(name, "General") == true)
+			UnregisterTexture(name);
+	}
 
 	//get original texture
 	Ogre::MaterialPtr ptr = GetMaterialByName(Origname);
