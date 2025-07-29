@@ -2633,7 +2633,7 @@ bool TextureManager::SetTexture(const std::string &name, const std::string &text
 		}
 		catch (...)
 		{
-			return ReportError("Error setting texture " + name + " to filename " + texture);
+			continue;
 		}
 	}
 	return true;
