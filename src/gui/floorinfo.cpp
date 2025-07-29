@@ -29,6 +29,7 @@
 #include "sbs.h"
 #include "debugpanel.h"
 #include "floor.h"
+#include "manager.h"
 #include "floorinfo.h"
 
 namespace Skyscraper {
@@ -168,7 +169,7 @@ void FloorInfo::Loop()
 		//if a new escalator has been selected, update values
 		if (newfloor && floor != newfloor)
 		{
-			floor = Simcore->GetFloor(selection);
+			floor = Simcore->GetFloorManager()->GetIndex(selection);
             txtNumber->SetValue(SBS::ToString(floor->Number));
 			txtName->SetValue(floor->Name);
             txtID->SetValue(floor->ID);
@@ -197,11 +198,11 @@ void FloorInfo::BuildList(bool restore_selection)
 		int old_selection = lstFloors->GetSelection();
 		lstFloors->Clear();
 
-		for (int i = 0; i < count; i++)
+		for (int i = 0; i < Simcore->GetFloorManager()->GetCount(); i++)
 		{
-			::SBS::Floor *floor = Simcore->GetFloor(i);
+			::SBS::Floor *floor = Simcore->GetFloorManager()->GetIndex(i);
 			if (floor)
-				lstFloors->Append(SBS::ToString(i + 1) + wxT(": ") + floor->Name);
+				lstFloors->Append(SBS::ToString(floor->Number) + wxT(": ") + floor->Name);
 		}
 
 		if (count > 0)
