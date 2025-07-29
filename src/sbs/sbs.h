@@ -392,6 +392,7 @@ public:
 	MeshObject* GetLandscapeMesh();
 	Real GetUnitScale();
 	Vector3 GetCenter();
+	bool IsInitialized() { return initialized; }
 
 	//Meshes
 	MeshObject* Buildings;
@@ -406,6 +407,8 @@ public:
 	std::string InstancePrompt;
 
 private:
+
+	bool initialized;
 
 	//fps
 	int fps_frame_count;

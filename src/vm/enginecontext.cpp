@@ -189,6 +189,9 @@ void EngineContext::Run()
 		if (!Simcore)
 			continue;
 
+		if (!Simcore->IsInitialized())
+			continue;
+
 		//run script processor
 		if (processor)
 		{

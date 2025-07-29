@@ -73,6 +73,7 @@ namespace SBS {
 SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instance_number, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max) : Object(0)
 {
 	sbs = this;
+	initialized = false;
 	this->mSceneManager = mSceneManager;
 
 	version = "1.1.0." + ToString(GIT_REV);
@@ -247,6 +248,7 @@ void SBS::Initialize()
 	MapGenerator = new Map(this, "Map Generator");
 
 	//report ready status
+	initialized = true;
 	Report("Ready");
 }
 
