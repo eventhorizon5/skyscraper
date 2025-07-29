@@ -188,6 +188,7 @@ void TextureManager::StartSlideshow(const std::string &name)
 	{
 		if (slideshows[i]->name == name)
 		{
+			Report("Starting slideshow '" + name + "'");
 			slideshows[i]->timer->Start(slideshows[i]->durations[0] * 1000, true);
 			return;
 		}
@@ -203,6 +204,7 @@ void TextureManager::StopSlideshow(const std::string &name)
 	{
 		if (slideshows[i]->name == name)
 		{
+			Report("Stopping slideshow '" + name + "'");
 			slideshows[i]->timer->Stop();
 			return;
 		}
@@ -343,6 +345,7 @@ bool TextureManager::CreateSlideshow(const std::string &name, bool start, std::v
 		slideshow->has_alpha = has_alpha;
 		slideshow->timer = new Timer(name + " Timer", this, slideshow);
 		slideshows.emplace_back(slideshow);
+		Report("Created slideshow '" + name + "' with " + ToString(num_frames) + " frames");
 		if (start)
 			slideshow->timer->Start(durations[0] * 1000, true); //start slideshow timer
 	}
