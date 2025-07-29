@@ -165,15 +165,19 @@ void TextureManager::Timer::Notify()
 	if (!slideshow)
 		return;
 
-	slideshow->iterator++;
-	if (slideshow->iterator >= slideshow->filenames.size())
-		slideshow->iterator = 0;
+	if (slideshow->filenames.empty() || slideshow->durations.empty())
+		return;
 
 	//change texture
 	parent->SetTexture(slideshow->name, slideshow->filenames[slideshow->iterator]);
- 
-	//set timer interval for next run, and enable timer
+
+	//set timer for the current frame
 	Start(slideshow->durations[slideshow->iterator] * 1000, true);
+
+	//advance to next frame
+	slideshow->iterator++;
+	if (slideshow->iterator >= slideshow->filenames.size())
+		slideshow->iterator = 0;
 }
 
 bool TextureManager::LoadTexture(const std::string &filename, const std::string &name, Real widthmult, Real heightmult, bool enable_force, bool force_mode, int mipmaps, bool use_alpha_color, Ogre::ColourValue alpha_color)

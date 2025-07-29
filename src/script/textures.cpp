@@ -139,7 +139,7 @@ int ScriptProcessor::TexturesSection::Run(std::string &LineData)
 
 		std::vector<std::string> filenames;
 		std::vector<Real> durations;
-		for (int i = 1; i < params - 5; i++)
+		for (int i = 1; i < params - 4; i++)
 		{
 			parent->CheckFile(tempdata[i]); //check existence of file
 			filenames.emplace_back(tempdata[i]);

@@ -48,11 +48,15 @@ TimerObject::~TimerObject()
 
 void TimerObject::Start(int milliseconds, bool oneshot)
 {
+	if (Running == true)
+		return;
+
 	Interval = milliseconds;
 	OneShot = oneshot;
 	Running = true;
 	StartTime = sbs->GetCurrentTime();
 	LastHit = 0;
+	CurrentTime = 0;
 	sbs->RegisterTimerCallback(this);
 
 	if (sbs->Verbose)
