@@ -2557,15 +2557,18 @@ bool TextureManager::SetTexture(const std::string &name, const std::string &text
 {
 	//get texture unit state
 	Ogre::MaterialPtr mMat = GetMaterialByName(name);
-	Ogre::TextureUnitState *state = mMat->getTechnique(0)->getPass(0)->getTextureUnitState(0);
-	try
+	for (size_t i = 0; i < mMat->getNumTechniques(); i++)
 	{
-		//set texture unit's texture image
-		state->setTextureName(texture);
-	}
-	catch (Ogre::Exception &e)
-	{
-		return ReportError("Error setting texture " + name + " to filename " + texture + "\n" + e.getDescription());
+		Ogre::TextureUnitState* state = mMat->getTechnique(i)->getPass(0)->getTextureUnitState(0);
+		try
+		{
+			//set texture unit's texture image
+			state->setTextureName(texture);
+		}
+		catch (Ogre::Exception& e)
+		{
+			return ReportError("Error setting texture " + name + " to filename " + texture + "\n" + e.getDescription());
+		}
 	}
 	return true;
 }
