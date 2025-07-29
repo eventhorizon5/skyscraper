@@ -82,6 +82,8 @@
     Load data/ropes.png, Ropes, 1, 1
     Load data/metal080.jpg, Rails, 1, 1
     Load data/metal1.jpg, RailsEdge, 1, 1
+    Load data/otis-touch.gif, Touch, 1, 1
+    Load data/otis-touchlit.gif, TouchLit, 1, 1
 
     Load data/black.jpg, Black, 1, 1
     Load data/black_lit.jpg, BlackLit, 1, 1
@@ -494,6 +496,12 @@ AddAction FireServiceBypass, Elevator1, Fire1Bypass
 #Create the fire service button itself, and map the previously created actions with the textures FireOff, FireOn, and FireBypass
 <Floor 0>
     AddActionControl FireSwitch, switch.wav, front, 3, 6 - 4.125 - 0.33 - 0.1, 0.25, 0.25, 3.5, 1, FireServiceOff, FireServiceBypass, FireServiceOn, Fire1Off, Fire1Bypass, Fire1On
+<EndFloor>
+
+<Floor 0>
+    AddAction StartSlideshow, TextureManager, StartSlideshow, MySlideshow
+    AddAction StopSlideshow, TextureManager, StopSlideshow, MySlideshow
+    AddActionControl MyControl, switch.wav, front, -10, 10, 1.5, 1.5, 5, 2, StopSlideshow, StartSlideshow, Touch, TouchLit
 <EndFloor>
 
 #define a runloop function, to run code after the sim engine has started
