@@ -24,6 +24,7 @@
 #define FLOORINFO_H
 
 //(*Headers(FloorInfo)
+#include <wx/button.h>
 #include <wx/dialog.h>
 #include <wx/listbox.h>
 #include <wx/sizer.h>
@@ -42,6 +43,7 @@ class FloorInfo: public wxDialog
         void Loop();
 
         //(*Declarations(FloorInfo)
+        wxButton* bOK;
         wxListBox* lstFloors;
         wxStaticText* StaticText1;
         wxStaticText* StaticText2;
@@ -85,11 +87,13 @@ class FloorInfo: public wxDialog
         static const long ID_txtHeight;
         static const long ID_STATICTEXT9;
         static const long ID_txtIntHeight;
+        static const long ID_bOK;
         //*)
 
     private:
 
         //(*Handlers(FloorInfo)
+        void On_bOK_Click(wxCommandEvent& event);
         //*)
         void BuildList(bool restore_selection = false);
 

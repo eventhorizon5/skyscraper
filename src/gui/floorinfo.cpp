@@ -53,6 +53,7 @@ const long FloorInfo::ID_STATICTEXT8 = wxNewId();
 const long FloorInfo::ID_txtHeight = wxNewId();
 const long FloorInfo::ID_STATICTEXT9 = wxNewId();
 const long FloorInfo::ID_txtIntHeight = wxNewId();
+const long FloorInfo::ID_bOK = wxNewId();
 //*)
 
 BEGIN_EVENT_TABLE(FloorInfo,wxDialog)
@@ -66,13 +67,16 @@ FloorInfo::FloorInfo(DebugPanel* parent,wxWindowID id)
     wxFlexGridSizer* FlexGridSizer1;
     wxFlexGridSizer* FlexGridSizer2;
     wxFlexGridSizer* FlexGridSizer3;
+    wxFlexGridSizer* FlexGridSizer4;
+    wxFlexGridSizer* FlexGridSizer5;
 
-    Create(parent, id, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE, _T("id"));
-    FlexGridSizer1 = new wxFlexGridSizer(0, 3, 0, 0);
+    Create(parent, id, _("Floor Information"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE, _T("id"));
+    FlexGridSizer1 = new wxFlexGridSizer(0, 1, 0, 0);
+    FlexGridSizer4 = new wxFlexGridSizer(0, 3, 0, 0);
     FlexGridSizer2 = new wxFlexGridSizer(0, 3, 0, 0);
     lstFloors = new wxListBox(this, ID_lstFloors, wxDefaultPosition, wxSize(200,400), 0, 0, 0, wxDefaultValidator, _T("ID_lstFloors"));
     FlexGridSizer2->Add(lstFloors, 1, wxALL|wxEXPAND, 5);
-    FlexGridSizer1->Add(FlexGridSizer2, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    FlexGridSizer4->Add(FlexGridSizer2, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     FlexGridSizer3 = new wxFlexGridSizer(0, 3, 0, 0);
     StaticText1 = new wxStaticText(this, ID_STATICTEXT1, _("Number:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT1"));
     FlexGridSizer3->Add(StaticText1, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
@@ -119,9 +123,16 @@ FloorInfo::FloorInfo(DebugPanel* parent,wxWindowID id)
     txtIntHeight = new wxTextCtrl(this, ID_txtIntHeight, wxEmptyString, wxDefaultPosition, wxSize(150,-1), 0, wxDefaultValidator, _T("ID_txtIntHeight"));
     FlexGridSizer3->Add(txtIntHeight, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     FlexGridSizer3->Add(-1,-1,1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-    FlexGridSizer1->Add(FlexGridSizer3, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    FlexGridSizer4->Add(FlexGridSizer3, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    FlexGridSizer1->Add(FlexGridSizer4, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    FlexGridSizer5 = new wxFlexGridSizer(0, 3, 0, 0);
+    bOK = new wxButton(this, ID_bOK, _("OK"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bOK"));
+    FlexGridSizer5->Add(bOK, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    FlexGridSizer1->Add(FlexGridSizer5, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     SetSizer(FlexGridSizer1);
     FlexGridSizer1->SetSizeHints(this);
+
+    Connect(ID_bOK,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&FloorInfo::On_bOK_Click);
     //*)
     lastcount = 0;
 	Simcore = 0;
@@ -220,6 +231,11 @@ void FloorInfo::BuildList(bool restore_selection)
 			//Slider1->SetValue(0);
 		}
 	}
+}
+
+void FloorInfo::On_bOK_Click(wxCommandEvent& event)
+{
+    this->Close();
 }
 
 }
