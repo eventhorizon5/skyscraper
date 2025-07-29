@@ -34,11 +34,26 @@
 #include "globals.h"
 #include "sbs.h"
 #include "utility.h"
+#include "polymesh.h"
 #include "texture.h"
 #include "teximage.h"
+#include "timer.h"
 #include "texman.h"
 
 namespace SBS {
+
+class TextureManager::Timer : public TimerObject
+{
+public:
+	TextureManager *parent;
+	Slideshow *slideshow;
+	Timer(const std::string &name, TextureManager *parent, Slideshow *slideshow) : TimerObject(parent, name)
+	{
+		this->parent = parent;
+		this->slideshow = slideshow;
+	}
+	virtual void Notify();
+};
 
 TextureManager::TextureManager(Object *parent) : Object(parent)
 {
@@ -105,6 +120,13 @@ TextureManager::TextureManager(Object *parent) : Object(parent)
 
 TextureManager::~TextureManager()
 {
+	//delete slideshow objects
+	for (size_t i = 0; i < slideshows.size(); i++)
+	{
+		if (slideshows[i])
+			delete slideshows[i];
+	}
+
 	//delete materials
 	UnloadMaterials();
 
@@ -136,14 +158,93 @@ TextureManager::~TextureManager()
 	}
 }
 
+void TextureManager::Timer::Notify()
+{
+	//slideshow timer
+
+	if (!slideshow)
+		return;
+
+	if (slideshow->filenames.empty() || slideshow->durations.empty())
+		return;
+
+	//change texture
+	parent->SetTexture(slideshow->name, slideshow->filenames[slideshow->iterator]);
+
+	//set timer for the current frame
+	Start(slideshow->durations[slideshow->iterator] * 1000, true);
+
+	//advance to next frame
+	slideshow->iterator++;
+	if (slideshow->iterator >= slideshow->filenames.size())
+		slideshow->iterator = 0;
+}
+
+void TextureManager::StartSlideshow(const std::string &name)
+{
+	//start a slideshow by name
+
+	for (size_t i = 0; i < slideshows.size(); i++)
+	{
+		if (slideshows[i]->name == name)
+		{
+			Report("Starting slideshow '" + name + "'");
+			slideshows[i]->timer->Start(slideshows[i]->durations[0] * 1000, true);
+			return;
+		}
+	}
+	return;
+}
+
+void TextureManager::StopSlideshow(const std::string &name)
+{
+	//stop a slideshow by name
+
+	for (size_t i = 0; i < slideshows.size(); i++)
+	{
+		if (slideshows[i]->name == name)
+		{
+			Report("Stopping slideshow '" + name + "'");
+			slideshows[i]->timer->Stop();
+			return;
+		}
+	}
+	return;
+}
+
+void TextureManager::StartAllSlideshows()
+{
+	//start all slideshows
+
+	for (size_t i = 0; i < slideshows.size(); i++)
+	{
+		if (slideshows[i])
+			slideshows[i]->timer->Start(slideshows[i]->durations[0] * 1000, true);
+	}
+}
+
+void TextureManager::StopAllSlideshows()
+{
+	//stop all slideshows
+
+	for (size_t i = 0; i < slideshows.size(); i++)
+	{
+		if (slideshows[i])
+			slideshows[i]->timer->Stop();
+	}
+}
+
 bool TextureManager::LoadTexture(const std::string &filename, const std::string &name, Real widthmult, Real heightmult, bool enable_force, bool force_mode, int mipmaps, bool use_alpha_color, Ogre::ColourValue alpha_color)
 {
 	//first verify the filename
 	std::string filename2 = sbs->GetUtility()->VerifyFile(filename);
 
-	//exit if already loaded
+	//unload texture if already loaded
 	if (MaterialExists(name))
-		return ReportError("Texture " + name + " already exists");
+	{
+		if (UnloadMaterial(name, "General") == true)
+			UnregisterTexture(name);
+	}
 
 	//load texture
 	bool has_alpha = false;
@@ -174,15 +275,104 @@ bool TextureManager::LoadTexture(const std::string &filename, const std::string 
 	return true;
 }
 
+bool TextureManager::CreateSlideshow(const std::string &name, bool start, std::vector<std::string> filenames, std::vector<Real> durations, Real widthmult, Real heightmult, bool enable_force, bool force_mode, int mipmaps, bool use_alpha_color, Ogre::ColourValue alpha_color)
+{
+	//creates an animated slideshow
+	//this is similar to the LoadAnimatedTexture command, but each image frame has a separate duration
+
+	if (filenames.size() == 0 || durations.size() == 0)
+		return false;
+	if (filenames.size() != durations.size())
+		return false;
+
+	std::vector<std::string> filenames2;
+
+	size_t num_frames = filenames.size();
+
+	//unload texture if already loaded
+	if (MaterialExists(name))
+	{
+		if (UnloadMaterial(name, "General") == true)
+			UnregisterTexture(name);
+	}
+
+	//first verify the filenames
+	for (size_t i = 0; i < filenames.size(); i++)
+	{
+		TrimString(filenames[i]);
+		filenames2.emplace_back(sbs->GetUtility()->VerifyFile(filenames[i]));
+	}
+
+	bool has_alpha = false;
+
+	size_t size = 0;
+	for (size_t i = 0; i < filenames2.size(); i++)
+	{
+		bool has_alpha2 = false;
+
+		//load texture
+		Ogre::TexturePtr mTex = LoadTexture(filenames2[i], mipmaps, has_alpha2, use_alpha_color, alpha_color);
+
+		if (!mTex)
+			return false;
+		std::string texturename = mTex->getName();
+
+		if (has_alpha2 == true)
+			has_alpha = true;
+
+		size += mTex->getSize();
+
+		if (sbs->Verbose)
+			Report("Loaded texture " + filenames2[i] + ", size " + ToString((int)mTex->getSize()));
+	}
+
+	//create a new material
+	std::string matname = TrimStringCopy(name);
+	Ogre::MaterialPtr mMat = CreateMaterial(matname, "General");
+
+	//bind first texture to material
+	Ogre::TextureUnitState* state = BindTextureToMaterial(mMat, filenames2[0], has_alpha);
+
+	//create slideshow object
+	if (state)
+	{
+		Slideshow *slideshow = new Slideshow();
+		slideshow->name = name;
+		slideshow->filenames = filenames2;
+		slideshow->durations = durations;
+		slideshow->iterator = 0;
+		slideshow->material = mMat;
+		slideshow->has_alpha = has_alpha;
+		slideshow->timer = new Timer(name + " Timer", this, slideshow);
+		slideshows.emplace_back(slideshow);
+		Report("Created slideshow '" + name + "' with " + ToString(num_frames) + " frames");
+		if (start)
+			slideshow->timer->Start(durations[0] * 1000, true); //start slideshow timer
+	}
+	else
+		return false;
+
+	//add texture multipliers
+	RegisterTexture(name, "", "", widthmult, heightmult, enable_force, force_mode, size, mMat->getSize());
+
+	if (sbs->Verbose)
+		Report("Loaded animated texture " + matname);
+
+	return true;
+}
+
 bool TextureManager::LoadAnimatedTexture(std::vector<std::string> filenames, const std::string &name, Real duration, Real widthmult, Real heightmult, bool enable_force, bool force_mode, int mipmaps, bool use_alpha_color, Ogre::ColourValue alpha_color)
 {
 	std::vector<std::string> filenames2;
 
 	size_t num_frames = filenames.size();
 
-	//exit if already loaded
+	//unload texture if already loaded
 	if (MaterialExists(name))
-		return ReportError("Texture " + name + " already exists");
+	{
+		if (UnloadMaterial(name, "General") == true)
+			UnregisterTexture(name);
+	}
 
 	//first verify the filenames
 	for (size_t i = 0; i < filenames.size(); i++)
@@ -249,9 +439,12 @@ bool TextureManager::LoadAlphaBlendTexture(const std::string &filename, const st
 	std::string specular_filename2 = sbs->GetUtility()->VerifyFile(specular_filename);
 	std::string blend_filename2 = sbs->GetUtility()->VerifyFile(blend_filename);
 
-	//exit if already loaded
+	//unload texture if already loaded
 	if (MaterialExists(name))
-		return ReportError("Texture " + name + " already exists");
+	{
+		if (UnloadMaterial(name, "General") == true)
+			UnregisterTexture(name);
+	}
 
 	//load texture
 	bool has_alpha = false, has_alpha2 = false;
@@ -400,9 +593,12 @@ bool TextureManager::LoadTextureCropped(const std::string &filename, const std::
 	int mipmaps = -1;
 	bool use_alpha_color = false;
 
-	//exit if already loaded
+	//unload texture if already loaded
 	if (MaterialExists(name))
-		return ReportError("Texture " + name + " already exists");
+	{
+		if (UnloadMaterial(name, "General") == true)
+			UnregisterTexture(name);
+	}
 
 	//first verify the filename
 	std::string filename2 = sbs->GetUtility()->VerifyFile(filename);
@@ -698,9 +894,12 @@ bool TextureManager::AddTextToTexture(const std::string &origname, const std::st
 
 	std::string font_filename2 = sbs->GetUtility()->VerifyFile(font_filename);
 
-	//exit if already loaded
+	//unload texture if already loaded
 	if (MaterialExists(name))
-		return ReportError("Texture " + name + " already exists");
+	{
+		if (UnloadMaterial(name, "General") == true)
+			UnregisterTexture(name);
+	}
 
 	//load font
 	Ogre::FontPtr font;
@@ -849,9 +1048,12 @@ bool TextureManager::AddTextureOverlay(const std::string &orig_texture, const st
 	std::string Origname = orig_texture;
 	std::string Overlay = overlay_texture;
 
-	//exit if already loaded
+	//unload texture if already loaded
 	if (MaterialExists(name))
-		return ReportError("Texture " + name + " already exists");
+	{
+		if (UnloadMaterial(name, "General") == true)
+			UnregisterTexture(name);
+	}
 
 	//get original texture
 	Ogre::MaterialPtr ptr = GetMaterialByName(Origname);
@@ -1163,7 +1365,7 @@ bool TextureManager::GetTextureMapping(PolyArray &vertices, Vector3 &v1, Vector3
 
 		//determine the largest projection dimension (the dimension that the polygon is generally on;
 		//with a floor Y would be biggest)
-		Plane plane = sbs->GetUtility()->ComputePlane(vertices);
+		Plane plane = sbs->GetPolyMesh()->ComputePlane(vertices);
 		Vector3 normal = plane.normal;
 
 		direction = 0; //x; faces left/right
@@ -1229,8 +1431,8 @@ bool TextureManager::GetTextureMapping(PolyArray &vertices, Vector3 &v1, Vector3
 
 		//get extents of both dimensions, since the polygon is projected in 2D as X and Y coordinates
 		Vector2 a, b;
-		a = sbs->GetUtility()->GetExtents(varray, 1);
-		b = sbs->GetUtility()->GetExtents(varray, 2);
+		a = sbs->GetPolyMesh()->GetExtents(varray, 1);
+		b = sbs->GetPolyMesh()->GetExtents(varray, 2);
 
 		//set the result 2D coordinates
 		if (direction == 0)
@@ -2199,6 +2401,7 @@ Ogre::MaterialPtr TextureManager::GetMaterialByName(const std::string &name, con
 
 Ogre::TextureUnitState* TextureManager::BindTextureToMaterial(Ogre::MaterialPtr mMat, std::string texture_name, bool has_alpha)
 {
+	//set texture filename of material
 	Ogre::TextureUnitState *state = mMat->getTechnique(0)->getPass(0)->createTextureUnitState(texture_name);
 
 	//enable alpha blending for related textures
@@ -2408,6 +2611,26 @@ bool TextureManager::ReportError(const std::string &message)
 	//general error reporting function
 	std::string msg = "Texture Manager: " + message;
 	return Object::ReportError(msg);
+}
+
+bool TextureManager::SetTexture(const std::string &name, const std::string &texture)
+{
+	//get texture unit state
+	Ogre::MaterialPtr mMat = GetMaterialByName(name);
+	for (size_t i = 0; i < mMat->getNumTechniques(); i++)
+	{
+		Ogre::TextureUnitState* state = mMat->getTechnique(i)->getPass(0)->getTextureUnitState(0);
+		try
+		{
+			//set texture unit's texture image
+			state->setTextureName(texture);
+		}
+		catch (Ogre::Exception& e)
+		{
+			return ReportError("Error setting texture " + name + " to filename " + texture + "\n" + e.getDescription());
+		}
+	}
+	return true;
 }
 
 }

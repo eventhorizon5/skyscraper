@@ -123,7 +123,7 @@ Vector2 Polygon::GetExtents(int coord)
 		}
 	}
 
-	Vector2 extents = sbs->GetUtility()->GetExtents(poly, coord);
+	Vector2 extents = sbs->GetPolyMesh()->GetExtents(poly, coord);
 
 	return extents;
 }

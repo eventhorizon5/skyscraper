@@ -794,14 +794,8 @@ void DoorManager::RemoveDoor(Door *door)
 {
 	//remove a door from the array
 	//this does not delete the object
-	for (size_t i = 0; i < Array.size(); i++)
-	{
-		if (Array[i] == door)
-		{
-			Array.erase(Array.begin() + i);
-			return;
-		}
-	}
+
+	RemoveArrayElement(Array, door);
 }
 
 int DoorManager::GetCount()
@@ -869,14 +863,8 @@ void RevolvingDoorManager::RemoveDoor(RevolvingDoor *door)
 {
 	//remove a door from the array
 	//this does not delete the object
-	for (size_t i = 0; i < Array.size(); i++)
-	{
-		if (Array[i] == door)
-		{
-			Array.erase(Array.begin() + i);
-			return;
-		}
-	}
+
+	RemoveArrayElement(Array, door);
 }
 
 int RevolvingDoorManager::GetCount()
@@ -1000,6 +988,7 @@ Vehicle* VehicleManager::GetIndex(int index)
 void VehicleManager::Remove(Vehicle *vehicle)
 {
 	//remove a vehicle (does not delete the object)
+
 	for (size_t i = 0; i < Array.size(); i++)
 	{
 		if (Array[i].object == vehicle)

@@ -274,9 +274,9 @@ void Shaft::CutFloors(bool relative, const Vector2 &start, const Vector2 &end, R
 				continue;
 
 			if (relative == true)
-				sbs->GetUtility()->Cut(sbs->External->Walls[i], Vector3(GetPosition().x + start.x, voffset1, GetPosition().z + start.y), Vector3(GetPosition().x + end.x, voffset2, GetPosition().z + end.y), false, true);
+				sbs->GetPolyMesh()->Cut(sbs->External->Walls[i], Vector3(GetPosition().x + start.x, voffset1, GetPosition().z + start.y), Vector3(GetPosition().x + end.x, voffset2, GetPosition().z + end.y), false, true);
 			else
-				sbs->GetUtility()->Cut(sbs->External->Walls[i], Vector3(start.x, voffset1, start.y), Vector3(end.x, voffset2, end.y), false, true);
+				sbs->GetPolyMesh()->Cut(sbs->External->Walls[i], Vector3(start.x, voffset1, start.y), Vector3(end.x, voffset2, end.y), false, true);
 		}
 	}
 }
@@ -877,37 +877,37 @@ bool Shaft::Level::Enabled(bool value, bool EnableShaftDoors)
 		enabled = value;
 
 		//doors
-		result = utility->EnableArray(DoorArray, value);
+		result = EnableArray(DoorArray, value);
 		if (!result)
 			status = false;
 
 		//controls
-		result = utility->EnableArray(ControlArray, value);
+		result = EnableArray(ControlArray, value);
 		if (!result)
 			status = false;
 
 		//triggers
-		result = utility->EnableArray(TriggerArray, value);
+		result = EnableArray(TriggerArray, value);
 		if (!result)
 			status = false;
 
 		//models
-		result = utility->EnableArray(ModelArray, value);
+		result = EnableArray(ModelArray, value);
 		if (!result)
 			status = false;
 
 		//primitives
-		result = utility->EnableArray(PrimArray, value);
+		result = EnableArray(PrimArray, value);
 		if (!result)
 			status = false;
 
 		//custom objects
-		result = utility->EnableArray(CustomObjectArray, value);
+		result = EnableArray(CustomObjectArray, value);
 		if (!result)
 			status = false;
 
 		//lights
-		result = utility->EnableArray(lights, value);
+		result = EnableArray(lights, value);
 		if (!result)
 			status = false;
 
@@ -964,9 +964,9 @@ bool Shaft::Level::Cut(bool relative, const Vector3 &start, const Vector3 &end, 
 			reset = false;
 
 		if (relative == true)
-			sbs->GetUtility()->Cut(mesh->Walls[i], Vector3(start.x, start.y, start.z), Vector3(end.x, end.y, end.z), cutwalls, cutfloors, checkwallnumber, reset);
+			sbs->GetPolyMesh()->Cut(mesh->Walls[i], Vector3(start.x, start.y, start.z), Vector3(end.x, end.y, end.z), cutwalls, cutfloors, checkwallnumber, reset);
 		else
-			sbs->GetUtility()->Cut(mesh->Walls[i], Vector3(start.x - GetPosition().x, start.y, start.z - GetPosition().z), Vector3(end.x - GetPosition().x, end.y, end.z - GetPosition().z), cutwalls, cutfloors, checkwallnumber, reset);
+			sbs->GetPolyMesh()->Cut(mesh->Walls[i], Vector3(start.x - GetPosition().x, start.y, start.z - GetPosition().z), Vector3(end.x - GetPosition().x, end.y, end.z - GetPosition().z), cutwalls, cutfloors, checkwallnumber, reset);
 	}
 	return true;
 }
@@ -979,79 +979,43 @@ bool Shaft::Level::IsEnabled()
 void Shaft::Level::RemoveLight(Light *light)
 {
 	//remove a light reference (does not delete the object itself)
-	for (size_t i = 0; i < lights.size(); i++)
-	{
-		if (lights[i] == light)
-		{
-			lights.erase(lights.begin() + i);
-			return;
-		}
-	}
+
+	RemoveArrayElement(lights, light);
 }
 
 void Shaft::Level::RemoveModel(Model *model)
 {
 	//remove a model reference (does not delete the object itself)
-	for (size_t i = 0; i < ModelArray.size(); i++)
-	{
-		if (ModelArray[i] == model)
-		{
-			ModelArray.erase(ModelArray.begin() + i);
-			return;
-		}
-	}
+
+	AddArrayElement(ModelArray, model);
 }
 
 void Shaft::Level::RemovePrimitive(Primitive *prim)
 {
 	//remove a prim reference (does not delete the object itself)
-	for (size_t i = 0; i < PrimArray.size(); i++)
-	{
-		if (PrimArray[i] == prim)
-		{
-			PrimArray.erase(PrimArray.begin() + i);
-			return;
-		}
-	}
+
+	AddArrayElement(PrimArray, prim);
 }
 
 void Shaft::Level::RemoveCustomObject(CustomObject *object)
 {
 	//remove a custom object reference (does not delete the object itself)
-	for (size_t i = 0; i < CustomObjectArray.size(); i++)
-	{
-		if (CustomObjectArray[i] == object)
-		{
-			CustomObjectArray.erase(CustomObjectArray.begin() + i);
-			return;
-		}
-	}
+
+	AddArrayElement(CustomObjectArray, object);
 }
 
 void Shaft::Level::RemoveControl(Control *control)
 {
 	//remove a control reference (does not delete the object itself)
-	for (size_t i = 0; i < ControlArray.size(); i++)
-	{
-		if (ControlArray[i] == control)
-		{
-			ControlArray.erase(ControlArray.begin() + i);
-			return;
-		}
-	}
+
+	AddArrayElement(ControlArray, control);
 }
 
 void Shaft::Level::RemoveTrigger(Trigger *trigger)
 {
 	//remove a trigger reference (does not delete the object itself)
-	for (size_t i = 0; i < TriggerArray.size(); i++)
-	{
-		if (TriggerArray[i] == trigger)
-		{
-			TriggerArray.erase(TriggerArray.begin() + i);
-			return;
-		}
-	}
+
+	AddArrayElement(TriggerArray, trigger);
 }
 
 MeshObject* Shaft::Level::GetMeshObject()
@@ -1101,13 +1065,7 @@ void Shaft::Level::AddModel(Model *model)
 	if (!model)
 		return;
 
-	for (size_t i = 0; i < ModelArray.size(); i++)
-	{
-		if (ModelArray[i] == model)
-			return;
-	}
-
-	ModelArray.emplace_back(model);
+	AddArrayElement(ModelArray, model);
 }
 
 Primitive* Shaft::Level::AddPrimitive(const std::string &name)
@@ -1125,13 +1083,7 @@ void Shaft::Level::AddPrimitive(Primitive *primitive)
 	if (!primitive)
 		return;
 
-	for (size_t i = 0; i < PrimArray.size(); i++)
-	{
-		if (PrimArray[i] == primitive)
-			return;
-	}
-
-	PrimArray.emplace_back(primitive);
+	AddArrayElement(PrimArray, primitive);
 }
 
 CustomObject* Shaft::Level::AddCustomObject(const std::string &name, const Vector3 &position, const Vector3 &rotation, Real max_render_distance, Real scale_multiplier)
@@ -1149,13 +1101,7 @@ void Shaft::Level::AddCustomObject(CustomObject *object)
 	if (!object)
 		return;
 
-	for (size_t i = 0; i < CustomObjectArray.size(); i++)
-	{
-		if (CustomObjectArray[i] == object)
-			return;
-	}
-
-	CustomObjectArray.emplace_back(object);
+	AddArrayElement(CustomObjectArray, object);
 }
 
 Control* Shaft::Level::AddControl(const std::string &name, const std::string &sound, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, int selection_position, std::vector<std::string> &action_names, std::vector<std::string> &textures)
@@ -1273,7 +1219,7 @@ Door* Shaft::Level::AddDoor(std::string name, const std::string &open_sound, con
 	}
 
 	//cut area
-	sbs->GetUtility()->ResetDoorwayWalls();
+	sbs->GetPolyMesh()->ResetDoorwayWalls();
 	if (face_direction == "left" || face_direction == "right")
 	{
 		Cut(1, Vector3(x1 - 0.5, voffset, z1), Vector3(x2 + 0.5, voffset + height, z2), true, false, 1);
@@ -1286,7 +1232,7 @@ Door* Shaft::Level::AddDoor(std::string name, const std::string &open_sound, con
 	}
 
 	//create doorway walls
-	sbs->GetUtility()->AddDoorwayWalls(mesh, "Connection Walls", "ConnectionWall", 0, 0);
+	sbs->GetPolyMesh()->AddDoorwayWalls(mesh, "Connection Walls", "ConnectionWall", 0, 0);
 
 	std::string num = ToString((int)DoorArray.size());
 	if (name == "")
@@ -1327,14 +1273,8 @@ Door* Shaft::Level::GetDoor(const std::string &name)
 void Shaft::Level::RemoveDoor(Door *door)
 {
 	//remove a door reference (this does not delete the object)
-	for (size_t i = 0; i < DoorArray.size(); i++)
-	{
-		if (DoorArray[i] == door)
-		{
-			DoorArray.erase(DoorArray.begin() + i);
-			return;
-		}
-	}
+
+	AddArrayElement(DoorArray, door);
 }
 
 CameraTexture* Shaft::Level::AddCameraTexture(const std::string &name, int quality, Real fov, const Vector3 &position, bool use_rotation, const Vector3 &rotation)
@@ -1348,14 +1288,8 @@ CameraTexture* Shaft::Level::AddCameraTexture(const std::string &name, int quali
 void Shaft::Level::RemoveCameraTexture(CameraTexture* camtex)
 {
 	//remove a cameratexture reference (does not delete the object itself)
-	for (size_t i = 0; i < CameraTextureArray.size(); i++)
-	{
-		if (CameraTextureArray[i] == camtex)
-		{
-			CameraTextureArray.erase(CameraTextureArray.begin() + i);
-			return;
-		}
-	}
+
+	AddArrayElement(CameraTextureArray, camtex);
 }
 
 }

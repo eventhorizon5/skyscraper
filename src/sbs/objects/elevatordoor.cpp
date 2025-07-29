@@ -1032,7 +1032,7 @@ DoorWrapper* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool Sha
 		base += floorobj->GetBase(true);
 
 		//cut shaft and floor walls
-		sbs->GetUtility()->ResetDoorwayWalls();
+		sbs->GetPolyMesh()->ResetDoorwayWalls();
 		if (DoorDirection == false)
 		{
 			if (shaft->GetLevel(floor))
@@ -1056,7 +1056,7 @@ DoorWrapper* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool Sha
 		if (DoorWalls == true)
 		{
 			sbs->GetTextureManager()->ResetTextureMapping(true);
-			sbs->GetUtility()->AddDoorwayWalls(floorobj->Level, "Connection Walls", "ConnectionWall", 0, 0);
+			sbs->GetPolyMesh()->AddDoorwayWalls(floorobj->Level, "Connection Walls", "ConnectionWall", 0, 0);
 			sbs->GetTextureManager()->ResetTextureMapping();
 		}
 	}

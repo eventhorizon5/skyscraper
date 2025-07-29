@@ -26,6 +26,7 @@
 #include "sbs.h"
 #include "scenenode.h"
 #include "profiler.h"
+#include "utility.h"
 #include "object.h"
 
 namespace SBS {
@@ -542,42 +543,14 @@ void Object::RegisterLoop(Object *object)
 {
 	//register a child object dynamic runloop
 
-	if (!object)
-		return;
-
-	for (size_t i = 0; i < runloops.size(); i++)
-	{
-		if (runloops[i] == object)
-			return;
-	}
-
-	runloops.emplace_back(object);
+	AddArrayElement(runloops, object);
 }
 
 void Object::UnregisterLoop(Object *object)
 {
 	//unregister a child object dynamic runloop
 
-	if (!object)
-		return;
-
-	if (runloops.empty())
-		return;
-
-	if (runloops.back() == object)
-	{
-		runloops.pop_back();
-		return;
-	}
-
-	for (size_t i = 0; i < runloops.size(); i++)
-	{
-		if (runloops[i] == object)
-		{
-			runloops.erase(runloops.begin() + i);
-			return;
-		}
-	}
+	RemoveArrayElement(runloops, object);
 }
 
 bool Object::LoopChildren()

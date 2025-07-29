@@ -511,7 +511,7 @@ void MeshObject::Cut(Vector3 start, Vector3 end, bool cutwalls, bool cutfloors, 
 		if (!Walls[i])
 			continue;
 
-		sbs->GetUtility()->Cut(Walls[i], start, end, cutwalls, cutfloors, checkwallnumber, reset_check);
+		sbs->GetPolyMesh()->Cut(Walls[i], start, end, cutwalls, cutfloors, checkwallnumber, reset_check);
 	}
 }
 
