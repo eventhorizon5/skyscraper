@@ -9,7 +9,7 @@
 					<object class="sizeritem">
 						<object class="wxListBox" name="ID_lstFloors" variable="lstFloors" member="yes">
 							<default>-1</default>
-							<size>200,300</size>
+							<size>200,400</size>
 						</object>
 						<flag>wxALL|wxEXPAND</flag>
 						<border>5</border>
@@ -25,14 +25,16 @@
 					<cols>3</cols>
 					<object class="sizeritem">
 						<object class="wxStaticText" name="ID_STATICTEXT1" variable="StaticText1" member="yes">
-							<label>Label</label>
+							<label>Number:</label>
 						</object>
 						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 						<border>5</border>
 						<option>1</option>
 					</object>
 					<object class="sizeritem">
-						<object class="wxTextCtrl" name="ID_txtNumber" variable="txtNumber" member="yes" />
+						<object class="wxTextCtrl" name="ID_txtNumber" variable="txtNumber" member="yes">
+							<size>150,-1</size>
+						</object>
 						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 						<border>5</border>
 						<option>1</option>
@@ -44,14 +46,16 @@
 					</object>
 					<object class="sizeritem">
 						<object class="wxStaticText" name="ID_STATICTEXT2" variable="StaticText2" member="yes">
-							<label>Label</label>
+							<label>Name:</label>
 						</object>
 						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 						<border>5</border>
 						<option>1</option>
 					</object>
 					<object class="sizeritem">
-						<object class="wxTextCtrl" name="ID_txtName" variable="txtName" member="yes" />
+						<object class="wxTextCtrl" name="ID_txtName" variable="txtName" member="yes">
+							<size>150,-1</size>
+						</object>
 						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 						<border>5</border>
 						<option>1</option>
@@ -63,14 +67,16 @@
 					</object>
 					<object class="sizeritem">
 						<object class="wxStaticText" name="ID_STATICTEXT3" variable="StaticText3" member="yes">
-							<label>Label</label>
+							<label>ID:</label>
 						</object>
 						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 						<border>5</border>
 						<option>1</option>
 					</object>
 					<object class="sizeritem">
-						<object class="wxTextCtrl" name="ID_txtID" variable="txtID" member="yes" />
+						<object class="wxTextCtrl" name="ID_txtID" variable="txtID" member="yes">
+							<size>150,-1</size>
+						</object>
 						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 						<border>5</border>
 						<option>1</option>
@@ -82,14 +88,16 @@
 					</object>
 					<object class="sizeritem">
 						<object class="wxStaticText" name="ID_STATICTEXT4" variable="StaticText4" member="yes">
-							<label>Label</label>
+							<label>Number ID:</label>
 						</object>
 						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 						<border>5</border>
 						<option>1</option>
 					</object>
 					<object class="sizeritem">
-						<object class="wxTextCtrl" name="ID_txtNumberID" variable="txtNumberID" member="yes" />
+						<object class="wxTextCtrl" name="ID_txtNumberID" variable="txtNumberID" member="yes">
+							<size>150,-1</size>
+						</object>
 						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 						<border>5</border>
 						<option>1</option>
@@ -101,14 +109,16 @@
 					</object>
 					<object class="sizeritem">
 						<object class="wxStaticText" name="ID_STATICTEXT5" variable="StaticText5" member="yes">
-							<label>Label</label>
+							<label>Floor Type:</label>
 						</object>
 						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 						<border>5</border>
 						<option>1</option>
 					</object>
 					<object class="sizeritem">
-						<object class="wxTextCtrl" name="ID_txtFloorType" variable="txtFloorType" member="yes" />
+						<object class="wxTextCtrl" name="ID_txtFloorType" variable="txtFloorType" member="yes">
+							<size>150,-1</size>
+						</object>
 						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 						<border>5</border>
 						<option>1</option>
@@ -120,14 +130,16 @@
 					</object>
 					<object class="sizeritem">
 						<object class="wxStaticText" name="ID_STATICTEXT6" variable="StaticText6" member="yes">
-							<label>Label</label>
+							<label>Description:</label>
 						</object>
 						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 						<border>5</border>
 						<option>1</option>
 					</object>
 					<object class="sizeritem">
-						<object class="wxTextCtrl" name="ID_txtDescription" variable="txtDescription" member="yes" />
+						<object class="wxTextCtrl" name="ID_txtDescription" variable="txtDescription" member="yes">
+							<size>150,-1</size>
+						</object>
 						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 						<border>5</border>
 						<option>1</option>
@@ -139,14 +151,16 @@
 					</object>
 					<object class="sizeritem">
 						<object class="wxStaticText" name="ID_STATICTEXT7" variable="StaticText7" member="yes">
-							<label>Label</label>
+							<label>Altitude:</label>
 						</object>
 						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 						<border>5</border>
 						<option>1</option>
 					</object>
 					<object class="sizeritem">
-						<object class="wxTextCtrl" name="ID_txtAltitude" variable="txtAltitude" member="yes" />
+						<object class="wxTextCtrl" name="ID_txtAltitude" variable="txtAltitude" member="yes">
+							<size>150,-1</size>
+						</object>
 						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 						<border>5</border>
 						<option>1</option>
@@ -158,14 +172,16 @@
 					</object>
 					<object class="sizeritem">
 						<object class="wxStaticText" name="ID_STATICTEXT8" variable="StaticText8" member="yes">
-							<label>Label</label>
+							<label>Height:</label>
 						</object>
 						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 						<border>5</border>
 						<option>1</option>
 					</object>
 					<object class="sizeritem">
-						<object class="wxTextCtrl" name="ID_txtHeight" variable="txtHeight" member="yes" />
+						<object class="wxTextCtrl" name="ID_txtHeight" variable="txtHeight" member="yes">
+							<size>150,-1</size>
+						</object>
 						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 						<border>5</border>
 						<option>1</option>
@@ -177,14 +193,16 @@
 					</object>
 					<object class="sizeritem">
 						<object class="wxStaticText" name="ID_STATICTEXT9" variable="StaticText9" member="yes">
-							<label>Label</label>
+							<label>Interfloor Height:</label>
 						</object>
 						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 						<border>5</border>
 						<option>1</option>
 					</object>
 					<object class="sizeritem">
-						<object class="wxTextCtrl" name="ID_txtIntHeight" variable="txtIntHeight" member="yes" />
+						<object class="wxTextCtrl" name="ID_txtIntHeight" variable="txtIntHeight" member="yes">
+							<size>150,-1</size>
+						</object>
 						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 						<border>5</border>
 						<option>1</option>
