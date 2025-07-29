@@ -127,7 +127,7 @@ int ScriptProcessor::TexturesSection::Run(std::string &LineData)
 		//get data
 		int params = SplitData(LineData, 15, false);
 
-		if (params < 8)
+		if (params < 9)
 			return ScriptError("Incorrect number of parameters");
 
 		//check numeric values
@@ -139,7 +139,7 @@ int ScriptProcessor::TexturesSection::Run(std::string &LineData)
 
 		std::vector<std::string> filenames;
 		std::vector<Real> durations;
-		for (int i = 1; i < params - 4; i++)
+		for (int i = 2; i < params - 4; i++)
 		{
 			parent->CheckFile(tempdata[i]); //check existence of file
 			filenames.emplace_back(tempdata[i]);
@@ -147,7 +147,7 @@ int ScriptProcessor::TexturesSection::Run(std::string &LineData)
 			durations.emplace_back(ToFloat(tempdata[i]));
 		}
 
-		texturemanager->CreateSlideshow(tempdata[0], filenames, durations, ToFloat(tempdata[params - 3]), ToFloat(tempdata[params - 2]), ToBool(tempdata[params - 1]));
+		texturemanager->CreateSlideshow(tempdata[0], ToBool(tempdata[1]), filenames, durations, ToFloat(tempdata[params - 3]), ToFloat(tempdata[params - 2]), ToBool(tempdata[params - 1]));
 		return sNextLine;
 	}
 

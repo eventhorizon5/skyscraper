@@ -180,6 +180,58 @@ void TextureManager::Timer::Notify()
 		slideshow->iterator = 0;
 }
 
+void TextureManager::StartSlideshow(const std::string &name)
+{
+	//start a slideshow by name
+
+	for (size_t i = 0; i < slideshows.size(); i++)
+	{
+		if (slideshows[i]->name == name)
+		{
+			slideshows[i]->timer->Start(slideshows[i]->durations[0] * 1000, true);
+			return;
+		}
+	}
+	return;
+}
+
+void TextureManager::StopSlideshow(const std::string &name)
+{
+	//stop a slideshow by name
+
+	for (size_t i = 0; i < slideshows.size(); i++)
+	{
+		if (slideshows[i]->name == name)
+		{
+			slideshows[i]->timer->Stop();
+			return;
+		}
+	}
+	return;
+}
+
+void TextureManager::StartAllSlideshows()
+{
+	//start all slideshows
+
+	for (size_t i = 0; i < slideshows.size(); i++)
+	{
+		if (slideshows[i])
+			slideshows[i]->timer->Start(slideshows[i]->durations[0] * 1000, true);
+	}
+}
+
+void TextureManager::StopAllSlideshows()
+{
+	//stop all slideshows
+
+	for (size_t i = 0; i < slideshows.size(); i++)
+	{
+		if (slideshows[i])
+			slideshows[i]->timer->Stop();
+	}
+}
+
 bool TextureManager::LoadTexture(const std::string &filename, const std::string &name, Real widthmult, Real heightmult, bool enable_force, bool force_mode, int mipmaps, bool use_alpha_color, Ogre::ColourValue alpha_color)
 {
 	//first verify the filename
@@ -221,7 +273,7 @@ bool TextureManager::LoadTexture(const std::string &filename, const std::string 
 	return true;
 }
 
-bool TextureManager::CreateSlideshow(const std::string &name, std::vector<std::string> filenames, std::vector<Real> durations, Real widthmult, Real heightmult, bool enable_force, bool force_mode, int mipmaps, bool use_alpha_color, Ogre::ColourValue alpha_color)
+bool TextureManager::CreateSlideshow(const std::string &name, bool start, std::vector<std::string> filenames, std::vector<Real> durations, Real widthmult, Real heightmult, bool enable_force, bool force_mode, int mipmaps, bool use_alpha_color, Ogre::ColourValue alpha_color)
 {
 	//creates an animated slideshow
 	//this is similar to the LoadAnimatedTexture command, but each image frame has a separate duration
@@ -291,7 +343,8 @@ bool TextureManager::CreateSlideshow(const std::string &name, std::vector<std::s
 		slideshow->has_alpha = has_alpha;
 		slideshow->timer = new Timer(name + " Timer", this, slideshow);
 		slideshows.emplace_back(slideshow);
-		slideshow->timer->Start(durations[0] * 1000, true); //start slideshow timer
+		if (start)
+			slideshow->timer->Start(durations[0] * 1000, true); //start slideshow timer
 	}
 	else
 		return false;
