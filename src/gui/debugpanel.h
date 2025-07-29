@@ -65,6 +65,7 @@ class RevolvingDoorControl;
 class ControllerEditor;
 class ScriptDebug;
 class ScriptProcessor;
+class FloorInfo;
 
 class DebugPanel: public wxFrame
 {
@@ -274,6 +275,7 @@ class DebugPanel: public wxFrame
 		WalkwayControl *walk;
 		RevolvingDoorControl* revdoor;
 		ControllerEditor* ceditor;
+		FloorInfo* info;
 
 		DECLARE_EVENT_TABLE()
 };

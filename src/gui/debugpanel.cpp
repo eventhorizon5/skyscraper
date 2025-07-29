@@ -56,6 +56,7 @@
 #include "walkwaycontrol.h"
 #include "revdoorcontrol.h"
 #include "controllereditor.h"
+#include "floorinfo.h"
 
 namespace Skyscraper {
 
@@ -327,6 +328,7 @@ DebugPanel::DebugPanel(VM *root, wxWindow* parent,wxWindowID id)
 	walk = 0;
 	revdoor = 0;
 	ceditor = 0;
+	info = 0;
 
 	OnInit();
 }
@@ -396,6 +398,9 @@ DebugPanel::~DebugPanel()
 	if (ceditor)
 		ceditor->Destroy();
 	ceditor = 0;
+	if (info)
+		info->Destroy();
+	info = 0;
 }
 
 void DebugPanel::On_chkCollisionDetection_Click(wxCommandEvent& event)
@@ -418,8 +423,12 @@ void DebugPanel::On_chkAutoShafts_Click(wxCommandEvent& event)
 
 void DebugPanel::On_bFloorList_Click(wxCommandEvent& event)
 {
-	if (Simcore)
-		Simcore->ShowFloorList();
+	if (!info)
+	info = new FloorInfo(this, -1);
+
+	info->CenterOnScreen();
+	info->Show();
+	info->Raise();
 }
 
 void DebugPanel::On_bMeshControl_Click(wxCommandEvent& event)
@@ -623,6 +632,11 @@ void DebugPanel::Loop()
 	{
 		if (ceditor->IsShown() == true)
 			ceditor->Loop();
+	}
+	if (info)
+	{
+		if (info->IsShown() == true)
+			info->Loop();
 	}
 }
 
