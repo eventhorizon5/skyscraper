@@ -170,7 +170,7 @@ void FloorInfo::Loop()
 		{
 			floor = Simcore->GetFloor(selection);
             txtNumber->SetValue(SBS::ToString(floor->Number));
-			txtName->SetValue(floor->GetName());
+			txtName->SetValue(floor->Name);
             txtID->SetValue(floor->ID);
             txtNumberID->SetValue(floor->NumberID);
             txtFloorType->SetValue(floor->FloorType);
@@ -178,9 +178,6 @@ void FloorInfo::Loop()
             txtAltitude->SetValue(SBS::ToString(floor->Altitude));
             txtHeight->SetValue(SBS::ToString(floor->Height));
             txtIntHeight->SetValue(SBS::ToString(floor->InterfloorHeight));
-
-			//txtParent->SetValue(floor->GetParent()->GetName());
-			//Slider1->SetValue(floor->GetRun());
 		}
 	}
 	else
@@ -204,7 +201,7 @@ void FloorInfo::BuildList(bool restore_selection)
 		{
 			::SBS::Floor *floor = Simcore->GetFloor(i);
 			if (floor)
-				lstFloors->Append(SBS::ToString(i + 1) + wxT(": ") + floor->GetName());
+				lstFloors->Append(SBS::ToString(i + 1) + wxT(": ") + floor->Name);
 		}
 
 		if (count > 0)
@@ -226,9 +223,6 @@ void FloorInfo::BuildList(bool restore_selection)
             txtAltitude->SetValue(wxT(""));
             txtHeight->SetValue(wxT(""));
             txtIntHeight->SetValue(wxT(""));
-			//txtName->SetValue(wxT(""));
-			//txtParent->SetValue(wxT(""));
-			//Slider1->SetValue(0);
 		}
 	}
 }
