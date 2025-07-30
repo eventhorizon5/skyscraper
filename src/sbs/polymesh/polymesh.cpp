@@ -33,6 +33,11 @@
 
 namespace SBS {
 
+#undef EPSILON
+#define EPSILON 0.001f
+#undef SMALL_EPSILON
+#define SMALL_EPSILON 0.000001f
+
 PolyMesh::PolyMesh(Object *parent) : ObjectBase(parent)
 {
 	WallCount = 0;
@@ -1937,6 +1942,87 @@ Wall* PolyMesh::AddDoorwayWalls(MeshObject* mesh, const std::string &wallname, c
 	}
 
 	return 0;
+}
+
+Vector3 PolyMesh::ComputeNormal2(const PolyArray &vertices, Real &D)
+{
+    //calculate the normal of a given polygon
+
+    Vector3 normal(0, 0, 0);
+    size_t n = vertices.size();
+    if (n < 3)
+        return normal; //not a polygon
+
+    for (size_t i = 0; i < n; ++i)
+    {
+        const Vector3 &current = vertices[i];
+        const Vector3 &next = vertices[(i + 1) % n];
+        normal.x += (current.y - next.y) * (current.z + next.z);
+        normal.y += (current.z - next.z) * (current.x + next.x);
+        normal.z += (current.x - next.x) * (current.y + next.y);
+    }
+
+    Real length = normal.length();
+    if (length < SMALL_EPSILON)
+        normal = Vector3(0, 0, 1); //default normal if degenerate
+    else
+        normal /= length;
+
+    //plane equation: Ax + By + Cz + D = 0, solve for D
+    D = -normal.x * vertices[0].x - normal.y * vertices[0].y - normal.z * vertices[0].z;
+
+	//return flipped normal
+    return -normal;
+}
+
+void PolyMesh::SplitWithPlane(int axis, const PolyArray &orig, PolyArray &poly1, PolyArray &poly2, Real value)
+{
+	//clear output polygons
+	poly1.clear();
+	poly2.clear();
+
+	//helper lambda to get coordinate by axis
+	auto getCoord = [axis](const Vector3& v) -> Real {
+		if (axis == 0) return v.x;
+		if (axis == 1) return v.y;
+		return v.z;
+	};
+
+	size_t n = orig.size();
+	if (n < 2) return; // Not enough vertices
+
+	//preallocate memory for a worst-case scenario
+	poly1.reserve(orig.size());
+	poly2.reserve(orig.size());
+
+	Vector3 prev = orig[n - 1];
+	Real prevSide = getCoord(prev) - value;
+	if (std::abs(prevSide) < SMALL_EPSILON) prevSide = 0;
+
+	for (size_t i = 0; i < n; ++i)
+	{
+		Vector3 curr = orig[i];
+		Real currSide = getCoord(curr) - value;
+		if (std::abs(currSide) < SMALL_EPSILON) currSide = 0;
+
+		//if edge crosses the plane, compute intersection
+		if ((prevSide < 0 && currSide > 0) || (prevSide > 0 && currSide < 0))
+		{
+			Real t = prevSide / (prevSide - currSide);
+			Vector3 intersect = prev + (curr - prev) * t;
+			poly1.emplace_back(intersect);
+			poly2.emplace_back(intersect);
+		}
+
+		//add current vertex to appropriate polygon(s)
+		if (currSide >= 0)
+			poly2.emplace_back(curr);
+		if (currSide <= 0)
+			poly1.emplace_back(curr);
+
+		prev = curr;
+		prevSide = currSide;
+	}
 }
 
 }

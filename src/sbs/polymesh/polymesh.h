@@ -80,8 +80,9 @@ public:
 	Vector3 GetPolygonDirection(PolyArray &polygon);
 	Vector2 GetEndPoint(const Vector2 &StartPoint, Real angle, Real distance);
 	Plane ComputePlane(PolyArray &vertices, bool flip_normal = true);
-	void SplitWithPlane(int axis, PolyArray &orig, PolyArray &poly1, PolyArray &poly2, Real value);
+	void SplitWithPlane(int axis, const PolyArray &orig, PolyArray &poly1, PolyArray &poly2, Real value);
 	Vector3 ComputeNormal(PolyArray &vertices, Real &D);
+	Vector3 ComputeNormal2(const PolyArray &vertices, Real &D);
 	void ResetDoorwayWalls();
 	Wall* AddDoorwayWalls(MeshObject* mesh, const std::string &wallname, const std::string &texture, Real tw, Real th);
 
