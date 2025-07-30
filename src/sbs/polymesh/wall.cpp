@@ -88,6 +88,19 @@ Polygon* Wall::AddQuad(const std::string &name, const std::string &texture, cons
 	return AddPolygon(name, texture, vertices, tw, th, autosize);
 }
 
+Polygon* Wall::AddTriangle(const std::string &name, const std::string &texture, const Vector3 &v1, const Vector3 &v2, const Vector3 &v3, Real tw, Real th, bool autosize)
+{
+	//add a triangle
+
+	PolyArray vertices;
+	vertices.reserve(3);
+	vertices.emplace_back(v1);
+	vertices.emplace_back(v2);
+	vertices.emplace_back(v3);
+
+	return AddPolygon(name, texture, vertices, tw, th, autosize);
+}
+
 Polygon* Wall::AddPolygon(const std::string &name, const std::string &texture, PolyArray &vertices, Real tw, Real th, bool autosize)
 {
 	//create a generic polygon
