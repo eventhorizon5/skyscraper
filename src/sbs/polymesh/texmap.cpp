@@ -383,61 +383,6 @@ Vector3 PolyMesh::ComputeNormal(PolyArray &vertices, Real &D)
 	return norm;
 }
 
-bool Polygon::IntersectRay(const Vector3 &start, const Vector3 &end)
-{
-	//from Crystal Space plugins/mesh/thing/object/polygon.cpp
-
-	/**
-	 * Intersect object-space ray with this polygon. This function
-	 * is similar to IntersectSegment except that it doesn't keep the length
-	 * of the ray in account. It just tests if the ray intersects with the
-	 * interior of the polygon. Note that this function also does back-face
-	 * culling.
-	 */
-
-	// First we do backface culling on the polygon with respect to
-	// the starting point of the beam.
-
-	Plane plane = GetAbsolutePlane();
-
-	Real dot1 = plane.d + plane.normal.x * start.x + plane.normal.y * start.y + plane.normal.z * start.z;
-	if (dot1 > 0)
-		return false;
-
-	// If this vector is perpendicular to the plane of the polygon we
-	// need to catch this case here.
-	Real dot2 = plane.d + plane.normal.x * end.x + plane.normal.y * end.y + plane.normal.z * end.z;
-	if (std::abs(dot1 - dot2) < SMALL_EPSILON)
-		return false;
-
-	// Now we generate a plane between the starting point of the ray and
-	// every edge of the polygon. With the plane normal of that plane we
-	// can then check if the end of the ray is on the same side for all
-	// these planes.
-	Vector3 normal;
-	Vector3 relend = end;
-	relend -= start;
-
-	Vector3 pos = sbs->ToRemote(mesh->GetPosition(), true, false);
-
-	for (size_t index = 0; index < geometry.size(); index++)
-	{
-		size_t i1 = geometry[index].size() - 1;
-		for (size_t i = 0; i < geometry[index].size(); i++)
-		{
-			Vector3 v = sbs->ToLocal(geometry[index][i1].vertex, false, true);
-			Vector3 vertex = pos + v;
-			Vector3 start2 = start - vertex;
-			normal = start2.crossProduct(start - vertex);
-			if ((relend.x * normal.x + relend.y * normal.y + relend.z * normal.z > 0))
-				continue;
-			i1 = i;
-		}
-	}
-
-	return true;
-}
-
 bool Polygon::IntersectSegment(const Vector3 &start, const Vector3 &end, Vector3 &isect, Real *pr, Vector3 &normal)
 {
 	//from Crystal Space plugins/mesh/thing/object/polygon.cpp
@@ -449,7 +394,8 @@ bool Polygon::IntersectSegment(const Vector3 &start, const Vector3 &end, Vector3
 	 * true if it intersects and the intersection point in world coordinates.
 	 */
 
-	if (!IntersectRay(start, end))
+	Vector3 hit_point;
+	if (!IntersectRay(start, end, hit_point))
 		return false;
 
 	return IntersectSegmentPlane(start, end, isect, pr, normal);

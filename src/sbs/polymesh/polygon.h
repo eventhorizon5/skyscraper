@@ -61,7 +61,6 @@ public:
 	~Polygon();
 	void GetTextureMapping(Matrix3 &t_matrix, Vector3 &t_vector);
 	bool IntersectSegment(const Vector3 &start, const Vector3 &end, Vector3 &isect, Real *pr, Vector3 &normal);
-	bool IntersectRay(const Vector3 &start, const Vector3 &end);
 	bool IntersectSegmentPlane(const Vector3 &start, const Vector3 &end, Vector3 &isect, Real *pr, Vector3 &normal);
 	void Move(const Vector3 &vector, Real speed = 1.0);
 	Plane GetAbsolutePlane();
@@ -70,6 +69,7 @@ public:
 	bool ReplaceTexture(const std::string &oldtexture, const std::string &newtexture);
 	bool ChangeTexture(const std::string &texture, bool matcheck = true);
 	Vector3 GetVertex(int index);
+	bool IntersectRay(const Vector3& rayOrigin, const Vector3& rayDir, Vector3& hitPoint);
 };
 
 }

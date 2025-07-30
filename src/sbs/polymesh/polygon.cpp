@@ -34,6 +34,11 @@
 
 namespace SBS {
 
+#undef EPSILON
+#define EPSILON 0.001f
+#undef SMALL_EPSILON
+#define SMALL_EPSILON 0.000001f
+
 Polygon::Polygon(Object *parent, const std::string &name, MeshObject *meshwrapper, GeometrySet &geometry, std::vector<Triangle> &triangles, Matrix3 &tex_matrix, Vector3 &tex_vector, const std::string &material, Plane &plane) : ObjectBase(parent)
 {
 	mesh = meshwrapper;
@@ -216,6 +221,45 @@ Vector3 Polygon::GetVertex(int index)
 		offset += geometry[i].size();
 	}
 	return Vector3::ZERO;
+}
+
+bool Polygon::IntersectRay(const Vector3& rayOrigin, const Vector3& rayDir, Vector3& hitPoint)
+{
+	//simple convex polygon ray intersection
+
+	//get polygon plane
+	Plane plane = GetAbsolutePlane();
+
+	//compute intersection of ray with plane
+	Real denom = plane.normal.dotProduct(rayDir);
+	if (std::abs(denom) < SMALL_EPSILON)
+		return false; //ray is parallel to plane
+
+	Real t = -(plane.normal.dotProduct(rayOrigin) + plane.d) / denom;
+	if (t < 0)
+		return false; //intersection is behind the ray origin
+
+	//compute intersection point
+	hitPoint = rayOrigin + rayDir * t;
+
+	//point-in-polygon test (convex polygons)
+	for (size_t i = 0; i < geometry.size(); i++)
+	{
+		const auto& verts = geometry[i];
+		size_t n = verts.size();
+		for (size_t i = 0; i < n; ++i)
+		{
+			Vector3 v0 = verts[i].vertex;
+			Vector3 v1 = verts[(i + 1) % n].vertex;
+			Vector3 edge = v1 - v0;
+			Vector3 toPoint = hitPoint - v0;
+			Vector3 cross = edge.crossProduct(toPoint);
+			if (plane.normal.dotProduct(cross) < -SMALL_EPSILON)
+				return false; //outside polygon
+		}
+	}
+
+	return true; //ray hits polygon
 }
 
 }
