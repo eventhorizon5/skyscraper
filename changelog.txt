@@ -25,6 +25,28 @@ Version 2.1
 -SBS: Loop() and OnInit() object functions should return a status, to indicate an object success or malfunction/failure
 -SBS: add support for a return value for Object initialization functions
 -SBS: object Enabled() function should return status.
+-Fix delimiter in uname command when no version state is specified
+-Added variable display to script debugger
+-VMConsole: remove Frontend mention from version command
+-SBS: if a texture material is already loaded, report an error and exit before trying to create a new texexture.  This fixes an issue where new textures with the same name as existing ones would cause a sim engine to have a fatal error and shut down
+-SBS: moved Texture Manager to controllers section
+-SBS: Moved TextureInfo into new Texture object
+-SBS: moved texture loading code into TextureImage object
+-SBS: created AddArrayElement and RemoveArrayElement utility templated functions
+-PolyMesh: add support for polygon extrusion, for creating custom polygons with thickness and sides.
+-SBS: stop timer before the Notify() call
+-Added CreateSlideshow command and related code
+-TextureManager: when loading a texture, unload the previous texture if it exists, instead of exiting
+-SBS: moved remaining geometry functions into PolyMesh
+-GUI: added the Floor Information dialog
+-Convention Center: made observatory level (114), spire top (115) and antenna
+-TextureManager: SetTexture() function should set texture on all Ogre techniques in the material instead of assuming 0
+-TextureManager: added the option to enable or disable the slideshow on start, added an Action that can start and stop a slideshow, and added the new "Simple - Slideshow" building
+-added the Simple - Slideshow building
+-TextureManager: report on slideshow creation and start/stop
+-Guide: added logo for Virtual Manager page
+-Script Guide: added CreateSlideshow command information and related Action commands
+
 
 Version 2.0 - July 24, 2025
 -------------------------
