@@ -70,58 +70,48 @@ Wall* PolyMesh::FindWallIntersect(MeshObject *mesh, const Vector3 &start, const 
 {
 	//find a wall from a 3D point
 	//positions need to be in remote (Ogre) positioning
-	//if wall_number is 0 or greater, this will only check that specified wall
 
 	SBS_PROFILE("PolyMesh::FindWallIntersect");
 
-	Real pr, best_pr = 2000000000.;
-	Real dist, best_dist = 2000000000.;
-	int best_i = -1;
-	Vector3 cur_isect;
-	Vector3 tmpnormal;
+    Real best_dist = 2000000000.;
+    int best_i = -1;
+    Vector3 cur_isect;
+    Vector3 tmpnormal;
 
-	for (size_t i = 0; i < mesh->Walls.size(); i++)
-	{
-		if (!mesh->Walls[i])
-			continue;
+    for (size_t i = 0; i < mesh->Walls.size(); i++)
+    {
+        if (!mesh->Walls[i])
+            continue;
 
-		if (wall && mesh->Walls[i] != wall)
-			continue;
+        if (wall && mesh->Walls[i] != wall)
+            continue;
 
-		for (int j = 0; j < mesh->Walls[i]->GetPolygonCount(); j++)
-		{
-			Polygon *poly = mesh->Walls[i]->GetPolygon(j);
-			if (!poly)
-				continue;
+        for (int j = 0; j < mesh->Walls[i]->GetPolygonCount(); j++)
+        {
+            Polygon *poly = mesh->Walls[i]->GetPolygon(j);
+            if (!poly)
+                continue;
 
-			if (poly->IntersectSegment(start, end, cur_isect, &pr, tmpnormal) == true)
-			{
-				if (pr < best_pr)
-				{
-					//currently test against previous camera intersection test to fix some weird issues
-					Vector3 orig_start = sbs->ToRemote(sbs->camera->HitPosition);
-					dist = orig_start.distance(cur_isect);
+            Real pr;
+            if (poly->IntersectSegment(start, end, cur_isect, &pr, tmpnormal) == true)
+            {
+                Real dist = start.distance(cur_isect);
+                if (dist < best_dist)
+                {
+                    best_dist = dist;
+                    best_i = (int)i;
+                    isect = cur_isect;
+                    normal = tmpnormal;
+                    distance = dist;
+                }
+            }
+        }
+    }
 
-					if (dist < best_dist)
-					{
-						//calculate distance to intersection
-						distance = start.distance(cur_isect);
-
-						best_dist = dist;
-						best_pr = pr;
-						best_i = (int)i;
-						isect = cur_isect;
-						normal = tmpnormal;
-					}
-				}
-			}
-		}
-	}
-
-	if (best_i >= 0)
-		return mesh->Walls[best_i];
-	else
-		return 0;
+    if (best_i >= 0)
+        return mesh->Walls[best_i];
+    else
+        return 0;
 }
 
 bool PolyMesh::CreateMesh(MeshObject *mesh, const std::string &name, const std::string &texture, PolyArray &vertices, Real tw, Real th, bool autosize, Matrix3 &t_matrix, Vector3 &t_vector, std::vector<std::vector<Polygon::Geometry> > &geometry, std::vector<Triangle> &triangles, PolygonSet &converted_vertices)
