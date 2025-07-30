@@ -159,7 +159,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 			return sNextLine;
 
 		//create triangle wall
-		StoreCommand(polymesh->AddTriangleWall(mesh, tempdata[1], tempdata[2], config->extrusion_texture, config->extrusion_thickness, ToFloat(tempdata[3]), voffset1, ToFloat(tempdata[5]), ToFloat(tempdata[6]), voffset2, ToFloat(tempdata[8]), ToFloat(tempdata[9]), voffset3, ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13])));
+		StoreCommand(polymesh->AddTriangleWall(mesh, tempdata[1], tempdata[2], config->extrusion_texture, config->extrusion_thickness, ToFloat(tempdata[3]), voffset1, ToFloat(tempdata[5]), ToFloat(tempdata[6]), voffset2, ToFloat(tempdata[8]), ToFloat(tempdata[9]), voffset3, ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), config->extrusion_tw, config->extrusion_th));
 
 		return sNextLine;
 	}
@@ -500,7 +500,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		for (int i = start; i < params - 2; i += 3)
 			varray.emplace_back(Vector3(ToFloat(tempdata[i]), ToFloat(tempdata[i + 1]) + voffset, ToFloat(tempdata[i + 2])));
 
-		StoreCommand(polymesh->AddCustomWall(mesh, tempdata[1], tempdata[2], config->extrusion_texture, config->extrusion_thickness, varray, ToFloat(tempdata[params - 2]), ToFloat(tempdata[params - 1])));
+		StoreCommand(polymesh->AddCustomWall(mesh, tempdata[1], tempdata[2], config->extrusion_texture, config->extrusion_thickness, varray, ToFloat(tempdata[params - 2]), ToFloat(tempdata[params - 1]), config->extrusion_tw, config->extrusion_th));
 
 		return sNextLine;
 	}
@@ -543,7 +543,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		for (int i = 3; i < params - 3; i += 2)
 			varray.emplace_back(Vector2(ToFloat(tempdata[i]), ToFloat(tempdata[i + 1])));
 
-		StoreCommand(polymesh->AddCustomFloor(mesh, tempdata[1], tempdata[2], config->extrusion_texture, config->extrusion_thickness, varray, altitude, ToFloat(tempdata[params - 2]), ToFloat(tempdata[params - 1])));
+		StoreCommand(polymesh->AddCustomFloor(mesh, tempdata[1], tempdata[2], config->extrusion_texture, config->extrusion_thickness, varray, altitude, ToFloat(tempdata[params - 2]), ToFloat(tempdata[params - 1]), config->extrusion_tw, config->extrusion_th));
 
 		return sNextLine;
 	}
@@ -591,7 +591,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		for (int i = 3; i < params - 2; i += 3)
 			varray.emplace_back(Vector3(ToFloat(tempdata[i]), ToFloat(tempdata[i + 1]) + voffset, ToFloat(tempdata[i + 2])));
 
-		polymesh->AddPolygon(wall, tempdata[2], config->extrusion_texture, config->extrusion_thickness, varray, ToFloat(tempdata[params - 2]), ToFloat(tempdata[params - 1]));
+		polymesh->AddPolygon(wall, tempdata[2], config->extrusion_texture, config->extrusion_thickness, varray, ToFloat(tempdata[params - 2]), ToFloat(tempdata[params - 1]), config->extrusion_tw, config->extrusion_th);
 
 		return sNextLine;
 	}
@@ -4167,7 +4167,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	{
 		int params = SplitData(LineData, 11);
 
-		if (params != 2)
+		if (params != 4)
 			return ScriptError("Incorrect number of parameters");
 
 		Real thickness;
@@ -4177,6 +4177,8 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		config->extrude = true;
 		config->extrusion_texture = tempdata[0];
 		config->extrusion_thickness = thickness;
+		config->extrusion_tw = ToFloat(tempdata[2]);
+		config->extrusion_th = ToFloat(tempdata[3]);
 		return sNextLine;
 	}
 
@@ -4186,6 +4188,8 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		config->extrude = false;
 		config->extrusion_texture = "";
 		config->extrusion_thickness = 0.0;
+		config->extrusion_tw = 0.0;
+		config->extrusion_th = 0.0;
 		return sNextLine;
 	}
 

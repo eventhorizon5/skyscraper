@@ -85,6 +85,8 @@ public:
 	bool CheckScript; //if true, quick-checks script execution, and exits
 	std::string extrusion_texture; //side texture used for polygon extrusion
 	Real extrusion_thickness; //polygon extrusion thickness
+	Real extrusion_tw; //extrusion side texture tiling width
+	Real extrusion_th; //extrusion side texture tiling height
 	bool extrude;
 };
 

@@ -1039,7 +1039,7 @@ Wall* PolyMesh::CreateWallBox2(MeshObject* mesh, const std::string &name, const 
 	return CreateWallBox(mesh, name, texture, x1, x2, z1, z2, height_in, voffset, tw, th, inside, outside, top, bottom, autosize);
 }
 
-void PolyMesh::AddPolygon(Wall* wallobject, const std::string &texture, const std::string &side_texture, Real thickness, PolyArray &varray, Real tw, Real th, bool report)
+void PolyMesh::AddPolygon(Wall* wallobject, const std::string &texture, const std::string &side_texture, Real thickness, PolyArray &varray, Real tw, Real th, Real side_tw, Real side_th, bool autosize, bool report)
 {
 	//creates a polygon in the specified wall object
 
@@ -1100,7 +1100,7 @@ void PolyMesh::AddPolygon(Wall* wallobject, const std::string &texture, const st
 		std::string final_texture = texture;
 		if (texturemanager->TextureOverride == true)
 			final_texture = texturemanager->mainnegtex;
-		wallobject->AddPolygon(NewName, final_texture, polyset[0], tw, th, true);
+		wallobject->AddPolygon(NewName, final_texture, polyset[0], tw, th, autosize);
 	}
 	if (DrawMainP == true)
 	{
@@ -1110,7 +1110,7 @@ void PolyMesh::AddPolygon(Wall* wallobject, const std::string &texture, const st
 		std::string final_texture = texture;
 		if (texturemanager->TextureOverride == true)
 			final_texture = texturemanager->mainpostex;
-		wallobject->AddPolygon(NewName, final_texture, polyset[1], tw, th, true);
+		wallobject->AddPolygon(NewName, final_texture, polyset[1], tw, th, autosize);
 	}
 	if ((DrawSideN || DrawSideP) && polyset.size() > 2 && thickness > 0.0)
 	{
@@ -1127,12 +1127,12 @@ void PolyMesh::AddPolygon(Wall* wallobject, const std::string &texture, const st
 				else
 					final_texture = texturemanager->sidepostex;
 			}
-			wallobject->AddPolygon(NewName, final_texture, polyset[i], tw, th, true);
+			wallobject->AddPolygon(NewName, final_texture, polyset[i], side_tw, side_th, autosize);
 		}
 	}
 }
 
-Wall* PolyMesh::AddCustomWall(MeshObject* mesh, const std::string &name, const std::string &texture, const std::string &side_texture, Real thickness, PolyArray &varray, Real tw, Real th)
+Wall* PolyMesh::AddCustomWall(MeshObject* mesh, const std::string &name, const std::string &texture, const std::string &side_texture, Real thickness, PolyArray &varray, Real tw, Real th, Real side_tw, Real side_th, bool autosize)
 {
 	//Adds a wall from a specified array of 3D vectors
 
@@ -1143,12 +1143,12 @@ Wall* PolyMesh::AddCustomWall(MeshObject* mesh, const std::string &name, const s
 	Wall *wall = mesh->CreateWallObject(name);
 
 	//create polygon in wall object
-	AddPolygon(wall, texture, side_texture, thickness, varray, tw, th);
+	AddPolygon(wall, texture, side_texture, thickness, varray, tw, th, side_tw, side_th, autosize);
 
 	return wall;
 }
 
-Wall* PolyMesh::AddCustomFloor(MeshObject* mesh, const std::string &name, const std::string &texture, const std::string &side_texture, Real thickness, std::vector<Vector2> &varray, Real altitude, Real tw, Real th)
+Wall* PolyMesh::AddCustomFloor(MeshObject* mesh, const std::string &name, const std::string &texture, const std::string &side_texture, Real thickness, std::vector<Vector2> &varray, Real altitude, Real tw, Real th, Real side_tw, Real side_th, bool autosize)
 {
 	//Same as AddCustomWall, with only one altitude value value
 	PolyArray varray3;
@@ -1161,10 +1161,10 @@ Wall* PolyMesh::AddCustomFloor(MeshObject* mesh, const std::string &name, const 
 	}
 
 	//pass data on to AddCustomWall function
-	return AddCustomWall(mesh, name, texture, side_texture, thickness, varray3, tw, th);
+	return AddCustomWall(mesh, name, texture, side_texture, thickness, varray3, tw, th, side_tw, side_th, autosize);
 }
 
-Wall* PolyMesh::AddTriangleWall(MeshObject* mesh, const std::string &name, const std::string &texture, const std::string &side_texture, Real thickness, Real x1, Real y1, Real z1, Real x2, Real y2, Real z2, Real x3, Real y3, Real z3, Real tw, Real th)
+Wall* PolyMesh::AddTriangleWall(MeshObject* mesh, const std::string &name, const std::string &texture, const std::string &side_texture, Real thickness, Real x1, Real y1, Real z1, Real x2, Real y2, Real z2, Real x3, Real y3, Real z3, Real tw, Real th, Real side_tw, Real side_th, bool autosize)
 {
 	//Adds a triangular wall with the specified dimensions
 	PolyArray varray;
@@ -1176,7 +1176,7 @@ Wall* PolyMesh::AddTriangleWall(MeshObject* mesh, const std::string &name, const
 	varray.emplace_back(Vector3(x3, y3, z3));
 
 	//pass data on to AddCustomWall function
-	return AddCustomWall(mesh, name, texture, side_texture, thickness, varray, tw, th);
+	return AddCustomWall(mesh, name, texture, side_texture, thickness, varray, tw, th, side_tw, side_th, autosize);
 }
 
 bool PolyMesh::SetWallOrientation(std::string direction)
