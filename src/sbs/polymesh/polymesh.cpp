@@ -1987,7 +1987,8 @@ void PolyMesh::SplitWithPlane(int axis, const PolyArray &orig, PolyArray &poly1,
 	};
 
 	size_t n = orig.size();
-	if (n < 2) return; // Not enough vertices
+	if (n < 2)
+		return; // Not enough vertices
 
 	//preallocate memory for a worst-case scenario
 	poly1.reserve(orig.size());
@@ -1995,13 +1996,15 @@ void PolyMesh::SplitWithPlane(int axis, const PolyArray &orig, PolyArray &poly1,
 
 	Vector3 prev = orig[n - 1];
 	Real prevSide = getCoord(prev) - value;
-	if (std::abs(prevSide) < SMALL_EPSILON) prevSide = 0;
+	if (std::abs(prevSide) < SMALL_EPSILON)
+		prevSide = 0;
 
 	for (size_t i = 0; i < n; ++i)
 	{
 		Vector3 curr = orig[i];
 		Real currSide = getCoord(curr) - value;
-		if (std::abs(currSide) < SMALL_EPSILON) currSide = 0;
+		if (std::abs(currSide) < SMALL_EPSILON)
+			currSide = 0;
 
 		//if edge crosses the plane, compute intersection
 		if ((prevSide < 0 && currSide > 0) || (prevSide > 0 && currSide < 0))
