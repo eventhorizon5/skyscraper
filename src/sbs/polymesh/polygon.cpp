@@ -262,4 +262,66 @@ bool Polygon::IntersectRay(const Vector3& rayOrigin, const Vector3& rayDir, Vect
 	return true; //ray hits polygon
 }
 
+bool Polygon::IntersectSegmentPlane(const Vector3 &start, const Vector3 &end, Vector3 &isect, Real *pr, Vector3 &normal)
+{
+	//computes the intersection point between a line segment and a polygon's plane
+	//returns true if the intersection point lies within the segment (between start and end)
+
+	//get the plane of the polygon
+	Plane plane = GetAbsolutePlane();
+
+	//get direction vector of the segment
+	Vector3 dir = end - start;
+
+	//compute denominator for intersection formula
+	Real denom = plane.normal.dotProduct(dir);
+
+	//check if the segment is parallel to the plane
+	if (std::abs(denom) < SMALL_EPSILON)
+	{
+		if (pr) *pr = -1;
+		return false;
+	}
+
+	//compute intersection parameter r
+	Real num = -(plane.normal.dotProduct(start) + plane.d);
+	Real r = num / denom;
+
+	//output r if requested
+	if (pr) *pr = r;
+
+	//compute intersection point
+	isect = start + dir * r;
+
+	//accept intersection if r is within [0, 1] (with epsilon tolerance)
+	if (r < -SMALL_EPSILON || r > 1.0 + SMALL_EPSILON)
+		return false;
+
+	normal = plane.normal;
+	return true;
+}
+
+bool Polygon::IntersectSegment(const Vector3 &start, const Vector3 &end, Vector3 &isect, Real *pr, Vector3 &normal)
+{
+	//checks if a line segment between two points intersects a convex polygon
+	//positions need to be in remote (Ogre) values
+
+	//ensure direction is correct
+	Vector3 dir = end - start;
+	if (dir.length() < SMALL_EPSILON)
+		return false; //degenerate segment
+
+	//normalize direction
+	dir.normalise();
+
+	//check if the ray hits the polygon
+	Vector3 hit_point;
+	if (!IntersectRay(start, dir, hit_point))
+		return false;
+
+	//check if intersection is within the segment
+	bool plane_hit = IntersectSegmentPlane(start, end, isect, pr, normal);
+	return plane_hit;
+}
+
 }
