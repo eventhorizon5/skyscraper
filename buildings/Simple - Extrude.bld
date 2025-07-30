@@ -495,7 +495,7 @@ AddAction FireServiceBypass, Elevator1, Fire1Bypass
 
 #add an extruded polygon
 DrawWalls = true, true, true, true, true, true
-ExtrudePoly Concrete, 5
+ExtrudePoly Concrete, 5, 1, 1
 AddCustomWall external, My Wall, Concrete, -10, 10, -40, 0, 20, -40, 10, 10, -40, 0, 0, -40, 0, 0
 EndExtrude
 
