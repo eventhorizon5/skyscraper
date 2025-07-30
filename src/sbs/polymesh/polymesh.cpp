@@ -33,11 +33,6 @@
 
 namespace SBS {
 
-#undef EPSILON
-#define EPSILON 0.001f
-#undef SMALL_EPSILON
-#define SMALL_EPSILON 0.000001f
-
 PolyMesh::PolyMesh(Object *parent) : ObjectBase(parent)
 {
 	WallCount = 0;
@@ -1977,6 +1972,9 @@ Vector3 PolyMesh::ComputeNormal2(const PolyArray &vertices, Real &D)
 
 void PolyMesh::SplitWithPlane(int axis, const PolyArray &orig, PolyArray &poly1, PolyArray &poly2, Real value)
 {
+	//splits the given polygon into two polygons, on the desired plane (defined by the axis and value parameters)
+	//axis is 0 for X, 1 for Y, 2 for Z
+
 	//clear output polygons
 	poly1.clear();
 	poly2.clear();

@@ -34,11 +34,6 @@
 
 namespace SBS {
 
-#undef EPSILON
-#define EPSILON 0.001f
-#undef SMALL_EPSILON
-#define SMALL_EPSILON 0.000001f
-
 Polygon::Polygon(Object *parent, const std::string &name, MeshObject *meshwrapper, GeometrySet &geometry, std::vector<Triangle> &triangles, Matrix3 &tex_matrix, Vector3 &tex_vector, const std::string &material, Plane &plane) : ObjectBase(parent)
 {
 	mesh = meshwrapper;
