@@ -902,7 +902,7 @@ DrawWalls = true, true, false, false, false, false
     AssignedShaft = 2
     AutoEnable = false
     CreateElevator true, -0.33 + 1, 0, 0
-    Rotate Elevator 5, 0, 90, 0, 1
+    Rotate Elevator 5:Car 1, 0, 90, 0, 1
 <EndElevator>
 
 <Elevator 6>
@@ -917,7 +917,7 @@ DrawWalls = true, true, false, false, false, false
     AssignedShaft = 2
     AutoEnable = false
     CreateElevator true, -0.33 + 1, 12, 0
-    Rotate Elevator 6, 0, 90, 0, 1
+    Rotate Elevator 6:Car 1, 0, 90, 0, 1
 <EndElevator>
 
 <Elevator 7>
@@ -932,7 +932,7 @@ DrawWalls = true, true, false, false, false, false
     AssignedShaft = 3
     AutoEnable = false
     CreateElevator true, 0.33 - 1, -12, 0
-    Rotate Elevator 7, 0, 270, 0, 1
+    Rotate Elevator 7:Car 1, 0, 270, 0, 1
 <EndElevator>
 
 <Elevator 8>
@@ -947,7 +947,7 @@ DrawWalls = true, true, false, false, false, false
     AssignedShaft = 3
     AutoEnable = false
     CreateElevator true, 0.33 - 1, 0, 0
-    Rotate Elevator 8, 0, 270, 0, 1
+    Rotate Elevator 8:Car 1, 0, 270, 0, 1
 <EndElevator>
 
 <Elevator 9>
@@ -962,7 +962,7 @@ DrawWalls = true, true, false, false, false, false
     AssignedShaft = 3
     AutoEnable = false
     CreateElevator true, 0.33 - 1, 12, 0
-    Rotate Elevator 9, 0, 270, 0, 1
+    Rotate Elevator 9:Car 1, 0, 270, 0, 1
 <EndElevator>
 
 <Elevators 1 to 9>
