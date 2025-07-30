@@ -46,6 +46,15 @@ Version 2.1
 -TextureManager: report on slideshow creation and start/stop
 -Guide: added logo for Virtual Manager page
 -Script Guide: added CreateSlideshow command information and related Action commands
+-Convention Center: fixed door movement of rotated elevators
+-Added Rotation parameter for shaft doors, allowing them to be rotated along with elevator cars
+-Convention Center: rotate shaft doors into position using the new rotation support
+-Added texture tiling parameters to the ExtrudePoly command
+-PolyMesh: updated code in FindWallIntersect()
+-PolyMesh: replaced the CS IntersectRay() with new implementation, fixes some of the wall-clicking issues
+-PolyMesh: replaced IntersectSegment functions
+-PolyMesh: added ComputeNormal2() and SplitWithPlane() replacement functions
+-TextureManager: replaced ComputeTextureMap() and ComputeTextureSpace() functions
 
 
 Version 2.0 - July 24, 2025
