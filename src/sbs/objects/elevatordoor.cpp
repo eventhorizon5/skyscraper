@@ -1166,7 +1166,7 @@ bool ElevatorDoor::FinishShaftDoors(bool DoorWalls, bool TrackWalls)
 	return true;
 }
 
-bool ElevatorDoor::AddShaftDoors(const std::string &lefttexture, const std::string &righttexture, Real thickness, Real CenterX, Real CenterZ, Real voffset, Real tw, Real th)
+bool ElevatorDoor::AddShaftDoors(Real rotation, const std::string &lefttexture, const std::string &righttexture, Real thickness, Real CenterX, Real CenterZ, Real voffset, Real tw, Real th)
 {
 	//adds shaft's elevator doors specified at a relative central position (off of elevator origin)
 	//uses some parameters (width, height, direction) from AddDoor/AddDoors function
@@ -1178,21 +1178,21 @@ bool ElevatorDoor::AddShaftDoors(const std::string &lefttexture, const std::stri
 	//create doors
 	for (size_t i = 0; i < car->ServicedFloors.size(); i++)
 	{
-		if (!AddShaftDoor(car->ServicedFloors[i], lefttexture, righttexture, ShaftDoorThickness, ShaftDoorOrigin.x, ShaftDoorOrigin.z, voffset, tw, th))
+		if (!AddShaftDoor(car->ServicedFloors[i], rotation, lefttexture, righttexture, ShaftDoorThickness, ShaftDoorOrigin.x, ShaftDoorOrigin.z, voffset, tw, th))
 			return false;
 	}
 
 	return true;
 }
 
-DoorWrapper* ElevatorDoor::AddShaftDoor(int floor, const std::string &lefttexture, const std::string &righttexture, Real tw, Real th)
+DoorWrapper* ElevatorDoor::AddShaftDoor(int floor, Real rotation, const std::string &lefttexture, const std::string &righttexture, Real tw, Real th)
 {
 	//compatibility version of AddShaftDoor; please use newer implementation instead
 
-	return AddShaftDoor(floor, lefttexture, righttexture, ShaftDoorThickness, ShaftDoorOrigin.x, ShaftDoorOrigin.z, 0, tw, th);
+	return AddShaftDoor(floor, rotation, lefttexture, righttexture, ShaftDoorThickness, ShaftDoorOrigin.x, ShaftDoorOrigin.z, 0, tw, th);
 }
 
-DoorWrapper* ElevatorDoor::AddShaftDoor(int floor, const std::string &lefttexture, const std::string &righttexture, Real thickness, Real CenterX, Real CenterZ, Real voffset, Real tw, Real th)
+DoorWrapper* ElevatorDoor::AddShaftDoor(int floor, Real rotation, const std::string &lefttexture, const std::string &righttexture, Real thickness, Real CenterX, Real CenterZ, Real voffset, Real tw, Real th)
 {
 	//adds a single elevator shaft door, with position and thickness parameters first specified
 	//by the SetShaftDoors command.
@@ -1243,7 +1243,7 @@ DoorWrapper* ElevatorDoor::AddShaftDoor(int floor, const std::string &lefttextur
 
 	//finish doors
 	DoorWrapper *wrapper = FinishShaftDoor(floor);
-
+	wrapper->Rotate(Vector3(0, rotation, 0));
 	return wrapper;
 }
 

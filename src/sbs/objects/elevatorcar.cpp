@@ -1559,7 +1559,7 @@ DoorWrapper* ElevatorCar::AddDoors(int number, const std::string &lefttexture, c
 	return 0;
 }
 
-bool ElevatorCar::AddShaftDoors(int number, const std::string &lefttexture, const std::string &righttexture, Real thickness, Real CenterX, Real CenterZ, Real voffset, Real tw, Real th)
+bool ElevatorCar::AddShaftDoors(int number, Real rotation, const std::string &lefttexture, const std::string &righttexture, Real thickness, Real CenterX, Real CenterZ, Real voffset, Real tw, Real th)
 {
 	//adds shaft's elevator doors specified at a relative central position (off of elevator origin)
 	//uses some parameters (width, height, direction) from AddDoors function
@@ -1567,31 +1567,31 @@ bool ElevatorCar::AddShaftDoors(int number, const std::string &lefttexture, cons
 	if (GetDoor(number))
 	{
 		Report("Adding shaft doors...");
-		return GetDoor(number)->AddShaftDoors(lefttexture, righttexture, thickness, CenterX, CenterZ, voffset, tw, th);
+		return GetDoor(number)->AddShaftDoors(rotation, lefttexture, righttexture, thickness, CenterX, CenterZ, voffset, tw, th);
 	}
 	else
 		ReportError("Invalid door " + ToString(number));
 	return false;
 }
 
-DoorWrapper* ElevatorCar::AddShaftDoor(int floor, int number, const std::string &lefttexture, const std::string &righttexture, Real tw, Real th)
+DoorWrapper* ElevatorCar::AddShaftDoor(int floor, int number, Real rotation, const std::string &lefttexture, const std::string &righttexture, Real tw, Real th)
 {
 	//adds a single elevator shaft door on the specified floor, with position and thickness parameters first specified
 	//by the SetShaftDoors command.
 
 	if (IsServicedFloor(floor) == true && GetDoor(number))
-		return GetDoor(number)->AddShaftDoor(floor, lefttexture, righttexture, tw, th);
+		return GetDoor(number)->AddShaftDoor(floor, rotation, lefttexture, righttexture, tw, th);
 	else
 		return 0;
 }
 
-DoorWrapper* ElevatorCar::AddShaftDoor(int floor, int number, const std::string &lefttexture, const std::string &righttexture, Real thickness, Real CenterX, Real CenterZ, Real voffset, Real tw, Real th)
+DoorWrapper* ElevatorCar::AddShaftDoor(int floor, int number, Real rotation, const std::string &lefttexture, const std::string &righttexture, Real thickness, Real CenterX, Real CenterZ, Real voffset, Real tw, Real th)
 {
 	//adds a single elevator shaft door on the specified floor, with position and thickness parameters first specified
 	//by the SetShaftDoors command.
 
 	if (IsServicedFloor(floor) == true && GetDoor(number))
-		return GetDoor(number)->AddShaftDoor(floor, lefttexture, righttexture, thickness, CenterX, CenterZ, voffset, tw, th);
+		return GetDoor(number)->AddShaftDoor(floor, rotation, lefttexture, righttexture, thickness, CenterX, CenterZ, voffset, tw, th);
 	else
 		return 0;
 }
