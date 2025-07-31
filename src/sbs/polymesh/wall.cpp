@@ -516,7 +516,7 @@ void Wall::CreateSphere(const std::string &name, const std::string &texture, Rea
 			poly1.reserve(3);
 			poly1.emplace_back(p1);
 			uvMap.emplace_back(Vector2(u1, v1));
-			tri1.a = 2 + index;
+			tri1.a = 0 + index;
 
 			poly1.emplace_back(p2);
 			uvMap.emplace_back(Vector2(u1, v2));
@@ -524,7 +524,7 @@ void Wall::CreateSphere(const std::string &name, const std::string &texture, Rea
 
 			poly1.emplace_back(p3);
 			uvMap.emplace_back(Vector2(u2, v2));
-			tri1.a = 0 + index;
+			tri1.c = 2 + index;
 
 			result.emplace_back(poly1);
 			uvMapSet.emplace_back(uvMap);
@@ -537,7 +537,7 @@ void Wall::CreateSphere(const std::string &name, const std::string &texture, Rea
 			poly2.reserve(3);
 			poly2.emplace_back(p1);
 			uvMap.emplace_back(Vector2(u1, v1));
-			tri2.a = 5 + index;
+			tri2.a = 3 + index;
 
 			poly2.emplace_back(p3);
 			uvMap.emplace_back(Vector2(u2, v2));
@@ -545,7 +545,7 @@ void Wall::CreateSphere(const std::string &name, const std::string &texture, Rea
 
 			poly2.emplace_back(p4);
 			uvMap.emplace_back(Vector2(u2, v1));
-			tri2.c = 3 + index;
+			tri2.c = 5 + index;
 
 			result.emplace_back(poly2);
 			uvMapSet.emplace_back(uvMap);
