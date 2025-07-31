@@ -1197,7 +1197,7 @@ DrawWalls = true, true, false, false, false, false
     #panel
     SetAutoSize = false, false
     CreatePanel ElevPanel, 15, 7, back, -1.75 - 0.875 + 0.1, -3 + 0.2 + 0.001, 0.15, 0.15, 0.3, 0.45, 4, 1, 1
-    AddControl 1, switch.wav, 2, 2, 1, 1, 0, 0, Fire2Off, Fire2Hold, Fire2On, Fire2Off, Fire2Hold, Fire2On
+    AddControl 1, switch.wav, 1, 6, 1, 1, 0, 0, Fire2Off, Fire2Hold, Fire2On, Fire2Off, Fire2Hold, Fire2On
     AddButton 1, switch.wav, ButtonCancel, ButtonCancel, 13, 6, cancel, 1, 1
     AddFloorButton 1, Button109, ButtonLit109, 2, 6, 109, 1, 1
     AddFloorButton 1, Button108, ButtonLit108, 2, 5, 108, 1, 1
