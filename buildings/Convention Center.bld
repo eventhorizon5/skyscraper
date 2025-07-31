@@ -113,6 +113,8 @@
     AddText BlackLit, ButtonLitA, nimbus_sans.ttf, 47, A, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText Black, ButtonL, nimbus_sans.ttf, 47, L, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText BlackLit, ButtonLitL, nimbus_sans.ttf, 47, L, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText Black, ButtonSB, nimbus_sans.ttf, 47, SB, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText BlackLit, ButtonLitSB, nimbus_sans.ttf, 47, SB, -1, -1, -1, -1, center, center, 255, 255, 255
     AddTextRange 1, 114, Black, Button%number%, nimbus_sans.ttf, 47, %number%, -1, -1, -1, -1, center, center, 255, 255, 255
     AddTextRange 1, 114, BlackLit, ButtonLit%number%, nimbus_sans.ttf, 47, %number%, -1, -1, -1, -1, center, center, 255, 255, 255
     AddTextRange 1, 4, Black, ButtonLL%number%, nimbus_sans.ttf, 47, LL%number%, -1, -1, -1, -1, center, center, 255, 255, 255
@@ -761,7 +763,7 @@ ShaftShowOutside 3 = 0 - 100
 ShowFullShaft 3 = true
 
 #Service elevator shaft
-AddShaft 4, 0, 200, 0, 111
+AddShaft 4, 0, 200, -4, 111
 ShaftCut 4, -4, -4.125 + 0.33, 4, 4.125, 0, 5
 
 #Tower express elevator shaft
@@ -1149,7 +1151,7 @@ DrawWalls = true, true, false, false, false, false
     Deceleration = 0.2
     AccelJerk = 0.3
     DecelJerk = 0.3
-    ServicedFloors = 0 - 109
+    ServicedFloors = -4 - 109
     AssignedShaft = 4
     CreateElevator true, 0, -0.294, 0
 
@@ -1316,6 +1318,10 @@ DrawWalls = true, true, false, false, false, false
     AddFloorButton 2, Button2, ButtonLit2, 13, 5, 2, 1, 1
     AddFloorButton 2, ButtonA, ButtonLitA, 13, 4, 1, 1, 1
     AddFloorButton 2, ButtonL, ButtonLitL, 13, 3, 0, 1, 1
+    AddFloorButton 2, ButtonLL1, ButtonLitLL1, 14, 5, -1, 1, 1
+    AddFloorButton 2, ButtonLL2, ButtonLitLL2, 14, 4, -2, 1, 1
+    AddFloorButton 2, ButtonLL3, ButtonLitLL3, 14, 3, -3, 1, 1
+    AddFloorButton 2, ButtonSB, ButtonLitSB, 14, 2, -4, 1, 1
     AddControlButton 2, ButtonOpen, 16, 6, open, 1, 1
     AddControlButton 2, ButtonClose, 16, 4, close, 1, 1
     AddControlButton 2, ButtonAlarm, 16, 2, alarm, 1, 1
