@@ -162,7 +162,7 @@ void Wall::AddPolygonMesh(const std::string &name, const std::string &material, 
 	//create a mesh of polygons, providing the UV map
 
 	std::vector<std::vector<Polygon::Geometry> > geometry;
-	std::vector<Triangle> triangles;
+	std::vector<std::vector<Triangle>> triangles;
 	PolygonSet converted_vertices;
 	if (!polymesh->CreateMesh(meshwrapper, name, material, vertices, uvMap, geometry, triangles, converted_vertices, 0, 0))
 	{
@@ -182,7 +182,7 @@ void Wall::AddPolygonMesh(const std::string &name, const std::string &material, 
 	{
 		if (uvMap[i].size() > 0)
 		{
-			Polygon* poly = new Polygon(this, name, meshwrapper, geometry, triangles, tex_matrix, tex_vector, material, plane);
+			Polygon* poly = new Polygon(this, name, meshwrapper, geometry[i], triangles[i], tex_matrix, tex_vector, material, plane);
 			polygons.emplace_back(poly);
 		}
 	}
