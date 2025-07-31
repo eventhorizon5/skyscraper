@@ -53,6 +53,7 @@
 #include "utility.h"
 #include "reverb.h"
 #include "wall.h"
+#include "shape.h"
 #include "floor.h"
 
 namespace SBS {
@@ -99,10 +100,6 @@ Floor::Floor(Object *parent, FloorManager *manager, int number) : Object(parent)
 	//create a dynamic mesh for doors
 	DoorWrapper = new DynamicMesh(this, GetSceneNode(), GetName() + " Door Container", 0, true);
 	DoorWrapper->force_combine = true;
-
-	//Wall* wall = Level->CreateWallObject("Floor Sphere");
-	//wall->CreateSphere("Floor Sphere", "Concrete", 1.0, 4, 4, 1.0, 1.0, true);
-	//wall->CreateBox("Floor Box", "Concrete", 5, 5, 5, 1.0, 1.0, true);
 }
 
 Floor::~Floor()
@@ -370,6 +367,19 @@ Wall* Floor::AddWall(const std::string &name, const std::string &texture, Real t
 		}
 	}
 	return wall;
+}
+
+Shape* Floor::CreateShape(Wall *wall)
+{
+	//Creates a shape in the specified wall object
+	//returns a Shape object, which must be deleted by the caller after use
+
+	if (!wall)
+		return 0;
+
+	Shape *shape = new Shape(wall);
+	shape->origin = Vector3(0, GetBase(true), 0);
+	return shape;
 }
 
 Wall* Floor::AddInterfloorWall(const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real height_in1, Real height_in2, Real voffset1, Real voffset2, Real tw, Real th)
