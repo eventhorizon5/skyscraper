@@ -1988,7 +1988,7 @@ void PolyMesh::SplitWithPlane(int axis, const PolyArray &orig, PolyArray &poly1,
 
 	size_t n = orig.size();
 	if (n < 2)
-		return; // Not enough vertices
+		return; //not enough vertices
 
 	//preallocate memory for a worst-case scenario
 	poly1.reserve(orig.size());
