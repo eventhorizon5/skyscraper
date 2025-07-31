@@ -576,7 +576,7 @@ void Wall::CreateBox(const std::string &name, const std::string &texture, Real w
 		Triangle tri1;
 		poly1.emplace_back(a);
 		uvMap.emplace_back(uvA);
-		tri1.a = 0;
+		tri1.a = 2;
 
 		poly1.emplace_back(b);
 		uvMap.emplace_back(uvB);
@@ -584,7 +584,7 @@ void Wall::CreateBox(const std::string &name, const std::string &texture, Real w
 
 		poly1.emplace_back(c);
 		uvMap.emplace_back(uvC);
-		tri1.c = 2;
+		tri1.c = 0;
 
 		result.emplace_back(poly1);
 		uvMapSet.emplace_back(uvMap);
@@ -595,7 +595,7 @@ void Wall::CreateBox(const std::string &name, const std::string &texture, Real w
 		Triangle tri2;
 		poly2.emplace_back(a);
 		uvMap.emplace_back(uvA);
-		tri2.a = 3;
+		tri2.a = 5;
 
 		poly2.emplace_back(c);
 		uvMap.emplace_back(uvC);
@@ -603,7 +603,7 @@ void Wall::CreateBox(const std::string &name, const std::string &texture, Real w
 
 		poly2.emplace_back(d);
 		uvMap.emplace_back(uvD);
-		tri2.c = 5;
+		tri2.c = 3;
 
 		result.emplace_back(poly2);
 		uvMapSet.emplace_back(uvMap);
@@ -613,23 +613,23 @@ void Wall::CreateBox(const std::string &name, const std::string &texture, Real w
 		AddPolygon(name, texture, result, uvMapSet, triangles, tw, th, autosize);
 	};
 
-	// Front face (+Z)
-	//addQuad(p101, p001, p011, p111, {1, 0}, {0, 0}, {0, 1}, {1, 1});
+	//back face (+Z)
+	addQuad(p101, p001, p011, p111, {1, 0}, {0, 0}, {0, 1}, {1, 1});
 
-	// Back face (-Z)
+	//front face (-Z)
 	addQuad(p100, p110, p010, p000, {1, 0}, {1, 1}, {0, 1}, {0, 0});
 
-	// Left face (-X)
-	//addQuad(p001, p000, p010, p011, {1, 0}, {0, 0}, {0, 1}, {1, 1});
+	//left face (-X)
+	addQuad(p001, p000, p010, p011, {1, 0}, {0, 0}, {0, 1}, {1, 1});
 
-	// Right face (+X)
-	//addQuad(p100, p101, p111, p110, {0, 0}, {1, 0}, {1, 1}, {0, 1});
+	//right face (+X)
+	addQuad(p100, p101, p111, p110, {0, 0}, {1, 0}, {1, 1}, {0, 1});
 
-	// Top face (+Y)
-	//addQuad(p011, p010, p110, p111, {0, 1}, {0, 0}, {1, 0}, {1, 1});
+	//top face (+Y)
+	addQuad(p011, p010, p110, p111, {0, 1}, {0, 0}, {1, 0}, {1, 1});
 
-	// Bottom face (-Y)
-	//addQuad(p100, p000, p001, p101, {1, 1}, {0, 1}, {0, 0}, {1, 0});
+	//bottom face (-Y)
+	addQuad(p100, p000, p001, p101, {1, 1}, {0, 1}, {0, 0}, {1, 0});
 }
 
 }
