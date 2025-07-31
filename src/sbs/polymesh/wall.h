@@ -44,8 +44,8 @@ public:
 	Polygon* AddQuad(const std::string &name, const std::string &texture, const Vector3 &v1, const Vector3 &v2, const Vector3 &v3, const Vector3 &v4, Real tw, Real th, bool autosize);
 	Polygon* AddTriangle(const std::string &name, const std::string &texture, const Vector3 &v1, const Vector3 &v2, const Vector3 &v3, Real tw, Real th, bool autosize);
 	Polygon* AddPolygon(const std::string &name, const std::string &texture, PolyArray &vertices, Real tw, Real th, bool autosize);
+	Polygon* AddPolygon(const std::string &name, const std::string &texture, PolygonSet &vertices, std::vector<std::vector<Vector2>> &uvMap, std::vector<Triangle> &triangles, Real tw, Real th, bool autosize);
 	Polygon* AddPolygonSet(const std::string &name, const std::string &material, PolygonSet &vertices, Matrix3 &tex_matrix, Vector3 &tex_vector);
-	bool AddPolygonMesh(const std::string &name, const std::string &material, PolygonSet &vertices, std::vector<std::vector<Vector2>> &uvMap);
 	void DeletePolygons(bool recreate_collider = true);
 	void DeletePolygon(int index, bool recreate_colliders);
 	int GetPolygonCount();

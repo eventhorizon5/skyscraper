@@ -132,6 +132,35 @@ Polygon* Wall::AddPolygon(const std::string &name, const std::string &texture, P
 	return poly;
 }
 
+Polygon* Wall::AddPolygon(const std::string &name, const std::string &texture, PolygonSet &vertices, std::vector<std::vector<Vector2>> &uvMap, std::vector<Triangle> &triangles, Real tw, Real th, bool autosize)
+{
+	//create a generic polygon, providing the UV texture mapping and triangles
+
+	Matrix3 tm;
+	Vector3 tv;
+	//std::vector<Extents> index_extents;
+	std::vector<std::vector<Polygon::Geometry> > geometry;
+	PolygonSet converted_vertices;
+	if (!polymesh->CreateMesh(meshwrapper, name, texture, vertices, uvMap, geometry, converted_vertices, tw, th))
+	{
+		ReportError("Error creating wall '" + name + "'");
+		return 0;
+	}
+
+	if (triangles.size() == 0)
+		return 0;
+
+	bool result;
+	std::string material = sbs->GetTextureManager()->GetTextureMaterial(texture, result, true, name);
+
+	//compute plane
+	Plane plane = sbs->GetPolyMesh()->ComputePlane(converted_vertices[0]);
+
+	Polygon* poly = new Polygon(this, name, meshwrapper, geometry, triangles, tm, tv, material, plane);
+	polygons.emplace_back(poly);
+	return poly;
+}
+
 Polygon* Wall::AddPolygonSet(const std::string &name, const std::string &material, PolygonSet &vertices, Matrix3 &tex_matrix, Vector3 &tex_vector)
 {
 	//create a set of polygons, providing the original material and texture mapping
@@ -155,38 +184,6 @@ Polygon* Wall::AddPolygonSet(const std::string &name, const std::string &materia
 	polygons.emplace_back(poly);
 
 	return poly;
-}
-
-bool Wall::AddPolygonMesh(const std::string &name, const std::string &material, PolygonSet &vertices, std::vector<std::vector<Vector2>> &uvMap)
-{
-	//create a mesh of polygons, providing the UV map
-
-	std::vector<std::vector<Polygon::Geometry> > geometry;
-	std::vector<std::vector<Triangle>> triangles;
-	PolygonSet converted_vertices;
-	if (!polymesh->CreateMesh(meshwrapper, name, material, vertices, uvMap, geometry, triangles, converted_vertices, 0, 0))
-		return ReportError("Error creating polygon mesh '" + name + "'");
-
-	Matrix3 tex_matrix = Matrix3::IDENTITY;
-	Vector3 tex_vector = Vector3::ZERO;
-	for (size_t i = 0; i < uvMap.size(); ++i)
-	{
-		if (uvMap[i].size() > 0)
-		{
-			if (triangles[i].size() == 0)
-				continue;
-
-			if (i > geometry.size() || i > triangles.size())
-				return ReportError("Error creating polygon mesh '" + name + "': geometry or triangles size mismatch");
-
-			//compute plane
-			Plane plane = sbs->GetPolyMesh()->ComputePlane(converted_vertices[i]);
-
-			Polygon* poly = new Polygon(this, name, meshwrapper, geometry[i], triangles[i], tex_matrix, tex_vector, material, plane);
-			polygons.emplace_back(poly);
-		}
-	}
-	return true;
 }
 
 void Wall::DeletePolygons(bool recreate_collider)
@@ -545,14 +542,11 @@ void Wall::CreateSphere(const std::string &name, const std::string &texture, Rea
 	}
 
 	//create polygons from the generated sphere segments
-	AddPolygonMesh(name, texture, result, uvMapSet);
+	//AddPolygonMesh(name, texture, result, uvMapSet);
 }
 
 void Wall::CreateBox(const std::string &name, const std::string &texture, Real width, Real height, Real depth, Real tw, Real th, bool autosize)
 {
-	PolygonSet result;
-	std::vector<std::vector<Vector2>> uvMapSet;
-
 	Real hw = width * 0.5;
 	Real hh = height * 0.5;
 	Real hd = depth * 0.5;
@@ -570,32 +564,53 @@ void Wall::CreateBox(const std::string &name, const std::string &texture, Real w
 	auto addQuad = [&](const Vector3& a, const Vector3& b, const Vector3& c, const Vector3& d,
 			const Vector2& uvA, const Vector2& uvB, const Vector2& uvC, const Vector2& uvD)
 	{
+		PolygonSet result;
+		std::vector<std::vector<Vector2>> uvMapSet;
+
 		std::vector<Vector2> uvMap;
+		uvMap.reserve(2);
+		std::vector<Triangle> triangles;
+		triangles.reserve(2);
 
-		PolyArray tri1;
-		tri1.emplace_back(a);
+		PolyArray poly1;
+		Triangle tri1;
+		poly1.emplace_back(a);
 		uvMap.emplace_back(uvA);
+		tri1.a = 0;
 
-		tri1.emplace_back(b);
+		poly1.emplace_back(b);
 		uvMap.emplace_back(uvB);
+		tri1.b = 1;
 
-		tri1.emplace_back(c);
+		poly1.emplace_back(c);
 		uvMap.emplace_back(uvC);
-		result.emplace_back(tri1);
+		tri1.c = 2;
+
+		result.emplace_back(poly1);
 		uvMapSet.emplace_back(uvMap);
+		triangles.emplace_back(tri1);
 
 		uvMap.clear();
-		PolyArray tri2;
-		tri2.emplace_back(a);
+		PolyArray poly2;
+		Triangle tri2;
+		poly2.emplace_back(a);
 		uvMap.emplace_back(uvA);
+		tri2.a = 0;
 
-		tri2.emplace_back(c);
+		poly2.emplace_back(c);
 		uvMap.emplace_back(uvC);
+		tri2.b = 1;
 
-		tri2.emplace_back(d);
+		poly2.emplace_back(d);
 		uvMap.emplace_back(uvD);
-		result.emplace_back(tri2);
+		tri2.c = 2;
+
+		result.emplace_back(poly2);
 		uvMapSet.emplace_back(uvMap);
+		triangles.emplace_back(tri2);
+
+		//create polygon from the generated triangles
+		AddPolygon(name, texture, result, uvMapSet, triangles, tw, th, autosize);
 	};
 
 	// Front face (+Z)
@@ -615,9 +630,6 @@ void Wall::CreateBox(const std::string &name, const std::string &texture, Real w
 
 	// Bottom face (-Y)
 	//addQuad(p100, p000, p001, p101, {1, 1}, {0, 1}, {0, 0}, {1, 0});
-
-	//create polygons from the generated quads
-	AddPolygonMesh(name, texture, result, uvMapSet);
 }
 
 }

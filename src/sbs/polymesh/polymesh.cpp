@@ -267,7 +267,7 @@ bool PolyMesh::CreateMesh(MeshObject *mesh, const std::string &name, const std::
 	return true;
 }
 
-bool PolyMesh::CreateMesh(MeshObject *mesh, const std::string &name, const std::string &material, PolygonSet &vertices, std::vector<std::vector<Vector2>> &uvMap, std::vector<std::vector<Polygon::Geometry> > &geometry, std::vector<std::vector<Triangle>> &triangles, PolygonSet &converted_vertices, Real tw, Real th, bool convert_vertices)
+bool PolyMesh::CreateMesh(MeshObject *mesh, const std::string &name, const std::string &material, PolygonSet &vertices, std::vector<std::vector<Vector2>> &uvMap, std::vector<std::vector<Polygon::Geometry> > &geometry, PolygonSet &converted_vertices, Real tw, Real th, bool convert_vertices)
 {
 	//create custom geometry, apply a texture map and material, and return the created submesh
 	//tw and th are only used when overriding texel map
@@ -286,16 +286,7 @@ bool PolyMesh::CreateMesh(MeshObject *mesh, const std::string &name, const std::
 	else
 		converted_vertices = vertices;
 
-	//triangulate mesh
-	TriangleIndices *trimesh = new TriangleIndices[converted_vertices.size()];
 	size_t trimesh_size = converted_vertices.size();
-
-	for (size_t i = 0; i < trimesh_size; i++)
-	{
-		trimesh[i].triangles.reserve(converted_vertices[i].size() - 2);
-		for (size_t j = 0; j < converted_vertices[i].size(); j++)
-			trimesh[i].triangles.emplace_back(triangles[i][j]);
-	}
 
 	//initialize geometry arrays
 	geometry.resize(trimesh_size);
@@ -326,26 +317,6 @@ bool PolyMesh::CreateMesh(MeshObject *mesh, const std::string &name, const std::
 			k++;
 		}
 	}
-
-	//add triangles to single array, to be passed to the submesh
-	size_t location = 0;
-	triangles.resize(trimesh_size);
-	for (size_t i = 0; i < trimesh_size; i++)
-	{
-		if (triangles[i].capacity() < trimesh[i].triangles.size())
-			triangles[i].reserve(trimesh[i].triangles.size());
-		for (size_t j = 0; j < trimesh[i].triangles.size(); j++)
-		{
-			Triangle tri = trimesh[i].triangles[j];
-			tri += location;
-			triangles[i].emplace_back(tri);
-		}
-		location += converted_vertices[i].size();
-	}
-
-	//delete trimesh array
-	delete [] trimesh;
-	trimesh = 0;
 
 	//recreate colliders if specified
 	if (sbs->DeleteColliders == true)
