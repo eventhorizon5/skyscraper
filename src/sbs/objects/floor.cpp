@@ -52,6 +52,7 @@
 #include "controller.h"
 #include "utility.h"
 #include "reverb.h"
+#include "wall.h"
 #include "floor.h"
 
 namespace SBS {
@@ -98,6 +99,9 @@ Floor::Floor(Object *parent, FloorManager *manager, int number) : Object(parent)
 	//create a dynamic mesh for doors
 	DoorWrapper = new DynamicMesh(this, GetSceneNode(), GetName() + " Door Container", 0, true);
 	DoorWrapper->force_combine = true;
+
+	Wall* wall = Level->CreateWallObject("Floor Sphere");
+	wall->CreateSphere("Floor Sphere", "Concrete", 1.0, 16, 16, 1.0, 1.0, true);
 }
 
 Floor::~Floor()

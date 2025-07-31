@@ -21,6 +21,7 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+#include <cmath>
 #include "globals.h"
 #include "sbs.h"
 #include "polymesh.h"
@@ -154,6 +155,37 @@ Polygon* Wall::AddPolygonSet(const std::string &name, const std::string &materia
 	polygons.emplace_back(poly);
 
 	return poly;
+}
+
+void Wall::AddPolygonMesh(const std::string &name, const std::string &material, PolygonSet &vertices, std::vector<std::vector<Vector2>> &uvMap)
+{
+	//create a mesh of polygons, providing the UV map
+
+	std::vector<std::vector<Polygon::Geometry> > geometry;
+	std::vector<Triangle> triangles;
+	PolygonSet converted_vertices;
+	if (!polymesh->CreateMesh(meshwrapper, name, material, vertices, uvMap, geometry, triangles, converted_vertices, 0, 0))
+	{
+		ReportError("Error creating polygon mesh '" + name + "'");
+		return;
+	}
+
+	if (triangles.size() == 0)
+		return;
+
+	//compute plane
+	Plane plane = sbs->GetPolyMesh()->ComputePlane(converted_vertices[0]);
+
+	Matrix3 tex_matrix = Matrix3::IDENTITY;
+	Vector3 tex_vector = Vector3::ZERO;
+	for (size_t i = 0; i < uvMap.size(); ++i)
+	{
+		if (uvMap[i].size() > 0)
+		{
+			Polygon* poly = new Polygon(this, name, meshwrapper, geometry, triangles, tex_matrix, tex_vector, material, plane);
+			polygons.emplace_back(poly);
+		}
+	}
 }
 
 void Wall::DeletePolygons(bool recreate_collider)
@@ -445,6 +477,73 @@ bool Wall::ChangeTexture(const std::string &texture, bool matcheck)
 			found = true;
 	}
 	return found;
+}
+
+void Wall::CreateSphere(const std::string &name, const std::string &texture, Real radius, int latSteps, int lonSteps, Real tw, Real th, bool autosize)
+{
+	//generates a sphere on the given wall object
+
+	PolygonSet result;
+	std::vector<std::vector<Vector2>> uvMapSet;
+
+	for (int lat = 0; lat < latSteps; ++lat)
+	{
+		float v1 = float(lat) / latSteps;
+		float v2 = float(lat + 1) / latSteps;
+
+		float theta1 = pi * (v1 - 0.5f);
+		float theta2 = pi * (v2 - 0.5f);
+
+		for (int lon = 0; lon < lonSteps; ++lon)
+		{
+			float u1 = float(lon) / lonSteps;
+			float u2 = float(lon + 1) / lonSteps;
+
+			float phi1 = 2.0f * pi * u1;
+			float phi2 = 2.0f * pi * u2;
+
+			Vector3 p1 = radius * Vector3(cosf(theta1) * cosf(phi1), sinf(theta1), cosf(theta1) * sinf(phi1));
+			Vector3 p2 = radius * Vector3(cosf(theta2) * cosf(phi1), sinf(theta2), cosf(theta2) * sinf(phi1));
+			Vector3 p3 = radius * Vector3(cosf(theta2) * cosf(phi2), sinf(theta2), cosf(theta2) * sinf(phi2));
+			Vector3 p4 = radius * Vector3(cosf(theta1) * cosf(phi2), sinf(theta1), cosf(theta1) * sinf(phi2));
+
+			std::vector<Vector2> uvMap;
+			uvMap.reserve(6);
+
+			// First triangle
+			PolyArray tri1;
+			tri1.reserve(3);
+			tri1.emplace_back(p1);
+			uvMap.emplace_back(Vector2(u1, v1));
+
+			tri1.emplace_back(p1);
+			uvMap.emplace_back(Vector2(u1, v2));
+
+			tri1.emplace_back(p1);
+			uvMap.emplace_back(Vector2(u2, v2));
+
+			result.emplace_back(tri1);
+			uvMapSet.emplace_back(uvMap);
+
+			// Second triangle
+			PolyArray tri2;
+			tri2.reserve(3);
+			tri2.emplace_back(p1);
+			uvMap.emplace_back(Vector2(u1, v1));
+
+			tri2.emplace_back(p3);
+			uvMap.emplace_back(Vector2(u2, v2));
+
+			tri2.emplace_back(p4);
+			uvMap.emplace_back(Vector2(u2, v1));
+
+			result.emplace_back(tri1);
+			uvMapSet.emplace_back(uvMap);
+		}
+	}
+
+	//create polygons from the generated sphere segments
+	AddPolygonMesh(name, texture, result, uvMapSet);
 }
 
 }

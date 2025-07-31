@@ -267,6 +267,94 @@ bool PolyMesh::CreateMesh(MeshObject *mesh, const std::string &name, const std::
 	return true;
 }
 
+bool PolyMesh::CreateMesh(MeshObject *mesh, const std::string &name, const std::string &material, PolygonSet &vertices, std::vector<std::vector<Vector2>> &uvMap, std::vector<std::vector<Polygon::Geometry> > &geometry, std::vector<Triangle> &triangles, PolygonSet &converted_vertices, Real tw, Real th, bool convert_vertices)
+{
+	//create custom geometry, apply a texture map and material, and return the created submesh
+	//tw and th are only used when overriding texel map
+
+	//convert to remote positioning
+	if (convert_vertices == true)
+	{
+		converted_vertices.resize(vertices.size());
+		for (size_t i = 0; i < vertices.size(); i++)
+		{
+			converted_vertices[i].reserve(vertices[i].size());
+			for (size_t j = 0; j < vertices[i].size(); j++)
+				converted_vertices[i].emplace_back(sbs->ToRemote(vertices[i][j]));
+		}
+	}
+	else
+		converted_vertices = vertices;
+
+	//triangulate mesh
+	TriangleIndices *trimesh = new TriangleIndices[converted_vertices.size()];
+	size_t trimesh_size = converted_vertices.size();
+
+	for (size_t i = 0; i < trimesh_size; i++)
+	{
+		//do a (very) simple triangulation
+		//this method also somewhat works with non-planar polygons
+		trimesh[i].triangles.reserve(converted_vertices[i].size() - 2);
+		for (size_t j = 2; j < converted_vertices[i].size(); j++)
+			trimesh[i].triangles.emplace_back(Triangle(0, j - 1, j));
+	}
+
+	//initialize geometry arrays
+	geometry.resize(trimesh_size);
+
+	for (size_t i = 0; i < trimesh_size; i++)
+	{
+		geometry[i].resize(converted_vertices[i].size());
+	}
+
+	//populate vertices, normals, and texels for mesh data
+	unsigned int k = 0;
+
+	for (size_t i = 0; i < trimesh_size; i++)
+	{
+		for (size_t j = 0; j < converted_vertices[i].size(); j++)
+		{
+			//calculate normal
+			Vector3 normal = ComputePlane(converted_vertices[i], false).normal;
+
+			geometry[i][j].vertex = converted_vertices[i][j];
+			geometry[i][j].normal = normal;
+
+			if (i >= uvMap.size())
+				return ReportError("PolyMesh: invalid polygon index for texel");
+			if (j >= uvMap[i].size())
+				return ReportError("PolyMesh: invalid texel index");
+			geometry[i][j].texel = uvMap[i][j];
+			k++;
+		}
+	}
+
+	//add triangles to single array, to be passed to the submesh
+	size_t location = 0;
+	for (size_t i = 0; i < trimesh_size; i++)
+	{
+		if (triangles.capacity() < trimesh[i].triangles.size())
+			triangles.reserve(trimesh[i].triangles.size());
+		for (size_t j = 0; j < trimesh[i].triangles.size(); j++)
+		{
+			Triangle tri = trimesh[i].triangles[j];
+			tri += location;
+			triangles.emplace_back(tri);
+		}
+		location += converted_vertices[i].size();
+	}
+
+	//delete trimesh array
+	delete [] trimesh;
+	trimesh = 0;
+
+	//recreate colliders if specified
+	if (sbs->DeleteColliders == true)
+		mesh->DeleteCollider();
+
+	return true;
+}
+
 Vector2* PolyMesh::GetTexels(Matrix3 &tex_matrix, Vector3 &tex_vector, PolygonSet &vertices, Real tw, Real th, size_t &texel_count)
 {
 	//return texel array for specified texture transformation matrix and vector
