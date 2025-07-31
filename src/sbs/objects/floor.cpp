@@ -101,7 +101,7 @@ Floor::Floor(Object *parent, FloorManager *manager, int number) : Object(parent)
 	DoorWrapper->force_combine = true;
 
 	Wall* wall = Level->CreateWallObject("Floor Sphere");
-	wall->CreateSphere("Floor Sphere", "Concrete", 1.0, 16, 16, 1.0, 1.0, true);
+	wall->CreateSphere("Floor Sphere", "Concrete", 1.0, 4, 4, 1.0, 1.0, true);
 }
 
 Floor::~Floor()

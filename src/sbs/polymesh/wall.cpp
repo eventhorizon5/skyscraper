@@ -516,10 +516,10 @@ void Wall::CreateSphere(const std::string &name, const std::string &texture, Rea
 			tri1.emplace_back(p1);
 			uvMap.emplace_back(Vector2(u1, v1));
 
-			tri1.emplace_back(p1);
+			tri1.emplace_back(p2);
 			uvMap.emplace_back(Vector2(u1, v2));
 
-			tri1.emplace_back(p1);
+			tri1.emplace_back(p3);
 			uvMap.emplace_back(Vector2(u2, v2));
 
 			result.emplace_back(tri1);
