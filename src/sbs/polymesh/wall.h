@@ -63,7 +63,7 @@ public:
 	bool ReplaceTexture(const std::string &oldtexture, const std::string &newtexture);
 	bool ChangeTexture(const std::string &texture, bool matcheck = true);
 	void CreateSphere(const std::string &name, const std::string &texture, Real radius, int latSteps, int lonSteps, Real tw, Real th, bool autosize);
-	void CreateBox(const std::string &name, const std::string &texture, float width, float height, float depth, Real tw, Real th, bool autosize);
+	void CreateBox(const std::string &name, const std::string &texture, Real width, Real height, Real depth, Real tw, Real th, bool autosize);
 
 private:
 	//mesh wrapper

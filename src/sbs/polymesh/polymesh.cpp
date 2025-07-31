@@ -292,11 +292,9 @@ bool PolyMesh::CreateMesh(MeshObject *mesh, const std::string &name, const std::
 
 	for (size_t i = 0; i < trimesh_size; i++)
 	{
-		//do a (very) simple triangulation
-		//this method also somewhat works with non-planar polygons
 		trimesh[i].triangles.reserve(converted_vertices[i].size() - 2);
-		for (size_t j = 2; j < converted_vertices[i].size(); j++)
-			trimesh[i].triangles.emplace_back(Triangle(0, j - 1, j));
+		for (size_t j = 0; j < converted_vertices[i].size(); j++)
+			trimesh[i].triangles.emplace_back(triangles[i][j]);
 	}
 
 	//initialize geometry arrays

@@ -548,14 +548,14 @@ void Wall::CreateSphere(const std::string &name, const std::string &texture, Rea
 	AddPolygonMesh(name, texture, result, uvMapSet);
 }
 
-void Wall::CreateBox(const std::string &name, const std::string &texture, float width, float height, float depth, Real tw, Real th, bool autosize)
+void Wall::CreateBox(const std::string &name, const std::string &texture, Real width, Real height, Real depth, Real tw, Real th, bool autosize)
 {
 	PolygonSet result;
 	std::vector<std::vector<Vector2>> uvMapSet;
 
-	float hw = width * 0.5f;
-	float hh = height * 0.5f;
-	float hd = depth * 0.5f;
+	Real hw = width * 0.5;
+	Real hh = height * 0.5;
+	Real hd = depth * 0.5;
 
 	// 8 corners of the box
 	Vector3 p000(-hw, -hh, -hd); // left bottom back
@@ -599,22 +599,22 @@ void Wall::CreateBox(const std::string &name, const std::string &texture, float 
 	};
 
 	// Front face (+Z)
-	addQuad(p101, p001, p011, p111, {1, 0}, {0, 0}, {0, 1}, {1, 1});
+	//addQuad(p101, p001, p011, p111, {1, 0}, {0, 0}, {0, 1}, {1, 1});
 
 	// Back face (-Z)
 	addQuad(p100, p110, p010, p000, {1, 0}, {1, 1}, {0, 1}, {0, 0});
 
 	// Left face (-X)
-	addQuad(p001, p000, p010, p011, {1, 0}, {0, 0}, {0, 1}, {1, 1});
+	//addQuad(p001, p000, p010, p011, {1, 0}, {0, 0}, {0, 1}, {1, 1});
 
 	// Right face (+X)
-	addQuad(p100, p101, p111, p110, {0, 0}, {1, 0}, {1, 1}, {0, 1});
+	//addQuad(p100, p101, p111, p110, {0, 0}, {1, 0}, {1, 1}, {0, 1});
 
 	// Top face (+Y)
-	addQuad(p011, p010, p110, p111, {0, 1}, {0, 0}, {1, 0}, {1, 1});
+	//addQuad(p011, p010, p110, p111, {0, 1}, {0, 0}, {1, 0}, {1, 1});
 
 	// Bottom face (-Y)
-	addQuad(p100, p000, p001, p101, {1, 1}, {0, 1}, {0, 0}, {1, 0});
+	//addQuad(p100, p000, p001, p101, {1, 1}, {0, 1}, {0, 0}, {1, 0});
 
 	//create polygons from the generated quads
 	AddPolygonMesh(name, texture, result, uvMapSet);
