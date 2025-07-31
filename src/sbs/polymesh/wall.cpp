@@ -483,7 +483,9 @@ void Wall::CreateSphere(const std::string &name, const std::string &texture, Rea
 
 	PolygonSet result;
 	std::vector<std::vector<Vector2>> uvMapSet;
+	std::vector<Triangle> triangles;
 
+	int index = 0;
 	for (int lat = 0; lat < latSteps; ++lat)
 	{
 		float v1 = float(lat) / latSteps;
@@ -508,41 +510,52 @@ void Wall::CreateSphere(const std::string &name, const std::string &texture, Rea
 			std::vector<Vector2> uvMap;
 			uvMap.reserve(6);
 
-			// First triangle
-			PolyArray tri1;
-			tri1.reserve(3);
-			tri1.emplace_back(p1);
+			//first triangle
+			PolyArray poly1;
+			Triangle tri1;
+			poly1.reserve(3);
+			poly1.emplace_back(p1);
 			uvMap.emplace_back(Vector2(u1, v1));
+			tri1.a = 2 + index;
 
-			tri1.emplace_back(p2);
+			poly1.emplace_back(p2);
 			uvMap.emplace_back(Vector2(u1, v2));
+			tri1.b = 1 + index;
 
-			tri1.emplace_back(p3);
+			poly1.emplace_back(p3);
 			uvMap.emplace_back(Vector2(u2, v2));
+			tri1.a = 0 + index;
 
-			result.emplace_back(tri1);
+			result.emplace_back(poly1);
 			uvMapSet.emplace_back(uvMap);
+			triangles.emplace_back(tri1);
 
-			// Second triangle
-			PolyArray tri2;
+			//second triangle
+			PolyArray poly2;
+			Triangle tri2;
 			uvMap.clear();
-			tri2.reserve(3);
-			tri2.emplace_back(p1);
+			poly2.reserve(3);
+			poly2.emplace_back(p1);
 			uvMap.emplace_back(Vector2(u1, v1));
+			tri2.a = 5 + index;
 
-			tri2.emplace_back(p3);
+			poly2.emplace_back(p3);
 			uvMap.emplace_back(Vector2(u2, v2));
+			tri2.b = 4 + index;
 
-			tri2.emplace_back(p4);
+			poly2.emplace_back(p4);
 			uvMap.emplace_back(Vector2(u2, v1));
+			tri2.c = 3 + index;
 
-			result.emplace_back(tri2);
+			result.emplace_back(poly2);
 			uvMapSet.emplace_back(uvMap);
+			triangles.emplace_back(tri2);
+			index += 6;
 		}
 	}
 
-	//create polygons from the generated sphere segments
-	//AddPolygonMesh(name, texture, result, uvMapSet);
+	//create polygon from the generated sphere segments
+	AddPolygon(name, texture, result, uvMapSet, triangles, tw, th, autosize);
 }
 
 void Wall::CreateBox(const std::string &name, const std::string &texture, Real width, Real height, Real depth, Real tw, Real th, bool autosize)
