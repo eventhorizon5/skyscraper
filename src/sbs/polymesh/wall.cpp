@@ -477,7 +477,7 @@ bool Wall::ChangeTexture(const std::string &texture, bool matcheck)
 	return found;
 }
 
-void Wall::CreateSphere(const std::string &name, const std::string &texture, Real radius, int latSteps, int lonSteps, Real tw, Real th, bool autosize)
+void Wall::CreateSphere(const std::string &name, const std::string &texture, const Vector3 &Center, Real radius, int latSteps, int lonSteps, Real tw, Real th, bool autosize)
 {
 	//generates a sphere on the given wall object
 
@@ -514,15 +514,15 @@ void Wall::CreateSphere(const std::string &name, const std::string &texture, Rea
 			PolyArray poly1;
 			Triangle tri1;
 			poly1.reserve(3);
-			poly1.emplace_back(p1);
+			poly1.emplace_back(p1 + Center);
 			uvMap.emplace_back(Vector2(u1, v1));
 			tri1.a = 0 + index;
 
-			poly1.emplace_back(p2);
+			poly1.emplace_back(p2 + Center);
 			uvMap.emplace_back(Vector2(u1, v2));
 			tri1.b = 1 + index;
 
-			poly1.emplace_back(p3);
+			poly1.emplace_back(p3 + Center);
 			uvMap.emplace_back(Vector2(u2, v2));
 			tri1.c = 2 + index;
 
@@ -535,15 +535,15 @@ void Wall::CreateSphere(const std::string &name, const std::string &texture, Rea
 			Triangle tri2;
 			uvMap.clear();
 			poly2.reserve(3);
-			poly2.emplace_back(p1);
+			poly2.emplace_back(p1 + Center);
 			uvMap.emplace_back(Vector2(u1, v1));
 			tri2.a = 3 + index;
 
-			poly2.emplace_back(p3);
+			poly2.emplace_back(p3 + Center);
 			uvMap.emplace_back(Vector2(u2, v2));
 			tri2.b = 4 + index;
 
-			poly2.emplace_back(p4);
+			poly2.emplace_back(p4 + Center);
 			uvMap.emplace_back(Vector2(u2, v1));
 			tri2.c = 5 + index;
 
@@ -558,7 +558,7 @@ void Wall::CreateSphere(const std::string &name, const std::string &texture, Rea
 	AddPolygon(name, texture, result, uvMapSet, triangles, tw, th, autosize);
 }
 
-void Wall::CreateBox(const std::string &name, const std::string &texture, Real width, Real height, Real depth, Real tw, Real th, bool autosize)
+void Wall::CreateBox(const std::string &name, const std::string &texture, Ogre::Vector3 &center, Real width, Real height, Real depth, Real tw, Real th, bool autosize)
 {
 	Real hw = width * 0.5;
 	Real hh = height * 0.5;
@@ -587,15 +587,15 @@ void Wall::CreateBox(const std::string &name, const std::string &texture, Real w
 
 		PolyArray poly1;
 		Triangle tri1;
-		poly1.emplace_back(a);
+		poly1.emplace_back(a + center);
 		uvMap.emplace_back(uvA);
 		tri1.a = 2;
 
-		poly1.emplace_back(b);
+		poly1.emplace_back(b + center);
 		uvMap.emplace_back(uvB);
 		tri1.b = 1;
 
-		poly1.emplace_back(c);
+		poly1.emplace_back(c + center);
 		uvMap.emplace_back(uvC);
 		tri1.c = 0;
 
@@ -606,15 +606,15 @@ void Wall::CreateBox(const std::string &name, const std::string &texture, Real w
 		uvMap.clear();
 		PolyArray poly2;
 		Triangle tri2;
-		poly2.emplace_back(a);
+		poly2.emplace_back(a + center);
 		uvMap.emplace_back(uvA);
 		tri2.a = 5;
 
-		poly2.emplace_back(c);
+		poly2.emplace_back(c + center);
 		uvMap.emplace_back(uvC);
 		tri2.b = 4;
 
-		poly2.emplace_back(d);
+		poly2.emplace_back(d + center);
 		uvMap.emplace_back(uvD);
 		tri2.c = 3;
 
