@@ -548,4 +548,76 @@ void Wall::CreateSphere(const std::string &name, const std::string &texture, Rea
 	AddPolygonMesh(name, texture, result, uvMapSet);
 }
 
+void Wall::CreateBox(const std::string &name, const std::string &texture, float width, float height, float depth, Real tw, Real th, bool autosize)
+{
+	PolygonSet result;
+	std::vector<std::vector<Vector2>> uvMapSet;
+
+	float hw = width * 0.5f;
+	float hh = height * 0.5f;
+	float hd = depth * 0.5f;
+
+	// 8 corners of the box
+	Vector3 p000(-hw, -hh, -hd); // left bottom back
+	Vector3 p001(-hw, -hh,  hd); // left bottom front
+	Vector3 p010(-hw,  hh, -hd); // left top back
+	Vector3 p011(-hw,  hh,  hd); // left top front
+	Vector3 p100( hw, -hh, -hd); // right bottom back
+	Vector3 p101( hw, -hh,  hd); // right bottom front
+	Vector3 p110( hw,  hh, -hd); // right top back
+	Vector3 p111( hw,  hh,  hd); // right top front
+
+	auto addQuad = [&](const Vector3& a, const Vector3& b, const Vector3& c, const Vector3& d,
+			const Vector2& uvA, const Vector2& uvB, const Vector2& uvC, const Vector2& uvD)
+	{
+		std::vector<Vector2> uvMap;
+
+		PolyArray tri1;
+		tri1.emplace_back(a);
+		uvMap.emplace_back(uvA);
+
+		tri1.emplace_back(b);
+		uvMap.emplace_back(uvB);
+
+		tri1.emplace_back(c);
+		uvMap.emplace_back(uvC);
+		result.emplace_back(tri1);
+		uvMapSet.emplace_back(uvMap);
+
+		uvMap.clear();
+		PolyArray tri2;
+		tri2.emplace_back(a);
+		uvMap.emplace_back(uvA);
+
+		tri2.emplace_back(c);
+		uvMap.emplace_back(uvC);
+
+		tri2.emplace_back(d);
+		uvMap.emplace_back(uvD);
+		result.emplace_back(tri2);
+		uvMapSet.emplace_back(uvMap);
+	};
+
+	// Front face (+Z)
+	addQuad(p101, p001, p011, p111, {1, 0}, {0, 0}, {0, 1}, {1, 1});
+
+	// Back face (-Z)
+	addQuad(p100, p110, p010, p000, {1, 0}, {1, 1}, {0, 1}, {0, 0});
+
+	// Left face (-X)
+	addQuad(p001, p000, p010, p011, {1, 0}, {0, 0}, {0, 1}, {1, 1});
+
+	// Right face (+X)
+	addQuad(p100, p101, p111, p110, {0, 0}, {1, 0}, {1, 1}, {0, 1});
+
+	// Top face (+Y)
+	addQuad(p011, p010, p110, p111, {0, 1}, {0, 0}, {1, 0}, {1, 1});
+
+	// Bottom face (-Y)
+	addQuad(p100, p000, p001, p101, {1, 1}, {0, 1}, {0, 0}, {1, 0});
+
+	//create polygons from the generated quads
+	AddPolygonMesh(name, texture, result, uvMapSet);
+}
+
 }
