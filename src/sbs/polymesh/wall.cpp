@@ -595,15 +595,15 @@ void Wall::CreateBox(const std::string &name, const std::string &texture, Real w
 		Triangle tri2;
 		poly2.emplace_back(a);
 		uvMap.emplace_back(uvA);
-		tri2.a = 0;
+		tri2.a = 3;
 
 		poly2.emplace_back(c);
 		uvMap.emplace_back(uvC);
-		tri2.b = 1;
+		tri2.b = 4;
 
 		poly2.emplace_back(d);
 		uvMap.emplace_back(uvD);
-		tri2.c = 2;
+		tri2.c = 5;
 
 		result.emplace_back(poly2);
 		uvMapSet.emplace_back(uvMap);
