@@ -527,6 +527,7 @@ void Wall::CreateSphere(const std::string &name, const std::string &texture, Rea
 
 			// Second triangle
 			PolyArray tri2;
+			uvMap.clear();
 			tri2.reserve(3);
 			tri2.emplace_back(p1);
 			uvMap.emplace_back(Vector2(u1, v1));
@@ -537,7 +538,7 @@ void Wall::CreateSphere(const std::string &name, const std::string &texture, Rea
 			tri2.emplace_back(p4);
 			uvMap.emplace_back(Vector2(u2, v1));
 
-			result.emplace_back(tri1);
+			result.emplace_back(tri2);
 			uvMapSet.emplace_back(uvMap);
 		}
 	}
