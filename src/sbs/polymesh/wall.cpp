@@ -157,7 +157,7 @@ Polygon* Wall::AddPolygonSet(const std::string &name, const std::string &materia
 	return poly;
 }
 
-void Wall::AddPolygonMesh(const std::string &name, const std::string &material, PolygonSet &vertices, std::vector<std::vector<Vector2>> &uvMap)
+bool Wall::AddPolygonMesh(const std::string &name, const std::string &material, PolygonSet &vertices, std::vector<std::vector<Vector2>> &uvMap)
 {
 	//create a mesh of polygons, providing the UV map
 
@@ -165,16 +165,7 @@ void Wall::AddPolygonMesh(const std::string &name, const std::string &material, 
 	std::vector<std::vector<Triangle>> triangles;
 	PolygonSet converted_vertices;
 	if (!polymesh->CreateMesh(meshwrapper, name, material, vertices, uvMap, geometry, triangles, converted_vertices, 0, 0))
-	{
-		ReportError("Error creating polygon mesh '" + name + "'");
-		return;
-	}
-
-	if (triangles.size() == 0)
-		return;
-
-	//compute plane
-	Plane plane = sbs->GetPolyMesh()->ComputePlane(converted_vertices[0]);
+		return ReportError("Error creating polygon mesh '" + name + "'");
 
 	Matrix3 tex_matrix = Matrix3::IDENTITY;
 	Vector3 tex_vector = Vector3::ZERO;
@@ -182,10 +173,20 @@ void Wall::AddPolygonMesh(const std::string &name, const std::string &material, 
 	{
 		if (uvMap[i].size() > 0)
 		{
+			if (triangles[i].size() == 0)
+				continue;
+
+			if (i > geometry.size() || i > triangles.size())
+				return ReportError("Error creating polygon mesh '" + name + "': geometry or triangles size mismatch");
+
+			//compute plane
+			Plane plane = sbs->GetPolyMesh()->ComputePlane(converted_vertices[i]);
+
 			Polygon* poly = new Polygon(this, name, meshwrapper, geometry[i], triangles[i], tex_matrix, tex_vector, material, plane);
 			polygons.emplace_back(poly);
 		}
 	}
+	return true;
 }
 
 void Wall::DeletePolygons(bool recreate_collider)
