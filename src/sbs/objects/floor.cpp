@@ -100,8 +100,8 @@ Floor::Floor(Object *parent, FloorManager *manager, int number) : Object(parent)
 	DoorWrapper = new DynamicMesh(this, GetSceneNode(), GetName() + " Door Container", 0, true);
 	DoorWrapper->force_combine = true;
 
-	Wall* wall = Level->CreateWallObject("Floor Sphere");
-	wall->CreateSphere("Floor Sphere", "Concrete", 1.0, 4, 4, 1.0, 1.0, true);
+	//Wall* wall = Level->CreateWallObject("Floor Sphere");
+	//wall->CreateSphere("Floor Sphere", "Concrete", 1.0, 4, 4, 1.0, 1.0, true);
 	//wall->CreateBox("Floor Box", "Concrete", 5, 5, 5, 1.0, 1.0, true);
 }
 
