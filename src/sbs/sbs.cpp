@@ -3378,4 +3378,16 @@ Vector3 SBS::GetCenter()
 	return area_trigger->GetBounds().getCenter();
 }
 
+Shape* SBS::CreateShape(Wall *wall)
+{
+	//Creates a shape in the specified wall object
+	//returns a Shape object, which must be deleted by the caller after use
+
+	if (!wall)
+		return 0;
+
+	Shape *shape = new Shape(wall);
+	return shape;
+}
+
 }

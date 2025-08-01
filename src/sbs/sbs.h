@@ -392,6 +392,7 @@ public:
 	MeshObject* GetLandscapeMesh();
 	Real GetUnitScale();
 	Vector3 GetCenter();
+	Shape* CreateShape(Wall *wall);
 
 	//Meshes
 	MeshObject* Buildings;

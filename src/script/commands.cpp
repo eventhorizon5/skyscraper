@@ -664,14 +664,14 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		Shape *shape;
 		if (floorobj)
 			shape = floorobj->CreateShape(wall);
-		/*else if (elevatorcarobj)
+		else if (elevatorcarobj)
 			shape = elevatorcarobj->CreateShape(wall);
 		else if (shaftobj)
 			shape = shaftobj->CreateShape(wall);
 		else if (stairsobj)
 			shape = stairsobj->CreateShape(wall);
 		else if (sbs)
-			shape = sbs->CreateShape(wall);*/
+			shape = sbs->CreateShape(wall);
 		else
 			return ScriptError("Invalid parent object");
 
@@ -752,14 +752,14 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		Shape *shape;
 		if (floorobj)
 			shape = floorobj->CreateShape(wall);
-		/*else if (elevatorcarobj)
+		else if (elevatorcarobj)
 			shape = elevatorcarobj->CreateShape(wall);
 		else if (shaftobj)
 			shape = shaftobj->CreateShape(wall);
 		else if (stairsobj)
 			shape = stairsobj->CreateShape(wall);
 		else if (sbs)
-			shape = sbs->CreateShape(wall);*/
+			shape = sbs->CreateShape(wall);
 		else
 			return ScriptError("Invalid parent object");
 

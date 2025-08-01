@@ -52,6 +52,7 @@
 #include "controller.h"
 #include "elevroute.h"
 #include "utility.h"
+#include "shape.h"
 #include "reverb.h"
 
 #include <time.h>
@@ -3817,5 +3818,17 @@ void ElevatorCar::RemoveReverb()
 	reverb = 0;
 }
 
+Shape* ElevatorCar::CreateShape(Wall *wall)
+{
+	//Creates a shape in the specified wall object
+	//returns a Shape object, which must be deleted by the caller after use
+
+	if (!wall)
+		return 0;
+
+	Shape *shape = new Shape(wall);
+	//shape->origin = Vector3(0, 0, 0);
+	return shape;
+}
 
 }

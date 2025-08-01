@@ -103,6 +103,7 @@ public:
 		bool Loop();
 		CameraTexture* AddCameraTexture(const std::string &name, int quality, Real fov, const Vector3 &position, bool use_rotation, const Vector3 &rotation);
 		void RemoveCameraTexture(CameraTexture* camtex);
+		Shape* CreateShape(Wall *wall);
 
 		bool enabled;
 

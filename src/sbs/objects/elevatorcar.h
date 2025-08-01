@@ -230,7 +230,8 @@ public:
 	bool RespondingToCall(int floor, int direction);
 	int RespondingToCall(int floor);
 	bool AddElevatorIDSigns(int door_number, bool relative, const std::string& texture_prefix, const std::string& direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset);
-
+	Shape* CreateShape(Wall *wall);
+	
 	MeshObject* Mesh; //car mesh object
 
 	//for keypad
