@@ -55,7 +55,17 @@ Version 2.1
 -PolyMesh: replaced IntersectSegment functions
 -PolyMesh: added ComputeNormal2() and SplitWithPlane() replacement functions
 -TextureManager: replaced ComputeTextureMap() and ComputeTextureSpace() functions
-
+-GUI: fix floor information selection code
+-PolyMesh: added AddTriangle() function
+-PolyMesh: started experimental support for shapes, starting with spheres
+-Convention Center: fixed fire service switch in service elevator
+-Convention Center: extended service elevator to sub-basement level
+-PolyMesh: moved bounding box creation code into separate function
+-PolyMesh: Added CreateBox() function
+-PolyMesh: added object centering support for Sphere and Box objects
+-PolyMesh: moved shape code into new Shape object, and integrated with Floor object
+-ScriptProc: fixed AddShaftDoor and AddShaftDoors commands
+-ScriptProc: fix regression in Floor section AddShaftDoor command
 
 Version 2.0 - July 24, 2025
 -------------------------
