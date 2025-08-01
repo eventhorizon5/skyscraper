@@ -1229,11 +1229,11 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		bool result;
 		if (compat == 0 && params == 9)
 			result = car->AddShaftDoors(ToInt(tempdata[0]), 0.0, tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]));
-		if (compat == 0 && params == 10)
+		else if (compat == 0 && params == 10)
 			result = car->AddShaftDoors(ToInt(tempdata[0]), ToFloat(tempdata[9]), tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]));
-		if (compat == 1)
+		else if (compat == 1)
 			result = car->AddShaftDoors(ToInt(tempdata[0]), 0.0, tempdata[1], tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), 0, ToFloat(tempdata[5]), ToFloat(tempdata[6]));
-		if (compat == 2)
+		else if (compat == 2)
 			result = car->AddShaftDoors(ToInt(tempdata[0]), 0.0, tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), 0, ToFloat(tempdata[6]), ToFloat(tempdata[7]));
 
 		if (result == false)
