@@ -1368,13 +1368,15 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		ElevatorCar *car = elev->GetCar(carnum);
 
 		if (compat == 0 && params == 10)
-			StoreCommand(car->AddShaftDoor(config->Current, 0.0, ToInt(tempdata[1]), tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9])));
-		else if (compat == 0 && params == 11)
-			StoreCommand(car->AddShaftDoor(config->Current, ToFloat(tempdata[10]), ToInt(tempdata[1]), tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9])));
+			StoreCommand(car->AddShaftDoor(config->Current, ToInt(tempdata[1]), 0.0, tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9])));
+		if (compat == 0 && params == 11)
+			StoreCommand(car->AddShaftDoor(config->Current, ToInt(tempdata[1]), ToFloat(tempdata[10]), tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9])));
+		if (compat == 0)
+			StoreCommand(car->AddShaftDoor(config->Current, ToInt(tempdata[1]), 0.0, tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9])));
 		if (compat == 1)
-			StoreCommand(car->AddShaftDoor(config->Current, 0.0, ToInt(tempdata[1]), tempdata[2], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4])));
+			StoreCommand(car->AddShaftDoor(config->Current, ToInt(tempdata[1]), 0.0, tempdata[2], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4])));
 		if (compat == 2)
-			StoreCommand(car->AddShaftDoor(config->Current, 0.0, ToInt(tempdata[1]), tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5])));
+			StoreCommand(car->AddShaftDoor(config->Current, ToInt(tempdata[1]), 0.0, tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5])));
 		return sNextLine;
 	}
 
