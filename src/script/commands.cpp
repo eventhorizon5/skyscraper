@@ -633,6 +633,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (!obj)
 			return ScriptError("Invalid parent object");
 
+		Model *modelobj = 0;
 		Floor *floorobj = 0;
 		Elevator *elevatorobj = 0;
 		ElevatorCar *elevatorcarobj = 0;
@@ -641,17 +642,19 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		::SBS::SBS *sbs = 0;
 
 		//get parent object of light
-		if (obj->GetType() == "Floor")
+		if (obj->GetType() == "Model")
+			modelobj = static_cast<Model*>(obj);
+		else if (obj->GetType() == "Floor")
 			floorobj = static_cast<Floor*>(obj);
-		if (obj->GetType() == "Elevator")
+		else if (obj->GetType() == "Elevator")
 			elevatorobj = static_cast<Elevator*>(obj);
-		if (obj->GetType() == "ElevatorCar")
+		else if (obj->GetType() == "ElevatorCar")
 			elevatorcarobj = static_cast<ElevatorCar*>(obj);
-		if (obj->GetType() == "Shaft Level")
+		else if (obj->GetType() == "Shaft Level")
 			shaftobj = static_cast<Shaft::Level*>(obj);
-		if (obj->GetType() == "Stairwell Level")
+		else if (obj->GetType() == "Stairwell Level")
 			stairsobj = static_cast<Stairwell::Level*>(obj);
-		if (obj->GetType() == "SBS")
+		else if (obj->GetType() == "SBS")
 			sbs = static_cast<::SBS::SBS*>(obj);
 
 		//get parent object
@@ -662,7 +665,9 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		}
 
 		Shape *shape;
-		if (floorobj)
+		if (modelobj)
+			shape = modelobj->CreateShape(wall);
+		else if (floorobj)
 			shape = floorobj->CreateShape(wall);
 		else if (elevatorcarobj)
 			shape = elevatorcarobj->CreateShape(wall);
@@ -721,6 +726,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (!obj)
 			return ScriptError("Invalid parent object");
 
+		Model *modelobj = 0;
 		Floor *floorobj = 0;
 		Elevator *elevatorobj = 0;
 		ElevatorCar *elevatorcarobj = 0;
@@ -729,17 +735,19 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		::SBS::SBS *sbs = 0;
 
 		//get parent object of light
-		if (obj->GetType() == "Floor")
+		if (obj->GetType() == "Model")
+			modelobj = static_cast<Model*>(obj);
+		else if (obj->GetType() == "Floor")
 			floorobj = static_cast<Floor*>(obj);
-		if (obj->GetType() == "Elevator")
+		else if (obj->GetType() == "Elevator")
 			elevatorobj = static_cast<Elevator*>(obj);
-		if (obj->GetType() == "ElevatorCar")
+		else if (obj->GetType() == "ElevatorCar")
 			elevatorcarobj = static_cast<ElevatorCar*>(obj);
-		if (obj->GetType() == "Shaft Level")
+		else if (obj->GetType() == "Shaft Level")
 			shaftobj = static_cast<Shaft::Level*>(obj);
-		if (obj->GetType() == "Stairwell Level")
+		else if (obj->GetType() == "Stairwell Level")
 			stairsobj = static_cast<Stairwell::Level*>(obj);
-		if (obj->GetType() == "SBS")
+		else if (obj->GetType() == "SBS")
 			sbs = static_cast<::SBS::SBS*>(obj);
 
 		//get parent object
@@ -750,7 +758,9 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		}
 
 		Shape *shape;
-		if (floorobj)
+		if (modelobj)
+			shape = modelobj->CreateShape(wall);
+		else if (floorobj)
 			shape = floorobj->CreateShape(wall);
 		else if (elevatorcarobj)
 			shape = elevatorcarobj->CreateShape(wall);

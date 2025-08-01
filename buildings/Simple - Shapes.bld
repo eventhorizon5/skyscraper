@@ -498,6 +498,10 @@ AddAction FireServiceBypass, Elevator1, Fire1Bypass
     #create a sphere
     CreateWallObject floor, MySphere
     AddSphere floor, MySphere, Concrete, -50, 5, -50, 5, 16, 16, 1, 1
+
+    AddModel Model1, , false, -0, 0, -10, 0, 0, 0, 0, 1, true, 0.1, 0.5, 0.1
+    CreateWallObject model1, MyPhysicalSphere
+    AddSphere model1, MyPhysicalSphere, Concrete, -50, 5, -50, 5, 16, 16, 1, 1
 <EndFloor>
 
 #define a runloop function, to run code after the sim engine has started
