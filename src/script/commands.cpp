@@ -48,6 +48,7 @@
 #include "utility.h"
 #include "geometry.h"
 #include "scriptproc.h"
+#include "shape.h"
 #include "section.h"
 
 using namespace SBS;
@@ -592,6 +593,94 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 			varray.emplace_back(Vector3(ToFloat(tempdata[i]), ToFloat(tempdata[i + 1]) + voffset, ToFloat(tempdata[i + 2])));
 
 		polymesh->AddPolygon(wall, tempdata[2], config->extrusion_texture, config->extrusion_thickness, varray, ToFloat(tempdata[params - 2]), ToFloat(tempdata[params - 1]), config->extrusion_tw, config->extrusion_th);
+
+		return sNextLine;
+	}
+
+	//AddSphere command
+	if (StartsWithNoCase(LineData, "addsphere"))
+	{
+		//get data
+		int params = SplitData(LineData, 9);
+
+		if (params != 11)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 4; i < params; i++)
+		{
+			if (!IsNumeric(tempdata[i]))
+				return ScriptError("Invalid value: " + tempdata[i]);
+		}
+		std::string meshname = SetCaseCopy(tempdata[0], false);
+
+		MeshObject *mesh = GetMeshObject(meshname);
+
+		if (!mesh)
+			return ScriptError("Invalid mesh object");
+
+		Wall *wall = mesh->GetWallByName(tempdata[1]);
+
+		if (!wall)
+			return ScriptError("Invalid wall object");
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
+
+		Object *obj = mesh->GetParent();
+		if (!obj)
+			return ScriptError("Invalid parent object");
+
+		Floor *floorobj = 0;
+		Elevator *elevatorobj = 0;
+		ElevatorCar *elevatorcarobj = 0;
+		Shaft::Level *shaftobj = 0;
+		Stairwell::Level *stairsobj = 0;
+		::SBS::SBS *sbs = 0;
+
+		//get parent object of light
+		if (obj->GetType() == "Floor")
+			floorobj = static_cast<Floor*>(obj);
+		if (obj->GetType() == "Elevator")
+			elevatorobj = static_cast<Elevator*>(obj);
+		if (obj->GetType() == "ElevatorCar")
+			elevatorcarobj = static_cast<ElevatorCar*>(obj);
+		if (obj->GetType() == "Shaft Level")
+			shaftobj = static_cast<Shaft::Level*>(obj);
+		if (obj->GetType() == "Stairwell Level")
+			stairsobj = static_cast<Stairwell::Level*>(obj);
+		if (obj->GetType() == "SBS")
+			sbs = static_cast<::SBS::SBS*>(obj);
+
+		//get parent object
+		if (elevatorobj)
+		{
+			elevatorcarobj = elevatorobj->GetCar(0);
+			obj = elevatorcarobj;
+		}
+
+		Shape *shape;
+		if (floorobj)
+			shape = floorobj->CreateShape(wall);
+		/*else if (elevatorcarobj)
+			shape = elevatorcarobj->CreateShape(wall);
+		else if (shaftobj)
+			shape = shaftobj->CreateShape(wall);
+		else if (stairsobj)
+			shape = stairsobj->CreateShape(wall);
+		else if (sbs)
+			shape = sbs->CreateShape(wall);*/
+		else
+			return ScriptError("Invalid parent object");
+
+		if (shape)
+		{
+			shape->CreateSphere("", tempdata[2], Vector3(ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5])), ToFloat(tempdata[6]), ToInt(tempdata[7]), ToInt(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), true);
+			delete shape; //delete shape object, since it was only used to create the sphere
+			shape = 0;
+		}
 
 		return sNextLine;
 	}

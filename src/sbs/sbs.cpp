@@ -516,13 +516,6 @@ bool SBS::Start(std::vector<Ogre::Camera*> &cameras)
 {
 	//Post-init startup code goes here, before the runloop
 
-	/*Wall* wall = GetFloor(0)->Level->CreateWallObject("Floor Sphere");
-	Shape *shape = GetFloor(0)->CreateShape(wall);
-	shape->CreateSphere("Floor Sphere", "Concrete", Vector3(-30, 0, -30), 1.0, 16, 16, 1.0, 1.0, true);
-	delete shape;
-	shape = 0;*/
-	//wall->CreateBox("Floor Box", "Concrete", 5, 5, 5, 1.0, 1.0, true);
-
 	//prepare 3D geometry for use
 	Prepare();
 
