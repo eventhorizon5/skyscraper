@@ -620,8 +620,8 @@ void VMConsole::Process(const std::string &text, bool echo)
 			Report("profile [-a] - shows function-level profiling statistics");
 			Report("vminit - create and initialize a simulator engine");
 			Report("boot [engine_number] - start a simulator engine");
-			Report("pause [engine_number] - pause the active engine or specified engine");
-			Report("resume [engine_number] - resume the active engine or specified engine");
+			Report("pause [engine_number] - pause a simulator engine");
+			Report("resume [engine_number] - resume a simulator engine");
 			Report("help - print this help guide\n");
 			Report("All other commands will be passed to the active simulator engine, if available");
 #ifdef USING_WX
