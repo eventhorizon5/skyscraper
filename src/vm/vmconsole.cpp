@@ -527,6 +527,76 @@ void VMConsole::Process(const std::string &text, bool echo)
 		return;
 	}
 
+	//pause command
+	if (command == "pause")
+	{
+		if (vm->GetEngineCount() == 0)
+		{
+			ReportError("No engine, run vminit");
+			consoleresult.ready = false;
+			consoleresult.threadwait = false;
+			return;
+		}
+
+		if (params.size() == 0)
+		{
+			vm->GetActiveEngine()->Paused = true;
+			Report("Paused active engine");
+			consoleresult.ready = false;
+			consoleresult.threadwait = false;
+			return;
+		}
+		else
+		{
+			EngineContext *engine = vm->GetEngine(SBS::ToInt(params[0]));
+			if (engine)
+			{
+				engine->Paused = true;
+				Report("Paused engine " + SBS::ToString(engine->GetNumber()));
+			}
+			else
+				ReportError("Invalid engine");
+		}
+		consoleresult.ready = false;
+		consoleresult.threadwait = false;
+		return;
+	}
+
+	//resume command
+	if (command == "resume")
+	{
+		if (vm->GetEngineCount() == 0)
+		{
+			ReportError("No engine, run vminit");
+			consoleresult.ready = false;
+			consoleresult.threadwait = false;
+			return;
+		}
+
+		if (params.size() == 0)
+		{
+			vm->GetActiveEngine()->Paused = false;
+			Report("Resumed active engine");
+			consoleresult.ready = false;
+			consoleresult.threadwait = false;
+			return;
+		}
+		else
+		{
+			EngineContext *engine = vm->GetEngine(SBS::ToInt(params[0]));
+			if (engine)
+			{
+				engine->Paused = false;
+				Report("Resumed engine " + SBS::ToString(engine->GetNumber()));
+			}
+			else
+				ReportError("Invalid engine");
+		}
+		consoleresult.ready = false;
+		consoleresult.threadwait = false;
+		return;
+	}
+
 	//help command
 	if (command == "help" || command == "?")
 	{
