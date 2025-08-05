@@ -338,6 +338,9 @@ void VMConsole::Process(const std::string &text, bool echo)
 	{
 		int count = vm->GetEngineCount();
 		Report(SBS::ToString(count) + " engines running\n", "cyan");
+		Report("Instance\tElapsed Time\t\tRun Time\t\tFilename", "cyan");
+		Report("--------\t------------\t\t---------\t\t--------", "cyan");
+		Report("");
 		for (int i = 0; i < count; i++)
 		{
 			EngineContext *engine = vm->GetEngine(i);

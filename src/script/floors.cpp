@@ -2438,7 +2438,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
-		//create escalator
+		//create moving walkway
 
 		//stop here if in Check mode
 		if (config->CheckScript == true)
