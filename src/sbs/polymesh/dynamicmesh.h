@@ -63,6 +63,7 @@ public:
 	Ogre::AxisAlignedBox GetBounds(MeshObject *client = 0);
 	void EnableShadows(bool value);
 	void SetMaterial(const std::string& material);
+	void TessellateTriangle(const Vector3& v0, const Vector3& v1, const Vector3& v2, const Vector2& uv0, const Vector2& uv1, const Vector2& uv2, std::vector<Vector3>& outVerts, std::vector<Vector2>& outUVs, std::vector<unsigned int>& outIndices, unsigned int& vertexOffset, int resolution = 4);
 
 private:
 
