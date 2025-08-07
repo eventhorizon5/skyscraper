@@ -66,6 +66,7 @@
 #include "geometry.h"
 #include "escalator.h"
 #include "map.h"
+#include "shape.h"
 #include "reverb.h"
 
 namespace SBS {
@@ -1118,17 +1119,7 @@ bool SBS::UnregisterTimerCallback(TimerObject *timer)
 	if (!timer)
 		return false;
 
-	for (size_t i = 0; i < timercallbacks.size(); i++)
-	{
-		//unregister existing call button callback
-		if (timercallbacks[i] == timer)
-		{
-			timercallbacks.erase(timercallbacks.begin() + i);
-			return true;
-		}
-	}
-
-	return false;
+	return RemoveArrayElement(timercallbacks, timer);
 }
 
 void SBS::ProcessTimers()
@@ -1713,14 +1704,7 @@ void SBS::RemoveSound(Sound *sound)
 	//remove a sound from the array
 	//this does not delete the object
 
-	for (size_t i = 0; i < sounds.size(); i++)
-	{
-		if (sounds[i] == sound)
-		{
-			sounds.erase(sounds.begin() + i);
-			return;
-		}
-	}
+	RemoveArrayElement(sounds, sound);
 }
 
 void SBS::RemoveReverb(Reverb *reverb)
@@ -1728,92 +1712,49 @@ void SBS::RemoveReverb(Reverb *reverb)
 	//remove a reverb from the array
 	//this does not delete the object
 
-	for (size_t i = 0; i < reverbs.size(); i++)
-	{
-		if (reverbs[i] == reverb)
-		{
-			reverbs.erase(reverbs.begin() + i);
-			return;
-		}
-	}
+	RemoveArrayElement(reverbs, reverb);
 }
 
 void SBS::RemoveLight(Light *light)
 {
 	//remove a light reference (does not delete the object itself)
-	for (size_t i = 0; i < lights.size(); i++)
-	{
-		if (lights[i] == light)
-		{
-			lights.erase(lights.begin() + i);
-			return;
-		}
-	}
+
+	RemoveArrayElement(lights, light);
 }
 
 void SBS::RemoveModel(Model *model)
 {
 	//remove a model reference (does not delete the object itself)
-	for (size_t i = 0; i < ModelArray.size(); i++)
-	{
-		if (ModelArray[i] == model)
-		{
-			ModelArray.erase(ModelArray.begin() + i);
-			return;
-		}
-	}
+
+	RemoveArrayElement(ModelArray, model);
 }
 
 void SBS::RemovePrimitive(Primitive *prim)
 {
 	//remove a prim reference (does not delete the object itself)
-	for (size_t i = 0; i < PrimArray.size(); i++)
-	{
-		if (PrimArray[i] == prim)
-		{
-			PrimArray.erase(PrimArray.begin() + i);
-			return;
-		}
-	}
+
+	RemoveArrayElement(PrimArray, prim);
 }
 
 void SBS::RemoveCustomObject(CustomObject *object)
 {
 	//remove a custom object reference (does not delete the object itself)
-	for (size_t i = 0; i < CustomObjectArray.size(); i++)
-	{
-		if (CustomObjectArray[i] == object)
-		{
-			CustomObjectArray.erase(CustomObjectArray.begin() + i);
-			return;
-		}
-	}
+
+	RemoveArrayElement(CustomObjectArray, object);
 }
 
 void SBS::RemoveControl(Control *control)
 {
 	//remove a control reference (does not delete the object itself)
-	for (size_t i = 0; i < ControlArray.size(); i++)
-	{
-		if (ControlArray[i] == control)
-		{
-			ControlArray.erase(ControlArray.begin() + i);
-			return;
-		}
-	}
+
+	RemoveArrayElement(ControlArray, control);
 }
 
 void SBS::RemoveTrigger(Trigger *trigger)
 {
 	//remove a trigger reference (does not delete the object itself)
-	for (size_t i = 0; i < TriggerArray.size(); i++)
-	{
-		if (TriggerArray[i] == trigger)
-		{
-			TriggerArray.erase(TriggerArray.begin() + i);
-			return;
-		}
-	}
+
+	RemoveArrayElement(TriggerArray, trigger);
 }
 
 void SBS::RemoveController(DispatchController *controller)
@@ -1875,19 +1816,12 @@ Light* SBS::AddLight(const std::string &name, int type)
 
 void SBS::AddMeshHandle(MeshObject* handle)
 {
-	meshes.emplace_back(handle);
+	AddArrayElement(meshes, handle);
 }
 
 void SBS::DeleteMeshHandle(MeshObject* handle)
 {
-	for (size_t i = 0; i < meshes.size(); i++)
-	{
-		if (meshes[i] == handle)
-		{
-			meshes.erase(meshes.begin() + i);
-			return;
-		}
-	}
+	RemoveArrayElement(meshes, handle);
 }
 
 MeshObject* SBS::FindMeshObject(const std::string &name)
@@ -2656,21 +2590,15 @@ void SBS::ListKeys()
 void SBS::RegisterControl(Control *control)
 {
 	//add control to index
-	control_index.emplace_back(control);
+
+	AddArrayElement(control_index, control);
 }
 
 void SBS::UnregisterControl(Control *control)
 {
 	//remove control from index
 
-	for (size_t i = 0; i < control_index.size(); i++)
-	{
-		if (control_index[i] == control)
-		{
-			control_index.erase(control_index.begin() + i);
-			return;
-		}
-	}
+	RemoveArrayElement(control_index, control);
 }
 
 void SBS::ShowFloorList()
@@ -2958,14 +2886,7 @@ void SBS::RemovePerson(Person *person)
 {
 	//remove a person (does not delete the object)
 
-	for (size_t i = 0; i < PersonArray.size(); i++)
-	{
-		if (PersonArray[i] == person)
-		{
-			PersonArray.erase(PersonArray.begin() + i);
-			return;
-		}
-	}
+	RemoveArrayElement(PersonArray, person);
 }
 
 bool SBS::AttachCamera(std::vector<Ogre::Camera*> &cameras, bool init_state)
@@ -3196,21 +3117,14 @@ void SBS::RegisterDynamicMesh(DynamicMesh *dynmesh)
 {
 	//register a dynamic mesh with the system
 
-	dynamic_meshes.emplace_back(dynmesh);
+	AddArrayElement(dynamic_meshes, dynmesh);
 }
 
 void SBS::UnregisterDynamicMesh(DynamicMesh *dynmesh)
 {
 	//unregister a dynamic mesh from the system
 
-	for (size_t i = 0; i < dynamic_meshes.size(); i++)
-	{
-		if (dynamic_meshes[i] == dynmesh)
-		{
-			dynamic_meshes.erase(dynamic_meshes.begin() + i);
-			return;
-		}
-	}
+	RemoveArrayElement(dynamic_meshes, dynmesh);
 }
 
 SoundSystem* SBS::GetSoundSystem()
@@ -3277,21 +3191,14 @@ void SBS::RegisterCameraTexture(CameraTexture *camtex)
 {
 	//register a camera texture
 
-	camtexarray.emplace_back(camtex);
+	AddArrayElement(camtexarray, camtex);
 }
 
 void SBS::UnregisterCameraTexture(CameraTexture *camtex)
 {
 	//unregister a camera texture
 
-	for (size_t i = 0; i < camtexarray.size(); i++)
-	{
-		if (camtexarray[i] == camtex)
-		{
-			camtexarray.erase(camtexarray.begin() + i);
-			return;
-		}
-	}
+	RemoveArrayElement(camtexarray, camtex);
 }
 
 int SBS::GetCameraTextureCount()
@@ -3338,21 +3245,15 @@ void SBS::MemoryReport()
 void SBS::RegisterEscalator(Escalator *escalator)
 {
 	//add escalator to index
-	EscalatorArray.emplace_back(escalator);
+
+	AddArrayElement(EscalatorArray, escalator);
 }
 
 void SBS::UnregisterEscalator(Escalator *escalator)
 {
 	//remove escalator from index
 
-	for (size_t i = 0; i < EscalatorArray.size(); i++)
-	{
-		if (EscalatorArray[i] == escalator)
-		{
-			EscalatorArray.erase(EscalatorArray.begin() + i);
-			return;
-		}
-	}
+	RemoveArrayElement(EscalatorArray, escalator);
 }
 
 Escalator* SBS::GetEscalator(int index)
@@ -3365,21 +3266,15 @@ Escalator* SBS::GetEscalator(int index)
 void SBS::RegisterMovingWalkway(MovingWalkway *walkway)
 {
 	//add moving walkway to index
-	MovingWalkwayArray.emplace_back(walkway);
+
+	AddArrayElement(MovingWalkwayArray, walkway);
 }
 
 void SBS::UnregisterMovingWalkway(MovingWalkway *walkway)
 {
 	//remove moving walkway from index
 
-	for (size_t i = 0; i < MovingWalkwayArray.size(); i++)
-	{
-		if (MovingWalkwayArray[i] == walkway)
-		{
-			MovingWalkwayArray.erase(MovingWalkwayArray.begin() + i);
-			return;
-		}
-	}
+	RemoveArrayElement(MovingWalkwayArray, walkway);
 }
 
 MovingWalkway* SBS::GetMovingWalkway(int index)
@@ -3399,14 +3294,7 @@ void SBS::UnregisterRevolvingDoor(RevolvingDoor* door)
 {
 	//remove revolving door from index
 
-	for (size_t i = 0; i < RevolvingDoorArray.size(); i++)
-	{
-		if (RevolvingDoorArray[i] == door)
-		{
-			RevolvingDoorArray.erase(RevolvingDoorArray.begin() + i);
-			return;
-		}
-	}
+	RemoveArrayElement(RevolvingDoorArray, door);
 }
 
 RevolvingDoor* SBS::GetRevolvingDoor(int index)
@@ -3488,6 +3376,18 @@ Vector3 SBS::GetCenter()
 		return Vector3(0, 0, 0);
 
 	return area_trigger->GetBounds().getCenter();
+}
+
+Shape* SBS::CreateShape(Wall *wall)
+{
+	//Creates a shape in the specified wall object
+	//returns a Shape object, which must be deleted by the caller after use
+
+	if (!wall)
+		return 0;
+
+	Shape *shape = new Shape(wall);
+	return shape;
 }
 
 }

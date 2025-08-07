@@ -48,6 +48,7 @@ public:
 	bool OnInit();
 	bool IsCustom() { return custom; }
 	void OnClick(Vector3 &position, bool shift, bool ctrl, bool alt, bool right);
+	Shape* CreateShape(Wall *wall);
 
 private:
 	void RemoveFromParent();

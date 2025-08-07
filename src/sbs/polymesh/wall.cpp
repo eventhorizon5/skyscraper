@@ -21,6 +21,7 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+#include <cmath>
 #include "globals.h"
 #include "sbs.h"
 #include "polymesh.h"
@@ -88,6 +89,19 @@ Polygon* Wall::AddQuad(const std::string &name, const std::string &texture, cons
 	return AddPolygon(name, texture, vertices, tw, th, autosize);
 }
 
+Polygon* Wall::AddTriangle(const std::string &name, const std::string &texture, const Vector3 &v1, const Vector3 &v2, const Vector3 &v3, Real tw, Real th, bool autosize)
+{
+	//add a triangle
+
+	PolyArray vertices;
+	vertices.reserve(3);
+	vertices.emplace_back(v1);
+	vertices.emplace_back(v2);
+	vertices.emplace_back(v3);
+
+	return AddPolygon(name, texture, vertices, tw, th, autosize);
+}
+
 Polygon* Wall::AddPolygon(const std::string &name, const std::string &texture, PolyArray &vertices, Real tw, Real th, bool autosize)
 {
 	//create a generic polygon
@@ -111,7 +125,36 @@ Polygon* Wall::AddPolygon(const std::string &name, const std::string &texture, P
 	std::string material = sbs->GetTextureManager()->GetTextureMaterial(texture, result, true, name);
 
 	//compute plane
-	Plane plane = sbs->GetUtility()->ComputePlane(converted_vertices[0]);
+	Plane plane = sbs->GetPolyMesh()->ComputePlane(converted_vertices[0]);
+
+	Polygon* poly = new Polygon(this, name, meshwrapper, geometry, triangles, tm, tv, material, plane);
+	polygons.emplace_back(poly);
+	return poly;
+}
+
+Polygon* Wall::AddPolygon(const std::string &name, const std::string &texture, PolygonSet &vertices, std::vector<std::vector<Vector2>> &uvMap, std::vector<Triangle> &triangles, Real tw, Real th, bool autosize)
+{
+	//create a generic polygon, providing the UV texture mapping and triangles
+
+	Matrix3 tm;
+	Vector3 tv;
+	//std::vector<Extents> index_extents;
+	std::vector<std::vector<Polygon::Geometry> > geometry;
+	PolygonSet converted_vertices;
+	if (!polymesh->CreateMesh(meshwrapper, name, texture, vertices, uvMap, geometry, converted_vertices, tw, th))
+	{
+		ReportError("Error creating wall '" + name + "'");
+		return 0;
+	}
+
+	if (triangles.size() == 0)
+		return 0;
+
+	bool result;
+	std::string material = sbs->GetTextureManager()->GetTextureMaterial(texture, result, true, name);
+
+	//compute plane
+	Plane plane = sbs->GetPolyMesh()->ComputePlane(converted_vertices[0]);
 
 	Polygon* poly = new Polygon(this, name, meshwrapper, geometry, triangles, tm, tv, material, plane);
 	polygons.emplace_back(poly);
@@ -135,7 +178,7 @@ Polygon* Wall::AddPolygonSet(const std::string &name, const std::string &materia
 		return 0;
 
 	//compute plane
-	Plane plane = sbs->GetUtility()->ComputePlane(converted_vertices[0]);
+	Plane plane = sbs->GetPolyMesh()->ComputePlane(converted_vertices[0]);
 
 	Polygon* poly = new Polygon(this, name, meshwrapper, geometry, triangles, tex_matrix, tex_vector, material, plane);
 	polygons.emplace_back(poly);
@@ -313,7 +356,7 @@ Vector3 Wall::GetWallExtents(Real altitude, bool get_max)
 {
 	//return the X and Z extents of this wall object at a specific altitude, by doing a double plane cut
 
-	Utility* utility = sbs->GetUtility();
+	PolyMesh* polymesh = sbs->GetPolyMesh();
 
 	for (int i = 0; i < GetPolygonCount(); i++)
 	{
@@ -327,29 +370,29 @@ Vector3 Wall::GetWallExtents(Real altitude, bool get_max)
 		}
 
 		//if given altitude is outside of polygon's range, return 0
-		Vector2 yextents = utility->GetExtents(poly, 2);
+		Vector2 yextents = polymesh->GetExtents(poly, 2);
 		Real tmpaltitude = altitude;
 		if (tmpaltitude < yextents.x || tmpaltitude > yextents.y)
 			return Vector3(0, 0, 0);
 
 		//get upper
-		utility->SplitWithPlane(1, poly, tmp1, tmp2, tmpaltitude - 0.001);
+		polymesh->SplitWithPlane(1, poly, tmp1, tmp2, tmpaltitude - 0.001);
 
 		//get lower part of upper
-		utility->SplitWithPlane(1, tmp2, poly, tmp1, tmpaltitude + 0.001);
+		polymesh->SplitWithPlane(1, tmp2, poly, tmp1, tmpaltitude + 0.001);
 
 		Vector3 result;
 		if (get_max == false)
 		{
 			//get minimum extents
-			result.x = utility->GetExtents(poly, 1).x;
-			result.z = utility->GetExtents(poly, 3).x;
+			result.x = polymesh->GetExtents(poly, 1).x;
+			result.z = polymesh->GetExtents(poly, 3).x;
 		}
 		else
 		{
 			//get maximum extents
-			result.x = utility->GetExtents(poly, 1).y;
-			result.z = utility->GetExtents(poly, 3).y;
+			result.x = polymesh->GetExtents(poly, 1).y;
+			result.z = polymesh->GetExtents(poly, 3).y;
 		}
 		result.y = altitude;
 		return result; //only check the first polygon for now

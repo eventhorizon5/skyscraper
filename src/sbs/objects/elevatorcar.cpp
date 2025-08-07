@@ -52,6 +52,7 @@
 #include "controller.h"
 #include "elevroute.h"
 #include "utility.h"
+#include "shape.h"
 #include "reverb.h"
 
 #include <time.h>
@@ -1056,7 +1057,7 @@ bool ElevatorCar::EnableObjects(bool value)
 	}
 
 	//floor indicators
-	/*bool result = sbs->GetUtility()->EnableArray(FloorIndicatorArray, value);
+	/*bool result = EnableArray(FloorIndicatorArray, value);
 	if (!result)
 		status = false;*/
 
@@ -1064,32 +1065,32 @@ bool ElevatorCar::EnableObjects(bool value)
 	//EnableDirectionalIndicators(value);
 
 	//controls
-	bool result = sbs->GetUtility()->EnableArray(ControlArray, value);
+	bool result = EnableArray(ControlArray, value);
 	if (!result)
 		status = false;
 
 	//triggers
-	result = sbs->GetUtility()->EnableArray(TriggerArray, value);
+	result = EnableArray(TriggerArray, value);
 	if (!result)
 		status = false;
 
 	//models
-	result = sbs->GetUtility()->EnableArray(ModelArray, value);
+	result = EnableArray(ModelArray, value);
 	if (!result)
 		status = false;
 
 	//panels
-	result = sbs->GetUtility()->EnableArray(PanelArray, value);
+	result = EnableArray(PanelArray, value);
 	if (!result)
 		status = false;
 
 	//primitives
-	result = sbs->GetUtility()->EnableArray(PrimArray, value);
+	result = EnableArray(PrimArray, value);
 	if (!result)
 		status = false;
 
 	//custom objects
-	result = sbs->GetUtility()->EnableArray(CustomObjectArray, value);
+	result = EnableArray(CustomObjectArray, value);
 	if (!result)
 		status = false;
 
@@ -1559,7 +1560,7 @@ DoorWrapper* ElevatorCar::AddDoors(int number, const std::string &lefttexture, c
 	return 0;
 }
 
-bool ElevatorCar::AddShaftDoors(int number, const std::string &lefttexture, const std::string &righttexture, Real thickness, Real CenterX, Real CenterZ, Real voffset, Real tw, Real th)
+bool ElevatorCar::AddShaftDoors(int number, Real rotation, const std::string &lefttexture, const std::string &righttexture, Real thickness, Real CenterX, Real CenterZ, Real voffset, Real tw, Real th)
 {
 	//adds shaft's elevator doors specified at a relative central position (off of elevator origin)
 	//uses some parameters (width, height, direction) from AddDoors function
@@ -1567,31 +1568,31 @@ bool ElevatorCar::AddShaftDoors(int number, const std::string &lefttexture, cons
 	if (GetDoor(number))
 	{
 		Report("Adding shaft doors...");
-		return GetDoor(number)->AddShaftDoors(lefttexture, righttexture, thickness, CenterX, CenterZ, voffset, tw, th);
+		return GetDoor(number)->AddShaftDoors(rotation, lefttexture, righttexture, thickness, CenterX, CenterZ, voffset, tw, th);
 	}
 	else
 		ReportError("Invalid door " + ToString(number));
 	return false;
 }
 
-DoorWrapper* ElevatorCar::AddShaftDoor(int floor, int number, const std::string &lefttexture, const std::string &righttexture, Real tw, Real th)
+DoorWrapper* ElevatorCar::AddShaftDoor(int floor, int number, Real rotation, const std::string &lefttexture, const std::string &righttexture, Real tw, Real th)
 {
 	//adds a single elevator shaft door on the specified floor, with position and thickness parameters first specified
 	//by the SetShaftDoors command.
 
 	if (IsServicedFloor(floor) == true && GetDoor(number))
-		return GetDoor(number)->AddShaftDoor(floor, lefttexture, righttexture, tw, th);
+		return GetDoor(number)->AddShaftDoor(floor, rotation, lefttexture, righttexture, tw, th);
 	else
 		return 0;
 }
 
-DoorWrapper* ElevatorCar::AddShaftDoor(int floor, int number, const std::string &lefttexture, const std::string &righttexture, Real thickness, Real CenterX, Real CenterZ, Real voffset, Real tw, Real th)
+DoorWrapper* ElevatorCar::AddShaftDoor(int floor, int number, Real rotation, const std::string &lefttexture, const std::string &righttexture, Real thickness, Real CenterX, Real CenterZ, Real voffset, Real tw, Real th)
 {
 	//adds a single elevator shaft door on the specified floor, with position and thickness parameters first specified
 	//by the SetShaftDoors command.
 
 	if (IsServicedFloor(floor) == true && GetDoor(number))
-		return GetDoor(number)->AddShaftDoor(floor, lefttexture, righttexture, thickness, CenterX, CenterZ, voffset, tw, th);
+		return GetDoor(number)->AddShaftDoor(floor, rotation, lefttexture, righttexture, thickness, CenterX, CenterZ, voffset, tw, th);
 	else
 		return 0;
 }
@@ -2223,162 +2224,94 @@ Door* ElevatorCar::GetDoor(const std::string &name)
 void ElevatorCar::RemovePanel(ButtonPanel* panel)
 {
 	//remove a button panel reference (does not delete the object itself)
-	for (size_t i = 0; i < PanelArray.size(); i++)
-	{
-		if (PanelArray[i] == panel)
-		{
-			PanelArray.erase(PanelArray.begin() + i);
-			return;
-		}
-	}
+
+	RemoveArrayElement(PanelArray, panel);
 }
 
 void ElevatorCar::RemoveDirectionalIndicator(DirectionalIndicator* indicator)
 {
 	//remove a directional indicator reference (does not delete the object itself)
-	for (size_t i = 0; i < DirIndicatorArray.size(); i++)
-	{
-		if (DirIndicatorArray[i] == indicator)
-		{
-			DirIndicatorArray.erase(DirIndicatorArray.begin() + i);
-			return;
-		}
-	}
+
+	RemoveArrayElement(DirIndicatorArray, indicator);
 }
 
 void ElevatorCar::RemoveElevatorDoor(ElevatorDoor* door)
 {
 	//remove an elevator door reference (does not delete the object itself)
-	for (size_t i = 0; i < DoorArray.size(); i++)
-	{
-		if (DoorArray[i] == door)
-		{
-			DoorArray.erase(DoorArray.begin() + i);
-			NumDoors--;
 
-			//reset cache values
-			lastdoor_number = 0;
-			lastdoor_result = 0;
-			return;
-		}
+	bool result = RemoveArrayElement(DoorArray, door);
+
+	if (result == true)
+	{
+		NumDoors--;
+
+		//reset cache values
+		lastdoor_number = 0;
+		lastdoor_result = 0;
 	}
 }
 
 void ElevatorCar::RemoveFloorIndicator(FloorIndicator* indicator)
 {
 	//remove a floor indicator reference (does not delete the object itself)
-	for (size_t i = 0; i < FloorIndicatorArray.size(); i++)
-	{
-		if (FloorIndicatorArray[i] == indicator)
-		{
-			FloorIndicatorArray.erase(FloorIndicatorArray.begin() + i);
-			return;
-		}
-	}
+
+	RemoveArrayElement(FloorIndicatorArray, indicator);
 }
 
 void ElevatorCar::RemoveDoor(Door* door)
 {
 	//remove a door reference (does not delete the object itself)
-	for (size_t i = 0; i < StdDoorArray.size(); i++)
-	{
-		if (StdDoorArray[i] == door)
-		{
-			StdDoorArray.erase(StdDoorArray.begin() + i);
-			return;
-		}
-	}
+
+	RemoveArrayElement(StdDoorArray, door);
 }
 
 void ElevatorCar::RemoveSound(Sound *sound)
 {
 	//remove a sound reference (does not delete the object itself)
-	for (size_t i = 0; i < sounds.size(); i++)
-	{
-		if (sounds[i] == sound)
-		{
-			sounds.erase(sounds.begin() + i);
-			return;
-		}
-	}
+
+	RemoveArrayElement(sounds, sound);
 }
 
 void ElevatorCar::RemoveLight(Light *light)
 {
 	//remove a light reference (does not delete the object itself)
-	for (size_t i = 0; i < lights.size(); i++)
-	{
-		if (lights[i] == light)
-		{
-			lights.erase(lights.begin() + i);
-			return;
-		}
-	}
+
+	RemoveArrayElement(lights, light);
 }
 
 void ElevatorCar::RemoveModel(Model *model)
 {
 	//remove a model reference (does not delete the object itself)
-	for (size_t i = 0; i < ModelArray.size(); i++)
-	{
-		if (ModelArray[i] == model)
-		{
-			ModelArray.erase(ModelArray.begin() + i);
-			return;
-		}
-	}
+
+	RemoveArrayElement(ModelArray, model);
 }
 
 void ElevatorCar::RemovePrimitive(Primitive *prim)
 {
 	//remove a prim reference (does not delete the object itself)
-	for (size_t i = 0; i < PrimArray.size(); i++)
-	{
-		if (PrimArray[i] == prim)
-		{
-			PrimArray.erase(PrimArray.begin() + i);
-			return;
-		}
-	}
+
+	RemoveArrayElement(PrimArray, prim);
 }
 
 void ElevatorCar::RemoveCustomObject(CustomObject *object)
 {
 	//remove a custom object reference (does not delete the object itself)
-	for (size_t i = 0; i < CustomObjectArray.size(); i++)
-	{
-		if (CustomObjectArray[i] == object)
-		{
-			CustomObjectArray.erase(CustomObjectArray.begin() + i);
-			return;
-		}
-	}
+
+	RemoveArrayElement(CustomObjectArray, object);
 }
 
 void ElevatorCar::RemoveControl(Control *control)
 {
 	//remove a control reference (does not delete the object itself)
-	for (size_t i = 0; i < ControlArray.size(); i++)
-	{
-		if (ControlArray[i] == control)
-		{
-			ControlArray.erase(ControlArray.begin() + i);
-			return;
-		}
-	}
+
+	RemoveArrayElement(ControlArray, control);
 }
 
 void ElevatorCar::RemoveTrigger(Trigger *trigger)
 {
 	//remove a trigger reference (does not delete the object itself)
-	for (size_t i = 0; i < TriggerArray.size(); i++)
-	{
-		if (TriggerArray[i] == trigger)
-		{
-			TriggerArray.erase(TriggerArray.begin() + i);
-			return;
-		}
-	}
+
+	RemoveArrayElement(TriggerArray, trigger);
 }
 
 bool ElevatorCar::IsNudgeModeActive(int number)
@@ -3559,14 +3492,8 @@ CameraTexture* ElevatorCar::AddCameraTexture(const std::string &name, int qualit
 void ElevatorCar::RemoveCameraTexture(CameraTexture* camtex)
 {
 	//remove a cameratexture reference (does not delete the object itself)
-	for (size_t i = 0; i < CameraTextureArray.size(); i++)
-	{
-		if (CameraTextureArray[i] == camtex)
-		{
-			CameraTextureArray.erase(CameraTextureArray.begin() + i);
-			return;
-		}
-	}
+
+	RemoveArrayElement(CameraTextureArray, camtex);
 }
 
 bool ElevatorCar::RespondingToCall(int floor, int direction)
@@ -3891,5 +3818,17 @@ void ElevatorCar::RemoveReverb()
 	reverb = 0;
 }
 
+Shape* ElevatorCar::CreateShape(Wall *wall)
+{
+	//Creates a shape in the specified wall object
+	//returns a Shape object, which must be deleted by the caller after use
+
+	if (!wall)
+		return 0;
+
+	Shape *shape = new Shape(wall);
+	//shape->origin = Vector3(0, 0, 0);
+	return shape;
+}
 
 }

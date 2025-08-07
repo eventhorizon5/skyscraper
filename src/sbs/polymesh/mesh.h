@@ -116,7 +116,7 @@ private:
 
 	bool LoadFromFile(const std::string &filename);
 	bool LoadColliderModel(Ogre::MeshPtr &collidermesh);
-
+	void CreateBoundingBox();
 	Ogre::MeshPtr collidermesh;
 	size_t size;
 };

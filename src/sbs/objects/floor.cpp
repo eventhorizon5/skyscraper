@@ -52,6 +52,8 @@
 #include "controller.h"
 #include "utility.h"
 #include "reverb.h"
+#include "wall.h"
+#include "shape.h"
 #include "floor.h"
 
 namespace SBS {
@@ -367,6 +369,19 @@ Wall* Floor::AddWall(const std::string &name, const std::string &texture, Real t
 	return wall;
 }
 
+Shape* Floor::CreateShape(Wall *wall)
+{
+	//Creates a shape in the specified wall object
+	//returns a Shape object, which must be deleted by the caller after use
+
+	if (!wall)
+		return 0;
+
+	Shape *shape = new Shape(wall);
+	shape->origin = Vector3(0, GetBase(true), 0);
+	return shape;
+}
+
 Wall* Floor::AddInterfloorWall(const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real height_in1, Real height_in2, Real voffset1, Real voffset2, Real tw, Real th)
 {
 	//Adds an interfloor wall with the specified dimensions
@@ -466,49 +481,49 @@ bool Floor::Enabled(bool value)
 	EnableColumnFrame(value);
 
 	//controls
-	result = utility->EnableArray(ControlArray, value);
+	result = EnableArray(ControlArray, value);
 	if (!result)
 		status = false;
 
 	//triggers
-	result = utility->EnableArray(TriggerArray, value);
+	result = EnableArray(TriggerArray, value);
 	if (!result)
 		status = false;
 
 	//models
-	result = utility->EnableArray(ModelArray, value);
+	result = EnableArray(ModelArray, value);
 	if (!result)
 		status = false;
 
 	//primitives
-	result = sbs->GetUtility()->EnableArray(PrimArray, value);
+	result = EnableArray(PrimArray, value);
 	if (!result)
 		status = false;
 
 	//custom objects
-	result = utility->EnableArray(CustomObjectArray, value);
+	result = EnableArray(CustomObjectArray, value);
 	if (!result)
 		status = false;
 
 	//call stations
-	result = utility->EnableArray(CallStationArray, value);
+	result = EnableArray(CallStationArray, value);
 	if (!result)
 		status = false;
 
 	//doors
-	result = utility->EnableArray(DoorArray, value);
+	result = EnableArray(DoorArray, value);
 	if (!result)
 		status = false;
 	DoorWrapper->Enabled(value);
 
 	//turn on/off directional indicators
-	result = utility->EnableArray(DirIndicatorArray, value);
+	result = EnableArray(DirIndicatorArray, value);
 	if (!result)
 		status = false;
 	UpdateDirectionalIndicators();
 
 	//floor indicators
-	result = utility->EnableArray(FloorIndicatorArray, value);
+	result = EnableArray(FloorIndicatorArray, value);
 	if (!result)
 		status = false;
 
@@ -516,12 +531,12 @@ bool Floor::Enabled(bool value)
 	UpdateFloorIndicators();
 
 	//escalators
-	result = utility->EnableArray(EscalatorArray, value);
+	result = EnableArray(EscalatorArray, value);
 	if (!result)
 		status = false;
 
 	//moving walkways
-	result = utility->EnableArray(MovingWalkwayArray, value);
+	result = EnableArray(MovingWalkwayArray, value);
 	if (!result)
 		status = false;
 
@@ -545,12 +560,12 @@ bool Floor::Enabled(bool value)
 	}
 
 	//reverbs
-	result = utility->EnableArray(reverbs, value);
+	result = EnableArray(reverbs, value);
 	if (!result)
 		status = false;
 
 	//lights
-	result = utility->EnableArray(lights, value);
+	result = EnableArray(lights, value);
 	if (!result)
 		status = false;
 
@@ -612,7 +627,7 @@ void Floor::Cut(const Vector3 &start, const Vector3 &end, bool cutwalls, bool cu
 		if (i > 0)
 			reset = false;
 
-		sbs->GetUtility()->Cut(Level->Walls[i], Vector3(start.x, start.y, start.z), Vector3(end.x, end.y, end.z), cutwalls, cutfloors, checkwallnumber, reset);
+		sbs->GetPolyMesh()->Cut(Level->Walls[i], Vector3(start.x, start.y, start.z), Vector3(end.x, end.y, end.z), cutwalls, cutfloors, checkwallnumber, reset);
 	}
 	if (fast == false)
 	{
@@ -621,7 +636,7 @@ void Floor::Cut(const Vector3 &start, const Vector3 &end, bool cutwalls, bool cu
 			if (!Interfloor->Walls[i])
 				continue;
 
-			sbs->GetUtility()->Cut(Interfloor->Walls[i], Vector3(start.x, start.y, start.z), Vector3(end.x, end.y, end.z), cutwalls, cutfloors, checkwallnumber, false);
+			sbs->GetPolyMesh()->Cut(Interfloor->Walls[i], Vector3(start.x, start.y, start.z), Vector3(end.x, end.y, end.z), cutwalls, cutfloors, checkwallnumber, false);
 		}
 	}
 }
@@ -664,7 +679,7 @@ void Floor::CutAll(const Vector3 &start, const Vector3 &end, bool cutwalls, bool
 			if (!sbs->External->Walls[i])
 				continue;
 
-			sbs->GetUtility()->Cut(sbs->External->Walls[i], Vector3(start.x, Altitude + start.y, start.z), Vector3(end.x, Altitude + end.y, end.z), cutwalls, cutfloors);
+			sbs->GetPolyMesh()->Cut(sbs->External->Walls[i], Vector3(start.x, Altitude + start.y, start.z), Vector3(end.x, Altitude + end.y, end.z), cutwalls, cutfloors);
 		}
 	}
 }
@@ -1308,187 +1323,103 @@ Door* Floor::GetDoor(const std::string &name)
 void Floor::RemoveCallStation(CallStation* station)
 {
 	//remove a call station reference (does not delete the object itself)
-	for (size_t i = 0; i < CallStationArray.size(); i++)
-	{
-		if (CallStationArray[i] == station)
-		{
-			CallStationArray.erase(CallStationArray.begin() + i);
-			return;
-		}
-	}
+
+	RemoveArrayElement(CallStationArray, station);
 }
 
 void Floor::RemoveFloorIndicator(FloorIndicator *indicator)
 {
 	//remove a floor indicator from the array
 	//this does not delete the object
-	for (size_t i = 0; i < FloorIndicatorArray.size(); i++)
-	{
-		if (FloorIndicatorArray[i] == indicator)
-		{
-			FloorIndicatorArray.erase(FloorIndicatorArray.begin() + i);
-			return;
-		}
-	}
+
+	RemoveArrayElement(FloorIndicatorArray, indicator);
 }
 
 void Floor::RemoveDirectionalIndicator(DirectionalIndicator *indicator)
 {
 	//remove a directional indicator from the array
 	//this does not delete the object
-	for (size_t i = 0; i < DirIndicatorArray.size(); i++)
-	{
-		if (DirIndicatorArray[i] == indicator)
-		{
-			DirIndicatorArray.erase(DirIndicatorArray.begin() + i);
-			return;
-		}
-	}
+
+	RemoveArrayElement(DirIndicatorArray, indicator);
 }
 
 void Floor::RemoveDoor(Door *door)
 {
 	//remove a door from the array
 	//this does not delete the object
-	for (size_t i = 0; i < DoorArray.size(); i++)
-	{
-		if (DoorArray[i] == door)
-		{
-			DoorArray.erase(DoorArray.begin() + i);
-			return;
-		}
-	}
+
+	RemoveArrayElement(DoorArray, door);
 }
 
 void Floor::RemoveSound(Sound *sound)
 {
 	//remove a sound from the array
 	//this does not delete the object
-	for (size_t i = 0; i < sounds.size(); i++)
-	{
-		if (sounds[i] == sound)
-		{
-			sounds.erase(sounds.begin() + i);
-			return;
-		}
-	}
+
+	RemoveArrayElement(sounds, sound);
 }
 
 void Floor::RemoveLight(Light *light)
 {
 	//remove a light reference (does not delete the object itself)
-	for (size_t i = 0; i < lights.size(); i++)
-	{
-		if (lights[i] == light)
-		{
-			lights.erase(lights.begin() + i);
-			return;
-		}
-	}
+
+	RemoveArrayElement(lights, light);
 }
 
 void Floor::RemoveModel(Model *model)
 {
 	//remove a model reference (does not delete the object itself)
-	for (size_t i = 0; i < ModelArray.size(); i++)
-	{
-		if (ModelArray[i] == model)
-		{
-			ModelArray.erase(ModelArray.begin() + i);
-			return;
-		}
-	}
+
+	RemoveArrayElement(ModelArray, model);
 }
 
 void Floor::RemovePrimitive(Primitive *prim)
 {
 	//remove a prim reference (does not delete the object itself)
-	for (size_t i = 0; i < PrimArray.size(); i++)
-	{
-		if (PrimArray[i] == prim)
-		{
-			PrimArray.erase(PrimArray.begin() + i);
-			return;
-		}
-	}
+
+	RemoveArrayElement(PrimArray, prim);
 }
 
 void Floor::RemoveCustomObject(CustomObject *object)
 {
 	//remove a custom object reference (does not delete the object itself)
-	for (size_t i = 0; i < CustomObjectArray.size(); i++)
-	{
-		if (CustomObjectArray[i] == object)
-		{
-			CustomObjectArray.erase(CustomObjectArray.begin() + i);
-			return;
-		}
-	}
+
+	RemoveArrayElement(CustomObjectArray, object);
 }
 
 void Floor::RemoveControl(Control *control)
 {
 	//remove a control reference (does not delete the object itself)
-	for (size_t i = 0; i < ControlArray.size(); i++)
-	{
-		if (ControlArray[i] == control)
-		{
-			ControlArray.erase(ControlArray.begin() + i);
-			return;
-		}
-	}
+
+	RemoveArrayElement(ControlArray, control);
 }
 
 void Floor::RemoveTrigger(Trigger *trigger)
 {
 	//remove a trigger reference (does not delete the object itself)
-	for (size_t i = 0; i < TriggerArray.size(); i++)
-	{
-		if (TriggerArray[i] == trigger)
-		{
-			TriggerArray.erase(TriggerArray.begin() + i);
-			return;
-		}
-	}
+
+	RemoveArrayElement(TriggerArray, trigger);
 }
 
 void Floor::RemoveCameraTexture(CameraTexture *cameratexture)
 {
 	//remove a camera texture reference (does not delete the object itself)
-	for (size_t i = 0; i < CameraTextureArray.size(); i++)
-	{
-		if (CameraTextureArray[i] == cameratexture)
-		{
-			CameraTextureArray.erase(CameraTextureArray.begin() + i);
-			return;
-		}
-	}
+
+	RemoveArrayElement(CameraTextureArray, cameratexture);
 }
 
 void Floor::RemoveEscalator(Escalator *escalator)
 {
 	//remove an escalator reference (does not delete the object itself)
-	for (size_t i = 0; i < EscalatorArray.size(); i++)
-	{
-		if (EscalatorArray[i] == escalator)
-		{
-			EscalatorArray.erase(EscalatorArray.begin() + i);
-			return;
-		}
-	}
+
+	RemoveArrayElement(EscalatorArray, escalator);
 }
 
 void Floor::RemoveMovingWalkway(MovingWalkway *walkway)
 {
 	//remove an escalator reference (does not delete the object itself)
-	for (size_t i = 0; i < MovingWalkwayArray.size(); i++)
-	{
-		if (MovingWalkwayArray[i] == walkway)
-		{
-			MovingWalkwayArray.erase(MovingWalkwayArray.begin() + i);
-			return;
-		}
-	}
+
+	RemoveArrayElement(MovingWalkwayArray, walkway);
 }
 
 Light* Floor::AddLight(const std::string &name, int type)
@@ -1922,14 +1853,8 @@ void Floor::RemoveRevolvingDoor(RevolvingDoor *door)
 {
 	//remove a door from the array
 	//this does not delete the object
-	for (size_t i = 0; i < RDoorArray.size(); i++)
-	{
-		if (RDoorArray[i] == door)
-		{
-			RDoorArray.erase(RDoorArray.begin() + i);
-			return;
-		}
-	}
+
+	RemoveArrayElement(RDoorArray, door);
 }
 
 RevolvingDoor* Floor::GetRevolvingDoor(int number)
@@ -1989,14 +1914,7 @@ void Floor::RemoveReverb(Reverb *reverb)
 	//remove a reverb from the array
 	//this does not delete the object
 
-	for (size_t i = 0; i < reverbs.size(); i++)
-	{
-		if (reverbs[i] == reverb)
-		{
-			reverbs.erase(reverbs.begin() + i);
-			return;
-		}
-	}
+	RemoveArrayElement(reverbs, reverb);
 }
 
 int Floor::GetReverbCount()

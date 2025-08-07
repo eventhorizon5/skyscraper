@@ -34,10 +34,26 @@
 #include "globals.h"
 #include "sbs.h"
 #include "utility.h"
+#include "polymesh.h"
 #include "texture.h"
+#include "teximage.h"
+#include "timer.h"
 #include "texman.h"
 
 namespace SBS {
+
+class TextureManager::Timer : public TimerObject
+{
+public:
+	TextureManager *parent;
+	Slideshow *slideshow;
+	Timer(const std::string &name, TextureManager *parent, Slideshow *slideshow) : TimerObject(parent, name)
+	{
+		this->parent = parent;
+		this->slideshow = slideshow;
+	}
+	virtual void Notify();
+};
 
 TextureManager::TextureManager(Object *parent) : Object(parent)
 {
@@ -104,6 +120,13 @@ TextureManager::TextureManager(Object *parent) : Object(parent)
 
 TextureManager::~TextureManager()
 {
+	//delete slideshow objects
+	for (size_t i = 0; i < slideshows.size(); i++)
+	{
+		if (slideshows[i])
+			delete slideshows[i];
+	}
+
 	//delete materials
 	UnloadMaterials();
 
@@ -126,6 +149,89 @@ TextureManager::~TextureManager()
 		}
 	}
 	manual_textures.clear();
+
+	//remove texture images
+	for (size_t i = 0; i < texture_images.size(); i++)
+	{
+		if (texture_images[i])
+			delete texture_images[i];
+	}
+}
+
+void TextureManager::Timer::Notify()
+{
+	//slideshow timer
+
+	if (!slideshow)
+		return;
+
+	if (slideshow->filenames.empty() || slideshow->durations.empty())
+		return;
+
+	//change texture
+	parent->SetTexture(slideshow->name, slideshow->filenames[slideshow->iterator]);
+
+	//set timer for the current frame
+	Start(slideshow->durations[slideshow->iterator] * 1000, true);
+
+	//advance to next frame
+	slideshow->iterator++;
+	if (slideshow->iterator >= slideshow->filenames.size())
+		slideshow->iterator = 0;
+}
+
+void TextureManager::StartSlideshow(const std::string &name)
+{
+	//start a slideshow by name
+
+	for (size_t i = 0; i < slideshows.size(); i++)
+	{
+		if (slideshows[i]->name == name)
+		{
+			Report("Starting slideshow '" + name + "'");
+			slideshows[i]->timer->Start(slideshows[i]->durations[0] * 1000, true);
+			return;
+		}
+	}
+	return;
+}
+
+void TextureManager::StopSlideshow(const std::string &name)
+{
+	//stop a slideshow by name
+
+	for (size_t i = 0; i < slideshows.size(); i++)
+	{
+		if (slideshows[i]->name == name)
+		{
+			Report("Stopping slideshow '" + name + "'");
+			slideshows[i]->timer->Stop();
+			return;
+		}
+	}
+	return;
+}
+
+void TextureManager::StartAllSlideshows()
+{
+	//start all slideshows
+
+	for (size_t i = 0; i < slideshows.size(); i++)
+	{
+		if (slideshows[i])
+			slideshows[i]->timer->Start(slideshows[i]->durations[0] * 1000, true);
+	}
+}
+
+void TextureManager::StopAllSlideshows()
+{
+	//stop all slideshows
+
+	for (size_t i = 0; i < slideshows.size(); i++)
+	{
+		if (slideshows[i])
+			slideshows[i]->timer->Stop();
+	}
 }
 
 bool TextureManager::LoadTexture(const std::string &filename, const std::string &name, Real widthmult, Real heightmult, bool enable_force, bool force_mode, int mipmaps, bool use_alpha_color, Ogre::ColourValue alpha_color)
@@ -133,9 +239,12 @@ bool TextureManager::LoadTexture(const std::string &filename, const std::string 
 	//first verify the filename
 	std::string filename2 = sbs->GetUtility()->VerifyFile(filename);
 
-	//exit if already loaded
+	//unload texture if already loaded
 	if (MaterialExists(name))
-		return ReportError("Texture " + name + " already exists");
+	{
+		if (UnloadMaterial(name, "General") == true)
+			UnregisterTexture(name);
+	}
 
 	//load texture
 	bool has_alpha = false;
@@ -166,15 +275,104 @@ bool TextureManager::LoadTexture(const std::string &filename, const std::string 
 	return true;
 }
 
+bool TextureManager::CreateSlideshow(const std::string &name, bool start, std::vector<std::string> filenames, std::vector<Real> durations, Real widthmult, Real heightmult, bool enable_force, bool force_mode, int mipmaps, bool use_alpha_color, Ogre::ColourValue alpha_color)
+{
+	//creates an animated slideshow
+	//this is similar to the LoadAnimatedTexture command, but each image frame has a separate duration
+
+	if (filenames.size() == 0 || durations.size() == 0)
+		return false;
+	if (filenames.size() != durations.size())
+		return false;
+
+	std::vector<std::string> filenames2;
+
+	size_t num_frames = filenames.size();
+
+	//unload texture if already loaded
+	if (MaterialExists(name))
+	{
+		if (UnloadMaterial(name, "General") == true)
+			UnregisterTexture(name);
+	}
+
+	//first verify the filenames
+	for (size_t i = 0; i < filenames.size(); i++)
+	{
+		TrimString(filenames[i]);
+		filenames2.emplace_back(sbs->GetUtility()->VerifyFile(filenames[i]));
+	}
+
+	bool has_alpha = false;
+
+	size_t size = 0;
+	for (size_t i = 0; i < filenames2.size(); i++)
+	{
+		bool has_alpha2 = false;
+
+		//load texture
+		Ogre::TexturePtr mTex = LoadTexture(filenames2[i], mipmaps, has_alpha2, use_alpha_color, alpha_color);
+
+		if (!mTex)
+			return false;
+		std::string texturename = mTex->getName();
+
+		if (has_alpha2 == true)
+			has_alpha = true;
+
+		size += mTex->getSize();
+
+		if (sbs->Verbose)
+			Report("Loaded texture " + filenames2[i] + ", size " + ToString((int)mTex->getSize()));
+	}
+
+	//create a new material
+	std::string matname = TrimStringCopy(name);
+	Ogre::MaterialPtr mMat = CreateMaterial(matname, "General");
+
+	//bind first texture to material
+	Ogre::TextureUnitState* state = BindTextureToMaterial(mMat, filenames2[0], has_alpha);
+
+	//create slideshow object
+	if (state)
+	{
+		Slideshow *slideshow = new Slideshow();
+		slideshow->name = name;
+		slideshow->filenames = filenames2;
+		slideshow->durations = durations;
+		slideshow->iterator = 0;
+		slideshow->material = mMat;
+		slideshow->has_alpha = has_alpha;
+		slideshow->timer = new Timer(name + " Timer", this, slideshow);
+		slideshows.emplace_back(slideshow);
+		Report("Created slideshow '" + name + "' with " + ToString(num_frames) + " frames");
+		if (start)
+			slideshow->timer->Start(durations[0] * 1000, true); //start slideshow timer
+	}
+	else
+		return false;
+
+	//add texture multipliers
+	RegisterTexture(name, "", "", widthmult, heightmult, enable_force, force_mode, size, mMat->getSize());
+
+	if (sbs->Verbose)
+		Report("Loaded animated texture " + matname);
+
+	return true;
+}
+
 bool TextureManager::LoadAnimatedTexture(std::vector<std::string> filenames, const std::string &name, Real duration, Real widthmult, Real heightmult, bool enable_force, bool force_mode, int mipmaps, bool use_alpha_color, Ogre::ColourValue alpha_color)
 {
 	std::vector<std::string> filenames2;
 
 	size_t num_frames = filenames.size();
 
-	//exit if already loaded
+	//unload texture if already loaded
 	if (MaterialExists(name))
-		return ReportError("Texture " + name + " already exists");
+	{
+		if (UnloadMaterial(name, "General") == true)
+			UnregisterTexture(name);
+	}
 
 	//first verify the filenames
 	for (size_t i = 0; i < filenames.size(); i++)
@@ -241,9 +439,12 @@ bool TextureManager::LoadAlphaBlendTexture(const std::string &filename, const st
 	std::string specular_filename2 = sbs->GetUtility()->VerifyFile(specular_filename);
 	std::string blend_filename2 = sbs->GetUtility()->VerifyFile(blend_filename);
 
-	//exit if already loaded
+	//unload texture if already loaded
 	if (MaterialExists(name))
-		return ReportError("Texture " + name + " already exists");
+	{
+		if (UnloadMaterial(name, "General") == true)
+			UnregisterTexture(name);
+	}
 
 	//load texture
 	bool has_alpha = false, has_alpha2 = false;
@@ -392,9 +593,12 @@ bool TextureManager::LoadTextureCropped(const std::string &filename, const std::
 	int mipmaps = -1;
 	bool use_alpha_color = false;
 
-	//exit if already loaded
+	//unload texture if already loaded
 	if (MaterialExists(name))
-		return ReportError("Texture " + name + " already exists");
+	{
+		if (UnloadMaterial(name, "General") == true)
+			UnregisterTexture(name);
+	}
 
 	//first verify the filename
 	std::string filename2 = sbs->GetUtility()->VerifyFile(filename);
@@ -438,7 +642,15 @@ bool TextureManager::LoadTextureCropped(const std::string &filename, const std::
 	catch (Ogre::Exception &e)
 	{
 		ReportError("Error creating new texture " + texturename + "\n" + e.getDescription());
-		return false;
+		Ogre::TexturePtr tex = GetTextureByName(texturename, "General");
+		if (tex)
+		{
+			new_texture = tex;
+			manual_textures.emplace_back(new_texture);
+			IncrementTextureCount();
+		}
+		else
+			return false;
 	}
 
 	//copy source and overlay images onto new image
@@ -690,9 +902,12 @@ bool TextureManager::AddTextToTexture(const std::string &origname, const std::st
 
 	std::string font_filename2 = sbs->GetUtility()->VerifyFile(font_filename);
 
-	//exit if already loaded
+	//unload texture if already loaded
 	if (MaterialExists(name))
-		return ReportError("Texture " + name + " already exists");
+	{
+		if (UnloadMaterial(name, "General") == true)
+			UnregisterTexture(name);
+	}
 
 	//load font
 	Ogre::FontPtr font;
@@ -774,7 +989,15 @@ bool TextureManager::AddTextToTexture(const std::string &origname, const std::st
 	catch (Ogre::Exception &e)
 	{
 		ReportError("Error creating new texture " + texturename + "\n" + e.getDescription());
-		return false;
+		Ogre::TexturePtr tex = GetTextureByName(texturename, "General");
+		if (tex)
+		{
+			texture = tex;
+			manual_textures.emplace_back(texture);
+			IncrementTextureCount();
+		}
+		else
+			return false;
 	}
 
 	//get new texture dimensions, if it was resized
@@ -841,9 +1064,12 @@ bool TextureManager::AddTextureOverlay(const std::string &orig_texture, const st
 	std::string Origname = orig_texture;
 	std::string Overlay = overlay_texture;
 
-	//exit if already loaded
+	//unload texture if already loaded
 	if (MaterialExists(name))
-		return ReportError("Texture " + name + " already exists");
+	{
+		if (UnloadMaterial(name, "General") == true)
+			UnregisterTexture(name);
+	}
 
 	//get original texture
 	Ogre::MaterialPtr ptr = GetMaterialByName(Origname);
@@ -903,7 +1129,15 @@ bool TextureManager::AddTextureOverlay(const std::string &orig_texture, const st
 	catch (Ogre::Exception &e)
 	{
 		ReportError("Error creating new texture " + texturename + "\n" + e.getDescription());
-		return false;
+		Ogre::TexturePtr tex = GetTextureByName(texturename, "General");
+		if (tex)
+		{
+			new_texture = tex;
+			manual_textures.emplace_back(new_texture);
+			IncrementTextureCount();
+		}
+		else
+			return false;
 	}
 
 	//copy source and overlay images onto new image
@@ -1155,7 +1389,7 @@ bool TextureManager::GetTextureMapping(PolyArray &vertices, Vector3 &v1, Vector3
 
 		//determine the largest projection dimension (the dimension that the polygon is generally on;
 		//with a floor Y would be biggest)
-		Plane plane = sbs->GetUtility()->ComputePlane(vertices);
+		Plane plane = sbs->GetPolyMesh()->ComputePlane(vertices);
 		Vector3 normal = plane.normal;
 
 		direction = 0; //x; faces left/right
@@ -1221,8 +1455,8 @@ bool TextureManager::GetTextureMapping(PolyArray &vertices, Vector3 &v1, Vector3
 
 		//get extents of both dimensions, since the polygon is projected in 2D as X and Y coordinates
 		Vector2 a, b;
-		a = sbs->GetUtility()->GetExtents(varray, 1);
-		b = sbs->GetUtility()->GetExtents(varray, 2);
+		a = sbs->GetPolyMesh()->GetExtents(varray, 1);
+		b = sbs->GetPolyMesh()->GetExtents(varray, 2);
 
 		//set the result 2D coordinates
 		if (direction == 0)
@@ -2118,82 +2352,18 @@ void TextureManager::DecrementMaterialCount()
 
 Ogre::TexturePtr TextureManager::LoadTexture(const std::string &filename, int mipmaps, bool &has_alpha, bool use_alpha_color, Ogre::ColourValue alpha_color)
 {
-	//set verbosity level
-	Ogre::TextureManager::getSingleton().setVerbose(sbs->Verbose);
+	//create new texture image object
+	TextureImage *teximage = new TextureImage(this, filename);
 
-	//exit if no texture specified
-	if (filename == "")
+	Ogre::TexturePtr texptr = teximage->LoadTexture(mipmaps, has_alpha, use_alpha_color, alpha_color);
+	if (!texptr)
+	{
+		delete teximage;
 		return 0;
-
-	std::string filename2 = filename;
-
-	//determine if the file is a GIF image, to force keycolor alpha
-	std::string extension = filename2.substr(filename.size() - 3);
-	SetCase(extension, false);
-	if (extension == "gif")
-		use_alpha_color = true;
-
-	//load the texture
-	std::string path = sbs->GetUtility()->GetMountPath(filename2, filename2);
-	Ogre::TexturePtr mTex;
-	std::string texturename;
-	has_alpha = false;
-
-	try
-	{
-		if (use_alpha_color == false)
-		{
-			//get any existing texture
-			mTex = GetTextureByName(filename2, path);
-
-			//if not found, load new texture
-			if (!mTex)
-			{
-				mTex = Ogre::TextureManager::getSingleton().load(filename2, path, Ogre::TEX_TYPE_2D, mipmaps);
-				IncrementTextureCount();
-			}
-
-			if (!mTex)
-			{
-				ReportError("Error loading texture" + filename2);
-				return mTex;
-			}
-			texturename = mTex->getName();
-			has_alpha = mTex->hasAlpha();
-		}
-		else
-		{
-			//load based on chroma key for alpha
-
-			texturename = "kc_" + filename2;
-
-			//get any existing texture
-			mTex = GetTextureByName(texturename, path);
-
-			//if not found, load new texture
-			if (!mTex)
-				mTex = loadChromaKeyedTexture(filename2, path, texturename, Ogre::ColourValue::White);
-
-			if (!mTex)
-			{
-				ReportError("Error loading texture" + filename2);
-				return mTex;
-			}
-			has_alpha = true;
-		}
-	}
-	catch (Ogre::Exception &e)
-	{
-		//texture needs to be removed if a load failed
-		Ogre::ResourcePtr wrapper = GetTextureByName(filename2, path);
-		if (wrapper.get())
-			Ogre::TextureManager::getSingleton().remove(wrapper);
-
-		ReportError("Error loading texture " + filename2 + "\n" + e.getDescription());
-		return mTex;
 	}
 
-	return mTex;
+	texture_images.emplace_back(teximage);
+	return texptr;
 }
 
 Ogre::MaterialPtr TextureManager::CreateMaterial(const std::string &name, const std::string &path)
@@ -2255,6 +2425,7 @@ Ogre::MaterialPtr TextureManager::GetMaterialByName(const std::string &name, con
 
 Ogre::TextureUnitState* TextureManager::BindTextureToMaterial(Ogre::MaterialPtr mMat, std::string texture_name, bool has_alpha)
 {
+	//set texture filename of material
 	Ogre::TextureUnitState *state = mMat->getTechnique(0)->getPass(0)->createTextureUnitState(texture_name);
 
 	//enable alpha blending for related textures
@@ -2450,6 +2621,146 @@ Texture* TextureManager::GetTextureObject(size_t index)
 		return 0;
 
 	return textures[index];
+}
+
+void TextureManager::Report(const std::string &message)
+{
+	//general reporting function
+	std::string msg = "Texture Manager: " + message;
+	Object::Report(msg);
+}
+
+bool TextureManager::ReportError(const std::string &message)
+{
+	//general error reporting function
+	std::string msg = "Texture Manager: " + message;
+	return Object::ReportError(msg);
+}
+
+bool TextureManager::SetTexture(const std::string &name, const std::string &texture)
+{
+	//get texture unit state
+	Ogre::MaterialPtr mMat = GetMaterialByName(name);
+	for (size_t i = 0; i < mMat->getNumTechniques(); i++)
+	{
+		try
+		{
+			Ogre::TextureUnitState* state = mMat->getTechnique(i)->getPass(0)->getTextureUnitState(0);
+
+			//set texture unit's texture image
+			if (state)
+				state->setTextureName(texture);
+		}
+		catch (Ogre::Exception& e)
+		{
+			return ReportError("Error setting texture " + name + " to filename " + texture + "\n" + e.getDescription());
+		}
+		catch (...)
+		{
+			continue;
+		}
+	}
+	return true;
+}
+
+bool TextureManager::ComputeTextureMap(Matrix3 &t_matrix, Vector3 &t_vector, PolyArray &vertices, const Vector3 &p1, const Vector3 &p2, const Vector3 &p3, Real tw, Real th)
+{
+	//calculates the transformation needed to map a texture onto a polygon.
+	//using three polygon points and their UV coordinates, determine the texture axes and origin in 3D space.
+
+	//get UV coordinates for the three points, scaled by texture width/height
+	Vector2 uv1 = MapUV[0] * tw;
+	Vector2 uv2 = MapUV[1] * tw;
+	Vector2 uv3 = MapUV[2] * tw;
+	uv1.y *= th / tw;
+	uv2.y *= th / tw;
+	uv3.y *= th / tw;
+
+	//build the 2x2 matrix for UV mapping
+	Real m11 = uv2.x - uv1.x;
+	Real m12 = uv3.x - uv1.x;
+	Real m21 = uv2.y - uv1.y;
+	Real m22 = uv3.y - uv1.y;
+
+	Real det = m11 * m22 - m12 * m21;
+	if (std::abs(det) < SMALL_EPSILON)
+		return ReportError("ComputeTextureMap: Bad UV coordinates"); //bad UV coordinates
+
+	Real inv_det = 1.0 / det;
+
+	//invert the matrix
+	Real im11 =  m22 * inv_det;
+	Real im12 = -m12 * inv_det;
+	Real im21 = -m21 * inv_det;
+	Real im22 =  m11 * inv_det;
+
+	//helper to compute a mapped point
+	auto map_point = [&](Real u, Real v) -> Vector3 {
+		Vector2 delta(u - uv1.x, v - uv1.y);
+		Real lambda = im11 * delta.x + im12 * delta.y;
+		Real mu     = im21 * delta.x + im22 * delta.y;
+		return p1 + lambda * (p2 - p1) + mu * (p3 - p1);
+	};
+
+	//compute Po (origin), Pu (U axis), Pv (V axis)
+	Vector3 po = map_point(0, 0);
+	Vector3 pu = map_point(1, 0);
+	Vector3 pv = map_point(0, 1);
+
+	//compute axis lengths
+	Real len1f = (pu - po).length();
+	Real len2f = (pv - po).length();
+
+	//call ComputeTextureSpace with the calculated axes
+	return ComputeTextureSpace(t_matrix, t_vector, po, pu, len1f, pv, len2f);
+}
+
+bool TextureManager::ComputeTextureSpace(Matrix3 &m, Vector3 &v, const Vector3 &origin, const Vector3 &u_point, Real u_length, const Vector3 &v_point, Real v_length)
+{
+	//calculates a texture space transformation matrix and origin vector
+	//given three points on the polygon and their desired texture axes
+
+	//compute normalized texture axes
+	Vector3 u_axis = u_point - origin;
+	Vector3 v_axis = v_point - origin;
+
+	Real u_norm = u_axis.length();
+	Real v_norm = v_axis.length();
+
+	if (u_norm < SMALL_EPSILON || v_norm < SMALL_EPSILON)
+		return false; //degenerate axes
+
+	u_axis /= u_norm;
+	v_axis /= v_norm;
+
+	//scale axes to desired texture length
+	u_axis *= u_length;
+	v_axis *= v_length;
+
+	//compute orthogonal w_axis (normal to polygon plane)
+	Vector3 w_axis = u_axis.crossProduct(v_axis);
+	Real w_norm = w_axis.length();
+	if (w_norm < SMALL_EPSILON)
+		return false; //degenerate plane
+
+	w_axis /= w_norm;
+
+	//fill matrix columns: u_axis, v_axis, w_axis
+	m[0][0] = u_axis.x; m[0][1] = v_axis.x; m[0][2] = w_axis.x;
+	m[1][0] = u_axis.y; m[1][1] = v_axis.y; m[1][2] = w_axis.y;
+	m[2][0] = u_axis.z; m[2][1] = v_axis.z; m[2][2] = w_axis.z;
+
+	//set origin vector
+	v = origin;
+
+	//optionally invert matrix if needed for mapping (depends on usage)
+	Real det = m.Determinant();
+	if (std::abs(det) < SMALL_EPSILON)
+		return false; //singular matrix
+
+	m = m.Inverse(1e-10f);
+
+	return true;
 }
 
 }

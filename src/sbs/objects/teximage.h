@@ -1,5 +1,5 @@
 /*
-	Scalable Building Simulator - Texture Object
+	Scalable Building Simulator - Texture Image
 	The Skyscraper Project - Version 2.1
 	Copyright (C)2004-2025 Ryan Thoryk
 	https://www.skyscrapersim.net
@@ -21,31 +21,23 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-#ifndef _SBS_TEXTURE_H
-#define _SBS_TEXTURE_H
+#ifndef _SBS_TEXIMAGE_H
+#define _SBS_TEXIMAGE_H
 
 namespace SBS {
 
-class SBSIMPEXP Texture : public Object
+class SBSIMPEXP TextureImage : public ObjectBase
 {
 public:
-	std::string material_name; //used if material is loaded instead of texture, as an alias
-	std::string filename;
-	Real widthmult;
-	Real heightmult;
-	bool enable_force; //enable forcing of tile or stretch mode?
-	bool force_mode; //false to disable autosizing, true to enable autosizing
-	int dependencies; //number of submeshes depending on this texture
-	size_t tex_size; //size of texture resource in bytes
-	size_t mat_size; //size of material resource in bytes
-
-    Texture(TextureManager *manager, const std::string &name, const std::string &material_name, const std::string &filename, Real widthmult, Real heightmult, bool enable_force, bool force_mode, size_t tex_size, size_t mat_size);
-    ~Texture();
-	size_t GetMemoryUsage();
+    TextureImage(TextureManager *manager, const std::string &filename);
+    ~TextureImage();
+	Ogre::TexturePtr LoadTexture(int mipmaps, bool &has_alpha, bool use_alpha_color = false, Ogre::ColourValue alpha_color = Ogre::ColourValue::Black);
 
 private:
 
     TextureManager* manager;
+	std::string filename;
+
 };
 
 }

@@ -338,6 +338,9 @@ void VMConsole::Process(const std::string &text, bool echo)
 	{
 		int count = vm->GetEngineCount();
 		Report(SBS::ToString(count) + " engines running\n", "cyan");
+		Report("Instance\tElapsed Time\t\tRun Time\t\tFilename", "cyan");
+		Report("--------\t------------\t\t---------\t\t--------", "cyan");
+		Report("");
 		for (int i = 0; i < count; i++)
 		{
 			EngineContext *engine = vm->GetEngine(i);
@@ -527,6 +530,76 @@ void VMConsole::Process(const std::string &text, bool echo)
 		return;
 	}
 
+	//pause command
+	if (command == "pause")
+	{
+		if (vm->GetEngineCount() == 0)
+		{
+			ReportError("No engine, run vminit");
+			consoleresult.ready = false;
+			consoleresult.threadwait = false;
+			return;
+		}
+
+		if (params.size() == 0)
+		{
+			vm->GetActiveEngine()->Paused = true;
+			Report("Paused active engine");
+			consoleresult.ready = false;
+			consoleresult.threadwait = false;
+			return;
+		}
+		else
+		{
+			EngineContext *engine = vm->GetEngine(SBS::ToInt(params[0]));
+			if (engine)
+			{
+				engine->Paused = true;
+				Report("Paused engine " + SBS::ToString(engine->GetNumber()));
+			}
+			else
+				ReportError("Invalid engine");
+		}
+		consoleresult.ready = false;
+		consoleresult.threadwait = false;
+		return;
+	}
+
+	//resume command
+	if (command == "resume")
+	{
+		if (vm->GetEngineCount() == 0)
+		{
+			ReportError("No engine, run vminit");
+			consoleresult.ready = false;
+			consoleresult.threadwait = false;
+			return;
+		}
+
+		if (params.size() == 0)
+		{
+			vm->GetActiveEngine()->Paused = false;
+			Report("Resumed active engine");
+			consoleresult.ready = false;
+			consoleresult.threadwait = false;
+			return;
+		}
+		else
+		{
+			EngineContext *engine = vm->GetEngine(SBS::ToInt(params[0]));
+			if (engine)
+			{
+				engine->Paused = false;
+				Report("Resumed engine " + SBS::ToString(engine->GetNumber()));
+			}
+			else
+				ReportError("Invalid engine");
+		}
+		consoleresult.ready = false;
+		consoleresult.threadwait = false;
+		return;
+	}
+
 	//help command
 	if (command == "help" || command == "?")
 	{
@@ -550,6 +623,8 @@ void VMConsole::Process(const std::string &text, bool echo)
 			Report("profile [-a] - shows function-level profiling statistics");
 			Report("vminit - create and initialize a simulator engine");
 			Report("boot [engine_number] - start a simulator engine");
+			Report("pause [engine_number] - pause a simulator engine");
+			Report("resume [engine_number] - resume a simulator engine");
 			Report("help - print this help guide\n");
 			Report("All other commands will be passed to the active simulator engine, if available");
 #ifdef USING_WX

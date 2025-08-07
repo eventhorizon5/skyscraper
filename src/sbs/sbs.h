@@ -116,6 +116,8 @@ namespace SBS {
 	class Map;
 	class RouteController;
 	class Texture;
+	class TextureImage;
+	class Shape;
 
 	typedef std::vector<Vector3> PolyArray;
 	typedef std::vector<PolyArray> PolygonSet;
@@ -390,6 +392,7 @@ public:
 	MeshObject* GetLandscapeMesh();
 	Real GetUnitScale();
 	Vector3 GetCenter();
+	Shape* CreateShape(Wall *wall);
 
 	//Meshes
 	MeshObject* Buildings;

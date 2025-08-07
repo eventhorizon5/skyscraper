@@ -25,8 +25,49 @@ Version 2.1
 -SBS: Loop() and OnInit() object functions should return a status, to indicate an object success or malfunction/failure
 -SBS: add support for a return value for Object initialization functions
 -SBS: object Enabled() function should return status.
+-Fix delimiter in uname command when no version state is specified
+-Added variable display to script debugger
+-VMConsole: remove Frontend mention from version command
+-SBS: if a texture material is already loaded, report an error and exit before trying to create a new texexture.  This fixes an issue where new textures with the same name as existing ones would cause a sim engine to have a fatal error and shut down
+-SBS: moved Texture Manager to controllers section
+-SBS: Moved TextureInfo into new Texture object
+-SBS: moved texture loading code into TextureImage object
+-SBS: created AddArrayElement and RemoveArrayElement utility templated functions
+-PolyMesh: add support for polygon extrusion, for creating custom polygons with thickness and sides.
+-SBS: stop timer before the Notify() call
+-Added CreateSlideshow command and related code
+-TextureManager: when loading a texture, unload the previous texture if it exists, instead of exiting
+-SBS: moved remaining geometry functions into PolyMesh
+-GUI: added the Floor Information dialog
+-Convention Center: made observatory level (114), spire top (115) and antenna
+-TextureManager: SetTexture() function should set texture on all Ogre techniques in the material instead of assuming 0
+-TextureManager: added the option to enable or disable the slideshow on start, added an Action that can start and stop a slideshow, and added the new "Simple - Slideshow" building
+-added the Simple - Slideshow building
+-TextureManager: report on slideshow creation and start/stop
+-Guide: added logo for Virtual Manager page
+-Script Guide: added CreateSlideshow command information and related Action commands
+-Convention Center: fixed door movement of rotated elevators
+-Added Rotation parameter for shaft doors, allowing them to be rotated along with elevator cars
+-Convention Center: rotate shaft doors into position using the new rotation support
+-Added texture tiling parameters to the ExtrudePoly command
+-PolyMesh: updated code in FindWallIntersect()
+-PolyMesh: replaced the CS IntersectRay() with new implementation, fixes some of the wall-clicking issues
+-PolyMesh: replaced IntersectSegment functions
+-PolyMesh: added ComputeNormal2() and SplitWithPlane() replacement functions
+-TextureManager: replaced ComputeTextureMap() and ComputeTextureSpace() functions
+-GUI: fix floor information selection code
+-PolyMesh: added AddTriangle() function
+-PolyMesh: started experimental support for shapes, starting with spheres
+-Convention Center: fixed fire service switch in service elevator
+-Convention Center: extended service elevator to sub-basement level
+-PolyMesh: moved bounding box creation code into separate function
+-PolyMesh: Added CreateBox() function
+-PolyMesh: added object centering support for Sphere and Box objects
+-PolyMesh: moved shape code into new Shape object, and integrated with Floor object
+-ScriptProc: fixed AddShaftDoor and AddShaftDoors commands
+-ScriptProc: fix regression in Floor section AddShaftDoor command
 
-Version 2.0
+Version 2.0 - July 24, 2025
 -------------------------
 -ScriptProc: fix direction value processing for AddDoor command
 -SBS: added pointer safety checks to elevator car's Loop() function
@@ -643,7 +684,7 @@ Version 2.0
 -Added an INI file setting to enable or disable the frame statistics on startup
 -Render window now resizes properly on Linux when the scaling factor is not 100%
 
-Version 1.11.2 (2.0 Alpha 11 Update 2)
+Version 1.11.2 (2.0 Alpha 11 Update 2) - April 13, 2023
 -------------------------
 -don't process a key down event if the key is actually up, this fixes a "stuck key" issue on some systems
 -updated starting position for Dellerton Plaza building
@@ -651,7 +692,7 @@ Version 1.11.2 (2.0 Alpha 11 Update 2)
 -made Level errors non-fatal
 -fixed a script error in the Skyscrapersim Housing Estate building
 
-Version 1.11.1 (2.0 Alpha 11 Update 1)
+Version 1.11.1 (2.0 Alpha 11 Update 1) - March 19, 2023
 -------------------------
 -Object selection fixes for the People Manager dialog
 -Updated guide to reflect collider filename change
@@ -660,7 +701,7 @@ Version 1.11.1 (2.0 Alpha 11 Update 1)
 -Fixed a crash when deleting elevator objects
 -Render window now resizes properly on Linux when the scaling factor is not 100%
 
-Version 1.11 (2.0 Alpha 11)
+Version 1.11 (2.0 Alpha 11) - March 10, 2023
 -------------------------
 -fix FMOD version number reporting
 -Only play floor sound during an elevator's standard arrival notification
@@ -834,12 +875,12 @@ engines on startup
 -added support for call button destination floors engines on startup (feature currently disabled)
 -Integrated all engine reporting into ObjectBase class
 
-Version 1.10.6 (2.0 Alpha 10 - Update 6)
+Version 1.10.6 (2.0 Alpha 10 - Update 6) - February 1, 2017
 -------------------------
 -removed extra elevator enable
 -elevators need to be enabled when camera attaches
 
-Version 1.10.5 (2.0 Alpha 10 - Update 5)
+Version 1.10.5 (2.0 Alpha 10 - Update 5) - February 1, 2017
 -------------------------
 -properly position escalator and walkway sounds
 -use separate meshes for escalator and moving walkway steps
@@ -847,7 +888,7 @@ Version 1.10.5 (2.0 Alpha 10 - Update 5)
 -only move steps if near escalator or moving walkway
 -return fix for Gotofloor action
 
-Version 1.10.4 (2.0 Alpha 10 - Update 4)
+Version 1.10.4 (2.0 Alpha 10 - Update 4) - January 7, 2017
 -------------------------
 -camera start position should not rely on a starting floor
 -added Skylab building set
@@ -857,7 +898,7 @@ Version 1.10.4 (2.0 Alpha 10 - Update 4)
 -added teleporter action support
 -fixed issue where a call panel would call in both directions if only a single down control was available
 
-Version 1.10.3 (2.0 Alpha 10 - Update 3)
+Version 1.10.3 (2.0 Alpha 10 - Update 3) - January 5, 2017
 -------------------------
 -step movement states should be reset when switching off escalator/moving
 walkway
@@ -866,11 +907,11 @@ walkway
 -steps should reset values on startup
 
 
-Version 1.10.2 (2.0 Alpha 10 - Update 2)
+Version 1.10.2 (2.0 Alpha 10 - Update 2) - December 31, 2016
 -------------------------
 -fixes for escalator and moving walkway motion
 
-Version 1.10.1 (2.0 Alpha 10 - Update 1)
+Version 1.10.1 (2.0 Alpha 10 - Update 1) - December 28, 2016
 -------------------------
 -added support for moving walkways
 -added support for escalators
@@ -879,7 +920,7 @@ Version 1.10.1 (2.0 Alpha 10 - Update 1)
 -integrated Enabled() function into Object
 -fixes for vertical elevator door movement
 
-Version 1.10 (2.0 Alpha 10)
+Version 1.10 (2.0 Alpha 10) - December 19, 2016
 -------------------------
 -added support for revolving doors
 -when in fire service phase 2 mode, only open phase 2's car doors on recall floor, not oth
@@ -1385,7 +1426,7 @@ er cars
 -elevator and floor creation should return created object
 -don't leave top and bottom levels of shafts on - this doesn't appear to be needed anymore, and should increase rendering efficiency
 
-Version 1.9.2 (2.0 Alpha 9 - Update 2)
+Version 1.9.2 (2.0 Alpha 9 - Update 2) - April 16, 2015
 -------------------------
 -fix TriangleType element names
 -turn off directional indicators if elevator is switching into a service mode, or is being switched off
@@ -1435,7 +1476,7 @@ Version 1.9.2 (2.0 Alpha 9 - Update 2)
 -added references to missing elevator action names
 -in CreateWallBox function, don't try to create side walls if there's no thickness
 
-Version 1.9.1 (2.0 Alpha 9 - Update 1)
+Version 1.9.1 (2.0 Alpha 9 - Update 1) - March 31, 2015
 -------------------------
 -play elevator door open/close and message sounds on reversal
 -change to Go function in rev 3171 broke FloorHold feature; relocated code to fix
@@ -1508,7 +1549,7 @@ Version 1.9.1 (2.0 Alpha 9 - Update 1)
 -fixed an issue where floors listed in the ShowFloors or ShowOutside lists would be switched off when stopping and continuing at a floor
 -fixed a crash that would occur if the Move button was pressed in the Object Manager if no selection was made
 
-Version 1.9 (2.0 Alpha 9)
+Version 1.9 (2.0 Alpha 9) - March 4, 2015
 -------------------------
 -added new Underground building
 -cleanups in relation to ShowFloors arrays
@@ -1857,7 +1898,7 @@ Version 1.9 (2.0 Alpha 9)
 -fixed creation of collider body which was causing crashes when loading collider meshes
 -added support for skipping calculations on model filenames - fixes an infinite loop
 
-Version 1.8 (2.0 Alpha 8)
+Version 1.8 (2.0 Alpha 8) - March 1, 2013
 -------------------------
 -elevators now report as available if on the same floor as the call and not moving, regardless of the door state - fixes an issue where pressing call buttons more than once would open additional elevators
 -fixed TruncateNumber function, to return correct floating point precision without exponent
@@ -1995,7 +2036,7 @@ Version 1.8 (2.0 Alpha 8)
 -new horizon distance setting
 -added render distance limits for small objects
 
-Version 1.7 (2.0 Alpha 7)
+Version 1.7 (2.0 Alpha 7) - September 19, 2010
 -------------------------
 -added braille fonts
 -added support for elevator panel switches and knobs
@@ -2045,7 +2086,7 @@ Version 1.7 (2.0 Alpha 7)
 -added sign textures
 -added nudge mode
 
-Version 1.6 (2.0 Alpha 6)
+Version 1.6 (2.0 Alpha 6) - March 11, 2010
 -------------------------
 -added current floor ID to the control panel's main and camera control windows
 -added support for forcing autosizing on or off on a per-texture basis
@@ -2103,7 +2144,7 @@ Version 1.6 (2.0 Alpha 6)
 -ACP mode now works in conjunction with peak modes
 -added experimental random elevator traffic
 
-Version 1.5 (2.0 Alpha 5)
+Version 1.5 (2.0 Alpha 5) - October 24, 2009
 -------------------------
 -clicking on shaft doors and elevator doors while holding down shift now causes them to manually open/close
 -manually opening shaft doors causes the related floor to turn on if user is
@@ -2153,12 +2194,12 @@ positives switched
 -added hotel rooms to the Triton Center
 -added control reference (for keyboard commands, etc) to the control panel
 
-Version 1.4.1 (2.0 Alpha 4.1)
+Version 1.4.1 (2.0 Alpha 4.1) - June 20, 2009
 -------------------------
 -Linux build fix
 -fixed a shaft door regression
 
-Version 1.4 (2.0 Alpha 4)
+Version 1.4 (2.0 Alpha 4) - June 19, 2009
 -------------------------
 -added syntax checking and error notification to the script processor
 -fixed an old bug that could crash the sim if the floor ID matched a non-existent texture
@@ -2191,7 +2232,7 @@ are now stationed at the top
 -added wireframe mode and screenshot keys
 -and lots more
 
-Version 1.3 (2.0 Alpha 3)
+Version 1.3 (2.0 Alpha 3) - March 29, 2009
 -------------------------
 -added door framework
 -fixed a range bug that caused ranges to fail if the first value was negative
@@ -2217,12 +2258,12 @@ Version 1.3 (2.0 Alpha 3)
 -added keys w, a, s and d for movement
 -input is now only processed if main window is selected
 
-Version 1.2 (2.0 Alpha 2) - Jan 10, 2009
+Version 1.2 (2.0 Alpha 2) - January 10, 2009
 -------------------------
 -added missing DLL for CS, and fixed installer
 -added AddGround command, for creating tile grid-based grounds (fixes ground interference issue in 1.1)
 
-Version 1.1 (2.0 Alpha 1) - Jan 6, 2009
+Version 1.1 (2.0 Alpha 1) - January 6, 2009
 -------------------------
 -complete rewrite from scratch, using C++ and the Crystal Space graphics engine
 -numerous features added that were not found in the 1.0 release
