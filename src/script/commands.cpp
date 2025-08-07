@@ -683,7 +683,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (shape)
 		{
 			shape->CreateSphere("", tempdata[2], Vector3(ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5])), ToFloat(tempdata[6]), ToInt(tempdata[7]), ToInt(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), true);
-			delete shape; //delete shape object, since it was only used to create the sphere
+			delete shape; //delete temporary shape object
 			shape = 0;
 		}
 
@@ -777,7 +777,1041 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		{
 			Vector3 center = Vector3(ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]));
 			shape->CreateBox("", tempdata[2], center, ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), true);
-			delete shape; //delete shape object, since it was only used to create the sphere
+			delete shape; //delete temporary shape object
+			shape = 0;
+		}
+
+		return sNextLine;
+	}
+
+	//AddCylinder command
+	if (StartsWithNoCase(LineData, "addcylinder"))
+	{
+		//get data
+		int params = SplitData(LineData, 11);
+
+		if (params != 11)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 3; i < params; i++)
+		{
+			if (!IsNumeric(tempdata[i]))
+				return ScriptError("Invalid value: " + tempdata[i]);
+		}
+		std::string meshname = SetCaseCopy(tempdata[0], false);
+
+		MeshObject *mesh = GetMeshObject(meshname);
+
+		if (!mesh)
+			return ScriptError("Invalid mesh object");
+
+		Wall *wall = mesh->GetWallByName(tempdata[1]);
+
+		if (!wall)
+			return ScriptError("Invalid wall object");
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
+
+		Object *obj = mesh->GetParent();
+		if (!obj)
+			return ScriptError("Invalid parent object");
+
+		Model *modelobj = 0;
+		Floor *floorobj = 0;
+		Elevator *elevatorobj = 0;
+		ElevatorCar *elevatorcarobj = 0;
+		Shaft::Level *shaftobj = 0;
+		Stairwell::Level *stairsobj = 0;
+		::SBS::SBS *sbs = 0;
+
+		//get parent object of light
+		if (obj->GetType() == "Model")
+			modelobj = static_cast<Model*>(obj);
+		else if (obj->GetType() == "Floor")
+			floorobj = static_cast<Floor*>(obj);
+		else if (obj->GetType() == "Elevator")
+			elevatorobj = static_cast<Elevator*>(obj);
+		else if (obj->GetType() == "ElevatorCar")
+			elevatorcarobj = static_cast<ElevatorCar*>(obj);
+		else if (obj->GetType() == "Shaft Level")
+			shaftobj = static_cast<Shaft::Level*>(obj);
+		else if (obj->GetType() == "Stairwell Level")
+			stairsobj = static_cast<Stairwell::Level*>(obj);
+		else if (obj->GetType() == "SBS")
+			sbs = static_cast<::SBS::SBS*>(obj);
+
+		//get parent object
+		if (elevatorobj)
+		{
+			elevatorcarobj = elevatorobj->GetCar(0);
+			obj = elevatorcarobj;
+		}
+
+		Shape *shape;
+		if (modelobj)
+			shape = modelobj->CreateShape(wall);
+		else if (floorobj)
+			shape = floorobj->CreateShape(wall);
+		else if (elevatorcarobj)
+			shape = elevatorcarobj->CreateShape(wall);
+		else if (shaftobj)
+			shape = shaftobj->CreateShape(wall);
+		else if (stairsobj)
+			shape = stairsobj->CreateShape(wall);
+		else if (sbs)
+			shape = sbs->CreateShape(wall);
+		else
+			return ScriptError("Invalid parent object");
+
+		if (shape)
+		{
+			Vector3 center = Vector3(ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]));
+			shape->CreateCylinder("", tempdata[2], center, ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToInt(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), true);
+			delete shape; //delete temporary shape object
+			shape = 0;
+		}
+
+		return sNextLine;
+	}
+
+	//AddCone command
+	if (StartsWithNoCase(LineData, "addcone"))
+	{
+		//get data
+		int params = SplitData(LineData, 7);
+
+		if (params != 11)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 3; i < params; i++)
+		{
+			if (!IsNumeric(tempdata[i]))
+				return ScriptError("Invalid value: " + tempdata[i]);
+		}
+		std::string meshname = SetCaseCopy(tempdata[0], false);
+
+		MeshObject *mesh = GetMeshObject(meshname);
+
+		if (!mesh)
+			return ScriptError("Invalid mesh object");
+
+		Wall *wall = mesh->GetWallByName(tempdata[1]);
+
+		if (!wall)
+			return ScriptError("Invalid wall object");
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
+
+		Object *obj = mesh->GetParent();
+		if (!obj)
+			return ScriptError("Invalid parent object");
+
+		Model *modelobj = 0;
+		Floor *floorobj = 0;
+		Elevator *elevatorobj = 0;
+		ElevatorCar *elevatorcarobj = 0;
+		Shaft::Level *shaftobj = 0;
+		Stairwell::Level *stairsobj = 0;
+		::SBS::SBS *sbs = 0;
+
+		//get parent object of light
+		if (obj->GetType() == "Model")
+			modelobj = static_cast<Model*>(obj);
+		else if (obj->GetType() == "Floor")
+			floorobj = static_cast<Floor*>(obj);
+		else if (obj->GetType() == "Elevator")
+			elevatorobj = static_cast<Elevator*>(obj);
+		else if (obj->GetType() == "ElevatorCar")
+			elevatorcarobj = static_cast<ElevatorCar*>(obj);
+		else if (obj->GetType() == "Shaft Level")
+			shaftobj = static_cast<Shaft::Level*>(obj);
+		else if (obj->GetType() == "Stairwell Level")
+			stairsobj = static_cast<Stairwell::Level*>(obj);
+		else if (obj->GetType() == "SBS")
+			sbs = static_cast<::SBS::SBS*>(obj);
+
+		//get parent object
+		if (elevatorobj)
+		{
+			elevatorcarobj = elevatorobj->GetCar(0);
+			obj = elevatorcarobj;
+		}
+
+		Shape *shape;
+		if (modelobj)
+			shape = modelobj->CreateShape(wall);
+		else if (floorobj)
+			shape = floorobj->CreateShape(wall);
+		else if (elevatorcarobj)
+			shape = elevatorcarobj->CreateShape(wall);
+		else if (shaftobj)
+			shape = shaftobj->CreateShape(wall);
+		else if (stairsobj)
+			shape = stairsobj->CreateShape(wall);
+		else if (sbs)
+			shape = sbs->CreateShape(wall);
+		else
+			return ScriptError("Invalid parent object");
+
+		if (shape)
+		{
+			Vector3 center = Vector3(ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]));
+			shape->CreateCone("", tempdata[2], center, ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToInt(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), true);
+			delete shape; //delete temporary shape object
+			shape = 0;
+		}
+
+		return sNextLine;
+	}
+
+	//AddCapsule command
+	if (StartsWithNoCase(LineData, "addcapsule"))
+	{
+		//get data
+		int params = SplitData(LineData, 10);
+
+		if (params != 12)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 3; i < params; i++)
+		{
+			if (!IsNumeric(tempdata[i]))
+				return ScriptError("Invalid value: " + tempdata[i]);
+		}
+		std::string meshname = SetCaseCopy(tempdata[0], false);
+
+		MeshObject *mesh = GetMeshObject(meshname);
+
+		if (!mesh)
+			return ScriptError("Invalid mesh object");
+
+		Wall *wall = mesh->GetWallByName(tempdata[1]);
+
+		if (!wall)
+			return ScriptError("Invalid wall object");
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
+
+		Object *obj = mesh->GetParent();
+		if (!obj)
+			return ScriptError("Invalid parent object");
+
+		Model *modelobj = 0;
+		Floor *floorobj = 0;
+		Elevator *elevatorobj = 0;
+		ElevatorCar *elevatorcarobj = 0;
+		Shaft::Level *shaftobj = 0;
+		Stairwell::Level *stairsobj = 0;
+		::SBS::SBS *sbs = 0;
+
+		//get parent object of light
+		if (obj->GetType() == "Model")
+			modelobj = static_cast<Model*>(obj);
+		else if (obj->GetType() == "Floor")
+			floorobj = static_cast<Floor*>(obj);
+		else if (obj->GetType() == "Elevator")
+			elevatorobj = static_cast<Elevator*>(obj);
+		else if (obj->GetType() == "ElevatorCar")
+			elevatorcarobj = static_cast<ElevatorCar*>(obj);
+		else if (obj->GetType() == "Shaft Level")
+			shaftobj = static_cast<Shaft::Level*>(obj);
+		else if (obj->GetType() == "Stairwell Level")
+			stairsobj = static_cast<Stairwell::Level*>(obj);
+		else if (obj->GetType() == "SBS")
+			sbs = static_cast<::SBS::SBS*>(obj);
+
+		//get parent object
+		if (elevatorobj)
+		{
+			elevatorcarobj = elevatorobj->GetCar(0);
+			obj = elevatorcarobj;
+		}
+
+		Shape *shape;
+		if (modelobj)
+			shape = modelobj->CreateShape(wall);
+		else if (floorobj)
+			shape = floorobj->CreateShape(wall);
+		else if (elevatorcarobj)
+			shape = elevatorcarobj->CreateShape(wall);
+		else if (shaftobj)
+			shape = shaftobj->CreateShape(wall);
+		else if (stairsobj)
+			shape = stairsobj->CreateShape(wall);
+		else if (sbs)
+			shape = sbs->CreateShape(wall);
+		else
+			return ScriptError("Invalid parent object");
+
+		if (shape)
+		{
+			Vector3 center = Vector3(ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]));
+			shape->CreateCapsule("", tempdata[2], center, ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToInt(tempdata[8]), ToInt(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), true);
+			delete shape; //delete temporary shape object
+			shape = 0;
+		}
+
+		return sNextLine;
+	}
+
+	//AddPlane command
+	if (StartsWithNoCase(LineData, "addplane"))
+	{
+		//get data
+		int params = SplitData(LineData, 8);
+
+		if (params != 12)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 3; i < params; i++)
+		{
+			if (!IsNumeric(tempdata[i]))
+				return ScriptError("Invalid value: " + tempdata[i]);
+		}
+		std::string meshname = SetCaseCopy(tempdata[0], false);
+
+		MeshObject *mesh = GetMeshObject(meshname);
+
+		if (!mesh)
+			return ScriptError("Invalid mesh object");
+
+		Wall *wall = mesh->GetWallByName(tempdata[1]);
+
+		if (!wall)
+			return ScriptError("Invalid wall object");
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
+
+		Object *obj = mesh->GetParent();
+		if (!obj)
+			return ScriptError("Invalid parent object");
+
+		Model *modelobj = 0;
+		Floor *floorobj = 0;
+		Elevator *elevatorobj = 0;
+		ElevatorCar *elevatorcarobj = 0;
+		Shaft::Level *shaftobj = 0;
+		Stairwell::Level *stairsobj = 0;
+		::SBS::SBS *sbs = 0;
+
+		//get parent object of light
+		if (obj->GetType() == "Model")
+			modelobj = static_cast<Model*>(obj);
+		else if (obj->GetType() == "Floor")
+			floorobj = static_cast<Floor*>(obj);
+		else if (obj->GetType() == "Elevator")
+			elevatorobj = static_cast<Elevator*>(obj);
+		else if (obj->GetType() == "ElevatorCar")
+			elevatorcarobj = static_cast<ElevatorCar*>(obj);
+		else if (obj->GetType() == "Shaft Level")
+			shaftobj = static_cast<Shaft::Level*>(obj);
+		else if (obj->GetType() == "Stairwell Level")
+			stairsobj = static_cast<Stairwell::Level*>(obj);
+		else if (obj->GetType() == "SBS")
+			sbs = static_cast<::SBS::SBS*>(obj);
+
+		//get parent object
+		if (elevatorobj)
+		{
+			elevatorcarobj = elevatorobj->GetCar(0);
+			obj = elevatorcarobj;
+		}
+
+		Shape *shape;
+		if (modelobj)
+			shape = modelobj->CreateShape(wall);
+		else if (floorobj)
+			shape = floorobj->CreateShape(wall);
+		else if (elevatorcarobj)
+			shape = elevatorcarobj->CreateShape(wall);
+		else if (shaftobj)
+			shape = shaftobj->CreateShape(wall);
+		else if (stairsobj)
+			shape = stairsobj->CreateShape(wall);
+		else if (sbs)
+			shape = sbs->CreateShape(wall);
+		else
+			return ScriptError("Invalid parent object");
+
+		if (shape)
+		{
+			Vector3 center = Vector3(ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]));
+			shape->CreatePlane("", tempdata[2], center, ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToInt(tempdata[8]), ToInt(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), true);
+			delete shape; //delete temporary shape object
+			shape = 0;
+		}
+
+		return sNextLine;
+	}
+
+	//AddCircle command
+	if (StartsWithNoCase(LineData, "addcircle"))
+	{
+		//get data
+		int params = SplitData(LineData, 9);
+
+		if (params != 10)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 3; i < params; i++)
+		{
+			if (!IsNumeric(tempdata[i]))
+				return ScriptError("Invalid value: " + tempdata[i]);
+		}
+		std::string meshname = SetCaseCopy(tempdata[0], false);
+
+		MeshObject *mesh = GetMeshObject(meshname);
+
+		if (!mesh)
+			return ScriptError("Invalid mesh object");
+
+		Wall *wall = mesh->GetWallByName(tempdata[1]);
+
+		if (!wall)
+			return ScriptError("Invalid wall object");
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
+
+		Object *obj = mesh->GetParent();
+		if (!obj)
+			return ScriptError("Invalid parent object");
+
+		Model *modelobj = 0;
+		Floor *floorobj = 0;
+		Elevator *elevatorobj = 0;
+		ElevatorCar *elevatorcarobj = 0;
+		Shaft::Level *shaftobj = 0;
+		Stairwell::Level *stairsobj = 0;
+		::SBS::SBS *sbs = 0;
+
+		//get parent object of light
+		if (obj->GetType() == "Model")
+			modelobj = static_cast<Model*>(obj);
+		else if (obj->GetType() == "Floor")
+			floorobj = static_cast<Floor*>(obj);
+		else if (obj->GetType() == "Elevator")
+			elevatorobj = static_cast<Elevator*>(obj);
+		else if (obj->GetType() == "ElevatorCar")
+			elevatorcarobj = static_cast<ElevatorCar*>(obj);
+		else if (obj->GetType() == "Shaft Level")
+			shaftobj = static_cast<Shaft::Level*>(obj);
+		else if (obj->GetType() == "Stairwell Level")
+			stairsobj = static_cast<Stairwell::Level*>(obj);
+		else if (obj->GetType() == "SBS")
+			sbs = static_cast<::SBS::SBS*>(obj);
+
+		//get parent object
+		if (elevatorobj)
+		{
+			elevatorcarobj = elevatorobj->GetCar(0);
+			obj = elevatorcarobj;
+		}
+
+		Shape *shape;
+		if (modelobj)
+			shape = modelobj->CreateShape(wall);
+		else if (floorobj)
+			shape = floorobj->CreateShape(wall);
+		else if (elevatorcarobj)
+			shape = elevatorcarobj->CreateShape(wall);
+		else if (shaftobj)
+			shape = shaftobj->CreateShape(wall);
+		else if (stairsobj)
+			shape = stairsobj->CreateShape(wall);
+		else if (sbs)
+			shape = sbs->CreateShape(wall);
+		else
+			return ScriptError("Invalid parent object");
+
+		if (shape)
+		{
+			Vector3 center = Vector3(ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]));
+			shape->CreateCircle("", tempdata[2], center, ToFloat(tempdata[6]), ToInt(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), true);
+			delete shape; //delete temporary shape object
+			shape = 0;
+		}
+
+		return sNextLine;
+	}
+
+	//AddTorus command
+	if (StartsWithNoCase(LineData, "addtorus"))
+	{
+		//get data
+		int params = SplitData(LineData, 8);
+
+		if (params != 12)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 3; i < params; i++)
+		{
+			if (!IsNumeric(tempdata[i]))
+				return ScriptError("Invalid value: " + tempdata[i]);
+		}
+		std::string meshname = SetCaseCopy(tempdata[0], false);
+
+		MeshObject *mesh = GetMeshObject(meshname);
+
+		if (!mesh)
+			return ScriptError("Invalid mesh object");
+
+		Wall *wall = mesh->GetWallByName(tempdata[1]);
+
+		if (!wall)
+			return ScriptError("Invalid wall object");
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
+
+		Object *obj = mesh->GetParent();
+		if (!obj)
+			return ScriptError("Invalid parent object");
+
+		Model *modelobj = 0;
+		Floor *floorobj = 0;
+		Elevator *elevatorobj = 0;
+		ElevatorCar *elevatorcarobj = 0;
+		Shaft::Level *shaftobj = 0;
+		Stairwell::Level *stairsobj = 0;
+		::SBS::SBS *sbs = 0;
+
+		//get parent object of light
+		if (obj->GetType() == "Model")
+			modelobj = static_cast<Model*>(obj);
+		else if (obj->GetType() == "Floor")
+			floorobj = static_cast<Floor*>(obj);
+		else if (obj->GetType() == "Elevator")
+			elevatorobj = static_cast<Elevator*>(obj);
+		else if (obj->GetType() == "ElevatorCar")
+			elevatorcarobj = static_cast<ElevatorCar*>(obj);
+		else if (obj->GetType() == "Shaft Level")
+			shaftobj = static_cast<Shaft::Level*>(obj);
+		else if (obj->GetType() == "Stairwell Level")
+			stairsobj = static_cast<Stairwell::Level*>(obj);
+		else if (obj->GetType() == "SBS")
+			sbs = static_cast<::SBS::SBS*>(obj);
+
+		//get parent object
+		if (elevatorobj)
+		{
+			elevatorcarobj = elevatorobj->GetCar(0);
+			obj = elevatorcarobj;
+		}
+
+		Shape *shape;
+		if (modelobj)
+			shape = modelobj->CreateShape(wall);
+		else if (floorobj)
+			shape = floorobj->CreateShape(wall);
+		else if (elevatorcarobj)
+			shape = elevatorcarobj->CreateShape(wall);
+		else if (shaftobj)
+			shape = shaftobj->CreateShape(wall);
+		else if (stairsobj)
+			shape = stairsobj->CreateShape(wall);
+		else if (sbs)
+			shape = sbs->CreateShape(wall);
+		else
+			return ScriptError("Invalid parent object");
+
+		if (shape)
+		{
+			Vector3 center = Vector3(ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]));
+			shape->CreateTorus("", tempdata[2], center, ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToInt(tempdata[8]), ToInt(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), true);
+			delete shape; //delete temporary shape object
+			shape = 0;
+		}
+
+		return sNextLine;
+	}
+
+	//AddDome command
+	if (StartsWithNoCase(LineData, "adddome"))
+	{
+		//get data
+		int params = SplitData(LineData, 7);
+
+		if (params != 11)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 3; i < params; i++)
+		{
+			if (!IsNumeric(tempdata[i]))
+				return ScriptError("Invalid value: " + tempdata[i]);
+		}
+		std::string meshname = SetCaseCopy(tempdata[0], false);
+
+		MeshObject *mesh = GetMeshObject(meshname);
+
+		if (!mesh)
+			return ScriptError("Invalid mesh object");
+
+		Wall *wall = mesh->GetWallByName(tempdata[1]);
+
+		if (!wall)
+			return ScriptError("Invalid wall object");
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
+
+		Object *obj = mesh->GetParent();
+		if (!obj)
+			return ScriptError("Invalid parent object");
+
+		Model *modelobj = 0;
+		Floor *floorobj = 0;
+		Elevator *elevatorobj = 0;
+		ElevatorCar *elevatorcarobj = 0;
+		Shaft::Level *shaftobj = 0;
+		Stairwell::Level *stairsobj = 0;
+		::SBS::SBS *sbs = 0;
+
+		//get parent object of light
+		if (obj->GetType() == "Model")
+			modelobj = static_cast<Model*>(obj);
+		else if (obj->GetType() == "Floor")
+			floorobj = static_cast<Floor*>(obj);
+		else if (obj->GetType() == "Elevator")
+			elevatorobj = static_cast<Elevator*>(obj);
+		else if (obj->GetType() == "ElevatorCar")
+			elevatorcarobj = static_cast<ElevatorCar*>(obj);
+		else if (obj->GetType() == "Shaft Level")
+			shaftobj = static_cast<Shaft::Level*>(obj);
+		else if (obj->GetType() == "Stairwell Level")
+			stairsobj = static_cast<Stairwell::Level*>(obj);
+		else if (obj->GetType() == "SBS")
+			sbs = static_cast<::SBS::SBS*>(obj);
+
+		//get parent object
+		if (elevatorobj)
+		{
+			elevatorcarobj = elevatorobj->GetCar(0);
+			obj = elevatorcarobj;
+		}
+
+		Shape *shape;
+		if (modelobj)
+			shape = modelobj->CreateShape(wall);
+		else if (floorobj)
+			shape = floorobj->CreateShape(wall);
+		else if (elevatorcarobj)
+			shape = elevatorcarobj->CreateShape(wall);
+		else if (shaftobj)
+			shape = shaftobj->CreateShape(wall);
+		else if (stairsobj)
+			shape = stairsobj->CreateShape(wall);
+		else if (sbs)
+			shape = sbs->CreateShape(wall);
+		else
+			return ScriptError("Invalid parent object");
+
+		if (shape)
+		{
+			Vector3 center = Vector3(ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]));
+			shape->CreateDome("", tempdata[2], center, ToFloat(tempdata[6]), ToInt(tempdata[7]), ToInt(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), true);
+			delete shape; //delete temporary shape object
+			shape = 0;
+		}
+
+		return sNextLine;
+	}
+
+	//AddPyramid command
+	if (StartsWithNoCase(LineData, "addpyramid"))
+	{
+		//get data
+		int params = SplitData(LineData, 10);
+
+		if (params != 11)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 3; i < params; i++)
+		{
+			if (!IsNumeric(tempdata[i]))
+				return ScriptError("Invalid value: " + tempdata[i]);
+		}
+		std::string meshname = SetCaseCopy(tempdata[0], false);
+
+		MeshObject *mesh = GetMeshObject(meshname);
+
+		if (!mesh)
+			return ScriptError("Invalid mesh object");
+
+		Wall *wall = mesh->GetWallByName(tempdata[1]);
+
+		if (!wall)
+			return ScriptError("Invalid wall object");
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
+
+		Object *obj = mesh->GetParent();
+		if (!obj)
+			return ScriptError("Invalid parent object");
+
+		Model *modelobj = 0;
+		Floor *floorobj = 0;
+		Elevator *elevatorobj = 0;
+		ElevatorCar *elevatorcarobj = 0;
+		Shaft::Level *shaftobj = 0;
+		Stairwell::Level *stairsobj = 0;
+		::SBS::SBS *sbs = 0;
+
+		//get parent object of light
+		if (obj->GetType() == "Model")
+			modelobj = static_cast<Model*>(obj);
+		else if (obj->GetType() == "Floor")
+			floorobj = static_cast<Floor*>(obj);
+		else if (obj->GetType() == "Elevator")
+			elevatorobj = static_cast<Elevator*>(obj);
+		else if (obj->GetType() == "ElevatorCar")
+			elevatorcarobj = static_cast<ElevatorCar*>(obj);
+		else if (obj->GetType() == "Shaft Level")
+			shaftobj = static_cast<Shaft::Level*>(obj);
+		else if (obj->GetType() == "Stairwell Level")
+			stairsobj = static_cast<Stairwell::Level*>(obj);
+		else if (obj->GetType() == "SBS")
+			sbs = static_cast<::SBS::SBS*>(obj);
+
+		//get parent object
+		if (elevatorobj)
+		{
+			elevatorcarobj = elevatorobj->GetCar(0);
+			obj = elevatorcarobj;
+		}
+
+		Shape *shape;
+		if (modelobj)
+			shape = modelobj->CreateShape(wall);
+		else if (floorobj)
+			shape = floorobj->CreateShape(wall);
+		else if (elevatorcarobj)
+			shape = elevatorcarobj->CreateShape(wall);
+		else if (shaftobj)
+			shape = shaftobj->CreateShape(wall);
+		else if (stairsobj)
+			shape = stairsobj->CreateShape(wall);
+		else if (sbs)
+			shape = sbs->CreateShape(wall);
+		else
+			return ScriptError("Invalid parent object");
+
+		if (shape)
+		{
+			Vector3 center = Vector3(ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]));
+			shape->CreatePyramid("", tempdata[2], center, ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), true);
+			delete shape; //delete temporary shape object
+			shape = 0;
+		}
+
+		return sNextLine;
+	}
+
+	//AddPrism command
+	if (StartsWithNoCase(LineData, "addprism"))
+	{
+		//get data
+		int params = SplitData(LineData, 8);
+
+		if (params != 11)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 3; i < params; i++)
+		{
+			if (!IsNumeric(tempdata[i]))
+				return ScriptError("Invalid value: " + tempdata[i]);
+		}
+		std::string meshname = SetCaseCopy(tempdata[0], false);
+
+		MeshObject *mesh = GetMeshObject(meshname);
+
+		if (!mesh)
+			return ScriptError("Invalid mesh object");
+
+		Wall *wall = mesh->GetWallByName(tempdata[1]);
+
+		if (!wall)
+			return ScriptError("Invalid wall object");
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
+
+		Object *obj = mesh->GetParent();
+		if (!obj)
+			return ScriptError("Invalid parent object");
+
+		Model *modelobj = 0;
+		Floor *floorobj = 0;
+		Elevator *elevatorobj = 0;
+		ElevatorCar *elevatorcarobj = 0;
+		Shaft::Level *shaftobj = 0;
+		Stairwell::Level *stairsobj = 0;
+		::SBS::SBS *sbs = 0;
+
+		//get parent object of light
+		if (obj->GetType() == "Model")
+			modelobj = static_cast<Model*>(obj);
+		else if (obj->GetType() == "Floor")
+			floorobj = static_cast<Floor*>(obj);
+		else if (obj->GetType() == "Elevator")
+			elevatorobj = static_cast<Elevator*>(obj);
+		else if (obj->GetType() == "ElevatorCar")
+			elevatorcarobj = static_cast<ElevatorCar*>(obj);
+		else if (obj->GetType() == "Shaft Level")
+			shaftobj = static_cast<Shaft::Level*>(obj);
+		else if (obj->GetType() == "Stairwell Level")
+			stairsobj = static_cast<Stairwell::Level*>(obj);
+		else if (obj->GetType() == "SBS")
+			sbs = static_cast<::SBS::SBS*>(obj);
+
+		//get parent object
+		if (elevatorobj)
+		{
+			elevatorcarobj = elevatorobj->GetCar(0);
+			obj = elevatorcarobj;
+		}
+
+		Shape *shape;
+		if (modelobj)
+			shape = modelobj->CreateShape(wall);
+		else if (floorobj)
+			shape = floorobj->CreateShape(wall);
+		else if (elevatorcarobj)
+			shape = elevatorcarobj->CreateShape(wall);
+		else if (shaftobj)
+			shape = shaftobj->CreateShape(wall);
+		else if (stairsobj)
+			shape = stairsobj->CreateShape(wall);
+		else if (sbs)
+			shape = sbs->CreateShape(wall);
+		else
+			return ScriptError("Invalid parent object");
+
+		if (shape)
+		{
+			Vector3 center = Vector3(ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]));
+			shape->CreatePrism("", tempdata[2], center, ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), true);
+			delete shape; //delete temporary shape object
+			shape = 0;
+		}
+
+		return sNextLine;
+	}
+
+	//AddTetrahedron command
+	if (StartsWithNoCase(LineData, "addtetrahedron"))
+	{
+		//get data
+		int params = SplitData(LineData, 14);
+
+		if (params != 9)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 3; i < params; i++)
+		{
+			if (!IsNumeric(tempdata[i]))
+				return ScriptError("Invalid value: " + tempdata[i]);
+		}
+		std::string meshname = SetCaseCopy(tempdata[0], false);
+
+		MeshObject *mesh = GetMeshObject(meshname);
+
+		if (!mesh)
+			return ScriptError("Invalid mesh object");
+
+		Wall *wall = mesh->GetWallByName(tempdata[1]);
+
+		if (!wall)
+			return ScriptError("Invalid wall object");
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
+
+		Object *obj = mesh->GetParent();
+		if (!obj)
+			return ScriptError("Invalid parent object");
+
+		Model *modelobj = 0;
+		Floor *floorobj = 0;
+		Elevator *elevatorobj = 0;
+		ElevatorCar *elevatorcarobj = 0;
+		Shaft::Level *shaftobj = 0;
+		Stairwell::Level *stairsobj = 0;
+		::SBS::SBS *sbs = 0;
+
+		//get parent object of light
+		if (obj->GetType() == "Model")
+			modelobj = static_cast<Model*>(obj);
+		else if (obj->GetType() == "Floor")
+			floorobj = static_cast<Floor*>(obj);
+		else if (obj->GetType() == "Elevator")
+			elevatorobj = static_cast<Elevator*>(obj);
+		else if (obj->GetType() == "ElevatorCar")
+			elevatorcarobj = static_cast<ElevatorCar*>(obj);
+		else if (obj->GetType() == "Shaft Level")
+			shaftobj = static_cast<Shaft::Level*>(obj);
+		else if (obj->GetType() == "Stairwell Level")
+			stairsobj = static_cast<Stairwell::Level*>(obj);
+		else if (obj->GetType() == "SBS")
+			sbs = static_cast<::SBS::SBS*>(obj);
+
+		//get parent object
+		if (elevatorobj)
+		{
+			elevatorcarobj = elevatorobj->GetCar(0);
+			obj = elevatorcarobj;
+		}
+
+		Shape *shape;
+		if (modelobj)
+			shape = modelobj->CreateShape(wall);
+		else if (floorobj)
+			shape = floorobj->CreateShape(wall);
+		else if (elevatorcarobj)
+			shape = elevatorcarobj->CreateShape(wall);
+		else if (shaftobj)
+			shape = shaftobj->CreateShape(wall);
+		else if (stairsobj)
+			shape = stairsobj->CreateShape(wall);
+		else if (sbs)
+			shape = sbs->CreateShape(wall);
+		else
+			return ScriptError("Invalid parent object");
+
+		if (shape)
+		{
+			Vector3 center = Vector3(ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]));
+			shape->CreateTetrahedron("", tempdata[2], center, ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), true);
+			delete shape; //delete temporary shape object
+			shape = 0;
+		}
+
+		return sNextLine;
+	}
+
+	//AddOctahedron command
+	if (StartsWithNoCase(LineData, "addoctahedron"))
+	{
+		//get data
+		int params = SplitData(LineData, 13);
+
+		if (params != 9)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 3; i < params; i++)
+		{
+			if (!IsNumeric(tempdata[i]))
+				return ScriptError("Invalid value: " + tempdata[i]);
+		}
+		std::string meshname = SetCaseCopy(tempdata[0], false);
+
+		MeshObject *mesh = GetMeshObject(meshname);
+
+		if (!mesh)
+			return ScriptError("Invalid mesh object");
+
+		Wall *wall = mesh->GetWallByName(tempdata[1]);
+
+		if (!wall)
+			return ScriptError("Invalid wall object");
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
+
+		Object *obj = mesh->GetParent();
+		if (!obj)
+			return ScriptError("Invalid parent object");
+
+		Model *modelobj = 0;
+		Floor *floorobj = 0;
+		Elevator *elevatorobj = 0;
+		ElevatorCar *elevatorcarobj = 0;
+		Shaft::Level *shaftobj = 0;
+		Stairwell::Level *stairsobj = 0;
+		::SBS::SBS *sbs = 0;
+
+		//get parent object of light
+		if (obj->GetType() == "Model")
+			modelobj = static_cast<Model*>(obj);
+		else if (obj->GetType() == "Floor")
+			floorobj = static_cast<Floor*>(obj);
+		else if (obj->GetType() == "Elevator")
+			elevatorobj = static_cast<Elevator*>(obj);
+		else if (obj->GetType() == "ElevatorCar")
+			elevatorcarobj = static_cast<ElevatorCar*>(obj);
+		else if (obj->GetType() == "Shaft Level")
+			shaftobj = static_cast<Shaft::Level*>(obj);
+		else if (obj->GetType() == "Stairwell Level")
+			stairsobj = static_cast<Stairwell::Level*>(obj);
+		else if (obj->GetType() == "SBS")
+			sbs = static_cast<::SBS::SBS*>(obj);
+
+		//get parent object
+		if (elevatorobj)
+		{
+			elevatorcarobj = elevatorobj->GetCar(0);
+			obj = elevatorcarobj;
+		}
+
+		Shape *shape;
+		if (modelobj)
+			shape = modelobj->CreateShape(wall);
+		else if (floorobj)
+			shape = floorobj->CreateShape(wall);
+		else if (elevatorcarobj)
+			shape = elevatorcarobj->CreateShape(wall);
+		else if (shaftobj)
+			shape = shaftobj->CreateShape(wall);
+		else if (stairsobj)
+			shape = stairsobj->CreateShape(wall);
+		else if (sbs)
+			shape = sbs->CreateShape(wall);
+		else
+			return ScriptError("Invalid parent object");
+
+		if (shape)
+		{
+			Vector3 center = Vector3(ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]));
+			shape->CreateOctahedron("", tempdata[2], center, ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), true);
+			delete shape; //delete temporary shape object
 			shape = 0;
 		}
 
