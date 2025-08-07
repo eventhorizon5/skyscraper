@@ -499,9 +499,58 @@ AddAction FireServiceBypass, Elevator1, Fire1Bypass
     CreateWallObject floor, MySphere
     AddSphere floor, MySphere, Concrete, -50, 5, -50, 5, 16, 16, 1, 1
 
+    #create a sphere model
     AddModel Model1, , false, -0, 0, -10, 0, 0, 0, 0, 1, true, 0.1, 0.5, 0.1
     CreateWallObject model1, MyPhysicalSphere
     AddSphere model1, MyPhysicalSphere, Concrete, -50, 5, -50, 5, 16, 16, 1, 1
+
+    #create a box
+    CreateWallObject floor, MyBox
+    AddBox floor, MyBox, Brick, -30, 5, -50, 5, 5, 5, 1, 1
+
+    #create a cylinder
+    CreateWallObject floor, MyCylinder
+    AddCylinder floor, MyCylinder, Brick, 0, 5, -50, 10, 10, 5, 1, 1
+
+    #create a cone
+    CreateWallObject floor, MyCone
+    AddCone floor, MyCone, Brick, 15, 5, -50, 5, 5, 5, 1, 1
+
+    #create a capsule
+    CreateWallObject floor, MyCapsule
+    AddCapsule floor, MyCapsule, Brick, 30, 5, -50, 5, 5, 5, 5, 1, 1
+
+    #create a plane
+    CreateWallObject floor, MyPlane
+    AddPlane floor, MyPlane, Brick, 50, 3, -50, 5, 5, 5, 5, 1, 1
+
+    #create a circle
+    CreateWallObject floor, MyCircle
+    AddCircle floor, MyCircle, Brick, 50, 5, -70, 5, 5, 1, 1
+
+    #create a torus
+    CreateWallObject floor, MyTorus
+    AddTorus floor, MyTorus, Brick, 30, 5, -70, 5, 5, 5, 5, 1, 1
+
+    #create a dome
+    CreateWallObject floor, MyDome
+    AddDome floor, MyDome, Brick, 15, 5, -70, 5, 5, 5, 1, 1
+
+    #create a pyramid
+    CreateWallObject floor, MyPyramid
+    AddPyramid floor, MyPyramid, Brick, 0, 5, -70, 5, 5, 5, 1, 1
+
+    #create a prism
+    CreateWallObject floor, MyPrism
+    AddPrism floor, MyPrism, Brick, -15, 5, -70, 5, 5, 5, 1, 1
+
+    #create a tetrahedron
+    CreateWallObject floor, MyTetrahedron
+    AddTetrahedron floor, MyTetrahedron, Brick, -30, 5, -70, 5, 1, 1
+
+    #create a octahedron
+    CreateWallObject floor, MyOctahedron
+    AddOctahedron floor, MyOctahedron, Brick, -45, 5, -70, 5, 1, 1
 <EndFloor>
 
 #define a runloop function, to run code after the sim engine has started
