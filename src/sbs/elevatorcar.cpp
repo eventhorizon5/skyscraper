@@ -761,11 +761,12 @@ void ElevatorCar::Loop()
 		{
 			if (InCar() == true || AreDoorsOpen() == true || AreDoorsMoving(0, true, false) != 0)
 			{
-				if (sbs->Verbose)
-					Report("playing car idle sound");
-
+				bool result = false;
 				if (idlesound->IsLoaded() == false)
-					idlesound->Load(IdleSound);
+					result = idlesound->Load(IdleSound);
+
+				if (sbs->Verbose && result == true)
+					Report("playing car idle sound");
 
 				idlesound->SetLoopState(true);
 				idlesound->Play();
