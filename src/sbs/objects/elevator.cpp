@@ -722,11 +722,12 @@ bool Elevator::Loop()
 		//play motor idle sound
 		if (motoridlesound->IsPlaying() == false && Running == true)
 		{
-			if (sbs->Verbose)
-				Report("playing motor idle sound");
-
+			bool result = false;
 			if (motoridlesound->IsLoaded() == false)
-				motoridlesound->Load(MotorIdleSound);
+				result = motoridlesound->Load(MotorIdleSound);
+
+			if (sbs->Verbose && result == true)
+				Report("playing motor idle sound");
 
 			motoridlesound->SetLoopState(true);
 			motoridlesound->Play();

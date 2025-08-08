@@ -57,4 +57,11 @@ Texture::~Texture()
 
 }
 
+size_t Texture::GetMemoryUsage()
+{
+	//returns the memory usage of this texture
+
+	return tex_size + mat_size;
+}
+
 }

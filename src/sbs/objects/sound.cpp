@@ -325,6 +325,9 @@ bool Sound::Play(bool reset)
 	if (!system || !enabled)
 		return true;
 
+	if (Filename == "none.wav" || Filename == "beno/none.wav")
+		return true;
+
 #ifndef DISABLE_SOUND
 	if (!sound)
 	{
@@ -388,6 +391,9 @@ bool Sound::Load(const std::string &filename, bool force)
 {
 	//exit if sound is disabled
 	if (!system || !enabled)
+		return false;
+
+	if (Filename == "none.wav" || Filename == "beno/none.wav")
 		return false;
 
 	//exit if filename is the same

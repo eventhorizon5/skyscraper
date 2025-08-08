@@ -2595,7 +2595,7 @@ size_t TextureManager::GetMemoryUsage()
 	{
 		if (!textures[i])
 			continue;
-		result += textures[i]->tex_size + textures[i]->mat_size;
+		result += textures[i]->GetMemoryUsage();
 	}
 
 	return result;

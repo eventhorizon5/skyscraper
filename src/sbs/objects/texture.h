@@ -41,6 +41,7 @@ public:
 
     Texture(TextureManager *manager, const std::string &name, const std::string &material_name, const std::string &filename, Real widthmult, Real heightmult, bool enable_force, bool force_mode, size_t tex_size, size_t mat_size);
     ~Texture();
+	size_t GetMemoryUsage();
 
 private:
 
