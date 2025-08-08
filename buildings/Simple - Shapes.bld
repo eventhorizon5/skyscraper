@@ -551,6 +551,14 @@ AddAction FireServiceBypass, Elevator1, Fire1Bypass
     #create a octahedron
     CreateWallObject floor, MyOctahedron
     AddOctahedron floor, MyOctahedron, Brick, -45, 5, -70, 5, 1, 1
+
+    #create an icosahedron
+    CreateWallObject floor, MyIcosahedron
+    AddIcosahedron floor, MyIcosahedron, Brick, -60, 5, -70, 5, 1, 1
+
+    #create a geosphere
+    CreateWallObject floor, MyGeosphere
+    AddGeosphere floor, MyGeosphere, Brick, -75, 5, -70, 5, 5, 1, 1
 <EndFloor>
 
 #define a runloop function, to run code after the sim engine has started
