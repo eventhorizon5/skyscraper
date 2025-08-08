@@ -846,6 +846,8 @@ void Shape::CreateDome(const std::string &name, const std::string &texture, cons
 
 void Shape::CreatePyramid(const std::string &name, const std::string &texture, const Vector3 &Center, Real width, Real depth, Real height, Real tw, Real th, bool autosize)
 {
+	//creates a pyramid
+
 	if (!parent)
 		return;
 
@@ -938,6 +940,8 @@ void Shape::CreatePyramid(const std::string &name, const std::string &texture, c
 
 void Shape::CreatePrism(const std::string &name, const std::string &texture, const Vector3 &Center, Real width, Real depth, Real height, Real tw, Real th, bool autosize)
 {
+	//creates a triangular prism
+
 	if (!parent)
 		return;
 
@@ -1035,6 +1039,8 @@ void Shape::CreatePrism(const std::string &name, const std::string &texture, con
 
 void Shape::CreateTetrahedron(const std::string &name, const std::string &texture, const Vector3 &Center, Real size, Real tw, Real th, bool autosize)
 {
+	//creates a tetrahedron
+
 	if (!parent)
 		return;
 
@@ -1112,6 +1118,7 @@ void Shape::CreateTetrahedron(const std::string &name, const std::string &textur
 
 void Shape::CreateOctahedron(const std::string &name, const std::string &texture, const Vector3 &Center, Real size, Real tw, Real th, bool autosize)
 {
+	//creates an octahedron
 	if (!parent)
 		return;
 
@@ -1164,6 +1171,223 @@ void Shape::CreateOctahedron(const std::string &name, const std::string &texture
 	add_face(bottom, v0, v3);
 
 	//create polygon object from the generated octahedron segments
+	parent->AddPolygon(name, texture, result, uvMapSet, triangles, tw, th, autosize);
+}
+
+void Shape::CreateIcosahedron(const std::string &name, const std::string &texture, const Vector3 &Center, Real radius, Real tw, Real th, bool autosize)
+{
+	//creates an icosahedron
+
+	if (!parent)
+		return;
+
+	if (radius <= 0)
+	{
+		parent->ReportError("Icosahedron requires a positive radius");
+		return;
+	}
+
+	PolygonSet result;
+	std::vector<std::vector<Vector2>> uvMapSet;
+	std::vector<Triangle> triangles;
+
+	//golden ratio
+	const Real phi = (1.0f + sqrtf(5.0f)) * 0.5f;
+
+	//base (unnormalized) vertex set for an icosahedron
+	std::vector<Vector3> v = {
+		{-1,  phi,  0}, { 1,  phi,  0}, {-1, -phi,  0}, { 1, -phi,  0},
+		{ 0, -1,  phi}, { 0,  1,  phi}, { 0, -1, -phi}, { 0,  1, -phi},
+		{ phi,  0, -1}, { phi,  0,  1}, {-phi,  0, -1}, {-phi,  0,  1}
+	};
+
+	//normalize to unit length, then scale to 'radius'
+	for (auto &p : v)
+	{
+		const Real len = sqrtf(p.x * p.x + p.y * p.y + p.z * p.z);
+		const Real s = (len > 0.0f) ? (radius / len) : 0.0f;
+		p.x *= s; p.y *= s; p.z *= s;
+	}
+
+	//face index list (20 faces)
+	const int f[20][3] = {
+		{0,11,5}, {0,5,1}, {0,1,7}, {0,7,10}, {0,10,11},
+		{1,5,9}, {5,11,4}, {11,10,2}, {10,7,6}, {7,1,8},
+		{3,9,4}, {3,4,2}, {3,2,6}, {3,6,8}, {3,8,9},
+		{4,9,5}, {2,4,11}, {6,2,10}, {8,6,7}, {9,8,1}
+	};
+
+	Vector3 offset = Center + origin;
+	int index = 0;
+
+	for (int i = 0; i < 20; ++i)
+	{
+		const Vector3 p0 = v[f[i][0]] + offset;
+		const Vector3 p1 = v[f[i][1]] + offset;
+		const Vector3 p2 = v[f[i][2]] + offset;
+
+		//one triangle per face
+		PolyArray poly = { p0, p1, p2 };
+
+		//simple triangular UVs (face-local); tweak as needed
+		std::vector<Vector2> uv = {
+			{0.5f * tw, 0.0f},
+			{0.0f,      th },
+			{tw,        th }
+		};
+
+		result.emplace_back(poly);
+		uvMapSet.emplace_back(uv);
+		Triangle tri (index + 0, index + 1, index + 2);
+		triangles.emplace_back(tri);
+		index += 3;
+	}
+
+	//create polygon object from the generated icosahedron segments
+	parent->AddPolygon(name, texture, result, uvMapSet, triangles, tw, th, autosize);
+}
+
+void Shape::CreateGeoSphere(const std::string &name, const std::string &texture, const Vector3 &Center, Real radius, int subdivisions, Real tw, Real th, bool autosize)
+{
+	//creates a geodesic sphere by subdividing an icosahedron
+
+	if (!parent)
+		return;
+
+	if (radius <= 0)
+	{
+		parent->ReportError("Geosphere requires a positive radius");
+		return;
+	}
+
+	if (subdivisions < 0)
+	{
+		parent->ReportError("Geosphere requires a non-negative subdivision count");
+		return;
+	}
+
+	PolygonSet result;
+	std::vector<std::vector<Vector2>> uvMapSet;
+	std::vector<Triangle> triangles;
+
+	// ---- base icosahedron ----
+	const Real phi = (1.0f + sqrtf(5.0f)) * 0.5f;
+
+	std::vector<Vector3> base = {
+		{-1,  phi,  0}, { 1,  phi,  0}, {-1, -phi,  0}, { 1, -phi,  0},
+		{ 0, -1,  phi}, { 0,  1,  phi}, { 0, -1, -phi}, { 0,  1, -phi},
+		{ phi,  0, -1}, { phi,  0,  1}, {-phi,  0, -1}, {-phi,  0,  1}
+	};
+
+	//normalize to unit, then scale to radius
+	auto normalize_to_radius = [&](const Vector3& p)->Vector3 {
+		Real len = sqrtf(p.x*p.x + p.y*p.y + p.z*p.z);
+		if (len == 0)
+			return Vector3(0,0,0);
+		Real s = radius / len;
+		return Vector3(p.x * s, p.y * s, p.z * s);
+	};
+
+	for (auto &p : base) p = normalize_to_radius(p);
+
+	static const int facesIdx[20][3] = {
+		{0,11,5}, {0,5,1}, {0,1,7}, {0,7,10}, {0,10,11},
+		{1,5,9}, {5,11,4}, {11,10,2}, {10,7,6}, {7,1,8},
+		{3,9,4}, {3,4,2}, {3,2,6}, {3,6,8}, {3,8,9},
+		{4,9,5}, {2,4,11}, {6,2,10}, {8,6,7}, {9,8,1}
+	};
+
+	struct Tri { Vector3 a, b, c; };
+	std::vector<Tri> faces; faces.reserve(20);
+	for (int i = 0; i < 20; ++i)
+	{
+		faces.push_back({ base[facesIdx[i][0]], base[facesIdx[i][1]], base[facesIdx[i][2]] });
+	}
+
+	// ---- subdivide ----
+	auto midpoint_on_sphere = [&](const Vector3& p, const Vector3& q)->Vector3 {
+		Vector3 m = Vector3((p.x + q.x) * 0.5f, (p.y + q.y) * 0.5f, (p.z + q.z) * 0.5f);
+		//project midpoint back to sphere of radius
+		return normalize_to_radius(m);
+	};
+
+	subdivisions = std::max(0, subdivisions);
+	for (int s = 0; s < subdivisions; ++s)
+	{
+		std::vector<Tri> next;
+		next.reserve(faces.size() * 4);
+		for (const auto& t : faces)
+		{
+			Vector3 ab = midpoint_on_sphere(t.a, t.b);
+			Vector3 bc = midpoint_on_sphere(t.b, t.c);
+			Vector3 ca = midpoint_on_sphere(t.c, t.a);
+			// split into 4
+			next.push_back({ t.a, ab, ca });
+			next.push_back({ t.b, bc, ab });
+			next.push_back({ t.c, ca, bc });
+			next.push_back({ ab, bc, ca });
+		}
+		faces.swap(next);
+	}
+
+	// ---- spherical UVs per-vertex, with per-triangle seam fix ----
+	auto sph_uv = [&](const Vector3& p)->Vector2 {
+		//convert to unit first for stable UVs
+		Real len = sqrtf(p.x * p.x + p.y * p.y + p.z * p.z);
+		Vector3 n = (len>0)? Vector3(p.x / len, p.y / len, p.z / len) : Vector3(0, 1, 0);
+		Real u = 0.5f + atan2f(n.z, n.x) / (2.0f * pi); // [0,1)
+		Real v = 0.5f - asinf(n.y) / pi;                // [0,1]
+		return Vector2(u, v);
+	};
+
+	auto fix_seam = [&](Vector2& a, Vector2& b, Vector2& c)
+	{
+		//if triangle straddles U wrap (e.g., 0.98, 0.01), lift small u by +1.0 to keep ordering tight
+		float umax = std::max({a.x, b.x, c.x});
+		float umin = std::min({a.x, b.x, c.x});
+		if (umax - umin > 0.5f)
+		{
+			for (auto* uv : {&a, &b, &c})
+			{
+				if (uv->x < 0.5f)
+					uv->x += 1.0f;
+			}
+		}
+	};
+
+	Vector3 offset = Center + origin;
+	int index = 0;
+
+	result.reserve(faces.size());
+	uvMapSet.reserve(faces.size());
+	triangles.reserve(faces.size());
+
+	for (const auto& t : faces)
+	{
+		Vector3 p0 = t.a + offset;
+		Vector3 p1 = t.b + offset;
+		Vector3 p2 = t.c + offset;
+
+		Vector2 uv0 = sph_uv(t.a);
+		Vector2 uv1 = sph_uv(t.b);
+		Vector2 uv2 = sph_uv(t.c);
+		fix_seam(uv0, uv1, uv2);
+
+		PolyArray poly = { p0, p1, p2 };
+		std::vector<Vector2> uvs = {
+			Vector2(uv0.x * tw, uv0.y * th),
+			Vector2(uv1.x * tw, uv1.y * th),
+			Vector2(uv2.x * tw, uv2.y * th)
+		};
+
+		result.emplace_back(poly);
+		uvMapSet.emplace_back(uvs);
+		Triangle tri(index + 0, index + 1, index + 2);
+		triangles.emplace_back(tri);
+		index += 3;
+	}
+
+	//create polygon object from the generated geosphere segments
 	parent->AddPolygon(name, texture, result, uvMapSet, triangles, tw, th, autosize);
 }
 
