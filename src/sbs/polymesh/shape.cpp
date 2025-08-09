@@ -988,8 +988,8 @@ void Shape::CreatePyramid(const std::string &name, const std::string &texture, c
 
 	int index = 0;
 
-	//side 1: front
-	if (polymesh->DrawMainN)
+	//side 1: back
+	if (polymesh->DrawMainP)
 	{
 		PolyArray poly = { tip, fr, fl };
 		std::vector<Vector2> uv = { {0.5f * tw, 0}, {tw, th}, {0, th} };
@@ -1016,17 +1016,17 @@ void Shape::CreatePyramid(const std::string &name, const std::string &texture, c
 		index += 3;
 	}
 
-	//side 3: back
-	if (polymesh->DrawMainP)
+	//side 3: front
+	if (polymesh->DrawMainN)
 	{
 		PolyArray poly = { tip, bl, br };
 		std::vector<Vector2> uv = { {0.5f * tw, 0}, {tw, th}, {0, th} };
 		result.emplace_back(poly);
 		uvMapSet.emplace_back(uv);
 		if (inside = false)
-			triangles.push_back(Triangle(index + 2, index + 1, index + 0));
-		else
 			triangles.push_back(Triangle(index + 0, index + 1, index + 2));
+		else
+			triangles.push_back(Triangle(index + 2, index + 1, index + 0));
 		index += 3;
 	}
 
