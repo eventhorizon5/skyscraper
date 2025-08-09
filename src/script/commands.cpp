@@ -603,11 +603,11 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		//get data
 		int params = SplitData(LineData, 9);
 
-		if (params != 11)
+		if (params != 12)
 			return ScriptError("Incorrect number of parameters");
 
 		//check numeric values
-		for (int i = 4; i < params; i++)
+		for (int i = 4; i < params - 1; i++)
 		{
 			if (!IsNumeric(tempdata[i]))
 				return ScriptError("Invalid value: " + tempdata[i]);
@@ -682,7 +682,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 
 		if (shape)
 		{
-			shape->CreateSphere("", tempdata[2], Vector3(ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5])), ToFloat(tempdata[6]), ToInt(tempdata[7]), ToInt(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), true);
+			shape->CreateSphere("", tempdata[2], Vector3(ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5])), ToFloat(tempdata[6]), ToInt(tempdata[7]), ToInt(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToBool(tempdata[11]), true);
 			delete shape; //delete temporary shape object
 			shape = 0;
 		}
@@ -696,11 +696,11 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		//get data
 		int params = SplitData(LineData, 6);
 
-		if (params != 11)
+		if (params != 12)
 			return ScriptError("Incorrect number of parameters");
 
 		//check numeric values
-		for (int i = 3; i < params; i++)
+		for (int i = 3; i < params - 1; i++)
 		{
 			if (!IsNumeric(tempdata[i]))
 				return ScriptError("Invalid value: " + tempdata[i]);
@@ -776,7 +776,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (shape)
 		{
 			Vector3 center = Vector3(ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]));
-			shape->CreateBox("", tempdata[2], center, ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), true);
+			shape->CreateBox("", tempdata[2], center, ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToBool(tempdata[11]), true);
 			delete shape; //delete temporary shape object
 			shape = 0;
 		}
@@ -790,11 +790,11 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		//get data
 		int params = SplitData(LineData, 11);
 
-		if (params != 11)
+		if (params != 12)
 			return ScriptError("Incorrect number of parameters");
 
 		//check numeric values
-		for (int i = 3; i < params; i++)
+		for (int i = 3; i < params - 1; i++)
 		{
 			if (!IsNumeric(tempdata[i]))
 				return ScriptError("Invalid value: " + tempdata[i]);
@@ -870,7 +870,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (shape)
 		{
 			Vector3 center = Vector3(ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]));
-			shape->CreateCylinder("", tempdata[2], center, ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToInt(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), true);
+			shape->CreateCylinder("", tempdata[2], center, ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToInt(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToBool(tempdata[11]), true);
 			delete shape; //delete temporary shape object
 			shape = 0;
 		}
@@ -884,11 +884,11 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		//get data
 		int params = SplitData(LineData, 7);
 
-		if (params != 11)
+		if (params != 12)
 			return ScriptError("Incorrect number of parameters");
 
 		//check numeric values
-		for (int i = 3; i < params; i++)
+		for (int i = 3; i < params - 1; i++)
 		{
 			if (!IsNumeric(tempdata[i]))
 				return ScriptError("Invalid value: " + tempdata[i]);
@@ -964,7 +964,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (shape)
 		{
 			Vector3 center = Vector3(ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]));
-			shape->CreateCone("", tempdata[2], center, ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToInt(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), true);
+			shape->CreateCone("", tempdata[2], center, ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToInt(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToBool(tempdata[11]), true);
 			delete shape; //delete temporary shape object
 			shape = 0;
 		}
@@ -978,11 +978,11 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		//get data
 		int params = SplitData(LineData, 10);
 
-		if (params != 12)
+		if (params != 13)
 			return ScriptError("Incorrect number of parameters");
 
 		//check numeric values
-		for (int i = 3; i < params; i++)
+		for (int i = 3; i < params - 1; i++)
 		{
 			if (!IsNumeric(tempdata[i]))
 				return ScriptError("Invalid value: " + tempdata[i]);
@@ -1058,7 +1058,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (shape)
 		{
 			Vector3 center = Vector3(ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]));
-			shape->CreateCapsule("", tempdata[2], center, ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToInt(tempdata[8]), ToInt(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), true);
+			shape->CreateCapsule("", tempdata[2], center, ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToInt(tempdata[8]), ToInt(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToBool(tempdata[12]), true);
 			delete shape; //delete temporary shape object
 			shape = 0;
 		}
@@ -1072,11 +1072,11 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		//get data
 		int params = SplitData(LineData, 8);
 
-		if (params != 12)
+		if (params != 13)
 			return ScriptError("Incorrect number of parameters");
 
 		//check numeric values
-		for (int i = 3; i < params; i++)
+		for (int i = 3; i < params - 1; i++)
 		{
 			if (!IsNumeric(tempdata[i]))
 				return ScriptError("Invalid value: " + tempdata[i]);
@@ -1152,7 +1152,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (shape)
 		{
 			Vector3 center = Vector3(ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]));
-			shape->CreatePlane("", tempdata[2], center, ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToInt(tempdata[8]), ToInt(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), true);
+			shape->CreatePlane("", tempdata[2], center, ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToInt(tempdata[8]), ToInt(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToBool(tempdata[12]), true);
 			delete shape; //delete temporary shape object
 			shape = 0;
 		}
@@ -1166,11 +1166,11 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		//get data
 		int params = SplitData(LineData, 9);
 
-		if (params != 10)
+		if (params != 11)
 			return ScriptError("Incorrect number of parameters");
 
 		//check numeric values
-		for (int i = 3; i < params; i++)
+		for (int i = 3; i < params - 1; i++)
 		{
 			if (!IsNumeric(tempdata[i]))
 				return ScriptError("Invalid value: " + tempdata[i]);
@@ -1246,7 +1246,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (shape)
 		{
 			Vector3 center = Vector3(ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]));
-			shape->CreateCircle("", tempdata[2], center, ToFloat(tempdata[6]), ToInt(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), true);
+			shape->CreateCircle("", tempdata[2], center, ToFloat(tempdata[6]), ToInt(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToBool(tempdata[10]), true);
 			delete shape; //delete temporary shape object
 			shape = 0;
 		}
@@ -1260,11 +1260,11 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		//get data
 		int params = SplitData(LineData, 8);
 
-		if (params != 12)
+		if (params != 13)
 			return ScriptError("Incorrect number of parameters");
 
 		//check numeric values
-		for (int i = 3; i < params; i++)
+		for (int i = 3; i < params - 1; i++)
 		{
 			if (!IsNumeric(tempdata[i]))
 				return ScriptError("Invalid value: " + tempdata[i]);
@@ -1340,7 +1340,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (shape)
 		{
 			Vector3 center = Vector3(ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]));
-			shape->CreateTorus("", tempdata[2], center, ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToInt(tempdata[8]), ToInt(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), true);
+			shape->CreateTorus("", tempdata[2], center, ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToInt(tempdata[8]), ToInt(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToBool(tempdata[12]), true);
 			delete shape; //delete temporary shape object
 			shape = 0;
 		}
@@ -1354,11 +1354,11 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		//get data
 		int params = SplitData(LineData, 7);
 
-		if (params != 11)
+		if (params != 12)
 			return ScriptError("Incorrect number of parameters");
 
 		//check numeric values
-		for (int i = 3; i < params; i++)
+		for (int i = 3; i < params - 1; i++)
 		{
 			if (!IsNumeric(tempdata[i]))
 				return ScriptError("Invalid value: " + tempdata[i]);
@@ -1434,7 +1434,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (shape)
 		{
 			Vector3 center = Vector3(ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]));
-			shape->CreateDome("", tempdata[2], center, ToFloat(tempdata[6]), ToInt(tempdata[7]), ToInt(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), true);
+			shape->CreateDome("", tempdata[2], center, ToFloat(tempdata[6]), ToInt(tempdata[7]), ToInt(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToBool(tempdata[11]), true);
 			delete shape; //delete temporary shape object
 			shape = 0;
 		}
@@ -1448,11 +1448,11 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		//get data
 		int params = SplitData(LineData, 10);
 
-		if (params != 11)
+		if (params != 12)
 			return ScriptError("Incorrect number of parameters");
 
 		//check numeric values
-		for (int i = 3; i < params; i++)
+		for (int i = 3; i < params - 1; i++)
 		{
 			if (!IsNumeric(tempdata[i]))
 				return ScriptError("Invalid value: " + tempdata[i]);
@@ -1528,7 +1528,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (shape)
 		{
 			Vector3 center = Vector3(ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]));
-			shape->CreatePyramid("", tempdata[2], center, ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), true);
+			shape->CreatePyramid("", tempdata[2], center, ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToBool(tempdata[11]), true);
 			delete shape; //delete temporary shape object
 			shape = 0;
 		}
@@ -1542,11 +1542,11 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		//get data
 		int params = SplitData(LineData, 8);
 
-		if (params != 11)
+		if (params != 12)
 			return ScriptError("Incorrect number of parameters");
 
 		//check numeric values
-		for (int i = 3; i < params; i++)
+		for (int i = 3; i < params - 1; i++)
 		{
 			if (!IsNumeric(tempdata[i]))
 				return ScriptError("Invalid value: " + tempdata[i]);
@@ -1622,7 +1622,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (shape)
 		{
 			Vector3 center = Vector3(ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]));
-			shape->CreatePrism("", tempdata[2], center, ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), true);
+			shape->CreatePrism("", tempdata[2], center, ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToBool(tempdata[11]), true);
 			delete shape; //delete temporary shape object
 			shape = 0;
 		}
@@ -1636,11 +1636,11 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		//get data
 		int params = SplitData(LineData, 14);
 
-		if (params != 9)
+		if (params != 10)
 			return ScriptError("Incorrect number of parameters");
 
 		//check numeric values
-		for (int i = 3; i < params; i++)
+		for (int i = 3; i < params - 1; i++)
 		{
 			if (!IsNumeric(tempdata[i]))
 				return ScriptError("Invalid value: " + tempdata[i]);
@@ -1716,7 +1716,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (shape)
 		{
 			Vector3 center = Vector3(ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]));
-			shape->CreateTetrahedron("", tempdata[2], center, ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), true);
+			shape->CreateTetrahedron("", tempdata[2], center, ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToBool(tempdata[9]), true);
 			delete shape; //delete temporary shape object
 			shape = 0;
 		}
@@ -1730,11 +1730,11 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		//get data
 		int params = SplitData(LineData, 13);
 
-		if (params != 9)
+		if (params != 10)
 			return ScriptError("Incorrect number of parameters");
 
 		//check numeric values
-		for (int i = 3; i < params; i++)
+		for (int i = 3; i < params - 1; i++)
 		{
 			if (!IsNumeric(tempdata[i]))
 				return ScriptError("Invalid value: " + tempdata[i]);
@@ -1810,7 +1810,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (shape)
 		{
 			Vector3 center = Vector3(ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]));
-			shape->CreateOctahedron("", tempdata[2], center, ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), true);
+			shape->CreateOctahedron("", tempdata[2], center, ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToBool(tempdata[9]), true);
 			delete shape; //delete temporary shape object
 			shape = 0;
 		}
@@ -1824,11 +1824,11 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		//get data
 		int params = SplitData(LineData, 14);
 
-		if (params != 9)
+		if (params != 10)
 			return ScriptError("Incorrect number of parameters");
 
 		//check numeric values
-		for (int i = 3; i < params; i++)
+		for (int i = 3; i < params - 1; i++)
 		{
 			if (!IsNumeric(tempdata[i]))
 				return ScriptError("Invalid value: " + tempdata[i]);
@@ -1904,7 +1904,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (shape)
 		{
 			Vector3 center = Vector3(ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]));
-			shape->CreateIcosahedron("", tempdata[2], center, ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), true);
+			shape->CreateIcosahedron("", tempdata[2], center, ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToBool(tempdata[9]), true);
 			delete shape; //delete temporary shape object
 			shape = 0;
 		}
@@ -1918,11 +1918,11 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		//get data
 		int params = SplitData(LineData, 12);
 
-		if (params != 10)
+		if (params != 11)
 			return ScriptError("Incorrect number of parameters");
 
 		//check numeric values
-		for (int i = 3; i < params; i++)
+		for (int i = 3; i < params - 1; i++)
 		{
 			if (!IsNumeric(tempdata[i]))
 				return ScriptError("Invalid value: " + tempdata[i]);
@@ -1998,7 +1998,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (shape)
 		{
 			Vector3 center = Vector3(ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]));
-			shape->CreateGeoSphere("", tempdata[2], center, ToFloat(tempdata[6]), ToInt(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), true);
+			shape->CreateGeoSphere("", tempdata[2], center, ToFloat(tempdata[6]), ToInt(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToBool(tempdata[10]), true);
 			delete shape; //delete temporary shape object
 			shape = 0;
 		}

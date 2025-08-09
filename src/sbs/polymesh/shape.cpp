@@ -40,7 +40,7 @@ Shape::~Shape()
 
 }
 
-void Shape::CreateSphere(const std::string &name, const std::string &texture, const Vector3 &Center, Real radius, int latSteps, int lonSteps, Real tw, Real th, bool autosize)
+void Shape::CreateSphere(const std::string &name, const std::string &texture, const Vector3 &Center, Real radius, int latSteps, int lonSteps, Real tw, Real th, bool inside, bool autosize)
 {
 	//generates a sphere
 
@@ -88,7 +88,10 @@ void Shape::CreateSphere(const std::string &name, const std::string &texture, co
 			poly1.reserve(3);
 			poly1.emplace_back(p1 + Center + origin);
 			uvMap.emplace_back(Vector2(u1, v1));
-			tri1.a = 0 + index;
+			if (inside == false)
+				tri1.a = 0 + index;
+			else
+				tri1.a = 2 + index;
 
 			poly1.emplace_back(p2 + Center + origin);
 			uvMap.emplace_back(Vector2(u1, v2));
@@ -96,7 +99,10 @@ void Shape::CreateSphere(const std::string &name, const std::string &texture, co
 
 			poly1.emplace_back(p3 + Center + origin);
 			uvMap.emplace_back(Vector2(u2, v2));
-			tri1.c = 2 + index;
+			if (inside == false)
+				tri1.c = 2 + index;
+			else
+				tri1.c = 0 + index;
 
 			result.emplace_back(poly1);
 			uvMapSet.emplace_back(uvMap);
@@ -109,7 +115,10 @@ void Shape::CreateSphere(const std::string &name, const std::string &texture, co
 			poly2.reserve(3);
 			poly2.emplace_back(p1 + Center + origin);
 			uvMap.emplace_back(Vector2(u1, v1));
-			tri2.a = 3 + index;
+			if (inside == false)
+				tri2.a = 3 + index;
+			else
+				tri2.a = 5 + index;
 
 			poly2.emplace_back(p3 + Center + origin);
 			uvMap.emplace_back(Vector2(u2, v2));
@@ -117,7 +126,10 @@ void Shape::CreateSphere(const std::string &name, const std::string &texture, co
 
 			poly2.emplace_back(p4 + Center + origin);
 			uvMap.emplace_back(Vector2(u2, v1));
-			tri2.c = 5 + index;
+			if (inside == false)
+				tri2.c = 5 + index;
+			else
+				tri2.c = 3 + index;
 
 			result.emplace_back(poly2);
 			uvMapSet.emplace_back(uvMap);
@@ -130,7 +142,7 @@ void Shape::CreateSphere(const std::string &name, const std::string &texture, co
 	parent->AddPolygon(name, texture, result, uvMapSet, triangles, tw, th, autosize);
 }
 
-void Shape::CreateBox(const std::string &name, const std::string &texture, Ogre::Vector3 &center, Real width, Real height, Real depth, Real tw, Real th, bool autosize)
+void Shape::CreateBox(const std::string &name, const std::string &texture, Ogre::Vector3 &center, Real width, Real height, Real depth, Real tw, Real th, bool inside, bool autosize)
 {
 	//generates a box
 
@@ -172,7 +184,10 @@ void Shape::CreateBox(const std::string &name, const std::string &texture, Ogre:
 		Triangle tri1;
 		poly1.emplace_back(a + center + origin);
 		uvMap.emplace_back(uvA);
-		tri1.a = 2;
+		if (inside == false)
+			tri1.a = 2;
+		else
+			tri1.a = 0;
 
 		poly1.emplace_back(b + center + origin);
 		uvMap.emplace_back(uvB);
@@ -180,7 +195,10 @@ void Shape::CreateBox(const std::string &name, const std::string &texture, Ogre:
 
 		poly1.emplace_back(c + center + origin);
 		uvMap.emplace_back(uvC);
-		tri1.c = 0;
+		if (inside == false)
+			tri1.c = 0;
+		else
+			tri1.c = 2;
 
 		result.emplace_back(poly1);
 		uvMapSet.emplace_back(uvMap);
@@ -191,7 +209,10 @@ void Shape::CreateBox(const std::string &name, const std::string &texture, Ogre:
 		Triangle tri2;
 		poly2.emplace_back(a + center + origin);
 		uvMap.emplace_back(uvA);
-		tri2.a = 5;
+		if (inside == false)
+			tri2.a = 5;
+		else
+			tri2.a = 3;
 
 		poly2.emplace_back(c + center + origin);
 		uvMap.emplace_back(uvC);
@@ -199,7 +220,10 @@ void Shape::CreateBox(const std::string &name, const std::string &texture, Ogre:
 
 		poly2.emplace_back(d + center + origin);
 		uvMap.emplace_back(uvD);
-		tri2.c = 3;
+		if (inside == false)
+			tri2.c = 3;
+		else
+			tri2.c = 5;
 
 		result.emplace_back(poly2);
 		uvMapSet.emplace_back(uvMap);
@@ -228,7 +252,7 @@ void Shape::CreateBox(const std::string &name, const std::string &texture, Ogre:
 	addQuad(p100, p000, p001, p101, {1, 1}, {0, 1}, {0, 0}, {1, 0});
 }
 
-void Shape::CreateCylinder(const std::string &name, const std::string &texture, const Vector3 &Center, Real radius, Real height, int slices, Real tw, Real th, bool autosize)
+void Shape::CreateCylinder(const std::string &name, const std::string &texture, const Vector3 &Center, Real radius, Real height, int slices, Real tw, Real th, bool inside, bool autosize)
 {
 	//generates a cylinder
 
@@ -277,7 +301,10 @@ void Shape::CreateCylinder(const std::string &name, const std::string &texture, 
 		};
 		result.emplace_back(poly1);
 		uvMapSet.emplace_back(uv1);
-		triangles.push_back(Triangle(index + 2, index + 1, index + 0));
+		if (inside == false)
+			triangles.push_back(Triangle(index + 2, index + 1, index + 0));
+		else
+			triangles.push_back(Triangle(index + 0, index + 1, index + 2));
 
 		//second triangle (p1, p3, p4)
 		PolyArray poly2 = {
@@ -292,7 +319,10 @@ void Shape::CreateCylinder(const std::string &name, const std::string &texture, 
 		};
 		result.emplace_back(poly2);
 		uvMapSet.emplace_back(uv2);
-		triangles.push_back(Triangle(index + 5, index + 4, index + 3));
+		if (inside == false)
+			triangles.push_back(Triangle(index + 5, index + 4, index + 3));
+		else
+			triangles.push_back(Triangle(index + 3, index + 4, index + 5));
 
 		index += 6;
 	}
@@ -319,7 +349,10 @@ void Shape::CreateCylinder(const std::string &name, const std::string &texture, 
 
 		result.emplace_back(poly);
 		uvMapSet.emplace_back(uv);
-		triangles.push_back(Triangle(index + 0, index + 1, index + 2));
+		if (inside == false)
+			triangles.push_back(Triangle(index + 0, index + 1, index + 2));
+		else
+			triangles.push_back(Triangle(index + 2, index + 1, index + 0));
 		index += 3;
 	}
 
@@ -345,7 +378,10 @@ void Shape::CreateCylinder(const std::string &name, const std::string &texture, 
 
 		result.emplace_back(poly);
 		uvMapSet.emplace_back(uv);
-		triangles.push_back(Triangle(index + 0, index + 1, index + 2));
+		if (inside == false)
+			triangles.push_back(Triangle(index + 0, index + 1, index + 2));
+		else
+			triangles.push_back(Triangle(index + 2, index + 1, index + 0));
 		index += 3;
 	}
 
@@ -353,7 +389,7 @@ void Shape::CreateCylinder(const std::string &name, const std::string &texture, 
 	parent->AddPolygon(name, texture, result, uvMapSet, triangles, tw, th, autosize);
 }
 
-void Shape::CreateCone(const std::string &name, const std::string &texture, const Vector3 &Center, Real radius, Real height, int slices, Real tw, Real th, bool autosize)
+void Shape::CreateCone(const std::string &name, const std::string &texture, const Vector3 &Center, Real radius, Real height, int slices, Real tw, Real th, bool inside, bool autosize)
 {
 	//generates a cone
 
@@ -401,7 +437,10 @@ void Shape::CreateCone(const std::string &name, const std::string &texture, cons
 
 		result.emplace_back(poly);
 		uvMapSet.emplace_back(uv);
-		triangles.push_back(Triangle(index + 2, index + 1, index + 0));
+		if (inside == false)
+			triangles.push_back(Triangle(index + 2, index + 1, index + 0));
+		else
+			triangles.push_back(Triangle(index + 0, index + 1, index + 2));
 		index += 3;
 	}
 
@@ -427,7 +466,10 @@ void Shape::CreateCone(const std::string &name, const std::string &texture, cons
 
 		result.emplace_back(poly);
 		uvMapSet.emplace_back(uv);
-		triangles.push_back(Triangle(index + 2, index + 1, index + 0));
+		if (inside == false)
+			triangles.push_back(Triangle(index + 2, index + 1, index + 0));
+		else
+			triangles.push_back(Triangle(index + 0, index + 1, index + 2));
 		index += 3;
 	}
 
@@ -435,7 +477,7 @@ void Shape::CreateCone(const std::string &name, const std::string &texture, cons
 	parent->AddPolygon(name, texture, result, uvMapSet, triangles, tw, th, autosize);
 }
 
-void Shape::CreateCapsule(const std::string &name, const std::string &texture, const Vector3 &Center, Real radius, Real height, int latSteps, int lonSteps, Real tw, Real th, bool autosize)
+void Shape::CreateCapsule(const std::string &name, const std::string &texture, const Vector3 &Center, Real radius, Real height, int latSteps, int lonSteps, Real tw, Real th, bool inside, bool autosize)
 {
 	//generates a capsule (cylinder with hemispherical ends)
 
@@ -480,13 +522,19 @@ void Shape::CreateCapsule(const std::string &name, const std::string &texture, c
 		std::vector<Vector2> uv1 = { {u1 * tw, 0}, {u2 * tw, 0}, {u2 * tw, th} };
 		result.emplace_back(poly1);
 		uvMapSet.emplace_back(uv1);
-		triangles.push_back(Triangle(index + 2, index + 1, index + 0));
+		if (inside == false)
+			triangles.push_back(Triangle(index + 2, index + 1, index + 0));
+		else
+			triangles.push_back(Triangle(index + 0, index + 1, index + 2));
 
 		PolyArray poly2 = { p1 + Center + origin, p3 + Center + origin, p4 + Center + origin };
 		std::vector<Vector2> uv2 = { {u1 * tw, 0}, {u2 * tw, th}, {u1 * tw, th} };
 		result.emplace_back(poly2);
 		uvMapSet.emplace_back(uv2);
-		triangles.push_back(Triangle(index + 5, index + 4, index + 3));
+		if (inside == false)
+			triangles.push_back(Triangle(index + 5, index + 4, index + 3));
+		else
+			triangles.push_back(Triangle(index + 3, index + 4, index + 5));
 
 		index += 6;
 	}
@@ -522,14 +570,20 @@ void Shape::CreateCapsule(const std::string &name, const std::string &texture, c
 			std::vector<Vector2> uv1 = { {u1 * tw, v1 * th}, {u1 * tw, v2 * th}, {u2 * tw, v2 * th} };
 			result.emplace_back(poly1);
 			uvMapSet.emplace_back(uv1);
-			triangles.push_back(Triangle(index + 0, index + 1, index + 2));
+			if (inside == false)
+				triangles.push_back(Triangle(index + 0, index + 1, index + 2));
+			else
+				triangles.push_back(Triangle(index + 2, index + 1, index + 0));
 
 			//second triangle
 			PolyArray poly2 = { p1, p3, p4 };
 			std::vector<Vector2> uv2 = { {u1 * tw, v1 * th}, {u2 * tw, v2 * th}, {u2 * tw, v1 * th} };
 			result.emplace_back(poly2);
 			uvMapSet.emplace_back(uv2);
-			triangles.push_back(Triangle(index + 3, index + 4, index + 5));
+			if (inside == false)
+				triangles.push_back(Triangle(index + 3, index + 4, index + 5));
+			else
+				triangles.push_back(Triangle(index + 5, index + 4, index + 3));
 
 			index += 6;
 		}
@@ -566,14 +620,20 @@ void Shape::CreateCapsule(const std::string &name, const std::string &texture, c
 			std::vector<Vector2> uv1 = { {u1 * tw, v1 * th}, {u1 * tw, v2 * th}, {u2 * tw, v2 * th} };
 			result.emplace_back(poly1);
 			uvMapSet.emplace_back(uv1);
-			triangles.push_back(Triangle(index + 2, index + 1, index + 0));
+			if (inside == false)
+				triangles.push_back(Triangle(index + 2, index + 1, index + 0));
+			else
+				triangles.push_back(Triangle(index + 0, index + 1, index + 2));
 
 			//second triangle
 			PolyArray poly2 = { p1, p3, p4 };
 			std::vector<Vector2> uv2 = { {u1 * tw, v1 * th}, {u2 * tw, v2 * th}, {u2 * tw, v1 * th} };
 			result.emplace_back(poly2);
 			uvMapSet.emplace_back(uv2);
-			triangles.push_back(Triangle(index + 5, index + 4, index + 3));
+			if (inside == false)
+				triangles.push_back(Triangle(index + 5, index + 4, index + 3));
+			else
+				triangles.push_back(Triangle(index + 3, index + 4, index + 5));
 
 			index += 6;
 		}
@@ -583,7 +643,7 @@ void Shape::CreateCapsule(const std::string &name, const std::string &texture, c
 	parent->AddPolygon(name, texture, result, uvMapSet, triangles, tw, th, autosize);
 }
 
-void Shape::CreatePlane(const std::string &name, const std::string &texture, const Vector3 &Center, Real width, Real depth, int xSegments, int zSegments, Real tw, Real th, bool autosize)
+void Shape::CreatePlane(const std::string &name, const std::string &texture, const Vector3 &Center, Real width, Real depth, int xSegments, int zSegments, Real tw, Real th, bool face_down, bool autosize)
 {
 	if (!parent)
 		return;
@@ -626,14 +686,20 @@ void Shape::CreatePlane(const std::string &name, const std::string &texture, con
 			std::vector<Vector2> uv1 = { {u1 * tw, v1 * th}, {u2 * tw, v1 * th}, {u2 * tw, v2 * th} };
 			result.emplace_back(poly1);
 			uvMapSet.emplace_back(uv1);
-			triangles.emplace_back(Triangle(index + 2, index + 1, index + 0));
+			if (face_down == false)
+				triangles.emplace_back(Triangle(index + 2, index + 1, index + 0));
+			else
+				triangles.emplace_back(Triangle(index + 0, index + 1, index + 2));
 
 			//triangle 2
 			PolyArray poly2 = { p1, p3, p4 };
 			std::vector<Vector2> uv2 = { {u1 * tw, v1 * th}, {u2 * tw, v2 * th}, {u1 * tw, v2 * th} };
 			result.emplace_back(poly2);
 			uvMapSet.emplace_back(uv2);
-			triangles.emplace_back(Triangle(index + 5, index + 4, index + 3));
+			if (face_down == false)
+				triangles.emplace_back(Triangle(index + 5, index + 4, index + 3));
+			else
+				triangles.emplace_back(Triangle(index + 3, index + 4, index + 5));
 
 			index += 6;
 		}
@@ -643,7 +709,7 @@ void Shape::CreatePlane(const std::string &name, const std::string &texture, con
 	parent->AddPolygon(name, texture, result, uvMapSet, triangles, tw, th, autosize);
 }
 
-void Shape::CreateCircle(const std::string &name, const std::string &texture, const Vector3 &Center, Real radius, int slices, Real tw, Real th, bool autosize)
+void Shape::CreateCircle(const std::string &name, const std::string &texture, const Vector3 &Center, Real radius, int slices, Real tw, Real th, bool face_down, bool autosize)
 {
 	//generates a circle (disc)
 
@@ -685,7 +751,10 @@ void Shape::CreateCircle(const std::string &name, const std::string &texture, co
 
 		result.emplace_back(poly);
 		uvMapSet.emplace_back(uv);
-		triangles.emplace_back(Triangle(index + 2, index + 1, index + 0));
+		if (face_down == false)
+			triangles.emplace_back(Triangle(index + 2, index + 1, index + 0));
+		else
+			triangles.emplace_back(Triangle(index + 0, index + 1, index + 2));
 		index += 3;
 	}
 
@@ -693,7 +762,7 @@ void Shape::CreateCircle(const std::string &name, const std::string &texture, co
 	parent->AddPolygon(name, texture, result, uvMapSet, triangles, tw, th, autosize);
 }
 
-void Shape::CreateTorus(const std::string &name, const std::string &texture, const Vector3 &Center, Real majorRadius, Real minorRadius, int radialSteps, int tubeSteps, Real tw, Real th, bool autosize)
+void Shape::CreateTorus(const std::string &name, const std::string &texture, const Vector3 &Center, Real majorRadius, Real minorRadius, int radialSteps, int tubeSteps, Real tw, Real th, bool inside, bool autosize)
 {
 	//generates a torus
 
@@ -749,7 +818,10 @@ void Shape::CreateTorus(const std::string &name, const std::string &texture, con
 			};
 			result.emplace_back(poly1);
 			uvMapSet.emplace_back(uv1);
-			triangles.emplace_back(Triangle(index + 2, index + 1, index + 0));
+			if (inside == false)
+				triangles.emplace_back(Triangle(index + 2, index + 1, index + 0));
+			else
+				triangles.emplace_back(Triangle(index + 0, index + 1, index + 2));
 
 			//triangle 2
 			PolyArray poly2 = { p1, p3, p4 };
@@ -760,7 +832,10 @@ void Shape::CreateTorus(const std::string &name, const std::string &texture, con
 			};
 			result.emplace_back(poly2);
 			uvMapSet.emplace_back(uv2);
-			triangles.emplace_back(Triangle(index + 5, index + 4, index + 3));
+			if (inside == false)
+				triangles.emplace_back(Triangle(index + 5, index + 4, index + 3));
+			else
+				triangles.emplace_back(Triangle(index + 3, index + 4, index + 5));
 
 			index += 6;
 		}
@@ -770,7 +845,7 @@ void Shape::CreateTorus(const std::string &name, const std::string &texture, con
 	parent->AddPolygon(name, texture, result, uvMapSet, triangles, tw, th, autosize);
 }
 
-void Shape::CreateDome(const std::string &name, const std::string &texture, const Vector3 &Center, Real radius, int latSteps, int lonSteps, Real tw, Real th, bool autosize)
+void Shape::CreateDome(const std::string &name, const std::string &texture, const Vector3 &Center, Real radius, int latSteps, int lonSteps, Real tw, Real th, bool inside, bool autosize)
 {
 	//generates a dome (half-sphere)
 
@@ -824,7 +899,10 @@ void Shape::CreateDome(const std::string &name, const std::string &texture, cons
 
 			result.emplace_back(poly1);
 			uvMapSet.emplace_back(uvMap);
-			triangles.emplace_back(Triangle(index + 0, index + 1, index + 2));
+			if (inside == false)
+				triangles.emplace_back(Triangle(index + 0, index + 1, index + 2));
+			else
+				triangles.emplace_back(Triangle(index + 2, index + 1, index + 0));
 
 			//triangle 2
 			PolyArray poly2;
@@ -840,7 +918,10 @@ void Shape::CreateDome(const std::string &name, const std::string &texture, cons
 
 			result.emplace_back(poly2);
 			uvMapSet.emplace_back(uvMap);
-			triangles.emplace_back(Triangle(index + 3, index + 4, index + 5));
+			if (inside == false)
+				triangles.emplace_back(Triangle(index + 3, index + 4, index + 5));
+			else
+				triangles.emplace_back(Triangle(index + 5, index + 4, index + 3));
 
 			index += 6;
 		}
@@ -850,7 +931,7 @@ void Shape::CreateDome(const std::string &name, const std::string &texture, cons
 	parent->AddPolygon(name, texture, result, uvMapSet, triangles, tw, th, autosize);
 }
 
-void Shape::CreatePyramid(const std::string &name, const std::string &texture, const Vector3 &Center, Real width, Real depth, Real height, Real tw, Real th, bool autosize)
+void Shape::CreatePyramid(const std::string &name, const std::string &texture, const Vector3 &Center, Real width, Real depth, Real height, Real tw, Real th, bool inside, bool autosize)
 {
 	//creates a pyramid
 
@@ -887,7 +968,10 @@ void Shape::CreatePyramid(const std::string &name, const std::string &texture, c
 		std::vector<Vector2> uv = { {0.5f * tw, 0}, {tw, th}, {0, th} };
 		result.emplace_back(poly);
 		uvMapSet.emplace_back(uv);
-		triangles.push_back(Triangle(index + 2, index + 1, index + 0));
+		if (inside == false)
+			triangles.push_back(Triangle(index + 2, index + 1, index + 0));
+		else
+			triangles.push_back(Triangle(index + 0, index + 1, index + 2));
 		index += 3;
 	}
 
@@ -897,7 +981,10 @@ void Shape::CreatePyramid(const std::string &name, const std::string &texture, c
 		std::vector<Vector2> uv = { {0.5f * tw, 0}, {0, th}, {tw, th} };
 		result.emplace_back(poly);
 		uvMapSet.emplace_back(uv);
-		triangles.push_back(Triangle(index + 2, index + 1, index + 0));
+		if (inside == false)
+			triangles.push_back(Triangle(index + 2, index + 1, index + 0));
+		else
+			triangles.push_back(Triangle(index + 0, index + 1, index + 2));
 		index += 3;
 	}
 
@@ -907,7 +994,10 @@ void Shape::CreatePyramid(const std::string &name, const std::string &texture, c
 		std::vector<Vector2> uv = { {0.5f * tw, 0}, {tw, th}, {0, th} };
 		result.emplace_back(poly);
 		uvMapSet.emplace_back(uv);
-		triangles.push_back(Triangle(index + 2, index + 1, index + 0));
+		if (inside = false)
+			triangles.push_back(Triangle(index + 2, index + 1, index + 0));
+		else
+			triangles.push_back(Triangle(index + 0, index + 1, index + 2));
 		index += 3;
 	}
 
@@ -917,7 +1007,10 @@ void Shape::CreatePyramid(const std::string &name, const std::string &texture, c
 		std::vector<Vector2> uv = { {0.5f * tw, 0}, {tw, th}, {0, th} };
 		result.emplace_back(poly);
 		uvMapSet.emplace_back(uv);
-		triangles.push_back(Triangle(index + 2, index + 1, index + 0));
+		if (inside == false)
+			triangles.push_back(Triangle(index + 2, index + 1, index + 0));
+		else
+			triangles.push_back(Triangle(index + 0, index + 1, index + 2));
 		index += 3;
 	}
 
@@ -928,14 +1021,20 @@ void Shape::CreatePyramid(const std::string &name, const std::string &texture, c
 		std::vector<Vector2> uv1 = { {0, 0}, {tw, 0}, {tw, th} };
 		result.emplace_back(poly1);
 		uvMapSet.emplace_back(uv1);
-		triangles.push_back(Triangle(index + 2, index + 1, index + 0));
+		if (inside == false)
+			triangles.push_back(Triangle(index + 2, index + 1, index + 0));
+		else
+			triangles.push_back(Triangle(index + 0, index + 1, index + 2));
 
 		//triangle 2
 		PolyArray poly2 = { fl, br, bl };
 		std::vector<Vector2> uv2 = { {0, 0}, {tw, th}, {0, th} };
 		result.emplace_back(poly2);
 		uvMapSet.emplace_back(uv2);
-		triangles.push_back(Triangle(index + 5, index + 4, index + 3));
+		if (inside == false)
+			triangles.push_back(Triangle(index + 5, index + 4, index + 3));
+		else
+			triangles.push_back(Triangle(index + 3, index + 4, index + 5));
 
 		index += 6;
 	}
@@ -944,7 +1043,7 @@ void Shape::CreatePyramid(const std::string &name, const std::string &texture, c
 	parent->AddPolygon(name, texture, result, uvMapSet, triangles, tw, th, autosize);
 }
 
-void Shape::CreatePrism(const std::string &name, const std::string &texture, const Vector3 &Center, Real width, Real depth, Real height, Real tw, Real th, bool autosize)
+void Shape::CreatePrism(const std::string &name, const std::string &texture, const Vector3 &Center, Real width, Real depth, Real height, Real tw, Real th, bool inside, bool autosize)
 {
 	//creates a triangular prism
 
@@ -983,7 +1082,10 @@ void Shape::CreatePrism(const std::string &name, const std::string &texture, con
 		std::vector<Vector2> uv = { {0, 0}, {tw, 0}, {0.5f * tw, th} };
 		result.emplace_back(poly);
 		uvMapSet.emplace_back(uv);
-		triangles.push_back(Triangle(index + 0, index + 1, index + 2));
+		if (inside == false)
+			triangles.push_back(Triangle(index + 0, index + 1, index + 2));
+		else
+			triangles.push_back(Triangle(index + 2, index + 1, index + 0));
 		index += 3;
 	}
 
@@ -993,7 +1095,10 @@ void Shape::CreatePrism(const std::string &name, const std::string &texture, con
 		std::vector<Vector2> uv = { {0, 0}, {0.5f * tw, th}, {tw, 0} };
 		result.emplace_back(poly);
 		uvMapSet.emplace_back(uv);
-		triangles.push_back(Triangle(index + 0, index + 1, index + 2));
+		if (inside == false)
+			triangles.push_back(Triangle(index + 0, index + 1, index + 2));
+		else
+			triangles.push_back(Triangle(index + 2, index + 1, index + 0));
 		index += 3;
 	}
 
@@ -1002,12 +1107,18 @@ void Shape::CreatePrism(const std::string &name, const std::string &texture, con
 		PolyArray poly1 = { p0, p1, q1 };
 		std::vector<Vector2> uv1 = { {0, 0}, {tw, 0}, {tw, th} };
 		result.emplace_back(poly1); uvMapSet.emplace_back(uv1);
-		triangles.push_back(Triangle(index + 2, index + 1, index + 0));
+		if (inside == false)
+			triangles.push_back(Triangle(index + 2, index + 1, index + 0));
+		else
+			triangles.push_back(Triangle(index + 0, index + 1, index + 2));
 
 		PolyArray poly2 = { p0, q1, q0 };
 		std::vector<Vector2> uv2 = { {0, 0}, {tw, th}, {0, th} };
 		result.emplace_back(poly2); uvMapSet.emplace_back(uv2);
-		triangles.push_back(Triangle(index + 5, index + 4, index + 3));
+		if (inside == false)
+			triangles.push_back(Triangle(index + 5, index + 4, index + 3));
+		else
+			triangles.push_back(Triangle(index + 3, index + 4, index + 5));
 		index += 6;
 	}
 
@@ -1016,12 +1127,18 @@ void Shape::CreatePrism(const std::string &name, const std::string &texture, con
 		PolyArray poly1 = { p1, p2, q2 };
 		std::vector<Vector2> uv1 = { {0, 0}, {tw, 0}, {tw, th} };
 		result.emplace_back(poly1); uvMapSet.emplace_back(uv1);
-		triangles.push_back(Triangle(index + 2, index + 1, index + 0));
+		if (inside == false)
+			triangles.push_back(Triangle(index + 2, index + 1, index + 0));
+		else
+			triangles.push_back(Triangle(index + 0, index + 1, index + 2));
 
 		PolyArray poly2 = { p1, q2, q1 };
 		std::vector<Vector2> uv2 = { {0, 0}, {tw, th}, {0, th} };
 		result.emplace_back(poly2); uvMapSet.emplace_back(uv2);
-		triangles.push_back(Triangle(index + 5, index + 4, index + 3));
+		if (inside == false)
+			triangles.push_back(Triangle(index + 5, index + 4, index + 3));
+		else
+			triangles.push_back(Triangle(index + 3, index + 4, index + 5));
 		index += 6;
 	}
 
@@ -1030,12 +1147,18 @@ void Shape::CreatePrism(const std::string &name, const std::string &texture, con
 		PolyArray poly1 = { p2, p0, q0 };
 		std::vector<Vector2> uv1 = { {0, 0}, {tw, 0}, {tw, th} };
 		result.emplace_back(poly1); uvMapSet.emplace_back(uv1);
-		triangles.push_back(Triangle(index + 2, index + 1, index + 0));
+		if (inside == false)
+			triangles.push_back(Triangle(index + 2, index + 1, index + 0));
+		else
+			triangles.push_back(Triangle(index + 0, index + 1, index + 2));
 
 		PolyArray poly2 = { p2, q0, q2 };
 		std::vector<Vector2> uv2 = { {0, 0}, {tw, th}, {0, th} };
 		result.emplace_back(poly2); uvMapSet.emplace_back(uv2);
-		triangles.push_back(Triangle(index + 5, index + 4, index + 3));
+		if (inside == false)
+			triangles.push_back(Triangle(index + 5, index + 4, index + 3));
+		else
+			triangles.push_back(Triangle(index + 3, index + 4, index + 5));
 		index += 6;
 	}
 
@@ -1043,7 +1166,7 @@ void Shape::CreatePrism(const std::string &name, const std::string &texture, con
 	parent->AddPolygon(name, texture, result, uvMapSet, triangles, tw, th, autosize);
 }
 
-void Shape::CreateTetrahedron(const std::string &name, const std::string &texture, const Vector3 &Center, Real size, Real tw, Real th, bool autosize)
+void Shape::CreateTetrahedron(const std::string &name, const std::string &texture, const Vector3 &Center, Real size, Real tw, Real th, bool inside, bool autosize)
 {
 	//creates a tetrahedron
 
@@ -1084,7 +1207,10 @@ void Shape::CreateTetrahedron(const std::string &name, const std::string &textur
 		std::vector<Vector2> uv = { {0, 0}, {tw, 0}, {0.5f * tw, th} };
 		result.emplace_back(poly);
 		uvMapSet.emplace_back(uv);
-		triangles.push_back(Triangle(index + 0, index + 1, index + 2));
+		if (inside == false)
+			triangles.push_back(Triangle(index + 0, index + 1, index + 2));
+		else
+			triangles.push_back(Triangle(index + 2, index + 1, index + 0));
 		index += 3;
 	}
 
@@ -1094,7 +1220,10 @@ void Shape::CreateTetrahedron(const std::string &name, const std::string &textur
 		std::vector<Vector2> uv = { {0.5f * tw, 0}, {tw, th}, {0, th} };
 		result.emplace_back(poly);
 		uvMapSet.emplace_back(uv);
-		triangles.push_back(Triangle(index + 0, index + 1, index + 2));
+		if (inside == false)
+			triangles.push_back(Triangle(index + 0, index + 1, index + 2));
+		else
+			triangles.push_back(Triangle(index + 2, index + 1, index + 0));
 		index += 3;
 	}
 
@@ -1104,7 +1233,10 @@ void Shape::CreateTetrahedron(const std::string &name, const std::string &textur
 		std::vector<Vector2> uv = { {0.5f * tw, 0}, {0, th}, {tw, th} };
 		result.emplace_back(poly);
 		uvMapSet.emplace_back(uv);
-		triangles.push_back(Triangle(index + 0, index + 1, index + 2));
+		if (inside == false)
+			triangles.push_back(Triangle(index + 0, index + 1, index + 2));
+		else
+			triangles.push_back(Triangle(index + 2, index + 1, index + 0));
 		index += 3;
 	}
 
@@ -1114,7 +1246,10 @@ void Shape::CreateTetrahedron(const std::string &name, const std::string &textur
 		std::vector<Vector2> uv = { {0.5f * tw, 0}, {0, th}, {tw, th} };
 		result.emplace_back(poly);
 		uvMapSet.emplace_back(uv);
-		triangles.push_back(Triangle(index + 0, index + 1, index + 2));
+		if (inside == false)
+			triangles.push_back(Triangle(index + 0, index + 1, index + 2));
+		else
+			triangles.push_back(Triangle(index + 2, index + 1, index + 0));
 		index += 3;
 	}
 
@@ -1122,7 +1257,7 @@ void Shape::CreateTetrahedron(const std::string &name, const std::string &textur
 	parent->AddPolygon(name, texture, result, uvMapSet, triangles, tw, th, autosize);
 }
 
-void Shape::CreateOctahedron(const std::string &name, const std::string &texture, const Vector3 &Center, Real size, Real tw, Real th, bool autosize)
+void Shape::CreateOctahedron(const std::string &name, const std::string &texture, const Vector3 &Center, Real size, Real tw, Real th, bool inside, bool autosize)
 {
 	//creates an octahedron
 	if (!parent)
@@ -1161,7 +1296,10 @@ void Shape::CreateOctahedron(const std::string &name, const std::string &texture
 		};
 		result.emplace_back(poly);
 		uvMapSet.emplace_back(uv);
-		triangles.push_back(Triangle(index + 0, index + 1, index + 2));
+		if (inside == false)
+			triangles.push_back(Triangle(index + 0, index + 1, index + 2));
+		else
+			triangles.push_back(Triangle(index + 2, index + 1, index + 0));
 		index += 3;
 	};
 
@@ -1180,7 +1318,7 @@ void Shape::CreateOctahedron(const std::string &name, const std::string &texture
 	parent->AddPolygon(name, texture, result, uvMapSet, triangles, tw, th, autosize);
 }
 
-void Shape::CreateIcosahedron(const std::string &name, const std::string &texture, const Vector3 &Center, Real radius, Real tw, Real th, bool autosize)
+void Shape::CreateIcosahedron(const std::string &name, const std::string &texture, const Vector3 &Center, Real radius, Real tw, Real th, bool inside, bool autosize)
 {
 	//creates an icosahedron
 
@@ -1244,8 +1382,16 @@ void Shape::CreateIcosahedron(const std::string &name, const std::string &textur
 
 		result.emplace_back(poly);
 		uvMapSet.emplace_back(uv);
-		Triangle tri (index + 0, index + 1, index + 2);
-		triangles.emplace_back(tri);
+		if (inside == false)
+		{
+			Triangle tri (index + 0, index + 1, index + 2);
+			triangles.emplace_back(tri);
+		}
+		else
+		{
+			Triangle tri (index + 2, index + 1, index + 0);
+			triangles.emplace_back(tri);
+		}
 		index += 3;
 	}
 
@@ -1253,7 +1399,7 @@ void Shape::CreateIcosahedron(const std::string &name, const std::string &textur
 	parent->AddPolygon(name, texture, result, uvMapSet, triangles, tw, th, autosize);
 }
 
-void Shape::CreateGeoSphere(const std::string &name, const std::string &texture, const Vector3 &Center, Real radius, int subdivisions, Real tw, Real th, bool autosize)
+void Shape::CreateGeoSphere(const std::string &name, const std::string &texture, const Vector3 &Center, Real radius, int subdivisions, Real tw, Real th, bool inside, bool autosize)
 {
 	//creates a geodesic sphere by subdividing an icosahedron
 
@@ -1388,8 +1534,16 @@ void Shape::CreateGeoSphere(const std::string &name, const std::string &texture,
 
 		result.emplace_back(poly);
 		uvMapSet.emplace_back(uvs);
-		Triangle tri(index + 0, index + 1, index + 2);
-		triangles.emplace_back(tri);
+		if (inside == false)
+		{
+			Triangle tri(index + 0, index + 1, index + 2);
+			triangles.emplace_back(tri);
+		}
+		else
+		{
+			Triangle tri(index + 2, index + 1, index + 0);
+			triangles.emplace_back(tri);
+		}
 		index += 3;
 	}
 

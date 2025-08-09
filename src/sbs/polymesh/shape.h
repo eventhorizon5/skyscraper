@@ -35,21 +35,21 @@ public:
 	//functions
 	Shape(Wall* parent);
 	~Shape();
-	void CreateSphere(const std::string &name, const std::string &texture, const Vector3 &center, Real radius, int latSteps, int lonSteps, Real tw, Real th, bool autosize);
-	void CreateBox(const std::string &name, const std::string &texture, Ogre::Vector3 &center, Real width, Real height, Real depth, Real tw, Real th, bool autosize);
-	void CreateCylinder(const std::string &name, const std::string &texture, const Vector3 &Center, Real radius, Real height, int slices, Real tw, Real th, bool autosize);
-	void CreateCone(const std::string &name, const std::string &texture, const Vector3 &Center, Real radius, Real height, int slices, Real tw, Real th, bool autosize);
-	void CreateCapsule(const std::string &name, const std::string &texture, const Vector3 &Center, Real radius, Real height, int latSteps, int lonSteps, Real tw, Real th, bool autosize);
-	void CreatePlane(const std::string &name, const std::string &texture, const Vector3 &Center, Real width, Real depth, int xSegments, int zSegments, Real tw, Real th, bool autosize);
-	void CreateCircle(const std::string &name, const std::string &texture, const Vector3 &Center, Real radius, int slices, Real tw, Real th, bool autosize);
-	void CreateTorus(const std::string &name, const std::string &texture, const Vector3 &Center, Real majorRadius, Real minorRadius, int radialSteps, int tubeSteps, Real tw, Real th, bool autosize);
-	void CreateDome(const std::string &name, const std::string &texture, const Vector3 &Center, Real radius, int latSteps, int lonSteps, Real tw, Real th, bool autosize);
-	void CreatePyramid(const std::string &name, const std::string &texture, const Vector3 &Center, Real width, Real depth, Real height, Real tw, Real th, bool autosize);
-	void CreatePrism(const std::string &name, const std::string &texture, const Vector3 &Center, Real width, Real depth, Real height, Real tw, Real th, bool autosize);
-	void CreateTetrahedron(const std::string &name, const std::string &texture, const Vector3 &Center, Real size, Real tw, Real th, bool autosize);
-	void CreateOctahedron(const std::string &name, const std::string &texture, const Vector3 &Center, Real size, Real tw, Real th, bool autosize);
-	void CreateIcosahedron(const std::string &name, const std::string &texture, const Vector3 &Center, Real radius, Real tw, Real th, bool autosize);
-	void CreateGeoSphere(const std::string &name, const std::string &texture, const Vector3 &Center, Real radius, int subdivisions, Real tw, Real th, bool autosize);
+	void CreateSphere(const std::string &name, const std::string &texture, const Vector3 &center, Real radius, int latSteps, int lonSteps, Real tw, Real th, bool inside, bool autosize);
+	void CreateBox(const std::string &name, const std::string &texture, Ogre::Vector3 &center, Real width, Real height, Real depth, Real tw, Real th, bool inside, bool autosize);
+	void CreateCylinder(const std::string &name, const std::string &texture, const Vector3 &Center, Real radius, Real height, int slices, Real tw, Real th, bool inside, bool autosize);
+	void CreateCone(const std::string &name, const std::string &texture, const Vector3 &Center, Real radius, Real height, int slices, Real tw, Real th, bool inside, bool autosize);
+	void CreateCapsule(const std::string &name, const std::string &texture, const Vector3 &Center, Real radius, Real height, int latSteps, int lonSteps, Real tw, Real th, bool inside, bool autosize);
+	void CreatePlane(const std::string &name, const std::string &texture, const Vector3 &Center, Real width, Real depth, int xSegments, int zSegments, Real tw, Real th, bool face_down, bool autosize);
+	void CreateCircle(const std::string &name, const std::string &texture, const Vector3 &Center, Real radius, int slices, Real tw, Real th, bool face_down, bool autosize);
+	void CreateTorus(const std::string &name, const std::string &texture, const Vector3 &Center, Real majorRadius, Real minorRadius, int radialSteps, int tubeSteps, Real tw, Real th, bool inside, bool autosize);
+	void CreateDome(const std::string &name, const std::string &texture, const Vector3 &Center, Real radius, int latSteps, int lonSteps, Real tw, Real th, bool inside, bool autosize);
+	void CreatePyramid(const std::string &name, const std::string &texture, const Vector3 &Center, Real width, Real depth, Real height, Real tw, Real th, bool inside, bool autosize);
+	void CreatePrism(const std::string &name, const std::string &texture, const Vector3 &Center, Real width, Real depth, Real height, Real tw, Real th, bool inside, bool autosize);
+	void CreateTetrahedron(const std::string &name, const std::string &texture, const Vector3 &Center, Real size, Real tw, Real th, bool inside, bool autosize);
+	void CreateOctahedron(const std::string &name, const std::string &texture, const Vector3 &Center, Real size, Real tw, Real th, bool inside, bool autosize);
+	void CreateIcosahedron(const std::string &name, const std::string &texture, const Vector3 &Center, Real radius, Real tw, Real th, bool inside, bool autosize);
+	void CreateGeoSphere(const std::string &name, const std::string &texture, const Vector3 &Center, Real radius, int subdivisions, Real tw, Real th, bool inside, bool autosize);
 
 private:
 	Wall* parent;
