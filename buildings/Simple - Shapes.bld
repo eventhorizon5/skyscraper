@@ -82,6 +82,7 @@
     Load data/ropes.png, Ropes, 1, 1
     Load data/metal080.jpg, Rails, 1, 1
     Load data/metal1.jpg, RailsEdge, 1, 1
+    Load data/misc/granite.jpg, Granite, 1, 1
 
     Load data/black.jpg, Black, 1, 1
     Load data/black_lit.jpg, BlackLit, 1, 1
@@ -506,59 +507,61 @@ AddAction FireServiceBypass, Elevator1, Fire1Bypass
 
     #create a box
     CreateWallObject floor, MyBox
-    AddBox floor, MyBox, Brick, -30, 5, -50, 5, 5, 5, 1, 1
+    AddBox floor, MyBox, Granite, -30, 5, -50, 5, 5, 5, 1, 1
 
     #create a cylinder
     CreateWallObject floor, MyCylinder
-    AddCylinder floor, MyCylinder, Brick, 0, 5, -50, 10, 10, 5, 1, 1
+    AddCylinder floor, MyCylinder, Granite, 0, 5, -50, 10, 10, 5, 1, 1
 
     #create a cone
     CreateWallObject floor, MyCone
-    AddCone floor, MyCone, Brick, 15, 5, -50, 5, 5, 5, 1, 1
+    AddCone floor, MyCone, Granite, 15, 5, -50, 5, 5, 5, 1, 1
 
     #create a capsule
     CreateWallObject floor, MyCapsule
-    AddCapsule floor, MyCapsule, Brick, 30, 5, -50, 5, 5, 5, 5, 1, 1
+    AddCapsule floor, MyCapsule, Granite, 30, 5, -50, 5, 5, 5, 5, 1, 1
 
     #create a plane
     CreateWallObject floor, MyPlane
-    AddPlane floor, MyPlane, Brick, 50, 3, -50, 5, 5, 5, 5, 1, 1
+    AddPlane floor, MyPlane, Granite, 50, 1, -50, 5, 5, 5, 5, 1, 1
 
     #create a circle
     CreateWallObject floor, MyCircle
-    AddCircle floor, MyCircle, Brick, 50, 5, -70, 5, 5, 1, 1
+    AddCircle floor, MyCircle, Granite, 50, 1, -70, 5, 5, 1, 1
 
     #create a torus
     CreateWallObject floor, MyTorus
-    AddTorus floor, MyTorus, Brick, 30, 5, -70, 5, 5, 5, 5, 1, 1
+    AddTorus floor, MyTorus, Granite, 30, 5, -70, 5, 5, 5, 5, 1, 1
 
     #create a dome
     CreateWallObject floor, MyDome
-    AddDome floor, MyDome, Brick, 15, 5, -70, 5, 5, 5, 1, 1
+    AddDome floor, MyDome, Granite, 15, 5, -70, 5, 5, 5, 1, 1
 
     #create a pyramid
     CreateWallObject floor, MyPyramid
-    AddPyramid floor, MyPyramid, Brick, 0, 5, -70, 5, 5, 5, 1, 1
+    AddPyramid floor, MyPyramid, Granite, 0, 5, -70, 5, 5, 5, 1, 1
 
     #create a prism
     CreateWallObject floor, MyPrism
-    AddPrism floor, MyPrism, Brick, -15, 5, -70, 5, 5, 5, 1, 1
+    AddPrism floor, MyPrism, Granite, -15, 5, -70, 5, 5, 5, 1, 1
 
     #create a tetrahedron
     CreateWallObject floor, MyTetrahedron
-    AddTetrahedron floor, MyTetrahedron, Brick, -30, 5, -70, 5, 1, 1
+    AddTetrahedron floor, MyTetrahedron, Granite, -30, 5, -70, 5, 1, 1
 
     #create a octahedron
     CreateWallObject floor, MyOctahedron
-    AddOctahedron floor, MyOctahedron, Brick, -45, 5, -70, 5, 1, 1
+    AddOctahedron floor, MyOctahedron, Granite, -45, 5, -70, 5, 1, 1
 
     #create an icosahedron
     CreateWallObject floor, MyIcosahedron
-    AddIcosahedron floor, MyIcosahedron, Brick, -60, 5, -70, 5, 1, 1
+    AddIcosahedron floor, MyIcosahedron, Granite, -60, 5, -70, 5, 1, 1
 
     #create a geosphere
     CreateWallObject floor, MyGeosphere
-    AddGeosphere floor, MyGeosphere, Brick, -75, 5, -70, 5, 5, 1, 1
+    AddGeosphere floor, MyGeosphere, Granite, -75, 5, -70, 5, 3, 1, 1
+
+    Cut -76, 4, -80, -74, 6, -60, true, true
 <EndFloor>
 
 #define a runloop function, to run code after the sim engine has started
