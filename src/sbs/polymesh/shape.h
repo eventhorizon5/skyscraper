@@ -53,6 +53,7 @@ public:
 
 private:
 	Wall* parent;
+	PolyMesh* polymesh;
 };
 
 }

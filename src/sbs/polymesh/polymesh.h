@@ -32,6 +32,7 @@ typedef std::vector<Polygon*> Polygons;
 
 class SBSIMPEXP PolyMesh : public ObjectBase
 {
+	friend class Shape;
 public:
 
 	//define geometry type

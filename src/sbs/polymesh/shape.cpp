@@ -33,6 +33,7 @@ Shape::Shape(Wall* parent) : ObjectBase(parent)
 {
 	this->parent = parent;
 	origin = Vector3::ZERO;
+	polymesh = sbs->GetPolyMesh();
 }
 
 Shape::~Shape()
@@ -234,22 +235,28 @@ void Shape::CreateBox(const std::string &name, const std::string &texture, Ogre:
 	};
 
 	//back face (+Z)
-	addQuad(p101, p001, p011, p111, {1, 0}, {0, 0}, {0, 1}, {1, 1});
+	if (polymesh->DrawMainP)
+		addQuad(p101, p001, p011, p111, {1, 0}, {0, 0}, {0, 1}, {1, 1});
 
 	//front face (-Z)
+	if (polymesh->DrawMainN)
 	addQuad(p100, p110, p010, p000, {1, 0}, {1, 1}, {0, 1}, {0, 0});
 
 	//left face (-X)
-	addQuad(p001, p000, p010, p011, {1, 0}, {0, 0}, {0, 1}, {1, 1});
+	if (polymesh->DrawSideN)
+		addQuad(p001, p000, p010, p011, {1, 0}, {0, 0}, {0, 1}, {1, 1});
 
 	//right face (+X)
-	addQuad(p100, p101, p111, p110, {0, 0}, {1, 0}, {1, 1}, {0, 1});
+	if (polymesh->DrawSideP)
+		addQuad(p100, p101, p111, p110, {0, 0}, {1, 0}, {1, 1}, {0, 1});
 
 	//top face (+Y)
-	addQuad(p011, p010, p110, p111, {0, 1}, {0, 0}, {1, 0}, {1, 1});
+	if (polymesh->DrawTop)
+		addQuad(p011, p010, p110, p111, {0, 1}, {0, 0}, {1, 0}, {1, 1});
 
 	//bottom face (-Y)
-	addQuad(p100, p000, p001, p101, {1, 1}, {0, 1}, {0, 0}, {1, 0});
+	if (polymesh->DrawBottom)
+		addQuad(p100, p000, p001, p101, {1, 1}, {0, 1}, {0, 0}, {1, 0});
 }
 
 void Shape::CreateCylinder(const std::string &name, const std::string &texture, const Vector3 &Center, Real radius, Real height, int slices, Real tw, Real th, bool inside, bool autosize)
@@ -274,9 +281,14 @@ void Shape::CreateCylinder(const std::string &name, const std::string &texture, 
 
 	int index = 0;
 
+	bool draw_side = polymesh->DrawSideN || polymesh->DrawSideP;
+
 	//side surface
 	for (int i = 0; i < slices; ++i)
 	{
+		if (!draw_side)
+			continue;
+
 		float u1 = float(i) / slices;
 		float u2 = float(i + 1) / slices;
 
@@ -330,6 +342,9 @@ void Shape::CreateCylinder(const std::string &name, const std::string &texture, 
 	//bottom cap
 	for (int i = 0; i < slices; ++i)
 	{
+		if (polymesh->DrawBottom == false)
+			continue;
+
 		float theta1 = 2.0f * pi * float(i) / slices;
 		float theta2 = 2.0f * pi * float(i + 1) / slices;
 
@@ -359,6 +374,9 @@ void Shape::CreateCylinder(const std::string &name, const std::string &texture, 
 	//top cap
 	for (int i = 0; i < slices; ++i)
 	{
+		if (polymesh->DrawTop == false)
+			continue;
+
 		float theta1 = 2.0f * pi * float(i) / slices;
 		float theta2 = 2.0f * pi * float(i + 1) / slices;
 
@@ -411,9 +429,14 @@ void Shape::CreateCone(const std::string &name, const std::string &texture, cons
 
 	int index = 0;
 
+	bool draw_side = polymesh->DrawSideN || polymesh->DrawSideP;
+
 	//side surface (triangle fan from tip to base circle)
 	for (int i = 0; i < slices; ++i)
 	{
+		if (!draw_side)
+			continue;
+
 		float u1 = float(i) / slices;
 		float u2 = float(i + 1) / slices;
 
@@ -447,6 +470,9 @@ void Shape::CreateCone(const std::string &name, const std::string &texture, cons
 	//bottom cap (triangle fan centered on base)
 	for (int i = 0; i < slices; ++i)
 	{
+		if (!polymesh->DrawBottom)
+			continue;
+
 		float theta1 = 2.0f * pi * float(i) / slices;
 		float theta2 = 2.0f * pi * float(i + 1) / slices;
 
@@ -963,6 +989,7 @@ void Shape::CreatePyramid(const std::string &name, const std::string &texture, c
 	int index = 0;
 
 	//side 1: front
+	if (polymesh->DrawMainN)
 	{
 		PolyArray poly = { tip, fr, fl };
 		std::vector<Vector2> uv = { {0.5f * tw, 0}, {tw, th}, {0, th} };
@@ -976,6 +1003,7 @@ void Shape::CreatePyramid(const std::string &name, const std::string &texture, c
 	}
 
 	//side 2: right
+	if (polymesh->DrawSideP)
 	{
 		PolyArray poly = { tip, br, fr };
 		std::vector<Vector2> uv = { {0.5f * tw, 0}, {0, th}, {tw, th} };
@@ -989,6 +1017,7 @@ void Shape::CreatePyramid(const std::string &name, const std::string &texture, c
 	}
 
 	//side 3: back
+	if (polymesh->DrawMainP)
 	{
 		PolyArray poly = { tip, bl, br };
 		std::vector<Vector2> uv = { {0.5f * tw, 0}, {tw, th}, {0, th} };
@@ -1002,6 +1031,7 @@ void Shape::CreatePyramid(const std::string &name, const std::string &texture, c
 	}
 
 	//side 4: left
+	if (polymesh->DrawSideN)
 	{
 		PolyArray poly = { tip, fl, bl };
 		std::vector<Vector2> uv = { {0.5f * tw, 0}, {tw, th}, {0, th} };
@@ -1015,6 +1045,7 @@ void Shape::CreatePyramid(const std::string &name, const std::string &texture, c
 	}
 
 	//base (2 triangles)
+	if (polymesh->DrawBottom)
 	{
 		//triangle 1
 		PolyArray poly1 = { fl, fr, br };
@@ -1077,6 +1108,7 @@ void Shape::CreatePrism(const std::string &name, const std::string &texture, con
 	int index = 0;
 
 	//bottom face
+	if (polymesh->DrawBottom)
 	{
 		PolyArray poly = { p0, p1, p2 };
 		std::vector<Vector2> uv = { {0, 0}, {tw, 0}, {0.5f * tw, th} };
@@ -1090,6 +1122,7 @@ void Shape::CreatePrism(const std::string &name, const std::string &texture, con
 	}
 
 	//top face
+	if (polymesh->DrawTop)
 	{
 		PolyArray poly = { q0, q2, q1 };
 		std::vector<Vector2> uv = { {0, 0}, {0.5f * tw, th}, {tw, 0} };
@@ -1103,6 +1136,7 @@ void Shape::CreatePrism(const std::string &name, const std::string &texture, con
 	}
 
 	//side 1 (p0 to p1)
+	if (polymesh->DrawSideN || polymesh->DrawSideP)
 	{
 		PolyArray poly1 = { p0, p1, q1 };
 		std::vector<Vector2> uv1 = { {0, 0}, {tw, 0}, {tw, th} };
@@ -1123,6 +1157,7 @@ void Shape::CreatePrism(const std::string &name, const std::string &texture, con
 	}
 
 	//side 2 (p1 to p2)
+	if (polymesh->DrawSideN || polymesh->DrawSideP)
 	{
 		PolyArray poly1 = { p1, p2, q2 };
 		std::vector<Vector2> uv1 = { {0, 0}, {tw, 0}, {tw, th} };
@@ -1143,6 +1178,7 @@ void Shape::CreatePrism(const std::string &name, const std::string &texture, con
 	}
 
 	//side 3 (p2 to p0)
+	if (polymesh->DrawSideN || polymesh->DrawSideP)
 	{
 		PolyArray poly1 = { p2, p0, q0 };
 		std::vector<Vector2> uv1 = { {0, 0}, {tw, 0}, {tw, th} };
@@ -1202,6 +1238,7 @@ void Shape::CreateTetrahedron(const std::string &name, const std::string &textur
 	int index = 0;
 
 	//face 1: base
+	if (polymesh->DrawBottom)
 	{
 		PolyArray poly = { p1, p2, p3 };
 		std::vector<Vector2> uv = { {0, 0}, {tw, 0}, {0.5f * tw, th} };
@@ -1215,6 +1252,7 @@ void Shape::CreateTetrahedron(const std::string &name, const std::string &textur
 	}
 
 	//face 2: tip, p2, p1
+	if (polymesh->DrawSideN || polymesh->DrawSideP)
 	{
 		PolyArray poly = { p0, p2, p1 };
 		std::vector<Vector2> uv = { {0.5f * tw, 0}, {tw, th}, {0, th} };
@@ -1228,6 +1266,7 @@ void Shape::CreateTetrahedron(const std::string &name, const std::string &textur
 	}
 
 	//face 3: tip, p3, p2
+	if (polymesh->DrawSideN || polymesh->DrawSideP)
 	{
 		PolyArray poly = { p0, p3, p2 };
 		std::vector<Vector2> uv = { {0.5f * tw, 0}, {0, th}, {tw, th} };
@@ -1241,6 +1280,7 @@ void Shape::CreateTetrahedron(const std::string &name, const std::string &textur
 	}
 
 	//face 4: tip, p1, p3
+	if (polymesh->DrawSideN || polymesh->DrawSideP)
 	{
 		PolyArray poly = { p0, p1, p3 };
 		std::vector<Vector2> uv = { {0.5f * tw, 0}, {0, th}, {tw, th} };

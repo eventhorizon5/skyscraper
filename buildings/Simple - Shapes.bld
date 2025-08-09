@@ -496,6 +496,8 @@ AddAction FireServiceBypass, Elevator1, Fire1Bypass
 
 #create some shapes
 <Floor 0>
+    DrawWalls = true, true, true, true, true, true
+
     #create a sphere
     CreateWallObject floor, MySphere
     AddSphere floor, MySphere, Concrete, -50, 5, -50, 5, 16, 16, 1, 1, false
