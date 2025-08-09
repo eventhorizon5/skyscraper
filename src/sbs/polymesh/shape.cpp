@@ -319,7 +319,7 @@ void Shape::CreateCylinder(const std::string &name, const std::string &texture, 
 
 		result.emplace_back(poly);
 		uvMapSet.emplace_back(uv);
-		triangles.push_back(Triangle(index + 2, index + 1, index + 0));
+		triangles.push_back(Triangle(index + 0, index + 1, index + 2));
 		index += 3;
 	}
 
@@ -345,7 +345,7 @@ void Shape::CreateCylinder(const std::string &name, const std::string &texture, 
 
 		result.emplace_back(poly);
 		uvMapSet.emplace_back(uv);
-		triangles.push_back(Triangle(index + 2, index + 1, index + 0));
+		triangles.push_back(Triangle(index + 0, index + 1, index + 2));
 		index += 3;
 	}
 
@@ -480,13 +480,13 @@ void Shape::CreateCapsule(const std::string &name, const std::string &texture, c
 		std::vector<Vector2> uv1 = { {u1 * tw, 0}, {u2 * tw, 0}, {u2 * tw, th} };
 		result.emplace_back(poly1);
 		uvMapSet.emplace_back(uv1);
-		triangles.push_back(Triangle(index + 0, index + 1, index + 2));
+		triangles.push_back(Triangle(index + 2, index + 1, index + 0));
 
 		PolyArray poly2 = { p1 + Center + origin, p3 + Center + origin, p4 + Center + origin };
 		std::vector<Vector2> uv2 = { {u1 * tw, 0}, {u2 * tw, th}, {u1 * tw, th} };
 		result.emplace_back(poly2);
 		uvMapSet.emplace_back(uv2);
-		triangles.push_back(Triangle(index + 3, index + 4, index + 5));
+		triangles.push_back(Triangle(index + 5, index + 4, index + 3));
 
 		index += 6;
 	}
@@ -626,14 +626,14 @@ void Shape::CreatePlane(const std::string &name, const std::string &texture, con
 			std::vector<Vector2> uv1 = { {u1 * tw, v1 * th}, {u2 * tw, v1 * th}, {u2 * tw, v2 * th} };
 			result.emplace_back(poly1);
 			uvMapSet.emplace_back(uv1);
-			triangles.emplace_back(Triangle(index + 0, index + 1, index + 2));
+			triangles.emplace_back(Triangle(index + 2, index + 1, index + 0));
 
 			//triangle 2
 			PolyArray poly2 = { p1, p3, p4 };
 			std::vector<Vector2> uv2 = { {u1 * tw, v1 * th}, {u2 * tw, v2 * th}, {u1 * tw, v2 * th} };
 			result.emplace_back(poly2);
 			uvMapSet.emplace_back(uv2);
-			triangles.emplace_back(Triangle(index + 3, index + 4, index + 5));
+			triangles.emplace_back(Triangle(index + 5, index + 4, index + 3));
 
 			index += 6;
 		}
@@ -685,7 +685,7 @@ void Shape::CreateCircle(const std::string &name, const std::string &texture, co
 
 		result.emplace_back(poly);
 		uvMapSet.emplace_back(uv);
-		triangles.emplace_back(Triangle(index + 0, index + 1, index + 2));
+		triangles.emplace_back(Triangle(index + 2, index + 1, index + 0));
 		index += 3;
 	}
 
@@ -983,7 +983,7 @@ void Shape::CreatePrism(const std::string &name, const std::string &texture, con
 		std::vector<Vector2> uv = { {0, 0}, {tw, 0}, {0.5f * tw, th} };
 		result.emplace_back(poly);
 		uvMapSet.emplace_back(uv);
-		triangles.push_back(Triangle(index + 2, index + 1, index + 0));
+		triangles.push_back(Triangle(index + 0, index + 1, index + 2));
 		index += 3;
 	}
 
@@ -993,7 +993,7 @@ void Shape::CreatePrism(const std::string &name, const std::string &texture, con
 		std::vector<Vector2> uv = { {0, 0}, {0.5f * tw, th}, {tw, 0} };
 		result.emplace_back(poly);
 		uvMapSet.emplace_back(uv);
-		triangles.push_back(Triangle(index + 2, index + 1, index + 0));
+		triangles.push_back(Triangle(index + 0, index + 1, index + 2));
 		index += 3;
 	}
 
