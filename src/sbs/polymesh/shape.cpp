@@ -277,7 +277,7 @@ void Shape::CreateCylinder(const std::string &name, const std::string &texture, 
 		};
 		result.emplace_back(poly1);
 		uvMapSet.emplace_back(uv1);
-		triangles.push_back(Triangle(index + 0, index + 1, index + 2 ));
+		triangles.push_back(Triangle(index + 2, index + 1, index + 0));
 
 		//second triangle (p1, p3, p4)
 		PolyArray poly2 = {
@@ -292,7 +292,7 @@ void Shape::CreateCylinder(const std::string &name, const std::string &texture, 
 		};
 		result.emplace_back(poly2);
 		uvMapSet.emplace_back(uv2);
-		triangles.push_back(Triangle(index + 3, index + 4, index + 5));
+		triangles.push_back(Triangle(index + 5, index + 4, index + 3));
 
 		index += 6;
 	}
@@ -319,7 +319,7 @@ void Shape::CreateCylinder(const std::string &name, const std::string &texture, 
 
 		result.emplace_back(poly);
 		uvMapSet.emplace_back(uv);
-		triangles.push_back(Triangle(index + 0, index + 1, index + 2));
+		triangles.push_back(Triangle(index + 2, index + 1, index + 0));
 		index += 3;
 	}
 
@@ -345,7 +345,7 @@ void Shape::CreateCylinder(const std::string &name, const std::string &texture, 
 
 		result.emplace_back(poly);
 		uvMapSet.emplace_back(uv);
-		triangles.push_back(Triangle(index + 0, index + 1, index + 2));
+		triangles.push_back(Triangle(index + 2, index + 1, index + 0));
 		index += 3;
 	}
 
@@ -401,7 +401,7 @@ void Shape::CreateCone(const std::string &name, const std::string &texture, cons
 
 		result.emplace_back(poly);
 		uvMapSet.emplace_back(uv);
-		triangles.push_back(Triangle(index + 0, index + 1, index + 2));
+		triangles.push_back(Triangle(index + 2, index + 1, index + 0));
 		index += 3;
 	}
 
@@ -427,7 +427,7 @@ void Shape::CreateCone(const std::string &name, const std::string &texture, cons
 
 		result.emplace_back(poly);
 		uvMapSet.emplace_back(uv);
-		triangles.push_back(Triangle(index + 0, index + 1, index + 2));
+		triangles.push_back(Triangle(index + 2, index + 1, index + 0));
 		index += 3;
 	}
 
@@ -478,12 +478,14 @@ void Shape::CreateCapsule(const std::string &name, const std::string &texture, c
 		//quad split into two triangles
 		PolyArray poly1 = { p1 + Center + origin, p2 + Center + origin, p3 + Center + origin };
 		std::vector<Vector2> uv1 = { {u1 * tw, 0}, {u2 * tw, 0}, {u2 * tw, th} };
-		result.emplace_back(poly1); uvMapSet.emplace_back(uv1);
+		result.emplace_back(poly1);
+		uvMapSet.emplace_back(uv1);
 		triangles.push_back(Triangle(index + 0, index + 1, index + 2));
 
 		PolyArray poly2 = { p1 + Center + origin, p3 + Center + origin, p4 + Center + origin };
 		std::vector<Vector2> uv2 = { {u1 * tw, 0}, {u2 * tw, th}, {u1 * tw, th} };
-		result.emplace_back(poly2); uvMapSet.emplace_back(uv2);
+		result.emplace_back(poly2);
+		uvMapSet.emplace_back(uv2);
 		triangles.push_back(Triangle(index + 3, index + 4, index + 5));
 
 		index += 6;
@@ -518,13 +520,15 @@ void Shape::CreateCapsule(const std::string &name, const std::string &texture, c
 			//first triangle
 			PolyArray poly1 = { p1, p2, p3 };
 			std::vector<Vector2> uv1 = { {u1 * tw, v1 * th}, {u1 * tw, v2 * th}, {u2 * tw, v2 * th} };
-			result.emplace_back(poly1); uvMapSet.emplace_back(uv1);
+			result.emplace_back(poly1);
+			uvMapSet.emplace_back(uv1);
 			triangles.push_back(Triangle(index + 0, index + 1, index + 2));
 
 			//second triangle
 			PolyArray poly2 = { p1, p3, p4 };
 			std::vector<Vector2> uv2 = { {u1 * tw, v1 * th}, {u2 * tw, v2 * th}, {u2 * tw, v1 * th} };
-			result.emplace_back(poly2); uvMapSet.emplace_back(uv2);
+			result.emplace_back(poly2);
+			uvMapSet.emplace_back(uv2);
 			triangles.push_back(Triangle(index + 3, index + 4, index + 5));
 
 			index += 6;
@@ -560,14 +564,16 @@ void Shape::CreateCapsule(const std::string &name, const std::string &texture, c
 			//first triangle
 			PolyArray poly1 = { p1, p2, p3 };
 			std::vector<Vector2> uv1 = { {u1 * tw, v1 * th}, {u1 * tw, v2 * th}, {u2 * tw, v2 * th} };
-			result.emplace_back(poly1); uvMapSet.emplace_back(uv1);
-			triangles.push_back(Triangle(index + 0, index + 1, index + 2));
+			result.emplace_back(poly1);
+			uvMapSet.emplace_back(uv1);
+			triangles.push_back(Triangle(index + 2, index + 1, index + 0));
 
 			//second triangle
 			PolyArray poly2 = { p1, p3, p4 };
 			std::vector<Vector2> uv2 = { {u1 * tw, v1 * th}, {u2 * tw, v2 * th}, {u2 * tw, v1 * th} };
-			result.emplace_back(poly2); uvMapSet.emplace_back(uv2);
-			triangles.push_back(Triangle(index + 3, index + 4, index + 5));
+			result.emplace_back(poly2);
+			uvMapSet.emplace_back(uv2);
+			triangles.push_back(Triangle(index + 5, index + 4, index + 3));
 
 			index += 6;
 		}
@@ -743,7 +749,7 @@ void Shape::CreateTorus(const std::string &name, const std::string &texture, con
 			};
 			result.emplace_back(poly1);
 			uvMapSet.emplace_back(uv1);
-			triangles.emplace_back(Triangle(index + 0, index + 1, index + 2));
+			triangles.emplace_back(Triangle(index + 2, index + 1, index + 0));
 
 			//triangle 2
 			PolyArray poly2 = { p1, p3, p4 };
@@ -754,7 +760,7 @@ void Shape::CreateTorus(const std::string &name, const std::string &texture, con
 			};
 			result.emplace_back(poly2);
 			uvMapSet.emplace_back(uv2);
-			triangles.emplace_back(Triangle(index + 3, index + 4, index + 5));
+			triangles.emplace_back(Triangle(index + 5, index + 4, index + 3));
 
 			index += 6;
 		}
@@ -881,7 +887,7 @@ void Shape::CreatePyramid(const std::string &name, const std::string &texture, c
 		std::vector<Vector2> uv = { {0.5f * tw, 0}, {tw, th}, {0, th} };
 		result.emplace_back(poly);
 		uvMapSet.emplace_back(uv);
-		triangles.push_back(Triangle(index + 0, index + 1, index + 2));
+		triangles.push_back(Triangle(index + 2, index + 1, index + 0));
 		index += 3;
 	}
 
@@ -891,7 +897,7 @@ void Shape::CreatePyramid(const std::string &name, const std::string &texture, c
 		std::vector<Vector2> uv = { {0.5f * tw, 0}, {0, th}, {tw, th} };
 		result.emplace_back(poly);
 		uvMapSet.emplace_back(uv);
-		triangles.push_back(Triangle(index + 0, index + 1, index + 2));
+		triangles.push_back(Triangle(index + 2, index + 1, index + 0));
 		index += 3;
 	}
 
@@ -901,7 +907,7 @@ void Shape::CreatePyramid(const std::string &name, const std::string &texture, c
 		std::vector<Vector2> uv = { {0.5f * tw, 0}, {tw, th}, {0, th} };
 		result.emplace_back(poly);
 		uvMapSet.emplace_back(uv);
-		triangles.push_back(Triangle(index + 0, index + 1, index + 2));
+		triangles.push_back(Triangle(index + 2, index + 1, index + 0));
 		index += 3;
 	}
 
@@ -911,7 +917,7 @@ void Shape::CreatePyramid(const std::string &name, const std::string &texture, c
 		std::vector<Vector2> uv = { {0.5f * tw, 0}, {tw, th}, {0, th} };
 		result.emplace_back(poly);
 		uvMapSet.emplace_back(uv);
-		triangles.push_back(Triangle(index + 0, index + 1, index + 2));
+		triangles.push_back(Triangle(index + 2, index + 1, index + 0));
 		index += 3;
 	}
 
@@ -922,14 +928,14 @@ void Shape::CreatePyramid(const std::string &name, const std::string &texture, c
 		std::vector<Vector2> uv1 = { {0, 0}, {tw, 0}, {tw, th} };
 		result.emplace_back(poly1);
 		uvMapSet.emplace_back(uv1);
-		triangles.push_back(Triangle(index + 0, index + 1, index + 2));
+		triangles.push_back(Triangle(index + 2, index + 1, index + 0));
 
 		//triangle 2
 		PolyArray poly2 = { fl, br, bl };
 		std::vector<Vector2> uv2 = { {0, 0}, {tw, th}, {0, th} };
 		result.emplace_back(poly2);
 		uvMapSet.emplace_back(uv2);
-		triangles.push_back(Triangle(index + 3, index + 4, index + 5));
+		triangles.push_back(Triangle(index + 5, index + 4, index + 3));
 
 		index += 6;
 	}
@@ -977,7 +983,7 @@ void Shape::CreatePrism(const std::string &name, const std::string &texture, con
 		std::vector<Vector2> uv = { {0, 0}, {tw, 0}, {0.5f * tw, th} };
 		result.emplace_back(poly);
 		uvMapSet.emplace_back(uv);
-		triangles.push_back(Triangle(index + 0, index + 1, index + 2));
+		triangles.push_back(Triangle(index + 2, index + 1, index + 0));
 		index += 3;
 	}
 
@@ -987,7 +993,7 @@ void Shape::CreatePrism(const std::string &name, const std::string &texture, con
 		std::vector<Vector2> uv = { {0, 0}, {0.5f * tw, th}, {tw, 0} };
 		result.emplace_back(poly);
 		uvMapSet.emplace_back(uv);
-		triangles.push_back(Triangle(index + 0, index + 1, index + 2));
+		triangles.push_back(Triangle(index + 2, index + 1, index + 0));
 		index += 3;
 	}
 
@@ -996,12 +1002,12 @@ void Shape::CreatePrism(const std::string &name, const std::string &texture, con
 		PolyArray poly1 = { p0, p1, q1 };
 		std::vector<Vector2> uv1 = { {0, 0}, {tw, 0}, {tw, th} };
 		result.emplace_back(poly1); uvMapSet.emplace_back(uv1);
-		triangles.push_back(Triangle(index + 0, index + 1, index + 2));
+		triangles.push_back(Triangle(index + 2, index + 1, index + 0));
 
 		PolyArray poly2 = { p0, q1, q0 };
 		std::vector<Vector2> uv2 = { {0, 0}, {tw, th}, {0, th} };
 		result.emplace_back(poly2); uvMapSet.emplace_back(uv2);
-		triangles.push_back(Triangle(index + 3, index + 4, index + 5));
+		triangles.push_back(Triangle(index + 5, index + 4, index + 3));
 		index += 6;
 	}
 
@@ -1010,12 +1016,12 @@ void Shape::CreatePrism(const std::string &name, const std::string &texture, con
 		PolyArray poly1 = { p1, p2, q2 };
 		std::vector<Vector2> uv1 = { {0, 0}, {tw, 0}, {tw, th} };
 		result.emplace_back(poly1); uvMapSet.emplace_back(uv1);
-		triangles.push_back(Triangle(index + 0, index + 1, index + 2));
+		triangles.push_back(Triangle(index + 2, index + 1, index + 0));
 
 		PolyArray poly2 = { p1, q2, q1 };
 		std::vector<Vector2> uv2 = { {0, 0}, {tw, th}, {0, th} };
 		result.emplace_back(poly2); uvMapSet.emplace_back(uv2);
-		triangles.push_back(Triangle(index + 3, index + 4, index + 5));
+		triangles.push_back(Triangle(index + 5, index + 4, index + 3));
 		index += 6;
 	}
 
@@ -1024,12 +1030,12 @@ void Shape::CreatePrism(const std::string &name, const std::string &texture, con
 		PolyArray poly1 = { p2, p0, q0 };
 		std::vector<Vector2> uv1 = { {0, 0}, {tw, 0}, {tw, th} };
 		result.emplace_back(poly1); uvMapSet.emplace_back(uv1);
-		triangles.push_back(Triangle(index + 0, index + 1, index + 2));
+		triangles.push_back(Triangle(index + 2, index + 1, index + 0));
 
 		PolyArray poly2 = { p2, q0, q2 };
 		std::vector<Vector2> uv2 = { {0, 0}, {tw, th}, {0, th} };
 		result.emplace_back(poly2); uvMapSet.emplace_back(uv2);
-		triangles.push_back(Triangle(index + 3, index + 4, index + 5));
+		triangles.push_back(Triangle(index + 5, index + 4, index + 3));
 		index += 6;
 	}
 
