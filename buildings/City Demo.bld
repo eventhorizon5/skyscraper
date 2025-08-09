@@ -41,7 +41,7 @@
     Load Simple - Primitives.bld, -225, 0, -900, 180, -37.5, 0, -25, 37.5, 0, 25
 
     Load Simple - Revolving Door.bld, 225, 0, -1000, 180, -37.5, 0, -25, 37.5, 0, 25
-    #Load Simple - Runloop.bld, 0, 0, -1000, 180, -37.5, 0, -25, 37.5, 0, 25
+    Load Simple - Runloop.bld, 0, 0, -1000, 180, -37.5, 0, -25, 37.5, 0, 25
     Load Simple - Sliding Doors Demo.bld, 75, 0, -1000, 180, -37.5, 0, -25, 37.5, 0, 25
     Load Simple - Split Level.bld, -75, 0, -1000, 180, -37.5, 0, -25, 37.5, 0, 25
     Load Simple - Teleporter.bld, -150, 0, -1000, 180, -37.5, 0, -25, 37.5, 0, 25

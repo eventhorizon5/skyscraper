@@ -46,6 +46,7 @@
     Load data/cinderblocks.jpg, StairsWall, 0.25, 1
     Load data/cutston.jpg, InterExt, 0.269, 0.25
     Load data/downtown.jpg, Downtown, 1, 1
+    Load data/misc/grass.jpg, Grass, 1, 1
     Load data/cutston.jpg, Ceiling1, 0.269, 0.25
     Load data/metal1.jpg, ElevExt, 0.25, 0.25
     Load data/door1.jpg, ElevDoors, 1, 1
@@ -96,18 +97,13 @@
     AddTextRange 1, 10, BlackLit, ButtonLit%number%, nimbus_sans.ttf, 47, %number%, -1, -1, -1, -1, center, center, 255, 255, 255
 <EndTextures>
 
-#Next you'll need to create the ground. The following code is the default ground code.
-#The second command is needed to cut a hole in the ground for the building.  In this
-#example I'm giving the building dimensions of 40x40 feet, so it needs to be cut from
-#-20 to 20 horizontally, and -20 to 20 depth-wise.
+#Make a new wall object to hold the Earth shape
+CreateWallObject landscape, Earth
 
-#CreatePrim SBS, Earth, Sphere, 1000, 100, 100, 16, 16
-CreatePrim SBS, Earth, Sphere, 20902211, 100, 1000, 1000, 1000
-PrimCollider SBS, Earth, -1
-PrimAttach SBS, Earth, 0, -20902211, 0, 0, 0, 0, 1000000, 1.0, false, 0, 0, 0
-PrimTexture SBS, Earth, Downtown2
+#Create the Earth as a geosphere
+AddGeosphere landscape, Earth, Grass, 0, -20902211 - 1, 0, 20902211, 6, 10, 10
 
-AddGround Ground, Downtown, -1000, -1000, 1000, 1000, 0, 1000, 1000
+AddGround Ground, Grass, -1000, -1000, 1000, 1000, 0, 100, 100
 Cut Landscape, -20, -1, -20, 20, 1, 20, false, true
 
 #Now it's time to start making the building's floors.  If you're making basement levels, they must
