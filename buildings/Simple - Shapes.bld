@@ -513,15 +513,15 @@ AddAction FireServiceBypass, Elevator1, Fire1Bypass
 
     #create a cylinder
     CreateWallObject floor, MyCylinder
-    AddCylinder floor, MyCylinder, Granite, 0, 5, -50, 10, 10, 5, 1, 1, false
+    AddCylinder floor, MyCylinder, Granite, 0, 5, -50, 5, 5, 25, 1, 1, false
 
     #create a cone
     CreateWallObject floor, MyCone
-    AddCone floor, MyCone, Granite, 15, 5, -50, 5, 5, 5, 1, 1, false
+    AddCone floor, MyCone, Granite, 15, 5, -50, 5, 5, 25, 1, 1, false
 
     #create a capsule
     CreateWallObject floor, MyCapsule
-    AddCapsule floor, MyCapsule, Granite, 30, 5, -50, 5, 5, 5, 5, 1, 1, false
+    AddCapsule floor, MyCapsule, Granite, 30, 5, -50, 5, 5, 5, 25, 1, 1, false
 
     #create a plane
     CreateWallObject floor, MyPlane
@@ -537,7 +537,7 @@ AddAction FireServiceBypass, Elevator1, Fire1Bypass
 
     #create a dome
     CreateWallObject floor, MyDome
-    AddDome floor, MyDome, Granite, 15, 5, -70, 5, 5, 5, 1, 1, false
+    AddDome floor, MyDome, Granite, 15, 5, -70, 5, 5, 25, 1, 1, false
 
     #create a pyramid
     CreateWallObject floor, MyPyramid
