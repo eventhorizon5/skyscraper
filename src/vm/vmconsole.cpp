@@ -491,7 +491,7 @@ void VMConsole::Process(const std::string &text, bool echo)
 	//vminit command
 	if (command == "vminit")
 	{
-		EngineContext* engine = vm->Initialize(false);
+		EngineContext* engine = vm->Initialize(false, ENGINETYPE_SOLARSYSTEM);
 		engine->LoadDefault();
 		consoleresult.ready = false;
 		consoleresult.threadwait = false;

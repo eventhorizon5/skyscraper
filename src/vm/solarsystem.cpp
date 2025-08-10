@@ -35,8 +35,8 @@ SolarSystem::SolarSystem(VM *vm)
 {
     this->vm = vm;
 
-	//create a star instance
-	EngineContext* sol = vm->Initialize(false);
+	//create a solar system instance
+	EngineContext* sol = vm->Initialize(false, ENGINETYPE_SOLARSYSTEM);
 	if (!sol)
 	{
 		vm->ReportFatalError("Error creating solar system");
@@ -51,7 +51,7 @@ SolarSystem::SolarSystem(VM *vm)
 	}
 
 	//create the Earth
-	EngineContext* earth = vm->Initialize(false, sol);
+	/*EngineContext* earth = vm->Initialize(false, ENGINETYPE_PLANET, sol);
 	if (!earth)
 	{
 		vm->ReportFatalError("Error creating planet");
@@ -63,7 +63,7 @@ SolarSystem::SolarSystem(VM *vm)
 	{
 		vm->ReportFatalError("Error loading Earth.bld");
 		return;
-	}
+	}*/
 }
 
 SolarSystem::~SolarSystem()

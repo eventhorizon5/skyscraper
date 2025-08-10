@@ -60,6 +60,17 @@ class dylib;
 
 namespace Skyscraper {
 
+enum EngineType
+{
+	ENGINETYPE_STANDARD,
+	ENGINETYPE_BUILDING,
+	ENGINETYPE_CITY,
+	ENGINETYPE_PLANET,
+	ENGINETYPE_SOLARSYSTEM,
+	ENGINETYPE_CUSTOM,
+	ENGINETYPE_UNKNOWN
+};
+
 class EngineContext;
 class ScriptProcessor;
 class HAL;
@@ -108,7 +119,7 @@ public:
 	void StartConsole();
 	void ProcessConsole();
 	VMConsole* GetConsole();
-	EngineContext* Initialize(bool clear, EngineContext *parent = 0, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
+	EngineContext* Initialize(bool clear, const EngineType type, EngineContext *parent = 0, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
 	void SetRenderOnStartup(bool value);
 	bool GetRenderOnStartup();
 	dylib* LoadLibrary(const std::string &name);

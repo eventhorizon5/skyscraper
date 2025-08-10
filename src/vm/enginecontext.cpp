@@ -51,15 +51,15 @@ using namespace SBS;
 
 namespace Skyscraper {
 
-EngineContext::EngineContext(EngineContext *parent, VM *vm, Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
+EngineContext::EngineContext(const EngineType type, EngineContext *parent, VM *vm, Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
 {
 	this->fmodsystem = fmodsystem;
-	Init(parent, vm, mSceneManager, position, rotation, area_min, area_max);
+	Init(type, parent, vm, mSceneManager, position, rotation, area_min, area_max);
 }
 
-EngineContext::EngineContext(EngineContext *parent, VM *vm, Ogre::SceneManager* mSceneManager, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
+EngineContext::EngineContext(const EngineType type, EngineContext *parent, VM *vm, Ogre::SceneManager* mSceneManager, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
 {
-	Init(parent, vm, mSceneManager, position, rotation, area_min, area_max);
+	Init(type, parent, vm, mSceneManager, position, rotation, area_min, area_max);
 }
 
 EngineContext::~EngineContext()
@@ -83,10 +83,11 @@ EngineContext::~EngineContext()
 	reload_state = 0;
 }
 
-void EngineContext::Init(EngineContext *parent, VM *vm, Ogre::SceneManager* mSceneManager, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
+void EngineContext::Init(const EngineType type, EngineContext *parent, VM *vm, Ogre::SceneManager* mSceneManager, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
 {
 	//initialize this engine context
 
+	this->type = type;
 	this->vm = vm;
 	finish_time = 0;
 	shutdown = false;

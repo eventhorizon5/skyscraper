@@ -159,7 +159,7 @@ GUI* VM::GetGUI()
 
 EngineContext* VM::CreateEngine(EngineContext *parent, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
 {
-	EngineContext* engine = new EngineContext(parent, this, hal->GetSceneManager(), hal->GetSoundSystem(), position, rotation, area_min, area_max);
+	EngineContext* engine = new EngineContext(ENGINETYPE_BUILDING, parent, this, hal->GetSceneManager(), hal->GetSoundSystem(), position, rotation, area_min, area_max);
 	return engine;
 }
 
@@ -218,6 +218,7 @@ void VM::DeleteEngines()
 	}
 	engines.clear();
 	active_engine = 0;
+	solarsystem_started = false;
 	unloaded = true;
 }
 
@@ -717,7 +718,7 @@ bool VM::Load(bool clear, const std::string &filename, EngineContext *parent, co
 	Report("Loading engine for building file '" + filename + "'...");
 
 	//boot SBS
-	EngineContext* engine = Initialize(clear, parent, position, rotation, area_min, area_max);
+	EngineContext* engine = Initialize(clear, ENGINETYPE_BUILDING, parent, position, rotation, area_min, area_max);
 
 	//exit if init failed
 	if (!engine)
@@ -737,7 +738,7 @@ bool VM::Load(bool clear, const std::string &filename, EngineContext *parent, co
 	return true;
 }
 
-EngineContext* VM::Initialize(bool clear, EngineContext *parent, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
+EngineContext* VM::Initialize(bool clear, const EngineType type, EngineContext *parent, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
 {
 	//bootstrap simulator
 
