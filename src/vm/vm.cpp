@@ -77,6 +77,7 @@ VM::VM()
 	unloaded = false;
 	monitor = 0;
 	system_loaded = false;
+	system_finished = false;
 
 	macos_major = 0;
 	macos_minor = 0;
@@ -764,6 +765,9 @@ bool VM::LoadQueued()
 		}
 	}
 
+	if (system_found == false && system_loaded == true)
+		system_finished = true;
+
 	for (size_t i = 0; i < load_queue.size(); i++)
 	{
 		DelayLoad &load = load_queue[i];
@@ -771,6 +775,9 @@ bool VM::LoadQueued()
 		if (load.system == false)
 		{
 			if (system_found == true || !system_loaded)
+				continue;
+
+			if (system_finished == false)
 				continue;
 		}
 

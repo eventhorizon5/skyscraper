@@ -191,7 +191,8 @@ private:
 		bool system;
 	};
 	std::vector<DelayLoad> load_queue; //delay load queue
-	bool system_loaded; //true if system engines have been loaded
+	bool system_loaded; //true if system engines have started loaded
+	bool system_finished; //true if system engines are finished loading
 };
 
 }
