@@ -48,7 +48,7 @@ bool Monitor::CreateSim()
 		return false;
 
 	//create a solar system instance
-	root = vm->Initialize(false, ENGINETYPE_GENERIC);
+	root = vm->Initialize(false);
 	if (!root)
 		return vm->ReportFatalError("Error creating root engine instance");
 

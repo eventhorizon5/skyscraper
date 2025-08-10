@@ -109,7 +109,7 @@ public:
 	bool StartEngine(EngineContext* engine, std::vector<Ogre::Camera*> &cameras);
 	::SBS::SBS* GetActiveSystem();
 	ScriptProcessor* GetActiveScriptProcessor();
-	bool Load(const EngineType type, bool system, bool clear, const std::string &filename, EngineContext *parent = 0, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
+	bool Load(bool system, bool clear, const std::string &filename, EngineContext *parent = 0, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
 	void ShowPlatform();
 	wxWindow* GetParent();
 	bool UpdateProgress();
@@ -117,7 +117,7 @@ public:
 	void StartConsole();
 	void ProcessConsole();
 	VMConsole* GetConsole();
-	EngineContext* Initialize(bool clear, const EngineType type, EngineContext *parent = 0, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
+	EngineContext* Initialize(bool clear, EngineContext *parent = 0, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
 	void SetRenderOnStartup(bool value);
 	bool GetRenderOnStartup();
 	dylib* LoadLibrary(const std::string &name);
@@ -189,7 +189,6 @@ private:
 		Real rotation;
 		Vector3 area_min, area_max;
 		bool system;
-		EngineType type;
 	};
 	std::vector<DelayLoad> load_queue; //delay load queue
 	bool system_loaded; //true if system engines have been loaded
