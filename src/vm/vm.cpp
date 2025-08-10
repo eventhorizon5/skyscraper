@@ -108,6 +108,11 @@ VM::~VM()
 {
 	Report("Shutting down...");
 
+	//delete monitor instance
+	if (monitor)
+		delete monitor;
+	monitor = 0;
+
 	//delete sky system instance
 	if (skysystem)
 		delete skysystem;
@@ -1090,6 +1095,22 @@ unsigned long VM::GetGlobalStats(unsigned long &meshes, unsigned long &textures,
 	}
 
 	return total;
+}
+
+bool VM::IsRootLoaded()
+{
+	//returns true if the root engine is loaded or running
+
+	if (engines.size() == 0)
+		return false;
+
+	if (engines[0])
+	{
+		if (engines[0]->IsLoadingFinished() == true || engines[0]->IsRunning() == true)
+			return true;
+	}
+
+	return false;
 }
 
 }

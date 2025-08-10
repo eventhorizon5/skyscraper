@@ -160,6 +160,11 @@ bool EngineContext::Run()
 	if (!Simcore)
 		return false;
 
+	//if (vm->IsSystemEngine(this) == false)
+	//{
+		//run engine only if root engine is finished loading
+	//}
+
 	//exit if paused
 	if (Paused == true)
 		return true;

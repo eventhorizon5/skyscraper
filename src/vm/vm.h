@@ -125,6 +125,7 @@ public:
 	unsigned long GetElapsedTime(int instance);
 	void ListPlayingSounds();
 	unsigned long GetGlobalStats(unsigned long &meshes, unsigned long &textures, unsigned long &actions, unsigned long &sounds, unsigned long &objects, unsigned long &walls, unsigned long &polygons);
+	bool IsRootLoaded();
 
 	bool Shutdown;
 	bool ConcurrentLoads; //set to true for buildings to be loaded while another sim is active and rendering
