@@ -1,5 +1,5 @@
 /*
-	Skyscraper 2.1 - Planet Object
+	Skyscraper 2.1 - Celestial Body Object
 	Copyright (C)2004-2025 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
@@ -24,18 +24,18 @@
 #include "sbs.h"
 #include "profiler.h"
 #include "vm.h"
-#include "planet.h"
+#include "body.h"
 
 using namespace SBS;
 
 namespace Skyscraper {
 
-Planet::Planet(VM *vm, const std::string &name)
+Body::Body(VM *vm, const std::string &name)
 {
     this->vm = vm;
 }
 
-Planet::~Planet()
+Body::~Body()
 {
 
 }

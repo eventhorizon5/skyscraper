@@ -1,5 +1,5 @@
 /*
-	Skyscraper 2.1 - Planet Object
+	Skyscraper 2.1 - Star Object
 	Copyright (C)2004-2025 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
@@ -20,24 +20,23 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-#include "globals.h"
-#include "sbs.h"
-#include "profiler.h"
-#include "vm.h"
-#include "planet.h"
+#ifndef STAR_H
+#define STAR_H
 
-using namespace SBS;
+#include "vm.h"
 
 namespace Skyscraper {
 
-Planet::Planet(VM *vm, const std::string &name)
+class VMIMPEXP Star
 {
-    this->vm = vm;
+public:
+    explicit Star(VM *vm, const std::string &name);
+    ~Star();
+
+private:
+    VM* vm;
+};
+
 }
 
-Planet::~Planet()
-{
-
-}
-
-}
+#endif

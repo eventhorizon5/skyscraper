@@ -30,7 +30,7 @@ namespace Skyscraper {
 class VMIMPEXP Planet
 {
 public:
-    explicit Planet(VM *vm);
+    explicit Planet(VM *vm, const std::string &name);
     ~Planet();
 
 private:
