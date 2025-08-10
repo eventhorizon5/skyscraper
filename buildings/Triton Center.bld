@@ -191,18 +191,8 @@
 <EndTextures>
 
 # Ground
-#AddGround Ground, Downtown, -158400, -158400, 158400, 158400, 0, 7920, 7920
-#Cut Landscape, -340.5, -1, -603, 400, 1, 321.5, false, true
-
-#Make a new wall object to hold the Earth shape
-CreateWallObject landscape, Earth
-
-#Create the Earth as a geosphere
-AddGeosphere landscape, Earth, Grass, 0, -20902211 - 1, 0, 20902211, 6, 10, 10
-
-AddGround Ground, Downtown, -10000, -10000, 10000, 10000, 0, 5000, 5000
+AddGround Ground, Downtown, -158400, -158400, 158400, 158400, 0, 7920, 7920
 Cut Landscape, -340.5, -1, -603, 400, 1, 321.5, false, true
-
 
 # Basements
 <Floor -1>
