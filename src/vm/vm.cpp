@@ -642,6 +642,9 @@ int VM::Run(std::vector<EngineContext*> &newengines)
 	unsigned long last = current_time;
 	current_time = hal->GetCurrentTime();
 
+	//run monitor
+	bool monresult = monitor->Run();
+
 	//run sim engines
 	bool result = RunEngines(newengines);
 

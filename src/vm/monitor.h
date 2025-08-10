@@ -30,11 +30,12 @@ namespace Skyscraper {
 class VMIMPEXP Monitor
 {
 public:
-    explicit Monitor(VM *vm);
-    ~Monitor();
+	explicit Monitor(VM *vm);
+	~Monitor();
+	bool Run();
 
 private:
-    VM* vm;
+	VM* vm;
 };
 
 }

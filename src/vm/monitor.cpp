@@ -49,12 +49,18 @@ Monitor::Monitor(VM *vm)
 		vm->ReportFatalError("Error loading Sol.bld");
 		return;
 	}
-
 }
 
 Monitor::~Monitor()
 {
 
+}
+
+bool Monitor::Run()
+{
+	//monitor runloop
+
+	return true;
 }
 
 }
