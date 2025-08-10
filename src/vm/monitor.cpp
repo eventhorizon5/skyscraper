@@ -36,14 +36,14 @@ Monitor::Monitor(VM *vm)
     this->vm = vm;
 
 	//create a solar system instance
-	EngineContext* root = vm->Initialize(false, ENGINETYPE_SOLARSYSTEM);
+	EngineContext* root = vm->Initialize(false, ENGINETYPE_SOLARSYSTEM, false);
 	if (!root)
 	{
 		vm->ReportFatalError("Error creating root engine instance");
 		return;
 	}
 
-	bool result = root->Load("Sol.bld");
+	bool result = root->Load("Sol.bld", true);
 	if (!result)
 	{
 		vm->ReportFatalError("Error loading Sol.bld");

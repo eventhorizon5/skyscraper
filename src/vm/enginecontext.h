@@ -39,6 +39,7 @@ public:
 	bool NewEngine; //true if this is a new engine
 	unsigned long current_time, time_stat;
 	bool Paused;
+	bool is_system; //true if this is a system engine
 
 	EngineContext(const EngineType type, EngineContext *parent, VM *vm, Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
 	EngineContext(const EngineType type, EngineContext *parent, VM *vm, Ogre::SceneManager* mSceneManager, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
@@ -50,7 +51,7 @@ public:
 	bool Run();
 	void Shutdown();
 	bool GetShutdownState() { return shutdown; }
-	bool Load(std::string filename);
+	bool Load(std::string filename, bool is_system);
 	bool IsLoading() { return loading; }
 	bool IsRunning() { return running; }
 	bool IsReloading() { return reloading; }
