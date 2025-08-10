@@ -44,7 +44,7 @@
 #include "gui.h"
 #include "profiler.h"
 #include "gitrev.h"
-#include "solarsystem.h"
+#include "monitor.h"
 #include "vmconsole.h"
 
 using namespace SBS;
@@ -75,8 +75,8 @@ VM::VM()
 	vmconsole = 0;
 	loadstart = false;
 	unloaded = false;
-	solarsystem = 0;
-	solarsystem_started = false;
+	monitor = 0;
+	monitor_started = false;
 
 	macos_major = 0;
 	macos_minor = 0;
@@ -159,7 +159,7 @@ GUI* VM::GetGUI()
 
 EngineContext* VM::CreateEngine(EngineContext *parent, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
 {
-	EngineContext* engine = new EngineContext(ENGINETYPE_BUILDING, parent, this, hal->GetSceneManager(), hal->GetSoundSystem(), position, rotation, area_min, area_max);
+	EngineContext* engine = new EngineContext(ENGINETYPE_GENERIC, parent, this, hal->GetSceneManager(), hal->GetSoundSystem(), position, rotation, area_min, area_max);
 	return engine;
 }
 
@@ -218,7 +218,7 @@ void VM::DeleteEngines()
 	}
 	engines.clear();
 	active_engine = 0;
-	solarsystem_started = false;
+	monitor_started = false;
 	unloaded = true;
 }
 
@@ -718,7 +718,7 @@ bool VM::Load(bool clear, const std::string &filename, EngineContext *parent, co
 	Report("Loading engine for building file '" + filename + "'...");
 
 	//boot SBS
-	EngineContext* engine = Initialize(clear, ENGINETYPE_BUILDING, parent, position, rotation, area_min, area_max);
+	EngineContext* engine = Initialize(clear, ENGINETYPE_GENERIC, parent, position, rotation, area_min, area_max);
 
 	//exit if init failed
 	if (!engine)
@@ -765,11 +765,11 @@ EngineContext* VM::Initialize(bool clear, const EngineType type, EngineContext *
 		return 0;
 	}
 
-	//load solar system if needed
-	if (!solarsystem_started)
+	//load monitor if needed
+	if (!monitor_started)
 	{
-		solarsystem_started = true;
-		solarsystem = new SolarSystem(this);
+		monitor_started = true;
+		monitor = new Monitor(this);
 	}
 
 	//set parent to master engine, if not set

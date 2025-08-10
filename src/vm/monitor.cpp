@@ -1,5 +1,5 @@
 /*
-	Skyscraper 2.1 - Solar System
+	Skyscraper 2.1 - Monitor System
 	Copyright (C)2004-2025 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
@@ -20,23 +20,41 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-#ifndef BODY_H
-#define BODY_H
-
+#include "globals.h"
+#include "sbs.h"
+#include "profiler.h"
 #include "vm.h"
+#include "enginecontext.h"
+#include "monitor.h"
+
+using namespace SBS;
 
 namespace Skyscraper {
 
-class VMIMPEXP SolarSystem
+Monitor::Monitor(VM *vm)
 {
-public:
-    explicit SolarSystem(VM *vm);
-    ~SolarSystem();
+    this->vm = vm;
 
-private:
-    VM* vm;
-};
+	//create a solar system instance
+	EngineContext* root = vm->Initialize(false, ENGINETYPE_SOLARSYSTEM);
+	if (!root)
+	{
+		vm->ReportFatalError("Error creating root engine instance");
+		return;
+	}
+
+	bool result = root->Load("Sol.bld");
+	if (!result)
+	{
+		vm->ReportFatalError("Error loading Sol.bld");
+		return;
+	}
 
 }
 
-#endif
+Monitor::~Monitor()
+{
+
+}
+
+}
