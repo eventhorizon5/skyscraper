@@ -42,7 +42,13 @@ SolarSystem::SolarSystem(VM *vm)
 		vm->ReportFatalError("Error creating solar system");
 		return;
 	}
-	sol->LoadDefault();
+
+	bool result = sol->Load("Sol.bld");
+	if (!result)
+	{
+		vm->ReportFatalError("Error loading Sol.bld");
+		return;
+	}
 
 	//create the Earth
 	EngineContext* earth = vm->Initialize(false, sol);
@@ -52,7 +58,7 @@ SolarSystem::SolarSystem(VM *vm)
 		return;
 	}
 
-	bool result = earth->Load("Earth.bld");
+	result = earth->Load("Earth.bld");
 	if (!result)
 	{
 		vm->ReportFatalError("Error loading Earth.bld");
