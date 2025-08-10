@@ -42,6 +42,7 @@ SolarSystem::SolarSystem(VM *vm)
 		vm->ReportFatalError("Error creating solar system");
 		return;
 	}
+	sol->LoadDefault();
 
 	//create the Earth
 	EngineContext* earth = vm->Initialize(false, sol);
