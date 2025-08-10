@@ -36,7 +36,7 @@ Monitor::Monitor(VM *vm)
     this->vm = vm;
 
 	//create a solar system instance
-	EngineContext* root = vm->Initialize(false, ENGINETYPE_SOLARSYSTEM, false);
+	EngineContext* root = vm->Initialize(false, ENGINETYPE_SOLARSYSTEM, true);
 	if (!root)
 	{
 		vm->ReportFatalError("Error creating root engine instance");
