@@ -44,6 +44,7 @@
 #include "gui.h"
 #include "profiler.h"
 #include "gitrev.h"
+#include "solarsystem.h"
 #include "vmconsole.h"
 
 using namespace SBS;
@@ -74,6 +75,8 @@ VM::VM()
 	vmconsole = 0;
 	loadstart = false;
 	unloaded = false;
+	solarsystem = 0;
+	solarsystem_started = false;
 
 	macos_major = 0;
 	macos_minor = 0;
@@ -759,6 +762,13 @@ EngineContext* VM::Initialize(bool clear, EngineContext *parent, const Vector3 &
 	{
 		ReportFatalError("Error updating render window");
 		return 0;
+	}
+
+	//load solar system if needed
+	if (!solarsystem_started)
+	{
+		solarsystem_started = true;
+		solarsystem = new SolarSystem(this);
 	}
 
 	//set parent to master engine, if not set

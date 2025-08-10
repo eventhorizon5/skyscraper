@@ -1,5 +1,5 @@
 /*
-	Skyscraper 2.1 - Celestial Body Object
+	Skyscraper 2.1 - Solar System
 	Copyright (C)2004-2025 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
@@ -20,24 +20,23 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-#include "globals.h"
-#include "sbs.h"
-#include "profiler.h"
-#include "vm.h"
-#include "body.h"
+#ifndef BODY_H
+#define BODY_H
 
-using namespace SBS;
+#include "vm.h"
 
 namespace Skyscraper {
 
-Body::Body(VM *vm, const std::string &name)
+class VMIMPEXP SolarSystem
 {
-    this->vm = vm;
+public:
+    explicit SolarSystem(VM *vm);
+    ~SolarSystem();
+
+private:
+    VM* vm;
+};
+
 }
 
-Body::~Body()
-{
-
-}
-
-}
+#endif

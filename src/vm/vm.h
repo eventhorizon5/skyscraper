@@ -66,11 +66,13 @@ class HAL;
 class SkySystem;
 class GUI;
 class VMConsole;
+class SolarSystem;
 
 //Virtual Manager system
 class VMIMPEXP VM
 {
 	friend class VMConsole;
+	friend class SolarSystem;
 
 public:
 	VM();
@@ -157,11 +159,13 @@ private:
 	SkySystem *skysystem;
 	GUI *gui; //GUI subsystem
 	VMConsole *vmconsole; //VM console system
+	SolarSystem *solarsystem; //solar system object
 
 	wxWindow *parent;
 
 	bool first_run;
 	bool RenderOnStartup; //override SBS engine setting with same name
+	bool solarsystem_started; //has solarsystem started?
 
 	//shared libraries
 	std::vector<dylib*> dylibs;

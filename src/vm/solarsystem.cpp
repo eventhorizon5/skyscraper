@@ -1,5 +1,5 @@
 /*
-	Skyscraper 2.1 - Celestial Body Object
+	Skyscraper 2.1 - Solar System
 	Copyright (C)2004-2025 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
@@ -20,23 +20,48 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-#ifndef BODY_H
-#define BODY_H
-
+#include "globals.h"
+#include "sbs.h"
+#include "profiler.h"
 #include "vm.h"
+#include "enginecontext.h"
+#include "solarsystem.h"
+
+using namespace SBS;
 
 namespace Skyscraper {
 
-class VMIMPEXP Body
+SolarSystem::SolarSystem(VM *vm)
 {
-public:
-    explicit Body(VM *vm, const std::string &name);
-    ~Body();
+    this->vm = vm;
 
-private:
-    VM* vm;
-};
+	//create a star instance
+	EngineContext* sol = vm->Initialize(false);
+	if (!sol)
+	{
+		vm->ReportFatalError("Error creating solar system");
+		return;
+	}
+
+	//create the Earth
+	EngineContext* earth = vm->Initialize(false, sol);
+	if (!earth)
+	{
+		vm->ReportFatalError("Error creating planet");
+		return;
+	}
+
+	bool result = earth->Load("Earth.bld");
+	if (!result)
+	{
+		vm->ReportFatalError("Error loading Earth.bld");
+		return;
+	}
+}
+
+SolarSystem::~SolarSystem()
+{
 
 }
 
-#endif
+}
