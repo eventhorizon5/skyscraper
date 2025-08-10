@@ -76,6 +76,7 @@ VM::VM()
 	loadstart = false;
 	unloaded = false;
 	monitor = 0;
+	system_loaded = false;
 
 	macos_major = 0;
 	macos_minor = 0;
@@ -645,8 +646,7 @@ int VM::Run(std::vector<EngineContext*> &newengines)
 	//gui->ShowProgress();
 
 	//load queued buildings
-	if (load_queue.size() > 0)
-		LoadQueued();
+	LoadQueued();
 
 	//get time for frame statistics
 	unsigned long last = current_time;
@@ -748,9 +748,31 @@ bool VM::Load(bool system, bool clear, const std::string &filename, EngineContex
 
 bool VM::LoadQueued()
 {
+	//load engines in a queued fashion
+
+	if (load_queue.size() == 0)
+		return false;
+
+	bool system_found = false;
 	for (size_t i = 0; i < load_queue.size(); i++)
 	{
 		DelayLoad &load = load_queue[i];
+		if (load.system == true)
+		{
+			system_found = true;
+			break;
+		}
+	}
+
+	for (size_t i = 0; i < load_queue.size(); i++)
+	{
+		DelayLoad &load = load_queue[i];
+
+		if (load.system == false)
+		{
+			if (system_found == true || !system_loaded)
+				continue;
+		}
 
 		Report("Loading engine for building file '" + load.filename + "'...");
 
