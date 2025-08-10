@@ -40,6 +40,8 @@ namespace Skyscraper {
 const long EngineManager::ID_EngineList = wxNewId();
 const long EngineManager::ID_STATICTEXT7 = wxNewId();
 const long EngineManager::ID_tType = wxNewId();
+const long EngineManager::ID_STATICTEXT8 = wxNewId();
+const long EngineManager::ID_tParent = wxNewId();
 const long EngineManager::ID_STATICTEXT4 = wxNewId();
 const long EngineManager::ID_tPosition = wxNewId();
 const long EngineManager::ID_STATICTEXT3 = wxNewId();
@@ -100,6 +102,11 @@ EngineManager::EngineManager(DebugPanel* parent,wxWindowID id,const wxPoint& pos
 	tType = new wxTextCtrl(this, ID_tType, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY|wxTE_CENTRE, wxDefaultValidator, _T("ID_tType"));
 	tType->SetMinSize(wxSize(200,-1));
 	FlexGridSizer2->Add(tType, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	StaticText8 = new wxStaticText(this, ID_STATICTEXT8, _("Parent:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT8"));
+	FlexGridSizer2->Add(StaticText8, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	tParent = new wxTextCtrl(this, ID_tParent, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY|wxTE_CENTRE, wxDefaultValidator, _T("ID_tParent"));
+	tParent->SetMinSize(wxSize(200,-1));
+	FlexGridSizer2->Add(tParent, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	StaticText4 = new wxStaticText(this, ID_STATICTEXT4, _("Position:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT4"));
 	FlexGridSizer2->Add(StaticText4, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	tPosition = new wxTextCtrl(this, ID_tPosition, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY|wxTE_CENTRE, wxDefaultValidator, _T("ID_tPosition"));
@@ -264,7 +271,7 @@ void EngineManager::Loop()
 			max.y = 0;
 
 		tPosition->SetValue(TruncateNumber(position.x, 2) + wxT(", ") + TruncateNumber(position.y, 2) + wxT(", ") + TruncateNumber(position.z, 2));
-		tBoundsMin->SetValue(TruncateNumber(min.x, 2) + wxT(", ") + TruncateNumber(min.y, 2) + wxT(", ") + TruncateNumber(min.z, 2));
+			tBoundsMin->SetValue(TruncateNumber(min.x, 2) + wxT(", ") + TruncateNumber(min.y, 2) + wxT(", ") + TruncateNumber(min.z, 2));
 		tBoundsMax->SetValue(TruncateNumber(max.x, 2) + wxT(", ") + TruncateNumber(max.y, 2) + wxT(", ") + TruncateNumber(max.z, 2));
 
 		//set camera state
@@ -302,6 +309,8 @@ void EngineManager::Loop()
 		else if (engine->type == ENGINETYPE_SOLARSYSTEM)
 			type = "Solar System";
 
+		if (engine->GetParent())
+			tParent->SetValue(SBS::ToString(engine->GetParent()->GetNumber()));
 		tType->SetValue(type);
 	}
 	else
@@ -312,6 +321,7 @@ void EngineManager::Loop()
 		tActive->Clear();
 		tState->SetValue("Unloaded");
 		tType->Clear();
+		tParent->Clear();
 	}
 
 	if (moveobject)

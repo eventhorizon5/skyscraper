@@ -62,9 +62,11 @@ class EngineManager: public wxDialog
 		wxStaticText* StaticText5;
 		wxStaticText* StaticText6;
 		wxStaticText* StaticText7;
+		wxStaticText* StaticText8;
 		wxTextCtrl* tActive;
 		wxTextCtrl* tBoundsMax;
 		wxTextCtrl* tBoundsMin;
+		wxTextCtrl* tParent;
 		wxTextCtrl* tPosition;
 		wxTextCtrl* tState;
 		wxTextCtrl* tType;
@@ -78,6 +80,8 @@ class EngineManager: public wxDialog
 		static const long ID_EngineList;
 		static const long ID_STATICTEXT7;
 		static const long ID_tType;
+		static const long ID_STATICTEXT8;
+		static const long ID_tParent;
 		static const long ID_STATICTEXT4;
 		static const long ID_tPosition;
 		static const long ID_STATICTEXT3;

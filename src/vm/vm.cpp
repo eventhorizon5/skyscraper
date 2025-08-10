@@ -776,6 +776,22 @@ bool VM::LoadQueued()
 
 		Report("Loading engine for building file '" + load.filename + "'...");
 
+		//if no parent is specified, select first planet as parent
+		if (load.parent == 0)
+		{
+			for (size_t j = 0; j < engines.size(); j++)
+			{
+				if (engines[j])
+				{
+					if (engines[j]->type == ENGINETYPE_PLANET)
+					{
+						load.parent = engines[j];
+						break;
+					}
+				}
+			}
+		}
+
 		//boot SBS
 		EngineContext* engine = Initialize(load.clear, load.parent, load.position, load.rotation, load.area_min, load.area_max);
 
