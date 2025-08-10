@@ -272,7 +272,7 @@ void LoadDialog::On_bLoad_Click(wxCommandEvent& event)
 	vm->CutExternal = chkCutExternal->GetValue();
 	vm->CutFloors = chkCutFloors->GetValue();
 
-	vm->Load(false, false, filename, vm->GetActiveEngine(), position, rotation, min, max);
+	vm->Load(ENGINETYPE_GENERIC, false, false, filename, vm->GetActiveEngine(), position, rotation, min, max);
 
 	this->Close();
 }

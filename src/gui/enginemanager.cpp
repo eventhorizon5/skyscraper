@@ -37,29 +37,31 @@
 namespace Skyscraper {
 
 //(*IdInit(EngineManager)
-const wxWindowID EngineManager::ID_EngineList = wxNewId();
-const wxWindowID EngineManager::ID_STATICTEXT4 = wxNewId();
-const wxWindowID EngineManager::ID_tPosition = wxNewId();
-const wxWindowID EngineManager::ID_STATICTEXT3 = wxNewId();
-const wxWindowID EngineManager::ID_tBoundsMin = wxNewId();
-const wxWindowID EngineManager::ID_STATICTEXT5 = wxNewId();
-const wxWindowID EngineManager::ID_tBoundsMax = wxNewId();
-const wxWindowID EngineManager::ID_STATICTEXT1 = wxNewId();
-const wxWindowID EngineManager::ID_tActive = wxNewId();
-const wxWindowID EngineManager::ID_STATICTEXT2 = wxNewId();
-const wxWindowID EngineManager::ID_tState = wxNewId();
-const wxWindowID EngineManager::ID_STATICTEXT6 = wxNewId();
-const wxWindowID EngineManager::ID_tUptime = wxNewId();
-const wxWindowID EngineManager::ID_STATICLINE2 = wxNewId();
-const wxWindowID EngineManager::ID_CLoads = wxNewId();
-const wxWindowID EngineManager::ID_chkRender = wxNewId();
-const wxWindowID EngineManager::ID_chkPaused = wxNewId();
-const wxWindowID EngineManager::ID_bSetActive = wxNewId();
-const wxWindowID EngineManager::ID_bReload = wxNewId();
-const wxWindowID EngineManager::ID_bMove = wxNewId();
-const wxWindowID EngineManager::ID_bLoad = wxNewId();
-const wxWindowID EngineManager::ID_bShutdown = wxNewId();
-const wxWindowID EngineManager::ID_bOk = wxNewId();
+const long EngineManager::ID_EngineList = wxNewId();
+const long EngineManager::ID_STATICTEXT7 = wxNewId();
+const long EngineManager::ID_tType = wxNewId();
+const long EngineManager::ID_STATICTEXT4 = wxNewId();
+const long EngineManager::ID_tPosition = wxNewId();
+const long EngineManager::ID_STATICTEXT3 = wxNewId();
+const long EngineManager::ID_tBoundsMin = wxNewId();
+const long EngineManager::ID_STATICTEXT5 = wxNewId();
+const long EngineManager::ID_tBoundsMax = wxNewId();
+const long EngineManager::ID_STATICTEXT1 = wxNewId();
+const long EngineManager::ID_tActive = wxNewId();
+const long EngineManager::ID_STATICTEXT2 = wxNewId();
+const long EngineManager::ID_tState = wxNewId();
+const long EngineManager::ID_STATICTEXT6 = wxNewId();
+const long EngineManager::ID_tUptime = wxNewId();
+const long EngineManager::ID_STATICLINE2 = wxNewId();
+const long EngineManager::ID_CLoads = wxNewId();
+const long EngineManager::ID_chkRender = wxNewId();
+const long EngineManager::ID_chkPaused = wxNewId();
+const long EngineManager::ID_bSetActive = wxNewId();
+const long EngineManager::ID_bReload = wxNewId();
+const long EngineManager::ID_bMove = wxNewId();
+const long EngineManager::ID_bLoad = wxNewId();
+const long EngineManager::ID_bShutdown = wxNewId();
+const long EngineManager::ID_bOk = wxNewId();
 //*)
 
 BEGIN_EVENT_TABLE(EngineManager,wxDialog)
@@ -93,6 +95,11 @@ EngineManager::EngineManager(DebugPanel* parent,wxWindowID id,const wxPoint& pos
 	BoxSizer1 = new wxBoxSizer(wxVERTICAL);
 	FlexGridSizer4 = new wxFlexGridSizer(0, 1, 0, 0);
 	FlexGridSizer2 = new wxFlexGridSizer(0, 2, 0, 0);
+	StaticText7 = new wxStaticText(this, ID_STATICTEXT7, _("Type:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT7"));
+	FlexGridSizer2->Add(StaticText7, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	tType = new wxTextCtrl(this, ID_tType, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY|wxTE_CENTRE, wxDefaultValidator, _T("ID_tType"));
+	tType->SetMinSize(wxSize(200,-1));
+	FlexGridSizer2->Add(tType, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	StaticText4 = new wxStaticText(this, ID_STATICTEXT4, _("Position:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT4"));
 	FlexGridSizer2->Add(StaticText4, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	tPosition = new wxTextCtrl(this, ID_tPosition, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY|wxTE_CENTRE, wxDefaultValidator, _T("ID_tPosition"));
@@ -166,15 +173,15 @@ EngineManager::EngineManager(DebugPanel* parent,wxWindowID id,const wxPoint& pos
 	FlexGridSizer1->SetSizeHints(this);
 	Center();
 
-	Connect(ID_CLoads, wxEVT_COMMAND_CHECKBOX_CLICKED, (wxObjectEventFunction)&EngineManager::On_chkCLoads_Click);
-	Connect(ID_chkRender, wxEVT_COMMAND_CHECKBOX_CLICKED, (wxObjectEventFunction)&EngineManager::On_chkRender_Click);
-	Connect(ID_chkPaused, wxEVT_COMMAND_CHECKBOX_CLICKED, (wxObjectEventFunction)&EngineManager::On_chkPaused_Click);
-	Connect(ID_bSetActive, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&EngineManager::On_bSetActive_Click);
-	Connect(ID_bReload, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&EngineManager::On_bReload_Click);
-	Connect(ID_bMove, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&EngineManager::On_bMove_Click);
-	Connect(ID_bLoad, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&EngineManager::On_bLoad_Click);
-	Connect(ID_bShutdown, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&EngineManager::On_bShutdown_Click);
-	Connect(ID_bOk, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&EngineManager::On_bOk_Click);
+	Connect(ID_CLoads,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&EngineManager::On_chkCLoads_Click);
+	Connect(ID_chkRender,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&EngineManager::On_chkRender_Click);
+	Connect(ID_chkPaused,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&EngineManager::On_chkPaused_Click);
+	Connect(ID_bSetActive,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&EngineManager::On_bSetActive_Click);
+	Connect(ID_bReload,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&EngineManager::On_bReload_Click);
+	Connect(ID_bMove,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&EngineManager::On_bMove_Click);
+	Connect(ID_bLoad,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&EngineManager::On_bLoad_Click);
+	Connect(ID_bShutdown,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&EngineManager::On_bShutdown_Click);
+	Connect(ID_bOk,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&EngineManager::On_bOk_Click);
 	//*)
 	panel = parent;
 	loader = 0;
@@ -281,6 +288,21 @@ void EngineManager::Loop()
 
 		//set paused state
 		chkPaused->SetValue(engine->Paused);
+
+		//set type value
+		std::string type;
+		if (engine->type == ENGINETYPE_BUILDING)
+			type = "Building";
+		else if (engine->type == ENGINETYPE_CITY)
+			type = "City";
+		else if (engine->type == ENGINETYPE_GENERIC)
+			type = "Generic";
+		else if (engine->type == ENGINETYPE_PLANET)
+			type = "Planet";
+		else if (engine->type == ENGINETYPE_SOLARSYSTEM)
+			type = "Solar System";
+
+		tType->SetValue(type);
 	}
 	else
 	{
@@ -289,6 +311,7 @@ void EngineManager::Loop()
 		tBoundsMax->Clear();
 		tActive->Clear();
 		tState->SetValue("Unloaded");
+		tType->Clear();
 	}
 
 	if (moveobject)

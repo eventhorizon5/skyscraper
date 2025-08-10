@@ -40,6 +40,7 @@ public:
 	unsigned long current_time, time_stat;
 	bool Paused;
 	bool IsSystem;
+	EngineType type;
 
 	EngineContext(const EngineType type, EngineContext *parent, VM *vm, Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
 	EngineContext(const EngineType type, EngineContext *parent, VM *vm, Ogre::SceneManager* mSceneManager, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
@@ -124,7 +125,6 @@ private:
 	Vector3 area_min;
 	Vector3 area_max;
 	Real rotation;
-	EngineType type;
 
 	//child engines
 	std::vector<EngineContext*> children;

@@ -18,6 +18,7 @@
 <Globals>
     Name = Earth
     Bounds = -20902211, -20902211, -20902211, 20902211, 20902211, 20902211
+    Type = Planet
 <EndGlobals>
 
 <Textures>

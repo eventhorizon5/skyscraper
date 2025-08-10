@@ -17,6 +17,7 @@
 
 <Globals>
     Name = Sol
+    Type = SolarSystem
 <EndGlobals>
 
 <Textures>

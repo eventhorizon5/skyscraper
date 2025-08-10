@@ -720,7 +720,7 @@ int VM::Run(std::vector<EngineContext*> &newengines)
 	return 1;
 }
 
-bool VM::Load(bool system, bool clear, const std::string &filename, EngineContext *parent, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
+bool VM::Load(const EngineType type, bool system, bool clear, const std::string &filename, EngineContext *parent, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
 {
 	//load simulator and data file
 
@@ -738,6 +738,7 @@ bool VM::Load(bool system, bool clear, const std::string &filename, EngineContex
 	delay_load.area_min = area_min;
 	delay_load.area_max = area_max;
 	delay_load.system = system;
+	delay_load.type = type;
 
 	load_queue.emplace_back(delay_load);
 
@@ -777,7 +778,7 @@ bool VM::LoadQueued()
 		Report("Loading engine for building file '" + load.filename + "'...");
 
 		//boot SBS
-		EngineContext* engine = Initialize(load.clear, ENGINETYPE_GENERIC, load.parent, load.position, load.rotation, load.area_min, load.area_max);
+		EngineContext* engine = Initialize(load.clear, load.type, load.parent, load.position, load.rotation, load.area_min, load.area_max);
 
 		//exit if init failed
 		if (!engine)
@@ -834,6 +835,7 @@ EngineContext* VM::Initialize(bool clear, const EngineType type, EngineContext *
 
 	//Create simulator instance
 	EngineContext* engine = CreateEngine(parent, position, rotation, area_min, area_max);
+	engine->type = type;
 
 	if (!GetActiveEngine())
 		active_engine = engine;

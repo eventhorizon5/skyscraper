@@ -67,5 +67,6 @@
 <Globals>
     CameraPosition = 115, -115
     CameraRotation = 0, 270, 0
+    Type = City
 <EndGlobals>
 
