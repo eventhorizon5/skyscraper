@@ -160,15 +160,6 @@ bool EngineContext::Run()
 	if (!Simcore)
 		return false;
 
-	if (parent)
-	{
-		if (parent->IsRunning() == false)
-		{
-			//run engine only if parent engine is running
-			return true;
-		}
-	}
-
 	//exit if paused
 	if (Paused == true)
 		return true;

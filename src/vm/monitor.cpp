@@ -34,7 +34,6 @@ namespace Skyscraper {
 Monitor::Monitor(VM *vm)
 {
     this->vm = vm;
-
 }
 
 Monitor::~Monitor()
