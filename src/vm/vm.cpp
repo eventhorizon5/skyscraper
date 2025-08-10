@@ -793,6 +793,8 @@ bool VM::LoadQueued()
 				DeleteEngine(engine);
 		}
 
+		if (load.system == true)
+			system_loaded = true;
 		load_queue.pop_back();
 		i--;
 	}
