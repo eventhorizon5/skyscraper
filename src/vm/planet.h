@@ -34,7 +34,7 @@ public:
     ~Planet();
 
 private:
-
+    VM* vm;
 };
 
 }

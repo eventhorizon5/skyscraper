@@ -1,5 +1,5 @@
 /*
-	Skyscraper 2.1 - Planet Object
+	Skyscraper 2.1 - City Object
 	Copyright (C)2004-2025 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
@@ -25,17 +25,18 @@
 #include "profiler.h"
 #include "vm.h"
 #include "planet.h"
+#include "city.h"
 
 using namespace SBS;
 
 namespace Skyscraper {
 
-Planet::Planet(VM *vm)
+City::City(VM *vm)
 {
-    this->vm = vm;
+	this->vm = vm;
 }
 
-Planet::~Planet()
+City::~City()
 {
 
 }
