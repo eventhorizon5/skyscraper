@@ -548,14 +548,35 @@ CameraState EngineContext::GetCameraState()
 {
 	//get camera state data
 
-	return Simcore->camera->GetCameraState();
+	CameraState state;
+	state.position = Vector3::ZERO;
+	state.rotation = Vector3::ZERO;
+	state.floor = 0;
+	state.collisions = true;
+	state.gravity = true;
+	state.freelook = false;
+	state.desired_velocity = Vector3::ZERO;
+	state.velocity = Vector3::ZERO;
+	state.desired_angle_velocity = Vector3::ZERO;
+	state.angle_velocity = Vector3::ZERO;
+	state.accum_movement = Vector3::ZERO;
+	state.fov = 0;
+	state.speed = 0;
+
+	if (Simcore->camera)
+		return Simcore->camera->GetCameraState();
+	return state;
 }
 
 void EngineContext::SetCameraState(const CameraState &state, bool set_floor)
 {
 	//set camera state data
 
-	Simcore->camera->SetCameraState(state, set_floor);
+	if (!Simcore)
+		return;
+
+	if (Simcore->camera)
+		Simcore->camera->SetCameraState(state, set_floor);
 }
 
 bool EngineContext::IsInside()
@@ -605,17 +626,26 @@ void EngineContext::AttachCamera(std::vector<Ogre::Camera*> &cameras, bool init_
 
 void EngineContext::RefreshCamera()
 {
+	if (!Simcore->camera)
+		return;
+
 	Simcore->camera->Refresh();
 }
 
 void EngineContext::ResetCamera()
 {
+	if (!Simcore->camera)
+		return;
+
 	//reset camera position
 	Simcore->camera->SetToStartPosition(true);
 }
 
 void EngineContext::RevertMovement()
 {
+	if (!Simcore->camera)
+		return;
+
 	//revert camera movement
 	Simcore->camera->RevertMovement();
 }
@@ -623,6 +653,9 @@ void EngineContext::RevertMovement()
 Vector3 EngineContext::GetCameraPosition()
 {
 	//get this engine's camera position, in global positioning
+
+	if (!Simcore->camera)
+		return Vector3::ZERO;
 
 	return Simcore->GetUtility()->ToGlobal(Simcore->camera->GetPosition());
 }

@@ -244,15 +244,24 @@ bool FloorManager::EnableAll(bool value)
 	}
 
 	//enable/disable dynamic meshes
-	bool result = floors->Enabled(value);
-	if (!result)
-		status = false;
-	result = interfloors->Enabled(value);
-	if (!result)
-		status = false;
-	result = columnframes->Enabled(value);
-	if (!result)
-		status = false;
+	if (floors)
+	{
+		bool result = floors->Enabled(value);
+		if (!result)
+			status = false;
+	}
+	if (interfloors)
+	{
+		bool result = interfloors->Enabled(value);
+		if (!result)
+			status = false;
+	}
+	if (columnframes)
+	{
+		bool result = columnframes->Enabled(value);
+		if (!result)
+			status = false;
+	}
 
 	return status;
 }

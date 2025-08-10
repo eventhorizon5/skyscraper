@@ -580,6 +580,9 @@ bool SBS::Loop(bool loading, bool isready)
 	//Main simulator loop
 	SBS_PROFILE_MAIN("SBS");
 
+	if (!camera)
+		return false;
+
 	bool status = true;
 
 	if (RenderOnStartup == true && (loading == true || isready == false))
@@ -685,14 +688,17 @@ void SBS::CalculateFrameRate()
 void SBS::EnableBuildings(bool value)
 {
 	//turns buildings on/off
-	Buildings->Enabled(value);
+
+	if (Buildings)
+		Buildings->Enabled(value);
 	IsBuildingsEnabled = value;
 }
 
 void SBS::EnableLandscape(bool value)
 {
 	//turns landscape on/off
-	Landscape->Enabled(value);
+	if (Landscape)
+		Landscape->Enabled(value);
 	IsLandscapeEnabled = value;
 }
 
@@ -2898,6 +2904,9 @@ bool SBS::AttachCamera(std::vector<Ogre::Camera*> &cameras, bool init_state)
 
 bool SBS::DetachCamera()
 {
+	if (!camera)
+		return false;
+
 	return camera->Detach();
 }
 
@@ -2979,9 +2988,9 @@ void SBS::CutOutsideBoundaries(bool landscape, bool buildings, bool external, bo
 	Vector3 min = area_trigger->GetMin();
 	Vector3 max = area_trigger->GetMax();
 
-	if (landscape == true)
+	if (landscape == true && Landscape)
 		Landscape->CutOutsideBounds(min, max, true, true);
-	if (buildings == true)
+	if (buildings == true && Buildings)
 		Buildings->CutOutsideBounds(min, max, true, true);
 	if (external == true && External)
 		External->CutOutsideBounds(min, max, true, true);
@@ -2998,9 +3007,9 @@ void SBS::CutInsideBoundaries(const Vector3 &min, const Vector3 &max, bool lands
 	//cut landscape and buildings for specified bounds
 	//run this function before calling Start()
 
-	if (landscape == true)
+	if (landscape == true && Landscape)
 		Landscape->Cut(min, max, true, true);
-	if (buildings == true)
+	if (buildings == true && Buildings)
 		Buildings->Cut(min, max, true, true);
 	if (external == true && External)
 		External->Cut(min, max, true, true);
@@ -3037,10 +3046,14 @@ void SBS::ResetState()
 	EnableSkybox(true);
 
 	//turn off interior objects
-	floor_manager->EnableAll(false);
-	shaft_manager->EnableAll(false);
-	stairwell_manager->EnableAll(false);
-	elevator_manager->EnableAll(false);
+	if (floor_manager)
+		floor_manager->EnableAll(false);
+	if (shaft_manager)
+		shaft_manager->EnableAll(false);
+	if (stairwell_manager)
+		stairwell_manager->EnableAll(false);
+	if (elevator_manager)
+		elevator_manager->EnableAll(false);
 
 	//turn off reverbs
 	for (size_t i = 0; i < reverbs.size(); i++)
@@ -3050,7 +3063,8 @@ void SBS::ResetState()
 	}
 
 	//reset camera state
-	camera->ResetState();
+	if (camera)
+		camera->ResetState();
 }
 
 Light* SBS::GetLight(std::string name)
