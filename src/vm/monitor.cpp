@@ -52,6 +52,8 @@ bool Monitor::CreateSim()
 	if (!root)
 		return vm->ReportFatalError("Error creating root engine instance");
 
+	root->IsSystem = true;
+
 	bool result = root->Load("Sol.bld");
 	if (!result)
 		return vm->ReportFatalError("Error loading Sol.bld");

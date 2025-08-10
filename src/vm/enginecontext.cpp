@@ -54,11 +54,13 @@ namespace Skyscraper {
 EngineContext::EngineContext(const EngineType type, EngineContext *parent, VM *vm, Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
 {
 	this->fmodsystem = fmodsystem;
+	IsSystem = false;
 	Init(type, parent, vm, mSceneManager, position, rotation, area_min, area_max);
 }
 
 EngineContext::EngineContext(const EngineType type, EngineContext *parent, VM *vm, Ogre::SceneManager* mSceneManager, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
 {
+	IsSystem = false;
 	Init(type, parent, vm, mSceneManager, position, rotation, area_min, area_max);
 }
 

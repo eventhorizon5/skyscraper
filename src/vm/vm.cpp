@@ -720,7 +720,7 @@ int VM::Run(std::vector<EngineContext*> &newengines)
 	return 1;
 }
 
-bool VM::Load(bool clear, const std::string &filename, EngineContext *parent, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
+bool VM::Load(bool system, bool clear, const std::string &filename, EngineContext *parent, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
 {
 	//load simulator and data file
 
@@ -737,6 +737,7 @@ bool VM::Load(bool clear, const std::string &filename, EngineContext *parent, co
 	delay_load.rotation = rotation;
 	delay_load.area_min = area_min;
 	delay_load.area_max = area_max;
+	delay_load.system = system;
 
 	load_queue.emplace_back(delay_load);
 

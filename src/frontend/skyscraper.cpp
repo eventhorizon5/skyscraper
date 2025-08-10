@@ -528,7 +528,7 @@ bool Skyscraper::Load(const std::string &filename, EngineContext *parent, const 
 
 	StopMenu();
 
-	bool result = vm->Load(true, filename, parent, position, rotation, area_min, area_max);
+	bool result = vm->Load(false, true, filename, parent, position, rotation, area_min, area_max);
 
 	if (result == false && vm->GetEngineCount() == 1)
 		UnloadToMenu();
