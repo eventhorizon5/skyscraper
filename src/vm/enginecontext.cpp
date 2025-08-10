@@ -54,13 +54,11 @@ namespace Skyscraper {
 EngineContext::EngineContext(const EngineType type, EngineContext *parent, VM *vm, Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
 {
 	this->fmodsystem = fmodsystem;
-	is_system = false;
 	Init(type, parent, vm, mSceneManager, position, rotation, area_min, area_max);
 }
 
 EngineContext::EngineContext(const EngineType type, EngineContext *parent, VM *vm, Ogre::SceneManager* mSceneManager, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
 {
-	is_system = false;
 	Init(type, parent, vm, mSceneManager, position, rotation, area_min, area_max);
 }
 
@@ -162,10 +160,13 @@ bool EngineContext::Run()
 	if (!Simcore)
 		return false;
 
-	if (is_system == false)
+	if (parent)
 	{
-		//run engine only if system engines are finished loading
-		return true;
+		if (parent->IsRunning() == false)
+		{
+			//run engine only if parent engine is running
+			return true;
+		}
 	}
 
 	//exit if paused
@@ -303,7 +304,7 @@ bool EngineContext::LoadDefault()
 	return true;
 }
 
-bool EngineContext::Load(std::string filename, bool is_system)
+bool EngineContext::Load(std::string filename)
 {
 	//load simulator and data file
 
@@ -365,7 +366,7 @@ void EngineContext::DoReload()
 	StartSim();
 
 	//load building file
-	if (Load(filename, false) == false)
+	if (Load(filename) == false)
 	{
 		reloading = false;
 		Reload = false;

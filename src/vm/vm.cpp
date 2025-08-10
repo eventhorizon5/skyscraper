@@ -715,7 +715,7 @@ int VM::Run(std::vector<EngineContext*> &newengines)
 	return 1;
 }
 
-bool VM::Load(bool clear, bool is_system, const std::string &filename, EngineContext *parent, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
+bool VM::Load(bool clear, const std::string &filename, EngineContext *parent, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
 {
 	//load simulator and data file
 
@@ -726,14 +726,14 @@ bool VM::Load(bool clear, bool is_system, const std::string &filename, EngineCon
 	Report("Loading engine for building file '" + filename + "'...");
 
 	//boot SBS
-	EngineContext* engine = Initialize(clear, ENGINETYPE_GENERIC, true, parent, position, rotation, area_min, area_max);
+	EngineContext* engine = Initialize(clear, ENGINETYPE_GENERIC, parent, position, rotation, area_min, area_max);
 
 	//exit if init failed
 	if (!engine)
 		return false;
 
 	//have new engine instance load building
-	bool result = engine->Load(filename, is_system);
+	bool result = engine->Load(filename);
 
 	//delete engine if load failed, if more than one engine is running
 	if (result == false)
@@ -746,11 +746,9 @@ bool VM::Load(bool clear, bool is_system, const std::string &filename, EngineCon
 	return true;
 }
 
-EngineContext* VM::Initialize(bool clear, const EngineType type, bool is_system, EngineContext *parent, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
+EngineContext* VM::Initialize(bool clear, const EngineType type, EngineContext *parent, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
 {
 	//bootstrap simulator
-
-	//if is_system is false, the engine load will be queued until the system engines are fully loaded
 
 	loadstart = true;
 
@@ -788,7 +786,6 @@ EngineContext* VM::Initialize(bool clear, const EngineType type, bool is_system,
 
 	//Create simulator instance
 	EngineContext* engine = CreateEngine(parent, position, rotation, area_min, area_max);
-	engine->is_system = is_system;
 
 	if (!GetActiveEngine())
 		active_engine = engine;
