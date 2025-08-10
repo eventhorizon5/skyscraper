@@ -76,7 +76,6 @@ VM::VM()
 	loadstart = false;
 	unloaded = false;
 	monitor = 0;
-	monitor_started = false;
 
 	macos_major = 0;
 	macos_minor = 0;
@@ -98,6 +97,9 @@ VM::VM()
 #else
 	gui = 0;
 #endif
+
+	//create monitor instance
+	monitor = new Monitor(this);
 
 	//LoadLibrary("test");
 
@@ -223,7 +225,6 @@ void VM::DeleteEngines()
 	}
 	engines.clear();
 	active_engine = 0;
-	monitor_started = false;
 	unloaded = true;
 }
 
@@ -643,6 +644,10 @@ int VM::Run(std::vector<EngineContext*> &newengines)
 	//show progress dialog if needed
 	//gui->ShowProgress();
 
+	//load queued buildings
+	if (load_queue.size() > 0)
+		LoadQueued();
+
 	//get time for frame statistics
 	unsigned long last = current_time;
 	current_time = hal->GetCurrentTime();
@@ -723,26 +728,51 @@ bool VM::Load(bool clear, const std::string &filename, EngineContext *parent, co
 	if (filename == "")
 		return false;
 
-	Report("Loading engine for building file '" + filename + "'...");
+	//add the building load request to the queue
+	DelayLoad delay_load;
+	delay_load.filename = filename;
+	delay_load.clear = clear;
+	delay_load.parent = parent;
+	delay_load.position = position;
+	delay_load.rotation = rotation;
+	delay_load.area_min = area_min;
+	delay_load.area_max = area_max;
 
-	//boot SBS
-	EngineContext* engine = Initialize(clear, ENGINETYPE_GENERIC, parent, position, rotation, area_min, area_max);
+	load_queue.emplace_back(delay_load);
 
-	//exit if init failed
-	if (!engine)
-		return false;
+	monitor->CreateSim();
 
-	//have new engine instance load building
-	bool result = engine->Load(filename);
+	return true;
+}
 
-	//delete engine if load failed, if more than one engine is running
-	if (result == false)
+bool VM::LoadQueued()
+{
+	for (size_t i = 0; i < load_queue.size(); i++)
 	{
-		if (GetEngineCount() > 1)
-			DeleteEngine(engine);
-		return false;
-	}
+		DelayLoad &load = load_queue[i];
 
+		Report("Loading engine for building file '" + load.filename + "'...");
+
+		//boot SBS
+		EngineContext* engine = Initialize(load.clear, ENGINETYPE_GENERIC, load.parent, load.position, load.rotation, load.area_min, load.area_max);
+
+		//exit if init failed
+		if (!engine)
+			return false;
+
+		//have new engine instance load building
+		bool result = engine->Load(load.filename);
+
+		//delete engine if load failed, if more than one engine is running
+		if (result == false)
+		{
+			if (GetEngineCount() > 1)
+				DeleteEngine(engine);
+		}
+
+		load_queue.pop_back();
+		i--;
+	}
 	return true;
 }
 
@@ -771,13 +801,6 @@ EngineContext* VM::Initialize(bool clear, const EngineType type, EngineContext *
 	{
 		ReportFatalError("Error updating render window");
 		return 0;
-	}
-
-	//load monitor if needed
-	if (!monitor_started)
-	{
-		monitor_started = true;
-		monitor = new Monitor(this);
 	}
 
 	//set parent to master engine, if not set

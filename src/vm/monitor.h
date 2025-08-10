@@ -32,10 +32,12 @@ class VMIMPEXP Monitor
 public:
 	explicit Monitor(VM *vm);
 	~Monitor();
+	bool CreateSim();
 	bool Run();
 
 private:
 	VM* vm;
+	EngineContext* root;
 };
 
 }

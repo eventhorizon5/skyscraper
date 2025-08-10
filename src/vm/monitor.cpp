@@ -34,11 +34,29 @@ namespace Skyscraper {
 Monitor::Monitor(VM *vm)
 {
     this->vm = vm;
+	root = 0;
 }
 
 Monitor::~Monitor()
 {
 
+}
+
+bool Monitor::CreateSim()
+{
+	if (root)
+		return false;
+
+	//create a solar system instance
+	root = vm->Initialize(false, ENGINETYPE_SOLARSYSTEM);
+	if (!root)
+		return vm->ReportFatalError("Error creating root engine instance");
+
+	bool result = root->Load("Sol.bld");
+	if (!result)
+		return vm->ReportFatalError("Error loading Sol.bld");
+
+	return true;
 }
 
 bool Monitor::Run()

@@ -162,6 +162,7 @@ private:
 	void Report(const std::string &message);
 	bool ReportError(const std::string &message);
 	bool ReportFatalError(const std::string &message);
+	bool LoadQueued();
 
 	EngineContext *active_engine;
 	std::vector<EngineContext*> engines;
@@ -175,10 +176,20 @@ private:
 
 	bool first_run;
 	bool RenderOnStartup; //override SBS engine setting with same name
-	bool monitor_started; //has monitor started?
 
 	//shared libraries
 	std::vector<dylib*> dylibs;
+
+	struct DelayLoad
+	{
+		std::string filename;
+		bool clear;
+		EngineContext *parent;
+		Vector3 position;
+		Real rotation;
+		Vector3 area_min, area_max;
+	};
+	std::vector<DelayLoad> load_queue; //delay load queue
 };
 
 }
