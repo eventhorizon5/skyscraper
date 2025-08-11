@@ -1705,7 +1705,7 @@ void PolyMesh::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool c
 
 			//add rebuilt polygons with explicit UVs (no planar remap)
 			if (!rebuilt.empty())
-				wall->AddPolygonSet(wall, name, oldmat, rebuilt);
+				wall->AddPolygonSet(name, oldmat, rebuilt);
 		}
 	}
 }

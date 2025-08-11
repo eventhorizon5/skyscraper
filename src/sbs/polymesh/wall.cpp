@@ -187,28 +187,26 @@ Polygon* Wall::AddPolygonSet(const std::string &name, const std::string &materia
 	return poly;
 }
 
-Polygon* Wall::AddPolygonSet(Wall* wall, const std::string& name, const std::string& material, const GeometrySet &geometry)
+Polygon* Wall::AddPolygonSet(const std::string& name, const std::string& material, const GeometrySet& geometry)
 {
-	//create a set of polygons, providing the original material and geometry data
+    // create a set of polygons, providing the original material and geometry data
 
 	if (!meshwrapper || geometry.empty())
 		return nullptr;
 
-	//convert GeometrySet into PolygonSet (positions) and UV map
 	PolygonSet vertices;
-	std::vector<Triangle> triangles;
 	std::vector<std::vector<Vector2>> uvMap;
 	vertices.reserve(geometry.size());
 	uvMap.reserve(geometry.size());
 
-	for (const auto &ring : geometry)
+	for (const auto& ring : geometry)
 	{
 		PolyArray verts;
 		std::vector<Vector2> uvs;
 		verts.reserve(ring.size());
 		uvs.reserve(ring.size());
 
-		for (const auto &g : ring)
+		for (const auto& g : ring)
 		{
 			verts.emplace_back(g.vertex);
 			uvs.emplace_back(g.texel);
@@ -217,24 +215,36 @@ Polygon* Wall::AddPolygonSet(Wall* wall, const std::string& name, const std::str
 		uvMap.emplace_back(std::move(uvs));
 	}
 
-	GeometrySet geom_copy;
+	//build mesh with explicit UVs
+	GeometrySet outGeom;
+	std::vector<Triangle> triangles;
 	PolygonSet converted_vertices;
 
-	//call CreateMesh with explicit UVs
-	if (!polymesh->CreateMesh(meshwrapper, name, material, vertices, uvMap, geom_copy, triangles, converted_vertices, 1.0f, 1.0f, false))
+	const bool convert_vertices = true;
+	const Real tw = 1.0f, th = 1.0f;
+
+	if (!polymesh->CreateMesh(meshwrapper, name, material, vertices, uvMap, outGeom, triangles, converted_vertices, tw, th, convert_vertices))
 	{
 		ReportError("Error creating wall '" + name + "'");
 		return 0;
 	}
 
-	//compute plane from first ring of positions
+	//compute plane
 	Plane plane;
 	if (!converted_vertices.empty() && !converted_vertices[0].empty())
-	plane = sbs->GetPolyMesh()->ComputePlane(converted_vertices[0]);
+		plane = sbs->GetPolyMesh()->ComputePlane(converted_vertices[0]);
+	else
+	{
+		plane.normal = Vector3(0,1,0);
+		plane.d = 0;
+	}
 
-	//create Polygon object
-	Matrix3 tm; Vector3 tv;
-	Polygon *poly = new Polygon(this, name, meshwrapper, geom_copy, triangles, tm, tv, material, plane);
+	//construct the polygon (tm/tv identity because UVs are explicit)
+	Matrix3 tm;
+	tm.FromAxes(Vector3(1,0,0), Vector3(0,1,0), Vector3(0,0,1));
+	Vector3 tv(0,0,0);
+
+	Polygon* poly = new Polygon(this, name, meshwrapper, outGeom, triangles, tm, tv, material, plane);
 	polygons.emplace_back(poly);
 
 	return poly;
