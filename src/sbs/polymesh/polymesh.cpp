@@ -1595,8 +1595,89 @@ void PolyMesh::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool c
 				continue;
 			}*/
 
+			//helper: append if valid
+			auto EmitIfValid = [&](const PolyArray& poly)
+			{
+				if (poly.size() > 2)
+					newpolys.emplace_back(poly);
+			};
+
 			//make sure the polygon intersects bounds (is not outside the cut area)
-			if (bounds.intersects(polybounds) == true)
+			if (bounds.intersects(polybounds))
+			{
+				//respect cutwalls/cutfloors selection without orientation-dependent splitting
+				//classify once, using extents helper:
+				extentsy = GetExtents(temppoly, 2);
+				bool isWall = (extentsy.x != extentsy.y);
+				bool isFloor = !isWall;
+
+				if ((isWall && !cutwalls) || (isFloor && !cutfloors))
+				{
+					//keep original polygon unchanged
+					newpolys.emplace_back(temppoly);
+				}
+				else
+				{
+					//six-plane partition, always the same order
+
+					//start from original
+					worker = temppoly;
+
+					//1) x < start.x  => LEFT
+					temppoly.clear();
+					temppoly2.clear();
+					SplitWithPlane(0, worker, temppoly, temppoly2, start.x);
+					EmitIfValid(temppoly);    // <= start.x
+					worker = temppoly2;       // >= start.x
+
+					//2) x > end.x => RIGHT
+					temppoly.clear();
+					temppoly2.clear();
+					SplitWithPlane(0, worker, temppoly, temppoly2, end.x);
+					EmitIfValid(temppoly2);   // >= end.x
+					worker = temppoly;        // <= end.x
+
+					//3) y < start.y => BELOW
+					temppoly.clear();
+					temppoly2.clear();
+					SplitWithPlane(1, worker, temppoly, temppoly2, start.y);
+					EmitIfValid(temppoly);    // <= start.y
+					worker = temppoly2;       // >= start.y
+
+					//4) y > end.y => ABOVE
+					temppoly.clear();
+					temppoly2.clear();
+					SplitWithPlane(1, worker, temppoly, temppoly2, end.y);
+					EmitIfValid(temppoly2);   // >= end.y
+					worker = temppoly;        // <= end.y
+
+					//5) z < start.z => BACK
+					temppoly.clear();
+					temppoly2.clear();
+					SplitWithPlane(2, worker, temppoly, temppoly2, start.z);
+					EmitIfValid(temppoly);    // <= start.z
+					worker = temppoly2;       // >= start.z
+					GetDoorwayExtents(wall->GetMesh(), checkwallnumber, temppoly); //store extents for door sides if needed
+
+					//6) z > end.z => FRONT
+					temppoly.clear();
+					temppoly2.clear();
+					SplitWithPlane(2, worker, temppoly, temppoly2, end.z);
+					EmitIfValid(temppoly2);   // >= end.z
+					worker = temppoly;        // <= end.z
+
+					// 'worker' is now the piece inside the [start,end] box -> drop it (hole)
+					polycheck = true; // triggers rebuild below
+				}
+			}
+			else
+			{
+				//otherwise put original polygon into array (will only be used if the related submesh is recreated)
+				newpolys.emplace_back(temppoly);
+			}
+
+			//make sure the polygon intersects bounds (is not outside the cut area)
+			/*if (bounds.intersects(polybounds) == true)
 			{
 				extentsx = GetExtents(temppoly, 1);
 				extentsy = GetExtents(temppoly, 2);
@@ -1788,7 +1869,7 @@ void PolyMesh::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool c
 					poly.emplace_back(sbs->ToLocal(polygon->geometry[j][k].vertex));
 				}
 				newpolys.emplace_back(poly);
-			}
+			}*/
 		}
 
 		//create new polygon
