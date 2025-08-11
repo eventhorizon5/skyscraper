@@ -1967,4 +1967,62 @@ void PolyMesh::SplitWithPlane(int axis, const PolyArray &orig, PolyArray &poly1,
 	}
 }
 
+void PolyMesh::SplitWithPlaneUV(int axis, const std::vector<Polygon::Geometry> &orig, std::vector<Polygon::Geometry> &poly1, std::vector<Polygon::Geometry> &poly2, Real value)
+{
+	//splits the given polygon into two polygons, on the desired plane (defined by the axis and value parameters)
+	//axis is 0 for X, 1 for Y, 2 for Z
+
+	//clear output polygons
+	poly1.clear();
+	poly2.clear();
+
+	//helper lambda to get coordinate by axis
+	auto getCoord = [axis](const Vector3& v) -> Real
+	{
+		if (axis == 0)
+			return v.x;
+		if (axis == 1)
+			return v.y;
+		return v.z;
+	};
+
+	size_t n = orig.size();
+	if (n < 2)
+		return; //not enough vertices
+
+	Polygon::Geometry prev = orig[n - 1];
+	Real prevSide = getCoord(prev.vertex) - value;
+	if (std::abs(prevSide) < SMALL_EPSILON)
+		prevSide = 0;
+
+	for (size_t i = 0; i < n; i++)
+	{
+		Polygon::Geometry curr = orig[i];
+		Real currSide = getCoord(curr.vertex) - value;
+		if (std::abs(currSide) < SMALL_EPSILON)
+			currSide = 0;
+
+		//if edge crosses the plane, compute intersection
+		if ((prevSide < 0 && currSide > 0) || (prevSide > 0 && currSide < 0))
+		{
+			Real t = prevSide / (prevSide - currSide);
+			Polygon::Geometry inter;
+			inter.vertex = prev.vertex + (curr.vertex - prev.vertex) * t;
+			inter.texel = prev.texel + (curr.texel - prev.texel) * t;
+			inter.normal = prev.normal + (curr.normal - prev.normal) * t;
+			poly1.emplace_back(inter);
+			poly2.emplace_back(inter);
+		}
+
+		//add current vertex to appropriate polygon(s)
+		if (currSide >= 0)
+			poly2.emplace_back(curr);
+		if (currSide <= 0)
+			poly1.emplace_back(curr);
+
+		prev = curr;
+		prevSide = currSide;
+	}
+}
+
 }

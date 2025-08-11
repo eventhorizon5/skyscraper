@@ -186,6 +186,11 @@ Polygon* Wall::AddPolygonSet(const std::string &name, const std::string &materia
 	return poly;
 }
 
+Polygon* Wall::AddPolygonSet(Wall* wall, const std::string& name, const std::string& material, const Polygon::GeometrySet &polys)
+{
+
+}
+
 void Wall::DeletePolygons(bool recreate_collider)
 {
 	//delete polygons

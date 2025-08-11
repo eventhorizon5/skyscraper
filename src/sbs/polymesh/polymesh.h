@@ -83,6 +83,7 @@ public:
 	Vector2 GetEndPoint(const Vector2 &StartPoint, Real angle, Real distance);
 	Plane ComputePlane(PolyArray &vertices, bool flip_normal = true);
 	void SplitWithPlane(int axis, const PolyArray &orig, PolyArray &poly1, PolyArray &poly2, Real value);
+	void SplitWithPlaneUV(int axis, const std::vector<Polygon::Geometry> &orig, std::vector<Polygon::Geometry> &poly1, std::vector<Polygon::Geometry> &poly2, Real value);
 	Vector3 ComputeNormal(PolyArray &vertices, Real &D);
 	Vector3 ComputeNormal2(const PolyArray &vertices, Real &D);
 	void ResetDoorwayWalls();
