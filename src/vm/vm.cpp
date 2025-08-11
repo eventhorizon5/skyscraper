@@ -772,8 +772,14 @@ bool VM::LoadQueued()
 	{
 		DelayLoad &load = load_queue[i];
 
-		if (load.system == false && system_finished == false)
-			continue;
+		if (load.system == false)
+		{
+			if (system_finished == false)
+				continue;
+
+			if (engines[0]->IsRunning() == false)
+				continue;
+		}
 
 		Report("Loading engine for building file '" + load.filename + "'...");
 
