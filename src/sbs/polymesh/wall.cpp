@@ -109,7 +109,7 @@ Polygon* Wall::AddPolygon(const std::string &name, const std::string &texture, P
 	Matrix3 tm;
 	Vector3 tv;
 	//std::vector<Extents> index_extents;
-	std::vector<std::vector<Polygon::Geometry> > geometry;
+	GeometrySet geometry;
 	std::vector<Triangle> triangles;
 	PolygonSet converted_vertices;
 	if (!polymesh->CreateMesh(meshwrapper, name, texture, vertices, tw, th, autosize, tm, tv, geometry, triangles, converted_vertices))
@@ -139,7 +139,7 @@ Polygon* Wall::AddPolygon(const std::string &name, const std::string &texture, P
 	Matrix3 tm;
 	Vector3 tv;
 	//std::vector<Extents> index_extents;
-	std::vector<std::vector<Polygon::Geometry> > geometry;
+	GeometrySet geometry;
 	PolygonSet converted_vertices;
 	if (!polymesh->CreateMesh(meshwrapper, name, texture, vertices, uvMap, geometry, converted_vertices, tw, th))
 	{
@@ -165,7 +165,7 @@ Polygon* Wall::AddPolygonSet(const std::string &name, const std::string &materia
 {
 	//create a set of polygons, providing the original material and texture mapping
 
-	std::vector<std::vector<Polygon::Geometry> > geometry;
+	GeometrySet geometry;
 	std::vector<Triangle> triangles;
 	PolygonSet converted_vertices;
 	if (!polymesh->CreateMesh(meshwrapper, name, material, vertices, tex_matrix, tex_vector, geometry, triangles, converted_vertices, 0, 0))
@@ -186,7 +186,7 @@ Polygon* Wall::AddPolygonSet(const std::string &name, const std::string &materia
 	return poly;
 }
 
-Polygon* Wall::AddPolygonSet(Wall* wall, const std::string& name, const std::string& material, const Polygon::GeometrySet &polys)
+Polygon* Wall::AddPolygonSet(Wall* wall, const std::string& name, const std::string& material, const GeometrySet &polys)
 {
 
 }

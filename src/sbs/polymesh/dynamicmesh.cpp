@@ -1033,7 +1033,7 @@ void DynamicMesh::Mesh::Prepare(bool process_vertices, int client)
 					{
 						for (size_t k = 0; k < poly->geometry[j].size(); k++)
 						{
-							Polygon::Geometry &element = poly->geometry[j][k];
+							Geometry &element = poly->geometry[j][k];
 
 							//make mesh's vertex relative to this scene node
 							Vector3 vertex;
@@ -1415,7 +1415,7 @@ void DynamicMesh::Mesh::UpdateVertices(int client, const std::string &material, 
 			{
 				for (size_t l = 0; l < poly->geometry[k].size(); l++)
 				{
-					Polygon::Geometry &element = poly->geometry[k][l];
+					Geometry &element = poly->geometry[k][l];
 
 					//make mesh's vertex relative to this scene node
 					Vector3 raw_vertex = mesh->GetOrientation() * element.vertex; //add mesh's rotation

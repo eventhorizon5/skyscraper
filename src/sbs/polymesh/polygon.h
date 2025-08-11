@@ -31,17 +31,20 @@
 
 namespace SBS {
 
+struct Geometry
+{
+	//basic 3D geometry
+	Vector3 vertex;
+	Vector2 texel;
+	Vector3 normal;
+};
+
+typedef std::vector<std::vector<Geometry> > GeometrySet;
+typedef std::vector<Geometry> GeometryArray;
+
 class SBSIMPEXP Polygon : public ObjectBase
 {
 public:
-	struct Geometry
-	{
-		//basic 3D geometry
-		Vector3 vertex;
-		Vector2 texel;
-		Vector3 normal;
-	};
-	typedef std::vector<std::vector<Geometry> > GeometrySet;
 
 	MeshObject* mesh;
 	GeometrySet geometry; //mesh geometry (vertices/texels/normals) container

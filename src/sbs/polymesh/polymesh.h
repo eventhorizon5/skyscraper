@@ -49,9 +49,9 @@ public:
 
 	explicit PolyMesh(Object *parent);
 	~PolyMesh();
-	bool CreateMesh(MeshObject *mesh, const std::string &name, const std::string &texture, PolyArray &vertices, Real tw, Real th, bool autosize, Matrix3 &tex_matrix, Vector3 &tex_vector, std::vector<std::vector<Polygon::Geometry> > &geometry, std::vector<Triangle> &triangles, PolygonSet &converted_vertices);
-	bool CreateMesh(MeshObject *mesh, const std::string &name, const std::string &material, PolygonSet &vertices, Matrix3 &tex_matrix, Vector3 &tex_vector, std::vector<std::vector<Polygon::Geometry> > &geometry, std::vector<Triangle> &triangles, PolygonSet &converted_vertices, Real tw, Real th, bool convert_vertices = true);
-	bool CreateMesh(MeshObject *mesh, const std::string &name, const std::string &material, PolygonSet &vertices, std::vector<std::vector<Vector2>> &uvMap, std::vector<std::vector<Polygon::Geometry> > &geometry, PolygonSet &converted_vertices, Real tw, Real th, bool convert_vertices = true);
+	bool CreateMesh(MeshObject *mesh, const std::string &name, const std::string &texture, PolyArray &vertices, Real tw, Real th, bool autosize, Matrix3 &tex_matrix, Vector3 &tex_vector, GeometrySet &geometry, std::vector<Triangle> &triangles, PolygonSet &converted_vertices);
+	bool CreateMesh(MeshObject *mesh, const std::string &name, const std::string &material, PolygonSet &vertices, Matrix3 &tex_matrix, Vector3 &tex_vector, GeometrySet &geometry, std::vector<Triangle> &triangles, PolygonSet &converted_vertices, Real tw, Real th, bool convert_vertices = true);
+	bool CreateMesh(MeshObject *mesh, const std::string &name, const std::string &material, PolygonSet &vertices, std::vector<std::vector<Vector2>> &uvMap, GeometrySet &geometry, PolygonSet &converted_vertices, Real tw, Real th, bool convert_vertices = true);
 	Wall* FindWallIntersect(MeshObject *mesh, const Vector3 &start, const Vector3 &end, Vector3 &isect, Real &distance, Vector3 &normal, Wall *wall = 0);
 	Vector2* GetTexels(Matrix3 &tex_matrix, Vector3 &tex_vector, PolygonSet &vertices, Real tw, Real th, size_t &texel_count);
 	Vector2 GetExtents(int coord, bool flip_z = false);
@@ -83,7 +83,7 @@ public:
 	Vector2 GetEndPoint(const Vector2 &StartPoint, Real angle, Real distance);
 	Plane ComputePlane(PolyArray &vertices, bool flip_normal = true);
 	void SplitWithPlane(int axis, const PolyArray &orig, PolyArray &poly1, PolyArray &poly2, Real value);
-	void SplitWithPlaneUV(int axis, const std::vector<Polygon::Geometry> &orig, std::vector<Polygon::Geometry> &poly1, std::vector<Polygon::Geometry> &poly2, Real value);
+	void SplitWithPlaneUV(int axis, const GeometryArray &orig, GeometryArray &poly1, GeometryArray &poly2, Real value);
 	Vector3 ComputeNormal(PolyArray &vertices, Real &D);
 	Vector3 ComputeNormal2(const PolyArray &vertices, Real &D);
 	void ResetDoorwayWalls();
@@ -112,10 +112,8 @@ private:
 	bool DrawBottomOld; //or front, if floor
 
 	//Cut function work polygons
-	PolyArray temppoly, temppoly2, worker;
-	PolygonSet newpolys;
-
-	PolyArray newpoly;
+	GeometryArray temppoly, temppoly2, worker;
+	GeometrySet newpolys;
 
 	//doorway data
 	bool wall1a, wall1b, wall2a, wall2b;
