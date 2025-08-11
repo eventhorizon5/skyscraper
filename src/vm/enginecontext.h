@@ -94,6 +94,7 @@ public:
 	void GatherReset();
 	void Gather();
 	void ResetPrepare();
+	void CancelShutdown() { shutdown = false; }
 
 private:
 

@@ -183,6 +183,11 @@ bool VM::DeleteEngine(const EngineContext *engine)
 	{
 		if (engines[i] == engine)
 		{
+			//don't delete the primary engine if others are running
+			if (i == 0 && engines.size() > 1)
+				return ReportError("Cannot delete primary engine with children");
+
+			//delete the engine
 			engines[i] = 0;
 			delete engine;
 			Report("Engine instance " + ToString(i) + " deleted");
@@ -227,6 +232,8 @@ void VM::DeleteEngines()
 	}
 	engines.clear();
 	active_engine = 0;
+	system_loaded = false;
+	system_finished = false;
 	unloaded = true;
 }
 
@@ -407,6 +414,8 @@ void VM::HandleEngineShutdown()
 					i--;
 					deleted = true;
 				}
+				else
+					engines[i]->CancelShutdown(); //cancel shutdown if delete failed
 			}
 		}
 	}
