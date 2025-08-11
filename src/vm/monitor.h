@@ -33,6 +33,7 @@ public:
 	explicit Monitor(VM *vm);
 	~Monitor();
 	bool CreateSim();
+	void Cleanup();
 	bool Run();
 
 private:

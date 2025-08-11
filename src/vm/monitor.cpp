@@ -61,6 +61,11 @@ bool Monitor::CreateSim()
 	return true;
 }
 
+void Monitor::Cleanup()
+{
+	root = 0;
+}
+
 bool Monitor::Run()
 {
 	//monitor runloop

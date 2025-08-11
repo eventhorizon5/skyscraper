@@ -224,6 +224,8 @@ void VM::DeleteEngines()
 {
 	//delete all sim emgine instances
 
+	monitor->Cleanup();
+
 	Report("Deleting all engines...");
 	for (size_t i = 0; i < engines.size(); i++)
 	{
