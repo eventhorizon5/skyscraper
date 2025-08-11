@@ -477,7 +477,8 @@ bool EngineContext::Start(std::vector<Ogre::Camera*> &cameras)
 		return false;
 
 	//cut outside sim boundaries if specified
-	Simcore->CutOutsideBoundaries(vm->CutLandscape, vm->CutBuildings, vm->CutExternal, vm->CutFloors);
+	if (!IsSystem)
+		Simcore->CutOutsideBoundaries(vm->CutLandscape, vm->CutBuildings, vm->CutExternal, vm->CutFloors);
 
 	//if this has a parent engine, cut the parent for this new engine
 	if (vm->IsValidEngine(parent) == true)
