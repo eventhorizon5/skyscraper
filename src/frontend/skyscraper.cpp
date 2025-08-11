@@ -606,9 +606,7 @@ bool Skyscraper::Start(EngineContext *engine)
 #endif
 
 	//load control panel
-	//if (engine == vm->GetActiveEngine())
-	//{
-		bool panel = vm->GetHAL()->GetConfigBool(hal->configfile, "Skyscraper.Frontend.ShowControlPanel", true);
+	bool panel = vm->GetHAL()->GetConfigBool(hal->configfile, "Skyscraper.Frontend.ShowControlPanel", true);
 
 #ifdef USING_WX
 		//override if disabled on the command line
@@ -618,7 +616,6 @@ bool Skyscraper::Start(EngineContext *engine)
 		if (panel == true)
 			gui->CreateDebugPanel();
 #endif
-	//}
 
 	hal->RefreshViewport();
 
