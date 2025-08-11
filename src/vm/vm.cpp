@@ -618,8 +618,10 @@ void VM::CheckCamera()
 	//switch the active engine to the next one that has an active camera
 
 	if (active_engine->IsCameraActive() == false)
+	{
 		active_engine = FindActiveEngine();
-
+		Report("Switching to active engine " + ToString(active_engine->GetNumber()));
+	}
 }
 
 bool VM::StartEngine(EngineContext* engine, std::vector<Ogre::Camera*> &cameras)
