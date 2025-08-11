@@ -1195,4 +1195,9 @@ bool VM::IsRootLoaded()
 	return false;
 }
 
+bool VM::LoadPending()
+{
+	return !load_queue.empty();
+}
+
 }

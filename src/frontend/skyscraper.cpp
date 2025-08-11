@@ -595,6 +595,10 @@ bool Skyscraper::Start(EngineContext *engine)
 	if (!vm->StartEngine(engine, hal->mCameras))
 		return false;
 
+	//exit if engine loads are still queued
+	if (vm->LoadPending() == true)
+		return true;
+
 	//close progress dialog if no engines are loading
 #ifdef USING_WX
 	if (vm->IsEngineLoading() == false)
