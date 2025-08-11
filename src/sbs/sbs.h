@@ -202,7 +202,7 @@ public:
 	SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instance_number, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0f, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
 	~SBS();
 	void Initialize();
-	bool Start(std::vector<Ogre::Camera*> &cameras);
+	bool Start();
 	void CreateSky();
 	void CalculateFrameRate();
 	bool Loop(bool loading, bool isready);

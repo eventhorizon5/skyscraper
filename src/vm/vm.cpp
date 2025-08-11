@@ -624,12 +624,12 @@ void VM::CheckCamera()
 	}
 }
 
-bool VM::StartEngine(EngineContext* engine, std::vector<Ogre::Camera*> &cameras)
+bool VM::StartEngine(EngineContext* engine)
 {
 	//start a sim engine
 
 	Report("Initiating engine start");
-	return engine->Start(cameras);
+	return engine->Start();
 }
 
 ::SBS::SBS* VM::GetActiveSystem()

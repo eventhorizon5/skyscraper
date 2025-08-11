@@ -469,7 +469,7 @@ void EngineContext::UnloadSim()
 #endif
 }
 
-bool EngineContext::Start(std::vector<Ogre::Camera*> &cameras)
+bool EngineContext::Start()
 {
 	//start simulator
 
@@ -494,7 +494,7 @@ bool EngineContext::Start(std::vector<Ogre::Camera*> &cameras)
 	}
 
 	//start simulator
-	if (!Simcore->Start(cameras))
+	if (!Simcore->Start())
 		return ReportError("Error starting simulator\n");
 
 	//set to saved position if reloading building
@@ -617,15 +617,17 @@ void EngineContext::DetachCamera(bool reset_building)
 		Simcore->ResetState();
 }
 
-void EngineContext::AttachCamera(std::vector<Ogre::Camera*> &cameras, bool init_state)
+bool EngineContext::AttachCamera(std::vector<Ogre::Camera*> &cameras, bool init_state)
 {
 	//attach the camera to this engine
 
-	Simcore->AttachCamera(cameras, init_state);
+	bool result = Simcore->AttachCamera(cameras, init_state);
 
 	//reset camera position if camera is outside of the engine's area when attaching
 	if (IsInside() == false || vm->IsRunning() == false)
 		ResetCamera();
+
+	return result;
 }
 
 void EngineContext::RefreshCamera()

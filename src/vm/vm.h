@@ -106,7 +106,7 @@ public:
 	EngineContext* GetFirstValidEngine();
 	int GetFreeInstanceNumber();
 	int Run(std::vector<EngineContext*> &newengine);
-	bool StartEngine(EngineContext* engine, std::vector<Ogre::Camera*> &cameras);
+	bool StartEngine(EngineContext* engine);
 	::SBS::SBS* GetActiveSystem();
 	ScriptProcessor* GetActiveScriptProcessor();
 	bool Load(bool system, bool clear, const std::string &filename, EngineContext *parent = 0, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);

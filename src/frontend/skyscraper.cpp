@@ -592,12 +592,8 @@ bool Skyscraper::Start(EngineContext *engine)
 #endif
 	}
 
-	std::vector<Ogre::Camera*> cameras;
-	if (engine->IsSystem == false)
-		cameras = hal->mCameras;
-
 	//start simulation
-	if (!vm->StartEngine(engine, cameras))
+	if (!vm->StartEngine(engine))
 		return false;
 
 	//exit if engine loads are still queued

@@ -512,7 +512,7 @@ SBS::~SBS()
 	sbs = 0;
 }
 
-bool SBS::Start(std::vector<Ogre::Camera*> &cameras)
+bool SBS::Start()
 {
 	//Post-init startup code goes here, before the runloop
 
@@ -537,9 +537,6 @@ bool SBS::Start(std::vector<Ogre::Camera*> &cameras)
 				sounds[i]->Play();
 		}
 	}
-
-	//attach camera object
-	AttachCamera(cameras);
 
 	//enable random activity if specified
 	if (RandomActivity == true)
