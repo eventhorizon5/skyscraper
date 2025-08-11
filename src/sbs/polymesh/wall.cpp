@@ -140,8 +140,9 @@ Polygon* Wall::AddPolygon(const std::string &name, const std::string &texture, P
 	Vector3 tv;
 	//std::vector<Extents> index_extents;
 	GeometrySet geometry;
+	std::vector<Triangle> output_triangles;
 	PolygonSet converted_vertices;
-	if (!polymesh->CreateMesh(meshwrapper, name, texture, vertices, uvMap, geometry, converted_vertices, tw, th))
+	if (!polymesh->CreateMesh(meshwrapper, name, texture, vertices, uvMap, geometry, output_triangles, converted_vertices, tw, th))
 	{
 		ReportError("Error creating wall '" + name + "'");
 		return 0;
@@ -186,9 +187,57 @@ Polygon* Wall::AddPolygonSet(const std::string &name, const std::string &materia
 	return poly;
 }
 
-Polygon* Wall::AddPolygonSet(Wall* wall, const std::string& name, const std::string& material, const GeometrySet &polys)
+Polygon* Wall::AddPolygonSet(Wall* wall, const std::string& name, const std::string& material, const GeometrySet &geometry)
 {
+	//create a set of polygons, providing the original material and geometry data
 
+	if (!meshwrapper || geometry.empty())
+		return nullptr;
+
+	//convert GeometrySet into PolygonSet (positions) and UV map
+	PolygonSet vertices;
+	std::vector<Triangle> triangles;
+	std::vector<std::vector<Vector2>> uvMap;
+	vertices.reserve(geometry.size());
+	uvMap.reserve(geometry.size());
+
+	for (const auto &ring : geometry)
+	{
+		PolyArray verts;
+		std::vector<Vector2> uvs;
+		verts.reserve(ring.size());
+		uvs.reserve(ring.size());
+
+		for (const auto &g : ring)
+		{
+			verts.emplace_back(g.vertex);
+			uvs.emplace_back(g.texel);
+		}
+		vertices.emplace_back(std::move(verts));
+		uvMap.emplace_back(std::move(uvs));
+	}
+
+	GeometrySet geom_copy;
+	PolygonSet converted_vertices;
+
+	//call CreateMesh with explicit UVs
+	if (!polymesh->CreateMesh(meshwrapper, name, material, vertices, uvMap, geom_copy, triangles, converted_vertices, 1.0f, 1.0f, false))
+	{
+		ReportError("Error creating wall '" + name + "'");
+		return 0;
+	}
+
+	//compute plane from first ring of positions
+	Plane plane;
+	if (!converted_vertices.empty() && !converted_vertices[0].empty())
+	plane = sbs->GetPolyMesh()->ComputePlane(converted_vertices[0]);
+
+	//create Polygon object
+	Matrix3 tm; Vector3 tv;
+	Polygon *poly = new Polygon(this, name, meshwrapper, geom_copy, triangles, tm, tv, material, plane);
+	polygons.emplace_back(poly);
+
+	return poly;
 }
 
 void Wall::DeletePolygons(bool recreate_collider)
