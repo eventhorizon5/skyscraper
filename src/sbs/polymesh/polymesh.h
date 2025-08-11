@@ -111,7 +111,7 @@ private:
 	bool DrawBottomOld; //or front, if floor
 
 	//Cut function work polygons
-	PolyArray temppoly, temppoly2, temppoly3, temppoly4, temppoly5, worker;
+	PolyArray temppoly, temppoly2, worker;
 	PolygonSet newpolys;
 
 	PolyArray newpoly;
