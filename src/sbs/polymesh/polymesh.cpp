@@ -1657,16 +1657,19 @@ void PolyMesh::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool c
 					SplitWithPlane(2, worker, temppoly, temppoly2, start.z);
 					EmitIfValid(temppoly);    // <= start.z
 					worker = temppoly2;       // >= start.z
-					GetDoorwayExtents(wall->GetMesh(), checkwallnumber, temppoly); //store extents for door sides if needed
 
 					//6) z > end.z => FRONT
 					temppoly.clear();
 					temppoly2.clear();
 					SplitWithPlane(2, worker, temppoly, temppoly2, end.z);
 					EmitIfValid(temppoly2);   // >= end.z
-					worker = temppoly;        // <= end.z
+					//worker = temppoly;        // <= end.z
+
+					//store extents for door sides if needed
+					GetDoorwayExtents(wall->GetMesh(), checkwallnumber, temppoly);
 
 					// 'worker' is now the piece inside the [start,end] box -> drop it (hole)
+
 					polycheck = true; // triggers rebuild below
 				}
 			}
