@@ -689,12 +689,16 @@ void EngineContext::OnExit()
 	inside = false;
 }
 
-void EngineContext::CutForEngine(EngineContext *engine)
+void EngineContext::CutForEngine(EngineContext *engine, bool child)
 {
 	//cut holes in this sim engine, for a newly loaded building, if possible
 
 	if (!engine || engine == this)
 		return;
+
+	//limit cuts on system engines
+	//if (child == false && IsSystem == true)
+		//return;
 
 	::SBS::SBS *newsimcore = engine->GetSystem();
 
@@ -736,7 +740,7 @@ void EngineContext::CutForEngine(EngineContext *engine)
 
 	//if this has a valid parent, have parent cut for the specified engine
 	if (vm->IsValidEngine(parent) == true)
-		parent->CutForEngine(engine);
+		parent->CutForEngine(engine, child);
 }
 
 void EngineContext::AddChild(EngineContext *engine)

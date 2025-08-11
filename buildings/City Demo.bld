@@ -68,5 +68,6 @@
     CameraPosition = 115, -115
     CameraRotation = 0, 270, 0
     Type = City
+    Bounds = -1000, 0, -1000, 1000, 0, 1000
 <EndGlobals>
 

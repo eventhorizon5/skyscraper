@@ -78,7 +78,7 @@ public:
 	Vector3 GetCameraPosition();
 	void OnEnter();
 	void OnExit();
-	void CutForEngine(EngineContext *engine);
+	void CutForEngine(EngineContext *engine, bool child = false);
 	void AddChild(EngineContext *engine);
 	void RemoveChild(const EngineContext *engine);
 	void RemoveParent() { parent = 0; }

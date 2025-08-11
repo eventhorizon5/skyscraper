@@ -817,6 +817,7 @@ bool VM::LoadQueued()
 
 		//boot SBS
 		EngineContext* engine = Initialize(load.clear, load.parent, load.position, load.rotation, load.area_min, load.area_max);
+		engine->IsSystem = load.system;
 
 		//exit if init failed
 		if (!engine)
