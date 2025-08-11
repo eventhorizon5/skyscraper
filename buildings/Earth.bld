@@ -29,5 +29,5 @@
 CreateWallObject landscape, Earth
 
 #Create the Earth as a geosphere
-AddGeosphere landscape, Earth, Earth, 0, -20902211 - 1, 0, 20902211, 6, 10, 10, false
+AddGeosphere landscape, Earth, Earth, 0, -20902211, 0, 20902211, 6, 10, 10, false
 
