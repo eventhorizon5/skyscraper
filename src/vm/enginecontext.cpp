@@ -623,7 +623,7 @@ void EngineContext::AttachCamera(std::vector<Ogre::Camera*> &cameras, bool init_
 	Simcore->AttachCamera(cameras, init_state);
 
 	//reset camera position if camera is outside of the engine's area when attaching
-	if (IsInside() == false)
+	if (IsInside() == false || vm->IsRunning() == false)
 		ResetCamera();
 }
 

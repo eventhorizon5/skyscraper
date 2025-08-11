@@ -127,6 +127,7 @@ public:
 	unsigned long GetGlobalStats(unsigned long &meshes, unsigned long &textures, unsigned long &actions, unsigned long &sounds, unsigned long &objects, unsigned long &walls, unsigned long &polygons);
 	bool IsRootLoaded();
 	bool LoadPending();
+	bool IsRunning() { return running; }
 
 	bool Shutdown;
 	bool ConcurrentLoads; //set to true for buildings to be loaded while another sim is active and rendering
@@ -177,6 +178,7 @@ private:
 
 	bool first_run;
 	bool RenderOnStartup; //override SBS engine setting with same name
+	bool running; //true if VM has started and is currently running/rendering
 
 	//shared libraries
 	std::vector<dylib*> dylibs;

@@ -78,6 +78,7 @@ VM::VM()
 	monitor = 0;
 	system_loaded = false;
 	system_finished = false;
+	running = false;
 
 	macos_major = 0;
 	macos_minor = 0;
@@ -236,6 +237,7 @@ void VM::DeleteEngines()
 	active_engine = 0;
 	system_loaded = false;
 	system_finished = false;
+	running = false;
 	unloaded = true;
 }
 
@@ -297,7 +299,7 @@ void VM::SetActiveEngine(int number, bool switch_engines, bool force)
 	active_engine->AttachCamera(hal->mCameras, !switch_engines);
 
 	//apply camera state to new engine
-	if (switch_engines == true && state_set == true)
+	if (switch_engines == true && state_set == true && running == true)
 		active_engine->SetCameraState(state, false);
 
 	//update mouse cursor for freelook mode
@@ -707,6 +709,9 @@ int VM::Run(std::vector<EngineContext*> &newengines)
 		Report("Unloading to menu...");
 		return 2;
 	}
+
+	//update running state;
+	running = true;
 
 	//update Caelum
 	skysystem->UpdateSky();
