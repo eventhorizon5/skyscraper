@@ -324,6 +324,7 @@ bool Sound::Play(bool reset)
 	if (!system || !enabled)
 		return false;
 
+	//blacklist certain empty sounds
 	if (Filename == "none.wav" || Filename == "beno/none.wav")
 		return true;
 
@@ -392,6 +393,7 @@ bool Sound::Load(const std::string &filename, bool force)
 	if (!system || !enabled)
 		return false;
 
+	//blacklist certain empty sounds
 	if (Filename == "none.wav" || Filename == "beno/none.wav")
 		return false;
 
