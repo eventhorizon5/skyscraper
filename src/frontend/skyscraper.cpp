@@ -600,7 +600,7 @@ bool Skyscraper::Start(EngineContext *engine)
 		return false;
 
 	//exit if engine loads are still queued
-	if (vm->LoadPending() == true)
+	if (vm->LoadPending() == true || vm->IsEngineLoading() == true)
 		return true;
 
 	//close progress dialog if no engines are loading
