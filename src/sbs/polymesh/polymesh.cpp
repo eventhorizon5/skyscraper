@@ -1687,6 +1687,14 @@ void PolyMesh::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool c
 			SplitWithPlaneUV(2, work, tmpA, tmpB, end.z);
 			emitIf(tmpB);      // >= end.z
 
+			//store extents for door sides if needed
+			PolyArray poly;
+			for (size_t i = 0; i < tmpA.size(); i++)
+			{
+				poly.push_back(tmpA[i].vertex);
+			}
+			GetDoorwayExtents(wall->GetMesh(), checkwallnumber, poly);
+
 			// 'work' now is the inside-of-box piece -> hole; drop it
 
 			touchedAny = true;
