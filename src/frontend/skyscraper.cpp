@@ -449,7 +449,8 @@ bool Skyscraper::Loop()
 	}
 
 #ifdef USING_WX
-	gui->ShowProgress();
+	if (vm->LoadPending() == false)
+		gui->ShowProgress();
 #endif
 
 	//run sim engine instances
