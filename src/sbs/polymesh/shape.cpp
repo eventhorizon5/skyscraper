@@ -1023,7 +1023,7 @@ void Shape::CreatePyramid(const std::string &name, const std::string &texture, c
 		std::vector<Vector2> uv = { {0.5f * tw, 0}, {tw, th}, {0, th} };
 		result.emplace_back(poly);
 		uvMapSet.emplace_back(uv);
-		if (inside = false)
+		if (inside == false)
 			triangles.push_back(Triangle(index + 0, index + 1, index + 2));
 		else
 			triangles.push_back(Triangle(index + 2, index + 1, index + 0));
