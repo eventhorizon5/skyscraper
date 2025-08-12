@@ -45,7 +45,7 @@ AddGround Ground, Downtown, -158400, -158400, 158400, 158400, 0, 7920, 7920
 <Globals>
     CameraPosition = 115, -115
     CameraRotation = 0, 270, 0
-    Bounds = -10000 -10000, -10000, 10000, 10000, 10000
+    Bounds = -10000, -10000, -10000, 10000, 10000, 10000
 <EndGlobals>
 
 <Vehicle 1>
