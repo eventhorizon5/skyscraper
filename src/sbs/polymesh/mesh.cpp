@@ -1265,7 +1265,10 @@ void MeshObject::CreateBoundingBox()
 				}
 			}
 		}
-		sbs->MergeBounds(*Bounds);
+		Ogre::AxisAlignedBox box = *Bounds;
+		box.setMinimum(Bounds->getMinimum() + GetPosition());
+		box.setMaximum(Bounds->getMaximum() + GetPosition());
+		sbs->MergeBounds(box);
 	}
 }
 
