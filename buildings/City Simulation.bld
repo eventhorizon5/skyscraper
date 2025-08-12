@@ -1,5 +1,13 @@
 # City Simulation
 
+<Textures>
+    Load data/downtown.jpg, Downtown, 1, 1
+    Load data/misc/grass.jpg, Grass, 1, 1
+<EndTextures>
+
+# Ground
+AddGround Ground, Downtown, -158400, -158400, 158400, 158400, 0, 7920, 7920
+
 <Buildings>
     ConcurrentLoads = false
     CutExternal = true
@@ -37,6 +45,7 @@
 <Globals>
     CameraPosition = 115, -115
     CameraRotation = 0, 270, 0
+    Bounds = -10000 -10000, -10000, 10000, 10000, 10000
 <EndGlobals>
 
 <Vehicle 1>
