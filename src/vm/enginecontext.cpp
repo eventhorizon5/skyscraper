@@ -764,19 +764,19 @@ void EngineContext::RemoveChild(const EngineContext *engine)
 	}
 }
 
-void EngineContext::Move(Vector3 &position, bool move_children)
+void EngineContext::Move(Vector3 &vector, Real speed, bool move_children)
 {
 	//move this engine
 	//if move_children is true, recursively call this function on all children
 
 	this->position += position;
-	Simcore->Move(position);
+	Simcore->Move(position, speed);
 
 	if (move_children == true)
 	{
 		for (size_t i = 0; i < children.size(); i++)
 		{
-			children[i]->Move(position, move_children);
+			children[i]->Move(position, speed, move_children);
 		}
 	}
 }

@@ -30,7 +30,7 @@
 #include "debugpanel.h"
 #include "vm.h"
 #include "enginecontext.h"
-#include "moveobject.h"
+#include "moveengine.h"
 #include "loaddialog.h"
 #include "enginemanager.h"
 
@@ -196,7 +196,7 @@ EngineManager::EngineManager(DebugPanel* parent,wxWindowID id,const wxPoint& pos
 	//*)
 	panel = parent;
 	loader = 0;
-	moveobject = 0;
+	moveengine = 0;
 	OnInit();
 }
 
@@ -208,9 +208,9 @@ EngineManager::~EngineManager()
 	if (loader)
 		loader->Destroy();
 	loader = 0;
-	if (moveobject)
-		moveobject->Destroy();
-	moveobject = 0;
+	if (moveengine)
+		moveengine->Destroy();
+	moveengine = 0;
 }
 
 void EngineManager::OnInit()
@@ -328,8 +328,8 @@ void EngineManager::Loop()
 		tParent->Clear();
 	}
 
-	if (moveobject)
-		moveobject->Loop();
+	if (moveengine)
+		moveengine->Loop();
 }
 
 void EngineManager::On_bSetActive_Click(wxCommandEvent& event)
@@ -400,12 +400,12 @@ void EngineManager::On_bMove_Click(wxCommandEvent& event)
 
 		if (engine)
 		{
-			if (moveobject)
-				delete moveobject;
-			moveobject = 0;
+			if (moveengine)
+				delete moveengine;
+			moveengine = 0;
 
-			moveobject = new MoveObject(panel, this, -1, engine, 0);
-			moveobject->Show();
+			moveengine = new MoveEngine(panel, this, -1, engine);
+			moveengine->Show();
 		}
 	}
 }

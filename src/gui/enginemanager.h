@@ -127,7 +127,7 @@ class EngineManager: public wxDialog
 		EngineContext *engine;
 		DebugPanel *panel;
 		LoadDialog *loader;
-		MoveObject *moveobject;
+		MoveEngine *moveengine;
 		int lastcount;
 
 		DECLARE_EVENT_TABLE()

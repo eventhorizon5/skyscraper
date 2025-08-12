@@ -82,7 +82,7 @@ public:
 	void AddChild(EngineContext *engine);
 	void RemoveChild(const EngineContext *engine);
 	void RemoveParent() { parent = 0; }
-	void Move(Vector3 &position, bool move_children = false);
+	void Move(Vector3 &vector, Real speed, bool move_children = false);
 	EngineContext* GetParent() { return parent; }
 	bool IsParent(EngineContext *engine, bool recursive = false);
 	VM* GetVM();
