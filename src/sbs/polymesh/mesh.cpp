@@ -1265,6 +1265,8 @@ void MeshObject::CreateBoundingBox()
 				}
 			}
 		}
+
+		//merge bounds into sim engine bounding box
 		Ogre::AxisAlignedBox box = *Bounds;
 		box.setMinimum(Bounds->getMinimum() + GetPosition());
 		box.setMaximum(Bounds->getMaximum() + GetPosition());

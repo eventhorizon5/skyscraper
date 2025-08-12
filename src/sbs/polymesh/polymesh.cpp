@@ -1597,7 +1597,7 @@ void PolyMesh::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool c
 			if (src.empty())
 				continue;
 
-			//build local-space CutVertex ring + compute bounds
+			//build local-space geometry ring + compute bounds
 			GeometryArray ring;
 			ring.reserve(src.size());
 
@@ -1653,37 +1653,43 @@ void PolyMesh::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool c
 			};
 
 			// 1) x < start.x (LEFT)
-			tmpA.clear(); tmpB.clear();
+			tmpA.clear();
+			tmpB.clear();
 			SplitWithPlaneUV(0, work, tmpA, tmpB, start.x);
 			emitIf(tmpA);      // <= start.x
 			work.swap(tmpB);   // remainder >= start.x
 
 			// 2) x > end.x (RIGHT)
-			tmpA.clear(); tmpB.clear();
+			tmpA.clear();
+			tmpB.clear();
 			SplitWithPlaneUV(0, work, tmpA, tmpB, end.x);
 			emitIf(tmpB);      // >= end.x
 			work.swap(tmpA);   // remainder <= end.x
 
 			// 3) y < start.y (BELOW)
-			tmpA.clear(); tmpB.clear();
+			tmpA.clear();
+			tmpB.clear();
 			SplitWithPlaneUV(1, work, tmpA, tmpB, start.y);
 			emitIf(tmpA);      // <= start.y
 			work.swap(tmpB);   // remainder >= start.y
 
 			// 4) y > end.y (ABOVE)
-			tmpA.clear(); tmpB.clear();
+			tmpA.clear();
+			tmpB.clear();
 			SplitWithPlaneUV(1, work, tmpA, tmpB, end.y);
 			emitIf(tmpB);      // >= end.y
 			work.swap(tmpA);   // remainder <= end.y
 
-			// 5) z < start.z (BACK)
-			tmpA.clear(); tmpB.clear();
+			// 5) z < start.z (FRONT)
+			tmpA.clear();
+			tmpB.clear();
 			SplitWithPlaneUV(2, work, tmpA, tmpB, start.z);
 			emitIf(tmpA);      // <= start.z
 			work.swap(tmpB);   // remainder >= start.z
 
-			// 6) z > end.z (FRONT)
-			tmpA.clear(); tmpB.clear();
+			// 6) z > end.z (BACK)
+			tmpA.clear();
+			tmpB.clear();
 			SplitWithPlaneUV(2, work, tmpA, tmpB, end.z);
 			emitIf(tmpB);      // >= end.z
 
