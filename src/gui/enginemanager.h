@@ -48,6 +48,7 @@ class EngineManager: public wxDialog
 		wxButton* bMove;
 		wxButton* bOk;
 		wxButton* bReload;
+		wxButton* bReset;
 		wxButton* bSetActive;
 		wxButton* bShutdown;
 		wxCheckBox* chkCLoads;
@@ -77,33 +78,34 @@ class EngineManager: public wxDialog
 	protected:
 
 		//(*Identifiers(EngineManager)
-		static const long ID_EngineList;
-		static const long ID_STATICTEXT7;
-		static const long ID_tType;
-		static const long ID_STATICTEXT8;
-		static const long ID_tParent;
-		static const long ID_STATICTEXT4;
-		static const long ID_tPosition;
-		static const long ID_STATICTEXT3;
-		static const long ID_tBoundsMin;
-		static const long ID_STATICTEXT5;
-		static const long ID_tBoundsMax;
-		static const long ID_STATICTEXT1;
-		static const long ID_tActive;
-		static const long ID_STATICTEXT2;
-		static const long ID_tState;
-		static const long ID_STATICTEXT6;
-		static const long ID_tUptime;
-		static const long ID_STATICLINE2;
-		static const long ID_CLoads;
-		static const long ID_chkRender;
-		static const long ID_chkPaused;
-		static const long ID_bSetActive;
-		static const long ID_bReload;
-		static const long ID_bMove;
-		static const long ID_bLoad;
-		static const long ID_bShutdown;
-		static const long ID_bOk;
+		static const wxWindowID ID_EngineList;
+		static const wxWindowID ID_STATICTEXT7;
+		static const wxWindowID ID_tType;
+		static const wxWindowID ID_STATICTEXT8;
+		static const wxWindowID ID_tParent;
+		static const wxWindowID ID_STATICTEXT4;
+		static const wxWindowID ID_tPosition;
+		static const wxWindowID ID_STATICTEXT3;
+		static const wxWindowID ID_tBoundsMin;
+		static const wxWindowID ID_STATICTEXT5;
+		static const wxWindowID ID_tBoundsMax;
+		static const wxWindowID ID_STATICTEXT1;
+		static const wxWindowID ID_tActive;
+		static const wxWindowID ID_STATICTEXT2;
+		static const wxWindowID ID_tState;
+		static const wxWindowID ID_STATICTEXT6;
+		static const wxWindowID ID_tUptime;
+		static const wxWindowID ID_STATICLINE2;
+		static const wxWindowID ID_CLoads;
+		static const wxWindowID ID_chkRender;
+		static const wxWindowID ID_chkPaused;
+		static const wxWindowID ID_bSetActive;
+		static const wxWindowID ID_bReload;
+		static const wxWindowID ID_bMove;
+		static const wxWindowID ID_bLoad;
+		static const wxWindowID ID_bReset;
+		static const wxWindowID ID_bShutdown;
+		static const wxWindowID ID_bOk;
 		//*)
 		void OnInit();
 
@@ -119,6 +121,7 @@ class EngineManager: public wxDialog
 		void On_bOk_Click(wxCommandEvent& event);
 		void On_bMove_Click(wxCommandEvent& event);
 		void On_chkPaused_Click(wxCommandEvent& event);
+		void On_bReset_Click(wxCommandEvent& event);
 		//*)
 
 		EngineContext *engine;

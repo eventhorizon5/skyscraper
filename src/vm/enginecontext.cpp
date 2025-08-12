@@ -852,4 +852,13 @@ void EngineContext::ResetPrepare()
 	prepared = false;
 }
 
+void EngineContext::Reset(bool full)
+{
+	//reset an engine context's SBS engine
+
+	Simcore->ResetState();
+	if (processor && full)
+		processor->Reset();
+}
+
 }
