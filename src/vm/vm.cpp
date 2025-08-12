@@ -309,7 +309,7 @@ void VM::SetActiveEngine(int number, bool switch_engines, bool force)
 	}
 
 	//apply camera state to new engine
-	if (switch_engines == true && state_set == true)
+	if (switch_engines == true && state_set == true && running == true)
 		active_engine->SetCameraState(state, false);
 
 	//update mouse cursor for freelook mode
