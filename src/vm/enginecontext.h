@@ -96,6 +96,7 @@ public:
 	void ResetPrepare();
 	void CancelShutdown() { shutdown = false; }
 	void Reset(bool full = true);
+	Vector3 GetPosition();
 
 private:
 

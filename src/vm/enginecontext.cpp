@@ -861,4 +861,9 @@ void EngineContext::Reset(bool full)
 		processor->Reset();
 }
 
+Vector3 EngineContext::GetPosition()
+{
+	return position;
+}
+
 }
