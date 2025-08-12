@@ -53,10 +53,6 @@ PolyMesh::PolyMesh(Object *parent) : ObjectBase(parent)
 	DrawBottomOld = false;
 
 	ResetDoorwayWalls();
-
-	temppoly.reserve(32);
-	temppoly2.reserve(32);
-	worker.reserve(32);
 }
 
 PolyMesh::~PolyMesh()
