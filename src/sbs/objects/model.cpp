@@ -31,6 +31,7 @@
 #include "stairs.h"
 #include "camera.h"
 #include "profiler.h"
+#include "shape.h"
 #include "model.h"
 
 namespace SBS {
@@ -296,6 +297,19 @@ void Model::OnClick(Vector3 &position, bool shift, bool ctrl, bool alt, bool rig
 			return;
 		}
 	}
+}
+
+Shape* Model::CreateShape(Wall *wall)
+{
+	//Creates a shape in the specified wall object
+	//returns a Shape object, which must be deleted by the caller after use
+
+	if (!wall)
+		return 0;
+
+	Shape *shape = new Shape(wall);
+	//shape->origin = Vector3(0, 0, 0);
+	return shape;
 }
 
 }

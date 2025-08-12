@@ -32,6 +32,7 @@ typedef std::vector<Polygon*> Polygons;
 
 class SBSIMPEXP PolyMesh : public ObjectBase
 {
+	friend class Shape;
 public:
 
 	//define geometry type
@@ -48,8 +49,9 @@ public:
 
 	explicit PolyMesh(Object *parent);
 	~PolyMesh();
-	bool CreateMesh(MeshObject *mesh, const std::string &name, const std::string &texture, PolyArray &vertices, Real tw, Real th, bool autosize, Matrix3 &tex_matrix, Vector3 &tex_vector, std::vector<std::vector<Polygon::Geometry> > &geometry, std::vector<Triangle> &triangles, PolygonSet &converted_vertices);
-	bool CreateMesh(MeshObject *mesh, const std::string &name, const std::string &material, PolygonSet &vertices, Matrix3 &tex_matrix, Vector3 &tex_vector, std::vector<std::vector<Polygon::Geometry> > &geometry, std::vector<Triangle> &triangles, PolygonSet &converted_vertices, Real tw, Real th, bool convert_vertices = true);
+	bool CreateMesh(MeshObject *mesh, const std::string &name, const std::string &texture, PolyArray &vertices, Real tw, Real th, bool autosize, Matrix3 &tex_matrix, Vector3 &tex_vector, GeometrySet &geometry, std::vector<Triangle> &triangles, PolygonSet &converted_vertices);
+	bool CreateMesh(MeshObject *mesh, const std::string &name, const std::string &material, PolygonSet &vertices, Matrix3 &tex_matrix, Vector3 &tex_vector, GeometrySet &geometry, std::vector<Triangle> &triangles, PolygonSet &converted_vertices, Real tw, Real th, bool convert_vertices = true);
+	bool CreateMesh(MeshObject *mesh, const std::string &name, const std::string &material, PolygonSet &vertices, std::vector<std::vector<Vector2>> &uvMap, GeometrySet &geometry, std::vector<Triangle> &triangles, PolygonSet &converted_vertices, Real tw, Real th, bool convert_vertices = true);
 	Wall* FindWallIntersect(MeshObject *mesh, const Vector3 &start, const Vector3 &end, Vector3 &isect, Real &distance, Vector3 &normal, Wall *wall = 0);
 	Vector2* GetTexels(Matrix3 &tex_matrix, Vector3 &tex_vector, PolygonSet &vertices, Real tw, Real th, size_t &texel_count);
 	Vector2 GetExtents(int coord, bool flip_z = false);
@@ -57,10 +59,10 @@ public:
 	bool AddFloorMain(Wall* wallobject, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real altitude1, Real altitude2, bool reverse_axis, bool texture_direction, Real tw, Real th, bool autosize, bool legacy_behavior = false, bool report = true);
 	Wall* CreateWallBox(MeshObject* mesh, const std::string &name, const std::string &texture, Real x1, Real x2, Real z1, Real z2, Real height_in, Real voffset, Real tw, Real th, bool inside = true, bool outside = true, bool top = true, bool bottom = true, bool autosize = true, bool report = true);
 	Wall* CreateWallBox2(MeshObject* mesh, const std::string &name, const std::string &texture, Real CenterX, Real CenterZ, Real WidthX, Real LengthZ, Real height_in, Real voffset, Real tw, Real th, bool inside = true, bool outside = true, bool top = true, bool bottom = true, bool autosize = true);
-	Wall* AddTriangleWall(MeshObject* mesh, const std::string &name, const std::string &texture, const std::string &side_texture, Real thickness, Real x1, Real y1, Real z1, Real x2, Real y2, Real z2, Real x3, Real y3, Real z3, Real tw, Real th);
-	Wall* AddCustomWall(MeshObject* mesh, const std::string &name, const std::string &texture, const std::string &side_texture, Real thickness, PolyArray &varray, Real tw, Real th);
-	Wall* AddCustomFloor(MeshObject* mesh, const std::string &name, const std::string &texture, const std::string &side_texture, Real thickness, std::vector<Vector2> &varray, Real altitude, Real tw, Real th);
-	void AddPolygon(Wall* wallobject, const std::string &texture, const std::string &side_texture, Real thickness, PolyArray &varray, Real tw, Real th, bool report = true);
+	Wall* AddTriangleWall(MeshObject* mesh, const std::string &name, const std::string &texture, const std::string &side_texture, Real thickness, Real x1, Real y1, Real z1, Real x2, Real y2, Real z2, Real x3, Real y3, Real z3, Real tw, Real th, Real side_tw, Real side_th, bool autosize = true);
+	Wall* AddCustomWall(MeshObject* mesh, const std::string &name, const std::string &texture, const std::string &side_texture, Real thickness, PolyArray &varray, Real tw, Real th, Real side_tw, Real side_th, bool autosize = true);
+	Wall* AddCustomFloor(MeshObject* mesh, const std::string &name, const std::string &texture, const std::string &side_texture, Real thickness, std::vector<Vector2> &varray, Real altitude, Real tw, Real th, Real side_tw, Real side_th, bool autosize = true);
+	void AddPolygon(Wall* wallobject, const std::string &texture, const std::string &side_texture, Real thickness, PolyArray &varray, Real tw, Real th, Real side_tw, Real side_th, bool autosize = true, bool report = true);
 	bool SetWallOrientation(std::string direction);
 	int GetWallOrientation();
 	bool SetFloorOrientation(std::string direction);
@@ -80,8 +82,10 @@ public:
 	Vector3 GetPolygonDirection(PolyArray &polygon);
 	Vector2 GetEndPoint(const Vector2 &StartPoint, Real angle, Real distance);
 	Plane ComputePlane(PolyArray &vertices, bool flip_normal = true);
-	void SplitWithPlane(int axis, PolyArray &orig, PolyArray &poly1, PolyArray &poly2, Real value);
+	void SplitWithPlane(int axis, const PolyArray &orig, PolyArray &poly1, PolyArray &poly2, Real value);
+	void SplitWithPlaneUV(int axis, const GeometryArray &orig, GeometryArray &poly1, GeometryArray &poly2, Real value);
 	Vector3 ComputeNormal(PolyArray &vertices, Real &D);
+	Vector3 ComputeNormal2(const PolyArray &vertices, Real &D);
 	void ResetDoorwayWalls();
 	Wall* AddDoorwayWalls(MeshObject* mesh, const std::string &wallname, const std::string &texture, Real tw, Real th);
 
@@ -108,10 +112,8 @@ private:
 	bool DrawBottomOld; //or front, if floor
 
 	//Cut function work polygons
-	PolyArray temppoly, temppoly2, temppoly3, temppoly4, temppoly5, worker;
-	PolygonSet newpolys;
-
-	PolyArray newpoly;
+	GeometryArray temppoly, temppoly2, worker;
+	GeometrySet newpolys;
 
 	//doorway data
 	bool wall1a, wall1b, wall2a, wall2b;

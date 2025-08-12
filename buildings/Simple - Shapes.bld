@@ -23,6 +23,7 @@
     CameraRotation = 0, 0, 0
     Sky = noon
     Bounds = -75, 0, -75, 75, 0, 75
+    Lobby = 0
 <EndGlobals>
 
 #In the above code, I named the building "My Building", and set the designer as "Me".
@@ -46,7 +47,6 @@
     Load data/cinderblocks.jpg, StairsWall, 0.25, 1
     Load data/cutston.jpg, InterExt, 0.269, 0.25
     Load data/downtown.jpg, Downtown, 1, 1
-    Load data/misc/grass.jpg, Grass, 1, 1
     Load data/cutston.jpg, Ceiling1, 0.269, 0.25
     Load data/metal1.jpg, ElevExt, 0.25, 0.25
     Load data/door1.jpg, ElevDoors, 1, 1
@@ -82,9 +82,7 @@
     Load data/ropes.png, Ropes, 1, 1
     Load data/metal080.jpg, Rails, 1, 1
     Load data/metal1.jpg, RailsEdge, 1, 1
-
-    Load data/downtown.jpg, Downtown2, 1, 1
-    SetCulling Downtown2, 0
+    Load data/misc/granite.jpg, Granite, 1, 1
 
     Load data/black.jpg, Black, 1, 1
     Load data/black_lit.jpg, BlackLit, 1, 1
@@ -97,13 +95,12 @@
     AddTextRange 1, 10, BlackLit, ButtonLit%number%, nimbus_sans.ttf, 47, %number%, -1, -1, -1, -1, center, center, 255, 255, 255
 <EndTextures>
 
-#Make a new wall object to hold the Earth shape
-CreateWallObject landscape, Earth
+#Next you'll need to create the ground. The following code is the default ground code.
+#The second command is needed to cut a hole in the ground for the building.  In this
+#example I'm giving the building dimensions of 40x40 feet, so it needs to be cut from
+#-20 to 20 horizontally, and -20 to 20 depth-wise.
 
-#Create the Earth as a geosphere
-AddGeosphere landscape, Earth, Grass, 0, -20902211 - 1, 0, 20902211, 6, 10, 10
-
-AddGround Ground, Grass, -1000, -1000, 1000, 1000, 0, 100, 100
+AddGround Ground, Downtown, -158400, -158400, 158400, 158400, 0, 7920, 7920
 Cut Landscape, -20, -1, -20, 20, 1, 20, false, true
 
 #Now it's time to start making the building's floors.  If you're making basement levels, they must
@@ -390,7 +387,7 @@ DrawWalls = true, true, false, false, false, false
     MoveLight Elevator1, ElevLight, 0, 6, 0
 
     #Add reverb to the elevator (optional)
-    AddReverb MyReverb, ConcertHall, 0, 5, 0, 0, 3
+    AddReverb MyReverb, Room, 0, 5, 0, 0, 3
 <EndElevator>
 
 #Stairs
@@ -497,12 +494,80 @@ AddAction FireServiceBypass, Elevator1, Fire1Bypass
     AddActionControl FireSwitch, switch.wav, front, 3, 6 - 4.125 - 0.33 - 0.1, 0.25, 0.25, 3.5, 1, FireServiceOff, FireServiceBypass, FireServiceOn, Fire1Off, Fire1Bypass, Fire1On
 <EndFloor>
 
+#create some shapes
+<Floor 0>
+    DrawWalls = true, true, true, true, true, true
+
+    #create a sphere
+    CreateWallObject floor, MySphere
+    AddSphere floor, MySphere, Concrete, -50, 5, -50, 5, 16, 16, 1, 1, false
+
+    #create a sphere model
+    AddModel Model1, , false, -0, 0, -10, 0, 0, 0, 0, 1, true, 0.1, 0.5, 0.1
+    CreateWallObject model1, MyPhysicalSphere
+    AddSphere model1, MyPhysicalSphere, Concrete, -50, 5, -50, 5, 16, 16, 1, 1, false
+
+    #create a box
+    CreateWallObject floor, MyBox
+    AddBox floor, MyBox, Granite, -30, 5, -50, 5, 5, 5, 1, 1, false
+
+    #create a cylinder
+    CreateWallObject floor, MyCylinder
+    AddCylinder floor, MyCylinder, Granite, 0, 5, -50, 5, 5, 25, 1, 1, false
+
+    #create a cone
+    CreateWallObject floor, MyCone
+    AddCone floor, MyCone, Granite, 15, 5, -50, 5, 5, 25, 1, 1, false
+
+    #create a capsule
+    CreateWallObject floor, MyCapsule
+    AddCapsule floor, MyCapsule, Granite, 30, 5, -50, 5, 5, 5, 25, 1, 1, false
+
+    #create a plane
+    CreateWallObject floor, MyPlane
+    AddPlane floor, MyPlane, Granite, 50, 1, -50, 5, 5, 5, 5, 1, 1, false
+
+    #create a circle
+    CreateWallObject floor, MyCircle
+    AddCircle floor, MyCircle, Granite, 50, 1, -70, 5, 25, 1, 1, false
+
+    #create a torus
+    CreateWallObject floor, MyTorus
+    AddTorus floor, MyTorus, Granite, 30, 5, -70, 5, 5, 5, 5, 1, 1, false
+
+    #create a dome
+    CreateWallObject floor, MyDome
+    AddDome floor, MyDome, Granite, 15, 5, -70, 5, 5, 25, 1, 1, false
+
+    #create a pyramid
+    CreateWallObject floor, MyPyramid
+    AddPyramid floor, MyPyramid, Granite, 0, 5, -70, 5, 5, 5, 1, 1, false
+
+    #create a prism
+    CreateWallObject floor, MyPrism
+    AddPrism floor, MyPrism, Granite, -15, 5, -70, 5, 5, 5, 1, 1, false
+
+    #create a tetrahedron
+    CreateWallObject floor, MyTetrahedron
+    AddTetrahedron floor, MyTetrahedron, Granite, -30, 5, -70, 5, 1, 1, false
+
+    #create a octahedron
+    CreateWallObject floor, MyOctahedron
+    AddOctahedron floor, MyOctahedron, Granite, -45, 5, -70, 5, 1, 1, false
+
+    #create an icosahedron
+    CreateWallObject floor, MyIcosahedron
+    AddIcosahedron floor, MyIcosahedron, Granite, -60, 5, -70, 5, 1, 1, false
+
+    #create a geosphere
+    CreateWallObject floor, MyGeosphere
+    AddGeosphere floor, MyGeosphere, Granite, -75, 5, -70, 5, 3, 1, 1, false
+
+    Cut -76, 4, -80, -74, 6, -60, true, true
+<EndFloor>
+
 #define a runloop function, to run code after the sim engine has started
 <Function runloop>
 
 <EndFunction>
-
-#<Function Floor0:Object1:runloop>
-
-#<EndFunction>
 

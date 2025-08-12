@@ -131,9 +131,9 @@ public:
 	void ResetDoors(int number = 0, bool sensor = false);
 	bool DoorsStopped(int number = 0);
 	DoorWrapper* AddDoors(int number, const std::string &lefttexture, const std::string &righttexture, Real thickness, Real CenterX, Real CenterZ, Real width, Real height, bool direction, Real tw, Real th);
-	bool AddShaftDoors(int number, const std::string &lefttexture, const std::string &righttexture, Real thickness, Real CenterX, Real CenterZ, Real voffset, Real tw, Real th);
-	DoorWrapper* AddShaftDoor(int floor, int number, const std::string &lefttexture, const std::string &righttexture, Real tw, Real th);
-	DoorWrapper* AddShaftDoor(int floor, int number, const std::string &lefttexture, const std::string &righttexture, Real thickness, Real CenterX, Real CenterZ, Real voffset, Real tw, Real th);
+	bool AddShaftDoors(int number, Real rotation, const std::string &lefttexture, const std::string &righttexture, Real thickness, Real CenterX, Real CenterZ, Real voffset, Real tw, Real th);
+	DoorWrapper* AddShaftDoor(int floor, int number, Real rotation, const std::string &lefttexture, const std::string &righttexture, Real tw, Real th);
+	DoorWrapper* AddShaftDoor(int floor, int number, Real rotation, const std::string &lefttexture, const std::string &righttexture, Real thickness, Real CenterX, Real CenterZ, Real voffset, Real tw, Real th);
 	void Chime(int number, int floor, bool direction, bool early = false);
 	void EnableDoors(bool value);
 	bool AddFloorSigns(int door_number, bool relative, const std::string &texture_prefix, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset);
@@ -230,7 +230,8 @@ public:
 	bool RespondingToCall(int floor, int direction);
 	int RespondingToCall(int floor);
 	bool AddElevatorIDSigns(int door_number, bool relative, const std::string& texture_prefix, const std::string& direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset);
-
+	Shape* CreateShape(Wall *wall);
+	
 	MeshObject* Mesh; //car mesh object
 
 	//for keypad

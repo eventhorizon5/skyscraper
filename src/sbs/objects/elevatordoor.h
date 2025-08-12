@@ -72,9 +72,9 @@ public:
 	void Reset(bool sensor = false);
 	bool DoorsStopped();
 	DoorWrapper* AddDoors(const std::string &lefttexture, const std::string &righttexture, Real thickness, Real CenterX, Real CenterZ, Real width, Real height, bool direction, Real tw, Real th);
-	bool AddShaftDoors(const std::string &lefttexture, const std::string &righttexture, Real thickness, Real CenterX, Real CenterZ, Real voffset, Real tw, Real th);
-	DoorWrapper* AddShaftDoor(int floor, const std::string &lefttexture, const std::string &righttexture, Real tw, Real th);
-	DoorWrapper* AddShaftDoor(int floor, const std::string &lefttexture, const std::string &righttexture, Real thickness, Real CenterX, Real CenterZ, Real voffset, Real tw, Real th);
+	bool AddShaftDoors(Real rotation, const std::string &lefttexture, const std::string &righttexture, Real thickness, Real CenterX, Real CenterZ, Real voffset, Real tw, Real th);
+	DoorWrapper* AddShaftDoor(int floor, Real rotation, const std::string &lefttexture, const std::string &righttexture, Real tw, Real th);
+	DoorWrapper* AddShaftDoor(int floor, Real rotation, const std::string &lefttexture, const std::string &righttexture, Real thickness, Real CenterX, Real CenterZ, Real voffset, Real tw, Real th);
 	void Chime(int floor, bool direction);
 	void EarlyChime(int floor, bool direction);
 	bool Loop();

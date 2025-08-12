@@ -1033,7 +1033,7 @@ void DynamicMesh::Mesh::Prepare(bool process_vertices, int client)
 					{
 						for (size_t k = 0; k < poly->geometry[j].size(); k++)
 						{
-							Polygon::Geometry &element = poly->geometry[j][k];
+							Geometry &element = poly->geometry[j][k];
 
 							//make mesh's vertex relative to this scene node
 							Vector3 vertex;
@@ -1415,7 +1415,7 @@ void DynamicMesh::Mesh::UpdateVertices(int client, const std::string &material, 
 			{
 				for (size_t l = 0; l < poly->geometry[k].size(); l++)
 				{
-					Polygon::Geometry &element = poly->geometry[k][l];
+					Geometry &element = poly->geometry[k][l];
 
 					//make mesh's vertex relative to this scene node
 					Vector3 raw_vertex = mesh->GetOrientation() * element.vertex; //add mesh's rotation
@@ -1545,6 +1545,54 @@ void DynamicMesh::Mesh::SetMaterial(const std::string& material)
 		//set to default material if the specified one is not found
 		mat = sbs->GetTextureManager()->GetMaterialByName("Default");
 		Movable->setMaterial(mat);
+	}
+}
+
+void DynamicMesh::TessellateTriangle(const Vector3& v0, const Vector3& v1, const Vector3& v2, const Vector2& uv0, const Vector2& uv1, const Vector2& uv2, std::vector<Vector3>& outVerts, std::vector<Vector2>& outUVs, std::vector<unsigned int>& outIndices, unsigned int& vertexOffset, int resolution)
+{
+	//tessellate a triangle
+
+	//create barycentric grid of points
+	std::vector<std::vector<unsigned int>> grid(resolution + 1);
+
+	for (int i = 0; i <= resolution; ++i)
+	{
+		grid[i].resize(i + 1);
+		for (int j = 0; j <= i; ++j)
+		{
+			float a = 1.0f - (float)i / resolution;
+			float b = ((float)(i - j)) / resolution;
+			float c = (float)j / resolution;
+
+			Vector3 pos = v0 * a + v1 * b + v2 * c;
+			Vector2 uv  = uv0 * a + uv1 * b + uv2 * c;
+
+			outVerts.emplace_back(pos);
+			outUVs.emplace_back(uv);
+			grid[i][j] = vertexOffset++;
+		}
+	}
+
+	//create triangles
+	for (int i = 0; i < resolution; ++i)
+	{
+		for (int j = 0; j < i; ++j)
+		{
+			//lower left triangle
+			outIndices.emplace_back(grid[i][j]);
+			outIndices.emplace_back(grid[i + 1][j]);
+			outIndices.emplace_back(grid[i + 1][j + 1]);
+
+			//upper right triangle
+			outIndices.emplace_back(grid[i][j]);
+			outIndices.emplace_back(grid[i + 1][j + 1]);
+			outIndices.emplace_back(grid[i][j + 1]);
+		}
+
+		//edge triangle at the end of the row
+		outIndices.emplace_back(grid[i][i]);
+		outIndices.emplace_back(grid[i + 1][i]);
+		outIndices.emplace_back(grid[i + 1][i + 1]);
 	}
 }
 

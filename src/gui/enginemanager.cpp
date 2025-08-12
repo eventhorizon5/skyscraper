@@ -38,6 +38,10 @@ namespace Skyscraper {
 
 //(*IdInit(EngineManager)
 const wxWindowID EngineManager::ID_EngineList = wxNewId();
+const wxWindowID EngineManager::ID_STATICTEXT7 = wxNewId();
+const wxWindowID EngineManager::ID_tType = wxNewId();
+const wxWindowID EngineManager::ID_STATICTEXT8 = wxNewId();
+const wxWindowID EngineManager::ID_tParent = wxNewId();
 const wxWindowID EngineManager::ID_STATICTEXT4 = wxNewId();
 const wxWindowID EngineManager::ID_tPosition = wxNewId();
 const wxWindowID EngineManager::ID_STATICTEXT3 = wxNewId();
@@ -60,6 +64,7 @@ const wxWindowID EngineManager::ID_bSetActive = wxNewId();
 const wxWindowID EngineManager::ID_bReload = wxNewId();
 const wxWindowID EngineManager::ID_bMove = wxNewId();
 const wxWindowID EngineManager::ID_bLoad = wxNewId();
+const wxWindowID EngineManager::ID_bReset = wxNewId();
 const wxWindowID EngineManager::ID_bShutdown = wxNewId();
 const wxWindowID EngineManager::ID_bOk = wxNewId();
 //*)
@@ -95,6 +100,16 @@ EngineManager::EngineManager(DebugPanel* parent,wxWindowID id,const wxPoint& pos
 	BoxSizer1 = new wxBoxSizer(wxVERTICAL);
 	FlexGridSizer4 = new wxFlexGridSizer(0, 1, 0, 0);
 	FlexGridSizer2 = new wxFlexGridSizer(0, 2, 0, 0);
+	StaticText7 = new wxStaticText(this, ID_STATICTEXT7, _("Type:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT7"));
+	FlexGridSizer2->Add(StaticText7, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	tType = new wxTextCtrl(this, ID_tType, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY|wxTE_CENTRE, wxDefaultValidator, _T("ID_tType"));
+	tType->SetMinSize(wxSize(200,-1));
+	FlexGridSizer2->Add(tType, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	StaticText8 = new wxStaticText(this, ID_STATICTEXT8, _("Parent:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT8"));
+	FlexGridSizer2->Add(StaticText8, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	tParent = new wxTextCtrl(this, ID_tParent, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY|wxTE_CENTRE, wxDefaultValidator, _T("ID_tParent"));
+	tParent->SetMinSize(wxSize(200,-1));
+	FlexGridSizer2->Add(tParent, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	StaticText4 = new wxStaticText(this, ID_STATICTEXT4, _("Position:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT4"));
 	FlexGridSizer2->Add(StaticText4, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	tPosition = new wxTextCtrl(this, ID_tPosition, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY|wxTE_CENTRE, wxDefaultValidator, _T("ID_tPosition"));
@@ -158,6 +173,8 @@ EngineManager::EngineManager(DebugPanel* parent,wxWindowID id,const wxPoint& pos
 	BoxSizer6 = new wxBoxSizer(wxHORIZONTAL);
 	bLoad = new wxButton(this, ID_bLoad, _("Load Building"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bLoad"));
 	BoxSizer6->Add(bLoad, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	bReset = new wxButton(this, ID_bReset, _("Reset"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bReset"));
+	BoxSizer6->Add(bReset, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	bShutdown = new wxButton(this, ID_bShutdown, _("Shutdown"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bShutdown"));
 	BoxSizer6->Add(bShutdown, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer2->Add(BoxSizer6, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
@@ -180,6 +197,7 @@ EngineManager::EngineManager(DebugPanel* parent,wxWindowID id,const wxPoint& pos
 	Connect(ID_bReload, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&EngineManager::On_bReload_Click);
 	Connect(ID_bMove, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&EngineManager::On_bMove_Click);
 	Connect(ID_bLoad, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&EngineManager::On_bLoad_Click);
+	Connect(ID_bReset, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&EngineManager::On_bReset_Click);
 	Connect(ID_bShutdown, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&EngineManager::On_bShutdown_Click);
 	Connect(ID_bOk, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&EngineManager::On_bOk_Click);
 	//*)
@@ -264,7 +282,7 @@ void EngineManager::Loop()
 			max.y = 0;
 
 		tPosition->SetValue(TruncateNumber(position.x, 2) + wxT(", ") + TruncateNumber(position.y, 2) + wxT(", ") + TruncateNumber(position.z, 2));
-		tBoundsMin->SetValue(TruncateNumber(min.x, 2) + wxT(", ") + TruncateNumber(min.y, 2) + wxT(", ") + TruncateNumber(min.z, 2));
+			tBoundsMin->SetValue(TruncateNumber(min.x, 2) + wxT(", ") + TruncateNumber(min.y, 2) + wxT(", ") + TruncateNumber(min.z, 2));
 		tBoundsMax->SetValue(TruncateNumber(max.x, 2) + wxT(", ") + TruncateNumber(max.y, 2) + wxT(", ") + TruncateNumber(max.z, 2));
 
 		//set camera state
@@ -291,6 +309,23 @@ void EngineManager::Loop()
 
 		//set paused state
 		chkPaused->SetValue(engine->Paused);
+
+		//set type value
+		std::string type;
+		if (engine->type == ENGINETYPE_BUILDING)
+			type = "Building";
+		else if (engine->type == ENGINETYPE_CITY)
+			type = "City";
+		else if (engine->type == ENGINETYPE_GENERIC)
+			type = "Generic";
+		else if (engine->type == ENGINETYPE_PLANET)
+			type = "Planet";
+		else if (engine->type == ENGINETYPE_SOLARSYSTEM)
+			type = "Solar System";
+
+		if (engine->GetParent())
+			tParent->SetValue(SBS::ToString(engine->GetParent()->GetNumber()));
+		tType->SetValue(type);
 	}
 	else
 	{
@@ -299,6 +334,8 @@ void EngineManager::Loop()
 		tBoundsMax->Clear();
 		tActive->Clear();
 		tState->SetValue("Unloaded");
+		tType->Clear();
+		tParent->Clear();
 	}
 
 	if (moveobject)
@@ -393,6 +430,19 @@ void EngineManager::On_chkPaused_Click(wxCommandEvent& event)
 
 		if (engine)
 			engine->Paused = chkPaused->GetValue();
+	}
+}
+
+void EngineManager::On_bReset_Click(wxCommandEvent& event)
+{
+	int selection = EngineList->GetSelection();
+
+	if (selection >= 0)
+	{
+		EngineContext *engine = panel->GetRoot()->GetEngine(selection);
+
+		if (engine)
+			engine->Reset();
 	}
 }
 

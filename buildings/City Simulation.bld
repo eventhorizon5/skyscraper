@@ -14,7 +14,7 @@
     Load Simple.bld, -150, 0, -628, 180, -37.5, 0, -25, 37.5, 0, 25
     Load Simple.bld, -225, 0, -628, 180, -37.5, 0, -25, 37.5, 0, 25
     Load Northeast Triad Convention Center.bld, -3000, 0, 0, 0, -500, -500, -500, 500, 5000, 500
-    Load WTC Master Milestone 7.bld, 2000, 0, 0, 0, -500, -500, -500, 500, 5000, 500
+    Load WTC Master.bld, 2000, 0, 0, 0, -500, -500, -500, 500, 5000, 500
     Load The Palace Tower.bld, 2000, 0, -2000, 0, -500, -500, -500, 500, 5000, 500
     Load DTAnd - Dellerton Plaza (V2).bld, 2000, 0, 2000, 0, -500, -500, -500, 500, 5000, 500
     Load DTAnd - Eternity Plaza (V2).bld, 2000, 0, 3000, 0, -500, -500, -500, 500, 5000, 500

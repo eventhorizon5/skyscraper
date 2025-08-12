@@ -40,6 +40,7 @@
 #include "cameratexture.h"
 #include "utility.h"
 #include "trigger.h"
+#include "shape.h"
 #include "stairs.h"
 
 namespace SBS {
@@ -1200,6 +1201,19 @@ void Stairwell::Level::RemoveCameraTexture(CameraTexture* camtex)
 	//remove a cameratexture reference (does not delete the object itself)
 
 	RemoveArrayElement(CameraTextureArray, camtex);
+}
+
+Shape* Stairwell::Level::CreateShape(Wall *wall)
+{
+	//Creates a shape in the specified wall object
+	//returns a Shape object, which must be deleted by the caller after use
+
+	if (!wall)
+		return 0;
+
+	Shape *shape = new Shape(wall);
+	//shape->origin = Vector3(0, 0, 0);
+	return shape;
 }
 
 }

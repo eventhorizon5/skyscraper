@@ -48,6 +48,7 @@ class EngineManager: public wxDialog
 		wxButton* bMove;
 		wxButton* bOk;
 		wxButton* bReload;
+		wxButton* bReset;
 		wxButton* bSetActive;
 		wxButton* bShutdown;
 		wxCheckBox* chkCLoads;
@@ -62,12 +63,15 @@ class EngineManager: public wxDialog
 		wxStaticText* StaticText5;
 		wxStaticText* StaticText6;
 		wxStaticText* StaticText7;
+		wxStaticText* StaticText8;
 		wxTextCtrl* tActive;
 		wxTextCtrl* tBoundsMax;
 		wxTextCtrl* tBoundsMin;
+		wxTextCtrl* tParent;
 		wxTextCtrl* tPosition;
 		wxTextCtrl* tState;
 		wxTextCtrl* tThread;
+		wxTextCtrl* tType;
 		wxTextCtrl* tUptime;
 		//*)
 		void Loop();
@@ -76,6 +80,10 @@ class EngineManager: public wxDialog
 
 		//(*Identifiers(EngineManager)
 		static const wxWindowID ID_EngineList;
+		static const wxWindowID ID_STATICTEXT7;
+		static const wxWindowID ID_tType;
+		static const wxWindowID ID_STATICTEXT8;
+		static const wxWindowID ID_tParent;
 		static const wxWindowID ID_STATICTEXT4;
 		static const wxWindowID ID_tPosition;
 		static const wxWindowID ID_STATICTEXT3;
@@ -98,6 +106,7 @@ class EngineManager: public wxDialog
 		static const wxWindowID ID_bReload;
 		static const wxWindowID ID_bMove;
 		static const wxWindowID ID_bLoad;
+		static const wxWindowID ID_bReset;
 		static const wxWindowID ID_bShutdown;
 		static const wxWindowID ID_bOk;
 		//*)
@@ -115,6 +124,7 @@ class EngineManager: public wxDialog
 		void On_bOk_Click(wxCommandEvent& event);
 		void On_bMove_Click(wxCommandEvent& event);
 		void On_chkPaused_Click(wxCommandEvent& event);
+		void On_bReset_Click(wxCommandEvent& event);
 		//*)
 
 		EngineContext *engine;

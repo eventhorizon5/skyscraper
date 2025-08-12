@@ -95,7 +95,7 @@
     AddTextRange 1, 10, Black, Button%number%, nimbus_sans.ttf, 47, %number%, -1, -1, -1, -1, center, center, 255, 255, 255
     AddTextRange 1, 10, BlackLit, ButtonLit%number%, nimbus_sans.ttf, 47, %number%, -1, -1, -1, -1, center, center, 255, 255, 255
 
-    CreateSlideshow MySlideshow, true, data/fire2keyoff.png, 1.0, data/fire2keyon.png, 2.0, data/fire2keyhold.png, 3.0, 1, 1, false
+    CreateSlideshow MySlideshow, true, data/miscdoor1.jpg, 1.0, data/miscdoor2.jpg, 2.0, data/miscdoor3.jpg, 3.0, data/miscdoor4.jpg, 2.0, data/miscdoor5.jpg, 2.0, data/miscdoor6.jpg, 1.0, data/miscdoor7.jpg, 2.5, data/miscdoor8.jpg, 2.0, data/miscdoor9.jpg, 5.0, 1, 1, false
 
 <EndTextures>
 
@@ -125,7 +125,7 @@ Cut Landscape, -20, -1, -20, 20, 1, 20, false, true
 
     #create a basic carpeted floor
     DrawWalls = false, true, false, false, false, false
-    AddFloor Floor, MySlideshow, 0.5, -20, -20, 20, 20, 0, 0, false, false, 0, 0, False
+    AddFloor Floor, Carpet1, 0.5, -20, -20, 20, 20, 0, 0, false, false, 0, 0, False
 
     #create a ceiling
     DrawWalls = true, false, false, false, false, false
@@ -467,7 +467,7 @@ CutStairwell 1, -8.5, -3.5, 8.5, 3.5, 0, 5
     
     #This command adds a door, and automatically cuts the walls for you.
     if[%floor% = 9] SetLock 2, 1
-    AddStairsDoor 1, , , False, StairsDoor, 0.2, 1, 0, -8.5, 0, 3.5, 8, 0, 1, 1
+    AddStairsDoor 1, , , False, MySlideshow, 0.2, 1, 0, -8.5, 0, 3.5, 8, 0, 1, 1
     SetLock 0, 0
 
     #Add filler walls around the door, to cover the gap caused by the cut

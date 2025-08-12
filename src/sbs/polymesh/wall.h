@@ -24,12 +24,12 @@
 #ifndef _SBS_WALL_H
 #define _SBS_WALL_H
 
+#include "polygon.h"
 #include "triangle.h"
 #include "mesh.h"
 
 namespace SBS {
 
-class Polygon;
 class PolyMesh;
 
 class SBSIMPEXP Wall : public Object
@@ -42,8 +42,11 @@ public:
 	Wall(MeshObject* wrapper, const std::string &name);
 	~Wall();
 	Polygon* AddQuad(const std::string &name, const std::string &texture, const Vector3 &v1, const Vector3 &v2, const Vector3 &v3, const Vector3 &v4, Real tw, Real th, bool autosize);
+	Polygon* AddTriangle(const std::string &name, const std::string &texture, const Vector3 &v1, const Vector3 &v2, const Vector3 &v3, Real tw, Real th, bool autosize);
 	Polygon* AddPolygon(const std::string &name, const std::string &texture, PolyArray &vertices, Real tw, Real th, bool autosize);
+	Polygon* AddPolygon(const std::string &name, const std::string &texture, PolygonSet &vertices, std::vector<std::vector<Vector2>> &uvMap, std::vector<Triangle> &triangles, Real tw, Real th, bool autosize);
 	Polygon* AddPolygonSet(const std::string &name, const std::string &material, PolygonSet &vertices, Matrix3 &tex_matrix, Vector3 &tex_vector);
+	Polygon* AddPolygonSet(const std::string& name, const std::string& material, const GeometrySet &polys);
 	void DeletePolygons(bool recreate_collider = true);
 	void DeletePolygon(int index, bool recreate_colliders);
 	int GetPolygonCount();

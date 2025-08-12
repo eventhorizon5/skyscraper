@@ -1320,6 +1320,8 @@ void ScriptProcessor::ConfigHandler::Reset()
 	CheckScript = false;
 	extrusion_texture = "";
 	extrusion_thickness = 0.0;
+	extrusion_tw = 0.0;
+	extrusion_th = 0.0;
 	extrude = false;
 }
 

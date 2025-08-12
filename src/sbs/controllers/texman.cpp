@@ -642,7 +642,15 @@ bool TextureManager::LoadTextureCropped(const std::string &filename, const std::
 	catch (Ogre::Exception &e)
 	{
 		ReportError("Error creating new texture " + texturename + "\n" + e.getDescription());
-		return false;
+		Ogre::TexturePtr tex = GetTextureByName(texturename, "General");
+		if (tex)
+		{
+			new_texture = tex;
+			manual_textures.emplace_back(new_texture);
+			IncrementTextureCount();
+		}
+		else
+			return false;
 	}
 
 	//copy source and overlay images onto new image
@@ -981,7 +989,15 @@ bool TextureManager::AddTextToTexture(const std::string &origname, const std::st
 	catch (Ogre::Exception &e)
 	{
 		ReportError("Error creating new texture " + texturename + "\n" + e.getDescription());
-		return false;
+		Ogre::TexturePtr tex = GetTextureByName(texturename, "General");
+		if (tex)
+		{
+			texture = tex;
+			manual_textures.emplace_back(texture);
+			IncrementTextureCount();
+		}
+		else
+			return false;
 	}
 
 	//get new texture dimensions, if it was resized
@@ -1113,7 +1129,15 @@ bool TextureManager::AddTextureOverlay(const std::string &orig_texture, const st
 	catch (Ogre::Exception &e)
 	{
 		ReportError("Error creating new texture " + texturename + "\n" + e.getDescription());
-		return false;
+		Ogre::TexturePtr tex = GetTextureByName(texturename, "General");
+		if (tex)
+		{
+			new_texture = tex;
+			manual_textures.emplace_back(new_texture);
+			IncrementTextureCount();
+		}
+		else
+			return false;
 	}
 
 	//copy source and overlay images onto new image
@@ -2571,7 +2595,7 @@ size_t TextureManager::GetMemoryUsage()
 	{
 		if (!textures[i])
 			continue;
-		result += textures[i]->tex_size + textures[i]->mat_size;
+		result += textures[i]->GetMemoryUsage();
 	}
 
 	return result;
@@ -2619,17 +2643,123 @@ bool TextureManager::SetTexture(const std::string &name, const std::string &text
 	Ogre::MaterialPtr mMat = GetMaterialByName(name);
 	for (size_t i = 0; i < mMat->getNumTechniques(); i++)
 	{
-		Ogre::TextureUnitState* state = mMat->getTechnique(i)->getPass(0)->getTextureUnitState(0);
 		try
 		{
+			Ogre::TextureUnitState* state = mMat->getTechnique(i)->getPass(0)->getTextureUnitState(0);
+
 			//set texture unit's texture image
-			state->setTextureName(texture);
+			if (state)
+				state->setTextureName(texture);
 		}
 		catch (Ogre::Exception& e)
 		{
 			return ReportError("Error setting texture " + name + " to filename " + texture + "\n" + e.getDescription());
 		}
+		catch (...)
+		{
+			continue;
+		}
 	}
+	return true;
+}
+
+bool TextureManager::ComputeTextureMap(Matrix3 &t_matrix, Vector3 &t_vector, PolyArray &vertices, const Vector3 &p1, const Vector3 &p2, const Vector3 &p3, Real tw, Real th)
+{
+	//calculates the transformation needed to map a texture onto a polygon.
+	//using three polygon points and their UV coordinates, determine the texture axes and origin in 3D space.
+
+	//get UV coordinates for the three points, scaled by texture width/height
+	Vector2 uv1 = MapUV[0] * tw;
+	Vector2 uv2 = MapUV[1] * tw;
+	Vector2 uv3 = MapUV[2] * tw;
+	uv1.y *= th / tw;
+	uv2.y *= th / tw;
+	uv3.y *= th / tw;
+
+	//build the 2x2 matrix for UV mapping
+	Real m11 = uv2.x - uv1.x;
+	Real m12 = uv3.x - uv1.x;
+	Real m21 = uv2.y - uv1.y;
+	Real m22 = uv3.y - uv1.y;
+
+	Real det = m11 * m22 - m12 * m21;
+	if (std::abs(det) < SMALL_EPSILON)
+		return ReportError("ComputeTextureMap: Bad UV coordinates"); //bad UV coordinates
+
+	Real inv_det = 1.0 / det;
+
+	//invert the matrix
+	Real im11 =  m22 * inv_det;
+	Real im12 = -m12 * inv_det;
+	Real im21 = -m21 * inv_det;
+	Real im22 =  m11 * inv_det;
+
+	//helper to compute a mapped point
+	auto map_point = [&](Real u, Real v) -> Vector3 {
+		Vector2 delta(u - uv1.x, v - uv1.y);
+		Real lambda = im11 * delta.x + im12 * delta.y;
+		Real mu     = im21 * delta.x + im22 * delta.y;
+		return p1 + lambda * (p2 - p1) + mu * (p3 - p1);
+	};
+
+	//compute Po (origin), Pu (U axis), Pv (V axis)
+	Vector3 po = map_point(0, 0);
+	Vector3 pu = map_point(1, 0);
+	Vector3 pv = map_point(0, 1);
+
+	//compute axis lengths
+	Real len1f = (pu - po).length();
+	Real len2f = (pv - po).length();
+
+	//call ComputeTextureSpace with the calculated axes
+	return ComputeTextureSpace(t_matrix, t_vector, po, pu, len1f, pv, len2f);
+}
+
+bool TextureManager::ComputeTextureSpace(Matrix3 &m, Vector3 &v, const Vector3 &origin, const Vector3 &u_point, Real u_length, const Vector3 &v_point, Real v_length)
+{
+	//calculates a texture space transformation matrix and origin vector
+	//given three points on the polygon and their desired texture axes
+
+	//compute normalized texture axes
+	Vector3 u_axis = u_point - origin;
+	Vector3 v_axis = v_point - origin;
+
+	Real u_norm = u_axis.length();
+	Real v_norm = v_axis.length();
+
+	if (u_norm < SMALL_EPSILON || v_norm < SMALL_EPSILON)
+		return false; //degenerate axes
+
+	u_axis /= u_norm;
+	v_axis /= v_norm;
+
+	//scale axes to desired texture length
+	u_axis *= u_length;
+	v_axis *= v_length;
+
+	//compute orthogonal w_axis (normal to polygon plane)
+	Vector3 w_axis = u_axis.crossProduct(v_axis);
+	Real w_norm = w_axis.length();
+	if (w_norm < SMALL_EPSILON)
+		return false; //degenerate plane
+
+	w_axis /= w_norm;
+
+	//fill matrix columns: u_axis, v_axis, w_axis
+	m[0][0] = u_axis.x; m[0][1] = v_axis.x; m[0][2] = w_axis.x;
+	m[1][0] = u_axis.y; m[1][1] = v_axis.y; m[1][2] = w_axis.y;
+	m[2][0] = u_axis.z; m[2][1] = v_axis.z; m[2][2] = w_axis.z;
+
+	//set origin vector
+	v = origin;
+
+	//optionally invert matrix if needed for mapping (depends on usage)
+	Real det = m.Determinant();
+	if (std::abs(det) < SMALL_EPSILON)
+		return false; //singular matrix
+
+	m = m.Inverse(1e-10f);
+
 	return true;
 }
 

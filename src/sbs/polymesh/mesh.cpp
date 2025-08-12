@@ -242,28 +242,7 @@ void MeshObject::Prepare(bool force)
 		return;
 
 	//set up bounding box
-	if (model_loaded == false)
-	{
-		Bounds->setNull();
-		for (size_t i = 0; i < Walls.size(); i++)
-		{
-			if (!Walls[i])
-				continue;
-
-			for (size_t j = 0; j < Walls[i]->polygons.size(); j++)
-			{
-				Polygon *poly = Walls[i]->polygons[j];
-
-				if (!poly)
-					continue;
-				for (size_t k = 0; k < poly->geometry.size(); k++)
-				{
-					for (size_t l = 0; l < poly->geometry[k].size(); l++)
-						Bounds->merge(poly->geometry[k][l].vertex);
-				}
-			}
-		}
-	}
+	CreateBoundingBox();
 
 	//update dynamic mesh
 	MeshWrapper->NeedsUpdate(this);
@@ -1257,6 +1236,37 @@ size_t MeshObject::GetSize()
 	}
 
 	return size;
+}
+
+void MeshObject::CreateBoundingBox()
+{
+	//create a new bounding box for this mesh object
+	//based on the geometry of all associated wall objects
+
+	if (model_loaded == false)
+	{
+		Bounds->setNull();
+		for (size_t i = 0; i < Walls.size(); i++)
+		{
+			if (!Walls[i])
+				continue;
+
+			//step through each wall polygon, and merge it's vertices into the bounding box
+			for (size_t j = 0; j < Walls[i]->polygons.size(); j++)
+			{
+				Polygon *poly = Walls[i]->polygons[j];
+
+				if (!poly)
+					continue;
+				for (size_t k = 0; k < poly->geometry.size(); k++)
+				{
+					for (size_t l = 0; l < poly->geometry[k].size(); l++)
+						Bounds->merge(poly->geometry[k][l].vertex);
+				}
+			}
+		}
+		sbs->MergeBounds(*Bounds);
+	}
 }
 
 }

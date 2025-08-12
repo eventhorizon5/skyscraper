@@ -9,6 +9,7 @@
     Sky = noon
     Collisions = false
     Gravity = false
+    Bounds = -1000, 0, -1000, 1000, 0, 1000
 <EndGlobals>
 
 <Textures>

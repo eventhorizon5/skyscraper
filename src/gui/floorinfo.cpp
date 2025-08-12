@@ -164,12 +164,12 @@ void FloorInfo::Loop()
 
 	if (selection >= 0)
 	{
-		SBS::Floor *newfloor = Simcore->GetFloor(selection);
+		SBS::Floor *newfloor = Simcore->GetFloorManager()->GetIndex(selection);
 
-		//if a new escalator has been selected, update values
+		//if a new floor has been selected, update values
 		if (newfloor && floor != newfloor)
 		{
-			floor = Simcore->GetFloorManager()->GetIndex(selection);
+			floor = newfloor;
             txtNumber->SetValue(SBS::ToString(floor->Number));
 			txtName->SetValue(floor->Name);
             txtID->SetValue(floor->ID);

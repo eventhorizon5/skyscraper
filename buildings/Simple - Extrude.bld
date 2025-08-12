@@ -23,6 +23,7 @@
     CameraRotation = 0, 0, 0
     Sky = noon
     Bounds = -75, 0, -75, 75, 0, 75
+    Lobby = 0
 <EndGlobals>
 
 #In the above code, I named the building "My Building", and set the designer as "Me".
@@ -46,7 +47,6 @@
     Load data/cinderblocks.jpg, StairsWall, 0.25, 1
     Load data/cutston.jpg, InterExt, 0.269, 0.25
     Load data/downtown.jpg, Downtown, 1, 1
-    Load data/misc/grass.jpg, Grass, 1, 1
     Load data/cutston.jpg, Ceiling1, 0.269, 0.25
     Load data/metal1.jpg, ElevExt, 0.25, 0.25
     Load data/door1.jpg, ElevDoors, 1, 1
@@ -83,9 +83,6 @@
     Load data/metal080.jpg, Rails, 1, 1
     Load data/metal1.jpg, RailsEdge, 1, 1
 
-    Load data/downtown.jpg, Downtown2, 1, 1
-    SetCulling Downtown2, 0
-
     Load data/black.jpg, Black, 1, 1
     Load data/black_lit.jpg, BlackLit, 1, 1
     AddText Black, ButtonOpen, nimbus_sans.ttf, 28, Open, -1, -1, -1, -1, center, center, 255, 255, 255
@@ -97,13 +94,12 @@
     AddTextRange 1, 10, BlackLit, ButtonLit%number%, nimbus_sans.ttf, 47, %number%, -1, -1, -1, -1, center, center, 255, 255, 255
 <EndTextures>
 
-#Make a new wall object to hold the Earth shape
-CreateWallObject landscape, Earth
+#Next you'll need to create the ground. The following code is the default ground code.
+#The second command is needed to cut a hole in the ground for the building.  In this
+#example I'm giving the building dimensions of 40x40 feet, so it needs to be cut from
+#-20 to 20 horizontally, and -20 to 20 depth-wise.
 
-#Create the Earth as a geosphere
-AddGeosphere landscape, Earth, Grass, 0, -20902211 - 1, 0, 20902211, 6, 10, 10
-
-AddGround Ground, Grass, -1000, -1000, 1000, 1000, 0, 100, 100
+AddGround Ground, Downtown, -158400, -158400, 158400, 158400, 0, 7920, 7920
 Cut Landscape, -20, -1, -20, 20, 1, 20, false, true
 
 #Now it's time to start making the building's floors.  If you're making basement levels, they must
@@ -390,7 +386,7 @@ DrawWalls = true, true, false, false, false, false
     MoveLight Elevator1, ElevLight, 0, 6, 0
 
     #Add reverb to the elevator (optional)
-    AddReverb MyReverb, ConcertHall, 0, 5, 0, 0, 3
+    AddReverb MyReverb, Room, 0, 5, 0, 0, 3
 <EndElevator>
 
 #Stairs
@@ -497,12 +493,14 @@ AddAction FireServiceBypass, Elevator1, Fire1Bypass
     AddActionControl FireSwitch, switch.wav, front, 3, 6 - 4.125 - 0.33 - 0.1, 0.25, 0.25, 3.5, 1, FireServiceOff, FireServiceBypass, FireServiceOn, Fire1Off, Fire1Bypass, Fire1On
 <EndFloor>
 
+#add an extruded polygon
+DrawWalls = true, true, true, true, true, true
+ExtrudePoly Concrete, 5, 1, 1
+AddCustomWall external, My Wall, Concrete, -10, 10, -40, 0, 20, -40, 10, 10, -40, 0, 0, -40, 0, 0
+EndExtrude
+
 #define a runloop function, to run code after the sim engine has started
 <Function runloop>
 
 <EndFunction>
-
-#<Function Floor0:Object1:runloop>
-
-#<EndFunction>
 
