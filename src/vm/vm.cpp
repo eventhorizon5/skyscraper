@@ -79,6 +79,7 @@ VM::VM()
 	system_loaded = false;
 	system_finished = false;
 	running = false;
+	first_attach = false;
 
 	macos_major = 0;
 	macos_minor = 0;
@@ -237,6 +238,7 @@ void VM::DeleteEngines()
 	active_engine = 0;
 	system_loaded = false;
 	system_finished = false;
+	first_attach = false;
 	running = false;
 	unloaded = true;
 }
@@ -279,7 +281,7 @@ void VM::SetActiveEngine(int number, bool switch_engines, bool force)
 	CameraState state;
 	bool state_set = false;
 
-	if (active_engine)
+	if (active_engine && (engine->IsSystem == false || running == true))
 	{
 		//get previous engine's camera state
 		if (switch_engines == true)
@@ -292,14 +294,22 @@ void VM::SetActiveEngine(int number, bool switch_engines, bool force)
 		active_engine->DetachCamera(switch_engines);
 	}
 
-	Report("Setting engine " + ToString(number) + " as active");
-
 	//switch context to new engine instance
-	active_engine = engine;
-	active_engine->AttachCamera(hal->mCameras, !switch_engines);
+	if (engine->IsSystem == false || running == true)
+	{
+		Report("Setting engine " + ToString(number) + " as active");
+		active_engine = engine;
+		bool init_state = !switch_engines;
+		if (first_attach == false)
+		{
+			first_attach = true;
+			init_state = true;
+		}
+		active_engine->AttachCamera(hal->mCameras, init_state);
+	}
 
 	//apply camera state to new engine
-	if (switch_engines == true && state_set == true && running == true)
+	if (switch_engines == true && state_set == true)
 		active_engine->SetCameraState(state, false);
 
 	//update mouse cursor for freelook mode

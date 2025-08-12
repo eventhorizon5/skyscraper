@@ -179,6 +179,7 @@ private:
 	bool first_run;
 	bool RenderOnStartup; //override SBS engine setting with same name
 	bool running; //true if VM has started and is currently running/rendering
+	bool first_attach;
 
 	//shared libraries
 	std::vector<dylib*> dylibs;
