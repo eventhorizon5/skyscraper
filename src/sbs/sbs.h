@@ -202,7 +202,7 @@ public:
 	SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instance_number, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0f, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
 	~SBS();
 	void Initialize();
-	bool Start(std::vector<Ogre::Camera*> &cameras);
+	bool Start();
 	void CreateSky();
 	void CalculateFrameRate();
 	bool Loop(bool loading, bool isready);
@@ -393,6 +393,7 @@ public:
 	Real GetUnitScale();
 	Vector3 GetCenter();
 	Shape* CreateShape(Wall *wall);
+	void MergeBounds(Ogre::AxisAlignedBox &box);
 
 	//Meshes
 	MeshObject* Buildings;
@@ -446,6 +447,7 @@ private:
 	void CalculateAverageTime();
 	std::vector<ElevatorRoute*> GetIndirectRoute(std::vector<int> &checked_floors, int StartingFloor, int DestinationFloor, bool service_access = false, bool top_level = true);
 	ElevatorRoute* GetDirectRoute(Floor *floor, int DestinationFloor, bool service_access = false);
+	void GenerateBounds(Vector3 &min, Vector3 &max);
 
 	//timer callback array
 	std::vector<TimerObject*> timercallbacks;
@@ -530,6 +532,10 @@ private:
 
 	//sim engine area trigger
 	Trigger *area_trigger;
+
+	//sim engine bounds state
+	Ogre::AxisAlignedBox bounds;
+	bool bounds_set;
 
 	//camera texture references
 	std::vector<CameraTexture*> camtexarray;

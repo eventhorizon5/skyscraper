@@ -56,9 +56,6 @@ PolyMesh::PolyMesh(Object *parent) : ObjectBase(parent)
 
 	temppoly.reserve(32);
 	temppoly2.reserve(32);
-	temppoly3.reserve(32);
-	temppoly4.reserve(32);
-	temppoly5.reserve(32);
 	worker.reserve(32);
 }
 
@@ -114,7 +111,7 @@ Wall* PolyMesh::FindWallIntersect(MeshObject *mesh, const Vector3 &start, const 
         return 0;
 }
 
-bool PolyMesh::CreateMesh(MeshObject *mesh, const std::string &name, const std::string &texture, PolyArray &vertices, Real tw, Real th, bool autosize, Matrix3 &t_matrix, Vector3 &t_vector, std::vector<std::vector<Polygon::Geometry> > &geometry, std::vector<Triangle> &triangles, PolygonSet &converted_vertices)
+bool PolyMesh::CreateMesh(MeshObject *mesh, const std::string &name, const std::string &texture, PolyArray &vertices, Real tw, Real th, bool autosize, Matrix3 &t_matrix, Vector3 &t_vector, GeometrySet &geometry, std::vector<Triangle> &triangles, PolygonSet &converted_vertices)
 {
 	//create custom mesh geometry, apply a texture map and material, and return the created submesh
 
@@ -172,7 +169,7 @@ bool PolyMesh::CreateMesh(MeshObject *mesh, const std::string &name, const std::
 	return CreateMesh(mesh, name, material, converted_vertices, t_matrix, t_vector, geometry, triangles, converted_vertices, tw2, th2, false);
 }
 
-bool PolyMesh::CreateMesh(MeshObject *mesh, const std::string &name, const std::string &material, PolygonSet &vertices, Matrix3 &tex_matrix, Vector3 &tex_vector, std::vector<std::vector<Polygon::Geometry> > &geometry, std::vector<Triangle> &triangles, PolygonSet &converted_vertices, Real tw, Real th, bool convert_vertices)
+bool PolyMesh::CreateMesh(MeshObject *mesh, const std::string &name, const std::string &material, PolygonSet &vertices, Matrix3 &tex_matrix, Vector3 &tex_vector, GeometrySet &geometry, std::vector<Triangle> &triangles, PolygonSet &converted_vertices, Real tw, Real th, bool convert_vertices)
 {
 	//create custom geometry, apply a texture map and material, and return the created submesh
 	//tw and th are only used when overriding texel map
@@ -267,7 +264,7 @@ bool PolyMesh::CreateMesh(MeshObject *mesh, const std::string &name, const std::
 	return true;
 }
 
-bool PolyMesh::CreateMesh(MeshObject *mesh, const std::string &name, const std::string &material, PolygonSet &vertices, std::vector<std::vector<Vector2>> &uvMap, std::vector<std::vector<Polygon::Geometry> > &geometry, PolygonSet &converted_vertices, Real tw, Real th, bool convert_vertices)
+bool PolyMesh::CreateMesh(MeshObject *mesh, const std::string &name, const std::string &material, PolygonSet &vertices, std::vector<std::vector<Vector2>> &uvMap, GeometrySet &geometry, std::vector<Triangle> &triangles, PolygonSet &converted_vertices, Real tw, Real th, bool convert_vertices)
 {
 	//create custom geometry, apply a texture map and material, and return the created submesh
 	//tw and th are only used when overriding texel map
@@ -286,7 +283,18 @@ bool PolyMesh::CreateMesh(MeshObject *mesh, const std::string &name, const std::
 	else
 		converted_vertices = vertices;
 
+	//triangulate mesh
+	TriangleIndices *trimesh = new TriangleIndices[converted_vertices.size()];
 	size_t trimesh_size = converted_vertices.size();
+
+	for (size_t i = 0; i < trimesh_size; i++)
+	{
+		//do a (very) simple triangulation
+		//this method also somewhat works with non-planar polygons
+		trimesh[i].triangles.reserve(converted_vertices[i].size() - 2);
+		for (size_t j = 2; j < converted_vertices[i].size(); j++)
+			trimesh[i].triangles.emplace_back(Triangle(0, j - 1, j));
+	}
 
 	//initialize geometry arrays
 	geometry.resize(trimesh_size);
@@ -317,6 +325,25 @@ bool PolyMesh::CreateMesh(MeshObject *mesh, const std::string &name, const std::
 			k++;
 		}
 	}
+
+	//add triangles to single array, to be passed to the submesh
+	size_t location = 0;
+	for (size_t i = 0; i < trimesh_size; i++)
+	{
+		if (triangles.capacity() < trimesh[i].triangles.size())
+			triangles.reserve(trimesh[i].triangles.size());
+		for (size_t j = 0; j < trimesh[i].triangles.size(); j++)
+		{
+			Triangle tri = trimesh[i].triangles[j];
+			tri += location;
+			triangles.emplace_back(tri);
+		}
+		location += converted_vertices[i].size();
+	}
+
+	//delete trimesh array
+	delete [] trimesh;
+	trimesh = 0;
 
 	//recreate colliders if specified
 	if (sbs->DeleteColliders == true)
@@ -1522,10 +1549,10 @@ void PolyMesh::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool c
 {
 	//cuts a rectangular hole in the polygons within the specified range
 
-	if (cutwalls == false && cutfloors == false)
+	if (!cutwalls && !cutfloors)
 		return;
 
-	//swap values if the first is greater than the second
+	//normalize bounds
 	if (start.x > end.x)
 		std::swap(start.x, end.x);
 	if (start.y > end.y)
@@ -1533,9 +1560,7 @@ void PolyMesh::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool c
 	if (start.z > end.z)
 		std::swap(start.z, end.z);
 
-	bool polycheck = false;
-
-	if (reset_check == true)
+	if (reset_check)
 	{
 		if (checkwallnumber == 1)
 		{
@@ -1549,275 +1574,146 @@ void PolyMesh::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool c
 		}
 	}
 
-	//step through each polygon
+	Ogre::AxisAlignedBox bounds(start, end);
+
 	int polycount = wall->GetPolygonCount();
-	for (int i = 0; i < polycount; i++)
+	for (int i = 0; i < polycount; ++i)
 	{
-		//get name
-		Polygon *polygon = wall->GetPolygon(i);
-
-		newpolys.clear();
-
-		//skip empty polygons
-		if (polygon->geometry.size() == 0)
+		Polygon* polygon = wall->GetPolygon(i);
+		if (!polygon)
 			continue;
 
-		//cut all polygons within range
-		for (size_t j = 0; j < polygon->geometry.size(); j++)
+		bool touchedAny = false;
+		GeometrySet rebuilt; // output polys w/ explicit UVs
+
+		// skip empty poly
+		if (polygon->geometry.empty())
+			continue;
+
+		//for each subpoly in this Polygon
+		for (size_t j = 0; j < polygon->geometry.size(); ++j)
 		{
-			//skip null geometry
-			if (polygon->geometry[j].size() == 0)
+			const auto& src = polygon->geometry[j];
+			if (src.empty())
 				continue;
 
-			temppoly.clear();
-			temppoly2.clear();
-			temppoly3.clear();
-			temppoly4.clear();
-			temppoly5.clear();
-			worker.clear();
-			Vector2 extentsx, extentsy, extentsz;
-			Ogre::AxisAlignedBox bounds (start, end);
+			//build local-space CutVertex ring + compute bounds
+			GeometryArray ring;
+			ring.reserve(src.size());
+
 			Ogre::AxisAlignedBox polybounds;
-			bool polycheck2 = false;
-
-			//copy source polygon vertices
-			for (size_t k = 0; k < polygon->geometry[j].size(); k++)
+			for (const auto& g : src)
 			{
-				Ogre::Vector3 vertex = sbs->ToLocal(polygon->geometry[j][k].vertex);
-				temppoly.emplace_back(vertex);
-				polybounds.merge(vertex);
+				Geometry v;
+				v.vertex = sbs->ToLocal(g.vertex);
+				v.texel  = g.texel;
+				v.normal = g.normal;
+				ring.emplace_back(v);
+				polybounds.merge(v.vertex);
 			}
 
-			//skip if the polygon is completely inside the bounding box
-			/*if (bounds.contains(polybounds) == true)
+			//if polygon is entirely outside the cut AABB, keep as-is
+			if (!bounds.intersects(polybounds))
 			{
-				polycheck = true;
+				//direct pass-through
+				rebuilt.emplace_back(ring);
 				continue;
-			}*/
-
-			//make sure the polygon intersects bounds (is not outside the cut area)
-			if (bounds.intersects(polybounds) == true)
-			{
-				extentsx = GetExtents(temppoly, 1);
-				extentsy = GetExtents(temppoly, 2);
-				extentsz = GetExtents(temppoly, 3);
-
-				//is polygon a wall?
-				if (extentsy.x != extentsy.y)
-				{
-					if (cutwalls == true)
-					{
-						//wall
-						if (std::abs(extentsx.x - extentsx.y) > std::abs(extentsz.x - extentsz.y))
-						{
-							//wall is facing forward/backward
-
-							//get left side
-							worker = temppoly;
-							SplitWithPlane(0, worker, temppoly, temppoly2, start.x);
-							worker.clear();
-
-							//get right side
-							if (temppoly2.size() > 0)
-								worker = temppoly2;
-							else
-								worker = temppoly;
-							SplitWithPlane(0, worker, temppoly3, temppoly2, end.x);
-							worker.clear();
-
-							//get lower
-							if (temppoly3.size() > 0)
-								worker = temppoly3;
-							else if (temppoly2.size() > 0)
-								worker = temppoly2;
-							else if (temppoly.size() > 0)
-								worker = temppoly;
-							SplitWithPlane(1, worker, temppoly3, temppoly4, start.y);
-							worker.clear();
-
-							//get upper
-							if (temppoly4.size() > 0)
-								worker = temppoly4;
-							else if (temppoly3.size() > 0)
-								worker = temppoly3;
-							else if (temppoly2.size() > 0)
-								worker = temppoly2;
-							else if (temppoly.size() > 0)
-								worker = temppoly;
-							SplitWithPlane(1, worker, temppoly5, temppoly4, end.y);
-							worker.clear();
-						}
-						else
-						{
-							//wall is facing left/right
-
-							//get left side
-							worker = temppoly;
-							SplitWithPlane(2, worker, temppoly, temppoly2, start.z);
-							worker.clear();
-
-							//get right side
-							if (temppoly2.size() > 0)
-								worker = temppoly2;
-							else
-								worker = temppoly;
-							SplitWithPlane(2, worker, temppoly3, temppoly2, end.z);
-							worker.clear();
-
-							//get lower
-							if (temppoly3.size() > 0)
-								worker = temppoly3;
-							else if (temppoly2.size() > 0)
-								worker = temppoly2;
-							else if (temppoly.size() > 0)
-								worker = temppoly;
-							SplitWithPlane(1, worker, temppoly3, temppoly4, start.y);
-							worker.clear();
-
-							//get upper
-							if (temppoly4.size() > 0)
-								worker = temppoly4;
-							else if (temppoly3.size() > 0)
-								worker = temppoly3;
-							else if (temppoly2.size() > 0)
-								worker = temppoly2;
-							else if (temppoly.size() > 0)
-								worker = temppoly;
-							SplitWithPlane(1, worker, temppoly5, temppoly4, end.y);
-							worker.clear();
-						}
-						polycheck = true;
-						polycheck2 = true;
-
-						//store extents of temppoly5 for door sides if needed
-						GetDoorwayExtents(wall->GetMesh(), checkwallnumber, temppoly5);
-					}
-				}
-				else if (cutfloors == true)
-				{
-					//floor
-
-					//get left side
-					worker = temppoly;
-					SplitWithPlane(0, worker, temppoly, temppoly2, start.x);
-					worker.clear();
-
-					//get right side
-					if (temppoly2.size() > 0)
-						worker = temppoly2;
-					else
-						worker = temppoly;
-					SplitWithPlane(0, worker, temppoly3, temppoly2, end.x);
-					worker.clear();
-
-					//get lower
-					if (temppoly3.size() > 0)
-						worker = temppoly3;
-					else if (temppoly2.size() > 0)
-						worker = temppoly2;
-					else if (temppoly.size() > 0)
-						worker = temppoly;
-					SplitWithPlane(2, worker, temppoly3, temppoly4, start.z);
-					worker.clear();
-
-					//get upper
-					if (temppoly4.size() > 0)
-						worker = temppoly4;
-					else if (temppoly3.size() > 0)
-						worker = temppoly3;
-					else if (temppoly2.size() > 0)
-						worker = temppoly2;
-					else if (temppoly.size() > 0)
-						worker = temppoly;
-					SplitWithPlane(2, worker, temppoly5, temppoly4, end.z);
-					worker.clear();
-					temppoly5.clear();
-
-					polycheck = true;
-					polycheck2 = true;
-				}
-
-				//create split polygons
-				if (polycheck2 == true)
-				{
-					if (temppoly.size() > 2)
-					{
-						newpolys.resize(newpolys.size() + 1);
-						if (newpolys[newpolys.size() - 1].capacity() < temppoly.size())
-							newpolys[newpolys.size() - 1].reserve(temppoly.size());
-						for (size_t k = 0; k < temppoly.size(); k++)
-							newpolys[newpolys.size() - 1].emplace_back(temppoly[k]);
-					}
-					if (temppoly2.size() > 2)
-					{
-						newpolys.resize(newpolys.size() + 1);
-						if (newpolys[newpolys.size() - 1].capacity() < temppoly2.size())
-							newpolys[newpolys.size() - 1].reserve(temppoly2.size());
-						for (size_t k = 0; k < temppoly2.size(); k++)
-							newpolys[newpolys.size() - 1].emplace_back(temppoly2[k]);
-					}
-					if (temppoly3.size() > 2)
-					{
-						newpolys.resize(newpolys.size() + 1);
-						if (newpolys[newpolys.size() - 1].capacity() < temppoly3.size())
-							newpolys[newpolys.size() - 1].reserve(temppoly3.size());
-						for (size_t k = 0; k < temppoly3.size(); k++)
-							newpolys[newpolys.size() - 1].emplace_back(temppoly3[k]);
-					}
-					if (temppoly4.size() > 2)
-					{
-						newpolys.resize(newpolys.size() + 1);
-						if (newpolys[newpolys.size() - 1].capacity() < temppoly4.size())
-							newpolys[newpolys.size() - 1].reserve(temppoly4.size());
-						for (size_t k = 0; k < temppoly4.size(); k++)
-							newpolys[newpolys.size() - 1].emplace_back(temppoly4[k]);
-					}
-
-					temppoly.clear();
-					temppoly2.clear();
-					temppoly3.clear();
-					temppoly4.clear();
-				}
 			}
-			else
+
+			//decide 'isWall' by vertical extent: if it spans Y, we treat as wall.
+			auto getExtents = [&](const GeometryArray& p, int axis)->Vector2
 			{
-				//otherwise put original polygon into array (will only be used if the related submesh is recreated)
-				PolyArray poly;
-				for (size_t k = 0; k < polygon->geometry[j].size(); k++)
+				Real mn = std::numeric_limits<Real>::infinity();
+				Real mx = -mn;
+				for (auto& v : p)
 				{
-					poly.emplace_back(sbs->ToLocal(polygon->geometry[j][k].vertex));
+					Real c = (axis == 0) ? v.vertex.x : (axis == 1) ? v.vertex.y : v.vertex.z;
+					mn = std::min(mn, c);
+					mx = std::max(mx, c);
 				}
-				newpolys.emplace_back(poly);
+				return Vector2(mn, mx);
+			};
+			Vector2 ey = getExtents(ring, 1);
+			const bool isWall = (ey.x != ey.y);
+			const bool isFloor = !isWall;
+
+			if ((isWall && !cutwalls) || (isFloor && !cutfloors))
+			{
+				//keep original
+				rebuilt.emplace_back(ring);
+				continue;
 			}
+
+			// Six-plane partition (emit outside pieces; discard inside)
+			GeometryArray work = ring, tmpA, tmpB;
+			auto emitIf = [&](const GeometryArray& poly)
+			{
+				if (poly.size() > 2)
+					rebuilt.emplace_back(poly);
+			};
+
+			// 1) x < start.x (LEFT)
+			tmpA.clear(); tmpB.clear();
+			SplitWithPlaneUV(0, work, tmpA, tmpB, start.x);
+			emitIf(tmpA);      // <= start.x
+			work.swap(tmpB);   // remainder >= start.x
+
+			// 2) x > end.x (RIGHT)
+			tmpA.clear(); tmpB.clear();
+			SplitWithPlaneUV(0, work, tmpA, tmpB, end.x);
+			emitIf(tmpB);      // >= end.x
+			work.swap(tmpA);   // remainder <= end.x
+
+			// 3) y < start.y (BELOW)
+			tmpA.clear(); tmpB.clear();
+			SplitWithPlaneUV(1, work, tmpA, tmpB, start.y);
+			emitIf(tmpA);      // <= start.y
+			work.swap(tmpB);   // remainder >= start.y
+
+			// 4) y > end.y (ABOVE)
+			tmpA.clear(); tmpB.clear();
+			SplitWithPlaneUV(1, work, tmpA, tmpB, end.y);
+			emitIf(tmpB);      // >= end.y
+			work.swap(tmpA);   // remainder <= end.y
+
+			// 5) z < start.z (BACK)
+			tmpA.clear(); tmpB.clear();
+			SplitWithPlaneUV(2, work, tmpA, tmpB, start.z);
+			emitIf(tmpA);      // <= start.z
+			work.swap(tmpB);   // remainder >= start.z
+
+			// 6) z > end.z (FRONT)
+			tmpA.clear(); tmpB.clear();
+			SplitWithPlaneUV(2, work, tmpA, tmpB, end.z);
+			emitIf(tmpB);      // >= end.z
+
+			//store extents for door sides if needed
+			PolyArray poly;
+			for (size_t i = 0; i < tmpA.size(); i++)
+			{
+				poly.push_back(tmpA[i].vertex);
+			}
+			GetDoorwayExtents(wall->GetMesh(), checkwallnumber, poly);
+
+			// 'work' now is the inside-of-box piece -> hole; drop it
+
+			touchedAny = true;
 		}
 
-		//create new polygon
-		if (polycheck == true)
+		if (touchedAny)
 		{
-			std::string oldmat;
-			Vector3 oldvector;
-			Matrix3 mapping;
+			//capture material + mapping from the original polygon
 			std::string name = polygon->GetName();
+			std::string oldmat = polygon->material;
 
-			if (newpolys.size() > 0)
-			{
-				//get texture data from original polygon
-				oldmat = polygon->material;
-				polygon->GetTextureMapping(mapping, oldvector);
-			}
-
-			//delete original polygon
+			//remove original polygon
 			wall->DeletePolygon(i, false);
-			polygon = 0;
+			--i;
+			--polycount;  //keep indices valid
 
-			//create new polygon
-			if (newpolys.size() > 0)
-				wall->AddPolygonSet(name, oldmat, newpolys, mapping, oldvector);
-
-			//reset search position
-			i--;
-			polycount--;
-			polycheck = false;
+			//add rebuilt polygons with explicit UVs (no planar remap)
+			if (!rebuilt.empty())
+				wall->AddPolygonSet(name, oldmat, rebuilt);
 		}
 	}
 }
@@ -1873,7 +1769,7 @@ Vector3 PolyMesh::GetPolygonDirection(PolyArray &polygon)
 	//get largest normal
 
 	//convert to remote values for precision compatibility with Alpha 7 and earlier
-	newpoly.clear();
+	PolyArray newpoly;
 	for (size_t i = 0; i < polygon.size(); i++)
 		newpoly.emplace_back(sbs->ToRemote(polygon[i], true, false));
 
@@ -2071,6 +1967,64 @@ void PolyMesh::SplitWithPlane(int axis, const PolyArray &orig, PolyArray &poly1,
 			Vector3 intersect = prev + (curr - prev) * t;
 			poly1.emplace_back(intersect);
 			poly2.emplace_back(intersect);
+		}
+
+		//add current vertex to appropriate polygon(s)
+		if (currSide >= 0)
+			poly2.emplace_back(curr);
+		if (currSide <= 0)
+			poly1.emplace_back(curr);
+
+		prev = curr;
+		prevSide = currSide;
+	}
+}
+
+void PolyMesh::SplitWithPlaneUV(int axis, const GeometryArray &orig, GeometryArray &poly1, GeometryArray &poly2, Real value)
+{
+	//splits the given polygon into two polygons, on the desired plane (defined by the axis and value parameters)
+	//axis is 0 for X, 1 for Y, 2 for Z
+
+	//clear output polygons
+	poly1.clear();
+	poly2.clear();
+
+	//helper lambda to get coordinate by axis
+	auto getCoord = [axis](const Vector3& v) -> Real
+	{
+		if (axis == 0)
+			return v.x;
+		if (axis == 1)
+			return v.y;
+		return v.z;
+	};
+
+	size_t n = orig.size();
+	if (n < 2)
+		return; //not enough vertices
+
+	Geometry prev = orig[n - 1];
+	Real prevSide = getCoord(prev.vertex) - value;
+	if (std::abs(prevSide) < SMALL_EPSILON)
+		prevSide = 0;
+
+	for (size_t i = 0; i < n; i++)
+	{
+		Geometry curr = orig[i];
+		Real currSide = getCoord(curr.vertex) - value;
+		if (std::abs(currSide) < SMALL_EPSILON)
+			currSide = 0;
+
+		//if edge crosses the plane, compute intersection
+		if ((prevSide < 0 && currSide > 0) || (prevSide > 0 && currSide < 0))
+		{
+			Real t = prevSide / (prevSide - currSide);
+			Geometry inter;
+			inter.vertex = prev.vertex + (curr.vertex - prev.vertex) * t;
+			inter.texel = prev.texel + (curr.texel - prev.texel) * t;
+			inter.normal = prev.normal + (curr.normal - prev.normal) * t;
+			poly1.emplace_back(inter);
+			poly2.emplace_back(inter);
 		}
 
 		//add current vertex to appropriate polygon(s)

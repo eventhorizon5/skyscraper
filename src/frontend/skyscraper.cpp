@@ -449,7 +449,8 @@ bool Skyscraper::Loop()
 	}
 
 #ifdef USING_WX
-	gui->ShowProgress();
+	if (vm->LoadPending() == false)
+		gui->ShowProgress();
 #endif
 
 	//run sim engine instances
@@ -528,7 +529,7 @@ bool Skyscraper::Load(const std::string &filename, EngineContext *parent, const 
 
 	StopMenu();
 
-	bool result = vm->Load(true, filename, parent, position, rotation, area_min, area_max);
+	bool result = vm->Load(false, true, filename, parent, position, rotation, area_min, area_max);
 
 	if (result == false && vm->GetEngineCount() == 1)
 		UnloadToMenu();
@@ -592,8 +593,12 @@ bool Skyscraper::Start(EngineContext *engine)
 	}
 
 	//start simulation
-	if (!vm->StartEngine(engine, hal->mCameras))
+	if (!vm->StartEngine(engine))
 		return false;
+
+	//exit if engine loads are still queued
+	if (vm->LoadPending() == true || vm->IsEngineLoading() == true)
+		return true;
 
 	//close progress dialog if no engines are loading
 #ifdef USING_WX
@@ -602,9 +607,7 @@ bool Skyscraper::Start(EngineContext *engine)
 #endif
 
 	//load control panel
-	if (engine == vm->GetActiveEngine())
-	{
-		bool panel = vm->GetHAL()->GetConfigBool(hal->configfile, "Skyscraper.Frontend.ShowControlPanel", true);
+	bool panel = vm->GetHAL()->GetConfigBool(hal->configfile, "Skyscraper.Frontend.ShowControlPanel", true);
 
 #ifdef USING_WX
 		//override if disabled on the command line
@@ -614,7 +617,6 @@ bool Skyscraper::Start(EngineContext *engine)
 		if (panel == true)
 			gui->CreateDebugPanel();
 #endif
-	}
 
 	hal->RefreshViewport();
 

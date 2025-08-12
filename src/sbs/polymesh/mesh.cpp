@@ -1265,6 +1265,7 @@ void MeshObject::CreateBoundingBox()
 				}
 			}
 		}
+		sbs->MergeBounds(*Bounds);
 	}
 }
 

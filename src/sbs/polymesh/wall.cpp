@@ -109,7 +109,7 @@ Polygon* Wall::AddPolygon(const std::string &name, const std::string &texture, P
 	Matrix3 tm;
 	Vector3 tv;
 	//std::vector<Extents> index_extents;
-	std::vector<std::vector<Polygon::Geometry> > geometry;
+	GeometrySet geometry;
 	std::vector<Triangle> triangles;
 	PolygonSet converted_vertices;
 	if (!polymesh->CreateMesh(meshwrapper, name, texture, vertices, tw, th, autosize, tm, tv, geometry, triangles, converted_vertices))
@@ -139,9 +139,10 @@ Polygon* Wall::AddPolygon(const std::string &name, const std::string &texture, P
 	Matrix3 tm;
 	Vector3 tv;
 	//std::vector<Extents> index_extents;
-	std::vector<std::vector<Polygon::Geometry> > geometry;
+	GeometrySet geometry;
+	std::vector<Triangle> output_triangles;
 	PolygonSet converted_vertices;
-	if (!polymesh->CreateMesh(meshwrapper, name, texture, vertices, uvMap, geometry, converted_vertices, tw, th))
+	if (!polymesh->CreateMesh(meshwrapper, name, texture, vertices, uvMap, geometry, output_triangles, converted_vertices, tw, th))
 	{
 		ReportError("Error creating wall '" + name + "'");
 		return 0;
@@ -165,7 +166,7 @@ Polygon* Wall::AddPolygonSet(const std::string &name, const std::string &materia
 {
 	//create a set of polygons, providing the original material and texture mapping
 
-	std::vector<std::vector<Polygon::Geometry> > geometry;
+	GeometrySet geometry;
 	std::vector<Triangle> triangles;
 	PolygonSet converted_vertices;
 	if (!polymesh->CreateMesh(meshwrapper, name, material, vertices, tex_matrix, tex_vector, geometry, triangles, converted_vertices, 0, 0))
@@ -181,6 +182,69 @@ Polygon* Wall::AddPolygonSet(const std::string &name, const std::string &materia
 	Plane plane = sbs->GetPolyMesh()->ComputePlane(converted_vertices[0]);
 
 	Polygon* poly = new Polygon(this, name, meshwrapper, geometry, triangles, tex_matrix, tex_vector, material, plane);
+	polygons.emplace_back(poly);
+
+	return poly;
+}
+
+Polygon* Wall::AddPolygonSet(const std::string& name, const std::string& material, const GeometrySet& geometry)
+{
+    // create a set of polygons, providing the original material and geometry data
+
+	if (!meshwrapper || geometry.empty())
+		return nullptr;
+
+	PolygonSet vertices;
+	std::vector<std::vector<Vector2>> uvMap;
+	vertices.reserve(geometry.size());
+	uvMap.reserve(geometry.size());
+
+	for (const auto& ring : geometry)
+	{
+		PolyArray verts;
+		std::vector<Vector2> uvs;
+		verts.reserve(ring.size());
+		uvs.reserve(ring.size());
+
+		for (const auto& g : ring)
+		{
+			verts.emplace_back(g.vertex);
+			uvs.emplace_back(g.texel);
+		}
+		vertices.emplace_back(std::move(verts));
+		uvMap.emplace_back(std::move(uvs));
+	}
+
+	//build mesh with explicit UVs
+	GeometrySet outGeom;
+	std::vector<Triangle> triangles;
+	PolygonSet converted_vertices;
+
+	const bool convert_vertices = true;
+	const Real tw = 1.0f, th = 1.0f;
+
+	if (!polymesh->CreateMesh(meshwrapper, name, material, vertices, uvMap, outGeom, triangles, converted_vertices, tw, th, convert_vertices))
+	{
+		ReportError("Error creating wall '" + name + "'");
+		return 0;
+	}
+
+	//compute plane
+	Plane plane;
+	if (!converted_vertices.empty() && !converted_vertices[0].empty())
+		plane = sbs->GetPolyMesh()->ComputePlane(converted_vertices[0]);
+	else
+	{
+		plane.normal = Vector3(0,1,0);
+		plane.d = 0;
+	}
+
+	//construct the polygon (tm/tv identity because UVs are explicit)
+	Matrix3 tm;
+	tm.FromAxes(Vector3(1,0,0), Vector3(0,1,0), Vector3(0,0,1));
+	Vector3 tv(0,0,0);
+
+	Polygon* poly = new Polygon(this, name, meshwrapper, outGeom, triangles, tm, tv, material, plane);
 	polygons.emplace_back(poly);
 
 	return poly;

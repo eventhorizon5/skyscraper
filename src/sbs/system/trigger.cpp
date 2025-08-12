@@ -406,4 +406,10 @@ Vector3 Trigger::GetMax()
 	return area_box->getMaximum();
 }
 
+void Trigger::Merge(Ogre::AxisAlignedBox &box)
+{
+	//expand this trigger box to encompass the given box
+	area_box->merge(box);
+}
+
 }

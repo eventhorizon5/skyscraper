@@ -39,11 +39,13 @@ public:
 	bool NewEngine; //true if this is a new engine
 	unsigned long current_time, time_stat;
 	bool Paused;
+	bool IsSystem;
+	EngineType type;
 
-	EngineContext(EngineContext *parent, VM *vm, Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
-	EngineContext(EngineContext *parent, VM *vm, Ogre::SceneManager* mSceneManager, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
+	EngineContext(const EngineType type, EngineContext *parent, VM *vm, Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
+	EngineContext(const EngineType type, EngineContext *parent, VM *vm, Ogre::SceneManager* mSceneManager, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
 	~EngineContext();
-	void Init(EngineContext *parent, VM *vm, Ogre::SceneManager* mSceneManager, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max);
+	void Init(const EngineType type, EngineContext *parent, VM *vm, Ogre::SceneManager* mSceneManager, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max);
 	ScriptProcessor* GetScriptProcessor();
 	::SBS::SBS *GetSystem() { return Simcore; }
 	bool IsCameraActive();
@@ -56,7 +58,7 @@ public:
 	bool IsReloading() { return reloading; }
 	void DoReload();
 	std::string GetFilename();
-	bool Start(std::vector<Ogre::Camera*> &cameras);
+	bool Start();
 	void Report(const std::string &message);
 	bool ReportError(const std::string &message);
 	bool ReportFatalError(const std::string &message);
@@ -69,14 +71,14 @@ public:
 	bool IsInside();
 	bool IsInside(const Vector3 &position);
 	void DetachCamera(bool reset_building = false);
-	void AttachCamera(std::vector<Ogre::Camera*> &cameras, bool init_state = true);
+	bool AttachCamera(std::vector<Ogre::Camera*> &cameras, bool init_state = true);
 	void RefreshCamera();
 	void ResetCamera();
 	void RevertMovement();
 	Vector3 GetCameraPosition();
 	void OnEnter();
 	void OnExit();
-	void CutForEngine(EngineContext *engine);
+	void CutForEngine(EngineContext *engine, bool child = false);
 	void AddChild(EngineContext *engine);
 	void RemoveChild(const EngineContext *engine);
 	void RemoveParent() { parent = 0; }
@@ -92,6 +94,7 @@ public:
 	void GatherReset();
 	void Gather();
 	void ResetPrepare();
+	void CancelShutdown() { shutdown = false; }
 
 private:
 

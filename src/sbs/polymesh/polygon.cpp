@@ -111,7 +111,7 @@ void Polygon::Move(const Vector3 &vector, Real speed)
 	{
 		for (size_t j = 0; j < geometry[i].size(); j++)
 		{
-			Polygon::Geometry &data = geometry[i][j];
+			Geometry &data = geometry[i][j];
 			data.vertex += sbs->ToRemote(vector * speed);
 		}
 	}
@@ -162,7 +162,7 @@ void Polygon::ChangeHeight(Real newheight)
 	{
 		for (size_t j = 0; j < geometry[i].size(); j++)
 		{
-			Polygon::Geometry &data = geometry[i][j];
+			Geometry &data = geometry[i][j];
 			if (data.vertex.y == extents.y)
 				data.vertex.y = sbs->ToRemote(newheight);
 		}

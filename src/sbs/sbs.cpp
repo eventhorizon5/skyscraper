@@ -196,6 +196,8 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instan
 
 	//create main engine area trigger
 	SetBounds(area_min, area_max);
+	bounds = Ogre::AxisAlignedBox::BOX_NULL;
+	bounds_set = false;
 
 	//create sound system object if sound is enabled
 	if (fmodsystem)
@@ -512,12 +514,16 @@ SBS::~SBS()
 	sbs = 0;
 }
 
-bool SBS::Start(std::vector<Ogre::Camera*> &cameras)
+bool SBS::Start()
 {
 	//Post-init startup code goes here, before the runloop
 
 	//prepare 3D geometry for use
 	Prepare();
+
+	//if no bounds trigger was created, set it according to generated engine bounds
+	if (!area_trigger && !bounds.isNull())
+		SetBounds(bounds.getMinimum(), bounds.getMaximum());
 
 	//free text texture memory
 	texturemanager->FreeTextureBoxes();
@@ -537,9 +543,6 @@ bool SBS::Start(std::vector<Ogre::Camera*> &cameras)
 				sounds[i]->Play();
 		}
 	}
-
-	//attach camera object
-	AttachCamera(cameras);
 
 	//enable random activity if specified
 	if (RandomActivity == true)
@@ -579,6 +582,9 @@ bool SBS::Loop(bool loading, bool isready)
 {
 	//Main simulator loop
 	SBS_PROFILE_MAIN("SBS");
+
+	if (!camera)
+		return false;
 
 	bool status = true;
 
@@ -685,14 +691,17 @@ void SBS::CalculateFrameRate()
 void SBS::EnableBuildings(bool value)
 {
 	//turns buildings on/off
-	Buildings->Enabled(value);
+
+	if (Buildings)
+		Buildings->Enabled(value);
 	IsBuildingsEnabled = value;
 }
 
 void SBS::EnableLandscape(bool value)
 {
 	//turns landscape on/off
-	Landscape->Enabled(value);
+	if (Landscape)
+		Landscape->Enabled(value);
 	IsLandscapeEnabled = value;
 }
 
@@ -2898,6 +2907,9 @@ bool SBS::AttachCamera(std::vector<Ogre::Camera*> &cameras, bool init_state)
 
 bool SBS::DetachCamera()
 {
+	if (!camera)
+		return false;
+
 	return camera->Detach();
 }
 
@@ -2979,9 +2991,9 @@ void SBS::CutOutsideBoundaries(bool landscape, bool buildings, bool external, bo
 	Vector3 min = area_trigger->GetMin();
 	Vector3 max = area_trigger->GetMax();
 
-	if (landscape == true)
+	if (landscape == true && Landscape)
 		Landscape->CutOutsideBounds(min, max, true, true);
-	if (buildings == true)
+	if (buildings == true && Buildings)
 		Buildings->CutOutsideBounds(min, max, true, true);
 	if (external == true && External)
 		External->CutOutsideBounds(min, max, true, true);
@@ -2998,9 +3010,9 @@ void SBS::CutInsideBoundaries(const Vector3 &min, const Vector3 &max, bool lands
 	//cut landscape and buildings for specified bounds
 	//run this function before calling Start()
 
-	if (landscape == true)
+	if (landscape == true && Landscape)
 		Landscape->Cut(min, max, true, true);
-	if (buildings == true)
+	if (buildings == true && Buildings)
 		Buildings->Cut(min, max, true, true);
 	if (external == true && External)
 		External->Cut(min, max, true, true);
@@ -3037,10 +3049,14 @@ void SBS::ResetState()
 	EnableSkybox(true);
 
 	//turn off interior objects
-	floor_manager->EnableAll(false);
-	shaft_manager->EnableAll(false);
-	stairwell_manager->EnableAll(false);
-	elevator_manager->EnableAll(false);
+	if (floor_manager)
+		floor_manager->EnableAll(false);
+	if (shaft_manager)
+		shaft_manager->EnableAll(false);
+	if (stairwell_manager)
+		stairwell_manager->EnableAll(false);
+	if (elevator_manager)
+		elevator_manager->EnableAll(false);
 
 	//turn off reverbs
 	for (size_t i = 0; i < reverbs.size(); i++)
@@ -3050,7 +3066,8 @@ void SBS::ResetState()
 	}
 
 	//reset camera state
-	camera->ResetState();
+	if (camera)
+		camera->ResetState();
 }
 
 Light* SBS::GetLight(std::string name)
@@ -3388,6 +3405,18 @@ Shape* SBS::CreateShape(Wall *wall)
 
 	Shape *shape = new Shape(wall);
 	return shape;
+}
+
+void SBS::MergeBounds(Ogre::AxisAlignedBox &box)
+{
+	if (box.isNull())
+		return;
+
+	if (bounds_set == true)
+		bounds.merge(box);
+	else
+		bounds = box;
+	bounds_set = true;
 }
 
 }

@@ -51,15 +51,17 @@ using namespace SBS;
 
 namespace Skyscraper {
 
-EngineContext::EngineContext(EngineContext *parent, VM *vm, Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
+EngineContext::EngineContext(const EngineType type, EngineContext *parent, VM *vm, Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
 {
 	this->fmodsystem = fmodsystem;
-	Init(parent, vm, mSceneManager, position, rotation, area_min, area_max);
+	IsSystem = false;
+	Init(type, parent, vm, mSceneManager, position, rotation, area_min, area_max);
 }
 
-EngineContext::EngineContext(EngineContext *parent, VM *vm, Ogre::SceneManager* mSceneManager, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
+EngineContext::EngineContext(const EngineType type, EngineContext *parent, VM *vm, Ogre::SceneManager* mSceneManager, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
 {
-	Init(parent, vm, mSceneManager, position, rotation, area_min, area_max);
+	IsSystem = false;
+	Init(type, parent, vm, mSceneManager, position, rotation, area_min, area_max);
 }
 
 EngineContext::~EngineContext()
@@ -83,10 +85,11 @@ EngineContext::~EngineContext()
 	reload_state = 0;
 }
 
-void EngineContext::Init(EngineContext *parent, VM *vm, Ogre::SceneManager* mSceneManager, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
+void EngineContext::Init(const EngineType type, EngineContext *parent, VM *vm, Ogre::SceneManager* mSceneManager, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
 {
 	//initialize this engine context
 
+	this->type = type;
 	this->vm = vm;
 	finish_time = 0;
 	shutdown = false;
@@ -466,7 +469,7 @@ void EngineContext::UnloadSim()
 #endif
 }
 
-bool EngineContext::Start(std::vector<Ogre::Camera*> &cameras)
+bool EngineContext::Start()
 {
 	//start simulator
 
@@ -474,11 +477,8 @@ bool EngineContext::Start(std::vector<Ogre::Camera*> &cameras)
 		return false;
 
 	//cut outside sim boundaries if specified
-	Simcore->CutOutsideBoundaries(vm->CutLandscape, vm->CutBuildings, vm->CutExternal, vm->CutFloors);
-
-	//if this has a parent engine, cut the parent for this new engine
-	if (vm->IsValidEngine(parent) == true)
-		parent->CutForEngine(this);
+	if (!IsSystem)
+		Simcore->CutOutsideBoundaries(vm->CutLandscape, vm->CutBuildings, vm->CutExternal, vm->CutFloors);
 
 	//if this has child engines, and has reloaded, cut for the child engines
 	if (children.empty() == false && reloading == true)
@@ -490,8 +490,12 @@ bool EngineContext::Start(std::vector<Ogre::Camera*> &cameras)
 	}
 
 	//start simulator
-	if (!Simcore->Start(cameras))
+	if (!Simcore->Start())
 		return ReportError("Error starting simulator\n");
+
+	//if this has a parent engine, cut the parent for this new engine
+	if (vm->IsValidEngine(parent) == true)
+		parent->CutForEngine(this);
 
 	//set to saved position if reloading building
 	if (reloading == true)
@@ -548,14 +552,35 @@ CameraState EngineContext::GetCameraState()
 {
 	//get camera state data
 
-	return Simcore->camera->GetCameraState();
+	CameraState state;
+	state.position = Vector3::ZERO;
+	state.rotation = Vector3::ZERO;
+	state.floor = 0;
+	state.collisions = true;
+	state.gravity = true;
+	state.freelook = false;
+	state.desired_velocity = Vector3::ZERO;
+	state.velocity = Vector3::ZERO;
+	state.desired_angle_velocity = Vector3::ZERO;
+	state.angle_velocity = Vector3::ZERO;
+	state.accum_movement = Vector3::ZERO;
+	state.fov = 0;
+	state.speed = 0;
+
+	if (Simcore->camera)
+		return Simcore->camera->GetCameraState();
+	return state;
 }
 
 void EngineContext::SetCameraState(const CameraState &state, bool set_floor)
 {
 	//set camera state data
 
-	Simcore->camera->SetCameraState(state, set_floor);
+	if (!Simcore)
+		return;
+
+	if (Simcore->camera)
+		Simcore->camera->SetCameraState(state, set_floor);
 }
 
 bool EngineContext::IsInside()
@@ -592,30 +617,41 @@ void EngineContext::DetachCamera(bool reset_building)
 		Simcore->ResetState();
 }
 
-void EngineContext::AttachCamera(std::vector<Ogre::Camera*> &cameras, bool init_state)
+bool EngineContext::AttachCamera(std::vector<Ogre::Camera*> &cameras, bool init_state)
 {
 	//attach the camera to this engine
 
-	Simcore->AttachCamera(cameras, init_state);
+	bool result = Simcore->AttachCamera(cameras, init_state);
 
 	//reset camera position if camera is outside of the engine's area when attaching
-	if (IsInside() == false)
+	if (IsInside() == false || vm->IsRunning() == false)
 		ResetCamera();
+
+	return result;
 }
 
 void EngineContext::RefreshCamera()
 {
+	if (!Simcore->camera)
+		return;
+
 	Simcore->camera->Refresh();
 }
 
 void EngineContext::ResetCamera()
 {
+	if (!Simcore->camera)
+		return;
+
 	//reset camera position
 	Simcore->camera->SetToStartPosition(true);
 }
 
 void EngineContext::RevertMovement()
 {
+	if (!Simcore->camera)
+		return;
+
 	//revert camera movement
 	Simcore->camera->RevertMovement();
 }
@@ -623,6 +659,9 @@ void EngineContext::RevertMovement()
 Vector3 EngineContext::GetCameraPosition()
 {
 	//get this engine's camera position, in global positioning
+
+	if (!Simcore->camera)
+		return Vector3::ZERO;
 
 	return Simcore->GetUtility()->ToGlobal(Simcore->camera->GetPosition());
 }
@@ -653,12 +692,16 @@ void EngineContext::OnExit()
 	inside = false;
 }
 
-void EngineContext::CutForEngine(EngineContext *engine)
+void EngineContext::CutForEngine(EngineContext *engine, bool child)
 {
 	//cut holes in this sim engine, for a newly loaded building, if possible
 
 	if (!engine || engine == this)
 		return;
+
+	//limit cuts on system engines
+	//if (child == false && IsSystem == true)
+		//return;
 
 	::SBS::SBS *newsimcore = engine->GetSystem();
 
@@ -700,7 +743,7 @@ void EngineContext::CutForEngine(EngineContext *engine)
 
 	//if this has a valid parent, have parent cut for the specified engine
 	if (vm->IsValidEngine(parent) == true)
-		parent->CutForEngine(engine);
+		parent->CutForEngine(engine, child);
 }
 
 void EngineContext::AddChild(EngineContext *engine)
