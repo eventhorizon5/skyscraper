@@ -480,10 +480,6 @@ bool EngineContext::Start()
 	if (!IsSystem)
 		Simcore->CutOutsideBoundaries(vm->CutLandscape, vm->CutBuildings, vm->CutExternal, vm->CutFloors);
 
-	//if this has a parent engine, cut the parent for this new engine
-	if (vm->IsValidEngine(parent) == true)
-		parent->CutForEngine(this);
-
 	//if this has child engines, and has reloaded, cut for the child engines
 	if (children.empty() == false && reloading == true)
 	{
@@ -496,6 +492,10 @@ bool EngineContext::Start()
 	//start simulator
 	if (!Simcore->Start())
 		return ReportError("Error starting simulator\n");
+
+	//if this has a parent engine, cut the parent for this new engine
+	if (vm->IsValidEngine(parent) == true)
+		parent->CutForEngine(this);
 
 	//set to saved position if reloading building
 	if (reloading == true)
