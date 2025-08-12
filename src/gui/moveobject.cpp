@@ -328,7 +328,7 @@ void MoveObject::On_bZPlus_Click(wxCommandEvent& event)
 
 void MoveObject::On_bYPlus_Click(wxCommandEvent& event)
 {
-	if (!Simcore)
+	if (!Simcore || !object)
 		return;
 
 	if (chkHold->GetValue() == true)
@@ -345,7 +345,7 @@ void MoveObject::On_bYPlus_Click(wxCommandEvent& event)
 
 void MoveObject::On_bXNeg_Click(wxCommandEvent& event)
 {
-	if (!Simcore)
+	if (!Simcore || !object)
 		return;
 
 	if (chkHold->GetValue() == true)
@@ -362,7 +362,7 @@ void MoveObject::On_bXNeg_Click(wxCommandEvent& event)
 
 void MoveObject::On_bXPlus_Click(wxCommandEvent& event)
 {
-	if (!Simcore)
+	if (!Simcore || !object)
 		return;
 
 	if (chkHold->GetValue() == true)
@@ -379,7 +379,7 @@ void MoveObject::On_bXPlus_Click(wxCommandEvent& event)
 
 void MoveObject::On_bZNeg_Click(wxCommandEvent& event)
 {
-	if (!Simcore)
+	if (!Simcore || !object)
 		return;
 
 	if (chkHold->GetValue() == true)
@@ -396,7 +396,7 @@ void MoveObject::On_bZNeg_Click(wxCommandEvent& event)
 
 void MoveObject::On_bYNeg_Click(wxCommandEvent& event)
 {
-	if (!Simcore)
+	if (!Simcore || !object)
 		return;
 
 	if (chkHold->GetValue() == true)
