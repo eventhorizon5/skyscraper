@@ -629,8 +629,10 @@ void VM::CheckCamera()
 
 	if (active_engine->IsCameraActive() == false)
 	{
-		active_engine = FindActiveEngine();
-		Report("Switching to active engine " + ToString(active_engine->GetNumber()));
+		EngineContext *newengine = FindActiveEngine();
+		if (newengine != active_engine)
+			Report("Switching to active engine " + ToString(newengine->GetNumber()));
+		active_engine = newengine;
 	}
 }
 
