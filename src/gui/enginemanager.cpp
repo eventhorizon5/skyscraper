@@ -38,7 +38,6 @@ namespace Skyscraper {
 
 //(*IdInit(EngineManager)
 const wxWindowID EngineManager::ID_EngineList = wxNewId();
-const wxWindowID EngineManager::ID_STATICTEXT7 = wxNewId();
 const wxWindowID EngineManager::ID_tType = wxNewId();
 const wxWindowID EngineManager::ID_STATICTEXT8 = wxNewId();
 const wxWindowID EngineManager::ID_tParent = wxNewId();

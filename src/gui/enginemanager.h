@@ -80,7 +80,6 @@ class EngineManager: public wxDialog
 
 		//(*Identifiers(EngineManager)
 		static const wxWindowID ID_EngineList;
-		static const wxWindowID ID_STATICTEXT7;
 		static const wxWindowID ID_tType;
 		static const wxWindowID ID_STATICTEXT8;
 		static const wxWindowID ID_tParent;
