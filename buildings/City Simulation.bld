@@ -1,12 +1,22 @@
 # City Simulation
 
+<Textures>
+    Load data/downtown.jpg, Downtown, 1, 1
+    Load data/misc/grass.jpg, Grass, 1, 1
+<EndTextures>
+
+# Ground
+AddGround Ground, Downtown, -158400, -158400, 158400, 158400, 0, 7920, 7920
+
 <Buildings>
     ConcurrentLoads = false
     CutExternal = true
     CutFloors = true
+    Load Triton Center.bld, 0, 0, 0, 0
     Load Observation Tower.bld, -440.5, 0, 0, 0
     Load Glass Tower.bld, 0, 0, 871.5, 0
     Load Sears Tower.bld, 550, 0, 50, -90
+    Load Convention Center.bld, -416, 0, -350, 270
     Load Simple.bld, 225, 0, -628, 180, -37.5, 0, -25, 37.5, 0, 25
     Load Simple.bld, 0, 0, -628, 180, -37.5, 0, -25, 37.5, 0, 25
     Load Simple.bld, 75, 0, -628, 180, -37.5, 0, -25, 37.5, 0, 25
@@ -31,11 +41,11 @@
     
 <EndBuildings>
 
-<Include buildings/Triton Center.bld>
-
 <Globals>
     CameraPosition = 115, -115
     CameraRotation = 0, 270, 0
+    Type = City
+    Bounds = -10000, -10000, -10000, 10000, 10000, 10000
 <EndGlobals>
 
 <Vehicle 1>

@@ -66,6 +66,54 @@ Version 2.1
 -PolyMesh: moved shape code into new Shape object, and integrated with Floor object
 -ScriptProc: fixed AddShaftDoor and AddShaftDoors commands
 -ScriptProc: fix regression in Floor section AddShaftDoor command
+-ScriptProc: made AddSphere command, using the new shape support, and added the new "Simple - Shapes" building
+-ScriptProc: added AddBox command
+-SBS: shapes can now be created on elevator car, shaft, stairwell, and SBS objects
+-SBS: added support for creating PolyMesh shapes on models
+-PolyMesh: added remaining shapes and fixes to Shape object
+-Guide: added section on PolyMesh to development page
+-VM: added pause and resume console commands
+-PolyMesh: added triangle tessellation function
+-VM: Added field descriptions to ps command
+-Texture Manager: if a manual texture fails to create due to a texture with the same name existing, load that existing texture instead of failing with an error
+-SBS: Added GetMemoryUsage() texture function
+-added Planet support as a replacement for the Ground system
+-PolyMesh: added 'inside' parameter to shape functions, which determines if the outside or inside of the shape should be drawn
+-PolyMesh: shapes now support DrawWalls setting
+-VM: add Monitor system
+-VM: have monitor load default state for primary engine
+-Added Earth building file
+-VM: have monitor load sol.bld
+-VM: added engine type parameter
+-VM: added monitor system runloop
+-VM: Added IsRootLoaded() function
+-VM: added sim engine load queue, for delaying building and city loads until after system engines
+-Added sim engine types, and added type display to Engine Manager
+-Added parent display to Engine Manager window, and added automatic planet parenting code
+-VM: wait until system is finished loading before loading startup building
+-VM: added CancelShutdown() function
+-VM: clean up Monitor system on simulator unload
+-Frontend: don't continue Start() procedure if engine loads are still pending
+-Added bounds to Ground building
+-Frontend: only attach camera on startup if not a system engine
+-Frontend: only finish startup if all engines have finished loading
+-Frontend: only show progress dialog after system engines have loaded
+-VM: only have engine context cut outside boundaries on start, if not a system engine
+-PolyMesh: reworked Cut function to properly support shapes
+-PolyMesh: added SplitWithPlaneUV() function
+-PolyMesh: added new AddPolygonSet function
+-City Demo: moved Triton Center to buildings section, and added ground
+-VM: report on active engine switch
+-Removed unneeded Cameras parameter to Start() functions
+-VM: added first_attach state
+-Have each sim engine calculate it's own bounds, and apply if no bounds value is specified
+-VM: cut parent engine after engine start, not before, to support the new engine auto-bounds feature
+-VM: added Reset() engine context function, to reset the related SBS engine and script processor
+-City Simulation: update WTC filename
+-City Simulation: added Convention Center
+-City Simulation: added ground and bounds
+-VMConsole: fixed a potential divide-by-zero in ps command
+-City Simulation: update to match new City Demo structure
 
 Version 2.0 - July 24, 2025
 -------------------------

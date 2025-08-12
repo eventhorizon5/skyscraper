@@ -63,6 +63,7 @@ textures:
 -fire1 and fire2 textures by inskeemr
 -textures in 'escalator' folder by escalatorgeek881
 -counterweight.png and counterweight_frame.png from http://www.gtechelevators.com/portfolio/elevator-installation-company-nj.shtml
+-textures in data/planet are from https://www.solarsystemscope.com/textures/ and distributed under a Creative Commons license
 
 sounds:
 -chime1.wav made by me

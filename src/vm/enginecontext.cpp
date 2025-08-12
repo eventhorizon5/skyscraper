@@ -907,5 +907,10 @@ std::string EngineContext::GetThreadID()
 	return id;
 }
 
+Vector3 EngineContext::GetPosition()
+{
+	return position;
+}
+
 }
 

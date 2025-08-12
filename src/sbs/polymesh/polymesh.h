@@ -111,10 +111,6 @@ private:
 	bool DrawTopOld; //or back, if floor
 	bool DrawBottomOld; //or front, if floor
 
-	//Cut function work polygons
-	GeometryArray temppoly, temppoly2, worker;
-	GeometrySet newpolys;
-
 	//doorway data
 	bool wall1a, wall1b, wall2a, wall2b;
 	Vector2 wall_extents_x, wall_extents_z, wall_extents_y;
