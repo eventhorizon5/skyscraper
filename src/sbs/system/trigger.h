@@ -59,6 +59,7 @@ public:
 	bool IsOutside(Vector3 v1, Vector3 v2);
 	virtual void OnEntry() {}
 	virtual void OnExit() {}
+	void Merge(Ogre::AxisAlignedBox &box);
 
 private:
 	Ogre::AxisAlignedBox *area_box;

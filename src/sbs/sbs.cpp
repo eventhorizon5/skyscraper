@@ -196,6 +196,8 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instan
 
 	//create main engine area trigger
 	SetBounds(area_min, area_max);
+	bounds = Ogre::AxisAlignedBox::BOX_NULL;
+	bounds_set = false;
 
 	//create sound system object if sound is enabled
 	if (fmodsystem)
@@ -518,6 +520,10 @@ bool SBS::Start()
 
 	//prepare 3D geometry for use
 	Prepare();
+
+	//if no bounds trigger was created, set it according to generated engine bounds
+	if (!area_trigger && !bounds.isNull())
+		SetBounds(bounds.getMinimum(), bounds.getMaximum());
 
 	//free text texture memory
 	texturemanager->FreeTextureBoxes();
@@ -3399,6 +3405,18 @@ Shape* SBS::CreateShape(Wall *wall)
 
 	Shape *shape = new Shape(wall);
 	return shape;
+}
+
+void SBS::MergeBounds(Ogre::AxisAlignedBox &box)
+{
+	if (box.isNull())
+		return;
+
+	if (bounds_set == true)
+		bounds.merge(box);
+	else
+		bounds = box;
+	bounds_set = true;
 }
 
 }
