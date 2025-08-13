@@ -884,4 +884,17 @@ Vector3 EngineContext::GetRotation()
 	return Simcore->GetRotation();
 }
 
+EngineContext* EngineContext::GetChild(size_t index)
+{
+	if (index >= children.size())
+		return 0;
+
+	return children[index];
+}
+
+size_t EngineContext::GetChildCount()
+{
+	return children.size();
+}
+
 }

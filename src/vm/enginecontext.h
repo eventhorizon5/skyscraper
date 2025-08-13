@@ -99,6 +99,8 @@ public:
 	void Reset(bool full = true);
 	Vector3 GetPosition(bool relative = false);
 	Vector3 GetRotation();
+	EngineContext* GetChild(size_t index);
+	size_t GetChildCount();
 
 private:
 
