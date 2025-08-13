@@ -344,6 +344,9 @@ void VMConsole::Process(const std::string &text, bool echo)
 		for (int i = 0; i < count; i++)
 		{
 			EngineContext *engine = vm->GetEngine(i);
+			if (!engine)
+				continue;
+
 			Real elapsed_time = 0;
 			if (vm->GetElapsedTime(i) > 0)
 			{

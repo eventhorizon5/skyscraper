@@ -1137,7 +1137,9 @@ unsigned long VM::GetElapsedTime(int instance)
 
 	if (instance >= engines.size())
 		return 0;
-	return engines[instance]->time_stat;
+	if (engines[instance])
+		return engines[instance]->time_stat;
+	return 0;
 }
 
 void VM::ListPlayingSounds()
