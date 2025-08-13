@@ -1,3 +1,12 @@
+Version 2.0.1
+-------------------------
+-SBS: allow all movement on engine object, restrict based on bounds for others
+-GUI: added object safety checks to MoveObject
+-VMConsole: fixed a potential divide-by-zero in ps command
+-VM: added pause and resume console commands
+-Added new blank sound, none.wav, to replace the bad/static one used in add-ons
+-SBS: fixed none.wav sound loop issue, and console spamming while in verbose mode
+
 Version 2.0
 -------------------------
 -SBS: if a texture material is already loaded, report an error and exit before trying to create a new texture.  This fixes an issue where new textures with the same name as existing ones would cause a sim engine to have a fatal error and shut down
