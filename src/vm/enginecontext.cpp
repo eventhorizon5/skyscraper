@@ -398,6 +398,8 @@ void EngineContext::StartSim()
 	if (!Simcore)
 	{
 		Simcore = new ::SBS::SBS(mSceneManager, fmodsystem, instance, area_min, area_max);
+
+		//move and rotate sim engine
 		Vector3 pos = position + offset;
 		Simcore->Move(pos);
 		Simcore->Rotate(rotation);
