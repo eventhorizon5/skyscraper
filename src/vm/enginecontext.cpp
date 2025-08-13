@@ -897,4 +897,43 @@ size_t EngineContext::GetChildCount()
 	return children.size();
 }
 
+std::string EngineContext::GetStatus()
+{
+	//returns a string describing the state of this engine context
+
+	std::string state;
+	if (GetShutdownState() == true)
+		state = "Shutdown";
+	else if (IsLoading() == true)
+		state = "Loading";
+	else if (Paused)
+		state = "Paused";
+	else if (IsRunning() == true)
+		state = "Running";
+	else
+		state = "Unknown";
+
+	return state;
+}
+
+std::string EngineContext::GetType()
+{
+	//returns the type of this engine context, as a string
+
+	std::string typestr;
+	if (type == ENGINETYPE_BUILDING)
+		typestr = "Building";
+	else if (type == ENGINETYPE_CITY)
+		typestr = "City";
+	else if (type == ENGINETYPE_GENERIC)
+		typestr = "Generic";
+	else if (type == ENGINETYPE_PLANET)
+		typestr = "Planet";
+	else if (type == ENGINETYPE_SOLARSYSTEM)
+		typestr = "Solar System";
+	else
+		typestr = "Unknown";
+	return typestr;
+}
+
 }

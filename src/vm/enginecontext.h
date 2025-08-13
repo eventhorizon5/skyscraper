@@ -101,6 +101,8 @@ public:
 	Vector3 GetRotation();
 	EngineContext* GetChild(size_t index);
 	size_t GetChildCount();
+	std::string GetStatus();
+	std::string GetType();
 
 private:
 
