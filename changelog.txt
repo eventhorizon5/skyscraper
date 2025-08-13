@@ -6,6 +6,7 @@ Version 2.0.1
 -VM: added pause and resume console commands
 -Added new blank sound, none.wav, to replace the bad/static one used in add-ons
 -SBS: fixed none.wav sound loop issue, and console spamming while in verbose mode
+-VM: segfault fixes (make sure engines are verified to exist before use)
 
 Version 2.0
 -------------------------
