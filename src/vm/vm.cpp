@@ -168,7 +168,7 @@ GUI* VM::GetGUI()
 	return gui;
 }
 
-EngineContext* VM::CreateEngine(EngineContext *parent, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
+EngineContext* VM::CreateEngine(EngineContext *parent, const Vector3 &position, const Vector3 &rotation, const Vector3 &area_min, const Vector3 &area_max)
 {
 	EngineContext* engine = new EngineContext(ENGINETYPE_GENERIC, parent, this, hal->GetSceneManager(), hal->GetSoundSystem(), position, rotation, area_min, area_max);
 	return engine;
@@ -751,7 +751,7 @@ int VM::Run(std::vector<EngineContext*> &newengines)
 	return 1;
 }
 
-bool VM::Load(bool system, bool clear, const std::string &filename, EngineContext *parent, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
+bool VM::Load(bool system, bool clear, const std::string &filename, EngineContext *parent, const Vector3 &position, const Vector3 &rotation, const Vector3 &area_min, const Vector3 &area_max)
 {
 	//load simulator and data file
 
@@ -855,7 +855,7 @@ bool VM::LoadQueued()
 	return true;
 }
 
-EngineContext* VM::Initialize(bool clear, EngineContext *parent, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
+EngineContext* VM::Initialize(bool clear, EngineContext *parent, const Vector3 &position, const Vector3 &rotation, const Vector3 &area_min, const Vector3 &area_max)
 {
 	//bootstrap simulator
 

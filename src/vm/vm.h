@@ -92,7 +92,7 @@ public:
 	GUI* GetGUI();
 	EngineContext* GetActiveEngine() { return active_engine; }
 	EngineContext* GetEngine(int number);
-	EngineContext* CreateEngine(EngineContext *parent = 0, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
+	EngineContext* CreateEngine(EngineContext *parent = 0, const Vector3 &position = Vector3::ZERO, const Vector3 &rotation = Vector3::ZERO, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
 	bool DeleteEngine(const EngineContext *engine);
 	void DeleteEngines();
 	int GetEngineCount(bool loading_only = false);
@@ -109,7 +109,7 @@ public:
 	bool StartEngine(EngineContext* engine);
 	::SBS::SBS* GetActiveSystem();
 	ScriptProcessor* GetActiveScriptProcessor();
-	bool Load(bool system, bool clear, const std::string &filename, EngineContext *parent = 0, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
+	bool Load(bool system, bool clear, const std::string &filename, EngineContext *parent = 0, const Vector3 &position = Vector3::ZERO, const Vector3 &rotation = Vector3::ZERO, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
 	void ShowPlatform();
 	wxWindow* GetParent();
 	bool UpdateProgress();
@@ -117,7 +117,7 @@ public:
 	void StartConsole();
 	void ProcessConsole();
 	VMConsole* GetConsole();
-	EngineContext* Initialize(bool clear, EngineContext *parent = 0, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
+	EngineContext* Initialize(bool clear, EngineContext *parent = 0, const Vector3 &position = Vector3::ZERO, const Vector3 &rotation = Vector3::ZERO, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
 	void SetRenderOnStartup(bool value);
 	bool GetRenderOnStartup();
 	dylib* LoadLibrary(const std::string &name);
@@ -190,7 +190,7 @@ private:
 		bool clear;
 		EngineContext *parent;
 		Vector3 position;
-		Real rotation;
+		Vector3 rotation;
 		Vector3 area_min, area_max;
 		bool system;
 	};

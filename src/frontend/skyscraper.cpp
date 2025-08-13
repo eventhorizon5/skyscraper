@@ -523,7 +523,7 @@ std::string Skyscraper::SelectBuilding(bool native_dialog)
 #endif
 }
 
-bool Skyscraper::Load(const std::string &filename, EngineContext *parent, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
+bool Skyscraper::Load(const std::string &filename, EngineContext *parent, const Vector3 &position, const Vector3 &rotation, const Vector3 &area_min, const Vector3 &area_max)
 {
 	//load simulator and data file
 

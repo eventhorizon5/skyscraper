@@ -102,7 +102,7 @@ public:
 	void ShowMessage(const std::string &message);
 	void StartSound();
 	std::string SelectBuilding(bool native_dialog = false);
-	bool Load(const std::string &filename, EngineContext *parent = 0, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
+	bool Load(const std::string &filename, EngineContext *parent = 0, const Vector3 &position = Vector3::ZERO, const Vector3 &rotation = Vector3::ZERO, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
 	bool Start(EngineContext *engine);
 	void AllowResize(bool value);
 	void UnloadToMenu();
