@@ -387,7 +387,7 @@ void EngineContext::StartSim()
 	//get offset of parent engine
 	Vector3 offset;
 	if (parent)
-		offset = parent->GetSystem()->GetPosition();
+		offset = parent->GetPosition();
 	else
 		offset = Vector3::ZERO;
 
@@ -396,7 +396,12 @@ void EngineContext::StartSim()
 
 	//Create simulator object
 	if (!Simcore)
-		Simcore = new ::SBS::SBS(mSceneManager, fmodsystem, instance, position + offset, rotation, area_min, area_max);
+	{
+		Simcore = new ::SBS::SBS(mSceneManager, fmodsystem, instance, area_min, area_max);
+		Vector3 pos = position + offset;
+		Simcore->Move(pos, 1.0, false, true);
+		Simcore->Rotate(rotation);
+	}
 
 	//load script processor
 	if (!processor)
