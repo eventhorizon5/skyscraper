@@ -70,6 +70,15 @@ bool Monitor::Run()
 {
 	//monitor runloop
 
+	/*EngineContext *planet = root->GetChild(0);
+	if (planet)
+	{
+		if (planet->IsRunning())
+		{
+			Vector3 vec (-1, 0, 0);
+			planet->Move(vec, 1000, true);
+		}
+	}*/
 	return true;
 }
 
