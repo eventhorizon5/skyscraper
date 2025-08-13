@@ -270,21 +270,20 @@ void MoveEngine::Loop()
 		return;
 	}
 
-
 	Vector3 pos = engine->GetPosition();
-	//Vector3 relpos = object->GetPosition(true);
-	//Vector3 rot = object->GetRotation();
+	Vector3 relpos = engine->GetPosition(true);
+	Vector3 rot = engine->GetRotation();
 	lblPosition->SetLabel(TruncateNumber(pos.x, 2) + wxT(", ") + TruncateNumber(pos.y, 2) + wxT(", ") + TruncateNumber(pos.z, 2));
-	//lblRelPosition->SetLabel(TruncateNumber(relpos.x, 2) + wxT(", ") + TruncateNumber(relpos.y, 2) + wxT(", ") + TruncateNumber(relpos.z, 2));
-	//lblRotation->SetLabel(TruncateNumber(rot.x, 2) + wxT(", ") + TruncateNumber(rot.y, 2) + wxT(", ") + TruncateNumber(rot.z, 2));
+	lblRelPosition->SetLabel(TruncateNumber(relpos.x, 2) + wxT(", ") + TruncateNumber(relpos.y, 2) + wxT(", ") + TruncateNumber(relpos.z, 2));
+	lblRotation->SetLabel(TruncateNumber(rot.x, 2) + wxT(", ") + TruncateNumber(rot.y, 2) + wxT(", ") + TruncateNumber(rot.z, 2));
 
 	//move if hold vector is not zero
 	if (hold_vector != Vector3(0, 0, 0))
 	{
 		if (rPosition->GetValue() == true)
-			engine->Move(hold_vector, true);
-		//else
-			//Simcore->RotateObject(object, hold_vector, 1, true, true, true, true);
+			engine->Move(hold_vector, 1.0, true);
+		else
+			engine->Rotate(hold_vector, 1.0, chkRelative->GetValue());
 	}
 }
 
@@ -314,8 +313,8 @@ void MoveEngine::On_bZPlus_Click(wxCommandEvent& event)
 
 	if (rPosition->GetValue() == true)
 		engine->Move(vector, speed, true);
-	//else
-		//object->Rotate(vector, speed, chkRelative->GetValue());
+	else
+		engine->Rotate(vector, speed, chkRelative->GetValue());
 }
 
 void MoveEngine::On_bYPlus_Click(wxCommandEvent& event)
@@ -334,8 +333,8 @@ void MoveEngine::On_bYPlus_Click(wxCommandEvent& event)
 
 	if (rPosition->GetValue() == true)
 		engine->Move(vector, speed, true);
-	//else
-		//object->Rotate(vector, speed, chkRelative->GetValue());
+	else
+		engine->Rotate(vector, speed, chkRelative->GetValue());
 }
 
 void MoveEngine::On_bXNeg_Click(wxCommandEvent& event)
@@ -354,8 +353,8 @@ void MoveEngine::On_bXNeg_Click(wxCommandEvent& event)
 
 	if (rPosition->GetValue() == true)
 		engine->Move(vector, speed, true);
-	//else
-		//object->Rotate(vector, speed, chkRelative->GetValue());
+	else
+		engine->Rotate(vector, speed, chkRelative->GetValue());
 }
 
 void MoveEngine::On_bXPlus_Click(wxCommandEvent& event)
@@ -374,8 +373,8 @@ void MoveEngine::On_bXPlus_Click(wxCommandEvent& event)
 
 	if (rPosition->GetValue() == true)
 		engine->Move(vector, speed, true);
-	//else
-		//object->Rotate(vector, speed, chkRelative->GetValue());
+	else
+		engine->Rotate(vector, speed, chkRelative->GetValue());
 }
 
 void MoveEngine::On_bZNeg_Click(wxCommandEvent& event)
@@ -394,8 +393,8 @@ void MoveEngine::On_bZNeg_Click(wxCommandEvent& event)
 
 	if (rPosition->GetValue() == true)
 		engine->Move(vector, speed, true);
-	//else
-		//object->Rotate(vector, speed, chkRelative->GetValue());
+	else
+		engine->Rotate(vector, speed, chkRelative->GetValue());
 }
 
 void MoveEngine::On_bYNeg_Click(wxCommandEvent& event)
@@ -413,9 +412,9 @@ void MoveEngine::On_bYNeg_Click(wxCommandEvent& event)
 	}
 
 	if (rPosition->GetValue() == true)
-		engine->Move(vector, speed, true);;
-	//else
-		//object->Rotate(vector, speed, chkRelative->GetValue());
+		engine->Move(vector, speed, true);
+	else
+		engine->Rotate(vector, speed, chkRelative->GetValue());
 }
 
 void MoveEngine::On_bPositionX_Click(wxCommandEvent& event)
@@ -441,20 +440,23 @@ void MoveEngine::On_bPositionZ_Click(wxCommandEvent& event)
 
 void MoveEngine::On_bRotationX_Click(wxCommandEvent& event)
 {
-	//if (engine)
-		//Simcore->RotateObject(object, Vector3(atof(txtRotationX->GetValue()), 0.0, 0.0), 0, chkRelative->GetValue(), true, false, false);
+	Vector3 pos = Vector3(atof(txtRotationX->GetValue()), 0.0, 0.0);
+	if (engine)
+		engine->Rotate(pos, 1.0, chkRelative->GetValue());
 }
 
 void MoveEngine::On_bRotationY_Click(wxCommandEvent& event)
 {
-	//if (engine)
-		//Simcore->RotateObject(object, Vector3(0.0, atof(txtRotationY->GetValue()), 0.0), 0, chkRelative->GetValue(), false, true, false);
+	Vector3 pos = Vector3(0.0, atof(txtRotationY->GetValue()), 0.0);
+	if (engine)
+		engine->Rotate(pos, 1.0, chkRelative->GetValue());
 }
 
 void MoveEngine::On_bRotationZ_Click(wxCommandEvent& event)
 {
-	//if (engine)
-		//Simcore->RotateObject(object, Vector3(0.0, 0.0, atof(txtRotationZ->GetValue())), 0, chkRelative->GetValue(), false, false, true);
+	Vector3 pos = Vector3(0.0, 0.0, atof(txtRotationZ->GetValue()));
+	if (engine)
+		engine->Rotate(pos, 1.0, chkRelative->GetValue());
 }
 
 void MoveEngine::On_chkHold_Click(wxCommandEvent& event)

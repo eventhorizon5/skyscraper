@@ -83,6 +83,7 @@ public:
 	void RemoveChild(const EngineContext *engine);
 	void RemoveParent() { parent = 0; }
 	void Move(Vector3 &vector, Real speed, bool move_children = false);
+	void Rotate(const Vector3 &vector, Real speed, bool relative);
 	EngineContext* GetParent() { return parent; }
 	bool IsParent(EngineContext *engine, bool recursive = false);
 	VM* GetVM();
@@ -96,11 +97,12 @@ public:
 	void ResetPrepare();
 	void CancelShutdown() { shutdown = false; }
 	void Reset(bool full = true);
-	Vector3 GetPosition();
+	Vector3 GetPosition(bool relative = false);
+	Vector3 GetRotation();
 
 private:
 
-	void StartSim();
+	void StartSim(const Vector3 &position, const Vector3 &rotation);
 	void UnloadSim();
 	void Init();
 
@@ -124,10 +126,8 @@ private:
 
 	Ogre::SceneManager* mSceneManager;
 	FMOD::System *fmodsystem;
-	Vector3 position;
 	Vector3 area_min;
 	Vector3 area_max;
-	Vector3 rotation;
 
 	//child engines
 	std::vector<EngineContext*> children;

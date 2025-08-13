@@ -103,10 +103,8 @@ void EngineContext::Init(const EngineType type, EngineContext *parent, VM *vm, O
 	reload_state->gravity = false;
 	reload_state->freelook = false;
 	this->mSceneManager = mSceneManager;
-	this->position = position;
 	this->area_min = area_min;
 	this->area_max = area_max;
-	this->rotation = rotation;
 	this->parent = parent;
 	Simcore = 0;
 	processor = 0;
@@ -130,7 +128,7 @@ void EngineContext::Init(const EngineType type, EngineContext *parent, VM *vm, O
 	if (parent)
 			parent->AddChild(this);
 
-	StartSim();
+	StartSim(position, rotation);
 }
 
 ScriptProcessor* EngineContext::GetScriptProcessor()
@@ -352,11 +350,15 @@ void EngineContext::DoReload()
 	std::string filename = Simcore->BuildingFilename;
 	*reload_state = GetCameraState();
 
+	//get current simulator state
+	Vector3 pos = GetPosition();
+	Vector3 rot = GetRotation();
+
 	//unload current simulator
 	UnloadSim();
 
 	//start a new simulator
-	StartSim();
+	StartSim(pos, rot);
 
 	//load building file
 	if (Load(filename) == false)
@@ -376,7 +378,7 @@ std::string EngineContext::GetFilename()
 	return "";
 }
 
-void EngineContext::StartSim()
+void EngineContext::StartSim(const Vector3 &position, const Vector3 &rotation)
 {
 	//create simulator and script interpreter objects
 
@@ -776,14 +778,13 @@ void EngineContext::Move(Vector3 &vector, Real speed, bool move_children)
 	//move this engine
 	//if move_children is true, recursively call this function on all children
 
-	this->position += position;
-	Simcore->Move(position, speed);
+	Simcore->Move(vector, speed);
 
 	if (move_children == true)
 	{
 		for (size_t i = 0; i < children.size(); i++)
 		{
-			children[i]->Move(position, speed, move_children);
+			children[i]->Move(vector, speed, move_children);
 		}
 	}
 }
@@ -868,9 +869,19 @@ void EngineContext::Reset(bool full)
 		processor->Reset();
 }
 
-Vector3 EngineContext::GetPosition()
+Vector3 EngineContext::GetPosition(bool relative)
 {
-	return position;
+	return Simcore->GetPosition(relative);
+}
+
+void EngineContext::Rotate(const Vector3 &vector, Real speed, bool relative)
+{
+	Simcore->Rotate(vector, speed, relative);
+}
+
+Vector3 EngineContext::GetRotation()
+{
+	return Simcore->GetRotation();
 }
 
 }
