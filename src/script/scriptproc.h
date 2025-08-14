@@ -53,7 +53,7 @@ public:
 	void LoadDefaults();
 	void Start();
 	bool ReportMissingFiles();
-	void Reset();
+	void Reset(bool full = true);
 	std::vector<std::string> *GetBuildingData();
 	bool IsFunctionDefined(const std::string &name);
 	std::string DumpState();

@@ -178,7 +178,8 @@ void ScriptDebug::On_bGoto_Click(wxCommandEvent& event)
 
 void ScriptDebug::On_bRun_Click(wxCommandEvent& event)
 {
-
+    if (scriptproc)
+        scriptproc->Reset(false);
 }
 
 void ScriptDebug::On_bStart_Click(wxCommandEvent& event)
@@ -189,7 +190,8 @@ void ScriptDebug::On_bStart_Click(wxCommandEvent& event)
 
 void ScriptDebug::On_bStop_Click(wxCommandEvent& event)
 {
-
+    if (scriptproc)
+        scriptproc->line = -1;
 }
 
 void ScriptDebug::On_bReset_Click(wxCommandEvent& event)

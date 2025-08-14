@@ -99,17 +99,13 @@ ScriptProcessor::~ScriptProcessor()
 		delete callstation_section;
 }
 
-void ScriptProcessor::Reset()
+void ScriptProcessor::Reset(bool full)
 {
 	line = 0; //line number
 	LineData = "";  //line contents
 	wall = 0;
 	startpos = 0;
 	getfloordata = false;
-	BuildingData.clear();
-	BuildingDataOrig.clear();
-	BuildingData.reserve(1024);
-	BuildingDataOrig.reserve(1024);
 	InFunction = 0;
 	FunctionStack.clear();
 	ReplaceLine = false;
@@ -123,6 +119,14 @@ void ScriptProcessor::Reset()
 	variables.clear();
 	in_runloop = false;
 	processed_runloop = false;
+
+	if (full == true)
+	{
+		BuildingData.clear();
+		BuildingDataOrig.clear();
+		BuildingData.reserve(1024);
+		BuildingDataOrig.reserve(1024);
+	}
 
 	//reset configuration
 	config->Reset();
