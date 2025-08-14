@@ -5158,7 +5158,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		Real voffset = 0;
 
 		if (config->SectionNum == 2)
-			voffset += Real(Simcore->GetFloor(config->Current)->GetBase(true));
+			voffset += Real(Simcore->GetFloor(config->Current)->GetBase());
 
 		Vector3 pos (ToFloat(tempdata[3]), voffset, ToFloat(tempdata[4]));
 		Vector3 dest (ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]));
