@@ -118,6 +118,7 @@ namespace SBS {
 	class Texture;
 	class TextureImage;
 	class Shape;
+	class Teleporter;
 
 	typedef std::vector<Vector3> PolyArray;
 	typedef std::vector<PolyArray> PolygonSet;
