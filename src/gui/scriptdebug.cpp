@@ -41,6 +41,7 @@ const wxWindowID ScriptDebug::ID_STATICTEXT1 = wxNewId();
 const wxWindowID ScriptDebug::ID_txtFilename = wxNewId();
 const wxWindowID ScriptDebug::ID_STATICTEXT2 = wxNewId();
 const wxWindowID ScriptDebug::ID_txtLine = wxNewId();
+const wxWindowID ScriptDebug::ID_lstFunctions = wxNewId();
 const wxWindowID ScriptDebug::ID_bGoto = wxNewId();
 const wxWindowID ScriptDebug::ID_bRun = wxNewId();
 const wxWindowID ScriptDebug::ID_bStart = wxNewId();
@@ -62,8 +63,11 @@ ScriptDebug::ScriptDebug(DebugPanel* root, wxWindow* parent)
     wxFlexGridSizer* FlexGridSizer3;
     wxFlexGridSizer* FlexGridSizer4;
     wxFlexGridSizer* FlexGridSizer5;
+    wxFlexGridSizer* FlexGridSizer6;
+    wxFlexGridSizer* FlexGridSizer7;
     wxStaticBoxSizer* StaticBoxSizer1;
     wxStaticBoxSizer* StaticBoxSizer2;
+    wxStaticBoxSizer* StaticBoxSizer3;
 
     Create(parent, wxID_ANY, _("Script Debugger"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE, _T("wxID_ANY"));
     FlexGridSizer1 = new wxFlexGridSizer(0, 2, 0, 0);
@@ -74,6 +78,7 @@ ScriptDebug::ScriptDebug(DebugPanel* root, wxWindow* parent)
     StaticBoxSizer1->Add(lstScript, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     FlexGridSizer2->Add(StaticBoxSizer1, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     FlexGridSizer1->Add(FlexGridSizer2, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    FlexGridSizer6 = new wxFlexGridSizer(0, 1, 0, 0);
     FlexGridSizer3 = new wxFlexGridSizer(0, 3, 0, 0);
     StaticText1 = new wxStaticText(this, ID_STATICTEXT1, _("Filename:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT1"));
     FlexGridSizer3->Add(StaticText1, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
@@ -85,7 +90,15 @@ ScriptDebug::ScriptDebug(DebugPanel* root, wxWindow* parent)
     txtLine = new wxTextCtrl(this, ID_txtLine, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY, wxDefaultValidator, _T("ID_txtLine"));
     FlexGridSizer3->Add(txtLine, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     FlexGridSizer3->Add(-1,-1,1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-    FlexGridSizer1->Add(FlexGridSizer3, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    FlexGridSizer6->Add(FlexGridSizer3, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    FlexGridSizer7 = new wxFlexGridSizer(0, 3, 0, 0);
+    StaticBoxSizer3 = new wxStaticBoxSizer(wxHORIZONTAL, this, _("Functions"));
+    lstFunctions = new wxListBox(this, ID_lstFunctions, wxDefaultPosition, wxDefaultSize, 0, 0, 0, wxDefaultValidator, _T("ID_lstFunctions"));
+    lstFunctions->SetMinSize(wxSize(150,150));
+    StaticBoxSizer3->Add(lstFunctions, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    FlexGridSizer7->Add(StaticBoxSizer3, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    FlexGridSizer6->Add(FlexGridSizer7, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    FlexGridSizer1->Add(FlexGridSizer6, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     FlexGridSizer4 = new wxFlexGridSizer(0, 1, 0, 0);
     bGoto = new wxButton(this, ID_bGoto, _("Goto Line"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bGoto"));
     FlexGridSizer4->Add(bGoto, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
@@ -116,6 +129,7 @@ ScriptDebug::ScriptDebug(DebugPanel* root, wxWindow* parent)
     //*)
     this->panel = root;
     variable_count = 0;
+    function_count = 0;
     OnInit();
 }
 
@@ -162,6 +176,17 @@ void ScriptDebug::Loop()
             std::string name = scriptproc->variables[i].name;
             std::string value = scriptproc->variables[i].value;
             lstVariables->Append(SBS::ToString(i + 1) + ": " + name + " - " + value);
+        }
+    }
+
+    temp_count = scriptproc->GetFunctionCount();
+    if (function_count != temp_count)
+    {
+        function_count = temp_count;
+        for (size_t i = 0; i < function_count; i++)
+        {
+            ScriptProcessor::FunctionInfo info = scriptproc->GetFunctionInfo(i);
+            lstFunctions->Append(SBS::ToString(i + 1) + ": " + info.name + " - line " + SBS::ToString(info.line));
         }
     }
 }

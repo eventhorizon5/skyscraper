@@ -48,6 +48,7 @@ class ScriptDebug: public wxDialog
         wxButton* bRun;
         wxButton* bStart;
         wxButton* bStop;
+        wxListBox* lstFunctions;
         wxListBox* lstScript;
         wxListBox* lstVariables;
         wxStaticText* StaticText1;
@@ -65,6 +66,7 @@ class ScriptDebug: public wxDialog
         static const wxWindowID ID_txtFilename;
         static const wxWindowID ID_STATICTEXT2;
         static const wxWindowID ID_txtLine;
+        static const wxWindowID ID_lstFunctions;
         static const wxWindowID ID_bGoto;
         static const wxWindowID ID_bRun;
         static const wxWindowID ID_bStart;
@@ -86,6 +88,7 @@ class ScriptDebug: public wxDialog
         ScriptProcessor *scriptproc;
 		DebugPanel *panel;
         size_t variable_count;
+        size_t function_count;
 
         DECLARE_EVENT_TABLE()
 };
