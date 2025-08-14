@@ -94,7 +94,10 @@ bool Teleporter::Enabled(bool value)
 	if (sound)
 	{
 		if (value == true)
+		{
+			sound->SetLoopState(true);
 			sound->Play();
+		}
 		else
 			sound->Stop();
 	}

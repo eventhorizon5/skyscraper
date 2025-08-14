@@ -119,6 +119,7 @@ namespace SBS {
 	class TextureImage;
 	class Shape;
 	class Teleporter;
+	class TeleporterManager;
 
 	typedef std::vector<Vector3> PolyArray;
 	typedef std::vector<PolyArray> PolygonSet;
@@ -361,6 +362,7 @@ public:
 	StairwellManager* GetStairwellManager();
 	DoorManager* GetDoorManager();
 	ControllerManager* GetControllerManager();
+	TeleporterManager* GetTeleporterManager();
 	void RegisterDynamicMesh(DynamicMesh *dynmesh);
 	void UnregisterDynamicMesh(DynamicMesh *dynmesh);
 	TextureManager* GetTextureManager();
@@ -426,6 +428,7 @@ private:
 	DoorManager* door_manager;
 	VehicleManager* vehicle_manager;
 	ControllerManager* controller_manager;
+	TeleporterManager* teleporter_manager;
 
 	//dynamic meshes
 	std::vector<DynamicMesh*> dynamic_meshes;

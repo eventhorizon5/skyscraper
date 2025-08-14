@@ -181,6 +181,15 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instan
 	soundsystem = 0;
 	area_trigger = 0;
 	texturemanager = 0;
+	floor_manager = 0;
+	elevator_manager = 0;
+	shaft_manager = 0;
+	stairwell_manager = 0;
+	door_manager = 0;
+	revolvingdoor_manager = 0;
+	vehicle_manager = 0;
+	controller_manager = 0;
+	teleporter_manager = 0;
 
 	//Print SBS banner
 	PrintBanner();
@@ -236,6 +245,7 @@ void SBS::Initialize()
 	revolvingdoor_manager = new RevolvingDoorManager(this);
 	vehicle_manager = new VehicleManager(this);
 	controller_manager = new ControllerManager(this);
+	teleporter_manager = new TeleporterManager(this);
 
 	//create camera object
 	this->camera = new Camera(this);
@@ -401,6 +411,13 @@ SBS::~SBS()
 		delete controller_manager;
 	}
 	controller_manager = 0;
+
+	if (teleporter_manager)
+	{
+		teleporter_manager->parent_deleting = true;
+		delete teleporter_manager;
+	}
+	teleporter_manager = 0;
 
 	//delete sounds
 	for (size_t i = 0; i < sounds.size(); i++)
@@ -3196,6 +3213,11 @@ VehicleManager* SBS::GetVehicleManager()
 ControllerManager* SBS::GetControllerManager()
 {
 	return controller_manager;
+}
+
+TeleporterManager* SBS::GetTeleporterManager()
+{
+	return teleporter_manager;
 }
 
 void SBS::RegisterCameraTexture(CameraTexture *camtex)
