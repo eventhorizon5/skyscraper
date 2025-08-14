@@ -2652,6 +2652,8 @@ bool TextureManager::SetTexture(const std::string &name, const std::string &text
 			//set texture unit's texture image
 			if (state)
 				state->setTextureName(texture);
+
+			Report("Texture " + name + " set to filename " + texture);
 		}
 		catch (Ogre::Exception& e)
 		{
