@@ -100,7 +100,7 @@ public:
 	//functions
 	Camera(Object *parent);
 	~Camera();
-	void SetPosition(const Vector3 &position);
+	void SetPosition(const Vector3 &position, bool force = false);
 	void SetDirection(const Vector3 &direction);
 	void SetRotation(const Vector3 &rotation);
 	Vector3 GetPosition(bool relative = false);
