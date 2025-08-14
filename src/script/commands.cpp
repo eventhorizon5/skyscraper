@@ -49,6 +49,7 @@
 #include "geometry.h"
 #include "scriptproc.h"
 #include "shape.h"
+#include "teleporter.h"
 #include "section.h"
 
 using namespace SBS;
@@ -5130,6 +5131,32 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 			return ScriptError("Invalid custom object " + tempdata[1] + " in " + name);
 
 		StoreCommand(polymesh->CreateWallBox2(object->GetMeshObject(), tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToBool(tempdata[12]), ToBool(tempdata[13]), ToBool(tempdata[14]), ToBool(tempdata[15]), ToBool(tempdata[16])));
+
+		return sNextLine;
+	}
+
+	//CreateTeleporter command
+	if (StartsWithNoCase(LineData, "createteleporter"))
+	{
+		//get data
+		int params = SplitData(LineData, 16);
+
+		if (params != 8)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 3; i <= params; i++)
+		{
+			if (!IsNumeric(tempdata[i]))
+				return ScriptError("Invalid value: " + tempdata[i]);
+		}
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
+		Vector3 dest (ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]));
+		StoreCommand(Simcore->GetTeleporterManager()->Create(tempdata[0], tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), dest));
 
 		return sNextLine;
 	}
