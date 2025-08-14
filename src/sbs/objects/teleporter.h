@@ -31,7 +31,7 @@ class SBSIMPEXP Teleporter : public Object
 public:
 
 	//functions
-	Teleporter(Object *parent, const std::string &name, const std::string &idle_sound, const std::string &teleport_sound, Real CenterX, Real CenterZ, Real width, Real height, Real voffset);
+	Teleporter(Object *parent, const std::string &name, const std::string &idle_sound, const std::string &teleport_sound, Real width, Real height, const Vector3 &destination);
 	~Teleporter();
 	bool Enabled(bool value);
 	bool IsEnabled();

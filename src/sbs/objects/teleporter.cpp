@@ -30,7 +30,7 @@
 
 namespace SBS {
 
-Teleporter::Teleporter(Object *parent, const std::string &name, const std::string &idle_sound, const std::string &teleport_sound, Real CenterX, Real CenterZ, Real width, Real height, Real voffset) : Object(parent)
+Teleporter::Teleporter(Object *parent, const std::string &name, const std::string &idle_sound, const std::string &teleport_sound, Real width, Real height, const Vector3 &destination) : Object(parent)
 {
 	//set up SBS object
 	SetValues("Teleporter", name, true);
@@ -48,9 +48,9 @@ Teleporter::Teleporter(Object *parent, const std::string &name, const std::strin
 	//set up command and parameters
 	std::string command = "teleport";
 	Ogre::StringVector parameters;
-	parameters.emplace_back(ToString(CenterX));
-	parameters.emplace_back(ToString(voffset));
-	parameters.emplace_back(ToString(CenterZ));
+	parameters.emplace_back(ToString(destination.x));
+	parameters.emplace_back(ToString(destination.y));
+	parameters.emplace_back(ToString(destination.z));
 
 	//set SBS as action parent
 	std::vector<Object*> action_parents;
@@ -65,8 +65,6 @@ Teleporter::Teleporter(Object *parent, const std::string &name, const std::strin
 	action_names.emplace_back(home_action->GetName());
 	action_names.emplace_back(dest_action->GetName());
 	trigger = new Trigger(this, name + " Trigger", false, teleport_sound, area_min, area_max, action_names);
-	Vector3 pos (CenterX, voffset, CenterZ);
-	Move(pos);
 
 	Enabled(true);
 	EnableLoop(true);
