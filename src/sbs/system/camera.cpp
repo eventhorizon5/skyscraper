@@ -176,7 +176,7 @@ Camera::~Camera()
 	}
 }
 
-void Camera::SetPosition(const Vector3 &position)
+void Camera::SetPosition(const Vector3 &position, bool force)
 {
 	//sets the camera to an absolute position in 3D space
 
@@ -184,7 +184,7 @@ void Camera::SetPosition(const Vector3 &position)
 		return;
 
 	if (EnableBullet == true)
-		GetSceneNode()->SetPosition(position - sbs->ToLocal(Cameras[0]->getPosition()));
+		GetSceneNode()->SetPosition(position - sbs->ToLocal(Cameras[0]->getPosition()), false, force);
 	else
 	{
 		for (size_t i = 0; i < Cameras.size(); i++)
@@ -1521,7 +1521,7 @@ void Camera::Teleport(Real X, Real Y, Real Z)
 	Vector3 destination (X, Y, Z);
 
 	GotoFloor(sbs->GetFloorNumber(destination.y));
-	SetPosition(destination);
+	SetPosition(destination, true);
 }
 
 void Camera::Drive(bool left, bool right, bool down, bool up, bool key_down)
