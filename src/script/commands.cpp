@@ -5348,6 +5348,18 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		return sNextLine;
 	}
 
+	//SetTexture command
+	if (StartsWithNoCase(LineData, "settexture"))
+	{
+		int params = SplitData(LineData, 10, false);
+
+		if (params != 2)
+			return ScriptError("Incorrect number of parameters");
+
+		texturemanager->SetTexture(tempdata[0], tempdata[1]);
+		return sNextLine;
+	}
+
 	//SetKey command
 	if (StartsWithNoCase(LineData, "setkey"))
 	{
