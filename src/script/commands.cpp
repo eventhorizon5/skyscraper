@@ -5141,7 +5141,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		//get data
 		int params = SplitData(LineData, 16);
 
-		if (params != 8)
+		if (params != 10)
 			return ScriptError("Incorrect number of parameters");
 
 		//check numeric values
@@ -5155,8 +5155,11 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (config->CheckScript == true)
 			return sNextLine;
 
-		Vector3 dest (ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]));
-		StoreCommand(Simcore->GetTeleporterManager()->Create(tempdata[0], tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), dest));
+		Vector3 pos (ToFloat(tempdata[3]), 0, ToFloat(tempdata[4]));
+		Vector3 dest (ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]));
+		Teleporter *teleporter = Simcore->GetTeleporterManager()->Create(tempdata[0], tempdata[1], tempdata[2], ToFloat(tempdata[5]), ToFloat(tempdata[6]), dest);
+		teleporter->Move(pos);
+		StoreCommand(teleporter);
 
 		return sNextLine;
 	}
