@@ -5155,7 +5155,12 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (config->CheckScript == true)
 			return sNextLine;
 
-		Vector3 pos (ToFloat(tempdata[3]), 0, ToFloat(tempdata[4]));
+		Real voffset = 0;
+
+		if (config->SectionNum == 2)
+			voffset += Real(Simcore->GetFloor(config->Current)->GetBase(true));
+
+		Vector3 pos (ToFloat(tempdata[3]), voffset, ToFloat(tempdata[4]));
 		Vector3 dest (ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]));
 		Teleporter *teleporter = Simcore->GetTeleporterManager()->Create(tempdata[0], tempdata[1], tempdata[2], ToFloat(tempdata[5]), ToFloat(tempdata[6]), dest);
 		teleporter->Move(pos);
