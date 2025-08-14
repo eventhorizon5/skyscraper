@@ -2079,4 +2079,21 @@ void ScriptProcessor::Start()
 	show_percent = false;
 }
 
+size_t ScriptProcessor::GetFunctionCount()
+{
+	return functions.size();
+}
+
+ScriptProcessor::FunctionInfo ScriptProcessor::GetFunctionInfo(size_t index)
+{
+	FunctionInfo info;
+	info.line = 0;
+	info.name = "";
+
+	if (index >= functions.size())
+		return info;
+
+	return functions[index];
+}
+
 }

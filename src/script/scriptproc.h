@@ -45,6 +45,12 @@ public:
 	class ControllerSection;
 	class CallStationSection;
 
+	struct FunctionInfo
+	{
+		std::string name;
+		int line;
+	};
+
 	explicit ScriptProcessor(EngineContext *instance);
 	~ScriptProcessor();
 	bool Run();
@@ -62,6 +68,8 @@ public:
 	ConfigHandler* GetConfigHandler();
 	bool HasRunloop();
 	bool InRunloop() {return in_runloop;}
+	size_t GetFunctionCount();
+	FunctionInfo GetFunctionInfo(size_t index);
 
 	bool IsFinished;
 
@@ -145,12 +153,6 @@ private:
 	void ProcessExtents();
 	int ProcessForLoops();
 	void ProcessRunloop();
-
-	struct FunctionInfo
-	{
-		std::string name;
-		int line;
-	};
 
 	std::vector<FunctionInfo> functions; //stored functions
 
