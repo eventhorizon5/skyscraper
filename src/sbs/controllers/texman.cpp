@@ -2702,7 +2702,7 @@ bool TextureManager::ComputeTextureMap(Matrix3 &t_matrix, Vector3 &t_vector, Pol
 	auto map_point = [&](Real u, Real v) -> Vector3 {
 		Vector2 delta(u - uv1.x, v - uv1.y);
 		Real lambda = im11 * delta.x + im12 * delta.y;
-		Real mu     = im21 * delta.x + im22 * delta.y;
+		Real mu = im21 * delta.x + im22 * delta.y;
 		return p1 + lambda * (p2 - p1) + mu * (p3 - p1);
 	};
 
