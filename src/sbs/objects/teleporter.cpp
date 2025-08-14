@@ -42,7 +42,7 @@ Teleporter::Teleporter(Object *parent, const std::string &name, const std::strin
 	sound->Load(idle_sound);
 
 	//set up bounding box
-	Vector3 area_min (-(width / 2), 0, (width / 2));
+	Vector3 area_min (-(width / 2), 0, -(width / 2));
 	Vector3 area_max ((width / 2), height, (width / 2));
 
 	//set up command and parameters
