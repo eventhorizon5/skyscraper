@@ -52,7 +52,6 @@ class ScriptDebug: public wxDialog
         wxListBox* lstVariables;
         wxStaticText* StaticText1;
         wxStaticText* StaticText2;
-        wxStaticText* StaticText3;
         wxTextCtrl* txtFilename;
         wxTextCtrl* txtLine;
         //*)
@@ -66,7 +65,6 @@ class ScriptDebug: public wxDialog
         static const wxWindowID ID_txtFilename;
         static const wxWindowID ID_STATICTEXT2;
         static const wxWindowID ID_txtLine;
-        static const wxWindowID ID_STATICTEXT3;
         static const wxWindowID ID_bGoto;
         static const wxWindowID ID_bRun;
         static const wxWindowID ID_bStart;

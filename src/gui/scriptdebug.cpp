@@ -41,7 +41,6 @@ const wxWindowID ScriptDebug::ID_STATICTEXT1 = wxNewId();
 const wxWindowID ScriptDebug::ID_txtFilename = wxNewId();
 const wxWindowID ScriptDebug::ID_STATICTEXT2 = wxNewId();
 const wxWindowID ScriptDebug::ID_txtLine = wxNewId();
-const wxWindowID ScriptDebug::ID_STATICTEXT3 = wxNewId();
 const wxWindowID ScriptDebug::ID_bGoto = wxNewId();
 const wxWindowID ScriptDebug::ID_bRun = wxNewId();
 const wxWindowID ScriptDebug::ID_bStart = wxNewId();
@@ -78,16 +77,14 @@ ScriptDebug::ScriptDebug(DebugPanel* root, wxWindow* parent)
     FlexGridSizer3 = new wxFlexGridSizer(0, 3, 0, 0);
     StaticText1 = new wxStaticText(this, ID_STATICTEXT1, _("Filename:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT1"));
     FlexGridSizer3->Add(StaticText1, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-    txtFilename = new wxTextCtrl(this, ID_txtFilename, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_txtFilename"));
+    txtFilename = new wxTextCtrl(this, ID_txtFilename, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY, wxDefaultValidator, _T("ID_txtFilename"));
     FlexGridSizer3->Add(txtFilename, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     FlexGridSizer3->Add(-1,-1,1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     StaticText2 = new wxStaticText(this, ID_STATICTEXT2, _("Line:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT2"));
     FlexGridSizer3->Add(StaticText2, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-    txtLine = new wxTextCtrl(this, ID_txtLine, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_txtLine"));
+    txtLine = new wxTextCtrl(this, ID_txtLine, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY, wxDefaultValidator, _T("ID_txtLine"));
     FlexGridSizer3->Add(txtLine, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     FlexGridSizer3->Add(-1,-1,1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-    StaticText3 = new wxStaticText(this, ID_STATICTEXT3, _("Label"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT3"));
-    FlexGridSizer3->Add(StaticText3, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     FlexGridSizer1->Add(FlexGridSizer3, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     FlexGridSizer4 = new wxFlexGridSizer(0, 1, 0, 0);
     bGoto = new wxButton(this, ID_bGoto, _("Goto Line"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bGoto"));
@@ -154,7 +151,7 @@ void ScriptDebug::Loop()
 		return;
 
     txtLine->SetValue(SBS::ToString(scriptproc->line));
-    //txtFilename->SetValue(scriptproc->)
+    txtFilename->SetValue(Simcore->BuildingFilename);
 
     size_t temp_count = scriptproc->variables.size();
     if (variable_count != temp_count)
