@@ -14,7 +14,7 @@
 							<object class="sizeritem">
 								<object class="wxListBox" name="ID_lstScript" variable="lstScript" member="yes">
 									<default>-1</default>
-									<minsize>300,300</minsize>
+									<minsize>450,400</minsize>
 									<style>wxLB_HSCROLL</style>
 								</object>
 								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
@@ -93,7 +93,7 @@
 									<object class="sizeritem">
 										<object class="wxListBox" name="ID_lstFunctions" variable="lstFunctions" member="yes">
 											<default>-1</default>
-											<minsize>150,150</minsize>
+											<minsize>200,200</minsize>
 										</object>
 										<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 										<border>5</border>
@@ -176,7 +176,7 @@
 							<object class="sizeritem">
 								<object class="wxListBox" name="ID_lstVariables" variable="lstVariables" member="yes">
 									<default>-1</default>
-									<minsize>150,150</minsize>
+									<minsize>200,200</minsize>
 									<style>wxLB_HSCROLL</style>
 								</object>
 								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>

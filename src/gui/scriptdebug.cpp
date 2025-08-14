@@ -74,7 +74,7 @@ ScriptDebug::ScriptDebug(DebugPanel* root, wxWindow* parent)
     FlexGridSizer2 = new wxFlexGridSizer(0, 3, 0, 0);
     StaticBoxSizer1 = new wxStaticBoxSizer(wxHORIZONTAL, this, _("Script"));
     lstScript = new wxListBox(this, ID_lstScript, wxDefaultPosition, wxDefaultSize, 0, 0, wxLB_HSCROLL, wxDefaultValidator, _T("ID_lstScript"));
-    lstScript->SetMinSize(wxSize(300,300));
+    lstScript->SetMinSize(wxSize(450,400));
     StaticBoxSizer1->Add(lstScript, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     FlexGridSizer2->Add(StaticBoxSizer1, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     FlexGridSizer1->Add(FlexGridSizer2, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
@@ -94,7 +94,7 @@ ScriptDebug::ScriptDebug(DebugPanel* root, wxWindow* parent)
     FlexGridSizer7 = new wxFlexGridSizer(0, 3, 0, 0);
     StaticBoxSizer3 = new wxStaticBoxSizer(wxHORIZONTAL, this, _("Functions"));
     lstFunctions = new wxListBox(this, ID_lstFunctions, wxDefaultPosition, wxDefaultSize, 0, 0, 0, wxDefaultValidator, _T("ID_lstFunctions"));
-    lstFunctions->SetMinSize(wxSize(150,150));
+    lstFunctions->SetMinSize(wxSize(200,200));
     StaticBoxSizer3->Add(lstFunctions, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     FlexGridSizer7->Add(StaticBoxSizer3, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     FlexGridSizer6->Add(FlexGridSizer7, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
@@ -114,7 +114,7 @@ ScriptDebug::ScriptDebug(DebugPanel* root, wxWindow* parent)
     FlexGridSizer5 = new wxFlexGridSizer(0, 3, 0, 0);
     StaticBoxSizer2 = new wxStaticBoxSizer(wxHORIZONTAL, this, _("Variables"));
     lstVariables = new wxListBox(this, ID_lstVariables, wxDefaultPosition, wxDefaultSize, 0, 0, wxLB_HSCROLL, wxDefaultValidator, _T("ID_lstVariables"));
-    lstVariables->SetMinSize(wxSize(150,150));
+    lstVariables->SetMinSize(wxSize(200,200));
     StaticBoxSizer2->Add(lstVariables, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     FlexGridSizer5->Add(StaticBoxSizer2, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     FlexGridSizer1->Add(FlexGridSizer5, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
@@ -164,7 +164,7 @@ void ScriptDebug::Loop()
     if (!Simcore || !scriptproc)
 		return;
 
-    txtLine->SetValue(SBS::ToString(scriptproc->line));
+    txtLine->SetValue(SBS::ToString(scriptproc->line + 1));
     txtFilename->SetValue(Simcore->BuildingFilename);
 
     size_t temp_count = scriptproc->variables.size();
@@ -186,7 +186,7 @@ void ScriptDebug::Loop()
         for (size_t i = 0; i < function_count; i++)
         {
             ScriptProcessor::FunctionInfo info = scriptproc->GetFunctionInfo(i);
-            lstFunctions->Append(SBS::ToString(i + 1) + ": " + info.name + " - line " + SBS::ToString(info.line));
+            lstFunctions->Append(SBS::ToString(i + 1) + ": " + info.name + " - line " + SBS::ToString(info.line + 1));
         }
     }
 }
