@@ -893,6 +893,15 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 			}
 			return false;
 		}
+		if (command_name == "settexture")
+		{
+			if ((int)command_parameters.size() == 2)
+			{
+				texman->SetTexture(command_parameters[0], command_parameters[1]);
+				return true;
+			}
+			return false;
+		}
 	}
 
 	if (command_name == "changetexture")

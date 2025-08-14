@@ -2639,6 +2639,8 @@ bool TextureManager::ReportError(const std::string &message)
 
 bool TextureManager::SetTexture(const std::string &name, const std::string &texture)
 {
+	//changes the texture file of the given material
+
 	//get texture unit state
 	Ogre::MaterialPtr mMat = GetMaterialByName(name);
 	for (size_t i = 0; i < mMat->getNumTechniques(); i++)
