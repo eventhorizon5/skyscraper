@@ -1,0 +1,90 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>Virtual Manager</title>
+  </head>
+  <body>
+    <div align="center"><img
+        src="vm512.png"
+        alt="Virtual Manager" width="512" height="421"></div>
+    <p align="center"><strong><font size="+2">Virtual Manager</font></strong><br>
+    </p>
+    <p align="center"> </p>
+    <hr><br>
+    <div align="center">Virtual Manager is a system that allows
+      Skyscraper to run multiple simulator engines, or buildings,
+      simultaneously in the same environment.<br>
+      It is an evolution of the Engine Contexts feature, and this page
+      explains how to use it.<br>
+      <br>
+      There are two ways to interact with VM, using the Console, or the
+      Engine Manager.&nbsp; First, we'll explain the Engine Manager.<br>
+      <br>
+      <br>
+      <font size="+1"><b>The Engine Manager</b></font><br>
+      <img src="engine_manager.jpg" alt="The Engine Manager" width="765"
+        height="573"><br>
+      On the left is a list of running simulator engines, each one is a
+      building in the simulator.<br>
+      On the right are the information fields about the selected
+      simulator engine.<br>
+      <i>Position</i> is the position in 3D space of the selected
+      simulator.<br>
+      <i>Bounds</i> refers to the position limits of the simulator
+      instance.<br>
+      <i>Camera Active</i> refers to if the user's camera is active in
+      the selected simulator.<br>
+      <i>Uptime</i> is the running time in seconds of the simulator
+      instance.<br>
+      If <i>Concurrent Loading</i> is checked, any loaded simulators
+      will load in parallel.<br>
+      If <i>Render on Startup</i> is true, the simulator engines will
+      be drawn while loading.<br>
+      <br>
+      The buttons below are used to control the related simulator:<br>
+      <i><b>Set Active</b></i> sets the user's camera to be active in
+      the selected simulator.<br>
+      <i><b>Reload</b></i> reloads the selected simulator.<br>
+      <i><b>Move</b></i> moves the selected simulator in 3D space.<br>
+      <i><b>Load</b></i> Building loads a new building as a sim engine.<br>
+      <i><b>Shutdown</b></i> shuts down the selected sim engine.<br>
+      <br>
+      Clicking on Load brings up this dialog:<br>
+      <img src="load_building.jpg" alt="Load Building" width="491"
+        height="599"><br>
+      <br>
+      In the Load Building dialog, select the building to load.&nbsp;
+      Then, enter the position that you want it placed at.<br>
+      For the Bounds, leave at 0 if the building has bounds information
+      inside it, otherwise set values to cut around the building.<br>
+      The Bounds values I used in the example, are fairly standard and
+      work for most regular buildings.<br>
+      Options determines what to cut for the building, External and
+      Floors are turned off by default to improve performance.<br>
+      <br>
+      <hr width="100%" size="2"><br>
+      <font size="+1"><b>The Console<br>
+          <br>
+          <img moz-do-not-send="true" src="console.jpg" alt="Console"
+            width="732" height="703"><br>
+        </b></font>The Console window allows you to interact with both
+      VM and the sim engine's script interpreter.<br>
+      To see a list of commands, type <i>help</i> and press Send.<br>
+      <br>
+      Commands will be first sent to VM, and if they don't match, will
+      be sent to the related script processor.<br>
+      <br>
+      As an example, to initialize and boot a new, empty simulator,
+      type:<br>
+      <i>vminit<br>
+        boot<br>
+        <br>
+      </i>The simulator will then launch with an empty sim engine.<br>
+      To launch a simulator with an empty ground scene, type:<br>
+      <i>start<br>
+        <br>
+        <br>
+      </i><i></i><font size="+1"><b></b></font> </div>
+  </body>
+</html>

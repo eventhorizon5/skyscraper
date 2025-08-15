@@ -45,7 +45,13 @@ public:
 	class ControllerSection;
 	class CallStationSection;
 
-	ScriptProcessor(EngineContext *instance);
+	struct FunctionInfo
+	{
+		std::string name;
+		int line;
+	};
+
+	explicit ScriptProcessor(EngineContext *instance);
 	~ScriptProcessor();
 	bool Run();
 	bool LoadDataFile(const std::string &filename, bool insert = false, int insert_line = 0);
@@ -53,7 +59,7 @@ public:
 	void LoadDefaults();
 	void Start();
 	bool ReportMissingFiles();
-	void Reset();
+	void Reset(bool full = true);
 	std::vector<std::string> *GetBuildingData();
 	bool IsFunctionDefined(const std::string &name);
 	std::string DumpState();
@@ -62,6 +68,8 @@ public:
 	ConfigHandler* GetConfigHandler();
 	bool HasRunloop();
 	bool InRunloop() {return in_runloop;}
+	size_t GetFunctionCount();
+	FunctionInfo GetFunctionInfo(size_t index);
 
 	bool IsFinished;
 
@@ -88,6 +96,7 @@ public:
 	bool getfloordata;
 	int line; //line number
 	std::string LineData; //line text
+	bool NoModels; //if true, disable models for DirectX11 support
 
 private:
 
@@ -136,7 +145,7 @@ private:
 	bool FunctionProc();
 	void CheckFile(const std::string &filename);
 	void GetLineInformation(bool CheckFunctionCall, int &LineNumber, std::string &FunctionName, int &FunctionLine, bool &IsInclude, std::string &IncludeFile, bool &IsIncludeFunction, std::string &IncludeFunctionFile);
-	void ProcessFunctionParameters();
+	bool ProcessFunctionParameters();
 	void ProcessUserVariables();
 	int ProcessSections();
 	int ProcessFloorObjects();
@@ -144,12 +153,6 @@ private:
 	void ProcessExtents();
 	int ProcessForLoops();
 	void ProcessRunloop();
-
-	struct FunctionInfo
-	{
-		std::string name;
-		int line;
-	};
 
 	std::vector<FunctionInfo> functions; //stored functions
 

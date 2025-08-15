@@ -24,12 +24,12 @@
 #ifndef _SBS_WALL_H
 #define _SBS_WALL_H
 
+#include "polygon.h"
 #include "triangle.h"
 #include "mesh.h"
 
 namespace SBS {
 
-class Polygon;
 class PolyMesh;
 
 class SBSIMPEXP Wall : public Object
@@ -39,19 +39,21 @@ class SBSIMPEXP Wall : public Object
 public:
 
 	//functions
-	Wall(MeshObject* wrapper);
+	Wall(MeshObject* wrapper, const std::string &name);
 	~Wall();
 	Polygon* AddQuad(const std::string &name, const std::string &texture, const Vector3 &v1, const Vector3 &v2, const Vector3 &v3, const Vector3 &v4, Real tw, Real th, bool autosize);
+	Polygon* AddTriangle(const std::string &name, const std::string &texture, const Vector3 &v1, const Vector3 &v2, const Vector3 &v3, Real tw, Real th, bool autosize);
 	Polygon* AddPolygon(const std::string &name, const std::string &texture, PolyArray &vertices, Real tw, Real th, bool autosize);
+	Polygon* AddPolygon(const std::string &name, const std::string &texture, PolygonSet &vertices, std::vector<std::vector<Vector2>> &uvMap, std::vector<Triangle> &triangles, Real tw, Real th, bool autosize);
 	Polygon* AddPolygonSet(const std::string &name, const std::string &material, PolygonSet &vertices, Matrix3 &tex_matrix, Vector3 &tex_vector);
+	Polygon* AddPolygonSet(const std::string& name, const std::string& material, const GeometrySet &polys);
 	void DeletePolygons(bool recreate_collider = true);
 	void DeletePolygon(int index, bool recreate_colliders);
 	int GetPolygonCount();
 	Polygon* GetPolygon(int index);
 	int FindPolygon(const std::string &name);
-	//void GetGeometry(int index, PolygonSet &vertices, bool firstonly = false, bool convert = true, bool rescale = true, bool relative = true, bool reverse = false);
 	bool IntersectsWall(Vector3 start, Vector3 end, Vector3 &isect, bool convert = true);
-	void Move(const Vector3 &position, Real speed = 1.0);
+	void Move(const Vector3 &vector, Real speed = 1.0);
 	MeshObject* GetMesh();
 	void SetParentArray(std::vector<Wall*> &array);
 	Vector3 GetPoint(const Vector3 &start, const Vector3 &end);
@@ -65,6 +67,9 @@ public:
 private:
 	//mesh wrapper
 	MeshObject* meshwrapper;
+
+	//polymesh system
+	PolyMesh* polymesh;
 
 	//polygon array
 	std::vector<Polygon*> polygons;

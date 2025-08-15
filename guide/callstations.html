@@ -16,8 +16,8 @@
         to create advanced call button panels.&nbsp; This must be
         created within a <i>Floor</i> section, in order to specify what
         floor the call station is on.&nbsp; Call Stations are numbered,
-        starting with 1, this is a global number, not per-floor, even
-        though call stations are created individually on each floor.<br>
+        starting with 1, this is a per-floor number, since call stations
+        are created individually on each floor.<br>
       </p>
       <p align="left">The section headers and footers are similar to the
         ones in the <em>Floor</em> section.<br>
@@ -29,6 +29,9 @@
         <br>
         For a range of call stations, you would use something like:<br>
         <font size="2" face="Courier New, Courier, mono">&lt;CallStations
+
+
+
 
 
 
@@ -115,9 +118,9 @@
         Example: <font size="2"><font face="Courier New, Courier, mono">Controller</font></font><font
           size="2" face="Courier New, Courier, mono"> = 1<br>
         </font></p>
-      <p align="left"><strong><strong>3. TimerDelay</strong></strong> -
-        specifies the key input timer delay, for keypads, in
-        seconds.&nbsp; The default is 2 seconds<strong>.</strong><strong><br>
+      <p align="left"><b>3. TimerDelay</b> - specifies the key input
+        timer delay, for keypads, in seconds.&nbsp; The default is 2
+        seconds<strong>.</strong><strong><br>
         </strong>Example: <font size="2"><font face="Courier New,
             Courier, mono">TimerDelay = 1</font></font><strong><font
             size="2" face="Courier New, Courier, mono"><br>
@@ -125,7 +128,15 @@
       <p align="left"><strong>4. InvalidInput</strong> - specifies
         keypad input values that should be treated as invalid.<br>
         Example: <font size="2"><font face="Courier New, Courier, mono">InvalidInput</font></font><font
-          size="2" face="Courier New, Courier, mono"> = 13, 23<br>
+          size="2" face="Courier New, Courier, mono"> = 13, 23</font><strong><font
+            size="2" face="Courier New, Courier, mono"> </font></strong></p>
+      <p align="left"><strong><font size="2" face="Courier New, Courier,
+            mono"> </font></strong></p>
+      <p align="left"><strong>5. ShowDirection</strong> - determines if
+        the destination indicator should show the direction of the
+        elevator when showing it's ID. The default is true.<br>
+        Example: <font size="2"><font face="Courier New, Courier, mono">ShowDirection</font></font><font
+          size="2" face="Courier New, Courier, mono"> = false<br>
         </font></p>
       <strong></strong><strong></strong>
       <p align="left"><strong><br>
@@ -139,6 +150,9 @@
       <p align="left"><strong>2. CreatePanel</strong> - creates a button
         panel<br>
         Syntax: <font size="2" face="Courier New, Courier, mono">CreatePanel
+
+
+
 
 
 
@@ -244,6 +258,9 @@
 
 
 
+
+
+
           <em>sound, row, column, width, height, hoffset, voffset,
             selection_position, command_name(s), texture_name(s)<br>
           </em></font>Example 1: <font size="2" face="Courier New,
@@ -282,6 +299,9 @@
         destination indicator for this call station<br>
         Syntax: <font size="2"><font face="Courier New, Courier, mono">AddIndicator</font></font><font
           size="2" face="Courier New, Courier, mono"> <em>sound</em>, <em>texture_prefix,
+
+
+
 
 
 

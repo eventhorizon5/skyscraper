@@ -78,9 +78,12 @@ void SkySystem::CreateSky(EngineContext *engine)
 {
 	//create sky system
 
-	//load Caelum plugin
-	if (vm->GetHAL()->GetConfigBool(vm->GetHAL()->configfile, "Skyscraper.Frontend.Caelum", true) == true)
+	bool use_caelum = vm->GetHAL()->GetConfigBool(vm->GetHAL()->configfile, "Skyscraper.Frontend.Caelum", true);
+	bool sky_result = true;
+
+	if (use_caelum == true)
 	{
+		//load Caelum plugin
 		try
 		{
 			new Caelum::CaelumPlugin();
@@ -92,20 +95,11 @@ void SkySystem::CreateSky(EngineContext *engine)
 				ReportFatalError("Error initializing Caelum plugin:\nDetails: " + e.getDescription());
 			return;
 		}
+		sky_result = InitSky(engine);
 	}
 
-	/*(if (sky_error == true)
-	{
-		engine->GetSystem()->CreateSky();
-		return;
-	}*/
-
-	bool sky_result = true;
-	if (vm->GetHAL()->GetConfigBool(vm->GetHAL()->configfile, "Skyscraper.Frontend.Caelum", true) == true)
-		sky_result = InitSky(engine);
-
 	//create old sky if Caelum is turned off, or failed to initialize
-	if (sky_result == false)
+	if (sky_result == false || use_caelum == false)
 		engine->GetSystem()->CreateSky();
 }
 
@@ -205,7 +199,7 @@ bool SkySystem::InitSky(EngineContext *engine)
 		mCaelumSystem->getCaelumCameraNode()->setOrientation(rot);
 
 		//have sky use SBS scaling factor
-		Real scale = 1 / engine->GetSystem()->UnitScale;
+		Real scale = 1 / engine->GetSystem()->GetUnitScale();
 		mCaelumSystem->getCaelumGroundNode()->setScale(scale, scale, scale);
 		mCaelumSystem->getCaelumCameraNode()->setScale(scale, scale, scale);
 	}

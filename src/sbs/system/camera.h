@@ -98,9 +98,9 @@ public:
 	int mouse_x, mouse_y;
 
 	//functions
-	Camera(Object *parent);
+	explicit Camera(Object *parent);
 	~Camera();
-	void SetPosition(const Vector3 &position);
+	void SetPosition(const Vector3 &position, bool force = false);
 	void SetDirection(const Vector3 &direction);
 	void SetRotation(const Vector3 &rotation);
 	Vector3 GetPosition(bool relative = false);
@@ -130,7 +130,7 @@ public:
 	int GetClickedObjectLine();
 	std::string GetClickedObjectCommand();
 	std::string GetClickedObjectCommandP();
-	void Loop();
+	bool Loop();
 	void Strafe(Real speed = 1.0);
 	void Step(Real speed = 1.0);
 	void Float(Real speed = 1.0);
@@ -139,7 +139,7 @@ public:
 	void Turn(Real speed = 1.0);
 	void Spin(Real speed = 1.0);
 	void InterpolateMovement(Real delta);
-	void SetGravity(Real gravity, bool save_value = true, bool camera_only = true);
+	void SetGravity(Real gravity, bool save_value = true);
 	Real GetGravity();
 	void EnableGravity(bool value);
 	bool GetGravityStatus();
@@ -203,6 +203,7 @@ private:
 	int lastfloor;
 	bool lastfloorset;
 	Real FOV; //default FOV angle
+	Real last_fov;
 	Vector3 Rotation;
 	bool Collisions; //collision detection status
 	bool RotationStopped;
@@ -214,6 +215,7 @@ private:
 	bool use_startdirection;
 	Quaternion prev_orientation;
 	Vector3 prev_position;
+	bool BinocularsState; //binoculars enabled status
 
 	//Models
 	Model*	AttachedModel;

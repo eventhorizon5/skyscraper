@@ -34,7 +34,7 @@ class SBSIMPEXP ObjectBase
 	friend class Object;
 
 public:
-	ObjectBase(Object *parent);
+	explicit ObjectBase(Object *parent);
 	virtual ~ObjectBase() {};
 	Object* GetParent();
 	SBS* GetRoot();
@@ -64,7 +64,7 @@ public:
 	bool parent_deleting; //true if object's parent is deleting object
 
 	//functions
-	Object(Object *parent);
+	explicit Object(Object *parent);
 	virtual ~Object();
 	void SetValues(const std::string &type, const std::string &name, bool is_permanent, bool is_movable = true);
 	bool IsPermanent();
@@ -77,18 +77,16 @@ public:
 	void RemoveChild(Object *object);
 	SceneNode* GetSceneNode();
 	void ShowBoundingBox(bool value);
-	virtual void Move(const Vector3 &vector, Real speed = 1.0);
-	virtual void Move(Real X, Real Y, Real Z, Real speed = 1.0);
-	virtual void SetPosition(const Vector3 &position);
-	void SetPositionRelative(const Vector3 &position);
-	virtual void SetPosition(Real X, Real Y, Real Z);
-	void SetPositionRelative(Real X, Real Y, Real Z);
-	virtual void SetPositionY(Real value);
+	virtual void Move(const Vector3 &vector, Real speed = 1.0, bool local = false, bool force = false);
+	virtual void Move(Real X, Real Y, Real Z, Real speed = 1.0, bool local = false, bool force = false);
+	virtual void SetPosition(const Vector3 &position, bool relative = false, bool force = false);
+	virtual void SetPosition(Real X, Real Y, Real Z, bool relative = false, bool force = false);
+	virtual void SetPositionY(Real value, bool force = false);
 	virtual Vector3 GetPosition(bool relative = false);
-	virtual void Rotate(const Vector3 &vector, Real speed = 1.0);
-	virtual void Rotate(Real X, Real Y, Real Z, Real speed = 1.0);
-	virtual void SetRotation(const Vector3 &rotation);
-	virtual void SetRotation(Real X, Real Y, Real Z);
+	virtual void Rotate(const Vector3 &vector, Real speed = 1.0, bool relative = true);
+	virtual void Rotate(Real X, Real Y, Real Z, Real speed = 1.0, bool relative = true);
+	virtual void SetRotation(const Vector3 &rotation, bool relative = true);
+	virtual void SetRotation(Real X, Real Y, Real Z, bool relative = true);
 	virtual Vector3 GetRotation();
 	Quaternion GetOrientation(bool relative = false);
 	void SetOrientation(const Quaternion &q, bool relative = false);
@@ -102,13 +100,16 @@ public:
 	virtual void ResetState() {} //resets the internal state of an object
 	void ChangeParent(Object *new_parent);
 	bool IsGlobal();
-	void Init(bool children = true); //pre-runloop (first-run) object initialization
-	virtual void OnInit() {} //called when object is initialized
-	virtual void Loop() {} //object runloop
+	bool Init(bool children = true); //pre-runloop (first-run) object initialization
+	virtual bool OnInit() { return true; } //called when object is initialized
+	virtual bool Loop() { return true; } //object runloop
 	void RegisterLoop(Object *object);
 	void UnregisterLoop(Object *object);
-	virtual void Enabled(bool value) {}
+	virtual bool Enabled(bool value) { return true; }
+	virtual bool IsEnabled() { return true; }
 	std::string GetNameBase();
+	virtual void OnEntry() {}
+	virtual void OnExit() {}
 
 	template <typename T> bool IsType()
 	{
@@ -124,12 +125,12 @@ public:
 
 protected:
 	void EnableLoop(bool value);
-	void LoopChildren();
+	bool LoopChildren();
 	bool SelfDestruct();
 
 private:
 	void NotifyChildren(bool move, bool rotate);
-	void InitChildren();
+	bool InitChildren();
 
 	bool Permanent; //is object permanent?
 	std::string Type; //object type

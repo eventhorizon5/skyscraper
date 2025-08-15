@@ -46,19 +46,19 @@
           initial objects, and the initial wxWidgets windowing
           framework.<br>
           <br>
-          <b><font size="+2"><u>VM (Virtual Manager)</u><u><br>
+          <b><font size="+2"><a href="virtual_manager.html"><u>VM
+                  (Virtual Manager)</u></a><u><br>
               </u><br>
-            </font></b>VM, or Virtual Manager, is a form of
-          meta-simulator, a system designed to manage simulator engine
-          instances.&nbsp; It operates in a similar way to a nanokernel
-          or hypervisor, in that it is a monitor and environment for the
-          simulator engines to run on.&nbsp; VM is responsible for
-          creating simulator engine instances, shutting down engines,
-          running sim engines in parallel, and moving between sim
-          engines.&nbsp; It also manages the client components, such as
-          the GUI and HAL.&nbsp; VM manages Engine Contexts, which are
-          the basic environments that host the sim engines and script
-          processors.<br>
+            </font></b>VM, or Virtual Manager, is a simulator management
+          frontend, designed to manage simulator engine instances.&nbsp;
+          It operates in a similar way to a nanokernel or hypervisor, in
+          that it is a monitor and environment for the simulator engines
+          to run on.&nbsp; VM is responsible for creating simulator
+          engine instances, shutting down engines, running sim engines
+          in parallel, and moving between sim engines.&nbsp; It also
+          manages the client components, such as the GUI and HAL.&nbsp;
+          VM manages Engine Contexts, which are the basic environments
+          that host the sim engines and script processors.<br>
           <font size="+2"></font><b><font size="+2"></font></b><br>
           <b><font size="+2"><u>GUI</u><br>
               <br>
@@ -95,7 +95,8 @@
           VR headsets, but doesn't yet support hand controls and some
           other things like on-screen displays.<br>
           <br>
-          <u><b><font size="+2">Scalable Building Simulator (SBS)<br>
+          <u><b><font size="+2"><a href="sbs.html">Scalable Building
+                  Simulator (SBS)</a><br>
                 <br>
               </font></b></u>The Scalable Building Simulator, or SBS, is
           a simulation engine designed with vertical simulation in
@@ -108,8 +109,20 @@
           combination of an instance of SBS and a Script Processor,
           together in a context.<br>
           <br>
-          <br>
-          <br>
+          <font size="+2"><u><b>PolyMesh</b></u></font><u><b><font
+                size="+2"><br>
+                <br>
+              </font></b></u>PolyMesh, Skyscraper's geometry processor,
+          is a subsystem of SBS.&nbsp; It was developed starting in 2010
+          to replace the Crystal Space game engine's ThingMesh system,
+          which Skyscraper Alpha 7 and earlier used.&nbsp; ThingMesh was
+          removed from Crystal Space, prompting the creation of a new
+          geometry processor, followed by Skyscraper moving over to the
+          Ogre graphics engine in late 2010, with the PolyMesh switch
+          having made the Ogre transition possible.&nbsp; PolyMesh, via
+          the DynamicMesh system, generates 3D geometry and render
+          buffers, that are submitted to Ogre for rendering, and are
+          uploaded to the graphics card in batches.<br>
           <br>
           <font size="+2"></font><b><font size="+2"></font></b><u><b><font
                 size="+2"></font></b></u><u><b><font size="+2"></font></b></u><br>

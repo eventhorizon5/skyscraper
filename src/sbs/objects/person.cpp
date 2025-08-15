@@ -169,11 +169,13 @@ void Person::GotoFloor(int floor)
 	}
 }
 
-void Person::Loop()
+bool Person::Loop()
 {
 	SBS_PROFILE("Person::Loop");
 
 	ProcessRoute();
+
+	return true;
 }
 
 void Person::ProcessRoute()

@@ -28,6 +28,7 @@
 
 #include "globals.h"
 #include "sbs.h"
+#include "texman.h"
 #include "texture.h"
 #include "debugpanel.h"
 #include "vm.h"
@@ -196,9 +197,9 @@ void TextureManager::Loop()
 	if (!manager)
 		return;
 
-	if (manager->GetTextureInfoCount() != lastcount)
+	if (manager->GetTextureObjectCount() != lastcount)
 	{
-		lastcount = manager->GetTextureInfoCount();
+		lastcount = manager->GetTextureObjectCount();
 
 		//clear values
 		TextureList->Clear();
@@ -215,11 +216,11 @@ void TextureManager::Loop()
 		tMipMaps->Clear();
 		tMemory->Clear();
 
-		for (int i = 0; i < manager->GetTextureInfoCount(); i++)
+		for (int i = 0; i < manager->GetTextureObjectCount(); i++)
 		{
-			SBS::TextureManager::TextureInfo info;
-			if (manager->GetTextureInfo(i, info))
-				TextureList->Append(SBS::ToString(i + 1) + wxT(" - ") + info.name);
+			SBS::Texture *texture = manager->GetTextureObject(i);
+			if (texture)
+				TextureList->Append(SBS::ToString(i + 1) + wxT(" - ") + texture->GetName());
 		}
 	}
 }
@@ -230,18 +231,20 @@ void TextureManager::On_bUnload_Click(wxCommandEvent& event)
 	if (selection < 0)
 		return;
 
-	SBS::TextureManager::TextureInfo texture;
-	Simcore->GetTextureManager()->GetTextureInfo(selection, texture);
+	SBS::Texture *texture = Simcore->GetTextureManager()->GetTextureObject(selection);
 
-	if (texture.name != "" && texture.name != "Default")
+	if (!texture)
+		return;
+
+	if (texture->GetName() != "" && texture->GetName() != "Default")
 	{
 		//don't unload texture if submeshes are using it
-		if (texture.dependencies > 0)
+		if (texture->dependencies > 0)
 			return;
 
-		bool result = Simcore->GetTextureManager()->UnloadMaterial(texture.name, "General");
+		bool result = Simcore->GetTextureManager()->UnloadMaterial(texture->GetName(), "General");
 		if (result == true)
-			Simcore->GetTextureManager()->UnregisterTextureInfo(texture.name, texture.material_name);
+			Simcore->GetTextureManager()->UnregisterTexture(texture->GetName(), texture->material_name);
 	}
 }
 
@@ -256,20 +259,21 @@ void TextureManager::On_TextureList_Select(wxCommandEvent& event)
 	if (selection < 0)
 		return;
 
-	SBS::TextureManager::TextureInfo texture;
-	Simcore->GetTextureManager()->GetTextureInfo(selection, texture);
+	SBS::Texture *texture = Simcore->GetTextureManager()->GetTextureObject(selection);
+	if (!texture)
+		return;
 
-	if (texture.name != "")
+	if (texture->GetName() != "")
 	{
-		tMaterial->SetValue(texture.material_name);
-		tFilename->SetValue(texture.filename);
-		tWidthMult->SetValue(SBS::TruncateNumber(texture.widthmult, 2));
-		tHeightMult->SetValue(SBS::TruncateNumber(texture.heightmult, 2));
-		chkEnableForce->SetValue(texture.enable_force);
-		chkForceMode->SetValue(texture.force_mode);
-		tDependencies->SetValue(SBS::ToString(texture.dependencies));
+		tMaterial->SetValue(texture->material_name);
+		tFilename->SetValue(texture->filename);
+		tWidthMult->SetValue(SBS::TruncateNumber(texture->widthmult, 2));
+		tHeightMult->SetValue(SBS::TruncateNumber(texture->heightmult, 2));
+		chkEnableForce->SetValue(texture->enable_force);
+		chkForceMode->SetValue(texture->force_mode);
+		tDependencies->SetValue(SBS::ToString(texture->dependencies));
 
-		std::string name = GetTextureName(texture.name);
+		std::string name = GetTextureName(texture->GetName());
 
 		if (name.empty())
 			return;
@@ -280,7 +284,10 @@ void TextureManager::On_TextureList_Select(wxCommandEvent& event)
 		{
 			tWidth->SetValue(SBS::ToString((int)tex->getWidth()));
 			tHeight->SetValue(SBS::ToString((int)tex->getHeight()));
-			tMipMaps->SetValue(SBS::ToString((int)tex->getNumMipmaps()));
+			if (tex->getNumMipmaps() == Ogre::MIP_UNLIMITED)
+				tMipMaps->SetValue("Unlimited");
+			else
+				tMipMaps->SetValue(SBS::ToString((int)tex->getNumMipmaps()));
 			tMemory->SetValue(SBS::ToString((int)tex->getSize()));
 
 			if (tex->hasAlpha() == true)
@@ -290,8 +297,8 @@ void TextureManager::On_TextureList_Select(wxCommandEvent& event)
 
 			wxString path = wxStandardPaths::Get().GetDataDir();
 			wxImage image;
-			if (texture.filename != "")
-				image.LoadFile(panel->GetRoot()->data_path + texture.filename);
+			if (texture->filename != "")
+				image.LoadFile(panel->GetRoot()->data_path + texture->filename);
 			else
 			{
 				bool result = Simcore->GetTextureManager()->GetTextureImage(tex);
@@ -311,17 +318,17 @@ void TextureManager::On_bSave_Click(wxCommandEvent& event)
 	if (selection < 0)
 		return;
 
-	SBS::TextureManager::TextureInfo texture;
-	Simcore->GetTextureManager()->GetTextureInfo(selection, texture);
+	SBS::Texture *texture = Simcore->GetTextureManager()->GetTextureObject(selection);
 
-	if (texture.name != "")
+	if (!texture)
+		return;
+
+	if (texture->GetName() != "")
 	{
-		texture.widthmult = atof(tWidthMult->GetValue());
-		texture.heightmult = atof(tHeightMult->GetValue());
-		texture.enable_force = chkEnableForce->GetValue();
-		texture.force_mode = chkForceMode->GetValue();
-
-		Simcore->GetTextureManager()->SetTextureInfo(selection, texture);
+		texture->widthmult = atof(tWidthMult->GetValue());
+		texture->heightmult = atof(tHeightMult->GetValue());
+		texture->enable_force = chkEnableForce->GetValue();
+		texture->force_mode = chkForceMode->GetValue();
 	}
 }
 
@@ -331,12 +338,13 @@ void TextureManager::On_bExport_Click(wxCommandEvent& event)
 	if (selection < 0)
 		return;
 
-	SBS::TextureManager::TextureInfo texture;
-	Simcore->GetTextureManager()->GetTextureInfo(selection, texture);
+	SBS::Texture *texture = Simcore->GetTextureManager()->GetTextureObject(selection);
+	if (!texture)
+		return;
 
-	if (texture.name != "")
+	if (texture->GetName() != "")
 	{
-		std::string name = GetTextureName(texture.name);
+		std::string name = GetTextureName(texture->GetName());
 
 		if (name.empty())
 			return;

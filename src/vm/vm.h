@@ -60,17 +60,28 @@ class dylib;
 
 namespace Skyscraper {
 
+enum EngineType
+{
+	ENGINETYPE_GENERIC,
+	ENGINETYPE_BUILDING,
+	ENGINETYPE_CITY,
+	ENGINETYPE_PLANET,
+	ENGINETYPE_SOLARSYSTEM
+};
+
 class EngineContext;
 class ScriptProcessor;
 class HAL;
 class SkySystem;
 class GUI;
 class VMConsole;
+class Monitor;
 
 //Virtual Manager system
 class VMIMPEXP VM
 {
 	friend class VMConsole;
+	friend class Monitor;
 
 public:
 	VM();
@@ -81,37 +92,42 @@ public:
 	GUI* GetGUI();
 	EngineContext* GetActiveEngine() { return active_engine; }
 	EngineContext* GetEngine(int number);
-	EngineContext* CreateEngine(EngineContext *parent = 0, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
-	bool DeleteEngine(EngineContext *engine);
+	EngineContext* CreateEngine(EngineContext *parent = 0, const Vector3 &position = Vector3::ZERO, const Vector3 &rotation = Vector3::ZERO, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
+	bool DeleteEngine(const EngineContext *engine);
 	void DeleteEngines();
-	int GetEngineCount();
+	int GetEngineCount(bool loading_only = false);
 	int GetEngineListSize() { return (int)engines.size(); }
 	EngineContext* FindActiveEngine();
-	void SetActiveEngine(int number, bool switch_engines = false);
+	void SetActiveEngine(int number, bool switch_engines = false, bool force = false);
 	bool IsEngineLoading();
-	bool IsValidEngine(EngineContext *engine);
-	bool IsValidSystem(::SBS::SBS *sbs);
+	bool IsValidEngine(const EngineContext *engine);
+	bool IsValidSystem(const ::SBS::SBS *sbs);
 	int RegisterEngine(EngineContext *engine);
 	EngineContext* GetFirstValidEngine();
 	int GetFreeInstanceNumber();
 	int Run(std::vector<EngineContext*> &newengine);
-	bool StartEngine(EngineContext* engine, std::vector<Ogre::Camera*> &cameras);
+	bool StartEngine(EngineContext* engine);
 	::SBS::SBS* GetActiveSystem();
 	ScriptProcessor* GetActiveScriptProcessor();
-	bool Load(bool clear, const std::string &filename, EngineContext *parent = 0, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
+	bool Load(bool system, bool clear, const std::string &filename, EngineContext *parent = 0, const Vector3 &position = Vector3::ZERO, const Vector3 &rotation = Vector3::ZERO, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
 	void ShowPlatform();
 	wxWindow* GetParent();
-	void UpdateProgress();
+	bool UpdateProgress();
 	bool ReportMissingFiles(std::vector<std::string> &missing_files);
 	void StartConsole();
 	void ProcessConsole();
 	VMConsole* GetConsole();
-	EngineContext* Initialize(bool clear, EngineContext *parent = 0, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
+	EngineContext* Initialize(bool clear, EngineContext *parent = 0, const Vector3 &position = Vector3::ZERO, const Vector3 &rotation = Vector3::ZERO, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
 	void SetRenderOnStartup(bool value);
 	bool GetRenderOnStartup();
 	dylib* LoadLibrary(const std::string &name);
 	unsigned long Uptime();
 	unsigned long GetElapsedTime(int instance);
+	void ListPlayingSounds();
+	unsigned long GetGlobalStats(unsigned long &meshes, unsigned long &textures, unsigned long &actions, unsigned long &sounds, unsigned long &objects, unsigned long &walls, unsigned long &polygons);
+	bool IsRootLoaded();
+	bool LoadPending();
+	bool IsRunning() { return running; }
 
 	bool Shutdown;
 	bool ConcurrentLoads; //set to true for buildings to be loaded while another sim is active and rendering
@@ -127,7 +143,7 @@ public:
 	std::string version;
 	std::string version_rev;
 	std::string version_state;
-	std::string version_frontend;
+	std::string version_full;
 
 	std::string Bits;
 	std::string Platform;
@@ -148,6 +164,7 @@ private:
 	void Report(const std::string &message);
 	bool ReportError(const std::string &message);
 	bool ReportFatalError(const std::string &message);
+	bool LoadQueued();
 
 	EngineContext *active_engine;
 	std::vector<EngineContext*> engines;
@@ -155,14 +172,31 @@ private:
 	SkySystem *skysystem;
 	GUI *gui; //GUI subsystem
 	VMConsole *vmconsole; //VM console system
+	Monitor *monitor; //monitor system object
 
 	wxWindow *parent;
 
 	bool first_run;
 	bool RenderOnStartup; //override SBS engine setting with same name
+	bool running; //true if VM has started and is currently running/rendering
+	bool first_attach;
 
 	//shared libraries
 	std::vector<dylib*> dylibs;
+
+	struct DelayLoad
+	{
+		std::string filename;
+		bool clear;
+		EngineContext *parent;
+		Vector3 position;
+		Vector3 rotation;
+		Vector3 area_min, area_max;
+		bool system;
+	};
+	std::vector<DelayLoad> load_queue; //delay load queue
+	bool system_loaded; //true if system engines have started loaded
+	bool system_finished; //true if system engines are finished loading
 };
 
 }

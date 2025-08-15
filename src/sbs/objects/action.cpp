@@ -39,6 +39,7 @@
 #include "door.h"
 #include "revolvingdoor.h"
 #include "profiler.h"
+#include "texman.h"
 #include "action.h"
 
 namespace SBS {
@@ -254,6 +255,7 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 	Light *light = dynamic_cast<Light*>(parent);
 	Door *door = dynamic_cast<Door*>(parent);
 	RevolvingDoor *revdoor = dynamic_cast<RevolvingDoor*>(parent);
+	TextureManager *texman = dynamic_cast<TextureManager*>(parent);
 
 	std::string caller_name = caller->GetName();
 	std::string caller_type = caller->GetType();
@@ -867,6 +869,38 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 		{
 			revdoor->Run(false);
 			return true;
+		}
+	}
+
+	//texture manager commands
+	if (texman)
+	{
+		if (command_name == "startslideshow")
+		{
+			if ((int)command_parameters.size() == 1)
+			{
+				texman->StartSlideshow(command_parameters[0]);
+				return true;
+			}
+			return false;
+		}
+		if (command_name == "stopslideshow")
+		{
+			if ((int)command_parameters.size() == 1)
+			{
+				texman->StopSlideshow(command_parameters[0]);
+				return true;
+			}
+			return false;
+		}
+		if (command_name == "settexture")
+		{
+			if ((int)command_parameters.size() == 2)
+			{
+				texman->SetTexture(command_parameters[0], command_parameters[1]);
+				return true;
+			}
+			return false;
 		}
 	}
 

@@ -27,7 +27,7 @@ class StartScreen
 {
 public:
 
-	StartScreen(Skyscraper* frontend);
+	explicit StartScreen(Skyscraper* frontend);
 	~StartScreen();
 	bool DrawBackground();
 	bool GetMenuInput();
@@ -61,6 +61,7 @@ private:
 
 	bool DrawImage(const std::string &filename, buttondata *button, Real x, Real y, bool center, const std::string &filename_selected = "", const std::string &filename_pressed = "");
 	void Click(int index);
+	void RightClick(int index);
 
 	Skyscraper *frontend;
 	VM *vm;

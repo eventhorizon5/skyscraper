@@ -1,8 +1,703 @@
 Version 2.1
 -------------------------
+-Added new custom memory allocator (for future use)
+-Started basic dynamic library support for VM.  So far the basic loader is working
+-started work on new networking subsystem (for future multiplayer support)
+-started Serializer object (the change was reverted, but is active in a local branch for the time being)
+-Fix looping on intro2.ogg
+-Moved SBS source files into subdirectories
+-new Convention Center building
+-added Convention Center to City Demo
+-Added most Simple demo buildings to City Demo
+-SBS: Move() functions should allow local space moves instead of just parent space
+-SBS: add relative parameter to SetRotation()
+-GUI: added relative movement/rotation checkbox for objects
+-SBS: made PolyMesh a client object of SBS root instead of MeshObject
+-SBS: moved remaining geometry code from core into PolyMesh
+-SBS: Moved UnitScale into Utility component
+-SBS: moved elevator call routing code into a new Route Controller object
+-SBS: PolyMesh function call cleanups
+-VM: const correctness changes
+-SBS: Added override keywords for Manager class
+-Use explicit for classes with one constructor parameter
+-added "skip engine" support to both VM and the progress dialog
+-GUI: added Script Debugger
+-SBS: Loop() and OnInit() object functions should return a status, to indicate an object success or malfunction/failure
+-SBS: add support for a return value for Object initialization functions
+-SBS: object Enabled() function should return status.
+-Fix delimiter in uname command when no version state is specified
+-Added variable display to script debugger
+-VMConsole: remove Frontend mention from version command
+-SBS: if a texture material is already loaded, report an error and exit before trying to create a new texexture.  This fixes an issue where new textures with the same name as existing ones would cause a sim engine to have a fatal error and shut down
+-SBS: moved Texture Manager to controllers section
+-SBS: Moved TextureInfo into new Texture object
+-SBS: moved texture loading code into TextureImage object
+-SBS: created AddArrayElement and RemoveArrayElement utility templated functions
+-PolyMesh: add support for polygon extrusion, for creating custom polygons with thickness and sides.
+-SBS: stop timer before the Notify() call
+-Added CreateSlideshow command and related code
+-TextureManager: when loading a texture, unload the previous texture if it exists, instead of exiting
+-SBS: moved remaining geometry functions into PolyMesh
+-GUI: added the Floor Information dialog
+-Convention Center: made observatory level (114), spire top (115) and antenna
+-TextureManager: SetTexture() function should set texture on all Ogre techniques in the material instead of assuming 0
+-TextureManager: added the option to enable or disable the slideshow on start, added an Action that can start and stop a slideshow, and added the new "Simple - Slideshow" building
+-added the Simple - Slideshow building
+-TextureManager: report on slideshow creation and start/stop
+-Guide: added logo for Virtual Manager page
+-Script Guide: added CreateSlideshow command information and related Action commands
+-Convention Center: fixed door movement of rotated elevators
+-Added Rotation parameter for shaft doors, allowing them to be rotated along with elevator cars
+-Convention Center: rotate shaft doors into position using the new rotation support
+-Added texture tiling parameters to the ExtrudePoly command
+-PolyMesh: updated code in FindWallIntersect()
+-PolyMesh: replaced the CS IntersectRay() with new implementation, fixes some of the wall-clicking issues
+-PolyMesh: replaced IntersectSegment functions
+-PolyMesh: added ComputeNormal2() and SplitWithPlane() replacement functions
+-TextureManager: replaced ComputeTextureMap() and ComputeTextureSpace() functions
+-GUI: fix floor information selection code
+-PolyMesh: added AddTriangle() function
+-PolyMesh: started experimental support for shapes, starting with spheres
+-Convention Center: fixed fire service switch in service elevator
+-Convention Center: extended service elevator to sub-basement level
+-PolyMesh: moved bounding box creation code into separate function
+-PolyMesh: Added CreateBox() function
+-PolyMesh: added object centering support for Sphere and Box objects
+-PolyMesh: moved shape code into new Shape object, and integrated with Floor object
+-ScriptProc: fixed AddShaftDoor and AddShaftDoors commands
+-ScriptProc: fix regression in Floor section AddShaftDoor command
+-ScriptProc: made AddSphere command, using the new shape support, and added the new "Simple - Shapes" building
+-ScriptProc: added AddBox command
+-SBS: shapes can now be created on elevator car, shaft, stairwell, and SBS objects
+-SBS: added support for creating PolyMesh shapes on models
+-PolyMesh: added remaining shapes and fixes to Shape object
+-Guide: added section on PolyMesh to development page
+-VM: added pause and resume console commands
+-PolyMesh: added triangle tessellation function
+-VM: Added field descriptions to ps command
+-Texture Manager: if a manual texture fails to create due to a texture with the same name existing, load that existing texture instead of failing with an error
+-SBS: Added GetMemoryUsage() texture function
+-added Planet support as a replacement for the Ground system
+-PolyMesh: added 'inside' parameter to shape functions, which determines if the outside or inside of the shape should be drawn
+-PolyMesh: shapes now support DrawWalls setting
+-VM: add Monitor system
+-VM: have monitor load default state for primary engine
+-Added Earth building file
+-VM: have monitor load sol.bld
+-VM: added engine type parameter
+-VM: added monitor system runloop
+-VM: Added IsRootLoaded() function
+-VM: added sim engine load queue, for delaying building and city loads until after system engines
+-Added sim engine types, and added type display to Engine Manager
+-Added parent display to Engine Manager window, and added automatic planet parenting code
+-VM: wait until system is finished loading before loading startup building
+-VM: added CancelShutdown() function
+-VM: clean up Monitor system on simulator unload
+-Frontend: don't continue Start() procedure if engine loads are still pending
+-Added bounds to Ground building
+-Frontend: only attach camera on startup if not a system engine
+-Frontend: only finish startup if all engines have finished loading
+-Frontend: only show progress dialog after system engines have loaded
+-VM: only have engine context cut outside boundaries on start, if not a system engine
+-PolyMesh: reworked Cut function to properly support shapes
+-PolyMesh: added SplitWithPlaneUV() function
+-PolyMesh: added new AddPolygonSet function
+-City Demo: moved Triton Center to buildings section, and added ground
+-VM: report on active engine switch
+-Removed unneeded Cameras parameter to Start() functions
+-VM: added first_attach state
+-Have each sim engine calculate it's own bounds, and apply if no bounds value is specified
+-VM: cut parent engine after engine start, not before, to support the new engine auto-bounds feature
+-VM: added Reset() engine context function, to reset the related SBS engine and script processor
+-City Simulation: update WTC filename
+-City Simulation: added Convention Center
+-City Simulation: added ground and bounds
+-VMConsole: fixed a potential divide-by-zero in ps command
+-City Simulation: update to match new City Demo structure
 
-Version 2.0
+Version 2.0 - July 24, 2025
 -------------------------
+-ScriptProc: fix direction value processing for AddDoor command
+-SBS: added pointer safety checks to elevator car's Loop() function
+-VM: SwitchEngines() function should not switch to engines in a paused state
+-GUI: added a Paused checkbox to the Engine Manager, to pause/suspend sim engines
+-VM: added support for pausing/suspending sim engines
+-SBS: added a force mode to movement and set position functions, currently used by Floor objects.  Force mode allows objects to pass outside of the simulator engine boundaries.
+-SBS: added GetCenter() function, which returns the position of the bounds center
+-PolyMesh: CreateWallBox() and AddPolygon() functions should report and exit if attempting to create an object outside of the sim engine boundaries
+-PolyMesh: if attempting to create walls/floors outside of the engine bounds, only report if specified.
+-SBS: fixed an issue with call stations not appearing on sim engines that have off-cener bounds, the call station needs to be moved to a position within the engine bounds before creating walls
+-SBS: added GetAreaTrigger() function
+-SBS: rewrote a trigger IsOutside() function and added a variant of IsInside()
+-SBS: prevent movement and setposition outside of sim engine boundaries
+-PolyMesh: report an error if attempting to create a wall outside of engine boundaries
+-PolyMesh: DynamicMesh should report as itself
+-SBS: Abort DynamicMesh mesh creation if provided scenenode doesn't exist.  This avoids a crash if there's an issue with the scenenode.
+-GUI: resized text boxes in Engine Manager window
+-GUI: updated Object Info sizing
+-SBS: added object IsEnabled() function support to remaining objects
+-GUI: added "Is Movable" and Enabled checkbox to Object Info window, the checkbox still needs an IsEnabled() implementation from Object in SBS
+-GUI: resized the Move Object window's coordinates display boxes
+-GUI: sound manager crash fixes, for when sound is disabled
+-SBS: fixed an array index issue in Escalator's CreateSteps() function
+-SBS: fixed an out-of-bounds write in elevator door's AddServicedFloor() function
+-SBS: Fix CreateButtonPanel() function declaration
+-SBS: added pointer safety checks to GetFloorNumber() function
+-SBS: updated banner to reflect new license file name
+-SBS: only print memory report on startup when in verbose mode
+-PolyMesh: code cleanups and safety checks for Wall object
+-PolyMesh: move wall initialization code into wall object constructor
+-HAL: Use size_t for renderer name processing
+-VM: when cleaning up empty engine slots, make sure engine count is greater than 0
+-HAL: clean up filtermode code
+-SBS: remade CreateSky() function, this fixes the old sky system
+-Some initialization fixes for the old skybox system
+-SBS: shaft and stairwell objects should not use the mesh as their parent, use the shaft/stairwell level instead.  Fixes some crashes.
+-ScriptProc: fix parameter handling of AddShaftTrigger command
+-GUI: check sound handle before access, to prevent a crash
+-SBS: re-enabled AddShaftTrigger and AddStairsTrigger commands; they should perform more efficiently due to recent engine code modernization
+-VM: simplify display output of ListPlayingSounds() function
+-Guide: added SBS page
+-Guide: added "Starting Skyscraper" page
+-ScriptProc: added side tiling and name parameters to AddExternalDoor command
+-ScriptProc: added name parameters to door commands
+-ScriptProc: added side tiling parameters to AddStairsDoor and AddDoor commands
+-ScriptProc: fixed side tiling parameters of AddShaftStdDoor command
+-SBS: moved some system functions into Utility object
+-added user's guide page on VR support
+-SBS: add texture override support to AddPolygon function, which allows texture overrides to work in the AddPolygon, AddCustomWall, AddCustomFloor, and AddTriangleWall commands
+-VMConsole: add build number to uname command
+-SBS: Use GetDerivedOrientation() function instead of an ogre call
+-SBS: replaced SetPositionRelative() functions with a relative parameter to SetPosition()
+-VM: moved version code from frontend into VM
+-SBS: added safety checks to Object
+-PolyMesh: GetTexels() should return array size, and prevent a potential buffer overrun
+-GUI: center progress dialog when updating
+-Removed outdated design document
+-Removed Bullet patch
+-SBS: remove the camera_only parameter to the SetGravity() function; the DynanamicsWorld gravity should always be set.
+-SBS: add support for slowing down revolving doors
+-VM: objects need to be checked before use, this fixes a potential crash in the ListPlayingSounds() function
+-Texture Manager: show mipmaps as "unlimited" for textures that return the MIP_UNLIMITED value
+-VM: fixed a crash in GetGlobalStats() function
+-Added C++ reference to the guide
+-SBS: name callstations on a per-floor basis
+-Have joystick only have camera jump if on ground
+-Assign joystick button 4 to Jump function
+-Add a joystick centering range, fixes joystick centering issues
+-updated Bullet to 2.89
+-Stats: Added a global stats checkbox
+-Frontend: right-clicking on the "Other Building" button now opens the original (native) file selection dialog
+-Updated doxygen config for 2.0
+-Remade menu screen, and switched Sears Tower with City Demo
+-SBS: Name call stations properly
+-Updated the DD version of Triton Center, for the new map and grand ballroom music
+-GUI: resize the progress dialog when updating
+-Report on the number of joystick buttons on startup
+-GUI: Have progress dialog show elapsed and estimated times
+-Engine Manager: added uptime display
+-VM: properly handle cancel functionality for additional engines
+-VM: Only close progress dialog when loading engine count reaches 1
+-VM: if an engine fails loading, switch to the next available engine even if it's in a loading state
+-Allow building loads to be cancelled from the progress dialog
+-Added the new 2.1 intro music as alternate music
+-ScriptProc: adjusted the map zoom levels in the Triton Center and "Simple - Map" buildings
+-ScriptProc: Added SetCameraZoom command
+-Triton Center: added a map screen to the Lobby service area
+-Triton Center: added the new intro music in the grand ballroom
+-Disable models on Direct3D11 renderer, allowing buildings that contain models to load
+-VMConsole: added engine runtime to ps function
+-VMConsole: don't show the simulator time if no sky system is loaded
+-Update .gitignore (pr #72)
+-Handle maximized window properly (pr #72)
+-Add preference to start Skyscraper maximized (pr #72)
+-Binoculars: Return to the previous FOV instead of the default (pr #72)
+-Make sure cross-hair cursor is enabled if freelook was enabled outside of frontend (pr #72)
+-Store and check binoculars enabled status to prevent an issue where enabling binoculars twice in a row (holding the B key) would cause the FOV to become stuck
+-The map generator is now a permanent object
+-Added support for deleting CameraTexture objects
+-Properly delete CameraTexture objects from parents, and make the Map texture permanent
+-Have OpenXR component report messages through Ogre, for console display
+-OpenXR: Report headset detected
+-Show a proper error message when an error occurs during a renderwindow update call
+-Add file details to VM and OpenXR DLLs (Windows)
+-Clarified OpenXR licensing and included license file
+-README update with more release notes
+-Added OgreBullet init banner and copyright
+-Updated OgreBullet initialization reporting
+-Fixed an issue with the Console that would cause commands to be repeated
+-SBS: Fixed a crash in GetFloorNumber(); object pointers should not be accessed directly without a safety check first
+-Have the script processor reset the prepared state of the simulator instance. This fixes an issue where creating objects using the console would result in the objects not being visible
+-SBS: Have elevators select the current car during a relevel operation instead of only the first one, to open the correct doors in double-decker setups (issue #49)
+-SBS: Report active car number when returning to the nearest floor
+-Added some support for making OpenXR optional on Windows
+-Don't automatically enable map generator on startup
+-Added new Inno Setup installer
+-Updated readme for 2.0 release information, and cleanups
+-Added Skyscraper logo images to guide folder
+-Added sound manager button to list playing sounds in all engines
+-Fix soundsystem stats reporting
+-Added sound manager button to list playing sounds in all engines
+-Added Skyscraper logo images to guide folder
+-started new Readme file
+-Added new Inno Setup installer
+-Don't automatically enable map generator on startup
+-Added a startup screen music volume option
+-Started interior ceiling work and fixes on Glass Tower
+-Fix vector name in Move functions
+-Make walls fully movable objects, by calling base object during move
+-(OgreBullet) Added 6DofSpringConstraint patch from 2010
+-Set default intro music volume to full for 2.0
+-Brought back the native file selection dialog, it can be enabled via the INI file
+-Clear/reset FMOD reverb when returning to the main menu
+-Added enable/disable function to Sound objects
+-Added sound enable/disable support to the Sound Manager dialog
+-Reset loadstart state when unloading simulator, this fixes an issue with returning to the startup screen after loading multiple buildings
+-Added support for displaying in-memory textures, by saving the texture as "temp.jpg" and loading
+-(Guide) Fixed elevator cars section
+-Native frontend build fixes
+-Native frontend runtime fixes
+-Disable sleep function on main loop, for native frontend
+-Don't use GUI console when GUI is disabled
+-moved wxWidgets code out into a separate frontend module
+-Added code to detect executable path without wxWidgets
+-added native input system
+-Some enhancements to the development doc
+-added SetZoom function for CameraTexture objects, which changes the zoom factor for orthographic cameras
+-Added a zoom control to the Camera Texture Control window
+-Don't separately initialize in the vminit command, use the initializer in LoadDefault() instead
+-Fixed some crashes involving the system not properly deleting startup screen buttons when the vminit command is used
+-RenderOnStartup fixes
+-Added a renderonly option to Prepare(), which prevents colliders from being created for faster rendering
+-Created a map object, that generates a map of the sim engine when enabled, using an orthographic camera texture
+-Added GetImage function, that returns the texture image from render textures used in camera texture and map objects
+-Added texture preview support to the Texture Manager, and expanded texture list
+-added new Map global command, which enables or disables the map generator
+-Added "Simple - Map" building, which demonstrates the use of a map texture
+-Fixed an infinite loop, only new engines should be added to the 'newengines' list, not all
+-Fixed a crash with the vmload command
+-profiler tweaks
+-added vmuptime command
+-ps command now shows instance utilization
+-Add support for blinking directional indicators
+-Added the PrimCollider command that turns on and off collider creation for primitives
+-Split the script guide out into multiple HTML files
+-Started work on the Skyscraper Users Guide
+-added new VMConsole system
+-added color support to the VM Console
+-Added color text support to HAL
+-integrated VMConsole into the GUI console
+-Added color text support to the GUI console, and inverted the default console colors to make a black background
+-Enable console Send button on start
+-Fixed an issue involving clicking objects, where wall detection would usually fail due to the scanning function exiting during checks instead of continuing
+-Only use malloc_trim on Linux, not other platforms such as FreeBSD
+-Make sound support (FMOD) optional
+-Detect FreeBSD on startup
+-Due to build issues, don't build joystick support on FreeBSD
+-Ogre upgraded to version 14.3.4
+-FMOD upgraded to version 2.03.07
+-wxWidgets upgraded to version 3.2.7
+-Update CMake required version (fixes issues with newer versions of CMake)
+-Removed support for precompiled headers in wxWidgets, due to build issues
+-Make sure indicators only turn on or off once when power status changes
+-Added Lobby global parameter, which is the starting floor for random activity
+-Added a lobby option to the People Manager window
+-Fixed missing file dialog
+-Removed unused framerate and framelimiter elements
+-Removed duplicate serviced floor index function
+-Fixed an issue where non-serviced floors would cause elevator floor malfunctions, a separate shaft door index lookup was created for this.
+-Save and apply camera speed factor when switching sim engines - this fixes an issue where the "fast" movement wouldn't be applied when walking into another sim, slowing the camera back to default
+-Added call cancel for regular operation, IND mode and Fire Phase 2 now use the CallCancelAll() function
+-Replaced transparent.png with an older version
+-Updated misc textures with transparent versions
+-If an elevator is stopped, have the elevator relevel and arrive if the current floor's button is pressed
+-Prevent deletion of default texture
+-multiple shaft door index fixes
+-Fixed a crash in the elevator door's AddServicedFloor() function, by rewriting the code
+-Cleaned up elevator door's RemoveServicedFloor() function
+-Don't create or remove shaft doors when modifying serviced floors in the elevator editor
+-Use correct floor index function, this fixes an issue where negative floors wouldn't show up in the elevator editor's serviced floor box.
+-Have elevator editor's serviced floor section only display floors with existing elevator doors
+-Exit to menu on a render failure, this fix is for the recent code reorganization changes
+-Switched usage of vector push_back to emplace_back (C++11)
+-Split off startup screen into it's own class/object
+-Removed unused Headless mode
+-Fixed prompt delimiter (Console window)
+-Move tricollider value based on physics, to the EnablePhysics() function
+-Collider mesh creation fixes, the mesh needs to be loaded from the EnablePhysics() function
+-fix for Vehicle support
+-Renamed City building to "City Simulation"
+-fixed indentation in the "Simple - Vehicles" building
+-Added a vehicle to the city simulation
+-added a serviced floor manager section to the Elevator Editor
+-Only report the dynamic mesh prepares when reporting is on, this fixes an issue where it would be filling up the console in verbose mode
+-Only run Prepare() once after a script is loading, and keep track of if an engine needs to run Prepare() again
+-Use "Windows" instead of "Console" subsystem when building for Windows (avrdude contribution)
+-migrated most of the Frontend code into separate libraries and folders
+-added City Simulation (City.bld)
+-Have cut options in Buildings section only run those commands if the engine is the root/primary.  This fixes an issue where ground textures would overlap when loading cities, when some buildings would turn off the landscape cut.
+-Only process Sky building parameters if the related engine is the root/primary engine, this fixes an issue where child sim engines would modify the sky parameters, affecting all engines.
+-Fixed a crash that would occur if a new client was added to a dynamic mesh
+-Added Moving Walkway Control window
+-Ogre shutdown fixes
+-Moved GUI system into separate component
+-Fixed RunEngines() and related functions to support multiple engines in the return.  This fixes an issue where sim engines wouldn't initiate a Start() when finished loading, causing the wrong buildings and wrong positioning to be applied after loading a set of buildings.
+-Fixed an issue where the elevator range was incorrect when interating over all elevators
+-Use hints in GetObject() to find references faster
+-Fixed an issue where runloops would cause runtime scripting (via the console) to fail
+-Enabled Rotate, SetRotation, Move, SetPosition, SetPositionY, and SetPositionRelative commands
+-added object moves and rotations to Simple - Custom Objects building
+-Allow a minimum of two frames for the LoadAnimated command
+-Added building power state checkbox to control panel
+-added power states for elevators, escalators, moving walkways, indicators, revolving doors, and elevator doors
+-Turn off elevator fan and music when power is switched off
+-Have elevator doors stop immediately (in normal running mode) when power is off
+-Print verbose FMOD error messages
+-Added GetMemoryUsage() texture manager function, and some initialization fixes
+-Store texture and material sizes in the related texture index
+-Add VM definition (Virtual Manager) to comments
+-Added support for FMOD reverbs, based on 3D location (introduces Reverb objects)
+-Made AddReverb commands for SBS, Floor and ElevatorCar objects
+-Added deletion support to Custom Objects and Reverbs
+-Add reverb to the Simple building's elevator
+-Updated documentation for reverb commands, and made some related fixes
+-Added code (currently disabled) to adjust the reverb wet value based on the listener's position to a sound object
+-Added documentation for rotation and move commands
+-Moved more engine management frontend code into VM
+-Added more verbose messages to VM
+-OpenXR positioning fixes
+-Only run OpenXR code when VR mode is enabled
+-Added support for different elevator malfunction types
+-Disable word wrapping in console
+-Have floor information use proper newlines
+-Update compiling doc for ogreprocedural
+-Automate the selection of the Ogre DirectX11 support library
+-Added support for escalator malfunctions
+-Have SBS engine enable/disable escalator malfunctions
+-added Escalator Control dialog window
+-size_t conversions (code cleanup)
+-Added a button to the Elevator Editor that selects the current elevator
+-Added ChimeOnArrival button and indicator in elevator editor
+-Added MusicAlwaysOn indicator in the elevator editor, and more editor window fixes
+-Rearranged some controls in the elevator editor
+-Added a malfunction button to the elevator editor
+-Added a Move button to the sound manager
+-added misc texture set (located in data/misc)
+-Fixed an issue where the LoadAnimated command would skip an animation frame
+-Fixed an issue where primitives wouldn't be added to the SBS parent if specified
+-added Custom Object framework
+-added CreateObject, ObjectVisible, FinishObject, ObjectWall, ObjectFloor, ObjectWallBox and ObjectWallBox2 script commands
+-Added "Simple - Custom Objects" building
+-Added documentation for new commands, and added the missing PrimVisible command
+-Use strafe keys while in freelook mode
+-Pass camera object as pointer to ClickedObject(), and return click result
+-Moved clicked object frontend code into VM
+-Try mouseclick in active engine, if result is false, then try other engines
+-In verbose mode, report position of mouse click if the click is outside the active engine
+-Add global position indicator to the control panel
+-Process a mouse click on the sim engine that has the closest hit
+-Report on mouseclick hits in verbose mode
+-Added ambient sound effects to Glass Tower building
+-(Glass Tower) Fix roof floor groupings
+-Added support for random elevator malfunctions
+-Add malfunctions option to control panel, and add elevator car fan toggle to elevator editor
+-Reset elevator queue on malfunction
+-Added support for creating global lights, and added the "SBS" object parameter to the guide
+-Added missing physics syntax for prim object
+-Enable physics on outdoor prims (Simple - Primitives building)
+-Added advanced PrimAttach syntax, which was missing from the build
+-For mesh objects, create an EnablePhysics() function to enable or disable physics separately
+-added EnablePhysics command
+-Added support for script runloops
+-Prevent sim engines from starting multiple times
+-Added "Simple - Runloop" building
+-Fixed a bug that was causing crashes on building reload
+-SetMaterial should use the default material if the specified material cannot be found
+-Enable and disable primitives with their parent objects
+-Added support for making prims always visible, with the PrimVisible command
+-added "Simple - Hydraulic" building
+-Initialize primitive mesh object
+-Add additional parameter count checks for PrimShape command
+-Added support for deleting primitives
+-Fixed an issue where the PrimShape command wouldn't work properly on elevator objects
+-Set default mesh padding to 0, this fixes an issue where the primitive's collider would be larger than the shape itself
+-Print a memory report on startup, currently for meshes
+-Renamed PrimShape command to CreatePrim, and removed the original CreatePrim command, to simplify commands
+-Delete prim objects in related destructors
+-Make sure cameras are removed from the sim engine on detach
+-initial OpenXR VR integration work
+-Added standard strafe movement keys
+-Make sure dialog windows are raised properly
+-Add an INI parameter to enable/disable VR mode
+-CMake build system fixes
+-Updated build documentation for Windows
+-Updated documentation to mention a crash issue when starting and how to fix
+-Move engine context handling code into new nanokernel component
+-added support for joysticks
+-Added AddElevatorIDSigns command (MultiMonorail)
+-Added joystick config file support
+-new CMake build system for Skyscraper
+-Have the keypad indicator display an error if a floor hasn't been selected due to different factors (MultiMonorail)
+-Fixed LimitQueue portion of Requested() function
+-removed ogre patch
+-removed old bullet patch
+-Prevent a floor request if the elevator is passing or departing the related floor
+-Fixed an issue where the Requested() function's LimitQueue code would prevent opposite-direction calls when the related queue was empty
+-Added Keypad support for Elevators (MultiMonorail)
+-Added "Simple - Keypad" building (MultiMonorail)
+-Added documentation for new features (MultiMonorail)
+-Fix AddKeypadIndicator sound parameter
+-Call buttons will now properly skip elevators that can't go beyond their range
+-Make sure the door-open directional message sounds don't play when MessageOnClose is true
+-Added more profiler probes, needed for the more recently-developed objects
+-Increased size of profiler window
+-Removed some performance probes that were causing slowdowns
+-Updated key dialog for change in elevator/shaft door behavior
+-Do not sound directional message if either NotifyEarly is set to -1 without NotifyLate or no chime has been played at all before (by MultiMonorail)
+-Changed order of directional message sound to play after the floor message sound (by MultiMonorail)
+-Added an elevator beep sound contributed by gothickitty93 (beep2.wav)
+-Allow changes to work with MessageOnMove (by MultiMonorail)
+-Fixed Call Cancel Action, it should cancel all calls and not just the last added call. (by MultiMonorail)
+-Opening an elevator door with interlocks enabled now emergency stops the elevator. (by MultiMonorail)
+-Call Cancel now works with Independent Service enabled. (by MultiMonorail)
+-Fixed minor typo in EarlyDownChimeSound (designguide.html) section. (by MultiMonorail)
+-Free text-to-texture memory when a script is finished loading, in addition to simulator start.  This fixes an issue where the raw font map textures (glyph maps) would stack up when loading many sim engines, wasting too much memory, before they were unloaded.
+-updated version to 2.0 (currently Beta)
+-expanded engine list in Engine Manager dialog
+-Fixed local/remote mismatches in the IntersectRay() function, this fixes the wall clicking feature
+-removed code block for GetGeometry() wall function
+-when checking for a closer elevator, don't process if the result is -1 (not found)
+-only show floor skip text if the floor is not served by any cars in the elevator
+-check wall and polygon objects before use, this fixes crashes that would happen when deleting objects (the crashes were introduced with the polygon code rework)
+-created the Simple City demo
+-Updated gitignore for vscode files
+-Fixed an issue where an empty sim engine on startup would prevent the control panel from running
+-Change interlock design in relation to doors, if elevator is moving when shaft doors are opened, stop elevator, don't require interlocks to be switched off for shaft doors to open.
+-Created new Inspection Mode actions for the up/down movement, to split it off from the manual elevator up/down movement, and updated guide
+-Remove friend definition (in SBS header) due to related functionality being moved into Utility object
+-Fixed an issue where concurrent engine loads that happened after the initial start, would cause rendering to stay running during the load.  Rendering being enabled properly now also works for the RenderOnStartup feature.
+-Fix conversion mismatch in GetWallExtents() function
+-Converted IntersectRay() function
+-Fixed a crash that involved trying to create colliders from empty walls (no polygons)
+-(IntersectSegment): Reverse function calls to match CS design
+-Fixed an issue with IntersectSegmentPlane()
+-Added the "Simple - Sliding Doors Demo" building from last year
+-Initialize direction vectors (fixes an uninitialized memory issue)
+-Fixed texture changing functions
+-Disable reprepare in ChangeTexture() function, was in a situation causing triangle corruption
+-Created a base Manager class for all manager objects
+-Moved the SBS utility functions into a new Utility object
+-Avoid double-initialize
+-Revert "Modify SBS Prepare functions to work from the runloop"
+-added support for For loops
+-added documentation for the new For loops
+-IsInCar() performance fix
+-Fix for elevator and counterweight ropes
+-Fix polygon count
+-Make sure mesh bounds is cleared when rebuilding in Prepare()
+-Delete unneeded DeletePolygons() call
+-Re-prepare meshes when walls are deleted
+-GetTriangleCount() shouldn't by default calculate total
+-Fixed an issue where dynamicmesh submeshes wouldn't be deleted/managed properly
+-Have Polygon object handle polygon counts
+-New polygon processing code
+-Moved SBS utility functions into their own file (utility.cpp)
+-Removed GetGeometry function
+-Keep track of combining status
+-Mention force combined
+-Removed support for temporary wall objects, which are now incompatible with the new polygon code
+-Removed support for temporary objects, which are no longer needed
+-Only create a single level of elevator car rails, instead of creating on all levels
+-Fix SBS Prepare console messages
+-Report processing of dynamic meshes in verbose mode
+-(DebugPanel) Don't work on floor object if the current floor doesn't exist yet
+-added the VerySimple building
+-Make it possible to disable the External mesh, this is used for performance testing
+-Reset progress marker status when including a file
+-Disable memory report
+-Updated msvc solution file for ARM64 target
+-Don't enable RTSS for Metal renderer
+-Fix arm64 build folder location
+-Upgrade OGRE from 14.1.2 to 14.2.6
+-Started work on a simulator memory usage report function, so far it calculates the total size of the geometry and index tables of meshes.
+-Report memory usage of enabled meshes
+-Add support for ARM Windows builds
+-Moved PolyMesh code into separate files
+-Prevent Caelum from initializing on DirectX 11, due to rendering issues
+-TruncateNumber() needs to be able to handle strings without decimal characters
+-Fix CopyTexture() on DirectX11
+-Add support for calculations of parameters before the equals sign, add more support for parameter calculations, and added the GetBeforeEquals() and GetRange() functions to simplify code.  CallButtonElevators now supports ranges properly, matching the script guide.
+-Began work on revamping script interpreter, use StartsWithNoCase() function instead of manual string checks
+-new Texture Manager dialog
+-Added support for texture dependency counts, the Texture Manager dialog will now unload textures when the related dependency count is 0
+-Report when unloading textures and materials
+-Export mipmaps to image, fixes image exporting/saving function
+-Relocated wxWidgets GUI classes into their own folder, to clean up the frontend source file layout
+-Updated email address
+-Added support for separate elevator music files for the up and down directions, via the MusicUp and MusicDown parameters
+-Added an always-on mode for elevator music, for a more realistic effect, via the MusicAlwaysOn parameter
+-Added MessageOnMove elevator car parameter, which if set to true, has the up/down directional messages play when the elevator starts moving instead of when the doors open fully
+-Fix include for Windows builds
+-Increased size of building selection dialog
+-Fixed a crash in the AddRails function; check for shaft object validity
+-Updated Linux build documentation
+-Updated version numbers for Windows builds
+-use snprintf instead of sprintf
+-year update
+-header indentation fixes
+-removed unneeded unix.cpp and unix.h files in SBS
+-enable camera rotation restriction by default
+-upgraded FMOD to latest version
+-upgrade Ogre to 14.1.2
+-upgrade wxWidgets to 3.2.4
+-Minimize use of Ogre namespace for code portability
+-Move script processor to separate library (Mac and Linux only)
+-Fix typo in string conversion line
+-Fixed FMOD declarations
+-Fixed a build failure on Mac due to an incorrect namespace change
+-Skip OGRE shutdown on Mac due to crash issues
+-removed fmod dependency from SBS library linkage
+-Updated image files, gothickitty93 contributed ImageOptim-optimized image files
+-Found that the DoorComponent code had the front direction specified as "forward", I added "front" in addition to that, so both method names will work now.
+-Added Rotate, SetRotation, Move, SetPosition, SetPositionY, and SetPositionRelative commands (disabled in this build)
+-Have GetObject() parse object grandparent names
+-Updated crash report email
+-Enable detachment error messages in verbose mode only
+-Fixed CallStation section description
+-CallStation section should not have code for processing outside of it's section
+-Use Ogre 14.0.1 (upgrading media)
+-Fixed an issue with the pyramid top of the Spire building, the issue was the result of a bugfix in Alpha 10 that fixed the third voffset parameter of the AddTriangleWall command
+-Moved core elevator door code into DoorSystem files
+-Renamed DoorObject to DoorComponent
+-Reworked the door system code to work with standard doors as parents
+-Migrated rotation code into door system
+-Created AddDoorComponent and FinishDoor functions in Door code
+-Moved basic door code into CreateDoor function
+-Added rotate parameter to Door object
+-Updated SBS and script processor functions with new door creation syntax
+-Made AddSlidingDoor command
+-Added side_texture parameter to Door object
+-Added name parameter to Door object frontends
+-Added option for locking sliding doors
+-Added AddStdDoor command
+-Added close_speed, side_tw, and side_th parameters to new door commands
+-Added action support for Doors and RevolvingDoors, and added a name parameter to Revolving Doors
+-Added Run parameter to RevolvingDoor, to enable motion on startup
+-Added CreateCustomDoor, CustomDoorComponent, and FinishDoor commands
+-Added MoveDoor command
+-Added support for using the DoorManager object as a parent for door creation functions
+-Updated .gitignore (tlr08-dev contribution)
+-Fixed gitrev script (tlr08-dev contribution)
+-Add include for gitrev.h to msvc project (tlr08-dev contribution)
+-Added mention of running GitRev script for Windows builds
+-Added support for autoclose timers on doors, and added a SetAutoClose command
+-Added an AutoClose action for doors
+-Report fonts being loaded, along with the TTF size and texture resource size.  Also, report general texture resource sizes in verbose mode
+-Made additional texture size reports, and cleanups
+-Ogre rebuild and upgrade to 13.6.4
+-On Windows, due to hangs, don't allow multiple threads to write to the console
+-Fixed an issue where single directional indicators wouldn't turn off if activated while another direction was activated
+-Due to texture problems with small polygons, ComputeTextureSpace() should use the standard matrix inversion instead of the custom one, with a more fine-grained tolerance value
+-Make Console::Write thread-safe using a mutex, this fixes console issues with Ogre running with a multithreaded WorkQueue
+-Updated build doc to build Ogre with multithreading turned on (use the defalt option, instead of switching it off)
+-Upgraded FMOD sound system
+-(for Linux/Mac) build with C++17
+-Report hardware concurrency on startup (hardware threads)
+-additional mainscreen pointer checks
+-Remade vertical door movement fix to match the horizontal door movement code
+-pause simulator during wxYield() call, this prevents sim engine calls from being made prematurely
+-disable debug panel during simulator pause
+-bring back original door movement code (revert change from last build)
+-Fix for QueueResets feature, code should check for a queue count of 1 or less, not just 0
+-If a door component is finished while another is still moving, and the direction is changed, reprocess door movement code.  This fixes a known freight elevator bug where outer doors wouldn't reopen if finished closing, while inner doors were closing and were reopened.
+-Added GitRev system for reporting the Git revision number in code
+-Integrate GitRev command into CMake build script
+-Report Skyscraper version on startup
+-Added verbose initialization reporting
+-Use a blank cursor when in Freelook mode under Wayland, this fixes an issue where Freelook would be broken on Wayland
+-Revert "Fixes for vertical door movement", due to it breaking some vertical doors
+-Use precompiled headers to speed up build
+-Report OS version on startup
+-Revert ContentScaleFactor value to 1.0 on MacOS versions earlier than 10.15
+-Don't process "stuck key" fix on Mac systems
+-Configure Skyscraper's binary to use the Bundle framework
+-Automatically copy OgreBullet and SBS into bundle on Mac
+-Add a wxYield() call before the sleep() call, to print the SBS banner properly on Mac and Linux
+-Report on initialization complete
+-Revert dmg compression to default on Mac builds (was previously bzip)
+-Make sure the associated controller serves the floor before creating call buttons
+-When clicking on a call station, properly report the call station and panel mesh instead of just the button panel
+-Write screenshots and skyscraper.log files to data path instead of main folder (resources folder on Mac)
+-On Mac, copy skyscraper.ini and keyboard.ini to Application Support folder if needed
+-use data path copies of skyscraper.ini and keyboard.ini files instead of main ones
+-Try loading the intro sound file from the data path first instead of just the main location
+-Add startingfloor check to floor indicator, to prevent a crash
+-Added a small amount of interfloorheight to some of the Underground building floors, to fix shaft door opening issues
+-Don't use direction characters in sound filenames
+-Make direction parameter in Button Panels lowercase, this fixes issues where the panel wouldn't be created if capital letters were used
+-Allow calling elevator from the same floor in the Elevator Editor
+-(Simple - Callstation) Don't create both call button directions on end floors
+-Mac version was rebuilt for the case-insensitive option
+-Fixed star and minus keypad buttons
+-Create Skyscraper folder under Application Support on startup if needed
+-Fixed callstation number issue that was causing glitches on some call stations
+-Fixed an issue where floor numbers with leading 0's would not get matched up with the correct floor IDs
+-Allow elevator to be assigned to the same destination multiple times
+-(Triton Center) - Fixed service elevator IDs
+-Fixed crosshairs freelook cursor on Windows
+-Keypad floor entries should test the NumberID floor parameter first, then the Floor ID, then the raw floor number, in that order
+-Special character error check should be before the UpdateIndicator() call to prevent texture errors
+-Remade xteal's input cap code, it should reject numbers that are greater than the length of the controller's bottom or top floor
+-Added TimerDelay parameter to Call Stations, to configure the key input timer delay value
+-Dispatch controller should report on route additions and removals
+-Don't report Caelum singleton errors
+-Store multiple calls instead of just one, and store call direction with it, this fixes issues with multiple hall call arrivals not being processed correctly
+-Have elevator delete active route after FinishMove(), which should fix arrival notification issues.  Also removed separate route delete in same-floor re-opening code
+-ask the controller about active calls to determine call direction
+-Have VerifyFile work with multiple resource path locations
+-Added GetFilesystemPath() function, which allows currently allows sounds to be loaded from other filesystem locations
+-Fix script processor file loader so that it can load from other filesystem locations
+-On Mac, load the Application Support folder in addition to the Resources folder
+-Have building file selector window support buildings in multiple folder source locations
+-Do proper error handling in DrawBackground() and DrawImage() functions, and exit app if there's an error
+-Simplify call status code, rename functions to GetCallStatus() and return both up and down call status like the original GetCallButtonStatus() function
+-migrated call button functionality (mainly lights) over to the new CallStation interface
+-simplify call station name
+-(Simple DD building) The Fire mode switches should use the CallStation instead of Elevator for operation
+-Updated documentation for callstation actions
+-Report and reprocess route if active elevator becomes unavailable during dispatch
+-Removed Recheck code from FindClosestElevator() function
+-added support for standard mode in dispatch controllers
+-Added standard mode Up and Down actions to Call Station
+-Added a callstation test building
+-Added ID parameter to elevator editor
+-Added NumberID floor parameter, used as the floor ID number mainly for Destination Dispatch keypads
+-Added InvalidInput callstation parameter, used to disallow certain floor inputs
+-added the Reprocess parameter to controllers, which determines if the controller should reprocess routes if an elevator becomes unavailable or if it should drop the routes
+-Make Reprocess only affect Destination Dispatch mode.  For standard mode, always reprocess.
+-xteal contribued code to automate the car direction indicators (Indicate whether the allocated car is opposite (#28))
+-Removed ElevatorsLeft and ElevatorsRight parameters (due to xteal contribution)
+-Added code to find Application Support folder on Mac
+-On Mac, use Application Support folder if a "Skyscraper" subfolder exists, instead of Application's resources folder
+-cat1554 contributed a change to the script guide, "AddTextRange example said "AddText", corrected to "AddTextRange"
+-Ensure subfolders exist on Mac when using Application Support folder
+-Handle elevator assignments in standard mode
+-Call button fix, the new DD exception to AvailableForCall() caused problems with multiple hall call buttons pressed
+-Reworked dispatch controller code so that it applies destination dispatch on a per-route basis instead of globally, this should allow hybrid configurations
+-Have call buttons use Dispatch Controllers
+-Call buttons should report and exit calls if no controller is found
+-GetElevator should exit if no elevators have been specified
+-Made a CheckArrivals() function for the arrival code, and moved it from the Process() function
+-integrated elevator recheck code from callbutton object to dispatch controller
+-Allow elevators to be on multiple controllers, this fixes callbutton breakage in some buildings.
+-Added support for assigning multiple controllers to an elevator
+-xteal contribution: "Cap inputs and do more error checking (#30)"
+-Enter or exit freelook mode using mouse scroll wheel
+-SetCursor fix for Mac, the old function wasn't properly setting the cross cursor for Freelook mode on Mac
+-For the "??" and "XX" call station indicator errors, expand out the names for the sound loading, so that "sound*.wav" loads "soundinvalid.wav" or "sounderror.wav" for those.  This is to mainly get around question marks being invalid in filenames on Windows.
+-Added code to work with the Metal renderer on Mac, if enabled (even though it doesn't really work yet)
+-Fixed the Mac main window hang issue, and made the top-level rendering option default
+-Reset turn and strafe values when switching in and out of freelook, to prevent movement from getting stuck
 -(xteal/NoNoTeal) added a configurable People parameter to the INI file
 -When AvailableForCall() does the final check on the queue direction, it should consider elevators on the same floor with queues empty to be available, maybe this situation should be moved into the IsIdle() function
 -Fixed an issue where the check in GetArrivalDirection() would check the same floor, in this case, use the queue direction if still active
@@ -37,7 +732,7 @@ Version 2.0
 -Added an INI file setting to enable or disable the frame statistics on startup
 -Render window now resizes properly on Linux when the scaling factor is not 100%
 
-Version 1.11.2 (2.0 Alpha 11 Update 2)
+Version 1.11.2 (2.0 Alpha 11 Update 2) - April 13, 2023
 -------------------------
 -don't process a key down event if the key is actually up, this fixes a "stuck key" issue on some systems
 -updated starting position for Dellerton Plaza building
@@ -45,7 +740,7 @@ Version 1.11.2 (2.0 Alpha 11 Update 2)
 -made Level errors non-fatal
 -fixed a script error in the Skyscrapersim Housing Estate building
 
-Version 1.11.1 (2.0 Alpha 11 Update 1)
+Version 1.11.1 (2.0 Alpha 11 Update 1) - March 19, 2023
 -------------------------
 -Object selection fixes for the People Manager dialog
 -Updated guide to reflect collider filename change
@@ -54,7 +749,7 @@ Version 1.11.1 (2.0 Alpha 11 Update 1)
 -Fixed a crash when deleting elevator objects
 -Render window now resizes properly on Linux when the scaling factor is not 100%
 
-Version 1.11 (2.0 Alpha 11)
+Version 1.11 (2.0 Alpha 11) - March 10, 2023
 -------------------------
 -fix FMOD version number reporting
 -Only play floor sound during an elevator's standard arrival notification
@@ -228,12 +923,12 @@ engines on startup
 -added support for call button destination floors engines on startup (feature currently disabled)
 -Integrated all engine reporting into ObjectBase class
 
-Version 1.10.6 (2.0 Alpha 10 - Update 6)
+Version 1.10.6 (2.0 Alpha 10 - Update 6) - February 1, 2017
 -------------------------
 -removed extra elevator enable
 -elevators need to be enabled when camera attaches
 
-Version 1.10.5 (2.0 Alpha 10 - Update 5)
+Version 1.10.5 (2.0 Alpha 10 - Update 5) - February 1, 2017
 -------------------------
 -properly position escalator and walkway sounds
 -use separate meshes for escalator and moving walkway steps
@@ -241,7 +936,7 @@ Version 1.10.5 (2.0 Alpha 10 - Update 5)
 -only move steps if near escalator or moving walkway
 -return fix for Gotofloor action
 
-Version 1.10.4 (2.0 Alpha 10 - Update 4)
+Version 1.10.4 (2.0 Alpha 10 - Update 4) - January 7, 2017
 -------------------------
 -camera start position should not rely on a starting floor
 -added Skylab building set
@@ -251,7 +946,7 @@ Version 1.10.4 (2.0 Alpha 10 - Update 4)
 -added teleporter action support
 -fixed issue where a call panel would call in both directions if only a single down control was available
 
-Version 1.10.3 (2.0 Alpha 10 - Update 3)
+Version 1.10.3 (2.0 Alpha 10 - Update 3) - January 5, 2017
 -------------------------
 -step movement states should be reset when switching off escalator/moving
 walkway
@@ -260,11 +955,11 @@ walkway
 -steps should reset values on startup
 
 
-Version 1.10.2 (2.0 Alpha 10 - Update 2)
+Version 1.10.2 (2.0 Alpha 10 - Update 2) - December 31, 2016
 -------------------------
 -fixes for escalator and moving walkway motion
 
-Version 1.10.1 (2.0 Alpha 10 - Update 1)
+Version 1.10.1 (2.0 Alpha 10 - Update 1) - December 28, 2016
 -------------------------
 -added support for moving walkways
 -added support for escalators
@@ -273,7 +968,7 @@ Version 1.10.1 (2.0 Alpha 10 - Update 1)
 -integrated Enabled() function into Object
 -fixes for vertical elevator door movement
 
-Version 1.10 (2.0 Alpha 10)
+Version 1.10 (2.0 Alpha 10) - December 19, 2016
 -------------------------
 -added support for revolving doors
 -when in fire service phase 2 mode, only open phase 2's car doors on recall floor, not oth
@@ -779,7 +1474,7 @@ er cars
 -elevator and floor creation should return created object
 -don't leave top and bottom levels of shafts on - this doesn't appear to be needed anymore, and should increase rendering efficiency
 
-Version 1.9.2 (2.0 Alpha 9 - Update 2)
+Version 1.9.2 (2.0 Alpha 9 - Update 2) - April 16, 2015
 -------------------------
 -fix TriangleType element names
 -turn off directional indicators if elevator is switching into a service mode, or is being switched off
@@ -829,7 +1524,7 @@ Version 1.9.2 (2.0 Alpha 9 - Update 2)
 -added references to missing elevator action names
 -in CreateWallBox function, don't try to create side walls if there's no thickness
 
-Version 1.9.1 (2.0 Alpha 9 - Update 1)
+Version 1.9.1 (2.0 Alpha 9 - Update 1) - March 31, 2015
 -------------------------
 -play elevator door open/close and message sounds on reversal
 -change to Go function in rev 3171 broke FloorHold feature; relocated code to fix
@@ -902,7 +1597,7 @@ Version 1.9.1 (2.0 Alpha 9 - Update 1)
 -fixed an issue where floors listed in the ShowFloors or ShowOutside lists would be switched off when stopping and continuing at a floor
 -fixed a crash that would occur if the Move button was pressed in the Object Manager if no selection was made
 
-Version 1.9 (2.0 Alpha 9)
+Version 1.9 (2.0 Alpha 9) - March 4, 2015
 -------------------------
 -added new Underground building
 -cleanups in relation to ShowFloors arrays
@@ -1251,7 +1946,7 @@ Version 1.9 (2.0 Alpha 9)
 -fixed creation of collider body which was causing crashes when loading collider meshes
 -added support for skipping calculations on model filenames - fixes an infinite loop
 
-Version 1.8 (2.0 Alpha 8)
+Version 1.8 (2.0 Alpha 8) - March 1, 2013
 -------------------------
 -elevators now report as available if on the same floor as the call and not moving, regardless of the door state - fixes an issue where pressing call buttons more than once would open additional elevators
 -fixed TruncateNumber function, to return correct floating point precision without exponent
@@ -1389,7 +2084,7 @@ Version 1.8 (2.0 Alpha 8)
 -new horizon distance setting
 -added render distance limits for small objects
 
-Version 1.7 (2.0 Alpha 7)
+Version 1.7 (2.0 Alpha 7) - September 19, 2010
 -------------------------
 -added braille fonts
 -added support for elevator panel switches and knobs
@@ -1439,7 +2134,7 @@ Version 1.7 (2.0 Alpha 7)
 -added sign textures
 -added nudge mode
 
-Version 1.6 (2.0 Alpha 6)
+Version 1.6 (2.0 Alpha 6) - March 11, 2010
 -------------------------
 -added current floor ID to the control panel's main and camera control windows
 -added support for forcing autosizing on or off on a per-texture basis
@@ -1497,7 +2192,7 @@ Version 1.6 (2.0 Alpha 6)
 -ACP mode now works in conjunction with peak modes
 -added experimental random elevator traffic
 
-Version 1.5 (2.0 Alpha 5)
+Version 1.5 (2.0 Alpha 5) - October 24, 2009
 -------------------------
 -clicking on shaft doors and elevator doors while holding down shift now causes them to manually open/close
 -manually opening shaft doors causes the related floor to turn on if user is
@@ -1547,12 +2242,12 @@ positives switched
 -added hotel rooms to the Triton Center
 -added control reference (for keyboard commands, etc) to the control panel
 
-Version 1.4.1 (2.0 Alpha 4.1)
+Version 1.4.1 (2.0 Alpha 4.1) - June 20, 2009
 -------------------------
 -Linux build fix
 -fixed a shaft door regression
 
-Version 1.4 (2.0 Alpha 4)
+Version 1.4 (2.0 Alpha 4) - June 19, 2009
 -------------------------
 -added syntax checking and error notification to the script processor
 -fixed an old bug that could crash the sim if the floor ID matched a non-existent texture
@@ -1585,7 +2280,7 @@ are now stationed at the top
 -added wireframe mode and screenshot keys
 -and lots more
 
-Version 1.3 (2.0 Alpha 3)
+Version 1.3 (2.0 Alpha 3) - March 29, 2009
 -------------------------
 -added door framework
 -fixed a range bug that caused ranges to fail if the first value was negative
@@ -1611,12 +2306,12 @@ Version 1.3 (2.0 Alpha 3)
 -added keys w, a, s and d for movement
 -input is now only processed if main window is selected
 
-Version 1.2 (2.0 Alpha 2) - Jan 10, 2009
+Version 1.2 (2.0 Alpha 2) - January 10, 2009
 -------------------------
 -added missing DLL for CS, and fixed installer
 -added AddGround command, for creating tile grid-based grounds (fixes ground interference issue in 1.1)
 
-Version 1.1 (2.0 Alpha 1) - Jan 6, 2009
+Version 1.1 (2.0 Alpha 1) - January 6, 2009
 -------------------------
 -complete rewrite from scratch, using C++ and the Crystal Space graphics engine
 -numerous features added that were not found in the 1.0 release

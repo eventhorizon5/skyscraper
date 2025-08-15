@@ -28,6 +28,7 @@
 #include "floor.h"
 #include "callstation.h"
 #include "profiler.h"
+#include "utility.h"
 #include "controller.h"
 
 namespace SBS {
@@ -61,19 +62,21 @@ DispatchController::~DispatchController()
 		sbs->RemoveController(this);
 }
 
-void DispatchController::Loop()
+bool DispatchController::Loop()
 {
 	//this function runs for every registered dispatch controller via timer callback
 
 	//only run if power is enabled
 	if (sbs->GetPower() == false)
-		return;
+		return true;
 
 	//process pending requests
 	ProcessRoutes();
 
 	//check arrivals
 	CheckArrivals();
+
+	return true;
 }
 
 void DispatchController::CheckArrivals()
@@ -173,7 +176,7 @@ void DispatchController::CheckArrivals()
 	}
 }
 
-void DispatchController::RemoveRoute(Route &route)
+void DispatchController::RemoveRoute(const Route &route)
 {
 	//remove a destination dispatch route
 
@@ -329,8 +332,7 @@ bool DispatchController::CallElevator(CallStation *station, bool direction)
 	//make sure this controller has elevators that serve the specified floor
 	if (IsServicedFloor(floor) == false)
 	{
-		if (station)
-			station->Error(1);
+		station->Error(1);
 		return ReportError("No elevators found for floor " + ToString(floor));
 	}
 
@@ -347,8 +349,7 @@ bool DispatchController::CallElevator(CallStation *station, bool direction)
 	}
 	if (isvalid == false)
 	{
-		if (station)
-			station->Error();
+		station->Error();
 		return ReportError("No valid elevators found");
 	}
 
@@ -652,6 +653,31 @@ bool DispatchController::RemoveElevator(int elevator)
 		}
 	}
 	return false;
+}
+
+bool DispatchController::RemoveElevatorIndex(int index)
+{
+	//remove an elevator from this controller, by index
+
+	//only run if power is enabled
+	if (sbs->GetPower() == false)
+		return false;
+
+	if (index < 0 || index >= Elevators.size())
+		return false;
+
+	int elev_num = Elevators[index].number;
+	Report("Elevator " + ToString(elev_num) + " removed from dispatch controller " + ToString(Number));
+
+	if (sbs->GetElevator(elev_num))
+		sbs->GetElevator(elev_num)->RemoveController(Number);
+
+	Elevators.erase(Elevators.begin() + index);
+
+	//process floor range
+	GetFloorRange();
+
+	return true;
 }
 
 bool DispatchController::ServicesElevator(int elevator)
@@ -1064,14 +1090,7 @@ void DispatchController::RegisterCallStation(CallStation *station)
 	if (sbs->GetPower() == false)
 		return;
 
-	//exit if already registered
-	for (size_t i = 0; i < CallStations.size(); i++)
-	{
-		if (CallStations[i] == station)
-			return;
-	}
-
-	CallStations.emplace_back(station);
+	AddArrayElement(CallStations, station);
 }
 
 void DispatchController::UnregisterCallStation(CallStation *station)
@@ -1082,14 +1101,7 @@ void DispatchController::UnregisterCallStation(CallStation *station)
 	if (sbs->GetPower() == false)
 		return;
 
-	for (size_t i = 0; i < CallStations.size(); i++)
-	{
-		if (CallStations[i] == station)
-		{
-			CallStations.erase(CallStations.begin() + i);
-			return;
-		}
-	}
+	RemoveArrayElement(CallStations, station);
 }
 
 std::vector<CallStation*> DispatchController::GetCallStations(int floor)
@@ -1106,6 +1118,23 @@ std::vector<CallStation*> DispatchController::GetCallStations(int floor)
 		}
 	}
 	return stationlist;
+}
+
+int DispatchController::GetCallStationCount()
+{
+	//returns number of registered call stations
+
+	return (int)CallStations.size();
+}
+
+CallStation* DispatchController::GetCallStation(int number)
+{
+	//returns a specific registered call station
+
+	if (number < 0 || number > CallStations.size() - 1)
+		return 0;
+
+	return CallStations[number];
 }
 
 int DispatchController::GetElevatorArrived(int starting_floor, int destination_floor)
@@ -1346,6 +1375,13 @@ int DispatchController::GetElevator(int index)
 	return Elevators[index].number;
 }
 
+int DispatchController::GetElevatorCount()
+{
+	//return the number of elevators handled by this controller
+
+	return (int)Elevators.size();
+}
+
 bool DispatchController::SameElevators(const std::vector<int> &elevators)
 {
 	//return true if the list of elevators matches this controller's elevators
@@ -1420,6 +1456,33 @@ bool DispatchController::ServesFloor(int floor)
 	}
 
 	return false;
+}
+
+int DispatchController::GetRouteCount()
+{
+	//return number of routes
+
+	return (int)Routes.size();
+}
+
+bool DispatchController::GetRoute(int number, DispatchController::Route &route)
+{
+	//get details on a specific route
+
+	route.assigned_elevator = 0;
+	route.destination = false;
+	route.destination_floor = 0;
+	route.direction = 0;
+	route.processed = false;
+	route.requests = 0;
+	route.starting_floor = 0;
+	route.station = 0;
+
+	if (number < 0 || number >= Routes.size())
+		return false;
+
+	route = Routes[number];
+	return true;
 }
 
 }

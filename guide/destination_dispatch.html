@@ -1,0 +1,299 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>Coding for Destination Dispatch</title>
+  </head>
+  <body>
+    <div align="center"><font size="+1"><font size="+2"><b>Coding for
+            Destination Dispatch</b></font><b><br>
+        </b></font><br>
+      This guide explains how to convert existing standard elevators
+      over to the new Destination Dispatch system.&nbsp; It's not that
+      hard to switch existing call buttons over to destination dispatch
+      call stations.<br>
+      <br>
+      <hr size="2" width="100%">
+      <div class="inner" id="msg_4211">
+        <meta http-equiv="content-type" content="text/html;
+          charset=UTF-8">
+        Steps to convert an existing building to Destination Dispatch:<br>
+        <ul class="bbc_list" style="list-style-type: decimal;">
+          <li>
+            <div align="left">Add new textures</div>
+          </li>
+          <li>
+            <div align="left">Add elevator ID parameters</div>
+          </li>
+          <li>
+            <div align="left">Create Dispatch Controllers</div>
+          </li>
+          <li>
+            <div align="left">Comment out Call Buttons</div>
+          </li>
+          <li>
+            <div align="left">Create Call Stations (either with a floor
+              panel, or keypad) in place of Call Buttons</div>
+          </li>
+          <li>
+            <div align="left">Add letter indicators above each elevator
+              (this is still under development, but you can use
+              directional indicators for now)</div>
+          </li>
+        </ul>
+        <hr size="2" width="100%">
+        <div class="inner" id="msg_4211">
+          <meta http-equiv="content-type" content="text/html;
+            charset=UTF-8">
+          To switch Call Buttons to regular DD Call Stations (with floor
+          numbers)<br>
+          <br>
+          First, add the indicator textures.&nbsp; You'll need to create
+          letter textures for each elevator ID that you're using,&nbsp;
+          In the Simple building, only "A" is used.&nbsp; The textures
+          that need to be created are "A left", "A right", "back left A"
+          and "back right A", finally "XX" is the error texture:<br>
+          <br>
+        </div>
+        <table width="817" height="87" cellspacing="2" cellpadding="2"
+          border="1">
+          <tbody>
+            <tr>
+              <td valign="top" bgcolor="#e0e0e0"><code class="bbc_code">
+                  <meta http-equiv="content-type" content="text/html;
+                    charset=UTF-8">
+                  <pre style="margin: 0; padding: 0;"><code class="bbc_code">AddText Black, Button&lt;A, nimbus_sans.ttf, 47, &lt;A, -1, -1, -1, -1, center, center, 255, 255, 255<br>AddText Black, ButtonA&gt;, nimbus_sans.ttf, 47, A&gt;, -1, -1, -1, -1, center, center, 255, 255, 255<br>AddText Black, Button[]A, nimbus_sans.ttf, 47, []A, -1, -1, -1, -1, center, center, 255, 255, 255<br>AddText Black, ButtonA[], nimbus_sans.ttf, 47, A[], -1, -1, -1, -1, center, center, 255, 255, 255<br>AddText Black, ButtonXX, nimbus_sans.ttf, 47, XX, -1, -1, -1, -1, center, center, 255, 255, 255</code></pre>
+                </code></td>
+            </tr>
+          </tbody>
+        </table>
+        <p>Next, prepare your elevator by adding an ID parameter to it,
+          for identification by the controller.&nbsp; Put this into your
+          Elevator section for your first elevator:<br>
+        </p>
+        <table width="513" height="27" cellspacing="2" cellpadding="2"
+          border="1">
+          <tbody>
+            <tr>
+              <td valign="top" bgcolor="#e0e0e0"><code class="bbc_code">
+                  <meta http-equiv="content-type" content="text/html;
+                    charset=UTF-8">
+                </code>
+                <div align="left"><code class="bbc_code">
+                    <pre style="margin: 0; padding: 0;"><code class="bbc_code">ID = A</code></pre>
+                  </code></div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="inner" id="msg_4211">
+          <meta http-equiv="content-type" content="text/html;
+            charset=UTF-8">
+          <br>
+          Other elevators should be B, C, D, etc.<br>
+          <br>
+          After the elevator is created, you'll need to make a Dispatch
+          Controller.&nbsp; This replaces the <i>CallButtonElevators</i>
+          command.&nbsp; This is how it appears in the Simple building
+          DD demo.<br>
+          <br>
+          <table width="723" height="147" cellspacing="2"
+            cellpadding="2" border="1">
+            <tbody>
+              <tr>
+                <td valign="top" bgcolor="#e0e0e0"><code
+                    class="bbc_code">
+                    <meta http-equiv="content-type" content="text/html;
+                      charset=UTF-8">
+                    <pre style="margin: 0; padding: 0;"><code class="bbc_code">#Create a new Dispatch Controller<br>&lt;Controller 1&gt;<br>&nbsp; &nbsp; Name = Dispatch Controller %controller%<br>&nbsp; &nbsp; DestinationDispatch = true #turn on Destination Dispatch mode<br>&nbsp; &nbsp; Hybrid = true #use hybrid mode (allow both regular and destination routes)<br>&nbsp; &nbsp; Range = 5<br>&nbsp; &nbsp; MaxPassengers = 10<br>&nbsp; &nbsp; Elevators = 1&nbsp; #assign elevator 1 to controller 1<br>&lt;EndController&gt;</code></pre>
+                  </code></td>
+              </tr>
+            </tbody>
+          </table>
+          <br>
+          <br>
+          <div class="inner" id="msg_4211">
+            <meta http-equiv="content-type" content="text/html;
+              charset=UTF-8">
+            Once the controller is created, find your Call Button
+            code.&nbsp; This is what the Simple building has:<br>
+            <br>
+            <table width="1146" height="72" cellspacing="2"
+              cellpadding="2" border="1">
+              <tbody>
+                <tr>
+                  <td valign="top" bgcolor="#e0e0e0"><code
+                      class="bbc_code">
+                      <meta http-equiv="content-type"
+                        content="text/html; charset=UTF-8">
+                      <pre style="margin: 0; padding: 0;"><code class="bbc_code">&lt;Floors 0 to 9&gt;<br>&nbsp; &nbsp; CallButtonElevators = 1<br>&nbsp; &nbsp; CreateCallButtons , ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, 3, 6 - 4.125 - 0.33 - 0.1, 4, front, 0.5, 1, true, 0, 0<br>&lt;EndFloors&gt;</code></pre>
+                    </code></td>
+                </tr>
+              </tbody>
+            </table>
+            <br>
+            <br>
+            <div class="inner" id="msg_4211">
+              <meta http-equiv="content-type" content="text/html;
+                charset=UTF-8">
+              Comment out the "CallButtonElevators" and
+              "CreateCallButtons" commands.&nbsp; You can delete them
+              later, but there's a couple things you need from them.<br>
+              Put the contents of the "CallButtonElevators" into the
+              "Elevators =" list of Controller 1 (shown above).&nbsp; So
+              if you have 3 elevators, Controller 1 should have a line
+              like this:<code class="bbc_code"><br>
+                <br>
+              </code>
+              <table width="243" height="27" cellspacing="2"
+                cellpadding="2" border="1">
+                <tbody>
+                  <tr>
+                    <td valign="top" bgcolor="#e0e0e0"><code
+                        class="bbc_code">Elevators = 1 - 3</code></td>
+                  </tr>
+                </tbody>
+              </table>
+              <code class="bbc_code"><br>
+              </code>That finishes your controller.&nbsp; For the
+              CreateCallButtons command, keep in mind the positioning
+              information, and maybe the background texture
+              (ElevExtPanels).<br>
+              <br>
+              This next part is what the Simple building has to create
+              the call station.&nbsp; Make a button panel for the floors
+              of your building similar to the inside of an
+              elevator.&nbsp; The only real unique change is that you
+              need to set the old call button's position in the
+              SetPosition command, so take it from the call button and
+              put it in there.&nbsp; Note that in this example, the
+              position in CreateCallButtons above and SetPosition below
+              are the same.&nbsp; This code also assigns Call Station 1
+              to Controller 1.<br>
+              <br>
+              <table width="773" height="387" cellspacing="2"
+                cellpadding="2" border="1">
+                <tbody>
+                  <tr>
+                    <td valign="top" bgcolor="#e0e0e0"><code
+                        class="bbc_code">
+                        <meta http-equiv="content-type"
+                          content="text/html; charset=UTF-8">
+                      </code><code class="bbc_code">
+                        <meta http-equiv="content-type"
+                          content="text/html; charset=UTF-8">
+                        <pre style="margin: 0; padding: 0;"><code class="bbc_code">SetAutoSize = false, false<br>&lt;Floors 0 to 9&gt;<br>&nbsp; &nbsp; &lt;CallStation 1&gt;<br>&nbsp; &nbsp; &nbsp; &nbsp; Name = Call Station %callstation%<br>&nbsp; &nbsp; &nbsp; &nbsp; Controller = 1&nbsp; #assign to Dispatch Controller 1<br><br>&nbsp; &nbsp; &nbsp; &nbsp; #create a button panel and controls<br>&nbsp; &nbsp; &nbsp; &nbsp; CreatePanel ElevExtPanels, 6, 5, front, 0.15, 0.15, 0.3, 0.45, 0, 0<br>&nbsp; &nbsp; &nbsp; &nbsp; AddControl switch.wav, 2, 2, 0, 0, 0, 0, 1, 7, Button8<br>&nbsp; &nbsp; &nbsp; &nbsp; AddControl switch.wav, 2, 3, 0, 0, 0, 0, 1, 8, Button9<br>&nbsp; &nbsp; &nbsp; &nbsp; AddControl switch.wav, 2, 4, 0, 0, 0, 0, 1, 9, Button10<br>&nbsp; &nbsp; &nbsp; &nbsp; AddControl switch.wav, 3, 2, 0, 0, 0, 0, 1, 4, Button5<br>&nbsp; &nbsp; &nbsp; &nbsp; AddControl switch.wav, 3, 3, 0, 0, 0, 0, 1, 5, Button6<br>&nbsp; &nbsp; &nbsp; &nbsp; AddControl switch.wav, 3, 4, 0, 0, 0, 0, 1, 6, Button7<br>&nbsp; &nbsp; &nbsp; &nbsp; AddControl switch.wav, 4, 2, 0, 0, 0, 0, 1, 1, Button2<br>&nbsp; &nbsp; &nbsp; &nbsp; AddControl switch.wav, 4, 3, 0, 0, 0, 0, 1, 2, Button3<br>&nbsp; &nbsp; &nbsp; &nbsp; AddControl switch.wav, 4, 4, 0, 0, 0, 0, 1, 3, Button4<br>&nbsp; &nbsp; &nbsp; &nbsp; AddControl switch.wav, 5, 3, 0, 0, 0, 0, 1, 0, Button1<br><br>&nbsp; &nbsp; &nbsp; &nbsp; #set position of call station<br>&nbsp; &nbsp; &nbsp; &nbsp; SetPosition 3, 4, 6 - 4.125 - 0.33 - 0.1<br><br>&nbsp; &nbsp; &nbsp; &nbsp; AddIndicator mechchime9.wav, Button, Black, front, 0, 0, 0.5, 0.5, 1, 5<br>&nbsp; &nbsp; &lt;EndCallStation&gt;<br>&lt;EndFloors&gt;</code></pre>
+                      </code></td>
+                  </tr>
+                </tbody>
+              </table>
+              <br>
+              Once that's finished, your call station should be working!<br>
+              <br>
+              <img src="destination_floors.jpg" alt="Destination Floors"
+                width="1024" height="768"><br>
+              <br>
+              <hr size="2" width="100%"><br>
+              <div class="inner" id="msg_4211">
+                <meta http-equiv="content-type" content="text/html;
+                  charset=UTF-8">
+                To create keypads, use the same steps as above, but in
+                your Textures section, add the Keypad textures.&nbsp;
+                This is what the Simple building has, textures for 0-99,
+                A (all directions), XX, ?? (invalid floor), minus and
+                star.<br>
+                <br>
+                <table width="1087" height="177" cellspacing="2"
+                  cellpadding="2" border="1">
+                  <tbody>
+                    <tr>
+                      <td valign="top" bgcolor="#e0e0e0">
+                        <div class="inner" id="msg_4211">
+                          <meta http-equiv="content-type"
+                            content="text/html; charset=UTF-8">
+                          <pre style="margin: 0; padding: 0;"><code class="bbc_code">#Create text for keypad<br>&nbsp; &nbsp; AddTextRange 0, 99, Black, Button%number%, nimbus_sans.ttf, 47, %number%, -1, -1, -1, -1, center, center, 255, 255, 255<br>&nbsp; &nbsp; AddTextRange 0, 99, BlackLit, ButtonLit%number%, nimbus_sans.ttf, 47, %number%, -1, -1, -1, -1, center, center, 255, 255, 255<br>&nbsp; &nbsp; AddText Black, Button&lt;A, nimbus_sans.ttf, 47, &lt;A, -1, -1, -1, -1, center, center, 255, 255, 255<br>&nbsp; &nbsp; AddText Black, ButtonA&gt;, nimbus_sans.ttf, 47, A&gt;, -1, -1, -1, -1, center, center, 255, 255, 255<br>&nbsp; &nbsp; AddText Black, Button[]A, nimbus_sans.ttf, 47, []A, -1, -1, -1, -1, center, center, 255, 255, 255<br>&nbsp; &nbsp; AddText Black, ButtonA[], nimbus_sans.ttf, 47, A[], -1, -1, -1, -1, center, center, 255, 255, 255<br>&nbsp; &nbsp; AddText Black, ButtonXX, nimbus_sans.ttf, 47, XX, -1, -1, -1, -1, center, center, 255, 255, 255<br>&nbsp; &nbsp; AddText Black, Button??, nimbus_sans.ttf, 47, ??, -1, -1, -1, -1, center, center, 255, 255, 255<br>&nbsp; &nbsp; AddText Black, Button-, nimbus_sans.ttf, 47, -, -1, -1, -1, -1, center, center, 255, 255, 255<br>&nbsp; &nbsp; AddText Black, Button*, nimbus_sans.ttf, 47, *, -1, -1, -1, -1, center, center, 255, 255, 255<br></code></pre>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <br>
+                <br>
+                <div class="inner" id="msg_4211">
+                  <meta http-equiv="content-type" content="text/html;
+                    charset=UTF-8">
+                  You might also need to create negative floor textures
+                  (such as -1, -2, -3, etc), or textures for floors
+                  higher than 99.<br>
+                  <br>
+                  Follow the previous steps, but for the <i>CallStation</i>
+                  section, make a keypad instead of a floor panel.&nbsp;
+                  This panel maps buttons to the Call Station actions.<br>
+                  <br>
+                  <table width="848" height="417" cellspacing="2"
+                    cellpadding="2" border="1">
+                    <tbody>
+                      <tr>
+                        <td valign="top" bgcolor="#e0e0e0">
+                          <div class="inner" id="msg_4211">
+                            <meta http-equiv="content-type"
+                              content="text/html; charset=UTF-8">
+                            <pre style="margin: 0; padding: 0;"><code class="bbc_code">SetAutoSize = false, false<br>&lt;Floors 0 to 9&gt;<br>&nbsp; &nbsp; &lt;CallStation 1&gt;<br>&nbsp; &nbsp; &nbsp; &nbsp; Name = Call Station %callstation%<br>&nbsp; &nbsp; &nbsp; &nbsp; Controller = 1&nbsp; #assign to Dispatch Controller 1<br><br>&nbsp; &nbsp; &nbsp; &nbsp; #create a button panel and controls<br>&nbsp; &nbsp; &nbsp; &nbsp; CreatePanel ElevExtPanels, 6, 5, front, 0.15, 0.15, 0.3, 0.45, 0, 0<br>&nbsp; &nbsp; &nbsp; &nbsp; AddControl switch.wav, 2, 2, 0, 0, 0, 0, 1, Input7, Button7<br>&nbsp; &nbsp; &nbsp; &nbsp; AddControl switch.wav, 2, 3, 0, 0, 0, 0, 1, Input8, Button8<br>&nbsp; &nbsp; &nbsp; &nbsp; AddControl switch.wav, 2, 4, 0, 0, 0, 0, 1, Input9, Button9<br>&nbsp; &nbsp; &nbsp; &nbsp; AddControl switch.wav, 3, 2, 0, 0, 0, 0, 1, Input4, Button4<br>&nbsp; &nbsp; &nbsp; &nbsp; AddControl switch.wav, 3, 3, 0, 0, 0, 0, 1, Input5, Button5<br>&nbsp; &nbsp; &nbsp; &nbsp; AddControl switch.wav, 3, 4, 0, 0, 0, 0, 1, Input6, Button6<br>&nbsp; &nbsp; &nbsp; &nbsp; AddControl switch.wav, 4, 2, 0, 0, 0, 0, 1, Input1, Button1<br>&nbsp; &nbsp; &nbsp; &nbsp; AddControl switch.wav, 4, 3, 0, 0, 0, 0, 1, Input2, Button2<br>&nbsp; &nbsp; &nbsp; &nbsp; AddControl switch.wav, 4, 4, 0, 0, 0, 0, 1, Input3, Button3<br>&nbsp; &nbsp; &nbsp; &nbsp; AddControl switch.wav, 5, 2, 0, 0, 0, 0, 1, InputStar, Button*<br>&nbsp; &nbsp; &nbsp; &nbsp; AddControl switch.wav, 5, 3, 0, 0, 0, 0, 1, Input0, Button0<br>&nbsp; &nbsp; &nbsp; &nbsp; AddControl switch.wav, 5, 4, 0, 0, 0, 0, 1, InputMinus, Button-<br><br>&nbsp; &nbsp; &nbsp; &nbsp; #set position of call station<br>&nbsp; &nbsp; &nbsp; &nbsp; SetPosition 3, 4, 6 - 4.125 - 0.33 - 0.1<br><br>&nbsp; &nbsp; &nbsp; &nbsp; AddIndicator mechchime9.wav, Button, Black, front, 0, 0, 0.5, 0.5, 1, 5<br>&nbsp; &nbsp; &lt;EndCallStation&gt;<br>&lt;EndFloors&gt;<br></code></pre>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <br>
+                  You can also change the "mechchime9.wav" to something
+                  like "indicatorsound*.wav" and when the indicator
+                  shows something like "XX", it'll play
+                  "indicatorsoundXX.wav", or "indicatorsoundA.wav" for
+                  elevator A.<br>
+                  <br>
+                  <img src="destination_keypad.jpg" alt="Destination
+                    Keypad" width="1024" height="768"><br>
+                  <br>
+                  <br>
+                  <div class="inner" id="msg_4211">
+                    <meta http-equiv="content-type" content="text/html;
+                      charset=UTF-8">
+                    For letter indicators above the elevator, I'm still
+                    developing that, but for now you can use a
+                    Directional Indicator above each elevator.&nbsp;
+                    This is one of the Triton Center's current ones:<br>
+                    <table width="100%" cellspacing="2" cellpadding="2"
+                      border="1">
+                      <tbody>
+                        <tr>
+                          <td valign="top" bgcolor="#e0e0e0"><code
+                              class="bbc_code">
+                              <meta http-equiv="content-type"
+                                content="text/html; charset=UTF-8">
+                              <pre style="margin: 0; padding: 0;"><code class="bbc_code">AddDirectionalIndicator 1, true, true, true, ElevExtPanels, ButtonA, ButtonLitA, ButtonA, ButtonLitA, 3.426 + 0.2 + 0.66 + 0.02, 0, 8.2, right, 0.5, 0.5, true, 0, 0</code></pre>
+                            </code></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <br>
+                    <br>
+                    <div class="inner" id="msg_4211">
+                      <meta http-equiv="content-type"
+                        content="text/html; charset=UTF-8">
+                      Basically it just displays the "ButtonA" texture
+                      for Up and Down, and the "ButtonLitA" when
+                      lit.&nbsp; Make sure you load the "ButtonA" and
+                      "ButtonLitA" textures.<br>
+                      <br>
+                      <br>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

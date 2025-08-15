@@ -14,43 +14,45 @@
         information about your building. This section is required, since
         it determines if a building file is valid. The section starts
         with this header:<br>
-        <font size="2" face="Courier New, Courier, mono">&lt;Globals&gt;</font></p>
+        <font face="Courier New, Courier, mono" size="2">&lt;Globals&gt;</font></p>
       <p align="left">and ends with this footer:<br>
-        <font size="2" face="Courier New, Courier, mono">&lt;EndGlobals&gt;</font></p>
+        <font face="Courier New, Courier, mono" size="2">&lt;EndGlobals&gt;</font></p>
       <p align="left">Parameters are placed between those two markers,
         and look like this:<br>
-        <font size="2" face="Courier New, Courier, mono">Parameter = <em>value</em></font></p>
+        <font face="Courier New, Courier, mono" size="2">Parameter = <em>value</em></font></p>
       <p align="left">Example:<br>
-        <font size="2" face="Courier New, Courier, mono">Name = Triton
+        <font face="Courier New, Courier, mono" size="2">Name = Triton
           Center</font></p>
       <p align="left"><strong>Parameters (all are optional):</strong></p>
       <p align="left"><strong>1. Name</strong> - building name<br>
-        Example: <font size="2" face="Courier New, Courier, mono">Name
+        Example: <font face="Courier New, Courier, mono" size="2">Name
           = My Building</font></p>
       <p align="left"><strong>2. Designer</strong> - name of building's
         designer<br>
-        <font size="2" face="Courier New, Courier, mono">Designer = Me</font><br>
+        <font face="Courier New, Courier, mono" size="2">Designer = Me</font><br>
         <br>
         <strong>3. Location</strong> - location of the building<br>
-        <font size="2" face="Courier New, Courier, mono">Location = 100
+        <font face="Courier New, Courier, mono" size="2">Location = 100
           Main Street</font></p>
       <p align="left"><strong>4. Description</strong> - Brief
         description of the building<br>
-        <font size="2" face="Courier New, Courier, mono">Description = A
+        <font face="Courier New, Courier, mono" size="2">Description = A
           really average building</font><br>
         <br>
         <strong>5. Version</strong> - Version of the building (can be
         text)<br>
-        <font size="2" face="Courier New, Courier, mono">Version = 1</font><br>
+        <font face="Courier New, Courier, mono" size="2">Version = 1</font><br>
         <br>
         <strong>6. CameraFloor</strong> - camera's starting floor,
         starting with 0 (like Floors command) - default is 0<br>
-        <font size="2" face="Courier New, Courier, mono">CameraFloor = 0</font><br>
+        <font face="Courier New, Courier, mono" size="2">CameraFloor = 0</font><br>
         <br>
         <strong>7. CameraPosition</strong> - camera's starting position
         in X (left/right) and Z (forward/backward) feet coordinates -
         default is "0, 0"<br>
-        Syntax: <font size="2" face="Courier New, Courier, mono">CameraPosition
+        Syntax: <font face="Courier New, Courier, mono" size="2">CameraPosition
+
+
 
 
 
@@ -95,20 +97,22 @@
 
 
           = <em>X</em>, <em>Z</em></font><br>
-        <font size="2" face="Courier New, Courier, mono">CameraPosition
+        <font face="Courier New, Courier, mono" size="2">CameraPosition
           = 0, -10</font><br>
         <br>
         <strong>8. CameraDirection</strong> - specifies a 3D point that
         the camera is looking at on startup (instead of specifying
         rotation), in X (left/right), Y (up down), and Z
         (forward/backward) feet coordinates.<br>
-        <font size="2" face="Courier New, Courier, mono">CameraDirection
+        <font face="Courier New, Courier, mono" size="2">CameraDirection
           = 0, 10, 28.8</font></p>
       <p align="left"><strong>9. CameraRotation</strong> - axis rotation
         of the camera on startup - X is degrees up/down, Y is degrees
         left/right, and Z is spin. Default is "0, 0, 0", and the example
         makes the camera face right.<br>
-        Syntax: <font size="2" face="Courier New, Courier, mono">CameraRotation
+        Syntax: <font face="Courier New, Courier, mono" size="2">CameraRotation
+
+
 
 
 
@@ -153,22 +157,24 @@
 
 
           = <em>X</em>, <em>Y</em>, <em>Z</em></font><br>
-        <font size="2" face="Courier New, Courier, mono">CameraRotation
+        <font face="Courier New, Courier, mono" size="2">CameraRotation
           = 0, 90, 0</font></p>
       <p align="left"><strong>10. Sky</strong> - which skybox texture
         pack to use, if the Caelum sky system is off. In the following
         example, the chosen pack is "noon", and the file "sky-noon.zip"
         will be loaded. Default is "noon".<br>
-        <font size="2" face="Courier New, Courier, mono">Sky = noon<br>
+        <font face="Courier New, Courier, mono" size="2">Sky = noon<br>
         </font></p>
       <p align="left"><strong>11. DynamicSky </strong>- which Caelum
         sky script to use. In the following example, the script is
         "RainWind", which is listed in the data/caelum/sky.os resource
         file.&nbsp; Default is "DefaultSky".<br>
-        <font size="2" face="Courier New, Courier, mono">DynamicSky =
+        <font face="Courier New, Courier, mono" size="2">DynamicSky =
           RainWind<br>
         </font></p>
       <p style="text-align:left;margin-left:0;margin-right:auto;">Available
+
+
 
 
 
@@ -239,35 +245,37 @@
         trusses (supports), between a level's ceiling and the next
         level. Since each floor needs supports below it, the default is
         false.<br>
-        <font size="2" face="Courier New, Courier, mono">InterfloorOnTop
+        <font face="Courier New, Courier, mono" size="2">InterfloorOnTop
           = true</font></p>
       <p align="left"><strong>13. Collisions</strong> - enables/disables
         collisions (default is true)<br>
-        <font size="2" face="Courier New, Courier, mono">Collisions =
+        <font face="Courier New, Courier, mono" size="2">Collisions =
           false</font></p>
       <p align="left"><strong>14. Gravity</strong> - enables/disables
         gravity (default is true)<br>
-        <font size="2" face="Courier New, Courier, mono">Gravity = false</font></p>
+        <font face="Courier New, Courier, mono" size="2">Gravity = false</font></p>
       <p align="left"><strong>15. Coordinates</strong> - set latitude
         and longitude of building (for sky system)<br>
-        <font size="2" face="Courier New, Courier, mono">Coordinates =
+        <font face="Courier New, Courier, mono" size="2">Coordinates =
           41.883, -87.629</font></p>
       <p align="left"><strong>16. DateTime</strong> - set UTC date/time
         on startup (in Julian value), for sky system, or set to "now" to
         use the current system time<br>
-        <font size="2" face="Courier New, Courier, mono">DateTime =
+        <font face="Courier New, Courier, mono" size="2">DateTime =
           2457197.1254</font><br>
-        <font size="2" face="Courier New, Courier, mono">DateTime = now</font></p>
+        <font face="Courier New, Courier, mono" size="2">DateTime = now</font></p>
       <p align="left"><strong>17. TimeScale</strong> - sets the time
         multiplier for the sky system. The default is 25. Set to 1 for
         real-time.<br>
-        <font size="2" face="Courier New, Courier, mono">TimeScale = 1</font><br>
+        <font face="Courier New, Courier, mono" size="2">TimeScale = 1</font><br>
       </p>
       <p align="left"><strong>18. Position</strong> - set the 3D
         position of this building, used when loading multiple buildings.
         See the Load command in the Buildings section for more
         information.<br>
-        Syntax: <font size="2" face="Courier New, Courier, mono">Position
+        Syntax: <font face="Courier New, Courier, mono" size="2">Position
+
+
 
 
 
@@ -312,7 +320,9 @@
 
 
           = <em>X, Y, Z</em></font><br>
-        Example: <font size="2" face="Courier New, Courier, mono">Position
+        Example: <font face="Courier New, Courier, mono" size="2">Position
+
+
 
 
 
@@ -361,7 +371,9 @@
         rotation (Y axis, which is left/right), in degrees, of this
         building, used when loading multiple buildings. See the Load
         command in the Buildings section for more information.<br>
-        Syntax: <font size="2" face="Courier New, Courier, mono">Rotation
+        Syntax: <font face="Courier New, Courier, mono" size="2">Rotation
+
+
 
 
 
@@ -406,7 +418,9 @@
 
 
           = <em>value</em></font><br>
-        Example: <font size="2" face="Courier New, Courier, mono">Rotation
+        Example: <font face="Courier New, Courier, mono" size="2">Rotation
+
+
 
 
 
@@ -457,9 +471,11 @@
         (primary) building. If both Y values are 0, the Y values are set
         to be unlimited. See the Load command in the Buildings section
         for more information.<br>
-        Syntax: <font size="2" face="Courier New, Courier, mono">Bounds
+        Syntax: <font face="Courier New, Courier, mono" size="2">Bounds
           = <em>MinX, MinY, MinZ, MaxX, MaxY, MaxZ</em></font><br>
-        Example: <font size="2" face="Courier New, Courier, mono">Bounds
+        Example: <font face="Courier New, Courier, mono" size="2">Bounds
+
+
 
 
 
@@ -507,15 +523,29 @@
         </font></p>
       <p align="left"><strong>21. Lobby</strong> - lobby level, which is
         the starting floor for random activity - default is 0<br>
-        <font size="2" face="Courier New, Courier, mono">Lobby = 0</font><br>
+        <font face="Courier New, Courier, mono" size="2">Lobby = 0</font><br>
       </p>
-      <p align="left"><strong>22. Map</strong> - enables or disables the
+      <p align="left"><strong>22. Type</strong> - type of sim engine,
+        default is Generic.&nbsp; Values are Generic, Building, City,
+        Planet, and SolarSystem.<br>
+        <font size="2"><font face="Courier New, Courier, mono">Type</font></font><font
+          face="Courier New, Courier, mono" size="2"> = City</font><br>
+      </p>
+      <font face="Courier New, Courier, mono" size="2">
+      </font>
+      <p align="left"><strong>23. Map</strong> - enables or disables the
         Map Generator.&nbsp; When the Map Generator is enabled, a
         real-time map render texture is made available, and is named <i>MapCamera</i>.&nbsp;
+
+
         Since the map generator takes up rendering time, the default is
-        <i>off</i> to improve performance.<br>
+        <i>off</i> to improve performance.&nbsp; To change the camera
+        zoom, see the <i>SetCameraZoom</i> command in the <a
+          moz-do-not-send="true" href="extended.html">Extended Commands</a>
+        section.<br>
         <font size="2"><font face="Courier New, Courier, mono">Map</font></font><font
-          size="2" face="Courier New, Courier, mono"> = on<br>
+          face="Courier New, Courier, mono" size="2"> = on<br>
+          <br>
           <br>
         </font> </p>
     </div>

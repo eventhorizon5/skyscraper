@@ -323,7 +323,7 @@
 										<orient>wxVERTICAL</orient>
 										<object class="sizeritem">
 											<object class="wxButton" name="ID_bFloorList" variable="bFloorList" member="yes">
-												<label>Floor List</label>
+												<label>Floor Information</label>
 												<handler function="On_bFloorList_Click" entry="EVT_BUTTON" />
 											</object>
 											<flag>wxEXPAND</flag>
@@ -407,6 +407,15 @@
 											<border>5</border>
 											<option>1</option>
 										</object>
+										<object class="sizeritem">
+											<object class="wxButton" name="ID_bRevolvingDoor" variable="bRevolvingDoor" member="yes">
+												<label>Revolving Door Control</label>
+												<handler function="On_bRevolvingDoor_Click" entry="EVT_BUTTON" />
+											</object>
+											<flag>wxEXPAND</flag>
+											<border>5</border>
+											<option>1</option>
+										</object>
 									</object>
 									<flag>wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 									<border>5</border>
@@ -480,7 +489,7 @@
 										</object>
 										<object class="sizeritem">
 											<object class="wxButton" name="ID_bFloorInfo" variable="bFloorInfo" member="yes">
-												<label>Floor Information</label>
+												<label>Current Floor Info</label>
 												<handler function="On_bFloorInfo_Click" entry="EVT_BUTTON" />
 											</object>
 											<flag>wxEXPAND</flag>
@@ -500,6 +509,15 @@
 											<object class="wxButton" name="ID_bMovingWalkway" variable="bMovingWalkway" member="yes">
 												<label>Moving Walkway Control</label>
 												<handler function="On_bMovingWalkway_Click" entry="EVT_BUTTON" />
+											</object>
+											<flag>wxEXPAND</flag>
+											<border>5</border>
+											<option>1</option>
+										</object>
+										<object class="sizeritem">
+											<object class="wxButton" name="ID_bControllerEditor" variable="bControllerEditor" member="yes">
+												<label>Controller Editor</label>
+												<handler function="On_bControllerEditor_Click" entry="EVT_BUTTON" />
 											</object>
 											<flag>wxEXPAND</flag>
 											<border>5</border>

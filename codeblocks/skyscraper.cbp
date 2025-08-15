@@ -30,12 +30,6 @@
 		<Unit filename="../src/frontend/enginemanager.h" />
 		<Unit filename="../src/frontend/fileio.cpp" />
 		<Unit filename="../src/frontend/fileio.h" />
-		<Unit filename="../src/gui/escalatorcontrol.cpp" />
-		<Unit filename="../src/gui/escalatorcontrol.h" />
-		<Unit filename="../src/gui/texturemanager.cpp" />
-		<Unit filename="../src/gui/texturemanager.h" />
-		<Unit filename="../src/gui/walkwaycontrol.cpp" />
-                <Unit filename="../src/gui/walkwaycontrol.h" />
 		<Unit filename="../src/frontend/keydialog.cpp" />
 		<Unit filename="../src/frontend/keydialog.h" />
 		<Unit filename="../src/frontend/meshcontrol.cpp" />
@@ -65,6 +59,18 @@
 		<Unit filename="../src/frontend/uexception.h" />
 		<Unit filename="../src/frontend/wallcreator.cpp" />
 		<Unit filename="../src/frontend/wallcreator.h" />
+		<Unit filename="../src/gui/controllereditor.cpp" />
+		<Unit filename="../src/gui/controllereditor.h" />
+		<Unit filename="../src/gui/escalatorcontrol.cpp" />
+		<Unit filename="../src/gui/escalatorcontrol.h" />
+		<Unit filename="../src/gui/floorinfo.cpp" />
+		<Unit filename="../src/gui/floorinfo.h" />
+		<Unit filename="../src/gui/scriptdebug.cpp" />
+		<Unit filename="../src/gui/scriptdebug.h" />
+		<Unit filename="../src/gui/texturemanager.cpp" />
+		<Unit filename="../src/gui/texturemanager.h" />
+		<Unit filename="../src/gui/walkwaycontrol.cpp" />
+		<Unit filename="../src/gui/walkwaycontrol.h" />
 		<Unit filename="../src/sbs/action.cpp" />
 		<Unit filename="../src/sbs/action.h" />
 		<Unit filename="../src/sbs/buttonpanel.cpp" />
@@ -126,9 +132,12 @@
 		<Unit filename="../src/sbs/wall.cpp" />
 		<Unit filename="../src/sbs/wall.h" />
 		<Unit filename="wxsmith/CameraTextureControl.wxs" />
+		<Unit filename="wxsmith/ControllerEditor1.wxs" />
 		<Unit filename="wxsmith/EngineManager.wxs" />
 		<Unit filename="wxsmith/EscalatorControl.wxs" />
+		<Unit filename="wxsmith/FloorInfo.wxs" />
 		<Unit filename="wxsmith/PeopleManager.wxs" />
+		<Unit filename="wxsmith/ScriptDebug.wxs" />
 		<Unit filename="wxsmith/SkyControl.wxs" />
 		<Unit filename="wxsmith/SoundManager.wxs" />
 		<Unit filename="wxsmith/TextureManager.wxs" />
@@ -160,6 +169,11 @@
 					<wxDialog wxs="wxsmith/TextureManager.wxs" src="../src/gui/texturemanager.cpp" hdr="../src/gui/texturemanager.h" fwddecl="0" i18n="1" name="TextureManager" language="CPP" />
 					<wxDialog wxs="wxsmith/EscalatorControl.wxs" src="../src/gui/escalatorcontrol.cpp" hdr="../src/gui/escalatorcontrol.h" fwddecl="0" i18n="1" name="EscalatorControl" language="CPP" />
 					<wxDialog wxs="wxsmith/WalkwayControl.wxs" src="../src/gui/walkwaycontrol.cpp" hdr="../src/gui/walkwaycontrol.h" fwddecl="0" i18n="1" name="WalkwayControl" language="CPP" />
+					<wxDialog wxs="wxsmith/RevolvingDoorControl.wxs" src="../src/gui/revdoorcontrol.cpp" hdr="../src/gui/revdoorcontrol.h" fwddecl="0" i18n="1" name="RevolvingDoorControl" language="CPP" />
+					<wxDialog wxs="wxsmith/ControllerEditor.wxs" src="../src/gui/controllereditor.cpp" hdr="../src/gui/controllereditor.h" fwddecl="0" i18n="1" name="ControllerEditor" language="CPP" />
+					<wxDialog wxs="wxsmith/ScriptDebug.wxs" src="../src/gui/scriptdebug.cpp" hdr="../src/gui/scriptdebug.h" fwddecl="0" i18n="1" name="ScriptDebug" language="CPP" />
+					<wxDialog wxs="wxsmith/FloorInfo.wxs" src="../src/gui/floorinfo.cpp" hdr="../src/gui/floorinfo.h" fwddecl="0" i18n="1" name="FloorInfo" language="CPP" />
+					<wxDialog wxs="wxsmith/MoveEngine.wxs" src="../src/gui/moveengine.cpp" hdr="../src/gui/moveengine.h" fwddecl="0" i18n="1" name="MoveEngine" language="CPP" />
 				</resources>
 			</wxsmith>
 		</Extensions>

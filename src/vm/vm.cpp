@@ -33,14 +33,18 @@
 #include "dylib.hpp"
 #include "globals.h"
 #include "sbs.h"
+#include "polymesh.h"
 #include "vm.h"
 #include "camera.h"
 #include "scenenode.h"
+#include "soundsystem.h"
 #include "enginecontext.h"
 #include "hal.h"
 #include "sky.h"
 #include "gui.h"
 #include "profiler.h"
+#include "gitrev.h"
+#include "monitor.h"
 #include "vmconsole.h"
 
 using namespace SBS;
@@ -71,9 +75,19 @@ VM::VM()
 	vmconsole = 0;
 	loadstart = false;
 	unloaded = false;
+	monitor = 0;
+	system_loaded = false;
+	system_finished = false;
+	running = false;
+	first_attach = false;
 
 	macos_major = 0;
 	macos_minor = 0;
+
+	version = "2.1";
+	version_rev = ToString(GIT_REV);
+	version_state = "Alpha";
+	version_full = version + ".0." + version_rev;
 
 	//create HAL instance
 	hal = new HAL(this);
@@ -88,6 +102,9 @@ VM::VM()
 	gui = 0;
 #endif
 
+	//create monitor instance
+	monitor = new Monitor(this);
+
 	//LoadLibrary("test");
 
 	Report("Started");
@@ -96,6 +113,11 @@ VM::VM()
 VM::~VM()
 {
 	Report("Shutting down...");
+
+	//delete monitor instance
+	if (monitor)
+		delete monitor;
+	monitor = 0;
 
 	//delete sky system instance
 	if (skysystem)
@@ -146,13 +168,13 @@ GUI* VM::GetGUI()
 	return gui;
 }
 
-EngineContext* VM::CreateEngine(EngineContext *parent, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
+EngineContext* VM::CreateEngine(EngineContext *parent, const Vector3 &position, const Vector3 &rotation, const Vector3 &area_min, const Vector3 &area_max)
 {
-	EngineContext* engine = new EngineContext(parent, this, hal->GetSceneManager(), hal->GetSoundSystem(), position, rotation, area_min, area_max);
+	EngineContext* engine = new EngineContext(ENGINETYPE_GENERIC, parent, this, hal->GetSceneManager(), hal->GetSoundSystem(), position, rotation, area_min, area_max);
 	return engine;
 }
 
-bool VM::DeleteEngine(EngineContext *engine)
+bool VM::DeleteEngine(const EngineContext *engine)
 {
 	//delete a specified sim engine instance
 
@@ -163,6 +185,11 @@ bool VM::DeleteEngine(EngineContext *engine)
 	{
 		if (engines[i] == engine)
 		{
+			//don't delete the primary engine if others are running
+			if (i == 0 && engines.size() > 1)
+				return ReportError("Cannot delete primary engine with children");
+
+			//delete the engine
 			engines[i] = 0;
 			delete engine;
 			Report("Engine instance " + ToString(i) + " deleted");
@@ -176,7 +203,7 @@ bool VM::DeleteEngine(EngineContext *engine)
 				if (count > 0)
 				{
 					int number = GetFirstValidEngine()->GetNumber();
-					SetActiveEngine(number);
+					SetActiveEngine(number, false, true);
 				}
 			}
 			else if (active_engine)
@@ -199,6 +226,8 @@ void VM::DeleteEngines()
 {
 	//delete all sim emgine instances
 
+	monitor->Cleanup();
+
 	Report("Deleting all engines...");
 	for (size_t i = 0; i < engines.size(); i++)
 	{
@@ -207,6 +236,10 @@ void VM::DeleteEngines()
 	}
 	engines.clear();
 	active_engine = 0;
+	system_loaded = false;
+	system_finished = false;
+	first_attach = false;
+	running = false;
 	unloaded = true;
 }
 
@@ -225,7 +258,7 @@ EngineContext* VM::FindActiveEngine()
 	return active_engine;
 }
 
-void VM::SetActiveEngine(int number, bool switch_engines)
+void VM::SetActiveEngine(int number, bool switch_engines, bool force)
 {
 	//set an engine instance to be active
 
@@ -242,13 +275,13 @@ void VM::SetActiveEngine(int number, bool switch_engines)
 		return;
 
 	//don't switch to engine if it's loading
-	if (engine->IsLoading() == true)
+	if (engine->IsLoading() == true && force == false)
 		return;
 
 	CameraState state;
 	bool state_set = false;
 
-	if (active_engine)
+	if (active_engine && (engine->IsSystem == false || running == true))
 	{
 		//get previous engine's camera state
 		if (switch_engines == true)
@@ -261,14 +294,22 @@ void VM::SetActiveEngine(int number, bool switch_engines)
 		active_engine->DetachCamera(switch_engines);
 	}
 
-	Report("Setting engine " + ToString(number) + " as active");
-
 	//switch context to new engine instance
-	active_engine = engine;
-	active_engine->AttachCamera(hal->mCameras, !switch_engines);
+	if (engine->IsSystem == false || running == true)
+	{
+		Report("Setting engine " + ToString(number) + " as active");
+		active_engine = engine;
+		bool init_state = !switch_engines;
+		if (first_attach == false)
+		{
+			first_attach = true;
+			init_state = true;
+		}
+		active_engine->AttachCamera(hal->mCameras, init_state);
+	}
 
 	//apply camera state to new engine
-	if (switch_engines == true && state_set == true)
+	if (switch_engines == true && state_set == true && running == true)
 		active_engine->SetCameraState(state, false);
 
 	//update mouse cursor for freelook mode
@@ -387,12 +428,14 @@ void VM::HandleEngineShutdown()
 					i--;
 					deleted = true;
 				}
+				else
+					engines[i]->CancelShutdown(); //cancel shutdown if delete failed
 			}
 		}
 	}
 
 	//clean up empty engine slots at the end of the list
-	if (deleted == true)
+	if (deleted == true && engines.size() > 0)
 	{
 		for (size_t i = engines.size() - 1; i < engines.size(); --i)
 		{
@@ -441,7 +484,7 @@ EngineContext* VM::GetEngine(int number)
 	return engines[number];
 }
 
-int VM::GetEngineCount()
+int VM::GetEngineCount(bool loading_only)
 {
 	//get number of valid engines
 
@@ -450,7 +493,15 @@ int VM::GetEngineCount()
 	for (size_t i = 0; i < engines.size(); i++)
 	{
 		if (engines[i])
-			count++;
+		{
+			if (loading_only == true)
+			{
+				if (engines[i]->IsLoading() == true)
+					count++;
+			}
+			else
+				count++;
+		}
 	}
 	return count;
 }
@@ -471,7 +522,7 @@ void VM::SwitchEngines()
 	//if active engine has a parent, switch to the parent if possible
 	if (parent)
 	{
-		if (parent->IsInside() == true && parent->IsCameraActive() == false)
+		if (parent->IsInside() == true && parent->IsCameraActive() == false && parent->Paused == false)
 		{
 			SetActiveEngine(parent->GetNumber(), true);
 			return;
@@ -479,12 +530,12 @@ void VM::SwitchEngines()
 	}
 
 	//otherwise search for a valid engine to attach to
-	Report("Searing for engine to attach to...");
+	Report("Searching for engine to attach to...");
 	for (size_t i = 0; i < engines.size(); i++)
 	{
 		if (engines[i] != active_engine && engines[i])
 		{
-			if (engines[i]->IsInside() == true && engines[i]->IsCameraActive() == false)
+			if (engines[i]->IsInside() == true && engines[i]->IsCameraActive() == false && engines[i]->Paused == false)
 			{
 				SetActiveEngine((int)i, true);
 				return;
@@ -497,7 +548,7 @@ void VM::SwitchEngines()
 	active_engine->RevertMovement();
 }
 
-bool VM::IsValidEngine(EngineContext *engine)
+bool VM::IsValidEngine(const EngineContext *engine)
 {
 	//returns true if the specified engine is valid (currently running)
 
@@ -512,7 +563,7 @@ bool VM::IsValidEngine(EngineContext *engine)
 	return false;
 }
 
-bool VM::IsValidSystem(::SBS::SBS *sbs)
+bool VM::IsValidSystem(const ::SBS::SBS *sbs)
 {
 	//returns true if the specified SBS instance is valid (being used by an engine context)
 
@@ -577,16 +628,20 @@ void VM::CheckCamera()
 	//switch the active engine to the next one that has an active camera
 
 	if (active_engine->IsCameraActive() == false)
-		active_engine = FindActiveEngine();
-
+	{
+		EngineContext *newengine = FindActiveEngine();
+		if (newengine != active_engine)
+			Report("Switching to active engine " + ToString(newengine->GetNumber()));
+		active_engine = newengine;
+	}
 }
 
-bool VM::StartEngine(EngineContext* engine, std::vector<Ogre::Camera*> &cameras)
+bool VM::StartEngine(EngineContext* engine)
 {
 	//start a sim engine
 
 	Report("Initiating engine start");
-	return engine->Start(cameras);
+	return engine->Start();
 }
 
 ::SBS::SBS* VM::GetActiveSystem()
@@ -618,9 +673,15 @@ int VM::Run(std::vector<EngineContext*> &newengines)
 	//show progress dialog if needed
 	//gui->ShowProgress();
 
+	//load queued buildings
+	LoadQueued();
+
 	//get time for frame statistics
 	unsigned long last = current_time;
 	current_time = hal->GetCurrentTime();
+
+	//run monitor
+	bool monresult = monitor->Run();
 
 	//run sim engines
 	bool result = RunEngines(newengines);
@@ -663,6 +724,9 @@ int VM::Run(std::vector<EngineContext*> &newengines)
 		return 2;
 	}
 
+	//update running state;
+	running = true;
+
 	//update Caelum
 	skysystem->UpdateSky();
 
@@ -687,7 +751,7 @@ int VM::Run(std::vector<EngineContext*> &newengines)
 	return 1;
 }
 
-bool VM::Load(bool clear, const std::string &filename, EngineContext *parent, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
+bool VM::Load(bool system, bool clear, const std::string &filename, EngineContext *parent, const Vector3 &position, const Vector3 &rotation, const Vector3 &area_min, const Vector3 &area_max)
 {
 	//load simulator and data file
 
@@ -695,26 +759,103 @@ bool VM::Load(bool clear, const std::string &filename, EngineContext *parent, co
 	if (filename == "")
 		return false;
 
-	Report("Loading engine for building file '" + filename + "'...");
+	//add the building load request to the queue
+	DelayLoad delay_load;
+	delay_load.filename = filename;
+	delay_load.clear = clear;
+	delay_load.parent = parent;
+	delay_load.position = position;
+	delay_load.rotation = rotation;
+	delay_load.area_min = area_min;
+	delay_load.area_max = area_max;
+	delay_load.system = system;
 
-	//boot SBS
-	EngineContext* engine = Initialize(clear, parent, position, rotation, area_min, area_max);
+	load_queue.emplace_back(delay_load);
 
-	//have new engine instance load building
-	bool result = engine->Load(filename);
-
-	//delete engine if load failed, if more than one engine is running
-	if (result == false)
-	{
-		if (GetEngineCount() > 1)
-			DeleteEngine(engine);
-		return false;
-	}
+	monitor->CreateSim();
 
 	return true;
 }
 
-EngineContext* VM::Initialize(bool clear, EngineContext *parent, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
+bool VM::LoadQueued()
+{
+	//load engines in a queued fashion
+
+	if (load_queue.size() == 0)
+		return false;
+
+	bool system_found = false;
+	for (size_t i = 0; i < load_queue.size(); i++)
+	{
+		DelayLoad &load = load_queue[i];
+		if (load.system == true)
+		{
+			system_found = true;
+			break;
+		}
+	}
+
+	if (system_found == false && system_loaded == true)
+		system_finished = true;
+
+	for (size_t i = 0; i < load_queue.size(); i++)
+	{
+		DelayLoad &load = load_queue[i];
+
+		if (load.system == false)
+		{
+			if (system_finished == false)
+				continue;
+
+			if (engines[0]->IsRunning() == false)
+				continue;
+		}
+
+		Report("Loading engine for building file '" + load.filename + "'...");
+
+		//if no parent is specified, select first planet as parent
+		if (load.parent == 0)
+		{
+			for (size_t j = 0; j < engines.size(); j++)
+			{
+				if (engines[j])
+				{
+					if (engines[j]->type == ENGINETYPE_PLANET)
+					{
+						load.parent = engines[j];
+						break;
+					}
+				}
+			}
+		}
+
+		//boot SBS
+		EngineContext* engine = Initialize(load.clear, load.parent, load.position, load.rotation, load.area_min, load.area_max);
+		engine->IsSystem = load.system;
+
+		//exit if init failed
+		if (!engine)
+			return false;
+
+		//have new engine instance load building
+		bool result = engine->Load(load.filename);
+
+		//delete engine if load failed, if more than one engine is running
+		if (result == false)
+		{
+			if (GetEngineCount() > 1)
+				DeleteEngine(engine);
+		}
+
+		if (load.system == true)
+			system_loaded = true;
+		load_queue.pop_back();
+		i--;
+	}
+	return true;
+}
+
+EngineContext* VM::Initialize(bool clear, EngineContext *parent, const Vector3 &position, const Vector3 &rotation, const Vector3 &area_min, const Vector3 &area_max)
 {
 	//bootstrap simulator
 
@@ -731,7 +872,15 @@ EngineContext* VM::Initialize(bool clear, EngineContext *parent, const Vector3 &
 	}
 
 	//clear screen
-	hal->GetRenderWindow()->update();
+	try
+	{
+		hal->GetRenderWindow()->update();
+	}
+	catch (...)
+	{
+		ReportFatalError("Error updating render window");
+		return 0;
+	}
 
 	//set parent to master engine, if not set
 	if (parent == 0 && GetEngineCount() >= 1)
@@ -744,8 +893,6 @@ EngineContext* VM::Initialize(bool clear, EngineContext *parent, const Vector3 &
 		active_engine = engine;
 
 	//set render on startup state
-	//bool render_on_start = hal->GetConfigBool(hal->configfile, "Skyscraper.SBS.RenderOnStartup", false);
-	//if (render_on_start == false && RenderOnStartup ==
 	//SetRenderOnStartup(hal->GetConfigBool(hal->configfile, "Skyscraper.SBS.RenderOnStartup", false));
 
 	return engine;
@@ -890,7 +1037,7 @@ wxWindow* VM::GetParent()
 	return parent;
 }
 
-void VM::UpdateProgress()
+bool VM::UpdateProgress()
 {
 	//update progress based on total sim engine status
 
@@ -907,8 +1054,9 @@ void VM::UpdateProgress()
 
 #ifdef USING_WX
 	if (gui)
-		gui->UpdateProgress(final);
+		return gui->UpdateProgress(final);
 #endif
+	return true;
 }
 
 bool VM::ReportMissingFiles(std::vector<std::string> &missing_files)
@@ -978,14 +1126,100 @@ dylib* VM::LoadLibrary(const std::string &name)
 
 unsigned long VM::Uptime()
 {
+	//get uptime of VM in milliseconds
+
 	return hal->GetCurrentTime();
 }
 
 unsigned long VM::GetElapsedTime(int instance)
 {
+	//get elapsed time (execution time) of the specified engine instance
+
 	if (instance >= engines.size())
 		return 0;
-	return engines[instance]->time_stat;
+	if (engines[instance])
+		return engines[instance]->time_stat;
+	return 0;
+}
+
+void VM::ListPlayingSounds()
+{
+	//list playing sounds in all engines
+
+	Report("Listing playing sounds in all engines");
+	for (size_t i = 0; i < engines.size(); i++)
+	{
+		if (!engines[i])
+			continue;
+
+		::SBS::SBS* Simcore = engines[i]->GetSystem();
+		
+		if (Simcore)
+		{
+			SoundSystem* soundsys = Simcore->GetSoundSystem();
+			if (soundsys)
+			{
+				soundsys->ShowPlayingSounds(false);
+				if (i == engines.size() - 1)
+					soundsys->ShowPlayingTotal();
+			}
+		}
+	}
+}
+
+unsigned long VM::GetGlobalStats(unsigned long &meshes, unsigned long &textures, unsigned long &actions, unsigned long &sounds, unsigned long &objects, unsigned long &walls, unsigned long &polygons)
+{
+	meshes = 0;
+	textures = 0;
+	actions = 0;
+	sounds = 0;
+	objects = 0;
+	walls = 0;
+	polygons = 0;
+	unsigned long total = 0;
+
+	for (size_t i = 0; i < engines.size(); i++)
+	{
+		if (!engines[i])
+			continue;
+
+		::SBS::SBS* Simcore = engines[i]->GetSystem();
+
+		if (Simcore)
+		{
+			++total;
+			meshes += Simcore->GetMeshCount();
+			textures += Simcore->GetTextureCount();
+			actions += Simcore->GetActionCount();
+			sounds += Simcore->GetSoundCount();
+			objects += Simcore->GetObjectCount();
+			walls += Simcore->GetPolyMesh()->GetWallCount();
+			polygons += Simcore->GetPolyMesh()->GetPolygonCount();
+		}
+	}
+
+	return total;
+}
+
+bool VM::IsRootLoaded()
+{
+	//returns true if the root engine is loaded or running
+
+	if (engines.size() == 0)
+		return false;
+
+	if (engines[0])
+	{
+		if (engines[0]->IsLoadingFinished() == true || engines[0]->IsRunning() == true)
+			return true;
+	}
+
+	return false;
+}
+
+bool VM::LoadPending()
+{
+	return !load_queue.empty();
 }
 
 }

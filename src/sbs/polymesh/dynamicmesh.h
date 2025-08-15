@@ -34,7 +34,7 @@ public:
 
 	DynamicMesh(Object *parent, SceneNode *node, const std::string &name, Real max_render_distance = 0, bool dynamic_buffers = false);
 	~DynamicMesh();
-	void Enabled(bool value, MeshObject *client = 0);
+	bool Enabled(bool value, MeshObject *client = 0);
 	bool ChangeTexture(const std::string &old_texture, const std::string &new_texture, MeshObject *client = 0);
 	void EnableDebugView(bool value, MeshObject *client = 0);
 	bool IsVisible(MeshObject *client = 0);
@@ -63,6 +63,7 @@ public:
 	Ogre::AxisAlignedBox GetBounds(MeshObject *client = 0);
 	void EnableShadows(bool value);
 	void SetMaterial(const std::string& material);
+	void TessellateTriangle(const Vector3& v0, const Vector3& v1, const Vector3& v2, const Vector2& uv0, const Vector2& uv1, const Vector2& uv2, std::vector<Vector3>& outVerts, std::vector<Vector2>& outUVs, std::vector<unsigned int>& outIndices, unsigned int& vertexOffset, int resolution = 4);
 
 private:
 
@@ -73,7 +74,7 @@ private:
 
 		Mesh(DynamicMesh *parent, const std::string &name, SceneNode *node, Real max_render_distance, const std::string &filename = "", const std::string &meshname = "", const std::string & path = "");
 		~Mesh();
-		void Enabled(bool value);
+		bool Enabled(bool value);
 		bool ChangeTexture(const std::string &old_texture, const std::string &new_texture);
 		int FindMatchingSubMesh(const std::string &material);
 		Submesh* CreateSubMesh(const std::string &material);

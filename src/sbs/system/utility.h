@@ -21,35 +21,122 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+#ifndef _SBS_UTILITY_H
+#define _SBS_UTILITY_H
+
 namespace SBS {
 
 class SBSIMPEXP Utility : public ObjectBase
 {
 public:
-	Utility(Object *parent);
+
+	Real UnitScale; //scale of 3D positions; this value equals 1 3D unit
+
+	explicit Utility(Object *parent);
 	~Utility();
-	Vector2 GetExtents(PolyArray &varray, int coord, bool flip_z = false);
-	void Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool cutfloors, int checkwallnumber = 0, bool reset_check = true);
-	void GetDoorwayExtents(MeshObject *mesh, int checknumber, PolyArray &polygon);
-	Vector3 GetPolygonDirection(PolyArray &polygon);
-	Vector2 GetEndPoint(const Vector2 &StartPoint, Real angle, Real distance);
-	Plane ComputePlane(PolyArray &vertices, bool flip_normal = true);
-	void SplitWithPlane(int axis, PolyArray &orig, PolyArray &poly1, PolyArray &poly2, Real value);
-	Vector3 ComputeNormal(PolyArray &vertices, Real &D);
-	void ResetDoorwayWalls();
-	Wall* AddDoorwayWalls(MeshObject* mesh, const std::string &wallname, const std::string &texture, Real tw, Real th);
+	Real MetersToFeet(Real meters); //converts meters to feet
+	Real FeetToMeters(Real feet); //converts feet to meters
+	Vector3 ToGlobal(const Vector3 &position);
+	Vector3 FromGlobal(const Vector3 &position);
+	Quaternion ToGlobal(const Quaternion &orientation);
+	Quaternion FromGlobal(const Quaternion &orientation);
+	std::string VerifyFile(const std::string &filename);
+	std::string VerifyFile(std::string filename, bool &result, bool skip_cache);
+	bool FileExists(const std::string &filename);
+	Real ToLocal(Real remote_value);
+	Vector2 ToLocal(const Vector2& remote_value);
+	Vector3 ToLocal(const Vector3& remote_value, bool rescale = true, bool flip_z = true);
+	Real ToRemote(Real local_value);
+	Vector2 ToRemote(const Vector2& local_value);
+	Vector3 ToRemote(const Vector3& local_value, bool rescale = true, bool flip_z = true);
+	bool Mount(const std::string &filename, const std::string &path);
+	Real GetDistance(Real x1, Real x2, Real z1, Real z2);
+	std::string GetFilesystemPath(std::string filename);
+	std::string GetMountPath(std::string filename, std::string &newfilename);
+	void CacheFilename(const std::string &filename, const std::string &result);
 
 private:
 
-	//Cut function work polygons
-	PolyArray temppoly, temppoly2, temppoly3, temppoly4, temppoly5, worker;
-	PolygonSet newpolys;
+	struct VerifyResult
+	{
+		std::string filename;
+		std::string result;
+	};
+	std::vector<VerifyResult> verify_results;
 
-	PolyArray newpoly;
-
-	//doorway data
-	bool wall1a, wall1b, wall2a, wall2b;
-	Vector2 wall_extents_x, wall_extents_z, wall_extents_y;
+	//file listing cache
+	Ogre::StringVectorPtr filesystem_listing;
 };
 
+//EnableArray() function
+template <typename T>
+bool EnableArray(const std::vector<T> &array, bool value)
+{
+	//enable or disable an object array
+
+	bool status = true;
+	for (size_t i = 0; i < array.size(); i++)
+	{
+		if (array[i])
+		{
+			bool result = array[i]->Enabled(value);
+			if (!result)
+				status = false;
+		}
+	}
+	return status;
 }
+
+//AddArrayElement() function
+template <typename T>
+bool AddArrayElement(std::vector<T*> &array, T* object, bool check = false)
+{
+	//add an element to an array
+
+	if (!object)
+		return false;
+
+	if (check == true)
+	{
+		for (size_t i = 0; i < array.size(); i++)
+		{
+			//exit if already registered
+			if (array[i] == object)
+				return false;
+		}
+	}
+
+	array.emplace_back(object);
+	return true;
+}
+
+//RemoveArrayElement() function
+template <typename T>
+bool RemoveArrayElement(std::vector<T*> &array, T* object)
+{
+	if (!object)
+		return false;
+
+	if (array.empty())
+		return false;
+
+	if (array.back() == object)
+	{
+		array.pop_back();
+		return true;
+	}
+
+	for (size_t i = 0; i < array.size(); i++)
+	{
+		if (array[i] == object)
+		{
+			array.erase(array.begin() + i);
+			return true;
+		}
+	}
+	return false;
+}
+
+}
+
+#endif

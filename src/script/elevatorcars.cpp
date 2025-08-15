@@ -1178,7 +1178,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		//get data
 		int params = SplitData(LineData, 14);
 
-		if (params < 7 || params > 9)
+		if (params < 7 || params > 10)
 			return ScriptError("Incorrect number of parameters");
 
 		int compat = 0;
@@ -1227,12 +1227,14 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 			return sNextLine;
 
 		bool result;
-		if (compat == 0)
-			result = car->AddShaftDoors(ToInt(tempdata[0]), tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]));
-		if (compat == 1)
-			result = car->AddShaftDoors(ToInt(tempdata[0]), tempdata[1], tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), 0, ToFloat(tempdata[5]), ToFloat(tempdata[6]));
-		if (compat == 2)
-			result = car->AddShaftDoors(ToInt(tempdata[0]), tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), 0, ToFloat(tempdata[6]), ToFloat(tempdata[7]));
+		if (compat == 0 && params == 9)
+			result = car->AddShaftDoors(ToInt(tempdata[0]), 0.0, tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]));
+		else if (compat == 0 && params == 10)
+			result = car->AddShaftDoors(ToInt(tempdata[0]), ToFloat(tempdata[9]), tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]));
+		else if (compat == 1)
+			result = car->AddShaftDoors(ToInt(tempdata[0]), 0.0, tempdata[1], tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), 0, ToFloat(tempdata[5]), ToFloat(tempdata[6]));
+		else if (compat == 2)
+			result = car->AddShaftDoors(ToInt(tempdata[0]), 0.0, tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), 0, ToFloat(tempdata[6]), ToFloat(tempdata[7]));
 
 		if (result == false)
 			return ScriptError();
@@ -2168,6 +2170,9 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 	//AddModel command
 	if (StartsWithNoCase(LineData, "addmodel"))
 	{
+		if (parent->NoModels == true)
+			return sNextLine;
+
 		//get data
 		int params = SplitData(LineData, 9);
 

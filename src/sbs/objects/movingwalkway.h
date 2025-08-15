@@ -33,10 +33,10 @@ public:
 
 	MovingWalkway(Object *parent, const std::string &name, int run, Real speed, const std::string &sound_file, const std::string &texture, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real treadsize, int num_steps, Real voffset, Real tw, Real th);
 	~MovingWalkway();
-	void Enabled(bool value);
+	bool Enabled(bool value);
 	void Report(const std::string &message);
 	bool ReportError(const std::string &message);
-	void Loop();
+	bool Loop();
 	bool IsEnabled() { return is_enabled; }
 	void OnClick(Vector3 &position, bool shift, bool ctrl, bool alt, bool right);
 	void ResetState();

@@ -45,14 +45,14 @@ public:
 Map::Map(Object *parent, const std::string &name) : Object(parent)
 {
 	//set up SBS object
-	SetValues("Map", name, false);
+	SetValues("Map", name, true);
 
 	OrthoCamera = 0;
 	enabled = false;
 
 	//create orthographic camera texture, used for map generation
 #ifdef USING_WX
-	OrthoCamera = new CameraTexture(this, "MapCamera", 3, 0, Vector3(0, 50000, 0), false, Vector3(270, 0, 0));
+	OrthoCamera = new CameraTexture(this, "MapCamera", 3, 0, Vector3(0, 50000, 0), false, Vector3(270, 0, 0), true);
 	OrthoCamera->EnableOrthographic(true);
 #endif
 
@@ -69,15 +69,17 @@ Map::~Map()
 	OrthoCamera = 0;
 }
 
-void Map::Enabled(bool value)
+bool Map::Enabled(bool value)
 {
+	bool status = true;
 	if (OrthoCamera)
-		OrthoCamera->Enabled(value);
+		status = OrthoCamera->Enabled(value);
 	/*if (value == true)
 		timer->Start(10000, false);
 	else
 		timer->Stop();*/
 	enabled = value;
+	return status;
 }
 
 bool Map::IsEnabled()

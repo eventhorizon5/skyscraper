@@ -64,6 +64,8 @@ public:
 	void OnMove(bool parent);
 	void OnRotate(bool parent);
 	void Unload();
+	bool Enabled(bool value);
+	bool IsEnabled();
 #ifndef DISABLE_SOUND
 	FMOD::Channel* GetChannel();
 #endif
@@ -97,6 +99,7 @@ private:
 	float default_speed;
 	float doppler_level;
 	bool position_queued;
+	bool enabled;
 
 	struct SBSIMPEXP SoundEntry
 	{

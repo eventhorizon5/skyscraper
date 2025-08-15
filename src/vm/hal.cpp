@@ -39,10 +39,7 @@
 #endif
 
 //OpenXR interfaces
-#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-#include "OgreOpenXRRenderWindow.h"
-#endif
-#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+#if USING_OPENXR
 #include "OgreOpenXRRenderWindow.h"
 #endif
 
@@ -89,6 +86,7 @@ HAL::HAL(VM *vm)
 	configfile = 0;
 	keyconfigfile = 0;
 	joyconfigfile = 0;
+	DX11 = false;
 	timer = new Ogre::Timer();
 }
 
@@ -174,6 +172,8 @@ void HAL::ClickedObject(bool left, bool shift, bool ctrl, bool alt, bool right, 
 
 void HAL::UnclickedObject()
 {
+	//unclick the clicked object
+
 	EngineContext *engine = vm->GetActiveEngine();
 
 	if (!engine)
@@ -192,7 +192,7 @@ void HAL::UnclickedObject()
 
 void HAL::UpdateOpenXR()
 {
-#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+#if USING_OPENXR
 	SBS_PROFILE_MAIN("UpdateOpenXR");
 
 	//update OpenXR camera transformations
@@ -344,7 +344,7 @@ bool HAL::Initialize(const std::string &data_path, Ogre::Root *root, Ogre::Overl
 			}
 
 			//report on system startup
-			Report("Skyscraper version " + vm->version_frontend + " starting...\n", "");
+			Report("Skyscraper version " + vm->version_full + " starting...\n", "");
 
 			//load OGRE
 			Report("Loading OGRE...");
@@ -447,7 +447,7 @@ bool HAL::LoadSystem(const std::string &data_path, Ogre::RenderWindow *renderwin
 	Renderer = mRoot->getRenderSystem()->getCapabilities()->getRenderSystemName();
 
 	//shorten name
-	int loc = Renderer.find("Rendering Subsystem");
+	size_t loc = Renderer.find("Rendering Subsystem");
 	Renderer = Renderer.substr(0, loc - 1);
 
 	//load resource configuration
@@ -544,6 +544,9 @@ bool HAL::LoadSystem(const std::string &data_path, Ogre::RenderWindow *renderwin
 		}
 	}
 
+	if (renderer == "Direct3D11 Rendering Subsystem")
+		DX11 = true;
+
 	try
 	{
 		//define camera configuration
@@ -585,10 +588,8 @@ bool HAL::LoadSystem(const std::string &data_path, Ogre::RenderWindow *renderwin
 	if (filtermode < 3)
 		maxanisotropy = 1;
 
-	Ogre::TextureFilterOptions filter;
-	if (filtermode == 0)
-		filter = Ogre::TFO_NONE;
-	else if (filtermode == 1)
+	Ogre::TextureFilterOptions filter = Ogre::TFO_NONE;
+	if (filtermode == 1)
 		filter = Ogre::TFO_BILINEAR;
 	else if (filtermode == 2)
 		filter = Ogre::TFO_TRILINEAR;
@@ -705,8 +706,9 @@ bool HAL::Render()
 	return true;
 }
 
-bool HAL::PlaySound(const std::string &filename)
+bool HAL::PlaySound(const std::string &filename, Real volume)
 {
+	//play a sound
 #ifndef DISABLE_SOUND
 
 	//load new sound
@@ -732,7 +734,7 @@ bool HAL::PlaySound(const std::string &filename)
 	}
 
 	channel->setLoopCount(-1);
-	channel->setVolume(1.0);
+	channel->setVolume(volume);
 	channel->setPaused(false);
 
 #endif
@@ -886,6 +888,11 @@ void HAL::Clear()
 	//free unused hardware buffers
 	Ogre::HardwareBufferManager::getSingleton()._freeUnusedBufferCopies();
 
+#ifndef DISABLE_SOUND
+	//reset FMOD reverb
+	soundsys->setReverbProperties(0, 0);
+#endif
+
 	ReInit();
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
@@ -906,7 +913,7 @@ Ogre::SceneManager* HAL::GetSceneManager()
 Ogre::RenderWindow* HAL::CreateRenderWindow(const std::string &name, int width, int height, const Ogre::NameValuePairList &params)
 {
 	//create the render window
-#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+#if USING_OPENXR
 	if (GetConfigBool(configfile, "Skyscraper.Frontend.VR", false) == true)
 	{
 		Ogre::RenderWindow* win2 = Ogre::Root::getSingleton().createRenderWindow(name, width, height, false, &params);
@@ -957,7 +964,7 @@ bool HAL::ReportFatalError(const std::string &message)
 	return ReportFatalError(message, "hal:");
 }
 
-void HAL::LoadConfiguration(const std::string data_path, bool show_console)
+void HAL::LoadConfiguration(const std::string &data_path, bool show_console)
 {
 	//load configuration files
 

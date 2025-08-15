@@ -25,6 +25,7 @@
 
 //(*Headers(Stats)
 #include <wx/button.h>
+#include <wx/checkbox.h>
 #include <wx/dialog.h>
 #include <wx/sizer.h>
 #include <wx/stattext.h>
@@ -42,6 +43,7 @@ class Stats: public wxDialog
 
 		//(*Declarations(Stats)
 		wxButton* bOK;
+		wxCheckBox* chkGlobal;
 		wxStaticText* StaticText10;
 		wxStaticText* StaticText11;
 		wxStaticText* StaticText12;
@@ -98,57 +100,58 @@ class Stats: public wxDialog
 	protected:
 
 		//(*Identifiers(Stats)
-		static const long ID_STATICTEXT18;
-		static const long ID_tName;
-		static const long ID_STATICTEXT17;
-		static const long ID_tDesigner;
-		static const long ID_STATICTEXT16;
-		static const long ID_tLocation;
-		static const long ID_STATICTEXT15;
-		static const long ID_tDescription;
-		static const long ID_STATICTEXT14;
-		static const long ID_tVersion;
-		static const long ID_STATICTEXT5;
-		static const long ID_tFloors;
-		static const long ID_STATICTEXT6;
-		static const long ID_tBasements;
-		static const long ID_STATICTEXT7;
-		static const long ID_tElevators;
-		static const long ID_STATICTEXT8;
-		static const long ID_tShafts;
-		static const long ID_STATICTEXT9;
-		static const long ID_tStairs;
-		static const long ID_STATICTEXT1;
-		static const long ID_tMeshes;
-		static const long ID_STATICTEXT3;
-		static const long ID_tTextures;
-		static const long ID_STATICTEXT4;
-		static const long ID_tActions;
-		static const long ID_STATICTEXT21;
-		static const long ID_tSounds;
-		static const long ID_STATICTEXT22;
-		static const long ID_tObjects;
-		static const long ID_STATICTEXT24;
-		static const long ID_tWalls;
-		static const long ID_STATICTEXT25;
-		static const long ID_tPolygons;
-		static const long ID_STATICTEXT10;
-		static const long ID_tInStairwell;
-		static const long ID_STATICTEXT11;
-		static const long ID_tInElevator;
-		static const long ID_STATICTEXT12;
-		static const long ID_tInShaft;
-		static const long ID_STATICTEXT13;
-		static const long ID_tRunningTime;
-		static const long ID_STATICTEXT20;
-		static const long ID_tFrontendVersion;
-		static const long ID_STATICTEXT23;
-		static const long ID_tSBSVersion;
-		static const long ID_STATICTEXT26;
-		static const long ID_tPlatform;
-		static const long ID_STATICTEXT2;
-		static const long ID_tRenderer;
-		static const long ID_bOK;
+		static const wxWindowID ID_STATICTEXT18;
+		static const wxWindowID ID_tName;
+		static const wxWindowID ID_STATICTEXT17;
+		static const wxWindowID ID_tDesigner;
+		static const wxWindowID ID_STATICTEXT16;
+		static const wxWindowID ID_tLocation;
+		static const wxWindowID ID_STATICTEXT15;
+		static const wxWindowID ID_tDescription;
+		static const wxWindowID ID_STATICTEXT14;
+		static const wxWindowID ID_tVersion;
+		static const wxWindowID ID_STATICTEXT5;
+		static const wxWindowID ID_tFloors;
+		static const wxWindowID ID_STATICTEXT6;
+		static const wxWindowID ID_tBasements;
+		static const wxWindowID ID_STATICTEXT7;
+		static const wxWindowID ID_tElevators;
+		static const wxWindowID ID_STATICTEXT8;
+		static const wxWindowID ID_tShafts;
+		static const wxWindowID ID_STATICTEXT9;
+		static const wxWindowID ID_tStairs;
+		static const wxWindowID ID_STATICTEXT1;
+		static const wxWindowID ID_tMeshes;
+		static const wxWindowID ID_STATICTEXT3;
+		static const wxWindowID ID_tTextures;
+		static const wxWindowID ID_STATICTEXT4;
+		static const wxWindowID ID_tActions;
+		static const wxWindowID ID_STATICTEXT21;
+		static const wxWindowID ID_tSounds;
+		static const wxWindowID ID_STATICTEXT22;
+		static const wxWindowID ID_tObjects;
+		static const wxWindowID ID_STATICTEXT24;
+		static const wxWindowID ID_tWalls;
+		static const wxWindowID ID_STATICTEXT25;
+		static const wxWindowID ID_tPolygons;
+		static const wxWindowID ID_STATICTEXT10;
+		static const wxWindowID ID_tInStairwell;
+		static const wxWindowID ID_STATICTEXT11;
+		static const wxWindowID ID_tInElevator;
+		static const wxWindowID ID_STATICTEXT12;
+		static const wxWindowID ID_tInShaft;
+		static const wxWindowID ID_STATICTEXT13;
+		static const wxWindowID ID_tRunningTime;
+		static const wxWindowID ID_STATICTEXT20;
+		static const wxWindowID ID_tFrontendVersion;
+		static const wxWindowID ID_STATICTEXT23;
+		static const wxWindowID ID_tSBSVersion;
+		static const wxWindowID ID_STATICTEXT26;
+		static const wxWindowID ID_tPlatform;
+		static const wxWindowID ID_STATICTEXT2;
+		static const wxWindowID ID_tRenderer;
+		static const wxWindowID ID_bOK;
+		static const wxWindowID ID_chkGlobal;
 		//*)
 		void OnInit();
 

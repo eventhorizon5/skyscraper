@@ -33,7 +33,7 @@ public:
 	//functions
 	Map(Object *parent, const std::string &name);
 	~Map();
-	void Enabled(bool value);
+	bool Enabled(bool value);
 	bool IsEnabled();
 	void GetImage(Ogre::Image &image);
 

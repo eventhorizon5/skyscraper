@@ -54,7 +54,6 @@
 #endif
 #include "profiler.h"
 #include "startscreen.h"
-#include "gitrev.h"
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
 #include <sysdir.h>  // for sysdir_start_search_path_enumeration
@@ -141,6 +140,7 @@ bool Skyscraper::OnInit()
 
 	StartupRunning = false;
 	FullScreen = false;
+	Maximized = false;
 	ShowMenu = false;
 	mRenderWindow = 0;
 	window = 0;
@@ -163,6 +163,9 @@ bool Skyscraper::OnInit()
 	step_backward = false;
 	freelook = false;
 
+	//reset loop states
+	startscreen_loaded = false;
+
 #ifdef USING_WX
 	parser = 0;
 #else
@@ -173,11 +176,6 @@ bool Skyscraper::OnInit()
 
 	//create VM instance
 	vm = new VM();
-
-	vm->version = "2.1";
-	vm->version_rev = ToString(GIT_REV);
-	vm->version_state = "Alpha";
-	vm->version_frontend = vm->version + ".0." + vm->version_rev;
 
 #ifdef USING_WX
 	gui = vm->GetGUI();
@@ -208,7 +206,7 @@ bool showconsole = true;
 	//show version number and exit if specified
 	if (parser->Found(wxT("version")) == true)
 	{
-		printf("Skyscraper version %s\n", vm->version_frontend.c_str());
+		printf("Skyscraper version %s\n", vm->version_full.c_str());
 		return false;
 	}
 
@@ -235,6 +233,7 @@ bool showconsole = true;
 	//AllowResize(false);
 	window->ShowWindow();
 	window->CenterOnScreen();
+	window->Maximize(hal->GetConfigBool(hal->configfile, "Skyscraper.Frontend.Maximized", false));
 
 	vm->SetParent(window);
 #else
@@ -277,6 +276,7 @@ bool showconsole = true;
 	{
 		Report("");
 		Report("Joystick detected: " + joystick.GetProductName().ToStdString());
+		Report("Joystick buttons: " + ToString(joystick.GetNumberButtons()));
 		Report("");
 	}
 #endif
@@ -393,6 +393,7 @@ bool Skyscraper::Loop()
 	{
 		UnloadSim();
 		vm->unloaded = false;
+		vm->loadstart = false;
 		return true;
 	}
 
@@ -402,6 +403,19 @@ bool Skyscraper::Loop()
 	if (StartupRunning == true)
 	{
 		bool result = false;
+
+		if (startscreen_loaded == false)
+		{
+#ifdef USING_WX
+			Maximized = window->IsMaximized();
+			if (Maximized == true)
+				window->Maximize(false);
+
+			window->SetClientSize(vm->GetHAL()->GetConfigInt(vm->GetHAL()->configfile, "Skyscraper.Frontend.Menu.Width", 800), vm->GetHAL()->GetConfigInt(vm->GetHAL()->configfile, "Skyscraper.Frontend.Menu.Height", 600));
+			window->Center();
+			window->SetCursor(wxNullCursor);
+#endif
+		}
 
 		result = startscreen->DrawBackground();
 
@@ -420,12 +434,23 @@ bool Skyscraper::Loop()
 			return true;
 		}
 
+		if (startscreen_loaded == false)
+		{
+#ifdef USING_WX
+			if (Maximized == true)
+				window->Maximize();
+#endif
+		}
+
+		startscreen_loaded = true;
+
 		//have HAL render frame
 		return vm->GetHAL()->Render();
 	}
 
 #ifdef USING_WX
-	gui->ShowProgress();
+	if (vm->LoadPending() == false)
+		gui->ShowProgress();
 #endif
 
 	//run sim engine instances
@@ -473,29 +498,38 @@ void Skyscraper::StartSound()
 		filename_full = vm->data_path + filename_full;
 #endif
 
+	Real volume = vm->GetHAL()->GetConfigFloat(vm->GetHAL()->configfile, "Skyscraper.Frontend.IntroMusicVolume", 1.0);
+
 	//fix name clash
 	#undef PlaySound
 
 	//play music
-	vm->GetHAL()->PlaySound(filename_full);
+	vm->GetHAL()->PlaySound(filename_full, volume);
 }
 
-std::string Skyscraper::SelectBuilding()
+std::string Skyscraper::SelectBuilding(bool native_dialog)
 {
 #ifdef USING_WX
-	return gui->SelectBuilding(vm->data_path);
+
+	if (native_dialog == true)
+		return gui->SelectBuildingNative(vm->data_path);
+
+	if (vm->GetHAL()->GetConfigBool(vm->GetHAL()->configfile, "Skyscraper.Frontend.SelectBuildingNative", false) == false)
+		return gui->SelectBuilding(vm->data_path);
+	else
+		return gui->SelectBuildingNative(vm->data_path);
 #else
 	return "";
 #endif
 }
 
-bool Skyscraper::Load(const std::string &filename, EngineContext *parent, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
+bool Skyscraper::Load(const std::string &filename, EngineContext *parent, const Vector3 &position, const Vector3 &rotation, const Vector3 &area_min, const Vector3 &area_max)
 {
 	//load simulator and data file
 
 	StopMenu();
 
-	bool result = vm->Load(true, filename, parent, position, rotation, area_min, area_max);
+	bool result = vm->Load(false, true, filename, parent, position, rotation, area_min, area_max);
 
 	if (result == false && vm->GetEngineCount() == 1)
 		UnloadToMenu();
@@ -509,6 +543,7 @@ void Skyscraper::StopMenu()
 	{
 		startscreen->DeleteButtons();
 		StartupRunning = false;
+		startscreen_loaded = false;
 	}
 }
 
@@ -540,21 +575,30 @@ bool Skyscraper::Start(EngineContext *engine)
 			SetFullScreen(true);
 
 #ifdef USING_WX
+		Maximized = window->IsMaximized();
+
 		//resize main window
 		if (FullScreen == false)
 		{
 #if !defined(__WXMAC__)
 			window->SetBackgroundColour(*wxBLACK);
 #endif
-			window->SetClientSize(hal->GetConfigInt(hal->configfile, "Skyscraper.Frontend.ScreenWidth", 1024), hal->GetConfigInt(hal->configfile, "Skyscraper.Frontend.ScreenHeight", 768));
-			window->Center();
+			if (Maximized == false)
+			{
+				window->SetClientSize(hal->GetConfigInt(hal->configfile, "Skyscraper.Frontend.ScreenWidth", 1024), hal->GetConfigInt(hal->configfile, "Skyscraper.Frontend.ScreenHeight", 768));
+				window->Center();
+			}
 		}
 #endif
 	}
 
 	//start simulation
-	if (!vm->StartEngine(engine, hal->mCameras))
+	if (!vm->StartEngine(engine))
 		return false;
+
+	//exit if engine loads are still queued
+	if (vm->LoadPending() == true || vm->IsEngineLoading() == true)
+		return true;
 
 	//close progress dialog if no engines are loading
 #ifdef USING_WX
@@ -563,9 +607,7 @@ bool Skyscraper::Start(EngineContext *engine)
 #endif
 
 	//load control panel
-	if (engine == vm->GetActiveEngine())
-	{
-		bool panel = vm->GetHAL()->GetConfigBool(hal->configfile, "Skyscraper.Frontend.ShowControlPanel", true);
+	bool panel = vm->GetHAL()->GetConfigBool(hal->configfile, "Skyscraper.Frontend.ShowControlPanel", true);
 
 #ifdef USING_WX
 		//override if disabled on the command line
@@ -575,7 +617,6 @@ bool Skyscraper::Start(EngineContext *engine)
 		if (panel == true)
 			gui->CreateDebugPanel();
 #endif
-	}
 
 	hal->RefreshViewport();
 
@@ -616,11 +657,7 @@ void Skyscraper::UnloadToMenu()
 
 	//return to main menu
 	SetFullScreen(false);
-#ifdef USING_WX
-	window->SetClientSize(vm->GetHAL()->GetConfigInt(vm->GetHAL()->configfile, "Skyscraper.Frontend.Menu.Width", 800), vm->GetHAL()->GetConfigInt(vm->GetHAL()->configfile, "Skyscraper.Frontend.Menu.Height", 600));
-	window->Center();
-	window->SetCursor(wxNullCursor);
-#endif
+
 	vm->ConcurrentLoads = false;
 	vm->SetRenderOnStartup(false);
 

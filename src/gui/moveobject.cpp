@@ -46,6 +46,7 @@ const long MoveObject::ID_rPosition = wxNewId();
 const long MoveObject::ID_rRotation = wxNewId();
 const long MoveObject::ID_STATICTEXT28 = wxNewId();
 const long MoveObject::ID_txtMoveSpeed = wxNewId();
+const long MoveObject::ID_chkRelative = wxNewId();
 const long MoveObject::ID_bZPlus = wxNewId();
 const long MoveObject::ID_bYPlus = wxNewId();
 const long MoveObject::ID_bXNeg = wxNewId();
@@ -89,6 +90,7 @@ MoveObject::MoveObject(DebugPanel* root, wxWindow* parent,wxWindowID id, EngineC
 	wxFlexGridSizer* FlexGridSizer12;
 	wxFlexGridSizer* FlexGridSizer14;
 	wxFlexGridSizer* FlexGridSizer1;
+	wxFlexGridSizer* FlexGridSizer2;
 	wxFlexGridSizer* FlexGridSizer4;
 	wxFlexGridSizer* FlexGridSizer5;
 	wxFlexGridSizer* FlexGridSizer6;
@@ -106,7 +108,7 @@ MoveObject::MoveObject(DebugPanel* root, wxWindow* parent,wxWindowID id, EngineC
 	GridSizer1 = new wxGridSizer(0, 2, 0, 0);
 	StaticText1 = new wxStaticText(this, ID_STATICTEXT1, _("Position:"), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE, _T("ID_STATICTEXT1"));
 	GridSizer1->Add(StaticText1, 1, wxALL|wxEXPAND, 5);
-	lblPosition = new wxStaticText(this, ID_lblPosition, _("0, 0, 0"), wxDefaultPosition, wxDefaultSize, wxST_NO_AUTORESIZE|wxALIGN_CENTRE, _T("ID_lblPosition"));
+	lblPosition = new wxStaticText(this, ID_lblPosition, _("0, 0, 0"), wxDefaultPosition, wxSize(150,-1), wxST_NO_AUTORESIZE|wxALIGN_CENTRE, _T("ID_lblPosition"));
 	GridSizer1->Add(lblPosition, 1, wxALL|wxEXPAND, 5);
 	StaticText3 = new wxStaticText(this, ID_STATICTEXT3, _("Relative Position:"), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE, _T("ID_STATICTEXT3"));
 	GridSizer1->Add(StaticText3, 1, wxALL|wxEXPAND, 5);
@@ -126,12 +128,17 @@ MoveObject::MoveObject(DebugPanel* root, wxWindow* parent,wxWindowID id, EngineC
 	rRotation = new wxRadioButton(this, ID_rRotation, _("Rotation"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_rRotation"));
 	FlexGridSizer11->Add(rRotation, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	FlexGridSizer5->Add(FlexGridSizer11, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	FlexGridSizer14 = new wxFlexGridSizer(0, 2, 0, 0);
+	FlexGridSizer14 = new wxFlexGridSizer(0, 1, 0, 0);
+	FlexGridSizer2 = new wxFlexGridSizer(0, 3, 0, 0);
 	StaticText20 = new wxStaticText(this, ID_STATICTEXT28, _("Speed"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT28"));
-	FlexGridSizer14->Add(StaticText20, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	FlexGridSizer2->Add(StaticText20, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	txtMoveSpeed = new wxTextCtrl(this, ID_txtMoveSpeed, _("1.0"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_txtMoveSpeed"));
 	txtMoveSpeed->SetMinSize(wxSize(90,-1));
-	FlexGridSizer14->Add(txtMoveSpeed, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	FlexGridSizer2->Add(txtMoveSpeed, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	FlexGridSizer14->Add(FlexGridSizer2, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	chkRelative = new wxCheckBox(this, ID_chkRelative, _("Relative"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_chkRelative"));
+	chkRelative->SetValue(true);
+	FlexGridSizer14->Add(chkRelative, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	FlexGridSizer5->Add(FlexGridSizer14, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	FlexGridSizer12 = new wxFlexGridSizer(0, 3, 0, 0);
 	FlexGridSizer12->Add(-1,-1,1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
@@ -214,7 +221,6 @@ MoveObject::MoveObject(DebugPanel* root, wxWindow* parent,wxWindowID id, EngineC
 	FlexGridSizer9->Add(StaticBoxSizer4, 1, wxTOP|wxBOTTOM|wxALIGN_TOP|wxALIGN_CENTER_HORIZONTAL, 5);
 	FlexGridSizer1->Add(FlexGridSizer9, 1, wxALIGN_RIGHT|wxALIGN_TOP, 5);
 	SetSizer(FlexGridSizer1);
-	FlexGridSizer1->Fit(this);
 	FlexGridSizer1->SetSizeHints(this);
 	Center();
 
@@ -311,140 +317,158 @@ void MoveObject::On_rRotation_Select(wxCommandEvent& event)
 
 void MoveObject::On_bZPlus_Click(wxCommandEvent& event)
 {
-	if (!Simcore)
+	if (!Simcore || !object)
 		return;
+
+	Vector3 vector = Vector3(0, 0, 1);
+	Real speed = atof(txtMoveSpeed->GetValue());
 
 	if (chkHold->GetValue() == true)
 	{
-		hold_vector += Vector3(0, 0, atof(txtMoveSpeed->GetValue()));
+		hold_vector += Vector3(0, 0, speed);
 		return;
 	}
 
 	if (rPosition->GetValue() == true)
-		Simcore->MoveObject(object, Vector3(0, 0, 1) * atof(txtMoveSpeed->GetValue()), true, true, true, true);
+		object->Move(vector, speed, chkRelative->GetValue());
 	else
-		Simcore->RotateObject(object, Vector3(0, 0, 1), atof(txtMoveSpeed->GetValue()), true, true, true, true);
+		object->Rotate(vector, speed, chkRelative->GetValue());
 }
 
 void MoveObject::On_bYPlus_Click(wxCommandEvent& event)
 {
-	if (!Simcore)
+	if (!Simcore || !object)
 		return;
+
+	Vector3 vector = Vector3(0, 1, 0);
+	Real speed = atof(txtMoveSpeed->GetValue());
 
 	if (chkHold->GetValue() == true)
 	{
-		hold_vector += Vector3(0, atof(txtMoveSpeed->GetValue()), 0);
+		hold_vector += Vector3(0, speed, 0);
 		return;
 	}
 
 	if (rPosition->GetValue() == true)
-		Simcore->MoveObject(object, Vector3(0, 1, 0) * atof(txtMoveSpeed->GetValue()), true, true, true, true);
+		object->Move(vector, speed, chkRelative->GetValue());
 	else
-		Simcore->RotateObject(object, Vector3(0, 1, 0), atof(txtMoveSpeed->GetValue()), true, true, true, true);
+		object->Rotate(vector, speed, chkRelative->GetValue());
 }
 
 void MoveObject::On_bXNeg_Click(wxCommandEvent& event)
 {
-	if (!Simcore)
+	if (!Simcore || !object)
 		return;
+
+	Vector3 vector = Vector3(-1, 0, 0);
+	Real speed = atof(txtMoveSpeed->GetValue());
 
 	if (chkHold->GetValue() == true)
 	{
-		hold_vector -= Vector3(atof(txtMoveSpeed->GetValue()), 0, 0);
+		hold_vector -= Vector3(speed, 0, 0);
 		return;
 	}
 
 	if (rPosition->GetValue() == true)
-		Simcore->MoveObject(object, Vector3(-1, 0, 0) * atof(txtMoveSpeed->GetValue()), true, true, true, true);
+		object->Move(vector, speed, chkRelative->GetValue());
 	else
-		Simcore->RotateObject(object, Vector3(-1, 0, 0), atof(txtMoveSpeed->GetValue()), true, true, true, true);
+		object->Rotate(vector, speed, chkRelative->GetValue());
 }
 
 void MoveObject::On_bXPlus_Click(wxCommandEvent& event)
 {
-	if (!Simcore)
+	if (!Simcore || !object)
 		return;
+
+	Vector3 vector = Vector3(1, 0, 0);
+	Real speed = atof(txtMoveSpeed->GetValue());
 
 	if (chkHold->GetValue() == true)
 	{
-		hold_vector += Vector3(atof(txtMoveSpeed->GetValue()), 0, 0);
+		hold_vector += Vector3(speed, 0, 0);
 		return;
 	}
 
 	if (rPosition->GetValue() == true)
-		Simcore->MoveObject(object, Vector3(1, 0, 0) * atof(txtMoveSpeed->GetValue()), true, true, true, true);
+		object->Move(vector, speed, chkRelative->GetValue());
 	else
-		Simcore->RotateObject(object, Vector3(1, 0, 0), atof(txtMoveSpeed->GetValue()), true, true, true, true);
+		object->Rotate(vector, speed, chkRelative->GetValue());
 }
 
 void MoveObject::On_bZNeg_Click(wxCommandEvent& event)
 {
-	if (!Simcore)
+	if (!Simcore || !object)
 		return;
+
+	Vector3 vector = Vector3(0, 0, -1);
+	Real speed = atof(txtMoveSpeed->GetValue());
 
 	if (chkHold->GetValue() == true)
 	{
-		hold_vector -= Vector3(0, 0, atof(txtMoveSpeed->GetValue()));
+		hold_vector -= Vector3(0, 0, speed);
 		return;
 	}
 
 	if (rPosition->GetValue() == true)
-		Simcore->MoveObject(object, Vector3(0, 0, -1) * atof(txtMoveSpeed->GetValue()), true, true, true, true);
+		object->Move(vector, speed, chkRelative->GetValue());
 	else
-		Simcore->RotateObject(object, Vector3(0, 0, -1), atof(txtMoveSpeed->GetValue()), true, true, true, true);
+		object->Rotate(vector, speed, chkRelative->GetValue());
 }
 
 void MoveObject::On_bYNeg_Click(wxCommandEvent& event)
 {
-	if (!Simcore)
+	if (!Simcore || !object)
 		return;
+
+	Vector3 vector = Vector3(0, -1, 0);
+	Real speed = atof(txtMoveSpeed->GetValue());
 
 	if (chkHold->GetValue() == true)
 	{
-		hold_vector -= Vector3(0, atof(txtMoveSpeed->GetValue()), 0);
+		hold_vector -= Vector3(0, speed, 0);
 		return;
 	}
 
 	if (rPosition->GetValue() == true)
-		Simcore->MoveObject(object, Vector3(0, -1, 0) * atof(txtMoveSpeed->GetValue()), true, true, true, true);
+		object->Move(vector, speed, chkRelative->GetValue());
 	else
-		Simcore->RotateObject(object, Vector3(0, -1, 0), atof(txtMoveSpeed->GetValue()), true, true, true, true);
+		object->Rotate(vector, speed, chkRelative->GetValue());
 }
 
 void MoveObject::On_bPositionX_Click(wxCommandEvent& event)
 {
 	if (Simcore)
-		Simcore->MoveObject(object, Vector3(atof(txtPositionX->GetValue()), 0.0, 0.0), false, true, false, false);
+		Simcore->MoveObject(object, Vector3(atof(txtPositionX->GetValue()), 0.0, 0.0), chkRelative->GetValue(), true, false, false);
 }
 
 void MoveObject::On_bPositionY_Click(wxCommandEvent& event)
 {
 	if (Simcore)
-		Simcore->MoveObject(object, Vector3(0.0, atof(txtPositionY->GetValue()), 0.0), false, false, true, false);
+		Simcore->MoveObject(object, Vector3(0.0, atof(txtPositionY->GetValue()), 0.0), chkRelative->GetValue(), false, true, false);
 }
 
 void MoveObject::On_bPositionZ_Click(wxCommandEvent& event)
 {
 	if (Simcore)
-		Simcore->MoveObject(object, Vector3(0.0, 0.0, atof(txtPositionZ->GetValue())), false, false, false, true);
+		Simcore->MoveObject(object, Vector3(0.0, 0.0, atof(txtPositionZ->GetValue())), chkRelative->GetValue(), false, false, true);
 }
 
 void MoveObject::On_bRotationX_Click(wxCommandEvent& event)
 {
 	if (Simcore)
-		Simcore->RotateObject(object, Vector3(atof(txtRotationX->GetValue()), 0.0, 0.0), 0, false, true, false, false);
+		Simcore->RotateObject(object, Vector3(atof(txtRotationX->GetValue()), 0.0, 0.0), 0, chkRelative->GetValue(), true, false, false);
 }
 
 void MoveObject::On_bRotationY_Click(wxCommandEvent& event)
 {
 	if (Simcore)
-		Simcore->RotateObject(object, Vector3(0.0, atof(txtRotationY->GetValue()), 0.0), 0, false, false, true, false);
+		Simcore->RotateObject(object, Vector3(0.0, atof(txtRotationY->GetValue()), 0.0), 0, chkRelative->GetValue(), false, true, false);
 }
 
 void MoveObject::On_bRotationZ_Click(wxCommandEvent& event)
 {
 	if (Simcore)
-		Simcore->RotateObject(object, Vector3(0.0, 0.0, atof(txtRotationZ->GetValue())), 0, false, false, false, true);
+		Simcore->RotateObject(object, Vector3(0.0, 0.0, atof(txtRotationZ->GetValue())), 0, chkRelative->GetValue(), false, false, true);
 }
 
 void MoveObject::On_chkHold_Click(wxCommandEvent& event)

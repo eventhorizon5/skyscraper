@@ -60,6 +60,9 @@ mDebugDrawer(0)
 	mDispatcher = new btCollisionDispatcher(&mDefaultCollisionConfiguration);
 	mBroadphase = new btDbvtBroadphase();
 
+    //print banner
+    LogManager::getSingleton().logMessage("\nOgreBullet Loading...");
+
 	// if not called by a inherited class
 	if (init)
 	{
@@ -68,6 +71,7 @@ mDebugDrawer(0)
 
 		btCollisionDispatcher * dispatcher = static_cast<btCollisionDispatcher *>(mWorld->getDispatcher());
 		btGImpactCollisionAlgorithm::registerAlgorithm(dispatcher);
+        LogManager::getSingleton().logMessage("CollisionsWorld initialized");
 	}
 }
 // -------------------------------------------------------------------------

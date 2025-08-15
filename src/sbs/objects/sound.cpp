@@ -26,6 +26,7 @@
 #endif
 #include "globals.h"
 #include "sbs.h"
+#include "utility.h"
 #include "floor.h"
 #include "elevatorcar.h"
 #include "reverb.h"
@@ -58,6 +59,7 @@ Sound::Sound(Object *parent, const std::string &name, bool permanent) : Object(p
 	doppler_level = (float)sbs->GetConfigFloat("Skyscraper.SBS.Sound.Doppler", 0.0);
 	position_queued = false;
 	SetVelocity = false;
+	enabled = true;
 
 	if (sbs->Verbose)
 		Report("Created sound");
@@ -96,7 +98,7 @@ Sound::~Sound()
 void Sound::OnMove(bool parent)
 {
 #ifndef DISABLE_SOUND
-	Vector3 global_position = sbs->ToGlobal(GetPosition());
+	Vector3 global_position = sbs->GetUtility()->ToGlobal(GetPosition());
 
 	FMOD_VECTOR pos = {(float)global_position.x, (float)global_position.y, (float)global_position.z};
 	FMOD_VECTOR vel = { 0, 0, 0 };
@@ -320,8 +322,12 @@ bool Sound::IsValid()
 bool Sound::Play(bool reset)
 {
 	//exit if sound is disabled
-	if (!system)
-		return false;
+	if (!system || !enabled)
+		return true;
+
+	//blacklist certain empty sounds
+	if (Filename == "none.wav" || Filename == "beno/none.wav")
+		return true;
 
 #ifndef DISABLE_SOUND
 	if (!sound)
@@ -385,7 +391,11 @@ void Sound::Reset()
 bool Sound::Load(const std::string &filename, bool force)
 {
 	//exit if sound is disabled
-	if (!system)
+	if (!system || !enabled)
+		return false;
+
+	//blacklist certain empty sounds
+	if (Filename == "none.wav" || Filename == "beno/none.wav")
 		return false;
 
 	//exit if filename is the same
@@ -614,6 +624,22 @@ bool Sound::GetNearestReverbPosition(Vector3 &position)
 	}
 
 	return result;
+}
+
+bool Sound::Enabled(bool value)
+{
+	//enable or disable this sound object
+
+	if (value == false)
+		Stop();
+
+	enabled = value;
+	return true;
+}
+
+bool Sound::IsEnabled()
+{
+	return enabled;
 }
 
 }

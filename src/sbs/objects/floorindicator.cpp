@@ -23,13 +23,14 @@
 
 #include "globals.h"
 #include "sbs.h"
+#include "polymesh.h"
 #include "mesh.h"
 #include "elevator.h"
 #include "elevatorcar.h"
 #include "profiler.h"
 #include "floor.h"
 #include "timer.h"
-#include "texture.h"
+#include "texman.h"
 #include "floorindicator.h"
 
 namespace SBS {
@@ -47,7 +48,7 @@ public:
 	virtual void Notify();
 };
 
-FloorIndicator::FloorIndicator(Object *parent, int elevator, int car, const std::string &texture_prefix, const std::string &blank_texture, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset) : Object(parent)
+FloorIndicator::FloorIndicator(Object *parent, int index, int elevator, int car, const std::string &texture_prefix, const std::string &blank_texture, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset) : Object(parent)
 {
 	//creates a new floor indicator at the specified position
 
@@ -64,7 +65,10 @@ FloorIndicator::FloorIndicator(Object *parent, int elevator, int car, const std:
 	//move object
 	Move(CenterX, voffset, CenterZ);
 
-	std::string name = "Floor Indicator " + ToString(elevator);
+	std::string ext;
+	if (index > 0)
+		ext = ":" + ToString(index + 1);
+	std::string name = "Floor Indicator " + ToString(elevator) + ext;
 	SetName(name);
 
 	FloorIndicatorMesh = new MeshObject(this, name, 0, "", "", sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
@@ -87,26 +91,27 @@ FloorIndicator::FloorIndicator(Object *parent, int elevator, int car, const std:
 	std::string tmpdirection = direction;
 	SetCase(tmpdirection, false);
 
+	PolyMesh* polymesh = sbs->GetPolyMesh();
 	Wall *wall = FloorIndicatorMesh->CreateWallObject("Floor Indicator");
 	if (tmpdirection == "front" || tmpdirection == "back")
 	{
 		if (tmpdirection == "front")
-			sbs->DrawWalls(true, false, false, false, false, false);
+			polymesh->DrawWalls(true, false, false, false, false, false);
 		else
-			sbs->DrawWalls(false, true, false, false, false, false);
+			polymesh->DrawWalls(false, true, false, false, false, false);
 
-		sbs->AddWallMain(wall, "Floor Indicator", texture, 0, -width / 2, 0, width / 2, 0, height, height, 0, 0, 1, 1, false);
+		polymesh->AddWallMain(wall, "Floor Indicator", texture, 0, -width / 2, 0, width / 2, 0, height, height, 0, 0, 1, 1, false);
 	}
 	else if (tmpdirection == "left" || tmpdirection == "right")
 	{
 		if (tmpdirection == "left")
-			sbs->DrawWalls(true, false, false, false, false, false);
+			polymesh->DrawWalls(true, false, false, false, false, false);
 		else
-			sbs->DrawWalls(false, true, false, false, false, false);
+			polymesh->DrawWalls(false, true, false, false, false, false);
 
-		sbs->AddWallMain(wall, "Floor Indicator", texture, 0, 0, width / 2, 0, -width / 2, height, height, 0, 0, 1, 1, false);
+		polymesh->AddWallMain(wall, "Floor Indicator", texture, 0, 0, width / 2, 0, -width / 2, height, height, 0, 0, 1, 1, false);
 	}
-	sbs->ResetWalls();
+	polymesh->ResetWalls();
 
 	flash_timer = new Timer("Flash Timer", this);
 
@@ -139,15 +144,16 @@ FloorIndicator::~FloorIndicator()
 	}
 }
 
-void FloorIndicator::Enabled(bool value)
+bool FloorIndicator::Enabled(bool value)
 {
 	//turns indicator on/off
 
 	if (is_enabled == value)
-		return;
+		return true;
 
-	FloorIndicatorMesh->Enabled(value);
+	bool status = FloorIndicatorMesh->Enabled(value);
 	is_enabled = value;
+	return status;
 }
 
 void FloorIndicator::Update(bool blank)
@@ -232,12 +238,14 @@ void FloorIndicator::On()
 	Update();
 }
 
-void FloorIndicator::Loop()
+bool FloorIndicator::Loop()
 {
 	if (sbs->GetPower() == false)
 		Off();
 	else
 		On();
+
+	return true;
 }
 
 }

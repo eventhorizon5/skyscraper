@@ -68,13 +68,15 @@ CustomObject::~CustomObject()
 		RemoveFromParent();
 }
 
-void CustomObject::Enabled(bool value)
+bool CustomObject::Enabled(bool value)
 {
 	if (always_visible == true)
 		value = true;
 
-	mesh->Enabled(value);
+	bool status = mesh->Enabled(value);
 	EnableLoop(value);
+
+	return status;
 }
 
 bool CustomObject::IsEnabled()
@@ -119,7 +121,7 @@ void CustomObject::AddToParent()
 		sbs->AddCustomObject(this);
 }
 
-void CustomObject::Loop()
+bool CustomObject::Loop()
 {
 	//runloop, called by parent to allow for switching parents
 
@@ -177,6 +179,8 @@ void CustomObject::Loop()
 			}
 		}
 	}
+
+	return true;
 }
 
 void CustomObject::PickUp()

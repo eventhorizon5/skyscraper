@@ -50,7 +50,7 @@ public:
 
 	MeshObject(Object* parent, const std::string &name, DynamicMesh* wrapper = 0, const std::string &filename = "", const std::string &meshname = "", Real max_render_distance = 0, Real scale_multiplier = 1, bool create_collider = true, bool dynamic_buffers = false);
 	virtual ~MeshObject();
-	void Enabled(bool value);
+	bool Enabled(bool value);
 	void EnableCollider(bool value);
 	bool IsEnabled();
 	Wall* CreateWallObject(const std::string &name);
@@ -74,7 +74,6 @@ public:
 	void GetBounds();
 	void ChangeHeight(Real newheight);
 	void EnableShadows(bool value);
-	PolyMesh* GetPolyMesh();
 	bool IsPrepared();
 	void ResetPrepare();
 	bool ReplaceTexture(const std::string &oldtexture, const std::string &newtexture);
@@ -114,10 +113,10 @@ private:
 	Real restitution, friction, mass;
 	bool prepared;
 	bool wrapper_selfcreate;
+
 	bool LoadFromFile(const std::string &filename);
 	bool LoadColliderModel(Ogre::MeshPtr &collidermesh);
-
-	PolyMesh *polymesh;
+	void CreateBoundingBox();
 	Ogre::MeshPtr collidermesh;
 	size_t size;
 };

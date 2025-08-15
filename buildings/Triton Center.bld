@@ -1,5 +1,5 @@
 #The Triton Center
-#Copyright (C)2002-2017 Ryan Thoryk
+#Copyright (C)2002-2025 Ryan Thoryk
 
 #This program is free software; you can redistribute it and/or
 #modify it under the terms of the GNU General Public License
@@ -85,6 +85,7 @@
     Load data/miscdoor8.jpg, StairsDoor2, 1, 1
     Load data/miscdoor9b.jpg, HotelDoor, 1, 1
     Load data/downtown.jpg, Downtown, 1, 1
+    Load data/misc/grass.jpg, Grass, 1, 1
     Load data/bracing1.jpg, VentsInt, 1, 1
     Load data/vents1.jpg, VentsExt, 1, 1
     Load data/stucco22b.jpg, HotelWalls, 0.269, 0.25
@@ -507,11 +508,17 @@ Cut Landscape, -340.5, -1, -603, 400, 1, 321.5, false, true
 
     #Add security camera TV
     AddWall Security TV, Camera1, 0.1, 3.9, 30, 3.9, 27, 3, 3, 4, 4, 1, 1, false
+    AddWall Map TV, MapCamera, 0.1, 3.9, 34, 3.9, 31, 3, 3, 4, 4, 1, 1, false
 
     #add a trigger for the camera, to only have it turn on when user is nearby
     AddAction CamStop, Camera1, Disable
     AddAction CamStart, Camera1, Enable
     AddTrigger CamEnable, , -4, 0, 20, 4, 10, 35, CamStop, CamStart
+
+    #add a map trigger
+    AddAction MapStop, MapGenerator:MapCamera, Disable
+    AddAction MapStart, MapGenerator:MapCamera, Enable
+    AddTrigger MapEnable, , -4, 0, 20, 4, 10, 35, MapStop, MapStart
 
     SetAutoSize = true, true
 <EndFloor>
@@ -9498,4 +9505,12 @@ AddFloorAutoArea -76.5, Floor(-7).Altitude, 100, -16, 0, 220
     AddLight Elevator %elevator%, ElevLight, 0
     MoveLight Elevator %elevator%, ElevLight, 0, 6, 0
 <EndElevators>
+
+#C++ version 20th Anniversary Music
+<Floor 135>
+    AddSound Music, intro2.ogg, 0, 10, 7, true, 1, 100, 1, -1, 0, 360, 360, 1, 0, 0, 0
+<EndFloor>
+
+#set zoom of Map camera
+SetCameraZoom MapGenerator, MapCamera, 1.5
 

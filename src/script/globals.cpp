@@ -298,6 +298,22 @@ int ScriptProcessor::GlobalsSection::Run(std::string &LineData)
 			enabled = true;
 		Simcore->EnableMap(enabled);
 	}
+	//type parameter
+	if (StartsWithNoCase(LineData, "type"))
+	{
+		std::string check = SetCaseCopy(value, false);
+		engine->type = ENGINETYPE_GENERIC;
+		if (check == "building")
+			engine->type = ENGINETYPE_BUILDING;
+		else if (check == "city")
+			engine->type = ENGINETYPE_CITY;
+		else if (check == "planet")
+			engine->type = ENGINETYPE_PLANET;
+		else if (check == "solarsystem")
+			engine->type = ENGINETYPE_SOLARSYSTEM;
+		return sNextLine;
+	}
+
 	//handle end of globals section
 	if (StartsWithNoCase(LineData, "<endglobals>"))
 	{

@@ -158,6 +158,38 @@ std::string GUI::SelectBuilding(const std::string &data_path)
 	return filename;
 }
 
+std::string GUI::SelectBuildingNative(const std::string &data_path)
+{
+	//choose a building from a script file, using a native file selection dialog
+	std::string filename = "";
+	srand (time (0));
+
+	//set building file
+	//wxFileDialog *Selector = new wxFileDialog(0, _("Select a Building"), _("buildings/"), _(""), _("Building files (*.bld;*.txt)|*.bld;*.txt"), wxFD_OPEN);
+	wxFileDialog *Selector = new wxFileDialog(0, _("Select a Building"), _("buildings/"), _(""), _("Building files (*.bld)|*.bld"), wxFD_OPEN);
+	int result = Selector->ShowModal();
+	if (result == wxID_CANCEL)
+	{
+		//delete dialog
+		delete Selector;
+		Selector = 0;
+		//quit
+		return "";
+	}
+
+#if defined(wxUSE_UNICODE) && wxUSE_UNICODE
+	filename = Selector->GetFilename().mb_str().data();
+#else
+	filename = Selector->GetFilename();
+#endif
+
+	//delete dialog
+	delete Selector;
+	Selector = 0;
+
+	return filename;
+}
+
 void GUI::CreateDebugPanel()
 {
 	if (!dpanel)
@@ -211,6 +243,8 @@ void GUI::CreateProgressDialog(const std::string &message)
 		msg += "\n";
 		msg += message;
 		progdialog->Update(progdialog->GetValue(), msg);
+		progdialog->Fit();
+		progdialog->Center();
 	}
 
 	//stop control panel timer
@@ -231,18 +265,37 @@ void GUI::CloseProgressDialog()
 void GUI::ShowProgressDialog()
 {
 	if (!progdialog)
-		progdialog = new wxProgressDialog(wxT("Loading..."), prog_text, 100, vm->GetParent());
+		progdialog = new wxProgressDialog(wxT("Loading..."), prog_text, 100, vm->GetParent(), wxPD_AUTO_HIDE|wxPD_APP_MODAL|wxPD_CAN_ABORT|wxPD_ELAPSED_TIME|wxPD_ESTIMATED_TIME|wxPD_CAN_SKIP);
 
 	show_progress = false;
 }
 
-void GUI::UpdateProgress(int percent)
+bool GUI::UpdateProgress(int percent)
 {
 	//update progress dialog with the specified percent
 	if (!progdialog)
-		return;
+		return true;
 
-	progdialog->Update(percent);
+	bool result = progdialog->Update(percent);
+	progdialog->Fit();
+	progdialog->Center();
+	return result;
+}
+
+bool GUI::ProgressCancelled()
+{
+	if (!progdialog)
+		return false;
+
+	return progdialog->WasCancelled();
+}
+
+bool GUI::ProgressSkipped()
+{
+	if (!progdialog)
+		return false;
+
+	return progdialog->WasSkipped();
 }
 
 void GUI::RefreshConsole()

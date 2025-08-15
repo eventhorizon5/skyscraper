@@ -114,6 +114,12 @@ namespace SBS {
 	class CustomObject;
 	class Reverb;
 	class Map;
+	class RouteController;
+	class Texture;
+	class TextureImage;
+	class Shape;
+	class Teleporter;
+	class TeleporterManager;
 
 	typedef std::vector<Vector3> PolyArray;
 	typedef std::vector<PolyArray> PolygonSet;
@@ -182,14 +188,11 @@ public:
 	int FloorDisplayRange; //number of floors to display while in elevator, if shaft's ShowFloors is true
 	std::string SkyName; //base filename of sky texture pack
 	bool DeleteColliders; //true if system should delete mesh colliders on each modification
-	Real UnitScale; //scale of 3D positions; this value equals 1 3D unit
 	bool Verbose; //set to true to enable verbose mode
 	bool InterfloorOnTop; //set to true to have interfloor area on top (it's on the bottom by default)
 	bool FastDelete; //used internally for quick object deletion
 	std::string LastError; //most recent error message, from ReportError()
 	std::string LastNotification; //most recent notification message, from Report()
-	int WallCount; //wall object count
-	int PolygonCount; //wall polygon object count
 	unsigned int SmoothFrames;
 	bool RenderOnStartup; //render objects on startup
 	bool RandomActivity; //random activity is enabled
@@ -198,27 +201,18 @@ public:
 	int Lobby; //lobby level (used or random activity)
 
 	//public functions
-	SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instance_number, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0f, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
+	SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instance_number, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
 	~SBS();
 	void Initialize();
-	bool Start(std::vector<Ogre::Camera*> &cameras);
+	bool Start();
 	void CreateSky();
-	bool AddWallMain(Wall* wallobject, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real height_in1, Real height_in2, Real altitude1, Real altitude2, Real tw, Real th, bool autosize);
-	bool AddFloorMain(Wall* wallobject, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real altitude1, Real altitude2, bool reverse_axis, bool texture_direction, Real tw, Real th, bool autosize, bool legacy_behavior = false);
 	void CalculateFrameRate();
-	void Loop(bool loading, bool isready);
-	Wall* CreateWallBox(MeshObject* mesh, const std::string &name, const std::string &texture, Real x1, Real x2, Real z1, Real z2, Real height_in, Real voffset, Real tw, Real th, bool inside = true, bool outside = true, bool top = true, bool bottom = true, bool autosize = true);
-	Wall* CreateWallBox2(MeshObject* mesh, const std::string &name, const std::string &texture, Real CenterX, Real CenterZ, Real WidthX, Real LengthZ, Real height_in, Real voffset, Real tw, Real th, bool inside = true, bool outside = true, bool top = true, bool bottom = true, bool autosize = true);
-	Wall* AddTriangleWall(MeshObject* mesh, const std::string &name, const std::string &texture, Real x1, Real y1, Real z1, Real x2, Real y2, Real z2, Real x3, Real y3, Real z3, Real tw, Real th);
-	Wall* AddCustomWall(MeshObject* mesh, const std::string &name, const std::string &texture, PolyArray &varray, Real tw, Real th);
-	Wall* AddCustomFloor(MeshObject* mesh, const std::string &name, const std::string &texture, std::vector<Vector2> &varray, Real altitude, Real tw, Real th);
-	void AddPolygon(Wall* wallobject, const std::string &texture, PolyArray &varray, Real tw, Real th);
+	bool Loop(bool loading, bool isready);
 	void EnableBuildings(bool value);
 	void EnableLandscape(bool value);
 	void EnableExternal(bool value);
 	void EnableSkybox(bool value);
 	int GetFloorNumber(Real altitude, int lastfloor = 0, bool checklastfloor = false);
-	Real GetDistance(Real x1, Real x2, Real z1, Real z2);
 	Shaft* CreateShaft(int number, Real CenterX, Real CenterZ, int startfloor, int endfloor);
 	Stairwell* CreateStairwell(int number, Real CenterX, Real CenterZ, int startfloor, int endfloor);
 	Elevator* NewElevator(int number);
@@ -237,24 +231,11 @@ public:
 	Stairwell* GetStairwell(int number);
 	Vehicle* GetVehicle(int number);
 	DispatchController* GetController(int number);
-	bool SetWallOrientation(std::string direction);
-	int GetWallOrientation();
-	bool SetFloorOrientation(std::string direction);
-	int GetFloorOrientation();
-	void DrawWalls(bool MainN, bool MainP, bool SideN, bool SideP, bool Top, bool Bottom);
-	void ResetWalls(bool ToDefaults = false);
-	int GetDrawWallsCount();
-	Real MetersToFeet(Real meters); //converts meters to feet
-	Real FeetToMeters(Real feet); //converts feet to meters
-	Wall* AddWall(MeshObject* mesh, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real height_in1, Real height_in2, Real altitude1, Real altitude2, Real tw, Real th);
-	Wall* AddFloor(MeshObject* mesh, const std::string &name, const std::string &texture, Real thickness, Real x1, Real z1, Real x2, Real z2, Real altitude1, Real altitude2, bool reverse_axis, bool texture_direction, Real tw, Real th, bool legacy_behavior = false);
-	Wall* AddGround(const std::string &name, const std::string &texture, Real x1, Real z1, Real x2, Real z2, Real altitude, int tile_x, int tile_z);
 	void EnableFloorRange(int floor, int range, bool value, bool enablegroups, int shaftnumber = 0, int stairsnumber = 0);
 	bool RegisterTimerCallback(TimerObject *timer);
 	bool UnregisterTimerCallback(TimerObject *timer);
 	void ProcessTimers();
 	int GetTimerCallbackCount();
-	bool Mount(const std::string &filename, const std::string &path);
 	void AddFloorAutoArea(Vector3 start, Vector3 end);
 	int GetMeshCount();
 	Sound* AddSound(const std::string &name, const std::string &filename, const Vector3 &position, bool loop = true, Real volume = 1.0, int speed = 100, Real min_distance = 1.0, Real max_distance = -1.0, Real doppler_level = 0.0, Real cone_inside_angle = 360, Real cone_outside_angle = 360, Real cone_outside_volume = 1.0, const Vector3 &direction = Vector3(0, 0, 0));
@@ -295,11 +276,6 @@ public:
 	void RemoveControl(Control *control);
 	void RemoveTrigger(Trigger *trigger);
 	void RemoveController(DispatchController *controller);
-	std::string VerifyFile(const std::string &filename);
-	std::string VerifyFile(std::string filename, bool &result, bool skip_cache);
-	bool FileExists(const std::string &filename);
-	int GetWallCount();
-	int GetPolygonCount();
 	void AddMeshHandle(MeshObject* handle);
 	void DeleteMeshHandle(MeshObject* handle);
 	void Prepare(bool report = true, bool renderonly = false);
@@ -321,9 +297,7 @@ public:
 	unsigned long GetRunTime();
 	unsigned long GetElapsedTime();
 	unsigned long GetAverageTime();
-	std::string GetMountPath(std::string filename, std::string &newfilename);
 	void ShowColliders(bool value);
-	void CacheFilename(const std::string &filename, const std::string &result);
 	void SetLighting(Real red = 1.0, Real green = 1.0, Real blue = 1.0);
 	void ResetLighting();
 	Control* AddControl(const std::string &name, const std::string &sound, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, int selection_position, std::vector<std::string> &action_names, std::vector<std::string> &textures);
@@ -355,11 +329,12 @@ public:
 	void ListVisibleMeshes();
 	int GetEscalatorCount();
 	int GetMovingWalkwayCount();
+	int GetRevolvingDoorCount();
 	bool HitBeam(const Ray &ray, Real max_distance, MeshObject *&mesh, Wall *&wall, Vector3 &hit_position);
 	void EnableRandomActivity(bool value);
 	void EnableMalfunctions(bool value);
 	SoundSystem* GetSoundSystem();
-	bool IsObjectValid(Object* object, std::string type = "");
+	bool IsObjectValid(Object* object, const std::string &type = "");
 	bool IsActionValid(Action* action);
 	std::vector<ElevatorRoute*> GetRouteToFloor(int StartingFloor, int DestinationFloor, bool service_access = false);
 	Person* CreatePerson(std::string name = "", int floor = 0, bool service_access = false);
@@ -377,10 +352,6 @@ public:
 	void SetBounds(const Vector3 &area_min, const Vector3 &area_max);
 	bool HasBounds();
 	void ResetState();
-	Vector3 ToGlobal(const Vector3 &position);
-	Vector3 FromGlobal(const Vector3 &position);
-	Quaternion ToGlobal(const Quaternion &orientation);
-	Quaternion FromGlobal(const Quaternion &orientation);
 	Light* GetLight(std::string name);
 	Model* GetModel(std::string name);
 	Primitive* GetPrimitive(std::string name);
@@ -391,6 +362,7 @@ public:
 	StairwellManager* GetStairwellManager();
 	DoorManager* GetDoorManager();
 	ControllerManager* GetControllerManager();
+	TeleporterManager* GetTeleporterManager();
 	void RegisterDynamicMesh(DynamicMesh *dynmesh);
 	void UnregisterDynamicMesh(DynamicMesh *dynmesh);
 	TextureManager* GetTextureManager();
@@ -400,7 +372,6 @@ public:
 	void UnregisterCameraTexture(CameraTexture *camtex);
 	int GetCameraTextureCount();
 	CameraTexture* GetCameraTexture(int number);
-	std::string GetFilesystemPath(std::string filename);
 	Utility* GetUtility();
 	GeometryController* GetGeometry();
 	void MemoryReport();
@@ -410,11 +381,22 @@ public:
 	void RegisterMovingWalkway(MovingWalkway *walkway);
 	void UnregisterMovingWalkway(MovingWalkway *walkway);
 	MovingWalkway* GetMovingWalkway(int index);
+	void RegisterRevolvingDoor(RevolvingDoor* door);
+	void UnregisterRevolvingDoor(RevolvingDoor* door);
+	RevolvingDoor* GetRevolvingDoor(int index);
 	void SetPower(bool value);
 	bool GetPower();
 	Reverb* GetReverb(int index);
 	int GetReverbCount();
 	void EnableMap(bool value);
+	int GetTextureCount();
+	PolyMesh* GetPolyMesh();
+	Trigger* GetAreaTrigger();
+	MeshObject* GetLandscapeMesh();
+	Real GetUnitScale();
+	Vector3 GetCenter();
+	Shape* CreateShape(Wall *wall);
+	void MergeBounds(Ogre::AxisAlignedBox &box);
 
 	//Meshes
 	MeshObject* Buildings;
@@ -435,26 +417,6 @@ private:
 	int fps_tottime;
 	Real remaining_delta;
 
-	//orientations
-	int wall_orientation;
-	int floor_orientation;
-
-	//wall/floor sides
-	bool DrawMainN; //or top, if floor
-	bool DrawMainP; //or bottom, if floor
-	bool DrawSideN;
-	bool DrawSideP;
-	bool DrawTop; //or back, if floor
-	bool DrawBottom; //or front, if floor
-
-	//old wall/floor sides
-	bool DrawMainNOld; //or top, if floor
-	bool DrawMainPOld; //or bottom, if floor
-	bool DrawSideNOld;
-	bool DrawSidePOld;
-	bool DrawTopOld; //or back, if floor
-	bool DrawBottomOld; //or front, if floor
-
 	//global object array (only pointers to actual objects)
 	std::vector<Object*> ObjectArray;
 
@@ -466,6 +428,7 @@ private:
 	DoorManager* door_manager;
 	VehicleManager* vehicle_manager;
 	ControllerManager* controller_manager;
+	TeleporterManager* teleporter_manager;
 
 	//dynamic meshes
 	std::vector<DynamicMesh*> dynamic_meshes;
@@ -479,12 +442,16 @@ private:
 	//moving walkways
 	std::vector<MovingWalkway*> MovingWalkwayArray;
 
+	//revolving doors
+	std::vector<RevolvingDoor*> RevolvingDoorArray;
+
 	//private functions
 	void PrintBanner();
 	void CheckAutoAreas();
 	void CalculateAverageTime();
 	std::vector<ElevatorRoute*> GetIndirectRoute(std::vector<int> &checked_floors, int StartingFloor, int DestinationFloor, bool service_access = false, bool top_level = true);
 	ElevatorRoute* GetDirectRoute(Floor *floor, int DestinationFloor, bool service_access = false);
+	void GenerateBounds(Vector3 &min, Vector3 &max);
 
 	//timer callback array
 	std::vector<TimerObject*> timercallbacks;
@@ -555,13 +522,6 @@ private:
 	//config file
 	Ogre::ConfigFile *configfile;
 
-	struct VerifyResult
-	{
-		std::string filename;
-		std::string result;
-	};
-	std::vector<VerifyResult> verify_results;
-
 	//keys
 	struct Key
 	{
@@ -574,11 +534,12 @@ private:
 	//index of all controls used for action deletion callback
 	std::vector<Control*> control_index;
 
-	//file listing cache
-	Ogre::StringVectorPtr filesystem_listing;
-
 	//sim engine area trigger
 	Trigger *area_trigger;
+
+	//sim engine bounds state
+	Ogre::AxisAlignedBox bounds;
+	bool bounds_set;
 
 	//camera texture references
 	std::vector<CameraTexture*> camtexarray;
@@ -591,6 +552,9 @@ private:
 
 	//geometry controller
 	GeometryController* geometry;
+
+	//geometry processor
+	PolyMesh* polymesh;
 
 	//building power state
 	bool power_state;

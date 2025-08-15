@@ -22,10 +22,11 @@
 
 #include "globals.h"
 #include "sbs.h"
+#include "polymesh.h"
 #include "enginecontext.h"
 #include "floor.h"
 #include "camera.h"
-#include "texture.h"
+#include "texman.h"
 #include "mesh.h"
 #include "soundsystem.h"
 #include "sound.h"
@@ -47,6 +48,8 @@
 #include "utility.h"
 #include "geometry.h"
 #include "scriptproc.h"
+#include "shape.h"
+#include "teleporter.h"
 #include "section.h"
 
 using namespace SBS;
@@ -61,6 +64,8 @@ ScriptProcessor::CommandsSection::CommandsSection(ScriptProcessor *parent) : Sec
 int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 {
 	//process global commands
+
+	PolyMesh *polymesh = Simcore->GetPolyMesh();
 
 	//IF/While statement
 	int IsIf = 0;
@@ -156,7 +161,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 			return sNextLine;
 
 		//create triangle wall
-		StoreCommand(Simcore->AddTriangleWall(mesh, tempdata[1], tempdata[2], ToFloat(tempdata[3]), voffset1, ToFloat(tempdata[5]), ToFloat(tempdata[6]), voffset2, ToFloat(tempdata[8]), ToFloat(tempdata[9]), voffset3, ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13])));
+		StoreCommand(polymesh->AddTriangleWall(mesh, tempdata[1], tempdata[2], config->extrusion_texture, config->extrusion_thickness, ToFloat(tempdata[3]), voffset1, ToFloat(tempdata[5]), ToFloat(tempdata[6]), voffset2, ToFloat(tempdata[8]), ToFloat(tempdata[9]), voffset3, ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), config->extrusion_tw, config->extrusion_th));
 
 		return sNextLine;
 	}
@@ -189,7 +194,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 			return sNextLine;
 
 		//create wall
-		StoreCommand(Simcore->AddWall(mesh, tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13])));
+		StoreCommand(polymesh->AddWall(mesh, tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13])));
 		return sNextLine;
 	}
 
@@ -242,9 +247,9 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 
 		//create floor
 		if (compat == true)
-			StoreCommand(Simcore->AddFloor(mesh, tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), config->ReverseAxis, false, ToFloat(tempdata[10]), ToFloat(tempdata[11]), true));
+			StoreCommand(polymesh->AddFloor(mesh, tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), config->ReverseAxis, false, ToFloat(tempdata[10]), ToFloat(tempdata[11]), true));
 		else
-			StoreCommand(Simcore->AddFloor(mesh, tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToBool(tempdata[10]), ToBool(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13])));
+			StoreCommand(polymesh->AddFloor(mesh, tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToBool(tempdata[10]), ToBool(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13])));
 		return sNextLine;
 	}
 
@@ -269,7 +274,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 			return sNextLine;
 
 		//create tiled ground
-		StoreCommand(Simcore->AddGround(tempdata[0], tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToInt(tempdata[7]), ToInt(tempdata[8])));
+		StoreCommand(polymesh->AddGround(tempdata[0], tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToInt(tempdata[7]), ToInt(tempdata[8])));
 		return sNextLine;
 	}
 
@@ -390,7 +395,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 				voffset += Real(Simcore->GetFloor(config->Current)->GetBase());
 		}
 
-		StoreCommand(Simcore->CreateWallBox2(mesh, tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), voffset, ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToBool(tempdata[11]), ToBool(tempdata[12]), ToBool(tempdata[13]), ToBool(tempdata[14])));
+		StoreCommand(polymesh->CreateWallBox2(mesh, tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), voffset, ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToBool(tempdata[11]), ToBool(tempdata[12]), ToBool(tempdata[13]), ToBool(tempdata[14])));
 
 		return sNextLine;
 	}
@@ -432,7 +437,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 				voffset += Real(Simcore->GetFloor(config->Current)->GetBase());
 		}
 
-		StoreCommand(Simcore->CreateWallBox(mesh, tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), voffset, ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToBool(tempdata[11]), ToBool(tempdata[12]), ToBool(tempdata[13]), ToBool(tempdata[14])));
+		StoreCommand(polymesh->CreateWallBox(mesh, tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), voffset, ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToBool(tempdata[11]), ToBool(tempdata[12]), ToBool(tempdata[13]), ToBool(tempdata[14])));
 
 		return sNextLine;
 	}
@@ -497,7 +502,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		for (int i = start; i < params - 2; i += 3)
 			varray.emplace_back(Vector3(ToFloat(tempdata[i]), ToFloat(tempdata[i + 1]) + voffset, ToFloat(tempdata[i + 2])));
 
-		StoreCommand(Simcore->AddCustomWall(mesh, tempdata[1], tempdata[2], varray, ToFloat(tempdata[params - 2]), ToFloat(tempdata[params - 1])));
+		StoreCommand(polymesh->AddCustomWall(mesh, tempdata[1], tempdata[2], config->extrusion_texture, config->extrusion_thickness, varray, ToFloat(tempdata[params - 2]), ToFloat(tempdata[params - 1]), config->extrusion_tw, config->extrusion_th));
 
 		return sNextLine;
 	}
@@ -540,7 +545,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		for (int i = 3; i < params - 3; i += 2)
 			varray.emplace_back(Vector2(ToFloat(tempdata[i]), ToFloat(tempdata[i + 1])));
 
-		StoreCommand(Simcore->AddCustomFloor(mesh, tempdata[1], tempdata[2], varray, altitude, ToFloat(tempdata[params - 2]), ToFloat(tempdata[params - 1])));
+		StoreCommand(polymesh->AddCustomFloor(mesh, tempdata[1], tempdata[2], config->extrusion_texture, config->extrusion_thickness, varray, altitude, ToFloat(tempdata[params - 2]), ToFloat(tempdata[params - 1]), config->extrusion_tw, config->extrusion_th));
 
 		return sNextLine;
 	}
@@ -588,7 +593,1416 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		for (int i = 3; i < params - 2; i += 3)
 			varray.emplace_back(Vector3(ToFloat(tempdata[i]), ToFloat(tempdata[i + 1]) + voffset, ToFloat(tempdata[i + 2])));
 
-		Simcore->AddPolygon(wall, tempdata[2], varray, ToFloat(tempdata[params - 2]), ToFloat(tempdata[params - 1]));
+		polymesh->AddPolygon(wall, tempdata[2], config->extrusion_texture, config->extrusion_thickness, varray, ToFloat(tempdata[params - 2]), ToFloat(tempdata[params - 1]), config->extrusion_tw, config->extrusion_th);
+
+		return sNextLine;
+	}
+
+	//AddSphere command
+	if (StartsWithNoCase(LineData, "addsphere"))
+	{
+		//get data
+		int params = SplitData(LineData, 9);
+
+		if (params != 12)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 4; i < params - 1; i++)
+		{
+			if (!IsNumeric(tempdata[i]))
+				return ScriptError("Invalid value: " + tempdata[i]);
+		}
+		std::string meshname = SetCaseCopy(tempdata[0], false);
+
+		MeshObject *mesh = GetMeshObject(meshname);
+
+		if (!mesh)
+			return ScriptError("Invalid mesh object");
+
+		Wall *wall = mesh->GetWallByName(tempdata[1]);
+
+		if (!wall)
+			return ScriptError("Invalid wall object");
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
+
+		Object *obj = mesh->GetParent();
+		if (!obj)
+			return ScriptError("Invalid parent object");
+
+		Model *modelobj = 0;
+		Floor *floorobj = 0;
+		Elevator *elevatorobj = 0;
+		ElevatorCar *elevatorcarobj = 0;
+		Shaft::Level *shaftobj = 0;
+		Stairwell::Level *stairsobj = 0;
+		::SBS::SBS *sbs = 0;
+
+		//get parent object of light
+		if (obj->GetType() == "Model")
+			modelobj = static_cast<Model*>(obj);
+		else if (obj->GetType() == "Floor")
+			floorobj = static_cast<Floor*>(obj);
+		else if (obj->GetType() == "Elevator")
+			elevatorobj = static_cast<Elevator*>(obj);
+		else if (obj->GetType() == "ElevatorCar")
+			elevatorcarobj = static_cast<ElevatorCar*>(obj);
+		else if (obj->GetType() == "Shaft Level")
+			shaftobj = static_cast<Shaft::Level*>(obj);
+		else if (obj->GetType() == "Stairwell Level")
+			stairsobj = static_cast<Stairwell::Level*>(obj);
+		else if (obj->GetType() == "SBS")
+			sbs = static_cast<::SBS::SBS*>(obj);
+
+		//get parent object
+		if (elevatorobj)
+		{
+			elevatorcarobj = elevatorobj->GetCar(0);
+			obj = elevatorcarobj;
+		}
+
+		Shape *shape;
+		if (modelobj)
+			shape = modelobj->CreateShape(wall);
+		else if (floorobj)
+			shape = floorobj->CreateShape(wall);
+		else if (elevatorcarobj)
+			shape = elevatorcarobj->CreateShape(wall);
+		else if (shaftobj)
+			shape = shaftobj->CreateShape(wall);
+		else if (stairsobj)
+			shape = stairsobj->CreateShape(wall);
+		else if (sbs)
+			shape = sbs->CreateShape(wall);
+		else
+			return ScriptError("Invalid parent object");
+
+		if (shape)
+		{
+			shape->CreateSphere("", tempdata[2], Vector3(ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5])), ToFloat(tempdata[6]), ToInt(tempdata[7]), ToInt(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToBool(tempdata[11]), true);
+			delete shape; //delete temporary shape object
+			shape = 0;
+		}
+
+		return sNextLine;
+	}
+
+	//AddBox command
+	if (StartsWithNoCase(LineData, "addbox"))
+	{
+		//get data
+		int params = SplitData(LineData, 6);
+
+		if (params != 12)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 3; i < params - 1; i++)
+		{
+			if (!IsNumeric(tempdata[i]))
+				return ScriptError("Invalid value: " + tempdata[i]);
+		}
+		std::string meshname = SetCaseCopy(tempdata[0], false);
+
+		MeshObject *mesh = GetMeshObject(meshname);
+
+		if (!mesh)
+			return ScriptError("Invalid mesh object");
+
+		Wall *wall = mesh->GetWallByName(tempdata[1]);
+
+		if (!wall)
+			return ScriptError("Invalid wall object");
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
+
+		Object *obj = mesh->GetParent();
+		if (!obj)
+			return ScriptError("Invalid parent object");
+
+		Model *modelobj = 0;
+		Floor *floorobj = 0;
+		Elevator *elevatorobj = 0;
+		ElevatorCar *elevatorcarobj = 0;
+		Shaft::Level *shaftobj = 0;
+		Stairwell::Level *stairsobj = 0;
+		::SBS::SBS *sbs = 0;
+
+		//get parent object of light
+		if (obj->GetType() == "Model")
+			modelobj = static_cast<Model*>(obj);
+		else if (obj->GetType() == "Floor")
+			floorobj = static_cast<Floor*>(obj);
+		else if (obj->GetType() == "Elevator")
+			elevatorobj = static_cast<Elevator*>(obj);
+		else if (obj->GetType() == "ElevatorCar")
+			elevatorcarobj = static_cast<ElevatorCar*>(obj);
+		else if (obj->GetType() == "Shaft Level")
+			shaftobj = static_cast<Shaft::Level*>(obj);
+		else if (obj->GetType() == "Stairwell Level")
+			stairsobj = static_cast<Stairwell::Level*>(obj);
+		else if (obj->GetType() == "SBS")
+			sbs = static_cast<::SBS::SBS*>(obj);
+
+		//get parent object
+		if (elevatorobj)
+		{
+			elevatorcarobj = elevatorobj->GetCar(0);
+			obj = elevatorcarobj;
+		}
+
+		Shape *shape;
+		if (modelobj)
+			shape = modelobj->CreateShape(wall);
+		else if (floorobj)
+			shape = floorobj->CreateShape(wall);
+		else if (elevatorcarobj)
+			shape = elevatorcarobj->CreateShape(wall);
+		else if (shaftobj)
+			shape = shaftobj->CreateShape(wall);
+		else if (stairsobj)
+			shape = stairsobj->CreateShape(wall);
+		else if (sbs)
+			shape = sbs->CreateShape(wall);
+		else
+			return ScriptError("Invalid parent object");
+
+		if (shape)
+		{
+			Vector3 center = Vector3(ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]));
+			shape->CreateBox("", tempdata[2], center, ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToBool(tempdata[11]), true);
+			delete shape; //delete temporary shape object
+			shape = 0;
+		}
+
+		return sNextLine;
+	}
+
+	//AddCylinder command
+	if (StartsWithNoCase(LineData, "addcylinder"))
+	{
+		//get data
+		int params = SplitData(LineData, 11);
+
+		if (params != 12)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 3; i < params - 1; i++)
+		{
+			if (!IsNumeric(tempdata[i]))
+				return ScriptError("Invalid value: " + tempdata[i]);
+		}
+		std::string meshname = SetCaseCopy(tempdata[0], false);
+
+		MeshObject *mesh = GetMeshObject(meshname);
+
+		if (!mesh)
+			return ScriptError("Invalid mesh object");
+
+		Wall *wall = mesh->GetWallByName(tempdata[1]);
+
+		if (!wall)
+			return ScriptError("Invalid wall object");
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
+
+		Object *obj = mesh->GetParent();
+		if (!obj)
+			return ScriptError("Invalid parent object");
+
+		Model *modelobj = 0;
+		Floor *floorobj = 0;
+		Elevator *elevatorobj = 0;
+		ElevatorCar *elevatorcarobj = 0;
+		Shaft::Level *shaftobj = 0;
+		Stairwell::Level *stairsobj = 0;
+		::SBS::SBS *sbs = 0;
+
+		//get parent object of light
+		if (obj->GetType() == "Model")
+			modelobj = static_cast<Model*>(obj);
+		else if (obj->GetType() == "Floor")
+			floorobj = static_cast<Floor*>(obj);
+		else if (obj->GetType() == "Elevator")
+			elevatorobj = static_cast<Elevator*>(obj);
+		else if (obj->GetType() == "ElevatorCar")
+			elevatorcarobj = static_cast<ElevatorCar*>(obj);
+		else if (obj->GetType() == "Shaft Level")
+			shaftobj = static_cast<Shaft::Level*>(obj);
+		else if (obj->GetType() == "Stairwell Level")
+			stairsobj = static_cast<Stairwell::Level*>(obj);
+		else if (obj->GetType() == "SBS")
+			sbs = static_cast<::SBS::SBS*>(obj);
+
+		//get parent object
+		if (elevatorobj)
+		{
+			elevatorcarobj = elevatorobj->GetCar(0);
+			obj = elevatorcarobj;
+		}
+
+		Shape *shape;
+		if (modelobj)
+			shape = modelobj->CreateShape(wall);
+		else if (floorobj)
+			shape = floorobj->CreateShape(wall);
+		else if (elevatorcarobj)
+			shape = elevatorcarobj->CreateShape(wall);
+		else if (shaftobj)
+			shape = shaftobj->CreateShape(wall);
+		else if (stairsobj)
+			shape = stairsobj->CreateShape(wall);
+		else if (sbs)
+			shape = sbs->CreateShape(wall);
+		else
+			return ScriptError("Invalid parent object");
+
+		if (shape)
+		{
+			Vector3 center = Vector3(ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]));
+			shape->CreateCylinder("", tempdata[2], center, ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToInt(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToBool(tempdata[11]), true);
+			delete shape; //delete temporary shape object
+			shape = 0;
+		}
+
+		return sNextLine;
+	}
+
+	//AddCone command
+	if (StartsWithNoCase(LineData, "addcone"))
+	{
+		//get data
+		int params = SplitData(LineData, 7);
+
+		if (params != 12)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 3; i < params - 1; i++)
+		{
+			if (!IsNumeric(tempdata[i]))
+				return ScriptError("Invalid value: " + tempdata[i]);
+		}
+		std::string meshname = SetCaseCopy(tempdata[0], false);
+
+		MeshObject *mesh = GetMeshObject(meshname);
+
+		if (!mesh)
+			return ScriptError("Invalid mesh object");
+
+		Wall *wall = mesh->GetWallByName(tempdata[1]);
+
+		if (!wall)
+			return ScriptError("Invalid wall object");
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
+
+		Object *obj = mesh->GetParent();
+		if (!obj)
+			return ScriptError("Invalid parent object");
+
+		Model *modelobj = 0;
+		Floor *floorobj = 0;
+		Elevator *elevatorobj = 0;
+		ElevatorCar *elevatorcarobj = 0;
+		Shaft::Level *shaftobj = 0;
+		Stairwell::Level *stairsobj = 0;
+		::SBS::SBS *sbs = 0;
+
+		//get parent object of light
+		if (obj->GetType() == "Model")
+			modelobj = static_cast<Model*>(obj);
+		else if (obj->GetType() == "Floor")
+			floorobj = static_cast<Floor*>(obj);
+		else if (obj->GetType() == "Elevator")
+			elevatorobj = static_cast<Elevator*>(obj);
+		else if (obj->GetType() == "ElevatorCar")
+			elevatorcarobj = static_cast<ElevatorCar*>(obj);
+		else if (obj->GetType() == "Shaft Level")
+			shaftobj = static_cast<Shaft::Level*>(obj);
+		else if (obj->GetType() == "Stairwell Level")
+			stairsobj = static_cast<Stairwell::Level*>(obj);
+		else if (obj->GetType() == "SBS")
+			sbs = static_cast<::SBS::SBS*>(obj);
+
+		//get parent object
+		if (elevatorobj)
+		{
+			elevatorcarobj = elevatorobj->GetCar(0);
+			obj = elevatorcarobj;
+		}
+
+		Shape *shape;
+		if (modelobj)
+			shape = modelobj->CreateShape(wall);
+		else if (floorobj)
+			shape = floorobj->CreateShape(wall);
+		else if (elevatorcarobj)
+			shape = elevatorcarobj->CreateShape(wall);
+		else if (shaftobj)
+			shape = shaftobj->CreateShape(wall);
+		else if (stairsobj)
+			shape = stairsobj->CreateShape(wall);
+		else if (sbs)
+			shape = sbs->CreateShape(wall);
+		else
+			return ScriptError("Invalid parent object");
+
+		if (shape)
+		{
+			Vector3 center = Vector3(ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]));
+			shape->CreateCone("", tempdata[2], center, ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToInt(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToBool(tempdata[11]), true);
+			delete shape; //delete temporary shape object
+			shape = 0;
+		}
+
+		return sNextLine;
+	}
+
+	//AddCapsule command
+	if (StartsWithNoCase(LineData, "addcapsule"))
+	{
+		//get data
+		int params = SplitData(LineData, 10);
+
+		if (params != 13)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 3; i < params - 1; i++)
+		{
+			if (!IsNumeric(tempdata[i]))
+				return ScriptError("Invalid value: " + tempdata[i]);
+		}
+		std::string meshname = SetCaseCopy(tempdata[0], false);
+
+		MeshObject *mesh = GetMeshObject(meshname);
+
+		if (!mesh)
+			return ScriptError("Invalid mesh object");
+
+		Wall *wall = mesh->GetWallByName(tempdata[1]);
+
+		if (!wall)
+			return ScriptError("Invalid wall object");
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
+
+		Object *obj = mesh->GetParent();
+		if (!obj)
+			return ScriptError("Invalid parent object");
+
+		Model *modelobj = 0;
+		Floor *floorobj = 0;
+		Elevator *elevatorobj = 0;
+		ElevatorCar *elevatorcarobj = 0;
+		Shaft::Level *shaftobj = 0;
+		Stairwell::Level *stairsobj = 0;
+		::SBS::SBS *sbs = 0;
+
+		//get parent object of light
+		if (obj->GetType() == "Model")
+			modelobj = static_cast<Model*>(obj);
+		else if (obj->GetType() == "Floor")
+			floorobj = static_cast<Floor*>(obj);
+		else if (obj->GetType() == "Elevator")
+			elevatorobj = static_cast<Elevator*>(obj);
+		else if (obj->GetType() == "ElevatorCar")
+			elevatorcarobj = static_cast<ElevatorCar*>(obj);
+		else if (obj->GetType() == "Shaft Level")
+			shaftobj = static_cast<Shaft::Level*>(obj);
+		else if (obj->GetType() == "Stairwell Level")
+			stairsobj = static_cast<Stairwell::Level*>(obj);
+		else if (obj->GetType() == "SBS")
+			sbs = static_cast<::SBS::SBS*>(obj);
+
+		//get parent object
+		if (elevatorobj)
+		{
+			elevatorcarobj = elevatorobj->GetCar(0);
+			obj = elevatorcarobj;
+		}
+
+		Shape *shape;
+		if (modelobj)
+			shape = modelobj->CreateShape(wall);
+		else if (floorobj)
+			shape = floorobj->CreateShape(wall);
+		else if (elevatorcarobj)
+			shape = elevatorcarobj->CreateShape(wall);
+		else if (shaftobj)
+			shape = shaftobj->CreateShape(wall);
+		else if (stairsobj)
+			shape = stairsobj->CreateShape(wall);
+		else if (sbs)
+			shape = sbs->CreateShape(wall);
+		else
+			return ScriptError("Invalid parent object");
+
+		if (shape)
+		{
+			Vector3 center = Vector3(ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]));
+			shape->CreateCapsule("", tempdata[2], center, ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToInt(tempdata[8]), ToInt(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToBool(tempdata[12]), true);
+			delete shape; //delete temporary shape object
+			shape = 0;
+		}
+
+		return sNextLine;
+	}
+
+	//AddPlane command
+	if (StartsWithNoCase(LineData, "addplane"))
+	{
+		//get data
+		int params = SplitData(LineData, 8);
+
+		if (params != 13)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 3; i < params - 1; i++)
+		{
+			if (!IsNumeric(tempdata[i]))
+				return ScriptError("Invalid value: " + tempdata[i]);
+		}
+		std::string meshname = SetCaseCopy(tempdata[0], false);
+
+		MeshObject *mesh = GetMeshObject(meshname);
+
+		if (!mesh)
+			return ScriptError("Invalid mesh object");
+
+		Wall *wall = mesh->GetWallByName(tempdata[1]);
+
+		if (!wall)
+			return ScriptError("Invalid wall object");
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
+
+		Object *obj = mesh->GetParent();
+		if (!obj)
+			return ScriptError("Invalid parent object");
+
+		Model *modelobj = 0;
+		Floor *floorobj = 0;
+		Elevator *elevatorobj = 0;
+		ElevatorCar *elevatorcarobj = 0;
+		Shaft::Level *shaftobj = 0;
+		Stairwell::Level *stairsobj = 0;
+		::SBS::SBS *sbs = 0;
+
+		//get parent object of light
+		if (obj->GetType() == "Model")
+			modelobj = static_cast<Model*>(obj);
+		else if (obj->GetType() == "Floor")
+			floorobj = static_cast<Floor*>(obj);
+		else if (obj->GetType() == "Elevator")
+			elevatorobj = static_cast<Elevator*>(obj);
+		else if (obj->GetType() == "ElevatorCar")
+			elevatorcarobj = static_cast<ElevatorCar*>(obj);
+		else if (obj->GetType() == "Shaft Level")
+			shaftobj = static_cast<Shaft::Level*>(obj);
+		else if (obj->GetType() == "Stairwell Level")
+			stairsobj = static_cast<Stairwell::Level*>(obj);
+		else if (obj->GetType() == "SBS")
+			sbs = static_cast<::SBS::SBS*>(obj);
+
+		//get parent object
+		if (elevatorobj)
+		{
+			elevatorcarobj = elevatorobj->GetCar(0);
+			obj = elevatorcarobj;
+		}
+
+		Shape *shape;
+		if (modelobj)
+			shape = modelobj->CreateShape(wall);
+		else if (floorobj)
+			shape = floorobj->CreateShape(wall);
+		else if (elevatorcarobj)
+			shape = elevatorcarobj->CreateShape(wall);
+		else if (shaftobj)
+			shape = shaftobj->CreateShape(wall);
+		else if (stairsobj)
+			shape = stairsobj->CreateShape(wall);
+		else if (sbs)
+			shape = sbs->CreateShape(wall);
+		else
+			return ScriptError("Invalid parent object");
+
+		if (shape)
+		{
+			Vector3 center = Vector3(ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]));
+			shape->CreatePlane("", tempdata[2], center, ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToInt(tempdata[8]), ToInt(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToBool(tempdata[12]), true);
+			delete shape; //delete temporary shape object
+			shape = 0;
+		}
+
+		return sNextLine;
+	}
+
+	//AddCircle command
+	if (StartsWithNoCase(LineData, "addcircle"))
+	{
+		//get data
+		int params = SplitData(LineData, 9);
+
+		if (params != 11)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 3; i < params - 1; i++)
+		{
+			if (!IsNumeric(tempdata[i]))
+				return ScriptError("Invalid value: " + tempdata[i]);
+		}
+		std::string meshname = SetCaseCopy(tempdata[0], false);
+
+		MeshObject *mesh = GetMeshObject(meshname);
+
+		if (!mesh)
+			return ScriptError("Invalid mesh object");
+
+		Wall *wall = mesh->GetWallByName(tempdata[1]);
+
+		if (!wall)
+			return ScriptError("Invalid wall object");
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
+
+		Object *obj = mesh->GetParent();
+		if (!obj)
+			return ScriptError("Invalid parent object");
+
+		Model *modelobj = 0;
+		Floor *floorobj = 0;
+		Elevator *elevatorobj = 0;
+		ElevatorCar *elevatorcarobj = 0;
+		Shaft::Level *shaftobj = 0;
+		Stairwell::Level *stairsobj = 0;
+		::SBS::SBS *sbs = 0;
+
+		//get parent object of light
+		if (obj->GetType() == "Model")
+			modelobj = static_cast<Model*>(obj);
+		else if (obj->GetType() == "Floor")
+			floorobj = static_cast<Floor*>(obj);
+		else if (obj->GetType() == "Elevator")
+			elevatorobj = static_cast<Elevator*>(obj);
+		else if (obj->GetType() == "ElevatorCar")
+			elevatorcarobj = static_cast<ElevatorCar*>(obj);
+		else if (obj->GetType() == "Shaft Level")
+			shaftobj = static_cast<Shaft::Level*>(obj);
+		else if (obj->GetType() == "Stairwell Level")
+			stairsobj = static_cast<Stairwell::Level*>(obj);
+		else if (obj->GetType() == "SBS")
+			sbs = static_cast<::SBS::SBS*>(obj);
+
+		//get parent object
+		if (elevatorobj)
+		{
+			elevatorcarobj = elevatorobj->GetCar(0);
+			obj = elevatorcarobj;
+		}
+
+		Shape *shape;
+		if (modelobj)
+			shape = modelobj->CreateShape(wall);
+		else if (floorobj)
+			shape = floorobj->CreateShape(wall);
+		else if (elevatorcarobj)
+			shape = elevatorcarobj->CreateShape(wall);
+		else if (shaftobj)
+			shape = shaftobj->CreateShape(wall);
+		else if (stairsobj)
+			shape = stairsobj->CreateShape(wall);
+		else if (sbs)
+			shape = sbs->CreateShape(wall);
+		else
+			return ScriptError("Invalid parent object");
+
+		if (shape)
+		{
+			Vector3 center = Vector3(ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]));
+			shape->CreateCircle("", tempdata[2], center, ToFloat(tempdata[6]), ToInt(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToBool(tempdata[10]), true);
+			delete shape; //delete temporary shape object
+			shape = 0;
+		}
+
+		return sNextLine;
+	}
+
+	//AddTorus command
+	if (StartsWithNoCase(LineData, "addtorus"))
+	{
+		//get data
+		int params = SplitData(LineData, 8);
+
+		if (params != 13)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 3; i < params - 1; i++)
+		{
+			if (!IsNumeric(tempdata[i]))
+				return ScriptError("Invalid value: " + tempdata[i]);
+		}
+		std::string meshname = SetCaseCopy(tempdata[0], false);
+
+		MeshObject *mesh = GetMeshObject(meshname);
+
+		if (!mesh)
+			return ScriptError("Invalid mesh object");
+
+		Wall *wall = mesh->GetWallByName(tempdata[1]);
+
+		if (!wall)
+			return ScriptError("Invalid wall object");
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
+
+		Object *obj = mesh->GetParent();
+		if (!obj)
+			return ScriptError("Invalid parent object");
+
+		Model *modelobj = 0;
+		Floor *floorobj = 0;
+		Elevator *elevatorobj = 0;
+		ElevatorCar *elevatorcarobj = 0;
+		Shaft::Level *shaftobj = 0;
+		Stairwell::Level *stairsobj = 0;
+		::SBS::SBS *sbs = 0;
+
+		//get parent object of light
+		if (obj->GetType() == "Model")
+			modelobj = static_cast<Model*>(obj);
+		else if (obj->GetType() == "Floor")
+			floorobj = static_cast<Floor*>(obj);
+		else if (obj->GetType() == "Elevator")
+			elevatorobj = static_cast<Elevator*>(obj);
+		else if (obj->GetType() == "ElevatorCar")
+			elevatorcarobj = static_cast<ElevatorCar*>(obj);
+		else if (obj->GetType() == "Shaft Level")
+			shaftobj = static_cast<Shaft::Level*>(obj);
+		else if (obj->GetType() == "Stairwell Level")
+			stairsobj = static_cast<Stairwell::Level*>(obj);
+		else if (obj->GetType() == "SBS")
+			sbs = static_cast<::SBS::SBS*>(obj);
+
+		//get parent object
+		if (elevatorobj)
+		{
+			elevatorcarobj = elevatorobj->GetCar(0);
+			obj = elevatorcarobj;
+		}
+
+		Shape *shape;
+		if (modelobj)
+			shape = modelobj->CreateShape(wall);
+		else if (floorobj)
+			shape = floorobj->CreateShape(wall);
+		else if (elevatorcarobj)
+			shape = elevatorcarobj->CreateShape(wall);
+		else if (shaftobj)
+			shape = shaftobj->CreateShape(wall);
+		else if (stairsobj)
+			shape = stairsobj->CreateShape(wall);
+		else if (sbs)
+			shape = sbs->CreateShape(wall);
+		else
+			return ScriptError("Invalid parent object");
+
+		if (shape)
+		{
+			Vector3 center = Vector3(ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]));
+			shape->CreateTorus("", tempdata[2], center, ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToInt(tempdata[8]), ToInt(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToBool(tempdata[12]), true);
+			delete shape; //delete temporary shape object
+			shape = 0;
+		}
+
+		return sNextLine;
+	}
+
+	//AddDome command
+	if (StartsWithNoCase(LineData, "adddome"))
+	{
+		//get data
+		int params = SplitData(LineData, 7);
+
+		if (params != 12)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 3; i < params - 1; i++)
+		{
+			if (!IsNumeric(tempdata[i]))
+				return ScriptError("Invalid value: " + tempdata[i]);
+		}
+		std::string meshname = SetCaseCopy(tempdata[0], false);
+
+		MeshObject *mesh = GetMeshObject(meshname);
+
+		if (!mesh)
+			return ScriptError("Invalid mesh object");
+
+		Wall *wall = mesh->GetWallByName(tempdata[1]);
+
+		if (!wall)
+			return ScriptError("Invalid wall object");
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
+
+		Object *obj = mesh->GetParent();
+		if (!obj)
+			return ScriptError("Invalid parent object");
+
+		Model *modelobj = 0;
+		Floor *floorobj = 0;
+		Elevator *elevatorobj = 0;
+		ElevatorCar *elevatorcarobj = 0;
+		Shaft::Level *shaftobj = 0;
+		Stairwell::Level *stairsobj = 0;
+		::SBS::SBS *sbs = 0;
+
+		//get parent object of light
+		if (obj->GetType() == "Model")
+			modelobj = static_cast<Model*>(obj);
+		else if (obj->GetType() == "Floor")
+			floorobj = static_cast<Floor*>(obj);
+		else if (obj->GetType() == "Elevator")
+			elevatorobj = static_cast<Elevator*>(obj);
+		else if (obj->GetType() == "ElevatorCar")
+			elevatorcarobj = static_cast<ElevatorCar*>(obj);
+		else if (obj->GetType() == "Shaft Level")
+			shaftobj = static_cast<Shaft::Level*>(obj);
+		else if (obj->GetType() == "Stairwell Level")
+			stairsobj = static_cast<Stairwell::Level*>(obj);
+		else if (obj->GetType() == "SBS")
+			sbs = static_cast<::SBS::SBS*>(obj);
+
+		//get parent object
+		if (elevatorobj)
+		{
+			elevatorcarobj = elevatorobj->GetCar(0);
+			obj = elevatorcarobj;
+		}
+
+		Shape *shape;
+		if (modelobj)
+			shape = modelobj->CreateShape(wall);
+		else if (floorobj)
+			shape = floorobj->CreateShape(wall);
+		else if (elevatorcarobj)
+			shape = elevatorcarobj->CreateShape(wall);
+		else if (shaftobj)
+			shape = shaftobj->CreateShape(wall);
+		else if (stairsobj)
+			shape = stairsobj->CreateShape(wall);
+		else if (sbs)
+			shape = sbs->CreateShape(wall);
+		else
+			return ScriptError("Invalid parent object");
+
+		if (shape)
+		{
+			Vector3 center = Vector3(ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]));
+			shape->CreateDome("", tempdata[2], center, ToFloat(tempdata[6]), ToInt(tempdata[7]), ToInt(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToBool(tempdata[11]), true);
+			delete shape; //delete temporary shape object
+			shape = 0;
+		}
+
+		return sNextLine;
+	}
+
+	//AddPyramid command
+	if (StartsWithNoCase(LineData, "addpyramid"))
+	{
+		//get data
+		int params = SplitData(LineData, 10);
+
+		if (params != 12)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 3; i < params - 1; i++)
+		{
+			if (!IsNumeric(tempdata[i]))
+				return ScriptError("Invalid value: " + tempdata[i]);
+		}
+		std::string meshname = SetCaseCopy(tempdata[0], false);
+
+		MeshObject *mesh = GetMeshObject(meshname);
+
+		if (!mesh)
+			return ScriptError("Invalid mesh object");
+
+		Wall *wall = mesh->GetWallByName(tempdata[1]);
+
+		if (!wall)
+			return ScriptError("Invalid wall object");
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
+
+		Object *obj = mesh->GetParent();
+		if (!obj)
+			return ScriptError("Invalid parent object");
+
+		Model *modelobj = 0;
+		Floor *floorobj = 0;
+		Elevator *elevatorobj = 0;
+		ElevatorCar *elevatorcarobj = 0;
+		Shaft::Level *shaftobj = 0;
+		Stairwell::Level *stairsobj = 0;
+		::SBS::SBS *sbs = 0;
+
+		//get parent object of light
+		if (obj->GetType() == "Model")
+			modelobj = static_cast<Model*>(obj);
+		else if (obj->GetType() == "Floor")
+			floorobj = static_cast<Floor*>(obj);
+		else if (obj->GetType() == "Elevator")
+			elevatorobj = static_cast<Elevator*>(obj);
+		else if (obj->GetType() == "ElevatorCar")
+			elevatorcarobj = static_cast<ElevatorCar*>(obj);
+		else if (obj->GetType() == "Shaft Level")
+			shaftobj = static_cast<Shaft::Level*>(obj);
+		else if (obj->GetType() == "Stairwell Level")
+			stairsobj = static_cast<Stairwell::Level*>(obj);
+		else if (obj->GetType() == "SBS")
+			sbs = static_cast<::SBS::SBS*>(obj);
+
+		//get parent object
+		if (elevatorobj)
+		{
+			elevatorcarobj = elevatorobj->GetCar(0);
+			obj = elevatorcarobj;
+		}
+
+		Shape *shape;
+		if (modelobj)
+			shape = modelobj->CreateShape(wall);
+		else if (floorobj)
+			shape = floorobj->CreateShape(wall);
+		else if (elevatorcarobj)
+			shape = elevatorcarobj->CreateShape(wall);
+		else if (shaftobj)
+			shape = shaftobj->CreateShape(wall);
+		else if (stairsobj)
+			shape = stairsobj->CreateShape(wall);
+		else if (sbs)
+			shape = sbs->CreateShape(wall);
+		else
+			return ScriptError("Invalid parent object");
+
+		if (shape)
+		{
+			Vector3 center = Vector3(ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]));
+			shape->CreatePyramid("", tempdata[2], center, ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToBool(tempdata[11]), true);
+			delete shape; //delete temporary shape object
+			shape = 0;
+		}
+
+		return sNextLine;
+	}
+
+	//AddPrism command
+	if (StartsWithNoCase(LineData, "addprism"))
+	{
+		//get data
+		int params = SplitData(LineData, 8);
+
+		if (params != 12)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 3; i < params - 1; i++)
+		{
+			if (!IsNumeric(tempdata[i]))
+				return ScriptError("Invalid value: " + tempdata[i]);
+		}
+		std::string meshname = SetCaseCopy(tempdata[0], false);
+
+		MeshObject *mesh = GetMeshObject(meshname);
+
+		if (!mesh)
+			return ScriptError("Invalid mesh object");
+
+		Wall *wall = mesh->GetWallByName(tempdata[1]);
+
+		if (!wall)
+			return ScriptError("Invalid wall object");
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
+
+		Object *obj = mesh->GetParent();
+		if (!obj)
+			return ScriptError("Invalid parent object");
+
+		Model *modelobj = 0;
+		Floor *floorobj = 0;
+		Elevator *elevatorobj = 0;
+		ElevatorCar *elevatorcarobj = 0;
+		Shaft::Level *shaftobj = 0;
+		Stairwell::Level *stairsobj = 0;
+		::SBS::SBS *sbs = 0;
+
+		//get parent object of light
+		if (obj->GetType() == "Model")
+			modelobj = static_cast<Model*>(obj);
+		else if (obj->GetType() == "Floor")
+			floorobj = static_cast<Floor*>(obj);
+		else if (obj->GetType() == "Elevator")
+			elevatorobj = static_cast<Elevator*>(obj);
+		else if (obj->GetType() == "ElevatorCar")
+			elevatorcarobj = static_cast<ElevatorCar*>(obj);
+		else if (obj->GetType() == "Shaft Level")
+			shaftobj = static_cast<Shaft::Level*>(obj);
+		else if (obj->GetType() == "Stairwell Level")
+			stairsobj = static_cast<Stairwell::Level*>(obj);
+		else if (obj->GetType() == "SBS")
+			sbs = static_cast<::SBS::SBS*>(obj);
+
+		//get parent object
+		if (elevatorobj)
+		{
+			elevatorcarobj = elevatorobj->GetCar(0);
+			obj = elevatorcarobj;
+		}
+
+		Shape *shape;
+		if (modelobj)
+			shape = modelobj->CreateShape(wall);
+		else if (floorobj)
+			shape = floorobj->CreateShape(wall);
+		else if (elevatorcarobj)
+			shape = elevatorcarobj->CreateShape(wall);
+		else if (shaftobj)
+			shape = shaftobj->CreateShape(wall);
+		else if (stairsobj)
+			shape = stairsobj->CreateShape(wall);
+		else if (sbs)
+			shape = sbs->CreateShape(wall);
+		else
+			return ScriptError("Invalid parent object");
+
+		if (shape)
+		{
+			Vector3 center = Vector3(ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]));
+			shape->CreatePrism("", tempdata[2], center, ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToBool(tempdata[11]), true);
+			delete shape; //delete temporary shape object
+			shape = 0;
+		}
+
+		return sNextLine;
+	}
+
+	//AddTetrahedron command
+	if (StartsWithNoCase(LineData, "addtetrahedron"))
+	{
+		//get data
+		int params = SplitData(LineData, 14);
+
+		if (params != 10)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 3; i < params - 1; i++)
+		{
+			if (!IsNumeric(tempdata[i]))
+				return ScriptError("Invalid value: " + tempdata[i]);
+		}
+		std::string meshname = SetCaseCopy(tempdata[0], false);
+
+		MeshObject *mesh = GetMeshObject(meshname);
+
+		if (!mesh)
+			return ScriptError("Invalid mesh object");
+
+		Wall *wall = mesh->GetWallByName(tempdata[1]);
+
+		if (!wall)
+			return ScriptError("Invalid wall object");
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
+
+		Object *obj = mesh->GetParent();
+		if (!obj)
+			return ScriptError("Invalid parent object");
+
+		Model *modelobj = 0;
+		Floor *floorobj = 0;
+		Elevator *elevatorobj = 0;
+		ElevatorCar *elevatorcarobj = 0;
+		Shaft::Level *shaftobj = 0;
+		Stairwell::Level *stairsobj = 0;
+		::SBS::SBS *sbs = 0;
+
+		//get parent object of light
+		if (obj->GetType() == "Model")
+			modelobj = static_cast<Model*>(obj);
+		else if (obj->GetType() == "Floor")
+			floorobj = static_cast<Floor*>(obj);
+		else if (obj->GetType() == "Elevator")
+			elevatorobj = static_cast<Elevator*>(obj);
+		else if (obj->GetType() == "ElevatorCar")
+			elevatorcarobj = static_cast<ElevatorCar*>(obj);
+		else if (obj->GetType() == "Shaft Level")
+			shaftobj = static_cast<Shaft::Level*>(obj);
+		else if (obj->GetType() == "Stairwell Level")
+			stairsobj = static_cast<Stairwell::Level*>(obj);
+		else if (obj->GetType() == "SBS")
+			sbs = static_cast<::SBS::SBS*>(obj);
+
+		//get parent object
+		if (elevatorobj)
+		{
+			elevatorcarobj = elevatorobj->GetCar(0);
+			obj = elevatorcarobj;
+		}
+
+		Shape *shape;
+		if (modelobj)
+			shape = modelobj->CreateShape(wall);
+		else if (floorobj)
+			shape = floorobj->CreateShape(wall);
+		else if (elevatorcarobj)
+			shape = elevatorcarobj->CreateShape(wall);
+		else if (shaftobj)
+			shape = shaftobj->CreateShape(wall);
+		else if (stairsobj)
+			shape = stairsobj->CreateShape(wall);
+		else if (sbs)
+			shape = sbs->CreateShape(wall);
+		else
+			return ScriptError("Invalid parent object");
+
+		if (shape)
+		{
+			Vector3 center = Vector3(ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]));
+			shape->CreateTetrahedron("", tempdata[2], center, ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToBool(tempdata[9]), true);
+			delete shape; //delete temporary shape object
+			shape = 0;
+		}
+
+		return sNextLine;
+	}
+
+	//AddOctahedron command
+	if (StartsWithNoCase(LineData, "addoctahedron"))
+	{
+		//get data
+		int params = SplitData(LineData, 13);
+
+		if (params != 10)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 3; i < params - 1; i++)
+		{
+			if (!IsNumeric(tempdata[i]))
+				return ScriptError("Invalid value: " + tempdata[i]);
+		}
+		std::string meshname = SetCaseCopy(tempdata[0], false);
+
+		MeshObject *mesh = GetMeshObject(meshname);
+
+		if (!mesh)
+			return ScriptError("Invalid mesh object");
+
+		Wall *wall = mesh->GetWallByName(tempdata[1]);
+
+		if (!wall)
+			return ScriptError("Invalid wall object");
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
+
+		Object *obj = mesh->GetParent();
+		if (!obj)
+			return ScriptError("Invalid parent object");
+
+		Model *modelobj = 0;
+		Floor *floorobj = 0;
+		Elevator *elevatorobj = 0;
+		ElevatorCar *elevatorcarobj = 0;
+		Shaft::Level *shaftobj = 0;
+		Stairwell::Level *stairsobj = 0;
+		::SBS::SBS *sbs = 0;
+
+		//get parent object of light
+		if (obj->GetType() == "Model")
+			modelobj = static_cast<Model*>(obj);
+		else if (obj->GetType() == "Floor")
+			floorobj = static_cast<Floor*>(obj);
+		else if (obj->GetType() == "Elevator")
+			elevatorobj = static_cast<Elevator*>(obj);
+		else if (obj->GetType() == "ElevatorCar")
+			elevatorcarobj = static_cast<ElevatorCar*>(obj);
+		else if (obj->GetType() == "Shaft Level")
+			shaftobj = static_cast<Shaft::Level*>(obj);
+		else if (obj->GetType() == "Stairwell Level")
+			stairsobj = static_cast<Stairwell::Level*>(obj);
+		else if (obj->GetType() == "SBS")
+			sbs = static_cast<::SBS::SBS*>(obj);
+
+		//get parent object
+		if (elevatorobj)
+		{
+			elevatorcarobj = elevatorobj->GetCar(0);
+			obj = elevatorcarobj;
+		}
+
+		Shape *shape;
+		if (modelobj)
+			shape = modelobj->CreateShape(wall);
+		else if (floorobj)
+			shape = floorobj->CreateShape(wall);
+		else if (elevatorcarobj)
+			shape = elevatorcarobj->CreateShape(wall);
+		else if (shaftobj)
+			shape = shaftobj->CreateShape(wall);
+		else if (stairsobj)
+			shape = stairsobj->CreateShape(wall);
+		else if (sbs)
+			shape = sbs->CreateShape(wall);
+		else
+			return ScriptError("Invalid parent object");
+
+		if (shape)
+		{
+			Vector3 center = Vector3(ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]));
+			shape->CreateOctahedron("", tempdata[2], center, ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToBool(tempdata[9]), true);
+			delete shape; //delete temporary shape object
+			shape = 0;
+		}
+
+		return sNextLine;
+	}
+
+	//AddIcosahedron command
+	if (StartsWithNoCase(LineData, "addicosahedron"))
+	{
+		//get data
+		int params = SplitData(LineData, 14);
+
+		if (params != 10)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 3; i < params - 1; i++)
+		{
+			if (!IsNumeric(tempdata[i]))
+				return ScriptError("Invalid value: " + tempdata[i]);
+		}
+		std::string meshname = SetCaseCopy(tempdata[0], false);
+
+		MeshObject *mesh = GetMeshObject(meshname);
+
+		if (!mesh)
+			return ScriptError("Invalid mesh object");
+
+		Wall *wall = mesh->GetWallByName(tempdata[1]);
+
+		if (!wall)
+			return ScriptError("Invalid wall object");
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
+
+		Object *obj = mesh->GetParent();
+		if (!obj)
+			return ScriptError("Invalid parent object");
+
+		Model *modelobj = 0;
+		Floor *floorobj = 0;
+		Elevator *elevatorobj = 0;
+		ElevatorCar *elevatorcarobj = 0;
+		Shaft::Level *shaftobj = 0;
+		Stairwell::Level *stairsobj = 0;
+		::SBS::SBS *sbs = 0;
+
+		//get parent object of light
+		if (obj->GetType() == "Model")
+			modelobj = static_cast<Model*>(obj);
+		else if (obj->GetType() == "Floor")
+			floorobj = static_cast<Floor*>(obj);
+		else if (obj->GetType() == "Elevator")
+			elevatorobj = static_cast<Elevator*>(obj);
+		else if (obj->GetType() == "ElevatorCar")
+			elevatorcarobj = static_cast<ElevatorCar*>(obj);
+		else if (obj->GetType() == "Shaft Level")
+			shaftobj = static_cast<Shaft::Level*>(obj);
+		else if (obj->GetType() == "Stairwell Level")
+			stairsobj = static_cast<Stairwell::Level*>(obj);
+		else if (obj->GetType() == "SBS")
+			sbs = static_cast<::SBS::SBS*>(obj);
+
+		//get parent object
+		if (elevatorobj)
+		{
+			elevatorcarobj = elevatorobj->GetCar(0);
+			obj = elevatorcarobj;
+		}
+
+		Shape *shape;
+		if (modelobj)
+			shape = modelobj->CreateShape(wall);
+		else if (floorobj)
+			shape = floorobj->CreateShape(wall);
+		else if (elevatorcarobj)
+			shape = elevatorcarobj->CreateShape(wall);
+		else if (shaftobj)
+			shape = shaftobj->CreateShape(wall);
+		else if (stairsobj)
+			shape = stairsobj->CreateShape(wall);
+		else if (sbs)
+			shape = sbs->CreateShape(wall);
+		else
+			return ScriptError("Invalid parent object");
+
+		if (shape)
+		{
+			Vector3 center = Vector3(ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]));
+			shape->CreateIcosahedron("", tempdata[2], center, ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToBool(tempdata[9]), true);
+			delete shape; //delete temporary shape object
+			shape = 0;
+		}
+
+		return sNextLine;
+	}
+
+	//AddGeosphere command
+	if (StartsWithNoCase(LineData, "addgeosphere"))
+	{
+		//get data
+		int params = SplitData(LineData, 12);
+
+		if (params != 11)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 3; i < params - 1; i++)
+		{
+			if (!IsNumeric(tempdata[i]))
+				return ScriptError("Invalid value: " + tempdata[i]);
+		}
+		std::string meshname = SetCaseCopy(tempdata[0], false);
+
+		MeshObject *mesh = GetMeshObject(meshname);
+
+		if (!mesh)
+			return ScriptError("Invalid mesh object");
+
+		Wall *wall = mesh->GetWallByName(tempdata[1]);
+
+		if (!wall)
+			return ScriptError("Invalid wall object");
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
+
+		Object *obj = mesh->GetParent();
+		if (!obj)
+			return ScriptError("Invalid parent object");
+
+		Model *modelobj = 0;
+		Floor *floorobj = 0;
+		Elevator *elevatorobj = 0;
+		ElevatorCar *elevatorcarobj = 0;
+		Shaft::Level *shaftobj = 0;
+		Stairwell::Level *stairsobj = 0;
+		::SBS::SBS *sbs = 0;
+
+		//get parent object of light
+		if (obj->GetType() == "Model")
+			modelobj = static_cast<Model*>(obj);
+		else if (obj->GetType() == "Floor")
+			floorobj = static_cast<Floor*>(obj);
+		else if (obj->GetType() == "Elevator")
+			elevatorobj = static_cast<Elevator*>(obj);
+		else if (obj->GetType() == "ElevatorCar")
+			elevatorcarobj = static_cast<ElevatorCar*>(obj);
+		else if (obj->GetType() == "Shaft Level")
+			shaftobj = static_cast<Shaft::Level*>(obj);
+		else if (obj->GetType() == "Stairwell Level")
+			stairsobj = static_cast<Stairwell::Level*>(obj);
+		else if (obj->GetType() == "SBS")
+			sbs = static_cast<::SBS::SBS*>(obj);
+
+		//get parent object
+		if (elevatorobj)
+		{
+			elevatorcarobj = elevatorobj->GetCar(0);
+			obj = elevatorcarobj;
+		}
+
+		Shape *shape;
+		if (modelobj)
+			shape = modelobj->CreateShape(wall);
+		else if (floorobj)
+			shape = floorobj->CreateShape(wall);
+		else if (elevatorcarobj)
+			shape = elevatorcarobj->CreateShape(wall);
+		else if (shaftobj)
+			shape = shaftobj->CreateShape(wall);
+		else if (stairsobj)
+			shape = stairsobj->CreateShape(wall);
+		else if (sbs)
+			shape = sbs->CreateShape(wall);
+		else
+			return ScriptError("Invalid parent object");
+
+		if (shape)
+		{
+			Vector3 center = Vector3(ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]));
+			shape->CreateGeoSphere("", tempdata[2], center, ToFloat(tempdata[6]), ToInt(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToBool(tempdata[10]), true);
+			delete shape; //delete temporary shape object
+			shape = 0;
+		}
 
 		return sNextLine;
 	}
@@ -985,7 +2399,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		bool equals;
 		std::string value = GetAfterEquals(LineData, equals);
 
-		if (!Simcore->SetWallOrientation(value))
+		if (!polymesh->SetWallOrientation(value))
 			return ScriptError();
 		return sNextLine;
 	}
@@ -997,7 +2411,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		bool equals;
 		std::string value = GetAfterEquals(LineData, equals);
 
-		if (!Simcore->SetFloorOrientation(value))
+		if (!polymesh->SetFloorOrientation(value))
 			return ScriptError();
 		return sNextLine;
 	}
@@ -1010,7 +2424,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (params != 6)
 			return ScriptError("Incorrect number of parameters");
 
-		Simcore->DrawWalls(ToBool(tempdata[0]),
+		polymesh->DrawWalls(ToBool(tempdata[0]),
 					ToBool(tempdata[1]),
 					ToBool(tempdata[2]),
 					ToBool(tempdata[3]),
@@ -1203,7 +2617,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 			return sNextLine;
 
 		Vector2 startpoint (ToFloat(tempdata[0]), ToFloat(tempdata[1]));
-		Vector2 endpoint = Simcore->GetUtility()->GetEndPoint(startpoint, ToFloat(tempdata[2]), ToFloat(tempdata[3]));
+		Vector2 endpoint = Simcore->GetPolyMesh()->GetEndPoint(startpoint, ToFloat(tempdata[2]), ToFloat(tempdata[3]));
 
 		buffer = LineData.substr(0, found) + ToString(endpoint.x) + ", " + ToString(endpoint.y) + LineData.substr(loc2 + 1);
 		LineData = buffer;
@@ -1303,7 +2717,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (params != 2)
 			return ScriptError("Incorrect number of parameters");
 
-		if (!Simcore->Mount(tempdata[0], tempdata[1]))
+		if (!Simcore->GetUtility()->Mount(tempdata[0], tempdata[1]))
 			return ScriptError();
 
 		return sNextLine;
@@ -1435,6 +2849,9 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	//AddModel command
 	if (StartsWithNoCase(LineData, "addmodel"))
 	{
+		if (parent->NoModels == true)
+			return sNextLine;
+
 		//get data
 		int params = SplitData(LineData, 9);
 
@@ -2250,6 +3667,35 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 			StoreCommand(stairsobj->AddCameraTexture(tempdata[1], ToInt(tempdata[2]), ToFloat(tempdata[3]), Vector3(ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6])), ToBool(tempdata[7]), Vector3(ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]))));
 		else
 			return ScriptError("Invalid object");
+
+		return sNextLine;
+	}
+
+	//SetCameraZoom command
+	if (StartsWithNoCase(LineData, "setcamerazoom"))
+	{
+		//get data
+		int params = SplitData(LineData, 14);
+
+		if (params != 3)
+			return ScriptError("Incorrect number of parameters");
+
+		//get SBS object
+		Object* object = Simcore->GetObjectOfParent(tempdata[0], tempdata[1], "CameraTexture", false);
+		if (!object)
+			return ScriptError("Object not found: parent " + tempdata[0] + ", name " + tempdata[1]);
+
+		::SBS::CameraTexture* camtex = static_cast<::SBS::CameraTexture*>(object);
+
+		if (!camtex)
+			return ScriptError("Invalid camera texture " + tempdata[1] + " in " + tempdata[0]);
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
+		//zoom camera
+		camtex->SetZoom(ToFloat(tempdata[2]));
 
 		return sNextLine;
 	}
@@ -3465,7 +4911,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (!object)
 			return ScriptError("Invalid custom object " + tempdata[1] + " in " + name);
 
-		StoreCommand(Simcore->AddWall(object->GetMeshObject(), tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14])));
+		StoreCommand(polymesh->AddWall(object->GetMeshObject(), tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14])));
 
 		return sNextLine;
 	}
@@ -3540,7 +4986,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (!object)
 			return ScriptError("Invalid custom object " + tempdata[1] + " in " + name);
 
-		StoreCommand(Simcore->AddFloor(object->GetMeshObject(), tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToBool(tempdata[11]), ToBool(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]), false));
+		StoreCommand(polymesh->AddFloor(object->GetMeshObject(), tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToBool(tempdata[11]), ToBool(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]), false));
 
 		return sNextLine;
 	}
@@ -3612,7 +5058,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (!object)
 			return ScriptError("Invalid custom object " + tempdata[1] + " in " + name);
 
-		StoreCommand(Simcore->CreateWallBox(object->GetMeshObject(), tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToBool(tempdata[12]), ToBool(tempdata[13]), ToBool(tempdata[14]), ToBool(tempdata[15]), ToBool(tempdata[16])));
+		StoreCommand(polymesh->CreateWallBox(object->GetMeshObject(), tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToBool(tempdata[12]), ToBool(tempdata[13]), ToBool(tempdata[14]), ToBool(tempdata[15]), ToBool(tempdata[16])));
 
 		return sNextLine;
 	}
@@ -3684,7 +5130,41 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (!object)
 			return ScriptError("Invalid custom object " + tempdata[1] + " in " + name);
 
-		StoreCommand(Simcore->CreateWallBox2(object->GetMeshObject(), tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToBool(tempdata[12]), ToBool(tempdata[13]), ToBool(tempdata[14]), ToBool(tempdata[15]), ToBool(tempdata[16])));
+		StoreCommand(polymesh->CreateWallBox2(object->GetMeshObject(), tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToBool(tempdata[12]), ToBool(tempdata[13]), ToBool(tempdata[14]), ToBool(tempdata[15]), ToBool(tempdata[16])));
+
+		return sNextLine;
+	}
+
+	//CreateTeleporter command
+	if (StartsWithNoCase(LineData, "createteleporter"))
+	{
+		//get data
+		int params = SplitData(LineData, 16);
+
+		if (params != 10)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 3; i <= params; i++)
+		{
+			if (!IsNumeric(tempdata[i]))
+				return ScriptError("Invalid value: " + tempdata[i]);
+		}
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
+		Real voffset = 0;
+
+		if (config->SectionNum == 2)
+			voffset += Real(Simcore->GetFloor(config->Current)->GetBase());
+
+		Vector3 pos (ToFloat(tempdata[3]), voffset, ToFloat(tempdata[4]));
+		Vector3 dest (ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]));
+		Teleporter *teleporter = Simcore->GetTeleporterManager()->Create(tempdata[0], tempdata[1], tempdata[2], ToFloat(tempdata[5]), ToFloat(tempdata[6]), dest);
+		teleporter->Move(pos);
+		StoreCommand(teleporter);
 
 		return sNextLine;
 	}
@@ -3879,7 +5359,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 			return sNextLine;
 
 		//rotate object
-		obj->SetPositionRelative(ToFloat(tempdata[1]), ToFloat(tempdata[2]), ToFloat(tempdata[3]));
+		obj->SetPosition(ToFloat(tempdata[1]), ToFloat(tempdata[2]), ToFloat(tempdata[3]), true);
 
 		return sNextLine;
 	}
@@ -3900,6 +5380,18 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 
 		StoreCommand(mesh->CreateWallObject(tempdata[1]));
 
+		return sNextLine;
+	}
+
+	//SetTexture command
+	if (StartsWithNoCase(LineData, "settexture"))
+	{
+		int params = SplitData(LineData, 10, false);
+
+		if (params != 2)
+			return ScriptError("Incorrect number of parameters");
+
+		texturemanager->SetTexture(tempdata[0], tempdata[1]);
 		return sNextLine;
 	}
 
@@ -4124,6 +5616,37 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (mesh)
 			mesh->EnablePhysics(ToBool(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]));
 
+		return sNextLine;
+	}
+
+	//ExtrudePoly command
+	if (StartsWithNoCase(LineData, "extrudepoly"))
+	{
+		int params = SplitData(LineData, 11);
+
+		if (params != 4)
+			return ScriptError("Incorrect number of parameters");
+
+		Real thickness;
+		if (!IsNumeric(tempdata[1], thickness))
+			return ScriptError("Invalid value: " + tempdata[1]);
+
+		config->extrude = true;
+		config->extrusion_texture = tempdata[0];
+		config->extrusion_thickness = thickness;
+		config->extrusion_tw = ToFloat(tempdata[2]);
+		config->extrusion_th = ToFloat(tempdata[3]);
+		return sNextLine;
+	}
+
+	//ExtrudeEnd command
+	if (StartsWithNoCase(LineData, "endextrude"))
+	{
+		config->extrude = false;
+		config->extrusion_texture = "";
+		config->extrusion_thickness = 0.0;
+		config->extrusion_tw = 0.0;
+		config->extrusion_th = 0.0;
 		return sNextLine;
 	}
 

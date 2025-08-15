@@ -23,13 +23,14 @@
 
 #include "globals.h"
 #include "sbs.h"
+#include "polymesh.h"
 #include "floor.h"
 #include "elevator.h"
 #include "elevatorcar.h"
 #include "shaft.h"
 #include "mesh.h"
 #include "camera.h"
-#include "texture.h"
+#include "texman.h"
 #include "trigger.h"
 #include "profiler.h"
 #include "sound.h"
@@ -217,7 +218,7 @@ void ElevatorDoor::AddServicedFloor(int floor)
 	if (ShaftDoors.empty() == true)
 	{
 		ShaftDoors.resize(1);
-		ShaftDoors[1] = 0;
+		ShaftDoors[0] = 0;
 		return;
 	}
 
@@ -842,18 +843,20 @@ DoorComponent* ElevatorDoor::AddDoorComponent(DoorWrapper *wrapper, const std::s
 
 	sbs->GetTextureManager()->ResetTextureMapping(true);
 
+	PolyMesh* polymesh = sbs->GetPolyMesh();
+
 	//add main walls
-	sbs->DrawWalls(true, true, false, false, false, false);
+	polymesh->DrawWalls(true, true, false, false, false, false);
 	Wall *wall;
 	wall = door->mesh->CreateWallObject(name);
-	sbs->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height, height, voffset, voffset, tw, th, false);
-	sbs->ResetWalls();
+	polymesh->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height, height, voffset, voffset, tw, th, false);
+	polymesh->ResetWalls();
 
 	//add side walls
-	sbs->DrawWalls(false, false, true, true, true, true);
+	polymesh->DrawWalls(false, false, true, true, true, true);
 	wall = door->mesh->CreateWallObject(name);
-	sbs->AddWallMain(wall, name, sidetexture, thickness, x1, z1, x2, z2, height, height, voffset, voffset, side_tw, side_th, false);
-	sbs->ResetWalls();
+	polymesh->AddWallMain(wall, name, sidetexture, thickness, x1, z1, x2, z2, height, height, voffset, voffset, side_tw, side_th, false);
+	polymesh->ResetWalls();
 
 	//store extents
 	if (x1 < x2)
@@ -1029,7 +1032,7 @@ DoorWrapper* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool Sha
 		base += floorobj->GetBase(true);
 
 		//cut shaft and floor walls
-		sbs->GetUtility()->ResetDoorwayWalls();
+		sbs->GetPolyMesh()->ResetDoorwayWalls();
 		if (DoorDirection == false)
 		{
 			if (shaft->GetLevel(floor))
@@ -1053,7 +1056,7 @@ DoorWrapper* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool Sha
 		if (DoorWalls == true)
 		{
 			sbs->GetTextureManager()->ResetTextureMapping(true);
-			sbs->GetUtility()->AddDoorwayWalls(floorobj->Level, "Connection Walls", "ConnectionWall", 0, 0);
+			sbs->GetPolyMesh()->AddDoorwayWalls(floorobj->Level, "Connection Walls", "ConnectionWall", 0, 0);
 			sbs->GetTextureManager()->ResetTextureMapping();
 		}
 	}
@@ -1063,13 +1066,14 @@ DoorWrapper* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool Sha
 	{
 		sbs->GetTextureManager()->ResetTextureMapping(true);
 		std::string name1, name2;
+		PolyMesh* polymesh = sbs->GetPolyMesh();
 
 		if (ShaftDoor == false)
 		{
 			name1 = "Door" + ToString(car->Number) + GetNumberText() + ":F1";
 			name2 = "Door" + ToString(car->Number) + GetNumberText() + ":F2";
-			sbs->CreateWallBox(car->Mesh, name1, "Connection", x1, x2, z1, z2, 1, -1.001f + base, 0, 0, false, true, true, true, false);
-			sbs->CreateWallBox(car->Mesh, name2, "Connection", x1, x2, z1, z2, 1, wrapper->Height + 0.001f + base, 0, 0, false, true, true, true, false);
+			polymesh->CreateWallBox(car->Mesh, name1, "Connection", x1, x2, z1, z2, 1, -1.001f + base, 0, 0, false, true, true, true, false);
+			polymesh->CreateWallBox(car->Mesh, name2, "Connection", x1, x2, z1, z2, 1, wrapper->Height + 0.001f + base, 0, 0, false, true, true, true, false);
 		}
 		else
 		{
@@ -1081,8 +1085,8 @@ DoorWrapper* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool Sha
 			Vector3 position (car->GetPosition() - shaft->GetPosition());
 			name1 = "ShaftDoor" + ToString(elev->Number) + ":" + ToString(car->Number) + ":" + ToString(Number) + ":F1";
 			name2 = "ShaftDoor" + ToString(elev->Number) + ":" + ToString(car->Number) + ":" + ToString(Number) + ":F2";
-			sbs->CreateWallBox(mesh, name1, "Connection", position.x + x1, position.x + x2, position.z + z1, position.z + z2, 1, -1.001f + base, 0, 0, false, true, true, true, false);
-			sbs->CreateWallBox(mesh, name2, "Connection", position.x + x1, position.x + x2, position.z + z1, position.z + z2, 1, wrapper->Height + 0.001f + base, 0, 0, false, true, true, true, false);
+			polymesh->CreateWallBox(mesh, name1, "Connection", position.x + x1, position.x + x2, position.z + z1, position.z + z2, 1, -1.001f + base, 0, 0, false, true, true, true, false);
+			polymesh->CreateWallBox(mesh, name2, "Connection", position.x + x1, position.x + x2, position.z + z1, position.z + z2, 1, wrapper->Height + 0.001f + base, 0, 0, false, true, true, true, false);
 		}
 
 		sbs->GetTextureManager()->ResetTextureMapping();
@@ -1162,7 +1166,7 @@ bool ElevatorDoor::FinishShaftDoors(bool DoorWalls, bool TrackWalls)
 	return true;
 }
 
-bool ElevatorDoor::AddShaftDoors(const std::string &lefttexture, const std::string &righttexture, Real thickness, Real CenterX, Real CenterZ, Real voffset, Real tw, Real th)
+bool ElevatorDoor::AddShaftDoors(Real rotation, const std::string &lefttexture, const std::string &righttexture, Real thickness, Real CenterX, Real CenterZ, Real voffset, Real tw, Real th)
 {
 	//adds shaft's elevator doors specified at a relative central position (off of elevator origin)
 	//uses some parameters (width, height, direction) from AddDoor/AddDoors function
@@ -1174,21 +1178,21 @@ bool ElevatorDoor::AddShaftDoors(const std::string &lefttexture, const std::stri
 	//create doors
 	for (size_t i = 0; i < car->ServicedFloors.size(); i++)
 	{
-		if (!AddShaftDoor(car->ServicedFloors[i], lefttexture, righttexture, ShaftDoorThickness, ShaftDoorOrigin.x, ShaftDoorOrigin.z, voffset, tw, th))
+		if (!AddShaftDoor(car->ServicedFloors[i], rotation, lefttexture, righttexture, ShaftDoorThickness, ShaftDoorOrigin.x, ShaftDoorOrigin.z, voffset, tw, th))
 			return false;
 	}
 
 	return true;
 }
 
-DoorWrapper* ElevatorDoor::AddShaftDoor(int floor, const std::string &lefttexture, const std::string &righttexture, Real tw, Real th)
+DoorWrapper* ElevatorDoor::AddShaftDoor(int floor, Real rotation, const std::string &lefttexture, const std::string &righttexture, Real tw, Real th)
 {
 	//compatibility version of AddShaftDoor; please use newer implementation instead
 
-	return AddShaftDoor(floor, lefttexture, righttexture, ShaftDoorThickness, ShaftDoorOrigin.x, ShaftDoorOrigin.z, 0, tw, th);
+	return AddShaftDoor(floor, rotation, lefttexture, righttexture, ShaftDoorThickness, ShaftDoorOrigin.x, ShaftDoorOrigin.z, 0, tw, th);
 }
 
-DoorWrapper* ElevatorDoor::AddShaftDoor(int floor, const std::string &lefttexture, const std::string &righttexture, Real thickness, Real CenterX, Real CenterZ, Real voffset, Real tw, Real th)
+DoorWrapper* ElevatorDoor::AddShaftDoor(int floor, Real rotation, const std::string &lefttexture, const std::string &righttexture, Real thickness, Real CenterX, Real CenterZ, Real voffset, Real tw, Real th)
 {
 	//adds a single elevator shaft door, with position and thickness parameters first specified
 	//by the SetShaftDoors command.
@@ -1239,7 +1243,7 @@ DoorWrapper* ElevatorDoor::AddShaftDoor(int floor, const std::string &lefttextur
 
 	//finish doors
 	DoorWrapper *wrapper = FinishShaftDoor(floor);
-
+	wrapper->Rotate(Vector3(0, rotation, 0));
 	return wrapper;
 }
 
@@ -1472,7 +1476,7 @@ bool ElevatorDoor::DoorsStopped()
 	return doors_stopped;
 }
 
-void ElevatorDoor::Loop()
+bool ElevatorDoor::Loop()
 {
 	//main loop
 	SBS_PROFILE("ElevatorDoor::Loop");
@@ -1488,17 +1492,19 @@ void ElevatorDoor::Loop()
 		MoveDoors(true, true);
 	if (OpenDoor == -2)
 		MoveDoors(false, true);
+
+	return true;
 }
 
-void ElevatorDoor::Enabled(bool value)
+bool ElevatorDoor::Enabled(bool value)
 {
-	Doors->Enabled(value);
+	return Doors->Enabled(value);
 }
 
 bool ElevatorDoor::IsEnabled()
 {
 	//are doors enabled?
-	return Doors->IsEnabled;
+	return Doors->IsEnabled();
 }
 
 int ElevatorDoor::GetWhichDoors()

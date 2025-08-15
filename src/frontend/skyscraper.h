@@ -78,6 +78,7 @@ public:
 	bool StartupRunning;
 	bool IntroMusic;
 	bool FullScreen;
+	bool Maximized;
 	bool Verbose;
 	bool ShowMenu; //show main menu
 	int wireframe;
@@ -100,8 +101,8 @@ public:
 	void ShowError(const std::string &message);
 	void ShowMessage(const std::string &message);
 	void StartSound();
-	std::string SelectBuilding();
-	bool Load(const std::string &filename, EngineContext *parent = 0, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
+	std::string SelectBuilding(bool native_dialog = false);
+	bool Load(const std::string &filename, EngineContext *parent = 0, const Vector3 &position = Vector3::ZERO, const Vector3 &rotation = Vector3::ZERO, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
 	bool Start(EngineContext *engine);
 	void AllowResize(bool value);
 	void UnloadToMenu();
@@ -150,6 +151,8 @@ protected:
 	bool freelook;
 
 private:
+	//loop states
+	bool startscreen_loaded;
 
 	void UnloadSim();
 	void Report(const std::string &message);

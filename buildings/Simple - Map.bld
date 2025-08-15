@@ -497,3 +497,6 @@ AddAction FireServiceBypass, Elevator1, Fire1Bypass
     SetAutoSize = true, true
 <EndFloors>
 
+#set zoom factor of map camera
+SetCameraZoom MapGenerator, MapCamera, 50
+

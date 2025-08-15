@@ -28,7 +28,7 @@ class MeshObject;
 class SBSIMPEXP GeometryController : public Object
 {
 public:
-	GeometryController(Object *parent);
+	explicit GeometryController(Object *parent);
 	~GeometryController();
 	Ogre::MeshPtr CreatePlane(Object* parent, const std::string& name, Real size_x, Real size_y, unsigned int segments_x, unsigned int segments_y, Real utile, Real vtile);
 	Ogre::MeshPtr CreateSphere(Object* parent, const std::string& name, Real radius, Real utile, Real vtile, unsigned int rings, unsigned int segments);

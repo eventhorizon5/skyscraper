@@ -28,6 +28,7 @@
 
 #include "globals.h"
 #include "sbs.h"
+#include "utility.h"
 #include "camera.h"
 #include "sound.h"
 #include "profiler.h"
@@ -75,7 +76,7 @@ SoundSystem::~SoundSystem()
 		//delete reverbs[i].object;
 }
 
-void SoundSystem::Loop()
+bool SoundSystem::Loop()
 {
 #ifndef DISABLE_SOUND
 	//update sound
@@ -85,19 +86,27 @@ void SoundSystem::Loop()
 		ProfileManager::Start_Profile("FMOD");
 
 	//sync sound listener object to camera position
-	if (sbs->camera->IsActive() == true)
-		SetListenerPosition(sbs->camera->GetPosition());
+	if (sbs->camera)
+	{
+		if (sbs->camera->IsActive() == true)
+			SetListenerPosition(sbs->camera->GetPosition());
+	}
 
 	//set direction of listener to camera's direction
 	Vector3 front = Vector3::ZERO;
 	Vector3 top = Vector3::ZERO;
-	sbs->camera->GetDirection(front, top, true);
-	SetListenerDirection(front, top);
+	if (sbs->camera)
+	{
+		sbs->camera->GetDirection(front, top, true);
+		SetListenerDirection(front, top);
+	}
 
 	//update FMOD
-	soundsys->update();
+	FMOD_RESULT result = soundsys->update();
 
 	ProfileManager::Stop_Profile();
+
+	return (result == FMOD_OK);
 #endif
 }
 
@@ -123,7 +132,7 @@ void SoundSystem::SetListenerPosition(const Vector3 &position)
 
 	Position = position;
 
-	Vector3 global_position = sbs->ToGlobal(position);
+	Vector3 global_position = sbs->GetUtility()->ToGlobal(position);
 
 	listener_position.x = (float)global_position.x;
 	listener_position.y = (float)global_position.y;
@@ -251,8 +260,8 @@ SoundData* SoundSystem::Load(const std::string &filename)
 	//load new sound
 	std::string full_filename1 = "data/";
 	full_filename1.append(filename);
-	std::string processed = sbs->VerifyFile(full_filename1);
-	std::string full_filename = sbs->GetFilesystemPath(processed);
+	std::string processed = sbs->GetUtility()->VerifyFile(full_filename1);
+	std::string full_filename = sbs->GetUtility()->GetFilesystemPath(processed);
 
 #if (FMOD_VERSION >> 16 == 4)
 	FMOD_RESULT result = soundsys->createSound(full_filename.c_str(), (FMOD_MODE)(FMOD_3D | FMOD_ACCURATETIME | FMOD_SOFTWARE | FMOD_LOOP_NORMAL), 0, &data->sound);
@@ -369,19 +378,27 @@ int SoundSystem::GetSoundCount()
 void SoundSystem::ShowLoadedSounds()
 {
 #ifndef DISABLE_SOUND
-	Object::Report("\n--- Loaded Sounds ---\n");
+	Object::Report("");
+	Object::Report("--- Loaded Sounds ---");
+	Object::Report("");
 	Object::Report("Filename\t----\tSound Objects\t----\tChannels");
 	for (int i = 0; i < GetSoundCount(); i++)
 	{
 		Object::Report(sounds[i]->filename + "\t----\t" + ToString(sounds[i]->GetHandleCount()) + "\t----\t" + ToString(sounds[i]->GetChannelCount()));
 	}
-	Object::Report("\nTotal loaded sounds: " + ToString(GetSoundCount()));
+	Object::Report("");
+	Object::Report("Total loaded sounds: " + ToString(GetSoundCount()));
 #endif
 }
 
-void SoundSystem::ShowPlayingSounds()
+void SoundSystem::ShowPlayingSounds(bool verbose)
 {
-	Object::Report("\n--- Playing Sounds ---\n");
+	if (verbose == true)
+	{
+		Object::Report("");
+		Object::Report("--- Playing Sounds ---");
+		Object::Report("");
+	}
 	for (int i = 0; i < GetSoundCount(); i++)
 	{
 		bool first = true;
@@ -397,7 +414,16 @@ void SoundSystem::ShowPlayingSounds()
 			}
 		}
 	}
-	Object::Report("\nTotal playing sounds: " + ToString(GetPlayingCount()));
+	if (verbose == true)
+	{
+		Object::Report("");
+		ShowPlayingTotal();
+	}
+}
+
+void SoundSystem::ShowPlayingTotal()
+{
+	Object::Report("Total playing sounds: " + ToString(GetPlayingCount()));
 }
 
 #ifndef DISABLE_SOUND

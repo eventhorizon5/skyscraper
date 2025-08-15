@@ -61,6 +61,11 @@ class SoundManager;
 class TextureManager;
 class EscalatorControl;
 class WalkwayControl;
+class RevolvingDoorControl;
+class ControllerEditor;
+class ScriptDebug;
+class ScriptProcessor;
+class FloorInfo;
 
 class DebugPanel: public wxFrame
 {
@@ -113,6 +118,7 @@ class DebugPanel: public wxFrame
 		static const long ID_bConsole;
 		static const long ID_bCameraTexture;
 		static const long ID_bEscalator;
+		static const long ID_bRevolvingDoor;
 		static const long ID_bObjectInfo;
 		static const long ID_bActionViewer;
 		static const long ID_bPeopleManager;
@@ -123,12 +129,14 @@ class DebugPanel: public wxFrame
 		static const long ID_bFloorInfo;
 		static const long ID_bSoundManager;
 		static const long ID_bMovingWalkway;
+		static const long ID_bControllerEditor;
 		static const long ID_PANEL1;
 		//*)
 		void EnableTimer(bool value);
 		void Loop();
 		VM* GetRoot() { return vm; }
 		SBS::SBS* GetSystem() { return Simcore; }
+		ScriptProcessor* GetScriptProcessor();
 		void ShowControlReference();
 		class Timer : public wxTimer
 		{
@@ -141,6 +149,7 @@ class DebugPanel: public wxFrame
 		Timer *timer;
 		SBS::SBS *Simcore;
 		VM* vm;
+		ScriptProcessor *scriptproc;
 
 	protected:
 
@@ -177,6 +186,8 @@ class DebugPanel: public wxFrame
 		void On_bEscalator_Click(wxCommandEvent& event);
 		void On_chkPower_Click(wxCommandEvent& event);
 		void On_bMovingWalkway_Click(wxCommandEvent& event);
+		void On_bRevolvingDoor_Click(wxCommandEvent& event);
+		void On_bControllerEditor_Click(wxCommandEvent& event);
 		//*)
 		void OnInit();
 
@@ -192,6 +203,7 @@ class DebugPanel: public wxFrame
 		wxButton* bCameraTexture;
 		wxButton* bConsole;
 		wxButton* bControlReference;
+		wxButton* bControllerEditor;
 		wxButton* bEditElevator;
 		wxButton* bEngineManager;
 		wxButton* bEscalator;
@@ -203,6 +215,7 @@ class DebugPanel: public wxFrame
 		wxButton* bObjectInfo;
 		wxButton* bPeopleManager;
 		wxButton* bProfiler;
+		wxButton* bRevolvingDoor;
 		wxButton* bSkyControl;
 		wxButton* bSoundManager;
 		wxButton* bStats;
@@ -260,6 +273,9 @@ class DebugPanel: public wxFrame
 		TextureManager *tmanager;
 		EscalatorControl *esc;
 		WalkwayControl *walk;
+		RevolvingDoorControl* revdoor;
+		ControllerEditor* ceditor;
+		FloorInfo* info;
 
 		DECLARE_EVENT_TABLE()
 };

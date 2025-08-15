@@ -22,6 +22,7 @@
 
 #include "globals.h"
 #include "sbs.h"
+#include "utility.h"
 #ifdef USING_WX
 #include "wx/wx.h"
 #endif
@@ -34,7 +35,7 @@
 #include "vm.h"
 #include "sky.h"
 #include "enginecontext.h"
-#include "texture.h"
+#include "texman.h"
 #include "floor.h"
 #include "camera.h"
 #include "random.h"
@@ -68,6 +69,7 @@ ScriptProcessor::ScriptProcessor(EngineContext *instance)
 	controller_section = new ControllerSection(this);
 	callstation_section = new CallStationSection(this);
 
+	NoModels = false;
 	Reset();
 }
 
@@ -97,17 +99,13 @@ ScriptProcessor::~ScriptProcessor()
 		delete callstation_section;
 }
 
-void ScriptProcessor::Reset()
+void ScriptProcessor::Reset(bool full)
 {
 	line = 0; //line number
 	LineData = "";  //line contents
 	wall = 0;
 	startpos = 0;
 	getfloordata = false;
-	BuildingData.clear();
-	BuildingDataOrig.clear();
-	BuildingData.reserve(1024);
-	BuildingDataOrig.reserve(1024);
 	InFunction = 0;
 	FunctionStack.clear();
 	ReplaceLine = false;
@@ -121,6 +119,14 @@ void ScriptProcessor::Reset()
 	variables.clear();
 	in_runloop = false;
 	processed_runloop = false;
+
+	if (full == true)
+	{
+		BuildingData.clear();
+		BuildingDataOrig.clear();
+		BuildingData.reserve(1024);
+		BuildingDataOrig.reserve(1024);
+	}
 
 	//reset configuration
 	config->Reset();
@@ -145,6 +151,7 @@ bool ScriptProcessor::Run()
 {
 	//building loader/script interpreter
 
+	bool status = false;
 	int returncode = sContinue;
 	IsFinished = false;
 
@@ -157,6 +164,8 @@ bool ScriptProcessor::Run()
 
 	if (line < (int)BuildingData.size() && line >= 0)
 	{
+		if (InRunloop() == false)
+			engine->ResetPrepare(); //reset prepare flag
 		LineData = BuildingData[line];
 		TrimString(LineData);
 
@@ -193,7 +202,11 @@ bool ScriptProcessor::Run()
 		}
 
 		//process function parameters
-		ProcessFunctionParameters();
+		status = ProcessFunctionParameters();
+
+		//handle cancel if requested
+		if (status == false)
+			goto Error;
 
 		//process user variables
 		ProcessUserVariables();
@@ -323,7 +336,7 @@ bool ScriptProcessor::LoadDataFile(const std::string &filename, bool insert, int
 {
 	//loads a building data file into the runtime buffer
 	int location = insert_line;
-	std::string Filename = Simcore->VerifyFile(filename);
+	std::string Filename = Simcore->GetUtility()->VerifyFile(filename);
 
 	//if insert location is greater than array size, return with error
 	if (insert == true)
@@ -336,7 +349,7 @@ bool ScriptProcessor::LoadDataFile(const std::string &filename, bool insert, int
 	}
 
 	//make sure file exists
-	if (Simcore->FileExists(Filename) == false)
+	if (Simcore->GetUtility()->FileExists(Filename) == false)
 	{
 		if (insert == false)
 			engine->ReportFatalError("Error loading building file:\nFile '" + Filename + "' does not exist");
@@ -362,7 +375,7 @@ bool ScriptProcessor::LoadDataFile(const std::string &filename, bool insert, int
 
 		//check for a mount point
 		std::string shortname;
-		std::string group = Simcore->GetMountPath(Filename, shortname);
+		std::string group = Simcore->GetUtility()->GetMountPath(Filename, shortname);
 
 		if (group == "General")
 		{
@@ -1043,7 +1056,7 @@ void ScriptProcessor::CheckFile(const std::string &filename)
 	if (loc > 0)
 		return;
 
-	if (Simcore->FileExists(file) == false)
+	if (Simcore->GetUtility()->FileExists(file) == false)
 	{
 		bool exists = false;
 		for (size_t i = 0; i < nonexistent_files.size(); i++)
@@ -1117,7 +1130,7 @@ ScriptProcessor::ElevatorCarSection* ScriptProcessor::GetElevatorCarSection()
 	return elevatorcar_section;
 }
 
-void ScriptProcessor::ProcessFunctionParameters()
+bool ScriptProcessor::ProcessFunctionParameters()
 {
 	//////////////////////////////
 	//Function parameter variables
@@ -1184,9 +1197,10 @@ void ScriptProcessor::ProcessFunctionParameters()
 		{
 			progress_marker = marker;
 			engine->Report(percent_s + "%");
-			engine->UpdateProgress(percent);
+			return engine->UpdateProgress(percent);
 		}
 	}
+	return true;
 }
 
 void ScriptProcessor::ProcessUserVariables()
@@ -1297,7 +1311,7 @@ int ScriptProcessor::ProcessSections()
 		BuildingData.erase(BuildingData.begin() + line);
 
 		//insert file at current line
-		std::string filename = Simcore->VerifyFile(includefile);
+		std::string filename = Simcore->GetUtility()->VerifyFile(includefile);
 		bool result = LoadDataFile(filename, true, line);
 		if (result == false)
 			return sError;
@@ -2063,6 +2077,23 @@ void ScriptProcessor::Start()
 {
 	IsFinished = true;
 	show_percent = false;
+}
+
+size_t ScriptProcessor::GetFunctionCount()
+{
+	return functions.size();
+}
+
+ScriptProcessor::FunctionInfo ScriptProcessor::GetFunctionInfo(size_t index)
+{
+	FunctionInfo info;
+	info.line = 0;
+	info.name = "";
+
+	if (index >= functions.size())
+		return info;
+
+	return functions[index];
 }
 
 }

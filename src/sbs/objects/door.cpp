@@ -23,13 +23,14 @@
 
 #include "globals.h"
 #include "sbs.h"
+#include "polymesh.h"
 #include "manager.h"
 #include "mesh.h"
 #include "floor.h"
 #include "elevatorcar.h"
 #include "shaft.h"
 #include "stairs.h"
-#include "texture.h"
+#include "texman.h"
 #include "sound.h"
 #include "timer.h"
 #include "doorsystem.h"
@@ -186,16 +187,17 @@ bool Door::IsOpen()
 	return OpenState;
 }
 
-void Door::Enabled(bool value)
+bool Door::Enabled(bool value)
 {
 	if (is_enabled == value)
-		return;
+		return true;
 
-	door->Enabled(value);
+	bool status = door->Enabled(value);
 	is_enabled = value;
+	return status;
 }
 
-void Door::Loop()
+bool Door::Loop()
 {
 	SBS_PROFILE("Door::Loop");
 
@@ -203,6 +205,8 @@ void Door::Loop()
 		MoveDoor();
 	else
 		EnableLoop(false);
+
+	return true;
 }
 
 void Door::MoveDoor()
@@ -370,19 +374,21 @@ DoorWrapper* Door::AddDoorComponent(const std::string &name, const std::string &
 	else
 		sbs->GetTextureManager()->SetTextureFlip(1, 0, 0, 0, 0, 0); //flip texture on rear side of door
 
+	PolyMesh* polymesh = sbs->GetPolyMesh();
+
 	//add main walls
-	sbs->DrawWalls(true, true, false, false, false, false);
+	polymesh->DrawWalls(true, true, false, false, false, false);
 	Wall *wall;
 	wall = component->mesh->CreateWallObject(name);
-	sbs->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height, height, voffset, voffset, tw, th, false);
-	sbs->ResetWalls();
+	polymesh->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height, height, voffset, voffset, tw, th, false);
+	polymesh->ResetWalls();
 	sbs->GetTextureManager()->ResetTextureMapping();
 
 	//add side walls
-	sbs->DrawWalls(false, false, true, true, true, true);
+	polymesh->DrawWalls(false, false, true, true, true, true);
 	wall = component->mesh->CreateWallObject(name);
-	sbs->AddWallMain(wall, name, sidetexture, thickness, x1, z1, x2, z2, height, height, voffset, voffset, side_tw, side_th, false);
-	sbs->ResetWalls();
+	polymesh->AddWallMain(wall, name, sidetexture, thickness, x1, z1, x2, z2, height, height, voffset, voffset, side_tw, side_th, false);
+	polymesh->ResetWalls();
 
 	//store extents
 	if (x1 < x2)

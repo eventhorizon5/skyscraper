@@ -34,7 +34,7 @@
 #include "polymesh.h"
 #include "polygon.h"
 #include "triangle.h"
-#include "texture.h"
+#include "texman.h"
 #include "scenenode.h"
 #include "profiler.h"
 #include "dynamicmesh.h"
@@ -113,8 +113,10 @@ bool DynamicMesh::LoadFromMesh(const std::string &meshname)
 	return true;
 }
 
-void DynamicMesh::Enabled(bool value, MeshObject *client)
+bool DynamicMesh::Enabled(bool value, MeshObject *client)
 {
+	bool status = true;
+
 	if (client == 0 || meshes.size() == 1)
 	{
 		//manage client enabled status
@@ -133,14 +135,18 @@ void DynamicMesh::Enabled(bool value, MeshObject *client)
 						continue;
 
 					if (client_enable[i] == true)
-						return;
+						return true;
 				}
 			}
 		}
 
 		//enable all meshes if no client specified
 		for (size_t i = 0; i < meshes.size(); i++)
-			meshes[i]->Enabled(value);
+		{
+			bool result = meshes[i]->Enabled(value);
+			if (!result)
+				status = false;
+		}
 	}
 	else if (meshes.size() > 1)
 	{
@@ -149,8 +155,13 @@ void DynamicMesh::Enabled(bool value, MeshObject *client)
 		int index = GetClientIndex(client);
 
 		if (index >= 0)
-			meshes[index]->Enabled(value);
+		{
+			bool result = meshes[index]->Enabled(value);
+			if (!result)
+				status = false;
+		}
 	}
+	return status;
 }
 
 bool DynamicMesh::ChangeTexture(const std::string &old_texture, const std::string &new_texture, MeshObject *client)
@@ -645,6 +656,12 @@ DynamicMesh::Mesh::Mesh(DynamicMesh *parent, const std::string &name, SceneNode 
 	auto_shadows = true;
 	parent_deleting = false;
 
+	if (!node)
+	{
+		sbs->ReportError("DynamicMesh: Error creating mesh " + meshname + "\n");
+		return;
+	}
+
 	if (filename == "")
 	{
 		this->name = name;
@@ -662,7 +679,7 @@ DynamicMesh::Mesh::Mesh(DynamicMesh *parent, const std::string &name, SceneNode 
 
 			if (!MeshWrapper)
 			{
-				sbs->ReportError("Error loading mesh " + meshname + "\n");
+				sbs->ReportError("DynamicMesh: Error loading mesh " + meshname + "\n");
 				return;
 			}
 
@@ -679,7 +696,7 @@ DynamicMesh::Mesh::Mesh(DynamicMesh *parent, const std::string &name, SceneNode 
 		}
 		catch (Ogre::Exception &e)
 		{
-			sbs->ReportError("Error loading model " + filename + "\n" + e.getDescription());
+			sbs->ReportError("DynamicMesh: Error loading model " + filename + "\n" + e.getDescription());
 			MeshWrapper = 0;
 			return;
 		}
@@ -713,17 +730,17 @@ DynamicMesh::Mesh::~Mesh()
 	}
 	catch (Ogre::Exception &e)
 	{
-		sbs->ReportError("Error unloading mesh: " + e.getDescription());
+		sbs->ReportError("DynamicMesh: Error unloading mesh: " + e.getDescription());
 	}
 	MeshWrapper = 0;
 }
 
-void DynamicMesh::Mesh::Enabled(bool value)
+bool DynamicMesh::Mesh::Enabled(bool value)
 {
 	//attach or detach from scenegraph
 
 	if (enabled == value || !node)
-		return;
+		return true;
 
 	if (value == false)
 		node->DetachObject(Movable);
@@ -734,6 +751,7 @@ void DynamicMesh::Mesh::Enabled(bool value)
 		Movable->setCastShadows(value);
 
 	enabled = value;
+	return true;
 }
 
 bool DynamicMesh::Mesh::ChangeTexture(const std::string &old_texture, const std::string &new_texture)
@@ -1015,7 +1033,7 @@ void DynamicMesh::Mesh::Prepare(bool process_vertices, int client)
 					{
 						for (size_t k = 0; k < poly->geometry[j].size(); k++)
 						{
-							Polygon::Geometry &element = poly->geometry[j][k];
+							Geometry &element = poly->geometry[j][k];
 
 							//make mesh's vertex relative to this scene node
 							Vector3 vertex;
@@ -1397,7 +1415,7 @@ void DynamicMesh::Mesh::UpdateVertices(int client, const std::string &material, 
 			{
 				for (size_t l = 0; l < poly->geometry[k].size(); l++)
 				{
-					Polygon::Geometry &element = poly->geometry[k][l];
+					Geometry &element = poly->geometry[k][l];
 
 					//make mesh's vertex relative to this scene node
 					Vector3 raw_vertex = mesh->GetOrientation() * element.vertex; //add mesh's rotation
@@ -1527,6 +1545,54 @@ void DynamicMesh::Mesh::SetMaterial(const std::string& material)
 		//set to default material if the specified one is not found
 		mat = sbs->GetTextureManager()->GetMaterialByName("Default");
 		Movable->setMaterial(mat);
+	}
+}
+
+void DynamicMesh::TessellateTriangle(const Vector3& v0, const Vector3& v1, const Vector3& v2, const Vector2& uv0, const Vector2& uv1, const Vector2& uv2, std::vector<Vector3>& outVerts, std::vector<Vector2>& outUVs, std::vector<unsigned int>& outIndices, unsigned int& vertexOffset, int resolution)
+{
+	//tessellate a triangle
+
+	//create barycentric grid of points
+	std::vector<std::vector<unsigned int>> grid(resolution + 1);
+
+	for (int i = 0; i <= resolution; ++i)
+	{
+		grid[i].resize(i + 1);
+		for (int j = 0; j <= i; ++j)
+		{
+			float a = 1.0f - (float)i / resolution;
+			float b = ((float)(i - j)) / resolution;
+			float c = (float)j / resolution;
+
+			Vector3 pos = v0 * a + v1 * b + v2 * c;
+			Vector2 uv  = uv0 * a + uv1 * b + uv2 * c;
+
+			outVerts.emplace_back(pos);
+			outUVs.emplace_back(uv);
+			grid[i][j] = vertexOffset++;
+		}
+	}
+
+	//create triangles
+	for (int i = 0; i < resolution; ++i)
+	{
+		for (int j = 0; j < i; ++j)
+		{
+			//lower left triangle
+			outIndices.emplace_back(grid[i][j]);
+			outIndices.emplace_back(grid[i + 1][j]);
+			outIndices.emplace_back(grid[i + 1][j + 1]);
+
+			//upper right triangle
+			outIndices.emplace_back(grid[i][j]);
+			outIndices.emplace_back(grid[i + 1][j + 1]);
+			outIndices.emplace_back(grid[i][j + 1]);
+		}
+
+		//edge triangle at the end of the row
+		outIndices.emplace_back(grid[i][i]);
+		outIndices.emplace_back(grid[i + 1][i]);
+		outIndices.emplace_back(grid[i + 1][i + 1]);
 	}
 }
 

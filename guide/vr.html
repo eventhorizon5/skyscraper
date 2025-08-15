@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>Virtual Reality (VR) Support</title>
+    <meta http-equiv="content-type" content="text/html;
+      charset=windows-1252">
+  </head>
+  <body>
+    <div align="center">
+      <p><strong><font size="+2">Virtual Reality (VR) Support</font></strong><br>
+      </p>
+      <hr>
+      <p align="left">Skyscraper has experimental virtual reality
+        support, that has been tested on a Meta Quest 2 headset.&nbsp;
+        Since only graphics are supported and not the controllers that
+        come with the headset, third-party game controllers are
+        recommended.&nbsp; The following photo shows the Quest 2 headset
+        I've used for simulator development and it's controller.<br>
+      </p>
+      <img src="headset_controller.jpg" alt="Headset and Controller"
+        width="640" height="480"><br>
+      <br>
+      To enable virtual reality support, open up the skyscraper.ini file
+      in a text editor, and change the line that reads
+      "Skyscraper.Frontend.VR = false" to true:<br>
+      <br>
+      <table width="800" height="42" cellspacing="2" cellpadding="2"
+        border="1">
+        <tbody>
+          <tr>
+            <td valign="top" bgcolor="#e0e0e0">
+              <div align="left"><font face="Courier New, Courier,
+                  monospace"><font size="-1">;enable or disable VR mode</font></font><br>
+              </div>
+              <font face="Courier New, Courier, monospace"><font
+                  size="-1">Skyscraper.Frontend.VR = true</font><br>
+              </font></td>
+          </tr>
+        </tbody>
+      </table>
+      <br>
+      Once that is changed, you'll need to make sure DirectX 11 support
+      is enabled.&nbsp; To do that, delete the ogre.cfg file in
+      Skyscraper's folder, and choose DirectX 11 when launching
+      Skyscraper.&nbsp; Connect your game controller and optionally your
+      headset, and launch Skyscraper.&nbsp; If you don't plug in your
+      headset beforehand, it'll report about a headset not being found.<br>
+      <br>
+      Both link cables and airlink are supported.&nbsp; Connect your
+      headset, and if things are working properly, you'll see the
+      building selection menu.&nbsp; You might need to enable the link
+      support from the headset.<br>
+      <br>
+      The building I normally choose is the City Demo.&nbsp; It should
+      take a minute to load, once it's loaded, you should see Skyscraper
+      in full immersive VR.<br>
+      <br>
+      Currently, to control things such as elevators, you'll need to use
+      the control panel windows.&nbsp; Things such as movement, jumping,
+      opening doors, and running can be done with the controller.&nbsp;
+      Other things such as turning off collisions (v key) can be done
+      via the keyboard.<br>
+      <br>
+      <br>
+      <br>
+    </div>
+  </body>
+</html>

@@ -33,6 +33,8 @@
 #include "vehicle.h"
 #include "controller.h"
 #include "profiler.h"
+#include "utility.h"
+#include "teleporter.h"
 #include "manager.h"
 
 namespace SBS {
@@ -230,23 +232,46 @@ void FloorManager::Remove(Floor *floor)
 	}
 }
 
-void FloorManager::EnableAll(bool value)
+bool FloorManager::EnableAll(bool value)
 {
 	//enable or disable all floors
+
+	bool status = true;
 	for (size_t i = 0; i < Array.size(); i++)
-		Array[i].object->Enabled(value);
+	{
+		bool result = Array[i].object->Enabled(value);
+		if (!result)
+			status = false;
+	}
 
 	//enable/disable dynamic meshes
-	floors->Enabled(value);
-	interfloors->Enabled(value);
-	columnframes->Enabled(value);
+	if (floors)
+	{
+		bool result = floors->Enabled(value);
+		if (!result)
+			status = false;
+	}
+	if (interfloors)
+	{
+		bool result = interfloors->Enabled(value);
+		if (!result)
+			status = false;
+	}
+	if (columnframes)
+	{
+		bool result = columnframes->Enabled(value);
+		if (!result)
+			status = false;
+	}
+
+	return status;
 }
 
-void FloorManager::Loop()
+bool FloorManager::Loop()
 {
 	SBS_PROFILE("FloorManager::Loop");
 
-	LoopChildren();
+	return LoopChildren();
 }
 
 ElevatorManager::ElevatorManager(Object* parent) : Manager(parent)
@@ -363,10 +388,11 @@ void ElevatorManager::Remove(Elevator *elevator)
 	}
 }
 
-void ElevatorManager::EnableAll(bool value)
+bool ElevatorManager::EnableAll(bool value)
 {
 	//turn off elevators, if the related shaft is only partially shown
 
+	bool status = true;
 	for (size_t i = 0; i < Array.size(); i++)
 	{
 		Shaft *shaft = Array[i].object->GetShaft();
@@ -374,16 +400,21 @@ void ElevatorManager::EnableAll(bool value)
 		if (value == false)
 			value = shaft->GetShowFull();
 
-		Array[i].object->Enabled(value);
+		bool result = Array[i].object->Enabled(value);
+		if (!result)
+			status = false;
 	}
+	return status;
 }
 
-void ElevatorManager::Loop()
+bool ElevatorManager::Loop()
 {
 	SBS_PROFILE("ElevatorManager::Loop");
 
 	if (sbs->ProcessElevators == true)
-		LoopChildren();
+		return LoopChildren();
+
+	return true;
 }
 
 ShaftManager::ShaftManager(Object* parent) : Manager(parent)
@@ -527,18 +558,24 @@ void ShaftManager::Remove(Shaft *shaft)
 	}
 }
 
-void ShaftManager::EnableAll(bool value)
+bool ShaftManager::EnableAll(bool value)
 {
 	//enable or disable all shafts
+	bool status = true;
 	for (size_t i = 0; i < Array.size(); i++)
-		Array[i].object->EnableWhole(value, true, true);
+	{
+		bool result = Array[i].object->EnableWhole(value, true, true);
+		if (!result)
+			status = false;
+	}
+	return status;
 }
 
-void ShaftManager::Loop()
+bool ShaftManager::Loop()
 {
 	SBS_PROFILE("ShaftManager::Loop");
 
-	LoopChildren();
+	return LoopChildren();
 }
 
 StairwellManager::StairwellManager(Object* parent) : Manager(parent)
@@ -681,18 +718,24 @@ void StairwellManager::Remove(Stairwell *stairs)
 	}
 }
 
-void StairwellManager::EnableAll(bool value)
+bool StairwellManager::EnableAll(bool value)
 {
 	//enable or disable all stairwells
+	bool status = true;
 	for (size_t i = 0; i < Array.size(); i++)
-		Array[i].object->EnableWhole(value, true);
+	{
+		bool result = Array[i].object->EnableWhole(value, true);
+		if (!result)
+			status = false;
+	}
+	return status;
 }
 
-void StairwellManager::Loop()
+bool StairwellManager::Loop()
 {
 	SBS_PROFILE("StairwellManager::Loop");
 
-	LoopChildren();
+	return LoopChildren();
 }
 
 DoorManager::DoorManager(Object* parent) : Manager(parent)
@@ -761,14 +804,8 @@ void DoorManager::RemoveDoor(Door *door)
 {
 	//remove a door from the array
 	//this does not delete the object
-	for (size_t i = 0; i < Array.size(); i++)
-	{
-		if (Array[i] == door)
-		{
-			Array.erase(Array.begin() + i);
-			return;
-		}
-	}
+
+	RemoveArrayElement(Array, door);
 }
 
 int DoorManager::GetCount()
@@ -785,11 +822,11 @@ Door* DoorManager::GetIndex(int index)
 	return Array[index];
 }
 
-void DoorManager::Loop()
+bool DoorManager::Loop()
 {
 	SBS_PROFILE("DoorManager::Loop");
 
-	LoopChildren();
+	return LoopChildren();
 }
 
 RevolvingDoorManager::RevolvingDoorManager(Object* parent) : Manager(parent)
@@ -836,14 +873,8 @@ void RevolvingDoorManager::RemoveDoor(RevolvingDoor *door)
 {
 	//remove a door from the array
 	//this does not delete the object
-	for (size_t i = 0; i < Array.size(); i++)
-	{
-		if (Array[i] == door)
-		{
-			Array.erase(Array.begin() + i);
-			return;
-		}
-	}
+
+	RemoveArrayElement(Array, door);
 }
 
 int RevolvingDoorManager::GetCount()
@@ -860,11 +891,11 @@ RevolvingDoor* RevolvingDoorManager::GetIndex(int index)
 	return Array[index];
 }
 
-void RevolvingDoorManager::Loop()
+bool RevolvingDoorManager::Loop()
 {
 	SBS_PROFILE("RevolvingDoorManager::Loop");
 
-	LoopChildren();
+	return LoopChildren();
 }
 
 VehicleManager::VehicleManager(Object* parent) : Manager(parent)
@@ -967,6 +998,7 @@ Vehicle* VehicleManager::GetIndex(int index)
 void VehicleManager::Remove(Vehicle *vehicle)
 {
 	//remove a vehicle (does not delete the object)
+
 	for (size_t i = 0; i < Array.size(); i++)
 	{
 		if (Array[i].object == vehicle)
@@ -981,11 +1013,11 @@ void VehicleManager::Remove(Vehicle *vehicle)
 	}
 }
 
-void VehicleManager::Loop()
+bool VehicleManager::Loop()
 {
 	SBS_PROFILE("VehicleManager::Loop");
 
-	LoopChildren();
+	return LoopChildren();
 }
 
 ControllerManager::ControllerManager(Object* parent) : Manager(parent)
@@ -1109,12 +1141,84 @@ void ControllerManager::Remove(DispatchController *controller)
 	}
 }
 
-void ControllerManager::Loop()
+bool ControllerManager::Loop()
 {
 	SBS_PROFILE("ControllerManager::Loop");
 
-	LoopChildren();
+	return LoopChildren();
 }
 
+TeleporterManager::TeleporterManager(Object* parent) : Manager(parent)
+{
+	//set up SBS object
+	SetValues("TeleporterManager", "Teleporter Manager", true);
 
+	EnableLoop(true);
+}
+
+TeleporterManager::~TeleporterManager()
+{
+	//delete doors
+	for (size_t i = 0; i < Array.size(); i++)
+	{
+		if (Array[i])
+		{
+			Array[i]->parent_deleting = true;
+			delete Array[i];
+		}
+		Array[i] = 0;
+	}
+}
+
+Teleporter* TeleporterManager::Create(std::string name, const std::string &idle_sound, const std::string &teleport_sound, Real width, Real height, const Vector3 &destination)
+{
+	int number = (int)Array.size() + 1;
+	if (name == "")
+		name = "Teleporter " + ToString(number);
+
+	teleported = false;
+
+	Teleporter* teleporter = new Teleporter(this, name, idle_sound, teleport_sound, width, height, destination);
+	Array.emplace_back(teleporter);
+	return teleporter;
+}
+
+Teleporter* TeleporterManager::Get(const std::string &name)
+{
+	for (size_t i = 0; i < Array.size(); i++)
+	{
+		if (Array[i]->GetName() == name)
+			return Array[i];
+	}
+	return 0;
+}
+
+void TeleporterManager::Remove(Teleporter *door)
+{
+	//remove a teleporter from the array
+	//this does not delete the object
+
+	RemoveArrayElement(Array, door);
+}
+
+int TeleporterManager::GetCount()
+{
+	//return the number of teleporters
+	return (int)Array.size();
+}
+
+Teleporter* TeleporterManager::GetIndex(int index)
+{
+	if (index < 0 || index >= (int)Array.size())
+		return 0;
+
+	return Array[index];
+}
+
+bool TeleporterManager::Loop()
+{
+	SBS_PROFILE("TeleporterManager::Loop");
+
+	return LoopChildren();
+}
 }

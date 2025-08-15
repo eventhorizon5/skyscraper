@@ -36,15 +36,15 @@ public:
 	std::string Blank; //blank texture name
 
 	//functions
-	FloorIndicator(Object *parent, int elevator, int car, const std::string &texture_prefix, const std::string &blank_texture, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real altitude);
+	FloorIndicator(Object *parent, int index, int elevator, int car, const std::string &texture_prefix, const std::string &blank_texture, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real altitude);
 	~FloorIndicator();
-	void Enabled(bool value);
+	bool Enabled(bool value);
 	void Update(bool blank = false);
 	bool IsEnabled() { return is_enabled; }
 	void Flash(bool enabled);
 	void Off();
 	void On();
-	void Loop();
+	bool Loop();
 
 private:
 	MeshObject* FloorIndicatorMesh; //indicator mesh object

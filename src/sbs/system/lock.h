@@ -29,7 +29,7 @@ namespace SBS {
 class SBSIMPEXP Lock
 {
 public:
-	Lock(Object *parent);
+	explicit Lock(Object *parent);
 	virtual ~Lock() {}
 	void SetLocked(bool value, int keyid);
 	bool IsLocked();

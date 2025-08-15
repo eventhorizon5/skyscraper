@@ -33,7 +33,7 @@
 #include "sbs.h"
 #include "camera.h"
 #include "wall.h"
-#include "texture.h"
+#include "texman.h"
 #include "profiler.h"
 #include "scenenode.h"
 #include "dynamicmesh.h"
@@ -48,9 +48,6 @@ MeshObject::MeshObject(Object* parent, const std::string &name, DynamicMesh* wra
 {
 	//set up SBS object
 	SetValues("Mesh", name, true);
-
-	//create an instance of the geometry processor
-	polymesh = new PolyMesh(this);
 
 	//initialize mesh object
 	enabled = true;
@@ -142,8 +139,6 @@ MeshObject::~MeshObject()
 	if (Bounds)
 		delete Bounds;
 	Bounds = 0;
-
-	delete polymesh;
 }
 
 void MeshObject::GetBounds()
@@ -151,7 +146,7 @@ void MeshObject::GetBounds()
 	*Bounds = MeshWrapper->GetBounds(this);
 }
 
-void MeshObject::Enabled(bool value)
+bool MeshObject::Enabled(bool value)
 {
 	//enables or disables the mesh
 
@@ -164,16 +159,17 @@ void MeshObject::Enabled(bool value)
 			EnableCollider(false);
 			remove_on_disable = false;
 		}
-		return;
+		return true;
 	}
 
 	SBS_PROFILE("MeshObject::Enable");
 
-	MeshWrapper->Enabled(value, this);
+	bool status = MeshWrapper->Enabled(value, this);
 
 	EnableCollider(value);
 
 	enabled = value;
+	return status;
 }
 
 void MeshObject::EnableCollider(bool value)
@@ -209,9 +205,7 @@ Wall* MeshObject::CreateWallObject(const std::string &name)
 {
 	//create a new wall object in the given array
 
-	Wall *wall = new Wall(this);
-	wall->SetParentArray(Walls);
-	wall->SetValues("Wall", name, false, false);
+	Wall *wall = new Wall(this, name);
 	Walls.emplace_back(wall);
 	return wall;
 }
@@ -248,28 +242,7 @@ void MeshObject::Prepare(bool force)
 		return;
 
 	//set up bounding box
-	if (model_loaded == false)
-	{
-		Bounds->setNull();
-		for (size_t i = 0; i < Walls.size(); i++)
-		{
-			if (!Walls[i])
-				continue;
-
-			for (size_t j = 0; j < Walls[i]->polygons.size(); j++)
-			{
-				Polygon *poly = Walls[i]->polygons[j];
-
-				if (!poly)
-					continue;
-				for (size_t k = 0; k < poly->geometry.size(); k++)
-				{
-					for (size_t l = 0; l < poly->geometry[k].size(); l++)
-						Bounds->merge(poly->geometry[k][l].vertex);
-				}
-			}
-		}
-	}
+	CreateBoundingBox();
 
 	//update dynamic mesh
 	MeshWrapper->NeedsUpdate(this);
@@ -517,7 +490,7 @@ void MeshObject::Cut(Vector3 start, Vector3 end, bool cutwalls, bool cutfloors, 
 		if (!Walls[i])
 			continue;
 
-		sbs->GetUtility()->Cut(Walls[i], start, end, cutwalls, cutfloors, checkwallnumber, reset_check);
+		sbs->GetPolyMesh()->Cut(Walls[i], start, end, cutwalls, cutfloors, checkwallnumber, reset_check);
 	}
 }
 
@@ -546,15 +519,15 @@ bool MeshObject::LoadFromFile(const std::string &filename)
 
 	std::string filename1 = "data/";
 	filename1.append(filename);
-	std::string filename2 = sbs->VerifyFile(filename1);
-	std::string path = sbs->GetMountPath(filename2, filename2);
+	std::string filename2 = sbs->GetUtility()->VerifyFile(filename1);
+	std::string path = sbs->GetUtility()->GetMountPath(filename2, filename2);
 	std::string matname;
 
 	//load material file
 	try
 	{
 		matname = filename2.substr(0, filename2.length() - 5) + ".material";
-		std::string matname2 = sbs->VerifyFile(matname);
+		std::string matname2 = sbs->GetUtility()->VerifyFile(matname);
 		Ogre::DataStreamPtr stream = Ogre::ResourceGroupManager::getSingleton().openResource(matname2, path);
 		Report("Loading material script " + matname2);
 		Ogre::MaterialManager::getSingleton().parseScript(stream, path);
@@ -618,8 +591,8 @@ bool MeshObject::LoadColliderModel(Ogre::MeshPtr &collidermesh)
 
 	std::string filename1 = "data/";
 	filename1.append(Filename);
-	std::string filename2 = sbs->VerifyFile(filename1);
-	std::string path = sbs->GetMountPath(filename2, filename2);
+	std::string filename2 = sbs->GetUtility()->VerifyFile(filename1);
+	std::string path = sbs->GetUtility()->GetMountPath(filename2, filename2);
 
 	//load collider model if physics is disabled
 	if (is_physical == false)
@@ -629,7 +602,7 @@ bool MeshObject::LoadColliderModel(Ogre::MeshPtr &collidermesh)
 		try
 		{
 			std::string colname = filename2.substr(0, filename2.length() - 5) + ".collider.mesh";
-			colname2 = sbs->VerifyFile(colname);
+			colname2 = sbs->GetUtility()->VerifyFile(colname);
 			collidermesh = Ogre::MeshManager::getSingleton().load(colname2, path);
 		}
 		catch (Ogre::Exception &e)
@@ -671,11 +644,6 @@ void MeshObject::EnableShadows(bool value)
 	//enable shadows
 
 	MeshWrapper->EnableShadows(value);
-}
-
-PolyMesh* MeshObject::GetPolyMesh()
-{
-	return polymesh;
 }
 
 bool MeshObject::IsPrepared()
@@ -1268,6 +1236,42 @@ size_t MeshObject::GetSize()
 	}
 
 	return size;
+}
+
+void MeshObject::CreateBoundingBox()
+{
+	//create a new bounding box for this mesh object
+	//based on the geometry of all associated wall objects
+
+	if (model_loaded == false)
+	{
+		Bounds->setNull();
+		for (size_t i = 0; i < Walls.size(); i++)
+		{
+			if (!Walls[i])
+				continue;
+
+			//step through each wall polygon, and merge it's vertices into the bounding box
+			for (size_t j = 0; j < Walls[i]->polygons.size(); j++)
+			{
+				Polygon *poly = Walls[i]->polygons[j];
+
+				if (!poly)
+					continue;
+				for (size_t k = 0; k < poly->geometry.size(); k++)
+				{
+					for (size_t l = 0; l < poly->geometry[k].size(); l++)
+						Bounds->merge(poly->geometry[k][l].vertex);
+				}
+			}
+		}
+
+		//merge bounds into sim engine bounding box
+		Ogre::AxisAlignedBox box = *Bounds;
+		box.setMinimum(Bounds->getMinimum() + GetPosition());
+		box.setMaximum(Bounds->getMaximum() + GetPosition());
+		sbs->MergeBounds(box);
+	}
 }
 
 }

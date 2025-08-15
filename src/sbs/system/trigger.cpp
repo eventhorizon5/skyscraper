@@ -32,6 +32,7 @@
 #include "sound.h"
 #include "action.h"
 #include "profiler.h"
+#include "manager.h"
 #include "trigger.h"
 
 namespace SBS {
@@ -54,6 +55,7 @@ Trigger::Trigger(Object *parent, const std::string &name, bool permanent, const 
 	area_box = new Ogre::AxisAlignedBox(area_min, area_max);
 	is_inside = false;
 	sound = 0;
+	teleporter = false;
 
 	//create sound object
 	if (sound_file != "")
@@ -99,15 +101,16 @@ Trigger::~Trigger()
 	}
 }
 
-void Trigger::Enabled(bool value)
+bool Trigger::Enabled(bool value)
 {
 	//enable or disable trigger
 
 	if (is_enabled == value)
-		return;
+		return true;
 
 	is_enabled = value;
 	EnableLoop(value);
+	return true;
 }
 
 bool Trigger::SetSelectPosition(int position)
@@ -264,12 +267,12 @@ bool Trigger::DoAction()
 	return result;
 }
 
-void Trigger::Loop()
+bool Trigger::Loop()
 {
 	//check for action; should be called in a loop by the parent object
 
 	if (is_enabled == false)
-		return;
+		return true;
 
 	SBS_PROFILE("Trigger::Loop");
 
@@ -298,17 +301,25 @@ void Trigger::Loop()
 				Report("Outside trigger area '" + GetName() + "', parent '" + GetParent()->GetName() + "'");
 		}
 
+		//run parent's OnEntry() or OnExit() functions
 		if (is_inside == true)
 			OnEntry();
 		else
 			OnExit();
+
+		//if this trigger is a teleporter, prevent teleporter loops by skipping processing on the receiving end
+		if (teleporter == true && sbs->GetTeleporterManager()->teleported == true)
+		{
+			sbs->GetTeleporterManager()->teleported = false;
+			return true;
+		}
 
 		//get action name of next position state
 		std::string name = GetPositionAction(GetNextSelectPosition());
 
 		//exit without changing position if floor button is currently selected
 		if (name == "off" && IsNumeric(GetSelectPositionAction()) == true)
-			return;
+			return true;
 
 		//change to next control position
 		NextSelectPosition();
@@ -325,6 +336,8 @@ void Trigger::Loop()
 		if (result == false)
 			PreviousSelectPosition();
 	}
+
+	return true;
 }
 
 bool Trigger::IsInside()
@@ -341,6 +354,16 @@ bool Trigger::IsInside(const Vector3 &position)
 	return area_box->contains(position - GetPosition());
 }
 
+bool Trigger::IsInside(const Vector3 &v1, const Vector3 &v2)
+{
+	//return true if the given rectangle is inside the trigger area
+
+	Ogre::AxisAlignedBox box;
+	box.setMinimum(v1);
+	box.setMaximum(v2);
+	return area_box->contains(box);
+}
+
 Ogre::AxisAlignedBox Trigger::GetBounds(bool relative)
 {
 	//get bounds information for this trigger
@@ -355,6 +378,13 @@ Ogre::AxisAlignedBox Trigger::GetBounds(bool relative)
 	}
 
 	return Ogre::AxisAlignedBox(min, max);
+}
+
+bool Trigger::IsOutside(const Vector3 &position)
+{
+	//return true if the given position is outside of the trigger area
+
+	return !IsInside(position);
 }
 
 bool Trigger::IsOutside(Vector3 v1, Vector3 v2)
@@ -384,6 +414,24 @@ Vector3 Trigger::GetMin()
 Vector3 Trigger::GetMax()
 {
 	return area_box->getMaximum();
+}
+
+void Trigger::Merge(Ogre::AxisAlignedBox &box)
+{
+	//expand this trigger box to encompass the given box
+	area_box->merge(box);
+}
+
+void Trigger::OnEntry()
+{
+	//notify parent of entry
+	GetParent()->OnEntry();
+}
+
+void Trigger::OnExit()
+{
+	//notify parent of exit
+	GetParent()->OnExit();
 }
 
 }

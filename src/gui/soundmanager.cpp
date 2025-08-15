@@ -38,43 +38,47 @@
 namespace Skyscraper {
 
 //(*IdInit(SoundManager)
-const long SoundManager::ID_STATICTEXT1 = wxNewId();
-const long SoundManager::ID_SoundList = wxNewId();
-const long SoundManager::ID_STATICTEXT2 = wxNewId();
-const long SoundManager::ID_HandleList = wxNewId();
-const long SoundManager::ID_lblStats = wxNewId();
-const long SoundManager::ID_STATICTEXT4 = wxNewId();
-const long SoundManager::ID_tName = wxNewId();
-const long SoundManager::ID_STATICTEXT3 = wxNewId();
-const long SoundManager::ID_tParent = wxNewId();
-const long SoundManager::ID_STATICTEXT5 = wxNewId();
-const long SoundManager::ID_tLength = wxNewId();
-const long SoundManager::ID_STATICTEXT6 = wxNewId();
-const long SoundManager::ID_tPlaying = wxNewId();
-const long SoundManager::ID_STATICTEXT7 = wxNewId();
-const long SoundManager::ID_tPosition = wxNewId();
-const long SoundManager::ID_bMove = wxNewId();
-const long SoundManager::ID_STATICTEXT8 = wxNewId();
-const long SoundManager::ID_tVolume = wxNewId();
-const long SoundManager::ID_bSetVolume = wxNewId();
-const long SoundManager::ID_STATICTEXT9 = wxNewId();
-const long SoundManager::ID_tLoop = wxNewId();
-const long SoundManager::ID_bSetLoop = wxNewId();
-const long SoundManager::ID_STATICTEXT10 = wxNewId();
-const long SoundManager::ID_tPaused = wxNewId();
-const long SoundManager::ID_bSetPause = wxNewId();
-const long SoundManager::ID_STATICTEXT11 = wxNewId();
-const long SoundManager::ID_tSpeed = wxNewId();
-const long SoundManager::ID_bSetSpeed = wxNewId();
-const long SoundManager::ID_STATICTEXT12 = wxNewId();
-const long SoundManager::ID_tPlayPosition = wxNewId();
-const long SoundManager::ID_bPlay = wxNewId();
-const long SoundManager::ID_bStop = wxNewId();
-const long SoundManager::ID_bReset = wxNewId();
-const long SoundManager::ID_bUnload = wxNewId();
-const long SoundManager::ID_bCleanup = wxNewId();
-const long SoundManager::ID_bOK = wxNewId();
-const long SoundManager::ID_bListPlaying = wxNewId();
+const wxWindowID SoundManager::ID_STATICTEXT1 = wxNewId();
+const wxWindowID SoundManager::ID_SoundList = wxNewId();
+const wxWindowID SoundManager::ID_STATICTEXT2 = wxNewId();
+const wxWindowID SoundManager::ID_HandleList = wxNewId();
+const wxWindowID SoundManager::ID_lblStats = wxNewId();
+const wxWindowID SoundManager::ID_STATICTEXT4 = wxNewId();
+const wxWindowID SoundManager::ID_tName = wxNewId();
+const wxWindowID SoundManager::ID_STATICTEXT3 = wxNewId();
+const wxWindowID SoundManager::ID_tParent = wxNewId();
+const wxWindowID SoundManager::ID_STATICTEXT5 = wxNewId();
+const wxWindowID SoundManager::ID_tLength = wxNewId();
+const wxWindowID SoundManager::ID_STATICTEXT6 = wxNewId();
+const wxWindowID SoundManager::ID_tPlaying = wxNewId();
+const wxWindowID SoundManager::ID_STATICTEXT7 = wxNewId();
+const wxWindowID SoundManager::ID_tPosition = wxNewId();
+const wxWindowID SoundManager::ID_bMove = wxNewId();
+const wxWindowID SoundManager::ID_STATICTEXT8 = wxNewId();
+const wxWindowID SoundManager::ID_tVolume = wxNewId();
+const wxWindowID SoundManager::ID_bSetVolume = wxNewId();
+const wxWindowID SoundManager::ID_STATICTEXT9 = wxNewId();
+const wxWindowID SoundManager::ID_tLoop = wxNewId();
+const wxWindowID SoundManager::ID_bSetLoop = wxNewId();
+const wxWindowID SoundManager::ID_STATICTEXT10 = wxNewId();
+const wxWindowID SoundManager::ID_tPaused = wxNewId();
+const wxWindowID SoundManager::ID_bSetPause = wxNewId();
+const wxWindowID SoundManager::ID_STATICTEXT13 = wxNewId();
+const wxWindowID SoundManager::ID_tEnabled = wxNewId();
+const wxWindowID SoundManager::ID_bEnabled = wxNewId();
+const wxWindowID SoundManager::ID_STATICTEXT11 = wxNewId();
+const wxWindowID SoundManager::ID_tSpeed = wxNewId();
+const wxWindowID SoundManager::ID_bSetSpeed = wxNewId();
+const wxWindowID SoundManager::ID_STATICTEXT12 = wxNewId();
+const wxWindowID SoundManager::ID_tPlayPosition = wxNewId();
+const wxWindowID SoundManager::ID_bPlay = wxNewId();
+const wxWindowID SoundManager::ID_bStop = wxNewId();
+const wxWindowID SoundManager::ID_bReset = wxNewId();
+const wxWindowID SoundManager::ID_bUnload = wxNewId();
+const wxWindowID SoundManager::ID_bCleanup = wxNewId();
+const wxWindowID SoundManager::ID_bOK = wxNewId();
+const wxWindowID SoundManager::ID_bListPlaying = wxNewId();
+const wxWindowID SoundManager::ID_bListPlayingAll = wxNewId();
 //*)
 
 BEGIN_EVENT_TABLE(SoundManager,wxDialog)
@@ -163,6 +167,12 @@ SoundManager::SoundManager(DebugPanel* parent,wxWindowID id,const wxPoint& pos,c
 	FlexGridSizer4->Add(tPaused, 1, wxEXPAND, 5);
 	bSetPause = new wxButton(this, ID_bSetPause, _("Set"), wxDefaultPosition, wxSize(50,-1), 0, wxDefaultValidator, _T("ID_bSetPause"));
 	FlexGridSizer4->Add(bSetPause, 1, wxLEFT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	StaticText13 = new wxStaticText(this, ID_STATICTEXT13, _("Enabled:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT13"));
+	FlexGridSizer4->Add(StaticText13, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	tEnabled = new wxTextCtrl(this, ID_tEnabled, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_CENTRE, wxDefaultValidator, _T("ID_tEnabled"));
+	FlexGridSizer4->Add(tEnabled, 1, wxEXPAND, 5);
+	bEnabled = new wxButton(this, ID_bEnabled, _("Set"), wxDefaultPosition, wxSize(50,-1), 0, wxDefaultValidator, _T("ID_bEnabled"));
+	FlexGridSizer4->Add(bEnabled, 1, wxLEFT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	StaticText11 = new wxStaticText(this, ID_STATICTEXT11, _("Speed:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT11"));
 	FlexGridSizer4->Add(StaticText11, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	tSpeed = new wxTextCtrl(this, ID_tSpeed, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_CENTRE, wxDefaultValidator, _T("ID_tSpeed"));
@@ -198,22 +208,26 @@ SoundManager::SoundManager(DebugPanel* parent,wxWindowID id,const wxPoint& pos,c
 	BoxSizer1->Add(bOK, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	bListPlaying = new wxButton(this, ID_bListPlaying, _("List Playing Sounds"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bListPlaying"));
 	BoxSizer1->Add(bListPlaying, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	bListPlayingAll = new wxButton(this, ID_bListPlayingAll, _("List Playing (All Engines)"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bListPlayingAll"));
+	BoxSizer1->Add(bListPlayingAll, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	FlexGridSizer1->Add(BoxSizer1, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	SetSizer(FlexGridSizer1);
 	FlexGridSizer1->SetSizeHints(this);
 
-	Connect(ID_bMove,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&SoundManager::On_bMove_Click);
-	Connect(ID_bSetVolume,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&SoundManager::On_bSetVolume_Click);
-	Connect(ID_bSetLoop,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&SoundManager::On_bSetLoop_Click);
-	Connect(ID_bSetPause,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&SoundManager::On_bSetPause_Click);
-	Connect(ID_bSetSpeed,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&SoundManager::On_bSetSpeed_Click);
-	Connect(ID_bPlay,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&SoundManager::On_bPlay_Click);
-	Connect(ID_bStop,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&SoundManager::On_bStop_Click);
-	Connect(ID_bReset,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&SoundManager::On_bReset_Click);
-	Connect(ID_bUnload,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&SoundManager::On_bUnload_Click);
-	Connect(ID_bCleanup,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&SoundManager::On_bCleanup_Click);
-	Connect(ID_bOK,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&SoundManager::On_bOK_Click);
-	Connect(ID_bListPlaying,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&SoundManager::On_bListPlaying_Click);
+	Connect(ID_bMove, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&SoundManager::On_bMove_Click);
+	Connect(ID_bSetVolume, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&SoundManager::On_bSetVolume_Click);
+	Connect(ID_bSetLoop, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&SoundManager::On_bSetLoop_Click);
+	Connect(ID_bSetPause, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&SoundManager::On_bSetPause_Click);
+	Connect(ID_bEnabled, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&SoundManager::On_bEnabled_Click);
+	Connect(ID_bSetSpeed, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&SoundManager::On_bSetSpeed_Click);
+	Connect(ID_bPlay, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&SoundManager::On_bPlay_Click);
+	Connect(ID_bStop, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&SoundManager::On_bStop_Click);
+	Connect(ID_bReset, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&SoundManager::On_bReset_Click);
+	Connect(ID_bUnload, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&SoundManager::On_bUnload_Click);
+	Connect(ID_bCleanup, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&SoundManager::On_bCleanup_Click);
+	Connect(ID_bOK, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&SoundManager::On_bOK_Click);
+	Connect(ID_bListPlaying, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&SoundManager::On_bListPlaying_Click);
+	Connect(ID_bListPlayingAll, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&SoundManager::On_bListPlayingAll_Click);
 	//*)
 	panel = parent;
 	Simcore = 0;
@@ -317,6 +331,11 @@ void SoundManager::Loop()
 	else
 		tPaused->SetValue("False");
 
+	if (handle->IsEnabled() == true)
+		tEnabled->SetValue("True");
+	else
+		tEnabled->SetValue("False");
+
 	tPlayPosition->SetValue(TruncateNumber(handle->GetPlayPosition(), 2));
 
 	lblStats->SetLabelText("Channels: " + SBS::ToString(sound->GetChannelCount()) + " - Playing Sounds: " + SBS::ToString(Simcore->GetSoundSystem()->GetPlayingCount()));
@@ -332,6 +351,9 @@ void SoundManager::On_bOK_Click(wxCommandEvent& event)
 
 void SoundManager::BuildSoundList()
 {
+	if (!Simcore->GetSoundSystem())
+		return;
+
 	int count = Simcore->GetSoundSystem()->GetSoundCount();
 
 	if (count != lastcount)
@@ -361,6 +383,7 @@ void SoundManager::BuildSoundList()
 			tVolume->Clear();
 			tLoop->Clear();
 			tPaused->Clear();
+			tEnabled->Clear();
 			tSpeed->Clear();
 			tPlayPosition->Clear();
 		}
@@ -381,7 +404,14 @@ void SoundManager::BuildHandleList()
 		HandleList->Clear();
 
 		for (int i = 0; i < count; i++)
-			HandleList->Append(SBS::ToString(i + 1) + wxT(": ") + sound->handles[i]->GetName());
+		{
+			std::string name;
+			if (sound->handles[i])
+				name = sound->handles[i]->GetName();
+			else
+				name = "(error)";
+			HandleList->Append(SBS::ToString(i + 1) + wxT(": ") + name);
+		}
 
 		if (count > 0)
 		{
@@ -400,6 +430,7 @@ void SoundManager::BuildHandleList()
 			tVolume->Clear();
 			tLoop->Clear();
 			tPaused->Clear();
+			tEnabled->Clear();
 			tSpeed->Clear();
 			tPlayPosition->Clear();
 			tLength->Clear();
@@ -410,7 +441,10 @@ void SoundManager::BuildHandleList()
 void SoundManager::On_bListPlaying_Click(wxCommandEvent& event)
 {
 	if (Simcore)
-		Simcore->GetSoundSystem()->ShowPlayingSounds();
+	{
+		if (Simcore->GetSoundSystem())
+			Simcore->GetSoundSystem()->ShowPlayingSounds();
+	}
 }
 
 void SoundManager::On_bSetVolume_Click(wxCommandEvent& event)
@@ -476,7 +510,10 @@ void SoundManager::On_bUnload_Click(wxCommandEvent& event)
 void SoundManager::On_bCleanup_Click(wxCommandEvent& event)
 {
 	if (Simcore)
-		Simcore->GetSoundSystem()->Cleanup();
+	{
+		if (Simcore->GetSoundSystem())
+			Simcore->GetSoundSystem()->Cleanup();
+	}
 }
 
 void SoundManager::On_bMove_Click(wxCommandEvent& event)
@@ -490,6 +527,20 @@ void SoundManager::On_bMove_Click(wxCommandEvent& event)
 		moveobject = new MoveObject(panel, this, -1, panel->GetRoot()->GetActiveEngine(), handle->GetNumber());
 		moveobject->Show();
 	}
+}
+
+void SoundManager::On_bEnabled_Click(wxCommandEvent& event)
+{
+	if (!handle)
+		return;
+
+	bool enabled = handle->IsEnabled();
+	handle->Enabled(!enabled);
+}
+
+void SoundManager::On_bListPlayingAll_Click(wxCommandEvent& event)
+{
+	panel->GetRoot()->ListPlayingSounds();
 }
 
 }

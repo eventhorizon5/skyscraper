@@ -64,13 +64,14 @@ Primitive::~Primitive()
 		RemoveFromParent();
 }
 
-void Primitive::Enabled(bool value)
+bool Primitive::Enabled(bool value)
 {
 	if (always_visible == true)
 		value = true;
 
-	mesh->Enabled(value);
+	bool status = mesh->Enabled(value);
 	EnableLoop(value);
+	return status;
 }
 
 bool Primitive::IsEnabled()
@@ -115,7 +116,7 @@ void Primitive::AddToParent()
 		sbs->AddPrimitive(this);
 }
 
-void Primitive::Loop()
+bool Primitive::Loop()
 {
 	//runloop, called by parent to allow for switching parents
 
@@ -173,6 +174,8 @@ void Primitive::Loop()
 			}
 		}
 	}
+
+	return true;
 }
 
 void Primitive::PickUp()

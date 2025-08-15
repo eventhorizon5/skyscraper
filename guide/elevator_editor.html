@@ -1,0 +1,191 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>The Elevator Editor</title>
+  </head>
+  <body>
+    <p align="center"><strong><font size="+2">The Elevator Editor</font></strong><br>
+    </p>
+    <hr><br>
+    <div align="center">The Elevator Editor is an interface into the
+      inner workings of Skyscraper's elevator system, and is very
+      elaborate.<br>
+      Use this window to modify and operate the simulator's elevators
+      directly.<br>
+      <img moz-do-not-send="true" src="elevators.jpg" alt="Elevator
+        Editor" width="995" height="840"><br>
+      <br>
+      On the top left, the Number bar selects the elevator number.&nbsp;
+      Right below it is the Floor bar, which selects the floor (and
+      shows the ID of the floor also).<br>
+      <br>
+      <br>
+      <b>Control Section:</b><br>
+      <i>Call:</i> call elevator to current floor<br>
+      <i>Go:</i> go directly to specified floor<br>
+      <i>Open:</i> open elevator doors<br>
+      <i>Close:</i> close elevator doors<br>
+      <i>Open Manual:</i> manually open elevator doors<br>
+      <i>Close Manual:</i> manually close elevator doors<br>
+      <i>Enqueue Up:</i> queues the selected floor on the specified
+      elevator in the Up direction<br>
+      <i>Enqueue Down:</i> queues the selected floor on the specified
+      elevator in the Down direction<br>
+      <i>Select Current Elevator</i> selects the elevator the user is
+      currently riding in.<br>
+      <i>Chime</i> plays the chime sound at the currently selected
+      floor.<br>
+      <br>
+      <b>Modes:</b><br>
+      <i>ACP Mode:</i> anti-crime protection, causes the elevator to
+      stop at a specified floor before continuing<br>
+      <i>Up/Down Peak:</i> sends elevators to the bottom or top of the
+      assigned floors, to prioritize peak times<br>
+      <i>Independent service:</i> enables or disables independent
+      service<br>
+      <i>Inspection service:</i> enables or disables inspection service<br>
+      <i>Fire Phase 1</i> can either be Off, On, or Bypass<br>
+      <i>Fire Phase 2</i> can either be Off, On or Hold.<br>
+      <br>
+      The <i>Visible</i> checkbox determines if the elevator should be
+      visible.&nbsp; The <i>Run</i> checkbox turns on and off the
+      elevator.<br>
+      <br>
+      <i>Manual</i> specifies the direction of manual movement, mostly
+      for Inspection Service mode.&nbsp; To operate inspection mode,
+      first enable it, and then click Go, and either Up or Down.<br>
+      <br>
+      <b>General Parameters:</b><br>
+      <i>Number:</i> elevator number<br>
+      <i>Name:</i> elevator name<br>
+      <i>ID:</i> elevator ID, mostly used for Destination Dispatch<br>
+      <i>Type:</i> type of elevator, such as Local or Express<br>
+      <i>Enabled:</i> shows if the elevator is enabled or not<br>
+      <i>Shaft:</i> the assigned shaft of the elevator<br>
+      <i>Height:</i> the calculated height of the elevator car<br>
+      <i>DoorSize:</i> the calculated size of the car doors, deprecated<br>
+      <i>DDirection:</i> the direction the car doors face, and is
+      deprecated<br>
+      <i>DoorsOpen:</i> shows if the car doors are open or not.<br>
+      <i>Brakes:</i> shows if the elevator's brakes are enabled or not.<br>
+      <i>EmergStop:</i> shows the internal status of Emergency Stop<br>
+      <i>DoorTimer:</i> the door close timer, in the example, is set to
+      5 seconds<br>
+      <i>QuickClose:</i> the timer used in quick-close mode, and in the
+      example is set to 3 seconds<br>
+      <i>FlrSkipTxt:</i> Floor skip text, shown on the elevator
+      indicator when skipping floors, used for things such as express
+      levels.<br>
+      WaitDoors: set to true for the MoveElevatorToFloor() function to
+      wait for the doors to close before running<br>
+      <i>Nudge:</i> shows or changes the status of nudge mode<br>
+      <i>Sensor:</i> enables or disables the door sensor<br>
+      <i>ActCallFloor:</i> the Active Call Floor<br>
+      <i>ActCallDir:</i> the Active Call Direction<br>
+      <i>Notified:</i> shows if floor arrival notifications have been
+      performed<br>
+      <i>WaitTimer:</i> true if elevator is waiting for the
+      arrival/departure timers to finish before moving<br>
+      <i>ChimeDir:</i> the direction the elevator last chimed<br>
+      <i>LevSpeed:</i> the leveling speed of the elevator<br>
+      <i>LevOffset:</i> the leveling offset<br>
+      <i>LevOpen:</i> determines the distance from the floor the
+      elevator doors open when leveling<br>
+      <i>FlrSounds:</i> enable or disable floor arrival sounds<br>
+      <i>FlrBeeps:</i> enable or disable floor beeps<br>
+      <i>MsgSounds:</i> enable or disable message sounds<br>
+      <i>AutoEnable:</i> true if interior objects should automatically
+      be enabled/disabled<br>
+      <i>ReOpen: </i>true if elevator should reopen doors if the same
+      floor is selected<br>
+      <i>AutoDoors:</i> if true, doors are automatic, set to false for
+      manual elevators<br>
+      <i>OpenStart:</i> if true, open elevator doors on start<br>
+      <i>Interlocks:</i> enables or disables interlocks<br>
+      <i>Fan:</i> enables or disables the car fan<br>
+      <i>Alarm on</i>: if true, the alarm is sounding<br>
+      <i>MusicOn:</i> play elevator music<br>
+      <i>MusicMove: </i>true if music should only play during move<br>
+      <i>MAlwaysOn:</i> MusicAlwaysOn, true if music should always be
+      played, and the on/off state should be volume-based<br>
+      <i>ChimeArrival: </i>set to true for elevator to always chime on
+      arrival, instead of just when responding to a hall call<br>
+      <br>
+      The <i>Serviced Floors</i> section allows you to change the
+      serviced floor list of the elevator.<br>
+      <br>
+      <b>Position Parameters<br>
+      </b><i>Floor:</i> the floor the elevator car is n<br>
+      <i>Pos:</i> the elevator's position in 3D space<br>
+      <i>StartFlr: </i>the elevator's starting floor<br>
+      <i>EStart: </i>the internal elevator starting position<br>
+      <i>DOrigin:</i> not used anymore, door origin<br>
+      <i>SDOrigin,</i> not used, shaft door origin<br>
+      <i>OnFloor:</i> true if elevator is on a floor<br>
+      <i>Motor:</i> position of motor at top of shaft<br>
+      <i>Camera:</i> camera position<br>
+      <i>Music:</i> position of elevator music sound emitter<br>
+      <br>
+      <b>Queues Parameters</b><br>
+      <i>Direction:</i> queue processing direction<br>
+      <i>LastUp:</i> last route added to up queue<br>
+      <i>LastDwn:</i> last route added to down queue<br>
+      <i>Last:</i> last queue direction<br>
+      <i>Resets:</i> true if queue resets are enabled<br>
+      <i>Limit:</i> LimitQueue, set to true to only allow floor
+      selections in the same queue direction<br>
+      <i>Reset</i> - resets both up and down queues<br>
+      <br>
+      <b>Motion Parameters<br>
+      </b><i>UpSpeed:</i> elevator up speed<br>
+      <i>DownSpeed:</i> elevator down speed<br>
+      <i>Accel:</i> acceleration<br>
+      <i>Decel:</i> deceleration<br>
+      <i>AccelJerk:</i> acceleration jerk rate<br>
+      <i>DecelJerk:</i> deceleration jerk rate<br>
+      <i>Rate:</i> elevator rate<br>
+      <i>Direction:</i> direction of travel<br>
+      <i>ActiveDir:</i> active direction of travel (doesn't change
+      during slowdown)<br>
+      <i>JerkRate:</i> current jerk rate<br>
+      <i>DStopped:</i> true if doors are stopped<br>
+      <i>IsIdle:</i> true if elevator is idle<br>
+      <i>Manual:</i> true if a manual elevator<br>
+      <i>Leveling:</i> true if elevator is leveling<br>
+      <i>Parking:</i> true if elevator is parking<br>
+      <i>ManualMove:</i> 0 if manual movement is off, otherwise -1 or 1<br>
+      <i>SlowSpd:</i> door slow speed<br>
+      <i>ManualSpd:</i> door manual speed<br>
+      <i>InsSpeed:</i> inspection mode speed<br>
+      <br>
+      <br>
+      <b>Destination Parameters<br>
+      </b><i>Floor:</i> destination floor<br>
+      <i>IsMoving:</i> true if elevator is moving<br>
+      <i>Move:</i> true to enable elevator motion<br>
+      <i>Distance:</i> distance in feet to destination floor<br>
+      <i>Dest:</i> altitude of destination floor<br>
+      <i>StopDist:</i> stopping distance in feet<br>
+      <i>TmpDecel:</i> internal temporary deceleration value<br>
+      <i>Error: </i>motion error offset<br>
+      <i>NotifyEarly:</i> status of the NotifyEarly feature<br>
+      <i>NotifyLate:</i> status of the NotifyLate feature<br>
+      <i>DDelay: </i>departure delay<br>
+      <i>ADelay: </i>arrival delay<br>
+      <br>
+      <b>Modes Parameters</b><br>
+      <i>ACP Floor</i>: the floor used for Anti-Crime Protection (ACP)
+      mode<br>
+      <i>Recall Flr</i>: recall floor<br>
+      <i>Rcl Flr Alt</i>: alternate recall floor<br>
+      <i>Park Flr</i>: parking floor<br>
+      <i>Park Dly</i>: parking delay, number of seconds to wait before
+      parking elevator, if idle<br>
+      <i>NudgeTmr:</i> nudge timer, time in seconds to wait before
+      enabling nudge mode<br>
+      <br>
+      <br>
+      <b></b><b></b><b></b> </div>
+  </body>
+</html>

@@ -48,6 +48,7 @@ public:
 	void Unload();
 	void ShowProgress();
 	std::string SelectBuilding(const std::string &data_path);
+	std::string SelectBuildingNative(const std::string &data_path);
 	void Resize();
 	void CreateDebugPanel();
 	void EnableConsole(bool value);
@@ -57,7 +58,9 @@ public:
 	void ShowProgressDialog();
 	void CreateProgressDialog(const std::string &message);
 	void CloseProgressDialog();
-	void UpdateProgress(int percent);
+	bool UpdateProgress(int percent);
+	bool ProgressCancelled();
+	bool ProgressSkipped();
 	void ShowError(const std::string &message);
     void ShowMessage(const std::string &message);
 	void RefreshConsole();

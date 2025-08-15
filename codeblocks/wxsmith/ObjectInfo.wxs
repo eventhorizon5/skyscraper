@@ -19,10 +19,15 @@
 								<item2>ObjectTree</item2>
 								<item2></item2>
 							</items_text>
-							<size>300,350</size>
+							<size>300,400</size>
 							<style>wxTR_DEFAULT_STYLE|wxBORDER_SUNKEN|wxVSCROLL</style>
 							<handler function="On_ObjectTree_SelectionChanged" entry="EVT_TREE_SEL_CHANGED" />
 						</object>
+						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+						<border>5</border>
+						<option>1</option>
+					</object>
+					<object class="spacer">
 						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 						<border>5</border>
 						<option>1</option>
@@ -56,6 +61,15 @@
 									<handler function="On_bCreate_Click" entry="EVT_BUTTON" />
 								</object>
 								<flag>wxALL|wxALIGN_TOP</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxCheckBox" name="ID_chkEnabled" variable="chkEnabled" member="yes">
+									<label>Enabled</label>
+									<handler function="On_chkEnabled_Click" entry="EVT_CHECKBOX" />
+								</object>
+								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 								<border>5</border>
 								<option>1</option>
 							</object>
@@ -96,11 +110,9 @@
 								<option>1</option>
 							</object>
 							<object class="sizeritem">
-								<object class="wxButton" name="ID_bSave" variable="bSave" member="yes">
-									<label>Save Script</label>
-									<enabled>0</enabled>
-									<hidden>1</hidden>
-									<handler function="On_bSave_Click" entry="EVT_BUTTON" />
+								<object class="wxButton" name="ID_bDebug" variable="bDebug" member="yes">
+									<label>Script Debug</label>
+									<handler function="On_bDebug_Click" entry="EVT_BUTTON" />
 								</object>
 								<flag>wxALL|wxALIGN_TOP</flag>
 								<border>5</border>
@@ -132,7 +144,7 @@
 							</object>
 							<object class="sizeritem">
 								<object class="wxTextCtrl" name="ID_tNumber" variable="tNumber" member="yes">
-									<size>125,-1</size>
+									<size>200,-1</size>
 									<style>wxTE_READONLY|wxTE_CENTRE</style>
 								</object>
 								<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
@@ -149,7 +161,7 @@
 							</object>
 							<object class="sizeritem">
 								<object class="wxTextCtrl" name="ID_tName" variable="tName" member="yes">
-									<size>125,-1</size>
+									<size>200,-1</size>
 									<style>wxTE_READONLY|wxTE_CENTRE</style>
 								</object>
 								<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
@@ -166,7 +178,7 @@
 							</object>
 							<object class="sizeritem">
 								<object class="wxTextCtrl" name="ID_tType" variable="tType" member="yes">
-									<size>125,-1</size>
+									<size>200,-1</size>
 									<style>wxTE_READONLY|wxTE_CENTRE</style>
 								</object>
 								<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
@@ -183,7 +195,7 @@
 							</object>
 							<object class="sizeritem">
 								<object class="wxTextCtrl" name="ID_tPermanent" variable="tPermanent" member="yes">
-									<size>125,-1</size>
+									<size>200,-1</size>
 									<style>wxTE_READONLY|wxTE_CENTRE</style>
 								</object>
 								<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
@@ -200,7 +212,7 @@
 							</object>
 							<object class="sizeritem">
 								<object class="wxTextCtrl" name="ID_tParent" variable="tParent" member="yes">
-									<size>125,-1</size>
+									<size>200,-1</size>
 									<style>wxTE_READONLY|wxTE_CENTRE</style>
 								</object>
 								<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
@@ -217,7 +229,7 @@
 							</object>
 							<object class="sizeritem">
 								<object class="wxTextCtrl" name="ID_tParentName" variable="tParentName" member="yes">
-									<size>125,-1</size>
+									<size>200,-1</size>
 									<style>wxTE_READONLY|wxTE_CENTRE</style>
 								</object>
 								<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
@@ -234,7 +246,24 @@
 							</object>
 							<object class="sizeritem">
 								<object class="wxTextCtrl" name="ID_tParentType" variable="tParentType" member="yes">
-									<size>125,-1</size>
+									<size>200,-1</size>
+									<style>wxTE_READONLY|wxTE_CENTRE</style>
+								</object>
+								<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxStaticText" name="ID_STATICTEXT13" variable="StaticText13" member="yes">
+									<label>Is Movable:</label>
+								</object>
+								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxTextCtrl" name="ID_txtMovable" variable="txtMovable" member="yes">
+									<size>200,-1</size>
 									<style>wxTE_READONLY|wxTE_CENTRE</style>
 								</object>
 								<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>

@@ -32,13 +32,18 @@
 #include <OgreImage.h>
 #include "globals.h"
 #include "sbs.h"
-#include "texture.h"
+#include "texman.h"
 #include "scenenode.h"
+#include "elevatorcar.h"
+#include "floor.h"
+#include "shaft.h"
+#include "stairs.h"
+#include "map.h"
 #include "cameratexture.h"
 
 namespace SBS {
 
-CameraTexture::CameraTexture(Object *parent, const std::string &name, int quality, Real fov, const Vector3 &position, bool use_rotation, const Vector3 &rotation) : Object(parent)
+CameraTexture::CameraTexture(Object *parent, const std::string &name, int quality, Real fov, const Vector3 &position, bool use_rotation, const Vector3 &rotation, bool permanent) : Object(parent)
 {
 	//creates a CameraTexture object
 
@@ -46,7 +51,7 @@ CameraTexture::CameraTexture(Object *parent, const std::string &name, int qualit
 	//texture quality is 1 for 256x256, 2 for 512x512, and 3 for 1024x1024.
 
 	//set up SBS object
-	SetValues("CameraTexture", name, false);
+	SetValues("CameraTexture", name, permanent);
 
 	FOV = fov;
 	camera = 0;
@@ -104,7 +109,7 @@ CameraTexture::CameraTexture(Object *parent, const std::string &name, int qualit
 		material->setLightingEnabled(false);
 
 		//add texture multipliers
-		sbs->GetTextureManager()->RegisterTextureInfo(name, "", "", 1.0f, 1.0f, false, false, texture->getSize(), material->getSize());
+		sbs->GetTextureManager()->RegisterTexture(name, "", "", 1.0f, 1.0f, false, false, texture->getSize(), material->getSize());
 
 		//register with system
 		sbs->RegisterCameraTexture(this);
@@ -134,15 +139,32 @@ CameraTexture::~CameraTexture()
 
 	if (sbs->FastDelete == false)
 	{
-		sbs->GetTextureManager()->UnregisterTextureInfo(GetName());
+		sbs->GetTextureManager()->UnregisterTexture(GetName());
 		sbs->UnregisterCameraTexture(this);
+
+		//unregister from parent
+		if (parent_deleting == false)
+		{
+			std::string type = GetParent()->GetType();
+
+			if (type == "ElevatorCar")
+				static_cast<ElevatorCar*>(GetParent())->RemoveCameraTexture(this);
+			else if (type == "Floor")
+				static_cast<Floor*>(GetParent())->RemoveCameraTexture(this);
+			else if (type == "Shaft Level")
+				static_cast<Shaft::Level*>(GetParent())->RemoveCameraTexture(this);
+			else if (type == "Stairwell Level")
+				static_cast<Stairwell::Level*>(GetParent())->RemoveCameraTexture(this);
+		}
 	}
 }
 
-void CameraTexture::Enabled(bool value)
+bool CameraTexture::Enabled(bool value)
 {
 	if (renderTexture)
 		renderTexture->setActive(value);
+
+	return true;
 }
 
 bool CameraTexture::IsEnabled()
@@ -211,13 +233,22 @@ void CameraTexture::SetZoom(Real value)
 {
 	//zoom camera in orthographic mode
 
-	if (!camera)
+	if (!camera || value <= 0)
 		return;
 
+	//get current camera view matrix
 	Ogre::Affine3 vmatrix = camera->getViewMatrix();
+
+	//remove old zoom factor
+	vmatrix[0][0] /= zoom;
+	vmatrix[1][2] /= zoom;
+
+	//apply new zoom factor
 	zoom = value;
 	vmatrix[0][0] *= zoom;
 	vmatrix[1][2] *= zoom;
+
+	//set camera view matrix with zoom applied
 	camera->setCustomViewMatrix(true, vmatrix);
 }
 

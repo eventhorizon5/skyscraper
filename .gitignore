@@ -19,6 +19,7 @@ skyscraper
 plugins.cfg
 **/cmake_install.cmake
 **/install_manifest.txt
+*CPack*
 Makefile
 
 # macOS App
@@ -27,19 +28,21 @@ Skyscraper.app
 # Windows
 msvc/Release
 msvc/Debug
+*.vcxproj*
+*.sln
 ogrebullet/Release
 ogrebullet/Debug
-*.dll
+*.dll*
 *.pdb
+*.dir/
+x64/
 Skyscraper.exe
+Thumbs.db
 
 # Misc.
 skyscraper.log
 ogre.cfg
-OgreBulletCollisions.exp
-OgreBulletCollisions.lib
-OgreBulletDynamics.exp
-OgreBulletDynamics.lib
+*.exp
+*.lib
 src/sbs/gitrev.h
-
 _deps/
