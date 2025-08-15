@@ -171,6 +171,10 @@ file (GLOB OGREBULLET_DYN_FILES
 	ogrebullet/Dynamics/src/Prefab/*.cpp
 )
 
+file (GLOB IMGUIZMO_FILES
+	dependencies/ImGuizmo/*.cpp
+)
+
 if(FMOD_FOUND)
 include_directories( ${OGRE_INCLUDE_DIRS}
 	${OGRE_Overlay_INCLUDE_DIRS}
@@ -202,6 +206,7 @@ include_directories( ${OGRE_INCLUDE_DIRS}
 	ogrebullet/Dynamics/include
 	ogrebullet/Dynamics/include/Constraints
 	ogrebullet/Dynamics/include/Prefab
+	dependencies/ImGuizmo
 )
 else()
 include_directories( ${OGRE_INCLUDE_DIRS}
@@ -233,6 +238,7 @@ include_directories( ${OGRE_INCLUDE_DIRS}
         ogrebullet/Dynamics/include
         ogrebullet/Dynamics/include/Constraints
         ogrebullet/Dynamics/include/Prefab
+	dependencies/ImGuizmo
 )
 endif()
  
@@ -268,6 +274,9 @@ if (WIN32)
 	add_library(OpenXR SHARED ${OPENXR_FILES})
 endif ()
 
+#ImGuizmo Library
+add_library(ImGuizmo SHARED ${IMGUIZMO_FILES})
+
 #frontend executable
 if (WIN32)
 	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /ENTRY:mainCRTStartup")
@@ -279,6 +288,7 @@ if (NOT WIN32)
 	add_library(VM SHARED ${VM_FILES})
 else ()
 	add_library(VM SHARED ${VM_FILES} ${SCRIPTPROC_FILES})
+	target_compile_options(ImGuizmo PRIVATE "/MD")
 	target_compile_options(OgreBulletCol PRIVATE -D_OGREBULLET_EXPORTS "/MD")
 	target_compile_options(OgreBulletDyn PRIVATE -D_OGREBULLET_EXPORTS "/MD")
 	target_compile_options(OpenXR PRIVATE -DOGREOPENXRDLL_EXPORTS "/MD")
@@ -322,13 +332,13 @@ if (NOT WIN32 AND wxWidgets_FOUND)
 	target_link_libraries(GUI SBS ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES})
 	target_link_libraries(skyscraper VM GUI ScriptProc SBS ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES} ${FMOD_LIBRARY} ${GTK3_LIBRARIES} ${FRONTENDGLINC})
 elseif (WIN32)
-	target_link_libraries(VM SBS Network OpenXR dylib ${OGRE_LIBRARIES} ${Caelum_LIBRARIES} ${FMOD_LIBRARY} ${wxWidgets_LIBRARIES} ${OPENXR_loader_LIBRARY})
+	target_link_libraries(VM SBS Network OpenXR dylib ImGuizmo ${OGRE_LIBRARIES} ${Caelum_LIBRARIES} ${FMOD_LIBRARY} ${wxWidgets_LIBRARIES} ${OPENXR_loader_LIBRARY})
 	target_link_libraries(skyscraper VM SBS ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES} ${GTK3_LIBRARIES} ${FRONTENDGLINC})
 endif ()
 
 if (NOT WIN32 AND NOT wxWidgets_FOUND)
 	target_link_libraries(ScriptProc SBS ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES})
-        target_link_libraries(VM SBS Network dylib ${OGRE_LIBRARIES} ${Caelum_LIBRARIES} ${FMOD_LIBRARY} ${wxWidgets_LIBRARIES})
+        target_link_libraries(VM SBS Network dylib ImGuizmo ${OGRE_LIBRARIES} ${Caelum_LIBRARIES} ${FMOD_LIBRARY} ${wxWidgets_LIBRARIES})
         target_link_libraries(skyscraper VM ScriptProc SBS ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES} ${FMOD_LIBRARY} ${GTK3_LIBRARIES} ${FRONTENDGLINC})
 endif ()
 
