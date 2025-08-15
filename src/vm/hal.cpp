@@ -694,15 +694,7 @@ bool HAL::Render()
 	//process imgui
 	Ogre::ImGuiOverlay::NewFrame();
 
-	/*ImGui::SetNextWindowPos(ImVec2(20, 20), ImGuiCond_Always);
-	ImGui::SetNextWindowSize(ImVec2(360, 120), ImGuiCond_Always);
-	ImGui::Begin("ImGui Smoke Test");
-	ImGui::Text("Hello from ImGuiOverlay.");
-	static bool showDemo = true;
-	ImGui::Checkbox("Show Demo", &showDemo);
-	ImGui::End();*/
-
-	ImGui::ShowDemoWindow();
+	//ImGui::ShowDemoWindow();
 
 	//render to the frame buffer
 	try
