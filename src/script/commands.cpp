@@ -5145,7 +5145,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 			return ScriptError("Incorrect number of parameters");
 
 		//check numeric values
-		for (int i = 3; i <= params; i++)
+		for (int i = 3; i < params; i++)
 		{
 			if (!IsNumeric(tempdata[i]))
 				return ScriptError("Invalid value: " + tempdata[i]);
