@@ -514,7 +514,7 @@ void VM::SwitchEngines()
 		return;
 
 	//exit if user is inside an engine
-	if (active_engine->IsInside() == true)
+	if (active_engine->IsInside() == true && active_engine->IsCameraActive() == true)
 		return;
 
 	EngineContext *parent = active_engine->GetParent();
