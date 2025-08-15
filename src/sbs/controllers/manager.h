@@ -251,6 +251,8 @@ public:
 	Teleporter* GetIndex(int index);
 	bool Loop() override;
 
+	bool teleported;
+
 private:
 	std::vector<Teleporter*> Array;
 };

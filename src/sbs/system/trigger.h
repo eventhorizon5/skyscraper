@@ -30,6 +30,8 @@ class SBSIMPEXP Trigger : public Object
 {
 public:
 
+	bool teleporter;
+
 	//functions
 	Trigger(Object *parent, const std::string &name, bool permanent, const std::string &sound_file, Vector3 area_min, Vector3 area_max, const std::vector<std::string> &action_names);
 	~Trigger();

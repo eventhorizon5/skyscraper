@@ -1176,6 +1176,8 @@ Teleporter* TeleporterManager::Create(std::string name, const std::string &idle_
 	if (name == "")
 		name = "Teleporter " + ToString(number);
 
+	teleported = false;
+
 	Teleporter* teleporter = new Teleporter(this, name, idle_sound, teleport_sound, width, height, destination);
 	Array.emplace_back(teleporter);
 	return teleporter;

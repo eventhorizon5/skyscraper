@@ -1520,6 +1520,7 @@ void Camera::Teleport(Real X, Real Y, Real Z)
 
 	Vector3 destination (X, Y, Z);
 
+	sbs->GetTeleporterManager()->teleported = true;
 	GotoFloor(sbs->GetFloorNumber(destination.y));
 	SetPosition(destination, true);
 }

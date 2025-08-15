@@ -65,6 +65,7 @@ Teleporter::Teleporter(Object *parent, const std::string &name, const std::strin
 	action_names.emplace_back(home_action->GetName());
 	action_names.emplace_back(dest_action->GetName());
 	trigger = new Trigger(this, name + " Trigger", false, teleport_sound, area_min, area_max, action_names);
+	trigger->teleporter = true;
 
 	Enabled(true);
 	EnableLoop(true);
