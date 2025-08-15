@@ -51,7 +51,7 @@
 #include <iostream>
 
 //ImGuizmo system
-#include "ImGuizmo.h"
+//#include "ImGuizmo.h"
 
 //simulator interfaces
 #include "globals.h"
@@ -696,7 +696,7 @@ bool HAL::Render()
 
 	//process imgui
 	Ogre::ImGuiOverlay::NewFrame();
-	ImGuizmo::BeginFrame();
+	//ImGuizmo::BeginFrame();
 
 	//ImGui::ShowDemoWindow();
 
