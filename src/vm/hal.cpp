@@ -87,6 +87,7 @@ HAL::HAL(VM *vm)
 	keyconfigfile = 0;
 	joyconfigfile = 0;
 	DX11 = false;
+	imgui = 0;
 	timer = new Ogre::Timer();
 }
 
@@ -559,7 +560,9 @@ bool HAL::LoadSystem(const std::string &data_path, Ogre::RenderWindow *renderwin
 			mCameras.emplace_back(mSceneMgr->createCamera("Camera " + ToString(i + 1)));
 			if (mRenderWindow)
 			{
-				mViewports.emplace_back(mRenderWindow->addViewport(mCameras[i], (cameras - 1) - i, 0, 0, 1, 1));
+				Ogre::Viewport* viewport = mRenderWindow->addViewport(mCameras[i], (cameras - 1) - i, 0, 0, 1, 1);
+				viewport->setOverlaysEnabled(true);
+				mViewports.emplace_back(viewport);
 				mCameras[i]->setAspectRatio(Real(mViewports[i]->getActualWidth()) / Real(mViewports[i]->getActualHeight()));
 			}
 		}
@@ -668,14 +671,18 @@ bool HAL::LoadSystem(const std::string &data_path, Ogre::RenderWindow *renderwin
 	Report("Initialization complete");
 	Report("");
 
-	ImGuiContext *ctx = ImGui::CreateContext();
-	ImGui::SetCurrentContext(ctx);
-
-	ImGuiIO& io = ImGui::GetIO();
-	//ImFont* font = io.Fonts->AddFontFromFileTTF("data/fonts/nimbus_sans.ttf", 14);
-	//ImGui::PushFont(font);
-	io.Fonts->AddFontDefault();
-	io.Fonts->Build();
+	//initialize ImGui Overlay
+	try
+	{
+		imgui = new Ogre::ImGuiOverlay();
+		imgui->setZOrder(300);
+		imgui->show();
+		Ogre::OverlayManager::getSingleton().addOverlay(imgui);
+	}
+	catch(Ogre::Exception &e)
+	{
+		return ReportFatalError("Error initializing ImGui overlay\nDetails: " + e.getDescription());
+	}
 
 	return true;
 }
@@ -686,6 +693,15 @@ bool HAL::Render()
 
 	//process imgui
 	Ogre::ImGuiOverlay::NewFrame();
+
+	/*ImGui::SetNextWindowPos(ImVec2(20, 20), ImGuiCond_Always);
+	ImGui::SetNextWindowSize(ImVec2(360, 120), ImGuiCond_Always);
+	ImGui::Begin("ImGui Smoke Test");
+	ImGui::Text("Hello from ImGuiOverlay.");
+	static bool showDemo = true;
+	ImGui::Checkbox("Show Demo", &showDemo);
+	ImGui::End();*/
+
 	ImGui::ShowDemoWindow();
 
 	//render to the frame buffer
