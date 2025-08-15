@@ -255,7 +255,7 @@ EngineContext* VM::FindActiveEngine()
 				return engines[i];
 		}
 	}
-	return active_engine;
+	return 0;
 }
 
 void VM::SetActiveEngine(int number, bool switch_engines, bool force)
@@ -630,9 +630,11 @@ void VM::CheckCamera()
 	if (active_engine->IsCameraActive() == false)
 	{
 		EngineContext *newengine = FindActiveEngine();
-		if (newengine != active_engine)
+		if (newengine)
+		{
 			Report("Switching to active engine " + ToString(newengine->GetNumber()));
-		active_engine = newengine;
+			active_engine = newengine;
+		}
 	}
 }
 
