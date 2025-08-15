@@ -328,7 +328,7 @@ endif()
 
 if (NOT WIN32 AND wxWidgets_FOUND)
 	target_link_libraries(ScriptProc SBS ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES})
-	target_link_libraries(VM GUI Network SBS dylib ${OGRE_LIBRARIES} ${Caelum_LIBRARIES} ${FMOD_LIBRARY} ${wxWidgets_LIBRARIES})
+	target_link_libraries(VM GUI Network SBS dylib ImGuizmo ${OGRE_LIBRARIES} ${Caelum_LIBRARIES} ${FMOD_LIBRARY} ${wxWidgets_LIBRARIES})
 	target_link_libraries(GUI SBS ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES})
 	target_link_libraries(skyscraper VM GUI ScriptProc SBS ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES} ${FMOD_LIBRARY} ${GTK3_LIBRARIES} ${FRONTENDGLINC})
 elseif (WIN32)
