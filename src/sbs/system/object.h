@@ -108,6 +108,8 @@ public:
 	virtual bool Enabled(bool value) { return true; }
 	virtual bool IsEnabled() { return true; }
 	std::string GetNameBase();
+	virtual void OnEntry() {}
+	virtual void OnExit() {}
 
 	template <typename T> bool IsType()
 	{

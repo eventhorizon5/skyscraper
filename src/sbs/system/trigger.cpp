@@ -299,6 +299,7 @@ bool Trigger::Loop()
 				Report("Outside trigger area '" + GetName() + "', parent '" + GetParent()->GetName() + "'");
 		}
 
+		//run parent's OnEntry() or OnExit() functions
 		if (is_inside == true)
 			OnEntry();
 		else
@@ -410,6 +411,18 @@ void Trigger::Merge(Ogre::AxisAlignedBox &box)
 {
 	//expand this trigger box to encompass the given box
 	area_box->merge(box);
+}
+
+void Trigger::OnEntry()
+{
+	//notify parent of entry
+	GetParent()->OnEntry();
+}
+
+void Trigger::OnExit()
+{
+	//notify parent of exit
+	GetParent()->OnExit();
 }
 
 }

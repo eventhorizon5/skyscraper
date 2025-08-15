@@ -36,6 +36,8 @@ public:
 	bool Enabled(bool value);
 	bool IsEnabled();
 	bool Loop();
+	void OnEntry();
+	void OnExit();
 
 private:
 

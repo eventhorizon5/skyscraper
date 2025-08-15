@@ -118,4 +118,14 @@ bool Teleporter::Loop()
 	return LoopChildren();
 }
 
+void Teleporter::OnEntry()
+{
+	sbs->Report("Entered teleporter " + GetName());
+}
+
+void Teleporter::OnExit()
+{
+	sbs->Report("Exited teleporter " + GetName());
+}
+
 }

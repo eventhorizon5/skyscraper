@@ -57,9 +57,9 @@ public:
 	Vector3 GetMax();
 	bool IsOutside(const Vector3 &position);
 	bool IsOutside(Vector3 v1, Vector3 v2);
-	virtual void OnEntry() {}
-	virtual void OnExit() {}
 	void Merge(Ogre::AxisAlignedBox &box);
+	void OnEntry();
+	void OnExit();
 
 private:
 	Ogre::AxisAlignedBox *area_box;
