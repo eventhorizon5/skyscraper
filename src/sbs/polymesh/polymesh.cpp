@@ -1935,7 +1935,7 @@ void PolyMesh::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool c
 	if (!cutwalls && !cutfloors)
 		return;
 
-	// normalize bounds
+	//normalize bounds
 	if (start.x > end.x)
 		std::swap(start.x, end.x);
 	if (start.y > end.y)
@@ -1985,7 +1985,7 @@ void PolyMesh::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool c
 		return Vector2(mn, mx);
 	};
 
-	// 2D early-outs for floors (XZ)
+	//2D early-outs for floors (XZ)
 	auto outside_all_floor = [&](const GeometryArray& p)->bool
 	{
 		bool xl=true,xr=true,zb=true,zf=true;
@@ -2012,7 +2012,7 @@ void PolyMesh::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool c
 		return true;
 	};
 
-	// 3D early-outs for walls (use full AABB)
+	//3D early-outs for walls (use full AABB)
 	auto outside_all_wall = [&](const GeometryArray& p)->bool
 	{
 		bool xl=true,xr=true,yl=true,yh=true,zb=true,zf=true;
@@ -2060,7 +2060,7 @@ void PolyMesh::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool c
 		if (src.empty())
 			continue;
 
-		// Localize ring
+		//localize ring
 		GeometryArray ring;
 		ring.reserve(src.size());
 		for (const auto& g : src)
@@ -2072,19 +2072,19 @@ void PolyMesh::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool c
 			ring.emplace_back(v);
 		}
 
-		// Classify by normal (robust): floor if near-horizontal
+		//classify by normal (robust): floor if near-horizontal
 		Vector3 nrm = computeNormal(ring);
 		const bool isFloor = (std::abs(nrm.y) > Real(0.70710678)); // > ~45° from vertical
 		const bool isWall  = !isFloor;
 
-		// Respect cut flags
+		//respect cut flags
 		if ((isWall  && !cutwalls) || (isFloor && !cutfloors))
 		{
 			rebuilt.emplace_back(ring);
 			continue;
 		}
 
-		// Early-outs per orientation
+		//early-outs per orientation
 		if (isFloor)
 		{
 			if (outside_all_floor(ring))
@@ -2112,7 +2112,7 @@ void PolyMesh::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool c
 			}
 		}
 
-		// --- Orientation-aware 4-way cut using original splitter ---
+		//--- Orientation-aware 4-way cut using original splitter ---
 		GeometryArray work = ring, a, b;
 		std::vector<GeometryArray> pieces;
 		pieces.reserve(4);
@@ -2131,16 +2131,20 @@ void PolyMesh::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool c
 		{
 			// Floors/ceilings: split X then Z (ignore Y)
 			// left of start.x
-			a.clear(); b.clear();
+			a.clear();
+			b.clear();
 			SplitWithPlaneUV(0, work, a, b, start.x); emit(a); work.swap(b); // keep >= start.x
 			// right of end.x
-			a.clear(); b.clear();
+			a.clear();
+			b.clear();
 			SplitWithPlaneUV(0, work, a, b, end.x);   emit(b); work.swap(a); // keep <= end.x
 			// back of start.z
-			a.clear(); b.clear();
+			a.clear();
+			b.clear();
 			SplitWithPlaneUV(2, work, a, b, start.z); emit(a); work.swap(b); // keep >= start.z
 			// front of end.z
-			a.clear(); b.clear();
+			a.clear();
+			b.clear();
 			SplitWithPlaneUV(2, work, a, b, end.z);   emit(b); work.swap(a); // keep <= end.z
 		}
 		else
@@ -2173,7 +2177,7 @@ void PolyMesh::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool c
 				SplitWithPlaneUV(1, work, a, b, end.y);   emit(b); work.swap(a);
 		}
 
-		// 'work' is the inside slab (hole) — drop it, but pass to doorway extents if needed
+		//'work' is the inside slab (hole) — drop it, but pass to doorway extents if needed
 		if (!work.empty())
 		{
 			PolyArray hole; hole.reserve(work.size());
@@ -2190,18 +2194,19 @@ void PolyMesh::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool c
 		}
 		else
 		{
-			// nothing changed (grazing): keep original ring
+			//nothing changed (grazing): keep original ring
 			rebuilt.emplace_back(ring);
 		}
 	}
 
 		if (touchedAny)
 		{
-			const std::string name   = polygon->GetName();
+			const std::string name = polygon->GetName();
 			const std::string oldmat = polygon->material;
 
 			wall->DeletePolygon(i, false);
-			--i; --polycount;
+			--i;
+			--polycount;
 
 			if (!rebuilt.empty())
 				wall->AddPolygonSet(name, oldmat, rebuilt);
