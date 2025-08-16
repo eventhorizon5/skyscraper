@@ -6,7 +6,7 @@ set(CMAKE_AUTORCC ON)
 
 set (CMAKE_CXX_FLAGS "-DBT_USE_DOUBLE_PRECISION ${CMAKE_CXX_FLAGS}")
 
-set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/tools/cmake;${PROJECT_SOURCE_DIR}/tools/cmake/imgui;${CMAKE_MODULE_PATH}")
+set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/tools/cmake;${CMAKE_MODULE_PATH}")
 
 if(NOT APPLE)
 	if(UNIX)
@@ -92,7 +92,7 @@ find_package(Bullet REQUIRED)
 find_package(Caelum REQUIRED)
 
 #find ImGUI
-find_package(ImGUI REQUIRED)
+#find_package(ImGUI REQUIRED)
 
 #find OpenXR
 if(WIN32)
@@ -185,7 +185,7 @@ include_directories( ${OGRE_INCLUDE_DIRS}
 	${OGRE_RTShaderSystem_INCLUDE_DIRS}
 	${OGRE_Bites_INCLUDE_DIRS}
 	${FMOD_INCLUDE_DIR}
-	${IMGUI_INCLUDE_DIR}
+#	${IMGUI_INCLUDE_DIR}
 	${GTK3_INCLUDE_DIRS}
 	${BULLET_INCLUDE_DIRS}
 	${Caelum_INCLUDE_DIRS}
