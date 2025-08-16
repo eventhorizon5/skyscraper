@@ -267,7 +267,8 @@ void VM::SetActiveEngine(int number, bool switch_engines, bool force)
 	if (!engine)
 		return;
 
-	if (active_engine == engine)
+	//don't switch if the engine is fully active (active and camera attached)
+	if (active_engine == engine && engine->IsCameraActive() == true)
 		return;
 
 	//don't switch if the camera's already active in the specified engine
@@ -517,6 +518,17 @@ void VM::SwitchEngines()
 	//continue to processing if the camera is not active in the engine
 	if (active_engine->IsInside() == true && active_engine->IsCameraActive() == true)
 		return;
+
+	//exit if active engine is loading
+	if (active_engine->IsLoading() == true)
+		return;
+
+	//if the active engine was reloaded, try to reattach to that engine after load
+	if (active_engine->IsInside() == true && active_engine->IsCameraActive() == false && active_engine->Paused == false)
+	{
+		SetActiveEngine(active_engine->GetNumber());
+		return;
+	}
 
 	EngineContext *parent = active_engine->GetParent();
 
