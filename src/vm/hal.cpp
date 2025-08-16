@@ -30,7 +30,7 @@
 #include <OgreBitesConfigDialog.h>
 #include <OgreSGTechniqueResolverListener.h>
 #include <OgreOverlaySystem.h>
-#include <OgreImGuiOverlay.h>
+//#include <OgreImGuiOverlay.h>
 #include <OgreImGuiInputListener.h>
 
 #ifndef DISABLE_SOUND
@@ -90,7 +90,7 @@ HAL::HAL(VM *vm)
 	keyconfigfile = 0;
 	joyconfigfile = 0;
 	DX11 = false;
-	imgui = 0;
+	//imgui = 0;
 	timer = new Ogre::Timer();
 }
 
@@ -675,7 +675,7 @@ bool HAL::LoadSystem(const std::string &data_path, Ogre::RenderWindow *renderwin
 	Report("");
 
 	//initialize ImGui Overlay
-	try
+	/*try
 	{
 		imgui = new Ogre::ImGuiOverlay();
 		imgui->setZOrder(300);
@@ -685,7 +685,7 @@ bool HAL::LoadSystem(const std::string &data_path, Ogre::RenderWindow *renderwin
 	catch(Ogre::Exception &e)
 	{
 		return ReportFatalError("Error initializing ImGui overlay\nDetails: " + e.getDescription());
-	}
+	}*/
 
 	return true;
 }
@@ -695,7 +695,7 @@ bool HAL::Render()
 	SBS_PROFILE_MAIN("Render");
 
 	//process imgui
-	Ogre::ImGuiOverlay::NewFrame();
+	//Ogre::ImGuiOverlay::NewFrame();
 	//ImGuizmo::BeginFrame();
 
 	//ImGui::ShowDemoWindow();
