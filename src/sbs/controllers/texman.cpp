@@ -642,15 +642,7 @@ bool TextureManager::LoadTextureCropped(const std::string &filename, const std::
 	catch (Ogre::Exception &e)
 	{
 		ReportError("Error creating new texture " + texturename + "\n" + e.getDescription());
-		Ogre::TexturePtr tex = GetTextureByName(texturename, "General");
-		if (tex)
-		{
-			new_texture = tex;
-			manual_textures.emplace_back(new_texture);
-			IncrementTextureCount();
-		}
-		else
-			return false;
+		return false;
 	}
 
 	//copy source and overlay images onto new image
@@ -989,15 +981,7 @@ bool TextureManager::AddTextToTexture(const std::string &origname, const std::st
 	catch (Ogre::Exception &e)
 	{
 		ReportError("Error creating new texture " + texturename + "\n" + e.getDescription());
-		Ogre::TexturePtr tex = GetTextureByName(texturename, "General");
-		if (tex)
-		{
-			texture = tex;
-			manual_textures.emplace_back(texture);
-			IncrementTextureCount();
-		}
-		else
-			return false;
+		return false;
 	}
 
 	//get new texture dimensions, if it was resized
@@ -1129,15 +1113,7 @@ bool TextureManager::AddTextureOverlay(const std::string &orig_texture, const st
 	catch (Ogre::Exception &e)
 	{
 		ReportError("Error creating new texture " + texturename + "\n" + e.getDescription());
-		Ogre::TexturePtr tex = GetTextureByName(texturename, "General");
-		if (tex)
-		{
-			new_texture = tex;
-			manual_textures.emplace_back(new_texture);
-			IncrementTextureCount();
-		}
-		else
-			return false;
+		return false;
 	}
 
 	//copy source and overlay images onto new image
