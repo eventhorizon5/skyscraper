@@ -1642,10 +1642,14 @@ void PolyMesh::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool c
 
 			// Six-plane partition (emit outside pieces; discard inside)
 			GeometryArray work = ring, tmpA, tmpB;
+			bool emitted_any = false;
 			auto emitIf = [&](const GeometryArray& poly)
 			{
 				if (poly.size() > 2)
+				{
 					rebuilt.emplace_back(poly);
+					emitted_any = true;
+				}
 			};
 
 			// 1) x < start.x (LEFT)
@@ -1690,16 +1694,19 @@ void PolyMesh::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool c
 			emitIf(tmpB);      // >= end.z
 
 			//store extents for door sides if needed
-			PolyArray poly;
-			for (size_t i = 0; i < tmpA.size(); i++)
-			{
-				poly.push_back(tmpA[i].vertex);
-			}
-			GetDoorwayExtents(wall->GetMesh(), checkwallnumber, poly);
+			PolyArray holeLoop;
+			for (const auto& v : work)
+				holeLoop.push_back(v.vertex);
+			GetDoorwayExtents(wall->GetMesh(), checkwallnumber, holeLoop);
 
 			// 'work' now is the inside-of-box piece -> hole; drop it
 
-			touchedAny = true;
+			bool removed_inside = (work.size() > 0); //inside chunk existed
+			bool changed = emitted_any || removed_inside;
+			if (changed)
+				touchedAny = true;
+			else
+				rebuilt.emplace_back(ring); //put original back if nothing changed
 		}
 
 		if (touchedAny)
