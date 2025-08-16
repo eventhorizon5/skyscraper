@@ -514,6 +514,7 @@ void VM::SwitchEngines()
 		return;
 
 	//exit if user is inside an engine
+	//continue to processing if the camera is not active in the engine
 	if (active_engine->IsInside() == true && active_engine->IsCameraActive() == true)
 		return;
 

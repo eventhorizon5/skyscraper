@@ -641,8 +641,7 @@ bool TextureManager::LoadTextureCropped(const std::string &filename, const std::
 	}
 	catch (Ogre::Exception &e)
 	{
-		ReportError("Error creating new texture " + texturename + "\n" + e.getDescription());
-		return false;
+		return ReportError("Error creating new texture " + texturename + "\n" + e.getDescription());
 	}
 
 	//copy source and overlay images onto new image
@@ -980,8 +979,7 @@ bool TextureManager::AddTextToTexture(const std::string &origname, const std::st
 	}
 	catch (Ogre::Exception &e)
 	{
-		ReportError("Error creating new texture " + texturename + "\n" + e.getDescription());
-		return false;
+		return ReportError("Error creating new texture " + texturename + "\n" + e.getDescription());
 	}
 
 	//get new texture dimensions, if it was resized
@@ -1112,8 +1110,7 @@ bool TextureManager::AddTextureOverlay(const std::string &orig_texture, const st
 	}
 	catch (Ogre::Exception &e)
 	{
-		ReportError("Error creating new texture " + texturename + "\n" + e.getDescription());
-		return false;
+		return ReportError("Error creating new texture " + texturename + "\n" + e.getDescription());
 	}
 
 	//copy source and overlay images onto new image
