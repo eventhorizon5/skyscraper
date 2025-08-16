@@ -2131,29 +2131,21 @@ void PolyMesh::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool c
 		{
 			// Floors/ceilings: split X then Z (ignore Y)
 			// left of start.x
-			a.clear();
-			b.clear();
 			SplitWithPlaneUV(0, work, a, b, start.x);
 			emit(a);
 			work.swap(b); // keep >= start.x
 
 			// right of end.x
-			a.clear();
-			b.clear();
 			SplitWithPlaneUV(0, work, a, b, end.x);
 			emit(b);
 			work.swap(a); // keep <= end.x
 
 			// back of start.z
-			a.clear();
-			b.clear();
 			SplitWithPlaneUV(2, work, a, b, start.z);
 			emit(a);
 			work.swap(b); // keep >= start.z
 
 			// front of end.z
-			a.clear();
-			b.clear();
 			SplitWithPlaneUV(2, work, a, b, end.z);
 			emit(b);
 			work.swap(a); // keep <= end.z
@@ -2168,14 +2160,10 @@ void PolyMesh::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool c
 			if (facesXZ)
 			{
 				// X major (forward/back)
-				a.clear();
-				b.clear();
 				SplitWithPlaneUV(0, work, a, b, start.x);
 				emit(a);
 				work.swap(b);
 
-				a.clear();
-				b.clear();
 				SplitWithPlaneUV(0, work, a, b, end.x);
 				emit(b);
 				work.swap(a);
@@ -2183,26 +2171,20 @@ void PolyMesh::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool c
 			else
 			{
 				// Z major (left/right)
-				a.clear();
-				b.clear();
 				SplitWithPlaneUV(2, work, a, b, start.z);
 				emit(a);
 				work.swap(b);
 
-				a.clear(); b.clear();
 				SplitWithPlaneUV(2, work, a, b, end.z);
 				emit(b);
 				work.swap(a);
 			}
 
 			// Y (common)
-			a.clear();
-			b.clear();
 			SplitWithPlaneUV(1, work, a, b, start.y);
 			emit(a);
 			work.swap(b);
 
-			a.clear(); b.clear();
 			SplitWithPlaneUV(1, work, a, b, end.y);
 			emit(b);
 			work.swap(a);
