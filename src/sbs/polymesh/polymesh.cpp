@@ -1961,9 +1961,9 @@ void PolyMesh::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool c
 
 	auto computeNormal = [&](const GeometryArray& p)->Vector3
 	{
-		for (size_t i=0;i+2<p.size();++i)
+		for (size_t i = 0; i + 2 < p.size(); ++i)
 		{
-			Vector3 n = (p[i+1].vertex - p[i].vertex).crossProduct(p[i+2].vertex - p[i+1].vertex);
+			Vector3 n = (p[i + 1].vertex - p[i].vertex).crossProduct(p[i + 2].vertex - p[i + 1].vertex);
 			if (n.squaredLength() > EPS*EPS)
 				return n.normalisedCopy();
 		}
@@ -1976,7 +1976,7 @@ void PolyMesh::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool c
 		Real mx = -mn;
 		for (const auto& v : p)
 		{
-			Real c = (axis==0)? v.vertex.x : (axis==1)? v.vertex.y : v.vertex.z;
+			Real c = (axis==0) ? v.vertex.x : (axis==1) ? v.vertex.y : v.vertex.z;
 			if (c < mn)
 				mn = c;
 			if (c > mx)
@@ -1991,11 +1991,11 @@ void PolyMesh::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool c
 		bool xl=true,xr=true,zb=true,zf=true;
 		for (const auto& v: p)
 		{
-			const Real x=v.vertex.x, z=v.vertex.z;
+			const Real x = v.vertex.x, z = v.vertex.z;
 			xl &= (x <= start.x - EPS);
-			xr &= (x >= end.x   + EPS);
+			xr &= (x >= end.x + EPS);
 			zb &= (z <= start.z - EPS);
-			zf &= (z >= end.z   + EPS);
+			zf &= (z >= end.z + EPS);
 		}
 		return xl || xr || zb || zf;
 	};
@@ -2004,7 +2004,7 @@ void PolyMesh::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool c
 	{
 		for (const auto& v: p)
 		{
-			const Real x=v.vertex.x, z=v.vertex.z;
+			const Real x = v.vertex.x, z = v.vertex.z;
 			if (x < start.x + EPS || x > end.x - EPS ||
 				z < start.z + EPS || z > end.z - EPS)
 				return false;
@@ -2015,10 +2015,10 @@ void PolyMesh::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool c
 	//3D early-outs for walls (use full AABB)
 	auto outside_all_wall = [&](const GeometryArray& p)->bool
 	{
-		bool xl=true,xr=true,yl=true,yh=true,zb=true,zf=true;
+		bool xl=true, xr=true, yl=true, yh=true, zb=true, zf=true;
 		for (const auto& v: p)
 		{
-			const Real x=v.vertex.x, y=v.vertex.y, z=v.vertex.z;
+			const Real x = v.vertex.x, y = v.vertex.y, z = v.vertex.z;
 			xl &= (x <= start.x - EPS);
 			xr &= (x >= end.x + EPS);
 			yl &= (y <= start.y - EPS);
@@ -2033,7 +2033,7 @@ void PolyMesh::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool c
 	{
 		for (const auto& v: p)
 		{
-			const Real x=v.vertex.x, y=v.vertex.y, z=v.vertex.z;
+			const Real x = v.vertex.x, y = v.vertex.y, z = v.vertex.z;
 			if (x < start.x + EPS || x > end.x - EPS ||
 				y < start.y + EPS || y > end.y - EPS ||
 				z < start.z + EPS || z > end.z - EPS)
@@ -2133,19 +2133,30 @@ void PolyMesh::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool c
 			// left of start.x
 			a.clear();
 			b.clear();
-			SplitWithPlaneUV(0, work, a, b, start.x); emit(a); work.swap(b); // keep >= start.x
+			SplitWithPlaneUV(0, work, a, b, start.x);
+			emit(a);
+			work.swap(b); // keep >= start.x
+
 			// right of end.x
 			a.clear();
 			b.clear();
-			SplitWithPlaneUV(0, work, a, b, end.x);   emit(b); work.swap(a); // keep <= end.x
+			SplitWithPlaneUV(0, work, a, b, end.x);
+			emit(b);
+			work.swap(a); // keep <= end.x
+
 			// back of start.z
 			a.clear();
 			b.clear();
-			SplitWithPlaneUV(2, work, a, b, start.z); emit(a); work.swap(b); // keep >= start.z
+			SplitWithPlaneUV(2, work, a, b, start.z);
+			emit(a);
+			work.swap(b); // keep >= start.z
+
 			// front of end.z
 			a.clear();
 			b.clear();
-			SplitWithPlaneUV(2, work, a, b, end.z);   emit(b); work.swap(a); // keep <= end.z
+			SplitWithPlaneUV(2, work, a, b, end.z);
+			emit(b);
+			work.swap(a); // keep <= end.z
 		}
 		else
 		{
@@ -2157,24 +2168,44 @@ void PolyMesh::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool c
 			if (facesXZ)
 			{
 				// X major (forward/back)
-				a.clear(); b.clear();
-				SplitWithPlaneUV(0, work, a, b, start.x); emit(a); work.swap(b);
-				a.clear(); b.clear();
-				SplitWithPlaneUV(0, work, a, b, end.x);   emit(b); work.swap(a);
+				a.clear();
+				b.clear();
+				SplitWithPlaneUV(0, work, a, b, start.x);
+				emit(a);
+				work.swap(b);
+
+				a.clear();
+				b.clear();
+				SplitWithPlaneUV(0, work, a, b, end.x);
+				emit(b);
+				work.swap(a);
 			}
 			else
 			{
 				// Z major (left/right)
+				a.clear();
+				b.clear();
+				SplitWithPlaneUV(2, work, a, b, start.z);
+				emit(a);
+				work.swap(b);
+
 				a.clear(); b.clear();
-				SplitWithPlaneUV(2, work, a, b, start.z); emit(a); work.swap(b);
-				a.clear(); b.clear();
-				SplitWithPlaneUV(2, work, a, b, end.z);   emit(b); work.swap(a);
+				SplitWithPlaneUV(2, work, a, b, end.z);
+				emit(b);
+				work.swap(a);
 			}
-				// Y (common)
-				a.clear(); b.clear();
-				SplitWithPlaneUV(1, work, a, b, start.y); emit(a); work.swap(b);
-				a.clear(); b.clear();
-				SplitWithPlaneUV(1, work, a, b, end.y);   emit(b); work.swap(a);
+
+			// Y (common)
+			a.clear();
+			b.clear();
+			SplitWithPlaneUV(1, work, a, b, start.y);
+			emit(a);
+			work.swap(b);
+
+			a.clear(); b.clear();
+			SplitWithPlaneUV(1, work, a, b, end.y);
+			emit(b);
+			work.swap(a);
 		}
 
 		//'work' is the inside slab (hole) — drop it, but pass to doorway extents if needed
