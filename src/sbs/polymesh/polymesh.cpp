@@ -2051,166 +2051,166 @@ void PolyMesh::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool c
 		if (polygon->geometry.empty())
 			continue;
 
-	GeometrySet rebuilt;
-	bool touchedAny = false;
+		GeometrySet rebuilt;
+		bool touchedAny = false;
 
-	for (size_t j = 0; j < polygon->geometry.size(); ++j)
-	{
-		const auto& src = polygon->geometry[j];
-		if (src.empty())
-			continue;
-
-		//localize ring
-		GeometryArray ring;
-		ring.reserve(src.size());
-		for (const auto& g : src)
+		for (size_t j = 0; j < polygon->geometry.size(); ++j)
 		{
-			Geometry v;
-			v.vertex = sbs->ToLocal(g.vertex);
-			v.texel  = g.texel;
-			v.normal = g.normal;
-			ring.emplace_back(v);
-		}
+			const auto& src = polygon->geometry[j];
+			if (src.empty())
+				continue;
 
-		//classify by normal (robust): floor if near-horizontal
-		Vector3 nrm = computeNormal(ring);
-		const bool isFloor = (std::abs(nrm.y) > Real(0.70710678)); // > ~45° from vertical
-		const bool isWall  = !isFloor;
+			//localize ring
+			GeometryArray ring;
+			ring.reserve(src.size());
+			for (const auto& g : src)
+			{
+				Geometry v;
+				v.vertex = sbs->ToLocal(g.vertex);
+				v.texel  = g.texel;
+				v.normal = g.normal;
+				ring.emplace_back(v);
+			}
 
-		//respect cut flags
-		if ((isWall  && !cutwalls) || (isFloor && !cutfloors))
-		{
-			rebuilt.emplace_back(ring);
-			continue;
-		}
+			//classify by normal (robust): floor if near-horizontal
+			Vector3 nrm = computeNormal(ring);
+			const bool isFloor = (std::abs(nrm.y) > Real(0.70710678)); // > ~45° from vertical
+			const bool isWall  = !isFloor;
 
-		//early-outs per orientation
-		if (isFloor)
-		{
-			if (outside_all_floor(ring))
+			//respect cut flags
+			if ((isWall  && !cutwalls) || (isFloor && !cutfloors))
 			{
 				rebuilt.emplace_back(ring);
 				continue;
 			}
-			if (inside_all_floor(ring))
+
+			//early-outs per orientation
+			if (isFloor)
 			{
-				touchedAny = true;
-				continue;
-			}
-		}
-		else
-		{
-			if (outside_all_wall(ring))
-			{
-				rebuilt.emplace_back(ring);
-				continue;
-			}
-			if (inside_all_wall(ring))
-			{
-				touchedAny = true;
-				continue;
-			}
-		}
-
-		//--- Orientation-aware 4-way cut using original splitter ---
-		GeometryArray work = ring, a, b;
-		std::vector<GeometryArray> pieces;
-		pieces.reserve(4);
-		bool changed = false;
-
-		auto emit = [&](const GeometryArray& poly)
-		{
-			if (poly.size() > 2)
-			{
-				pieces.emplace_back(poly);
-				changed = true;
-			}
-		};
-
-		if (isFloor)
-		{
-			// Floors/ceilings: split X then Z (ignore Y)
-			// left of start.x
-			SplitWithPlaneUV(0, work, a, b, start.x);
-			emit(a);
-			work.swap(b); // keep >= start.x
-
-			// right of end.x
-			SplitWithPlaneUV(0, work, a, b, end.x);
-			emit(b);
-			work.swap(a); // keep <= end.x
-
-			// back of start.z
-			SplitWithPlaneUV(2, work, a, b, start.z);
-			emit(a);
-			work.swap(b); // keep >= start.z
-
-			// front of end.z
-			SplitWithPlaneUV(2, work, a, b, end.z);
-			emit(b);
-			work.swap(a); // keep <= end.z
-		}
-		else
-		{
-			// Walls: pick major horizontal axis (X vs Z), then clip that + Y
-			Vector2 ex = extentsAxis(ring, 0);
-			Vector2 ez = extentsAxis(ring, 2);
-			const bool facesXZ = (std::abs(ex.y - ex.x) >= std::abs(ez.y - ez.x));
-
-			if (facesXZ)
-			{
-				// X major (forward/back)
-				SplitWithPlaneUV(0, work, a, b, start.x);
-				emit(a);
-				work.swap(b);
-
-				SplitWithPlaneUV(0, work, a, b, end.x);
-				emit(b);
-				work.swap(a);
+				if (outside_all_floor(ring))
+				{
+					rebuilt.emplace_back(ring);
+					continue;
+				}
+				if (inside_all_floor(ring))
+				{
+					touchedAny = true;
+					continue;
+				}
 			}
 			else
 			{
-				// Z major (left/right)
+				if (outside_all_wall(ring))
+				{
+					rebuilt.emplace_back(ring);
+					continue;
+				}
+				if (inside_all_wall(ring))
+				{
+					touchedAny = true;
+					continue;
+				}
+			}
+
+			//--- Orientation-aware 4-way cut using original splitter ---
+			GeometryArray work = ring, a, b;
+			std::vector<GeometryArray> pieces;
+			pieces.reserve(4);
+			bool changed = false;
+
+			auto emit = [&](const GeometryArray& poly)
+			{
+				if (poly.size() > 2)
+				{
+					pieces.emplace_back(poly);
+					changed = true;
+				}
+			};
+
+			if (isFloor)
+			{
+				// Floors/ceilings: split X then Z (ignore Y)
+				// left of start.x
+				SplitWithPlaneUV(0, work, a, b, start.x);
+				emit(a);
+				work.swap(b); // keep >= start.x
+
+				// right of end.x
+				SplitWithPlaneUV(0, work, a, b, end.x);
+				emit(b);
+				work.swap(a); // keep <= end.x
+
+				// back of start.z
 				SplitWithPlaneUV(2, work, a, b, start.z);
+				emit(a);
+				work.swap(b); // keep >= start.z
+
+				// front of end.z
+				SplitWithPlaneUV(2, work, a, b, end.z);
+				emit(b);
+				work.swap(a); // keep <= end.z
+			}
+			else
+			{
+				// Walls: pick major horizontal axis (X vs Z), then clip that + Y
+				Vector2 ex = extentsAxis(ring, 0);
+				Vector2 ez = extentsAxis(ring, 2);
+				const bool facesXZ = (std::abs(ex.y - ex.x) >= std::abs(ez.y - ez.x));
+
+				if (facesXZ)
+				{
+					// X major (forward/back)
+					SplitWithPlaneUV(0, work, a, b, start.x);
+					emit(a);
+					work.swap(b);
+
+					SplitWithPlaneUV(0, work, a, b, end.x);
+					emit(b);
+					work.swap(a);
+				}
+				else
+				{
+					// Z major (left/right)
+					SplitWithPlaneUV(2, work, a, b, start.z);
+					emit(a);
+					work.swap(b);
+
+					SplitWithPlaneUV(2, work, a, b, end.z);
+					emit(b);
+					work.swap(a);
+				}
+
+				// Y (common)
+				SplitWithPlaneUV(1, work, a, b, start.y);
 				emit(a);
 				work.swap(b);
 
-				SplitWithPlaneUV(2, work, a, b, end.z);
+				SplitWithPlaneUV(1, work, a, b, end.y);
 				emit(b);
 				work.swap(a);
 			}
 
-			// Y (common)
-			SplitWithPlaneUV(1, work, a, b, start.y);
-			emit(a);
-			work.swap(b);
+			//'work' is the inside slab (hole) — drop it, but pass to doorway extents if needed
+			if (!work.empty())
+			{
+				PolyArray hole; hole.reserve(work.size());
+				for (const auto& v : work)
+					hole.emplace_back(v.vertex);
+				GetDoorwayExtents(wall->GetMesh(), checkwallnumber, hole);
+			}
 
-			SplitWithPlaneUV(1, work, a, b, end.y);
-			emit(b);
-			work.swap(a);
+			if (changed)
+			{
+				for (const auto& p : pieces)
+					rebuilt.emplace_back(p);
+				touchedAny = true;
+			}
+			else
+			{
+				//nothing changed (grazing): keep original ring
+				rebuilt.emplace_back(ring);
+			}
 		}
-
-		//'work' is the inside slab (hole) — drop it, but pass to doorway extents if needed
-		if (!work.empty())
-		{
-			PolyArray hole; hole.reserve(work.size());
-			for (const auto& v : work)
-				hole.emplace_back(v.vertex);
-			GetDoorwayExtents(wall->GetMesh(), checkwallnumber, hole);
-		}
-
-		if (changed)
-		{
-			for (const auto& p : pieces)
-				rebuilt.emplace_back(p);
-			touchedAny = true;
-		}
-		else
-		{
-			//nothing changed (grazing): keep original ring
-			rebuilt.emplace_back(ring);
-		}
-	}
 
 		if (touchedAny)
 		{
