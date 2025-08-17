@@ -1545,6 +1545,306 @@ void PolyMesh::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool c
 {
 	//cuts a rectangular hole in the polygons within the specified range
 
+	if (cutwalls == false && cutfloors == false)
+		return;
+
+	//swap values if the first is greater than the second
+	if (start.x > end.x)
+		std::swap(start.x, end.x);
+	if (start.y > end.y)
+		std::swap(start.y, end.y);
+	if (start.z > end.z)
+		std::swap(start.z, end.z);
+
+	bool polycheck = false;
+
+	if (reset_check == true)
+	{
+		if (checkwallnumber == 1)
+		{
+			wall1a = false;
+			wall1b = false;
+		}
+		if (checkwallnumber == 2)
+		{
+			wall2a = false;
+			wall2b = false;
+		}
+	}
+
+	//step through each polygon
+	int polycount = wall->GetPolygonCount();
+	for (int i = 0; i < polycount; i++)
+	{
+		//get name
+		Polygon *polygon = wall->GetPolygon(i);
+
+		PolygonSet newpolys;
+
+		//skip empty polygons
+		if (polygon->geometry.size() == 0)
+			continue;
+
+		//cut all polygons within range
+		for (size_t j = 0; j < polygon->geometry.size(); j++)
+		{
+			//skip null geometry
+			if (polygon->geometry[j].size() == 0)
+				continue;
+
+			PolyArray temppoly, temppoly2, temppoly3, temppoly4, temppoly5, worker;
+
+			Vector2 extentsx, extentsy, extentsz;
+			Ogre::AxisAlignedBox bounds (start, end);
+			Ogre::AxisAlignedBox polybounds;
+			bool polycheck2 = false;
+
+			//copy source polygon vertices
+			for (size_t k = 0; k < polygon->geometry[j].size(); k++)
+			{
+				Ogre::Vector3 vertex = sbs->ToLocal(polygon->geometry[j][k].vertex);
+				temppoly.emplace_back(vertex);
+				polybounds.merge(vertex);
+			}
+
+			//skip if the polygon is completely inside the bounding box
+			/*if (bounds.contains(polybounds) == true)
+			{
+				polycheck = true;
+				continue;
+			}*/
+
+			//make sure the polygon intersects bounds (is not outside the cut area)
+			if (bounds.intersects(polybounds) == true)
+			{
+				extentsx = GetExtents(temppoly, 1);
+				extentsy = GetExtents(temppoly, 2);
+				extentsz = GetExtents(temppoly, 3);
+
+				//is polygon a wall?
+				if (extentsy.x != extentsy.y)
+				{
+					if (cutwalls == true)
+					{
+						//wall
+						if (std::abs(extentsx.x - extentsx.y) > std::abs(extentsz.x - extentsz.y))
+						{
+							//wall is facing forward/backward
+
+							//get left side
+							worker = temppoly;
+							SplitWithPlane(0, worker, temppoly, temppoly2, start.x);
+							worker.clear();
+
+							//get right side
+							if (temppoly2.size() > 0)
+								worker = temppoly2;
+							else
+								worker = temppoly;
+							SplitWithPlane(0, worker, temppoly3, temppoly2, end.x);
+							worker.clear();
+
+							//get lower
+							if (temppoly3.size() > 0)
+								worker = temppoly3;
+							else if (temppoly2.size() > 0)
+								worker = temppoly2;
+							else if (temppoly.size() > 0)
+								worker = temppoly;
+							SplitWithPlane(1, worker, temppoly3, temppoly4, start.y);
+							worker.clear();
+
+							//get upper
+							if (temppoly4.size() > 0)
+								worker = temppoly4;
+							else if (temppoly3.size() > 0)
+								worker = temppoly3;
+							else if (temppoly2.size() > 0)
+								worker = temppoly2;
+							else if (temppoly.size() > 0)
+								worker = temppoly;
+							SplitWithPlane(1, worker, temppoly5, temppoly4, end.y);
+							worker.clear();
+						}
+						else
+						{
+							//wall is facing left/right
+
+							//get left side
+							worker = temppoly;
+							SplitWithPlane(2, worker, temppoly, temppoly2, start.z);
+							worker.clear();
+
+							//get right side
+							if (temppoly2.size() > 0)
+								worker = temppoly2;
+							else
+								worker = temppoly;
+							SplitWithPlane(2, worker, temppoly3, temppoly2, end.z);
+							worker.clear();
+
+							//get lower
+							if (temppoly3.size() > 0)
+								worker = temppoly3;
+							else if (temppoly2.size() > 0)
+								worker = temppoly2;
+							else if (temppoly.size() > 0)
+								worker = temppoly;
+							SplitWithPlane(1, worker, temppoly3, temppoly4, start.y);
+							worker.clear();
+
+							//get upper
+							if (temppoly4.size() > 0)
+								worker = temppoly4;
+							else if (temppoly3.size() > 0)
+								worker = temppoly3;
+							else if (temppoly2.size() > 0)
+								worker = temppoly2;
+							else if (temppoly.size() > 0)
+								worker = temppoly;
+							SplitWithPlane(1, worker, temppoly5, temppoly4, end.y);
+							worker.clear();
+						}
+						polycheck = true;
+						polycheck2 = true;
+
+						//store extents of temppoly5 for door sides if needed
+						GetDoorwayExtents(wall->GetMesh(), checkwallnumber, temppoly5);
+					}
+				}
+				else if (cutfloors == true)
+				{
+					//floor
+
+					//get left side
+					worker = temppoly;
+					SplitWithPlane(0, worker, temppoly, temppoly2, start.x);
+					worker.clear();
+
+					//get right side
+					if (temppoly2.size() > 0)
+						worker = temppoly2;
+					else
+						worker = temppoly;
+					SplitWithPlane(0, worker, temppoly3, temppoly2, end.x);
+					worker.clear();
+
+					//get lower
+					if (temppoly3.size() > 0)
+						worker = temppoly3;
+					else if (temppoly2.size() > 0)
+						worker = temppoly2;
+					else if (temppoly.size() > 0)
+						worker = temppoly;
+					SplitWithPlane(2, worker, temppoly3, temppoly4, start.z);
+					worker.clear();
+
+					//get upper
+					if (temppoly4.size() > 0)
+						worker = temppoly4;
+					else if (temppoly3.size() > 0)
+						worker = temppoly3;
+					else if (temppoly2.size() > 0)
+						worker = temppoly2;
+					else if (temppoly.size() > 0)
+						worker = temppoly;
+					SplitWithPlane(2, worker, temppoly5, temppoly4, end.z);
+					worker.clear();
+					temppoly5.clear();
+
+					polycheck = true;
+					polycheck2 = true;
+				}
+
+				//create split polygons
+				if (polycheck2 == true)
+				{
+					if (temppoly.size() > 2)
+					{
+						newpolys.resize(newpolys.size() + 1);
+						if (newpolys[newpolys.size() - 1].capacity() < temppoly.size())
+							newpolys[newpolys.size() - 1].reserve(temppoly.size());
+						for (size_t k = 0; k < temppoly.size(); k++)
+							newpolys[newpolys.size() - 1].emplace_back(temppoly[k]);
+					}
+					if (temppoly2.size() > 2)
+					{
+						newpolys.resize(newpolys.size() + 1);
+						if (newpolys[newpolys.size() - 1].capacity() < temppoly2.size())
+							newpolys[newpolys.size() - 1].reserve(temppoly2.size());
+						for (size_t k = 0; k < temppoly2.size(); k++)
+							newpolys[newpolys.size() - 1].emplace_back(temppoly2[k]);
+					}
+					if (temppoly3.size() > 2)
+					{
+						newpolys.resize(newpolys.size() + 1);
+						if (newpolys[newpolys.size() - 1].capacity() < temppoly3.size())
+							newpolys[newpolys.size() - 1].reserve(temppoly3.size());
+						for (size_t k = 0; k < temppoly3.size(); k++)
+							newpolys[newpolys.size() - 1].emplace_back(temppoly3[k]);
+					}
+					if (temppoly4.size() > 2)
+					{
+						newpolys.resize(newpolys.size() + 1);
+						if (newpolys[newpolys.size() - 1].capacity() < temppoly4.size())
+							newpolys[newpolys.size() - 1].reserve(temppoly4.size());
+						for (size_t k = 0; k < temppoly4.size(); k++)
+							newpolys[newpolys.size() - 1].emplace_back(temppoly4[k]);
+					}
+
+					temppoly.clear();
+					temppoly2.clear();
+					temppoly3.clear();
+					temppoly4.clear();
+				}
+			}
+			else
+			{
+				//otherwise put original polygon into array (will only be used if the related submesh is recreated)
+				PolyArray poly;
+				for (size_t k = 0; k < polygon->geometry[j].size(); k++)
+				{
+					poly.emplace_back(sbs->ToLocal(polygon->geometry[j][k].vertex));
+				}
+				newpolys.emplace_back(poly);
+			}
+		}
+
+		//create new polygon
+		if (polycheck == true)
+		{
+			std::string oldmat;
+			Vector3 oldvector;
+			Matrix3 mapping;
+			std::string name = polygon->GetName();
+
+			if (newpolys.size() > 0)
+			{
+				//get texture data from original polygon
+				oldmat = polygon->material;
+				polygon->GetTextureMapping(mapping, oldvector);
+			}
+
+			//delete original polygon
+			wall->DeletePolygon(i, false);
+			polygon = 0;
+
+			//create new polygon
+			if (newpolys.size() > 0)
+				wall->AddPolygonSet(name, oldmat, newpolys, mapping, oldvector);
+
+			//reset search position
+			i--;
+			polycount--;
+			polycheck = false;
+		}
+	}
+}
+
+void PolyMesh::CutNew(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool cutfloors, int checkwallnumber, bool reset_check)
+{
+	//cuts a rectangular hole in the polygons within the specified range
+
 	if (!cutwalls && !cutfloors)
 		return;
 
