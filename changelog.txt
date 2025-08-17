@@ -114,6 +114,48 @@ Version 2.1
 -City Simulation: added ground and bounds
 -VMConsole: fixed a potential divide-by-zero in ps command
 -City Simulation: update to match new City Demo structure
+-VM: fixed active engine switch reporting
+-PolyMesh: fix bounds merge
+-Added type parameter to Guide globals section
+-Added planet textures
+-Updated design guide version
+-Added GetPosition() enginecontext function
+-GUI: added object safety checks to MoveObject
+-GUI: added MoveEngine window
+-Support full sim engine rotation vector instead of just a Y value
+-Moved SBS engine initial movement and rotation code into VM engine context
+-SBS: allow all movement on engine object, restrict based on bounds for others
+-VM: added engine context Rotate() function and related functions, and fixed sim engine movement/rotation
+-VM: added enginecontext GetChild() and GetChildCount() functions
+-Added experimental planet movement code to Monitor
+-VM: segfault fixes (make sure engines are verified to exist before use)
+-VM: added Show and Status console commands
+-Guide: added new SBS logo image
+-Added SetTexture action, which allows a script to change the filename of a texture definition
+-SetTexture should report on texture change
+-Added SetTexture global script command
+-Fixed filename display in script debug window
+-Implemented script debug window's Run and Stop buttons
+-ScriptProc: added GetFunctionCount() and GetFunctionInfo() functions
+-GUI: added function display to Script Debug window
+-Fixed script debug window sizing, and line number index
+-SBS: started Teleporter object
+-SBS: allow teleport outside of sim engine boundary
+-SBS: teleporter shouldn't move itself on startup, have parent move object
+-Added idle_hum sound
+-Added teleport sound effect
+-Added teleporter manager object
+-ScriptProc: added CreateTeleporter command
+-ScriptProc: if in a floor section, adjust the teleporter voffset to floor's base
+-Updated "Simple - Teleporter" building to use new teleporter object
+-SBS: moved OnEntry() and OnExit() functions to Function object as virtuals
+-SBS: fix teleporter loops by storing the teleportation state in the manager object, and have the trigger prevent processing if it's a receiving teleporter
+-started Dear ImGui support, for windowing in the render window.  This is intended for a future building designer system, and is disabled for now.
+-Added ImGuizmo library dependency, disabled for now
+-VM: fixed FindActiveEngine() and CheckCamera() functions
+-Revert "Texture Manager: if a manual texture fails to create due to a texture with the same name existing, load that existing texture instead of failing with an error"
+-VM: fixed some issues with the engine switching code, that caused camera issues after reloading a building
+-PolyMesh: restored original Cut function, and renamed newer one to CutNew()
 
 Version 2.0 - July 24, 2025
 -------------------------
