@@ -2407,62 +2407,149 @@ void PolyMesh::SplitWithPlane(int axis, const PolyArray &orig, PolyArray &poly1,
 	}
 }
 
-void PolyMesh::SplitWithPlaneUV(int axis, const GeometryArray &orig, GeometryArray &poly1, GeometryArray &poly2, Real value)
+void PolyMesh::SplitWithPlaneUV(int axis, const GeometryArray &orig, GeometryArray &polyLE, GeometryArray &polyGE, Real value)
 {
 	//splits the given polygon into two polygons, on the desired plane (defined by the axis and value parameters)
 	//axis is 0 for X, 1 for Y, 2 for Z
 
-	//clear output polygons
-	poly1.clear();
-	poly2.clear();
+	polyLE.clear();
+	polyGE.clear();
 
-	//helper lambda to get coordinate by axis
-	auto getCoord = [axis](const Vector3& v) -> Real
+	const Real EPS = SMALL_EPSILON;
+
+	//accessor for coordinate along axis
+	auto coord = [&](const Vector3& v)->Real
 	{
-		if (axis == 0)
-			return v.x;
-		if (axis == 1)
-			return v.y;
-		return v.z;
+		return (axis == 0) ? v.x : (axis == 1) ? v.y : v.z;
+	};
+	auto dist = [&](const Vector3& v)->Real
+	{
+		return coord(v) - value;
 	};
 
-	size_t n = orig.size();
-	if (n < 2)
-		return; //not enough vertices
-
-	Geometry prev = orig[n - 1];
-	Real prevSide = getCoord(prev.vertex) - value;
-	if (std::abs(prevSide) < SMALL_EPSILON)
-		prevSide = 0;
-
-	for (size_t i = 0; i < n; i++)
+	//append a vertex to a polygon if it's not a near-duplicate of the last one
+	auto pushUnique = [&](GeometryArray& poly, const Geometry& g)
 	{
-		Geometry curr = orig[i];
-		Real currSide = getCoord(curr.vertex) - value;
-		if (std::abs(currSide) < SMALL_EPSILON)
-			currSide = 0;
-
-		//if edge crosses the plane, compute intersection
-		if ((prevSide < 0 && currSide > 0) || (prevSide > 0 && currSide < 0))
+		if (!poly.empty())
 		{
-			Real t = prevSide / (prevSide - currSide);
-			Geometry inter;
-			inter.vertex = prev.vertex + (curr.vertex - prev.vertex) * t;
-			inter.texel = prev.texel + (curr.texel - prev.texel) * t;
-			inter.normal = prev.normal + (curr.normal - prev.normal) * t;
-			poly1.emplace_back(inter);
-			poly2.emplace_back(inter);
+			const Vector3& p = poly.back().vertex;
+			if ((g.vertex - p).squaredLength() <= EPS * EPS)
+				return; // skip dup
+		}
+		poly.emplace_back(g);
+	};
+
+	//basic colinearity test for removing spikes
+	auto colinear = [&](const Vector3& A, const Vector3& B, const Vector3& C)->bool
+	{
+		Vector3 u = B - A, v = C - B;
+		return u.crossProduct(v).squaredLength() <= EPS * EPS;
+	};
+
+	//light sanitize: remove consecutive duplicates & colinear spikes
+	auto sanitize = [&](GeometryArray& poly)
+	{
+		if (poly.size() < 3)
+			return;
+
+		//remove consecutive duplicates (already guarded in pushUnique)
+		//remove colinear spikes
+		GeometryArray out;
+		out.reserve(poly.size());
+		for (size_t i = 0; i < poly.size(); ++i)
+		{
+			const Vector3& A = poly[(i + poly.size() - 1) % poly.size()].vertex;
+			const Vector3& B = poly[i].vertex;
+			const Vector3& C = poly[(i + 1) % poly.size()].vertex;
+			if (colinear(A, B, C))
+				continue;
+			out.emplace_back(poly[i]);
+		}
+		poly.swap(out);
+
+		//drop closing duplicate
+		if (poly.size() >= 2 && (poly.front().vertex - poly.back().vertex).squaredLength() <= EPS * EPS)
+			poly.pop_back();
+	};
+
+	auto lerpGeom = [](const Geometry& a, const Geometry& b, Real t)->Geometry
+	{
+		Geometry r;
+		r.vertex = a.vertex + (b.vertex - a.vertex) * t;
+		r.texel  = a.texel  + (b.texel  - a.texel ) * t;
+		r.normal = a.normal + (b.normal - a.normal) * t;
+		return r;
+	};
+
+	const size_t n = orig.size();
+	if (n < 2)
+		return;
+
+	Geometry A = orig[n - 1];
+	Real dA = dist(A.vertex);
+	if (std::abs(dA) < EPS)
+		dA = 0;
+
+	for (size_t i = 0; i < n; ++i)
+	{
+		Geometry B = orig[i];
+		Real dB = dist(B.vertex);
+		if (std::abs(dB) < EPS)
+			dB = 0;
+
+		// Edge cases:
+		// 1) Crossing: (dA<0 && dB>0) or (dA>0 && dB<0)
+		// 2) On-plane endpoints: d==0 -> belong to BOTH sides, but de-dup
+		// 3) Completely on one side: append endpoint to that side
+
+		//crossing: emit intersection to BOTH sides (once), then endpoint to its side (or both if on-plane)
+		if ((dA < 0 && dB > 0) || (dA > 0 && dB < 0))
+		{
+			Real t = dA / (dA - dB); // safe: denominator has opposite sign
+			t = std::max(Real(0), std::min(Real(1), t));
+			Geometry I = lerpGeom(A, B, t);
+			//add intersection once to each (unique-guarded)
+			pushUnique(polyLE, I);
+			pushUnique(polyGE, I);
+
+			//now process the endpoint B
+			if (dB < 0)
+				pushUnique(polyLE, B);
+			else if (dB > 0)
+				pushUnique(polyGE, B);
+			else
+			{
+				//exactly on plane
+				pushUnique(polyLE, B);
+				pushUnique(polyGE, B);
+			}
+		}
+		else
+		{
+			//no crossing
+			if (dB < 0)
+				pushUnique(polyLE, B);
+			else if (dB > 0)
+				pushUnique(polyGE, B);
+			else
+			{
+				//endpoint on plane: belongs to BOTH, unique-guarded
+				pushUnique(polyLE, B);
+				pushUnique(polyGE, B);
+			}
 		}
 
-		//add current vertex to appropriate polygon(s)
-		if (currSide >= 0)
-			poly2.emplace_back(curr);
-		if (currSide <= 0)
-			poly1.emplace_back(curr);
-
-		prev = curr;
-		prevSide = currSide;
+		A = B; dA = dB;
 	}
+
+	sanitize(polyLE);
+	sanitize(polyGE);
+
+	//if either side collapses to <3 verts, clear it so callers can test size() > 2
+	if (polyLE.size() < 3)
+		polyLE.clear();
+	if (polyGE.size() < 3)
+		polyGE.clear();
 }
 
 }
