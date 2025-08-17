@@ -169,7 +169,9 @@ void Indicator::Update(const std::string &text, bool play_sound)
 	if (play_sound == true)
 		PlaySound();
 
-	timer->Start(timer_duration * 1000.0);
+	//restart timer
+	timer->Stop();
+	timer->Start(timer_duration * 1000.0, true);
 }
 
 void Indicator::Off()
