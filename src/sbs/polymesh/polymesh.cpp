@@ -201,6 +201,41 @@ bool PolyMesh::CreateMesh(MeshObject *mesh, const std::string &name, const std::
 			trimesh[i].triangles.emplace_back(Triangle(0, j - 1, j));
 	}
 
+	//advanced triangulation (not working)
+	/*TriangleIndices *trimesh = new TriangleIndices[converted_vertices.size()];
+	size_t trimesh_size = converted_vertices.size();
+
+	for (size_t i = 0; i < trimesh_size; i++)
+	{
+		const auto& ring3D = converted_vertices[i];
+		std::vector<Ogre::Vector2> ring2D;
+		ring2D.reserve(ring3D.size());
+
+		int dom = dominantAxis(ring3D);
+		project2D(ring3D, dom, ring2D);
+
+		std::vector<int> idx;
+		earClip(ring2D, idx); // local indices 0..ringN-1
+
+		// fallback: if ear clipping failed (degenerate), keep fan to avoid total loss
+		if (idx.size() < 3 * 1 && ring3D.size() >= 3)
+		{
+			idx.clear();
+			for (size_t j = 2;j < ring3D.size(); ++j)
+			{
+				idx.push_back(0);
+				idx.push_back((int)j - 1);
+				idx.push_back((int)j);
+			}
+		}
+
+		trimesh[i].triangles.reserve(idx.size() / 3);
+		for (size_t t = 0; t + 2 < idx.size(); t += 3)
+		{
+			trimesh[i].triangles.emplace_back(Triangle(idx[t + 0], idx[t + 1], idx[t + 2]));
+		}
+	}*/
+
 	//initialize geometry arrays
 	geometry.resize(trimesh_size);
 
@@ -292,35 +327,40 @@ bool PolyMesh::CreateMesh(MeshObject *mesh, const std::string &name, const std::
 			trimesh[i].triangles.emplace_back(Triangle(0, j - 1, j));
 	}
 
-	//initialize geometry arrays
-	geometry.resize(trimesh_size);
+	//advanced triangulation (not working)
+	/*TriangleIndices *trimesh = new TriangleIndices[converted_vertices.size()];
+	size_t trimesh_size = converted_vertices.size();
 
 	for (size_t i = 0; i < trimesh_size; i++)
 	{
-		geometry[i].resize(converted_vertices[i].size());
-	}
+		const auto& ring3D = converted_vertices[i];
+		std::vector<Ogre::Vector2> ring2D;
+		ring2D.reserve(ring3D.size());
 
-	//populate vertices, normals, and texels for mesh data
-	unsigned int k = 0;
+		int dom = dominantAxis(ring3D);
+		project2D(ring3D, dom, ring2D);
 
-	for (size_t i = 0; i < trimesh_size; i++)
-	{
-		for (size_t j = 0; j < converted_vertices[i].size(); j++)
+		std::vector<int> idx;
+		earClip(ring2D, idx); // local indices 0..ringN-1
+
+		// fallback: if ear clipping failed (degenerate), keep fan to avoid total loss
+		if (idx.size() < 3 * 1 && ring3D.size() >= 3)
 		{
-			//calculate normal
-			Vector3 normal = ComputePlane(converted_vertices[i], false).normal;
-
-			geometry[i][j].vertex = converted_vertices[i][j];
-			geometry[i][j].normal = normal;
-
-			if (i >= uvMap.size())
-				return ReportError("PolyMesh: invalid polygon index for texel");
-			if (j >= uvMap[i].size())
-				return ReportError("PolyMesh: invalid texel index");
-			geometry[i][j].texel = uvMap[i][j];
-			k++;
+			idx.clear();
+			for (size_t j = 2;j < ring3D.size(); ++j)
+			{
+				idx.push_back(0);
+				idx.push_back((int)j - 1);
+				idx.push_back((int)j);
+			}
 		}
-	}
+
+		trimesh[i].triangles.reserve(idx.size() / 3);
+		for (size_t t = 0; t + 2 < idx.size(); t += 3)
+		{
+			trimesh[i].triangles.emplace_back(Triangle(idx[t + 0], idx[t + 1], idx[t + 2]));
+		}
+	}*/
 
 	//add triangles to single array, to be passed to the submesh
 	size_t location = 0;
@@ -1541,7 +1581,7 @@ Vector2 PolyMesh::GetExtents(PolyArray &varray, int coord, bool flip_z)
 	return Vector2(esmall, ebig);
 }
 
-void PolyMesh::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool cutfloors, int checkwallnumber, bool reset_check)
+void PolyMesh::CutNew(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool cutfloors, int checkwallnumber, bool reset_check)
 {
 	//cuts a rectangular hole in the polygons within the specified range
 
@@ -1841,7 +1881,7 @@ void PolyMesh::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool c
 	}
 }
 
-void PolyMesh::CutNew(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool cutfloors, int checkwallnumber, bool reset_check)
+void PolyMesh::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool cutfloors, int checkwallnumber, bool reset_check)
 {
 	//cuts a rectangular hole in the polygons within the specified range
 
@@ -2550,6 +2590,164 @@ void PolyMesh::SplitWithPlaneUV(int axis, const GeometryArray &orig, GeometryArr
 		polyLE.clear();
 	if (polyGE.size() < 3)
 		polyGE.clear();
+}
+
+int PolyMesh::dominantAxis(const std::vector<Vector3>& ring)
+{
+	//compute rough normal via summation
+	Vector3 acc(0, 0, 0);
+	for (size_t i = 0; i < ring.size(); ++i)
+	{
+		const Vector3& a = ring[i];
+		const Vector3& b = ring[(i + 1) % ring.size()];
+		acc += a.crossProduct(b);
+	}
+	// choose projection with largest normal component
+	Real ax = std::abs(acc.x), ay = std::abs(acc.y), az = std::abs(acc.z);
+	if (ax >= ay && ax >= az)
+		return 0; // project to YZ
+	if (ay >= az)
+		return 1; // project to XZ
+	return 2; // project to XY
+}
+
+void PolyMesh::project2D(const std::vector<Vector3>& ring, int dom, std::vector<Ogre::Vector2>& out)
+{
+	out.resize(ring.size());
+	if (dom == 0)
+	{
+		// YZ
+		for (size_t i = 0;i < ring.size(); ++i)
+			out[i] = Ogre::Vector2(ring[i].y, ring[i].z);
+	}
+	else if (dom == 1)
+	{
+		// XZ
+		for (size_t i = 0;i < ring.size(); ++i)
+			out[i] = Ogre::Vector2(ring[i].x, ring[i].z);
+	}
+	else
+	{
+		// XY
+		for (size_t i = 0;i < ring.size(); ++i)
+			out[i] = Ogre::Vector2(ring[i].x, ring[i].y);
+	}
+}
+
+Real PolyMesh::cross2(const Vector2& a, const Vector2& b, const Vector2& c)
+{
+	// (b-a) x (c-b)
+	Vector2 u = b - a;
+	Vector2 v = c - b;
+	return u.x * v.y - u.y * v.x;
+}
+
+bool PolyMesh::pointInTri(const Ogre::Vector2& p, const Ogre::Vector2& a, const Ogre::Vector2& b, const Ogre::Vector2& c)
+{
+	//barycentric sign test
+	Real c1 = cross2(a,b,p);
+	Real c2 = cross2(b,c,p);
+	Real c3 = cross2(c,a,p);
+	bool hasNeg = (c1 < 0) || (c2 < 0) || (c3 < 0);
+	bool hasPos = (c1 > 0) || (c2 > 0) || (c3 > 0);
+	return !(hasNeg && hasPos);
+}
+
+bool PolyMesh::isConvex2(const Ogre::Vector2& a, const Ogre::Vector2& b, const Ogre::Vector2& c, bool ccw)
+{
+	Real z = cross2(a,b,c);
+	return ccw ? (z > 0) : (z < 0);
+}
+
+bool PolyMesh::polygonCCW(const std::vector<Ogre::Vector2>& p)
+{
+	double area = 0.0;
+	for (size_t i = 0;i < p.size(); ++i)
+	{
+		const auto& a = p[i];
+		const auto& b = p[(i + 1) % p.size()];
+		area += (double)a.x * b.y - (double)a.y * b.x;
+	}
+	return area > 0;
+}
+
+void PolyMesh::earClip(const std::vector<Ogre::Vector2>& poly2, std::vector<int>& outIdx)
+{
+	//ear clipping: returns local indices (0..n-1) of triangles.
+
+	outIdx.clear();
+	const size_t n = poly2.size();
+	if (n < 3)
+		return;
+
+	std::vector<int> V(n);
+	for (size_t i = 0;i < n; ++i) V[i] = (int)i;
+
+	const bool ccw = polygonCCW(poly2);
+
+	int guard = (int)n * 10; // safety to avoid infinite loops on degenerate rings
+	while (V.size() > 3 && guard-- > 0)
+	{
+		bool clipped = false;
+		const size_t m = V.size();
+		for (size_t vi = 0; vi < m; ++vi)
+		{
+			int i0 = V[(vi + m - 1) % m];
+			int i1 = V[vi];
+			int i2 = V[(vi + 1) % m];
+
+			const auto& a = poly2[i0];
+			const auto& b = poly2[i1];
+			const auto& c = poly2[i2];
+
+			//convex?
+			if (!isConvex2(a,b,c, ccw))
+				continue;
+
+			// check no other point inside ear
+			bool anyInside = false;
+			for (size_t k = 0;k < m; ++k)
+			{
+				int ik = V[k];
+				if (ik==i0 || ik==i1 || ik==i2)
+					continue;
+				if (pointInTri(poly2[ik], a,b,c))
+				{
+					anyInside = true;
+					break;
+				}
+			}
+			if (anyInside) continue;
+
+			//it's an ear: output triangle
+			if (ccw)
+			{
+				outIdx.push_back(i0); outIdx.push_back(i1); outIdx.push_back(i2);
+			}
+			else
+			{
+				outIdx.push_back(i2); outIdx.push_back(i1); outIdx.push_back(i0);
+			}
+
+			//remove ear tip
+			V.erase(V.begin() + (long)vi);
+			clipped = true;
+			break;
+		}
+		if (!clipped) break; // degenerate; stop
+	}
+
+	if (V.size() == 3)
+	{
+		if (polygonCCW({poly2[(size_t)V[0]], poly2[(size_t)V[1]], poly2[(size_t)V[2]]}))
+		{
+			outIdx.push_back(V[0]); outIdx.push_back(V[1]); outIdx.push_back(V[2]);
+		}
+		else
+		{
+			outIdx.push_back(V[2]); outIdx.push_back(V[1]); outIdx.push_back(V[0]);
+		}
+	}
 }
 
 }

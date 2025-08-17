@@ -90,6 +90,15 @@ public:
 	void ResetDoorwayWalls();
 	Wall* AddDoorwayWalls(MeshObject* mesh, const std::string &wallname, const std::string &texture, Real tw, Real th);
 
+	//geometry helper functions
+	int dominantAxis(const std::vector<Vector3>& ring);
+	void project2D(const std::vector<Vector3>& ring, int dom, std::vector<Ogre::Vector2>& out);
+	Real cross2(const Vector2& a, const Vector2& b, const Vector2& c);
+	bool pointInTri(const Ogre::Vector2& p, const Ogre::Vector2& a, const Ogre::Vector2& b, const Ogre::Vector2& c);
+	bool isConvex2(const Ogre::Vector2& a, const Ogre::Vector2& b, const Ogre::Vector2& c, bool ccw);
+	bool polygonCCW(const std::vector<Ogre::Vector2>& p);
+	void earClip(const std::vector<Ogre::Vector2>& poly2, std::vector<int>& outIdx);
+
 private:
 
 	//orientations
