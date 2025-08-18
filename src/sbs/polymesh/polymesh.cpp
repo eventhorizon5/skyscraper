@@ -1901,7 +1901,7 @@ void PolyMesh::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool c
 	};
 
 	//2D early-outs for floors (XZ)
-	auto outside_all_floor = [&](const GeometryArray& p)->bool
+	auto outside_all_floor_strict = [&](const GeometryArray& p)->bool
 	{
 		bool xl = true, xr = true, zb = true, zf = true;
 		for (const auto& v: p)
@@ -1914,8 +1914,21 @@ void PolyMesh::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool c
 		}
 		return xl || xr || zb || zf;
 	};
+	auto outside_all_floor_relaxed = [&](const GeometryArray& p)->bool
+	{
+		bool xl = true, xr = true, zb = true, zf = true;
+		for (const auto& v: p)
+		{
+			const Real x = v.vertex.x, z = v.vertex.z;
+			xl &= (x <= start.x + EPS);
+			xr &= (x >= end.x - EPS);
+			zb &= (z <= start.z + EPS);
+			zf &= (z >= end.z - EPS);
+		}
+		return xl || xr || zb || zf;
+	};
 
-	auto inside_all_floor = [&](const GeometryArray& p)->bool
+	auto inside_all_floor_strict = [&](const GeometryArray& p)->bool
 	{
 		for (const auto& v: p)
 		{
@@ -1927,8 +1940,20 @@ void PolyMesh::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool c
 		return true;
 	};
 
+	auto inside_all_floor_relaxed = [&](const GeometryArray& p)->bool
+	{
+		for (const auto& v: p)
+		{
+			const Real x = v.vertex.x, z = v.vertex.z;
+			if (x < start.x - EPS || x > end.x + EPS ||
+				z < start.z - EPS || z > end.z + EPS)
+				return false;
+		}
+		return true;
+	};
+
 	//3D early-outs for walls (use full AABB)
-	auto outside_all_wall = [&](const GeometryArray& p)->bool
+	auto outside_all_wall_strict = [&](const GeometryArray& p)->bool
 	{
 		bool xl = true, xr = true, yl = true, yh = true, zb = true, zf = true;
 		for (const auto& v: p)
@@ -1944,7 +1969,7 @@ void PolyMesh::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool c
 		return xl || xr || yl || yh || zb || zf;
 	};
 
-	auto inside_all_wall = [&](const GeometryArray& p)->bool
+	auto inside_all_wall_strict = [&](const GeometryArray& p)->bool
 	{
 		for (const auto& v: p)
 		{
@@ -1955,6 +1980,36 @@ void PolyMesh::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool c
 				return false;
 		}
 		return true;
+	};
+
+	//ring XZ bbox + Y thickness
+	auto ring_metrics = [&](const GeometryArray& p)
+	{
+		Vector2 mnXZ( std::numeric_limits<Real>::infinity()), mxXZ(-std::numeric_limits<Real>::infinity());
+		Real yMin =  std::numeric_limits<Real>::infinity();
+		Real yMax = -std::numeric_limits<Real>::infinity();
+		for (const auto& g : p)
+		{
+			mnXZ.x = std::min(mnXZ.x, g.vertex.x);
+			mxXZ.x = std::max(mxXZ.x, g.vertex.x);
+			mnXZ.y = std::min(mnXZ.y, g.vertex.z);
+			mxXZ.y = std::max(mxXZ.y, g.vertex.z);
+			yMin   = std::min(yMin, g.vertex.y);
+			yMax   = std::max(yMax, g.vertex.y);
+		}
+		return std::tuple<Vector2,Vector2,Real>(mnXZ, mxXZ, (yMax - yMin));
+	};
+
+	//small heuristic: likely a terrain/ground tile?
+	auto likely_terrain = [&](const GeometryArray& p)->bool
+	{
+		auto [mn,mx,yt] = ring_metrics(p);
+		const Real dx = mx.x - mn.x;
+		const Real dz = mx.y - mn.y;
+		const Real extent = std::max(dx, dz);
+		const Real Y_FLAT = SMALL_EPSILON * 64; // your prior flatness threshold
+		// Big and flat → probably terrain/landscape
+		return (extent >= 50.0f && yt <= Y_FLAT); // tune '50' to your project scale
 	};
 
 	int polycount = wall->GetPolygonCount();
@@ -2004,25 +2059,39 @@ void PolyMesh::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool c
 			//early-outs per orientation
 			if (isFloor)
 			{
-				if (outside_all_floor(ring))
+				if (outside_all_floor_strict(ring))
 				{
 					rebuilt.emplace_back(ring);
 					continue;
 				}
-				if (inside_all_floor(ring))
+				if (inside_all_floor_strict(ring))
 				{
 					touchedAny = true;
 					continue;
 				}
+
+				if (likely_terrain(ring))
+				{
+					if (outside_all_floor_relaxed(ring))
+					{
+						rebuilt.emplace_back(ring);
+						continue;
+					}
+					if (inside_all_floor_relaxed(ring))
+					{
+						touchedAny = true;
+						continue;
+					}
+				}
 			}
 			else
 			{
-				if (outside_all_wall(ring))
+				if (outside_all_wall_strict(ring))
 				{
 					rebuilt.emplace_back(ring);
 					continue;
 				}
-				if (inside_all_wall(ring))
+				if (inside_all_wall_strict(ring))
 				{
 					touchedAny = true;
 					continue;
