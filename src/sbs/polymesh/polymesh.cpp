@@ -1856,6 +1856,16 @@ void PolyMesh::CutNew(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, boo
 	if (start.z > end.z)
 		std::swap(start.z, end.z);
 
+	//convert to local space
+	Vector3 lstart = sbs->ToLocal(start);
+	Vector3 lend   = sbs->ToLocal(end);
+	if (lstart.x > lend.x)
+		std::swap(lstart.x, lend.x);
+	if (lstart.y > lend.y)
+		std::swap(lstart.y, lend.y);
+	if (lstart.z > lend.z)
+		std::swap(lstart.z, lend.z);
+
 	if (reset_check)
 	{
 		if (checkwallnumber == 1)
@@ -2046,22 +2056,22 @@ void PolyMesh::CutNew(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, boo
 			{
 				// Floors/ceilings: split X then Z (ignore Y)
 				// left of start.x
-				SplitWithPlaneUV(0, work, a, b, start.x);
+				SplitWithPlaneUV_HalfOpen(0, work, a, b, lstart.x, true);
 				emit(a);
 				work.swap(b); // keep >= start.x
 
 				// right of end.x
-				SplitWithPlaneUV(0, work, a, b, end.x);
+				SplitWithPlaneUV_HalfOpen(0, work, a, b, lend.x, false);
 				emit(b);
 				work.swap(a); // keep <= end.x
 
 				// back of start.z
-				SplitWithPlaneUV(2, work, a, b, start.z);
+				SplitWithPlaneUV_HalfOpen(2, work, a, b, lstart.z, true);
 				emit(a);
 				work.swap(b); // keep >= start.z
 
 				// front of end.z
-				SplitWithPlaneUV(2, work, a, b, end.z);
+				SplitWithPlaneUV_HalfOpen(2, work, a, b, lend.z, false);
 				emit(b);
 				work.swap(a); // keep <= end.z
 			}
@@ -2550,6 +2560,101 @@ void PolyMesh::SplitWithPlaneUV(int axis, const GeometryArray &orig, GeometryArr
 		polyLE.clear();
 	if (polyGE.size() < 3)
 		polyGE.clear();
+}
+
+void PolyMesh::SplitWithPlaneUV_HalfOpen(int axis, const GeometryArray& orig, GeometryArray& low, GeometryArray& high, Real value, bool keepGreater)
+{
+	// On-plane verts go ONLY to the kept "work" side.
+	// keepGreater=true  -> kept side is >= plane (on-plane -> high)
+	// keepGreater=false -> kept side is <= plane (on-plane -> low)
+
+	low.clear();
+	high.clear();
+	const Real EPS = SMALL_EPSILON;
+
+	auto coord=[&](const Vector3& v)
+	{
+		return axis==0 ? v.x : axis==1 ? v.y : v.z;
+	};
+
+	auto sign =[&](Real d)
+	{
+		if (std::abs(d) <= EPS)
+			return 0;
+		return d < 0 ? -1:+1;
+	};
+
+	auto push =[&](GeometryArray& p, const Geometry& g)
+	{
+		if (!p.empty() && (g.vertex - p.back().vertex).squaredLength() <= EPS * EPS)
+			return;
+		p.emplace_back(g);
+	};
+
+	const int onPlaneTo = keepGreater ? +1 : -1;
+	if (orig.size() < 2)
+		return;
+
+	Geometry prev = orig.back();
+	Real dPrev = coord(prev.vertex) - value;
+	int  sPrev = sign(dPrev);
+	if (sPrev == 0)
+		sPrev = onPlaneTo;
+
+	for (size_t i = 0; i < orig.size(); ++i)
+	{
+		Geometry cur = orig[i];
+		Real dCur = coord(cur.vertex) - value;
+		int  sCur = sign(dCur);
+		if (sCur == 0)
+			sCur = onPlaneTo;
+
+		//crossing -> add intersection to both
+		if ((sPrev < 0 && sCur > 0) || (sPrev > 0 && sCur < 0))
+		{
+			Real denom = (dPrev - dCur);
+			if (std::abs(denom) <= EPS)
+				denom = (denom >= 0 ? EPS : -EPS);
+			Real t = dPrev / denom;
+			if (t < 0)
+				t = 0;
+			if (t > 1)
+				t = 1;
+
+			Geometry I;
+			I.vertex = prev.vertex + (cur.vertex - prev.vertex) * t;
+			I.texel  = prev.texel  + (cur.texel  - prev.texel ) * t;
+			I.normal = prev.normal + (cur.normal - prev.normal) * t;
+			push(low,  I);
+			push(high, I);
+		}
+
+		if (sCur < 0)
+			push(low, cur);
+		else if (sCur > 0)
+			push(high, cur);
+		else
+		{
+			// on-plane -> kept side only
+			if (onPlaneTo > 0)
+				push(high, cur);
+			else
+				push(low, cur);
+		}
+
+		prev = cur;
+		dPrev = dCur;
+		sPrev = sCur;
+	}
+
+	//drop closing duplicate
+	auto dropClose = [&](GeometryArray& p)
+	{
+		if (p.size() >= 2 && (p.front().vertex - p.back().vertex).squaredLength() <= EPS * EPS)
+			p.pop_back();
+	};
+	dropClose(low);
+	dropClose(high);
 }
 
 }

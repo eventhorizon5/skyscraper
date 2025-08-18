@@ -89,6 +89,7 @@ public:
 	Vector3 ComputeNormal2(const PolyArray &vertices, Real &D);
 	void ResetDoorwayWalls();
 	Wall* AddDoorwayWalls(MeshObject* mesh, const std::string &wallname, const std::string &texture, Real tw, Real th);
+	void SplitWithPlaneUV_HalfOpen(int axis, const GeometryArray& orig, GeometryArray& low, GeometryArray& high, Real value, bool keepGreater);
 
 private:
 
