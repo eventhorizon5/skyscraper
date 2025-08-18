@@ -2702,7 +2702,7 @@ int SBS::GetRevolvingDoorCount()
 	return (int)RevolvingDoorArray.size();
 }
 
-bool SBS::HitBeam(const Ray &ray, Real max_distance, MeshObject *&mesh, Wall *&wall, Vector3 &hit_position)
+/*bool SBS::HitBeam(const Ray &ray, Real max_distance, MeshObject *&mesh, Wall *&wall, Vector3 &hit_position)
 {
 	//use a given ray and distance, and return the nearest hit mesh and if applicable, wall object
 	//note that the ray's origin and direction need to be in engine-relative values
@@ -2748,6 +2748,54 @@ bool SBS::HitBeam(const Ray &ray, Real max_distance, MeshObject *&mesh, Wall *&w
 	wall = GetPolyMesh()->FindWallIntersect(mesh, ray.getOrigin(), ray.getPoint(max_distance), isect, distance, normal);
 
 	return true;
+}*/
+
+bool SBS::HitBeam(const Ray &ray, Real max_distance, MeshObject *&mesh, Wall *&wall, Vector3 &hit_position)
+{
+	//use a given ray and distance, and return the nearest hit mesh and if applicable, wall object
+	//note that the ray's origin and direction need to be in engine-relative values
+
+	// 0) Build a single, canonical ray (engine-relative) and use it everywhere
+    const Ray pickRay(
+        ToRemote(GetUtility()->ToGlobal(ToLocal(ray.getOrigin()))),
+        GetOrientation() * ray.getDirection()
+    );
+
+    //ray test in Bullet
+    OgreBulletCollisions::CollisionClosestRayResultCallback callback(pickRay, mWorld, max_distance);
+    mWorld->launchRay(callback);
+    if (!callback.doesCollide())
+		return false;
+
+    //resolve MeshObject
+    OgreBulletCollisions::Object* object = callback.getCollidedObject();
+    if (!object)
+		return false;
+
+	//get name of collision object's grandparent scenenode (which is the same name as the mesh object)
+    std::string meshname;
+    if (dynamic_cast<OgreBulletDynamics::WheeledRigidBody*>(object) == 0)
+        meshname = object->getRootNode()->getParentSceneNode()->getName();
+    else
+        meshname = object->getRootNode()->getChild(0)->getName(); //for vehicles, the child of the root node is the mesh
+
+	//get associated mesh object
+    mesh = FindMeshObject(meshname);
+    if (!mesh)
+		return false;
+
+    //hit position — keep space consistent
+    hit_position = ToLocal(callback.getCollisionPoint());
+
+    //wall resolution — short-term: use same-space ray; long-term: triangle→wall map
+    Vector3 rs = pickRay.getOrigin();
+    Vector3 re = pickRay.getPoint(max_distance);
+
+	//get wall object, if any
+    Vector3 isect; Real distance = 2e9; Vector3 normal = Vector3::ZERO;
+    wall = GetPolyMesh()->FindWallIntersect_Tri(mesh, rs, re, isect, distance, normal);
+
+    return true;
 }
 
 void SBS::EnableRandomActivity(bool value)

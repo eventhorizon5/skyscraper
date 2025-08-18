@@ -112,7 +112,11 @@ Polygon* Wall::AddPolygon(const std::string &name, const std::string &texture, P
 	GeometrySet geometry;
 	std::vector<Triangle> triangles;
 	PolygonSet converted_vertices;
-	if (!polymesh->CreateMesh(meshwrapper, name, texture, vertices, tw, th, autosize, tm, tv, geometry, triangles, converted_vertices))
+
+	//create polygon
+	Polygon* poly = new Polygon(this, name, meshwrapper);
+
+	if (!polymesh->CreateMesh(meshwrapper, this, poly, name, texture, vertices, tw, th, autosize, tm, tv, geometry, triangles, converted_vertices))
 	{
 		ReportError("Error creating wall '" + name + "'");
 		return 0;
@@ -127,7 +131,9 @@ Polygon* Wall::AddPolygon(const std::string &name, const std::string &texture, P
 	//compute plane
 	Plane plane = sbs->GetPolyMesh()->ComputePlane(converted_vertices[0]);
 
-	Polygon* poly = new Polygon(this, name, meshwrapper, geometry, triangles, tm, tv, material, plane);
+	//store geometry data in polygon
+	poly->Create(geometry, triangles, tm, tv, material, plane);
+
 	polygons.emplace_back(poly);
 	return poly;
 }
@@ -142,7 +148,11 @@ Polygon* Wall::AddPolygon(const std::string &name, const std::string &texture, P
 	GeometrySet geometry;
 	std::vector<Triangle> output_triangles;
 	PolygonSet converted_vertices;
-	if (!polymesh->CreateMesh(meshwrapper, name, texture, vertices, uvMap, geometry, output_triangles, converted_vertices, tw, th))
+
+	//create polygon
+	Polygon* poly = new Polygon(this, name, meshwrapper);
+
+	if (!polymesh->CreateMesh(meshwrapper, this, poly, name, texture, vertices, uvMap, geometry, output_triangles, converted_vertices, tw, th))
 	{
 		ReportError("Error creating wall '" + name + "'");
 		return 0;
@@ -157,7 +167,7 @@ Polygon* Wall::AddPolygon(const std::string &name, const std::string &texture, P
 	//compute plane
 	Plane plane = sbs->GetPolyMesh()->ComputePlane(converted_vertices[0]);
 
-	Polygon* poly = new Polygon(this, name, meshwrapper, geometry, triangles, tm, tv, material, plane);
+	poly->Create(geometry, triangles, tm, tv, material, plane);
 	polygons.emplace_back(poly);
 	return poly;
 }
@@ -169,7 +179,11 @@ Polygon* Wall::AddPolygonSet(const std::string &name, const std::string &materia
 	GeometrySet geometry;
 	std::vector<Triangle> triangles;
 	PolygonSet converted_vertices;
-	if (!polymesh->CreateMesh(meshwrapper, name, material, vertices, tex_matrix, tex_vector, geometry, triangles, converted_vertices, 0, 0))
+
+	//create polygon
+	Polygon* poly = new Polygon(this, name, meshwrapper);
+
+	if (!polymesh->CreateMesh(meshwrapper, this, poly, name, material, vertices, tex_matrix, tex_vector, geometry, triangles, converted_vertices, 0, 0))
 	{
 		ReportError("Error creating wall '" + name + "'");
 		return 0;
@@ -181,7 +195,7 @@ Polygon* Wall::AddPolygonSet(const std::string &name, const std::string &materia
 	//compute plane
 	Plane plane = sbs->GetPolyMesh()->ComputePlane(converted_vertices[0]);
 
-	Polygon* poly = new Polygon(this, name, meshwrapper, geometry, triangles, tex_matrix, tex_vector, material, plane);
+	poly->Create(geometry, triangles, tex_matrix, tex_vector, material, plane);
 	polygons.emplace_back(poly);
 
 	return poly;
@@ -223,7 +237,10 @@ Polygon* Wall::AddPolygonSet(const std::string& name, const std::string& materia
 	const bool convert_vertices = true;
 	const Real tw = 1.0f, th = 1.0f;
 
-	if (!polymesh->CreateMesh(meshwrapper, name, material, vertices, uvMap, outGeom, triangles, converted_vertices, tw, th, convert_vertices))
+	//create polygon
+	Polygon* poly = new Polygon(this, name, meshwrapper);
+
+	if (!polymesh->CreateMesh(meshwrapper, this, poly, name, material, vertices, uvMap, outGeom, triangles, converted_vertices, tw, th, convert_vertices))
 	{
 		ReportError("Error creating wall '" + name + "'");
 		return 0;
@@ -244,7 +261,7 @@ Polygon* Wall::AddPolygonSet(const std::string& name, const std::string& materia
 	tm.FromAxes(Vector3(1,0,0), Vector3(0,1,0), Vector3(0,0,1));
 	Vector3 tv(0,0,0);
 
-	Polygon* poly = new Polygon(this, name, meshwrapper, outGeom, triangles, tm, tv, material, plane);
+	poly->Create(outGeom, triangles, tm, tv, material, plane);
 	polygons.emplace_back(poly);
 
 	return poly;

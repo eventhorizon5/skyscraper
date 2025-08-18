@@ -49,9 +49,9 @@ public:
 
 	explicit PolyMesh(Object *parent);
 	~PolyMesh();
-	bool CreateMesh(MeshObject *mesh, const std::string &name, const std::string &texture, PolyArray &vertices, Real tw, Real th, bool autosize, Matrix3 &tex_matrix, Vector3 &tex_vector, GeometrySet &geometry, std::vector<Triangle> &triangles, PolygonSet &converted_vertices);
-	bool CreateMesh(MeshObject *mesh, const std::string &name, const std::string &material, PolygonSet &vertices, Matrix3 &tex_matrix, Vector3 &tex_vector, GeometrySet &geometry, std::vector<Triangle> &triangles, PolygonSet &converted_vertices, Real tw, Real th, bool convert_vertices = true);
-	bool CreateMesh(MeshObject *mesh, const std::string &name, const std::string &material, PolygonSet &vertices, std::vector<std::vector<Vector2>> &uvMap, GeometrySet &geometry, std::vector<Triangle> &triangles, PolygonSet &converted_vertices, Real tw, Real th, bool convert_vertices = true);
+	bool CreateMesh(MeshObject *mesh, Wall* ownerWall, Polygon* ownerPoly, const std::string &name, const std::string &texture, PolyArray &vertices, Real tw, Real th, bool autosize, Matrix3 &tex_matrix, Vector3 &tex_vector, GeometrySet &geometry, std::vector<Triangle> &triangles, PolygonSet &converted_vertices);
+	bool CreateMesh(MeshObject *mesh, Wall* ownerWall, Polygon* ownerPoly, const std::string &name, const std::string &material, PolygonSet &vertices, Matrix3 &tex_matrix, Vector3 &tex_vector, GeometrySet &geometry, std::vector<Triangle> &triangles, PolygonSet &converted_vertices, Real tw, Real th, bool convert_vertices = true);
+	bool CreateMesh(MeshObject *mesh, Wall* ownerWall, Polygon* ownerPoly, const std::string &name, const std::string &material, PolygonSet &vertices, std::vector<std::vector<Vector2>> &uvMap, GeometrySet &geometry, std::vector<Triangle> &triangles, PolygonSet &converted_vertices, Real tw, Real th, bool convert_vertices = true);
 	Wall* FindWallIntersect(MeshObject *mesh, const Vector3 &start, const Vector3 &end, Vector3 &isect, Real &distance, Vector3 &normal, Wall *wall = 0);
 	Vector2* GetTexels(Matrix3 &tex_matrix, Vector3 &tex_vector, PolygonSet &vertices, Real tw, Real th, size_t &texel_count);
 	Vector2 GetExtents(int coord, bool flip_z = false);
@@ -89,6 +89,8 @@ public:
 	Vector3 ComputeNormal2(const PolyArray &vertices, Real &D);
 	void ResetDoorwayWalls();
 	Wall* AddDoorwayWalls(MeshObject* mesh, const std::string &wallname, const std::string &texture, Real tw, Real th);
+	bool IntersectRayTri(const Vector3& ro, const Vector3& rd, const Vector3& a, const Vector3& b, const Vector3& c, double& t, double& u, double& v);
+	Wall* FindWallIntersect_Tri(MeshObject* mesh, const Vector3& start, const Vector3& end, Vector3& isect, Real& distance, Vector3& normal);
 
 private:
 

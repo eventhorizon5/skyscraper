@@ -107,7 +107,7 @@ Wall* PolyMesh::FindWallIntersect(MeshObject *mesh, const Vector3 &start, const 
         return 0;
 }
 
-bool PolyMesh::CreateMesh(MeshObject *mesh, const std::string &name, const std::string &texture, PolyArray &vertices, Real tw, Real th, bool autosize, Matrix3 &t_matrix, Vector3 &t_vector, GeometrySet &geometry, std::vector<Triangle> &triangles, PolygonSet &converted_vertices)
+bool PolyMesh::CreateMesh(MeshObject *mesh, Wall* ownerWall, Polygon* ownerPoly, const std::string &name, const std::string &texture, PolyArray &vertices, Real tw, Real th, bool autosize, Matrix3 &t_matrix, Vector3 &t_vector, GeometrySet &geometry, std::vector<Triangle> &triangles, PolygonSet &converted_vertices)
 {
 	//create custom mesh geometry, apply a texture map and material, and return the created submesh
 
@@ -162,10 +162,10 @@ bool PolyMesh::CreateMesh(MeshObject *mesh, const std::string &name, const std::
 	if (!sbs->GetTextureManager()->ComputeTextureMap(t_matrix, t_vector, converted_vertices[0], v1, v2, v3, tw2, th2))
 		return false;
 
-	return CreateMesh(mesh, name, material, converted_vertices, t_matrix, t_vector, geometry, triangles, converted_vertices, tw2, th2, false);
+	return CreateMesh(mesh, ownerWall, ownerPoly, name, material, converted_vertices, t_matrix, t_vector, geometry, triangles, converted_vertices, tw2, th2, false);
 }
 
-bool PolyMesh::CreateMesh(MeshObject *mesh, const std::string &name, const std::string &material, PolygonSet &vertices, Matrix3 &tex_matrix, Vector3 &tex_vector, GeometrySet &geometry, std::vector<Triangle> &triangles, PolygonSet &converted_vertices, Real tw, Real th, bool convert_vertices)
+bool PolyMesh::CreateMesh(MeshObject *mesh, Wall* ownerWall, Polygon* ownerPoly, const std::string &name, const std::string &material, PolygonSet &vertices, Matrix3 &tex_matrix, Vector3 &tex_vector, GeometrySet &geometry, std::vector<Triangle> &triangles, PolygonSet &converted_vertices, Real tw, Real th, bool convert_vertices)
 {
 	//create custom geometry, apply a texture map and material, and return the created submesh
 	//tw and th are only used when overriding texel map
@@ -187,6 +187,16 @@ bool PolyMesh::CreateMesh(MeshObject *mesh, const std::string &name, const std::
 	//texture mapping
 	size_t texel_count;
 	Vector2 *table = GetTexels(tex_matrix, tex_vector, converted_vertices, tw, th, texel_count);
+
+	//append to flattened pick buffers
+	uint32_t base = static_cast<uint32_t>(mesh->pickPositions.size());
+	for (size_t i = 0; i < converted_vertices.size(); ++i)
+	{
+		for (const auto& p : converted_vertices[i])
+		{
+			mesh->pickPositions.emplace_back(p); //remote space
+		}
+	}
 
 	//triangulate mesh
 	TriangleIndices *trimesh = new TriangleIndices[converted_vertices.size()];
@@ -245,6 +255,14 @@ bool PolyMesh::CreateMesh(MeshObject *mesh, const std::string &name, const std::
 			Triangle tri = trimesh[i].triangles[j];
 			tri += location;
 			triangles.emplace_back(tri);
+
+			//also append to pick index buffer + ownership in the same order
+			mesh->pickIndices.push_back(base + tri.a);
+			mesh->pickIndices.push_back(base + tri.b);
+			mesh->pickIndices.push_back(base + tri.c);
+
+			//append ownership information
+			mesh->triOwners.push_back({ownerWall, ownerPoly});
 		}
 		location += converted_vertices[i].size();
 	}
@@ -260,7 +278,7 @@ bool PolyMesh::CreateMesh(MeshObject *mesh, const std::string &name, const std::
 	return true;
 }
 
-bool PolyMesh::CreateMesh(MeshObject *mesh, const std::string &name, const std::string &material, PolygonSet &vertices, std::vector<std::vector<Vector2>> &uvMap, GeometrySet &geometry, std::vector<Triangle> &triangles, PolygonSet &converted_vertices, Real tw, Real th, bool convert_vertices)
+bool PolyMesh::CreateMesh(MeshObject *mesh, Wall* ownerWall, Polygon* ownerPoly, const std::string &name, const std::string &material, PolygonSet &vertices, std::vector<std::vector<Vector2>> &uvMap, GeometrySet &geometry, std::vector<Triangle> &triangles, PolygonSet &converted_vertices, Real tw, Real th, bool convert_vertices)
 {
 	//create custom geometry, apply a texture map and material, and return the created submesh
 	//tw and th are only used when overriding texel map
@@ -278,6 +296,16 @@ bool PolyMesh::CreateMesh(MeshObject *mesh, const std::string &name, const std::
 	}
 	else
 		converted_vertices = vertices;
+
+	//append to flattened pick buffers
+	uint32_t base = static_cast<uint32_t>(mesh->pickPositions.size());
+	for (size_t i = 0; i < converted_vertices.size(); ++i)
+	{
+		for (const auto& p : converted_vertices[i])
+		{
+			mesh->pickPositions.emplace_back(p); //remote space
+		}
+	}
 
 	//triangulate mesh
 	TriangleIndices *trimesh = new TriangleIndices[converted_vertices.size()];
@@ -333,6 +361,14 @@ bool PolyMesh::CreateMesh(MeshObject *mesh, const std::string &name, const std::
 			Triangle tri = trimesh[i].triangles[j];
 			tri += location;
 			triangles.emplace_back(tri);
+
+			//also append to pick index buffer + ownership in the same order
+			mesh->pickIndices.push_back(base + tri.a);
+			mesh->pickIndices.push_back(base + tri.b);
+			mesh->pickIndices.push_back(base + tri.c);
+
+			//append ownership information
+			mesh->triOwners.push_back({ownerWall, ownerPoly});
 		}
 		location += converted_vertices[i].size();
 	}
@@ -2621,6 +2657,70 @@ void PolyMesh::SplitWithPlaneUV(int axis, const GeometryArray &orig, GeometryArr
 		polyLE.clear();
 	if (polyGE.size() < 3)
 		polyGE.clear();
+}
+
+// Two-sided, double-precision Möller–Trumbore
+bool PolyMesh::IntersectRayTri(const Vector3& ro, const Vector3& rd, const Vector3& a, const Vector3& b, const Vector3& c, double& t, double& u, double& v)
+{
+    const Vector3 ab = b - a;
+    const Vector3 ac = c - a;
+    const Vector3 p  = rd.crossProduct(ac);
+    const Real det = static_cast<double>(ab.dotProduct(p));
+
+    //two-sided: if nearly zero, the ray is parallel
+    if (std::abs(det) < 1e-12)
+		return false;
+
+    const Real invDet = 1.0 / det;
+    const Vector3 s = ro - a;
+    u = static_cast<Real>(s.dotProduct(p)) * invDet;
+    if (u < -1e-8 || u > 1.0 + 1e-8)
+		return false;
+
+    const Vector3 q = s.crossProduct(ab);
+    v = static_cast<Real>(rd.dotProduct(q)) * invDet;
+    if (v < -1e-8 || (u + v) > 1.0 + 1e-8)
+		return false;
+
+    t = static_cast<Real>(ac.dotProduct(q)) * invDet;
+		return t > 1e-8;
+}
+
+Wall* PolyMesh::FindWallIntersect_Tri(MeshObject* mesh, const Vector3& start, const Vector3& end, Vector3& isect, Real& distance, Vector3& normal)
+{
+    const Vector3 ro = start;
+    const Vector3 rd = (end - start).normalisedCopy();
+    Real bestT = std::numeric_limits<double>::infinity();
+    int bestTri = -1;
+
+    const auto& pos = mesh->pickPositions;
+    const auto& idx = mesh->pickIndices;
+
+    for (size_t i = 0; i < idx.size(); i += 3) {
+        const Vector3& a = pos[idx[i + 0]];
+        const Vector3& b = pos[idx[i + 1]];
+        const Vector3& c = pos[idx[i + 2]];
+        Real t, u, v;
+        if (IntersectRayTri(ro, rd, a,b,c, t,u,v)) {
+            if (t < bestT)
+			{
+                bestT = t;
+                bestTri = static_cast<int>(i / 3);
+                // compute normal in the same space
+                normal = (b - a).crossProduct(c - a).normalisedCopy();
+                // Two-sided: make normal face the ray (optional)
+                if (normal.dotProduct(rd) > 0)
+					normal = -normal;
+            }
+        }
+    }
+
+    if (bestTri < 0)
+		return 0;
+
+    isect = ro + rd * static_cast<Real>(bestT);
+    distance = (isect - ro).length();
+    return mesh->triOwners[bestTri].wall; // deterministic ownership
 }
 
 }

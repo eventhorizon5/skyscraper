@@ -107,6 +107,16 @@ public:
 	std::string Meshname; //name of loaded Ogre mesh (used for primitives)
 	bool model_loaded; //true if a model was loaded successfully
 
+	struct TriOwner
+	{
+		Wall* wall;      //owning wall
+		Polygon* poly;   //owning polygon
+	};
+
+	std::vector<Vector3>   pickPositions; //flattened positions
+	std::vector<uint32_t>  pickIndices;   //3 indices per triangle
+	std::vector<TriOwner>  triOwners;     //size == pickIndices.size() / 3
+
 private:
 	bool enabled;
 	bool is_physical;
