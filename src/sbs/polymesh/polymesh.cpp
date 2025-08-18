@@ -2696,12 +2696,14 @@ MeshObject::TriOwner PolyMesh::FindWallIntersect_Tri(MeshObject* mesh, const Vec
     const auto& pos = mesh->pickPositions;
     const auto& idx = mesh->pickIndices;
 
-    for (size_t i = 0; i < idx.size(); i += 3) {
+    for (size_t i = 0; i < idx.size(); i += 3)
+	{
         const Vector3& a = pos[idx[i + 0]];
         const Vector3& b = pos[idx[i + 1]];
         const Vector3& c = pos[idx[i + 2]];
         Real t, u, v;
-        if (IntersectRayTri(ro, rd, a,b,c, t,u,v)) {
+        if (IntersectRayTri(ro, rd, a,b,c, t,u,v))
+		{
             if (t < bestT)
 			{
                 bestT = t;

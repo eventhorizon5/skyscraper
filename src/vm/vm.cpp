@@ -313,6 +313,7 @@ void VM::SetActiveEngine(int number, bool switch_engines, bool force)
 	if (switch_engines == true && state_set == true && running == true)
 		active_engine->SetCameraState(state, false);
 
+	//apply camera state after reloading
 	if (engine->was_reloaded == true)
 		active_engine->SetCameraState(false);
 

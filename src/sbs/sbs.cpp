@@ -2767,7 +2767,7 @@ bool SBS::HitBeam(const Ray &ray, Real max_distance, MeshObject *&mesh, Wall *&w
     //hit position — keep space consistent
     hit_position = ToLocal(callback.getCollisionPoint());
 
-    //wall resolution — short-term: use same-space ray; long-term: triangle→wall map
+    //wall resolution
     Vector3 rs = rays.engine.getOrigin();
     Vector3 re = rays.engine.getPoint(max_distance);
 
