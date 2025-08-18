@@ -1541,7 +1541,7 @@ Vector2 PolyMesh::GetExtents(PolyArray &varray, int coord, bool flip_z)
 	return Vector2(esmall, ebig);
 }
 
-void PolyMesh::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool cutfloors, int checkwallnumber, bool reset_check)
+void PolyMesh::CutNew(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool cutfloors, int checkwallnumber, bool reset_check)
 {
 	//cuts a rectangular hole in the polygons within the specified range
 
@@ -1841,7 +1841,7 @@ void PolyMesh::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool c
 	}
 }
 
-void PolyMesh::CutNew(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool cutfloors, int checkwallnumber, bool reset_check)
+void PolyMesh::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool cutfloors, int checkwallnumber, bool reset_check)
 {
 	//cuts a rectangular hole in the polygons within the specified range
 
