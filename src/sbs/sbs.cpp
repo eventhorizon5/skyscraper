@@ -2702,54 +2702,6 @@ int SBS::GetRevolvingDoorCount()
 	return (int)RevolvingDoorArray.size();
 }
 
-/*bool SBS::HitBeam(const Ray &ray, Real max_distance, MeshObject *&mesh, Wall *&wall, Vector3 &hit_position)
-{
-	//use a given ray and distance, and return the nearest hit mesh and if applicable, wall object
-	//note that the ray's origin and direction need to be in engine-relative values
-
-	//create a new ray that has absolute positioning, for engine offsets
-	Ray ray2 (ToRemote(GetUtility()->ToGlobal(ToLocal(ray.getOrigin()))), GetOrientation() * ray.getDirection());
-
-	//get a collision callback from Bullet
-	OgreBulletCollisions::CollisionClosestRayResultCallback callback (ray2, mWorld, max_distance);
-
-	//check for collision
-	mWorld->launchRay(callback);
-
-	//exit if no collision
-	if (callback.doesCollide() == false)
-		return false;
-
-	//get collided collision object
-	OgreBulletCollisions::Object* object = callback.getCollidedObject();
-
-	if (!object)
-		return false;
-
-	//get name of collision object's grandparent scenenode (which is the same name as the mesh object)
-	std::string meshname;
-	if (dynamic_cast<OgreBulletDynamics::WheeledRigidBody*>(object) == 0)
-		meshname = object->getRootNode()->getParentSceneNode()->getName();
-	else
-		meshname = object->getRootNode()->getChild(0)->getName(); //for vehicles, the child of the root node is the mesh
-
-	//get hit/intersection position
-	hit_position = ToLocal(callback.getCollisionPoint());
-
-	//get associated mesh object
-	mesh = FindMeshObject(meshname);
-	if (!mesh)
-		return false;
-
-	//get wall object, if any
-	Vector3 isect;
-	Real distance = 2000000000.;
-	Vector3 normal = Vector3::ZERO;
-	wall = GetPolyMesh()->FindWallIntersect(mesh, ray.getOrigin(), ray.getPoint(max_distance), isect, distance, normal);
-
-	return true;
-}*/
-
 struct PickRays {
     Ray global;  // global space
     Ray engine;  // engine space
@@ -2780,17 +2732,22 @@ bool SBS::HitBeam(const Ray &ray, Real max_distance, MeshObject *&mesh, Wall *&w
 	//use a given ray and distance, and return the nearest hit mesh and if applicable, wall object
 	//note that the ray's origin and direction need to be in engine-relative values
 
+	//create a ray for absolute (global) positioning, and another for engine offsets (engine-relative positioning)
 	const PickRays rays = MakePickRays(ray, this);
 	wall = 0;
 	polygon = 0;
 
-    //ray test in Bullet
+    //ray test in Bullet; get a collision callback
     OgreBulletCollisions::CollisionClosestRayResultCallback callback(rays.global, mWorld, max_distance);
+
+	//check for collision
     mWorld->launchRay(callback);
+
+	//exit if no collision
     if (!callback.doesCollide())
 		return false;
 
-    //resolve MeshObject
+    //get collided collision object
     OgreBulletCollisions::Object* object = callback.getCollidedObject();
     if (!object)
 		return false;
