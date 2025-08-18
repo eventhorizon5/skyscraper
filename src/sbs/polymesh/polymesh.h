@@ -78,7 +78,7 @@ public:
 	void ExtrudePolygon(PolyArray &polygon, Real thickness, PolygonSet &output_faces);
 	Vector2 GetExtents(PolyArray &varray, int coord, bool flip_z = false);
 	void Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool cutfloors, int checkwallnumber = 0, bool reset_check = true);
-	void CutNew(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool cutfloors, int checkwallnumber = 0, bool reset_check = true);
+	void CutOrig(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool cutfloors, int checkwallnumber = 0, bool reset_check = true);
 	void GetDoorwayExtents(MeshObject *mesh, int checknumber, PolyArray &polygon);
 	Vector3 GetPolygonDirection(PolyArray &polygon);
 	Vector2 GetEndPoint(const Vector2 &StartPoint, Real angle, Real distance);
@@ -89,7 +89,6 @@ public:
 	Vector3 ComputeNormal2(const PolyArray &vertices, Real &D);
 	void ResetDoorwayWalls();
 	Wall* AddDoorwayWalls(MeshObject* mesh, const std::string &wallname, const std::string &texture, Real tw, Real th);
-	void SplitWithPlaneUV_HalfOpen(int axis, const GeometryArray& orig, GeometryArray& low, GeometryArray& high, Real value, bool keepGreater);
 
 private:
 

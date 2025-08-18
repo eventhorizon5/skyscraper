@@ -1541,9 +1541,10 @@ Vector2 PolyMesh::GetExtents(PolyArray &varray, int coord, bool flip_z)
 	return Vector2(esmall, ebig);
 }
 
-void PolyMesh::CutNew(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool cutfloors, int checkwallnumber, bool reset_check)
+void PolyMesh::CutOrig(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool cutfloors, int checkwallnumber, bool reset_check)
 {
 	//cuts a rectangular hole in the polygons within the specified range
+	//this function only works on flat polygons
 
 	if (cutwalls == false && cutfloors == false)
 		return;
@@ -1844,6 +1845,7 @@ void PolyMesh::CutNew(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, boo
 void PolyMesh::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool cutfloors, int checkwallnumber, bool reset_check)
 {
 	//cuts a rectangular hole in the polygons within the specified range
+	//this function works on 3D shapes, and also preserves the UV texture mapping
 
 	if (!cutwalls && !cutfloors)
 		return;
@@ -1855,16 +1857,6 @@ void PolyMesh::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool c
 		std::swap(start.y, end.y);
 	if (start.z > end.z)
 		std::swap(start.z, end.z);
-
-	//convert to local space
-	/*Vector3 lstart = sbs->ToLocal(start);
-	Vector3 lend   = sbs->ToLocal(end);
-	if (lstart.x > lend.x)
-		std::swap(lstart.x, lend.x);
-	if (lstart.y > lend.y)
-		std::swap(lstart.y, lend.y);
-	if (lstart.z > lend.z)
-		std::swap(lstart.z, lend.z);*/
 
 	if (reset_check)
 	{
@@ -1887,10 +1879,10 @@ void PolyMesh::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool c
 		for (size_t i = 0; i + 2 < p.size(); ++i)
 		{
 			Vector3 n = (p[i + 1].vertex - p[i].vertex).crossProduct(p[i + 2].vertex - p[i + 1].vertex);
-			if (n.squaredLength() > EPS*EPS)
+			if (n.squaredLength() > EPS * EPS)
 				return n.normalisedCopy();
 		}
-		return Vector3(0,1,0);
+		return Vector3(0, 1, 0);
 	};
 
 	auto extentsAxis = [](const GeometryArray& p, int axis)->Vector2
@@ -1899,7 +1891,7 @@ void PolyMesh::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool c
 		Real mx = -mn;
 		for (const auto& v : p)
 		{
-			Real c = (axis==0) ? v.vertex.x : (axis==1) ? v.vertex.y : v.vertex.z;
+			Real c = (axis == 0) ? v.vertex.x : (axis == 1) ? v.vertex.y : v.vertex.z;
 			if (c < mn)
 				mn = c;
 			if (c > mx)
@@ -1911,7 +1903,7 @@ void PolyMesh::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool c
 	//2D early-outs for floors (XZ)
 	auto outside_all_floor = [&](const GeometryArray& p)->bool
 	{
-		bool xl=true,xr=true,zb=true,zf=true;
+		bool xl = true, xr = true, zb = true, zf = true;
 		for (const auto& v: p)
 		{
 			const Real x = v.vertex.x, z = v.vertex.z;
@@ -1938,7 +1930,7 @@ void PolyMesh::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool c
 	//3D early-outs for walls (use full AABB)
 	auto outside_all_wall = [&](const GeometryArray& p)->bool
 	{
-		bool xl=true, xr=true, yl=true, yh=true, zb=true, zf=true;
+		bool xl = true, xr = true, yl = true, yh = true, zb = true, zf = true;
 		for (const auto& v: p)
 		{
 			const Real x = v.vertex.x, y = v.vertex.y, z = v.vertex.z;
@@ -2056,25 +2048,21 @@ void PolyMesh::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool c
 			{
 				// Floors/ceilings: split X then Z (ignore Y)
 				// left of start.x
-				//SplitWithPlaneUV_HalfOpen(0, work, a, b, lstart.x, true);
 				SplitWithPlaneUV(0, work, a, b, start.x);
 				emit(a);
 				work.swap(b); // keep >= start.x
 
 				// right of end.x
-				//SplitWithPlaneUV_HalfOpen(0, work, a, b, lend.x, false);
 				SplitWithPlaneUV(0, work, a, b, end.x);
 				emit(b);
 				work.swap(a); // keep <= end.x
 
 				// back of start.z
-				//SplitWithPlaneUV_HalfOpen(2, work, a, b, lstart.z, true);
 				SplitWithPlaneUV(2, work, a, b, start.z);
 				emit(a);
 				work.swap(b); // keep >= start.z
 
 				// front of end.z
-				//SplitWithPlaneUV_HalfOpen(2, work, a, b, lend.z, false);
 				SplitWithPlaneUV(2, work, a, b, end.z);
 				emit(b);
 				work.swap(a); // keep <= end.z
@@ -2564,101 +2552,6 @@ void PolyMesh::SplitWithPlaneUV(int axis, const GeometryArray &orig, GeometryArr
 		polyLE.clear();
 	if (polyGE.size() < 3)
 		polyGE.clear();
-}
-
-void PolyMesh::SplitWithPlaneUV_HalfOpen(int axis, const GeometryArray& orig, GeometryArray& low, GeometryArray& high, Real value, bool keepGreater)
-{
-	// On-plane verts go ONLY to the kept "work" side.
-	// keepGreater=true  -> kept side is >= plane (on-plane -> high)
-	// keepGreater=false -> kept side is <= plane (on-plane -> low)
-
-	low.clear();
-	high.clear();
-	const Real EPS = SMALL_EPSILON;
-
-	auto coord=[&](const Vector3& v)
-	{
-		return axis==0 ? v.x : axis==1 ? v.y : v.z;
-	};
-
-	auto sign =[&](Real d)
-	{
-		if (std::abs(d) <= EPS)
-			return 0;
-		return d < 0 ? -1:+1;
-	};
-
-	auto push =[&](GeometryArray& p, const Geometry& g)
-	{
-		if (!p.empty() && (g.vertex - p.back().vertex).squaredLength() <= EPS * EPS)
-			return;
-		p.emplace_back(g);
-	};
-
-	const int onPlaneTo = keepGreater ? +1 : -1;
-	if (orig.size() < 2)
-		return;
-
-	Geometry prev = orig.back();
-	Real dPrev = coord(prev.vertex) - value;
-	int  sPrev = sign(dPrev);
-	if (sPrev == 0)
-		sPrev = onPlaneTo;
-
-	for (size_t i = 0; i < orig.size(); ++i)
-	{
-		Geometry cur = orig[i];
-		Real dCur = coord(cur.vertex) - value;
-		int  sCur = sign(dCur);
-		if (sCur == 0)
-			sCur = onPlaneTo;
-
-		//crossing -> add intersection to both
-		if ((sPrev < 0 && sCur > 0) || (sPrev > 0 && sCur < 0))
-		{
-			Real denom = (dPrev - dCur);
-			if (std::abs(denom) <= EPS)
-				denom = (denom >= 0 ? EPS : -EPS);
-			Real t = dPrev / denom;
-			if (t < 0)
-				t = 0;
-			if (t > 1)
-				t = 1;
-
-			Geometry I;
-			I.vertex = prev.vertex + (cur.vertex - prev.vertex) * t;
-			I.texel  = prev.texel  + (cur.texel  - prev.texel ) * t;
-			I.normal = prev.normal + (cur.normal - prev.normal) * t;
-			push(low,  I);
-			push(high, I);
-		}
-
-		if (sCur < 0)
-			push(low, cur);
-		else if (sCur > 0)
-			push(high, cur);
-		else
-		{
-			// on-plane -> kept side only
-			if (onPlaneTo > 0)
-				push(high, cur);
-			else
-				push(low, cur);
-		}
-
-		prev = cur;
-		dPrev = dCur;
-		sPrev = sCur;
-	}
-
-	//drop closing duplicate
-	auto dropClose = [&](GeometryArray& p)
-	{
-		if (p.size() >= 2 && (p.front().vertex - p.back().vertex).squaredLength() <= EPS * EPS)
-			p.pop_back();
-	};
-	dropClose(low);
-	dropClose(high);
 }
 
 }
