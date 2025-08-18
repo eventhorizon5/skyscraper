@@ -1920,8 +1920,8 @@ void PolyMesh::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool c
 		for (const auto& v: p)
 		{
 			const Real x = v.vertex.x, z = v.vertex.z;
-			if (x < start.x - EPS || x > end.x + EPS ||
-				z < start.z - EPS || z > end.z + EPS)
+			if (x < start.x + EPS || x > end.x - EPS ||
+				z < start.z + EPS || z > end.z - EPS)
 				return false;
 		}
 		return true;
