@@ -1857,14 +1857,14 @@ void PolyMesh::CutNew(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, boo
 		std::swap(start.z, end.z);
 
 	//convert to local space
-	Vector3 lstart = sbs->ToLocal(start);
+	/*Vector3 lstart = sbs->ToLocal(start);
 	Vector3 lend   = sbs->ToLocal(end);
 	if (lstart.x > lend.x)
 		std::swap(lstart.x, lend.x);
 	if (lstart.y > lend.y)
 		std::swap(lstart.y, lend.y);
 	if (lstart.z > lend.z)
-		std::swap(lstart.z, lend.z);
+		std::swap(lstart.z, lend.z);*/
 
 	if (reset_check)
 	{
@@ -2056,22 +2056,26 @@ void PolyMesh::CutNew(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, boo
 			{
 				// Floors/ceilings: split X then Z (ignore Y)
 				// left of start.x
-				SplitWithPlaneUV_HalfOpen(0, work, a, b, lstart.x, true);
+				//SplitWithPlaneUV_HalfOpen(0, work, a, b, lstart.x, true);
+				SplitWithPlaneUV(0, work, a, b, start.x);
 				emit(a);
 				work.swap(b); // keep >= start.x
 
 				// right of end.x
-				SplitWithPlaneUV_HalfOpen(0, work, a, b, lend.x, false);
+				//SplitWithPlaneUV_HalfOpen(0, work, a, b, lend.x, false);
+				SplitWithPlaneUV(0, work, a, b, end.x);
 				emit(b);
 				work.swap(a); // keep <= end.x
 
 				// back of start.z
-				SplitWithPlaneUV_HalfOpen(2, work, a, b, lstart.z, true);
+				//SplitWithPlaneUV_HalfOpen(2, work, a, b, lstart.z, true);
+				SplitWithPlaneUV(2, work, a, b, start.z);
 				emit(a);
 				work.swap(b); // keep >= start.z
 
 				// front of end.z
-				SplitWithPlaneUV_HalfOpen(2, work, a, b, lend.z, false);
+				//SplitWithPlaneUV_HalfOpen(2, work, a, b, lend.z, false);
+				SplitWithPlaneUV(2, work, a, b, end.z);
 				emit(b);
 				work.swap(a); // keep <= end.z
 			}
