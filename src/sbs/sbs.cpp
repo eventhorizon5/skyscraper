@@ -2750,19 +2750,40 @@ int SBS::GetRevolvingDoorCount()
 	return true;
 }*/
 
+struct PickRays {
+    Ray global;  // global space
+    Ray engine;  // engine space
+};
+
+//build both rays at once from the Ogre camera ray
+static PickRays MakePickRays(const Ray& camRay, SBS* sbs)
+{
+    //start in Ogre camera space (camRay is Ogre/remote)
+
+    //engine space for polygon/triangle picking:
+    Ray engineRay(
+        sbs->ToRemote(sbs->ToLocal(camRay.getOrigin())),
+        sbs->GetOrientation().Inverse() * camRay.getDirection()
+    );
+
+    //global space for Bullet
+    Ray globalRay(
+        sbs->ToRemote(sbs->GetUtility()->ToGlobal(sbs->ToLocal(camRay.getOrigin()))),
+        sbs->GetOrientation() * camRay.getDirection()
+    );
+
+    return {globalRay, engineRay};
+}
+
 bool SBS::HitBeam(const Ray &ray, Real max_distance, MeshObject *&mesh, Wall *&wall, Vector3 &hit_position)
 {
 	//use a given ray and distance, and return the nearest hit mesh and if applicable, wall object
 	//note that the ray's origin and direction need to be in engine-relative values
 
-	// 0) Build a single, canonical ray (engine-relative) and use it everywhere
-    const Ray pickRay(
-        ToRemote(GetUtility()->ToGlobal(ToLocal(ray.getOrigin()))),
-        GetOrientation() * ray.getDirection()
-    );
+	const PickRays rays = MakePickRays(ray, this);
 
     //ray test in Bullet
-    OgreBulletCollisions::CollisionClosestRayResultCallback callback(pickRay, mWorld, max_distance);
+    OgreBulletCollisions::CollisionClosestRayResultCallback callback(rays.global, mWorld, max_distance);
     mWorld->launchRay(callback);
     if (!callback.doesCollide())
 		return false;
@@ -2788,8 +2809,8 @@ bool SBS::HitBeam(const Ray &ray, Real max_distance, MeshObject *&mesh, Wall *&w
     hit_position = ToLocal(callback.getCollisionPoint());
 
     //wall resolution — short-term: use same-space ray; long-term: triangle→wall map
-    Vector3 rs = pickRay.getOrigin();
-    Vector3 re = pickRay.getPoint(max_distance);
+    Vector3 rs = rays.engine.getOrigin();
+    Vector3 re = rays.engine.getPoint(max_distance);
 
 	//get wall object, if any
     Vector3 isect; Real distance = 2e9; Vector3 normal = Vector3::ZERO;
