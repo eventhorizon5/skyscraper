@@ -116,6 +116,7 @@ void EngineContext::Init(const EngineType type, EngineContext *parent, VM *vm, O
 	prepared = false;
 	NewEngine = true;
 	Paused = false;
+	was_reloaded = false;
 
 	//register this engine, and get it's instance number
 	instance = vm->RegisterEngine(this);
@@ -510,6 +511,7 @@ bool EngineContext::Start()
 	if (reloading == true)
 	{
 		reloading = false;
+		was_reloaded = true;
 		SetCameraState(*reload_state);
 	}
 
@@ -590,6 +592,17 @@ void EngineContext::SetCameraState(const CameraState &state, bool set_floor)
 
 	if (Simcore->camera)
 		Simcore->camera->SetCameraState(state, set_floor);
+}
+
+void EngineContext::SetCameraState(bool set_floor)
+{
+	//set camera state data
+
+	if (!Simcore || !reload_state)
+		return;
+
+	if (Simcore->camera)
+		Simcore->camera->SetCameraState(*reload_state, set_floor);
 }
 
 bool EngineContext::IsInside()

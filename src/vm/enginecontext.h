@@ -41,6 +41,7 @@ public:
 	bool Paused;
 	bool IsSystem;
 	EngineType type;
+	bool was_reloaded;
 
 	EngineContext(const EngineType type, EngineContext *parent, VM *vm, Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, const Vector3 &position = Vector3::ZERO, const Vector3 &rotation = Vector3::ZERO, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
 	EngineContext(const EngineType type, EngineContext *parent, VM *vm, Ogre::SceneManager* mSceneManager, const Vector3 &position = Vector3::ZERO, const Vector3 &rotation = Vector3::ZERO, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
@@ -68,6 +69,7 @@ public:
 	int GetNumber() { return instance; }
 	::SBS::CameraState GetCameraState();
 	void SetCameraState(const ::SBS::CameraState &state, bool set_floor = true);
+	void SetCameraState(bool set_floor);
 	bool IsInside();
 	bool IsInside(const Vector3 &position);
 	void DetachCamera(bool reset_building = false);

@@ -282,7 +282,7 @@ void VM::SetActiveEngine(int number, bool switch_engines, bool force)
 	CameraState state;
 	bool state_set = false;
 
-	if (active_engine && (engine->IsSystem == false || running == true))
+	if (active_engine && (engine->IsSystem == false || running == true) && engine->was_reloaded == false)
 	{
 		//get previous engine's camera state
 		if (switch_engines == true)
@@ -313,8 +313,13 @@ void VM::SetActiveEngine(int number, bool switch_engines, bool force)
 	if (switch_engines == true && state_set == true && running == true)
 		active_engine->SetCameraState(state, false);
 
+	if (engine->was_reloaded == true)
+		active_engine->SetCameraState(false);
+
 	//update mouse cursor for freelook mode
 	//frontend->GetWindow()->EnableFreelook(active_engine->GetSystem()->camera->Freelook); //FIXME
+
+	engine->was_reloaded = false;
 }
 
 bool VM::RunEngines(std::vector<EngineContext*> &newengines)
@@ -526,7 +531,7 @@ void VM::SwitchEngines()
 	//if the active engine was reloaded, try to reattach to that engine after load
 	if (active_engine->IsInside() == true && active_engine->IsCameraActive() == false && active_engine->Paused == false)
 	{
-		SetActiveEngine(active_engine->GetNumber());
+		SetActiveEngine(active_engine->GetNumber(), true);
 		return;
 	}
 
