@@ -2686,7 +2686,7 @@ bool PolyMesh::IntersectRayTri(const Vector3& ro, const Vector3& rd, const Vecto
 		return t > 1e-8;
 }
 
-Wall* PolyMesh::FindWallIntersect_Tri(MeshObject* mesh, const Vector3& start, const Vector3& end, Vector3& isect, Real& distance, Vector3& normal)
+MeshObject::TriOwner PolyMesh::FindWallIntersect_Tri(MeshObject* mesh, const Vector3& start, const Vector3& end, Vector3& isect, Real& distance, Vector3& normal)
 {
     const Vector3 ro = start;
     const Vector3 rd = (end - start).normalisedCopy();
@@ -2715,12 +2715,15 @@ Wall* PolyMesh::FindWallIntersect_Tri(MeshObject* mesh, const Vector3& start, co
         }
     }
 
+	MeshObject::TriOwner owner;
+	owner.poly = 0;
+	owner.wall = 0;
     if (bestTri < 0)
-		return 0;
+		return owner;
 
     isect = ro + rd * static_cast<Real>(bestT);
     distance = (isect - ro).length();
-    return mesh->triOwners[bestTri].wall; // deterministic ownership
+    return mesh->triOwners[bestTri]; // deterministic ownership
 }
 
 }

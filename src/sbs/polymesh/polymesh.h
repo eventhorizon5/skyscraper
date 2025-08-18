@@ -90,7 +90,7 @@ public:
 	void ResetDoorwayWalls();
 	Wall* AddDoorwayWalls(MeshObject* mesh, const std::string &wallname, const std::string &texture, Real tw, Real th);
 	bool IntersectRayTri(const Vector3& ro, const Vector3& rd, const Vector3& a, const Vector3& b, const Vector3& c, double& t, double& u, double& v);
-	Wall* FindWallIntersect_Tri(MeshObject* mesh, const Vector3& start, const Vector3& end, Vector3& isect, Real& distance, Vector3& normal);
+	MeshObject::TriOwner FindWallIntersect_Tri(MeshObject* mesh, const Vector3& start, const Vector3& end, Vector3& isect, Real& distance, Vector3& normal);
 
 private:
 

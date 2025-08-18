@@ -2775,12 +2775,14 @@ static PickRays MakePickRays(const Ray& camRay, SBS* sbs)
     return {globalRay, engineRay};
 }
 
-bool SBS::HitBeam(const Ray &ray, Real max_distance, MeshObject *&mesh, Wall *&wall, Vector3 &hit_position)
+bool SBS::HitBeam(const Ray &ray, Real max_distance, MeshObject *&mesh, Wall *&wall, Polygon *&polygon, Vector3 &hit_position)
 {
 	//use a given ray and distance, and return the nearest hit mesh and if applicable, wall object
 	//note that the ray's origin and direction need to be in engine-relative values
 
 	const PickRays rays = MakePickRays(ray, this);
+	wall = 0;
+	polygon = 0;
 
     //ray test in Bullet
     OgreBulletCollisions::CollisionClosestRayResultCallback callback(rays.global, mWorld, max_distance);
@@ -2814,7 +2816,9 @@ bool SBS::HitBeam(const Ray &ray, Real max_distance, MeshObject *&mesh, Wall *&w
 
 	//get wall object, if any
     Vector3 isect; Real distance = 2e9; Vector3 normal = Vector3::ZERO;
-    wall = GetPolyMesh()->FindWallIntersect_Tri(mesh, rs, re, isect, distance, normal);
+    MeshObject::TriOwner owner = GetPolyMesh()->FindWallIntersect_Tri(mesh, rs, re, isect, distance, normal);
+	wall = owner.wall;
+	polygon = owner.poly;
 
     return true;
 }

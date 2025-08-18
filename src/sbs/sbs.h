@@ -330,7 +330,7 @@ public:
 	int GetEscalatorCount();
 	int GetMovingWalkwayCount();
 	int GetRevolvingDoorCount();
-	bool HitBeam(const Ray &ray, Real max_distance, MeshObject *&mesh, Wall *&wall, Vector3 &hit_position);
+	bool HitBeam(const Ray &ray, Real max_distance, MeshObject *&mesh, Wall *&wall, Polygon *&polygon, Vector3 &hit_position);
 	void EnableRandomActivity(bool value);
 	void EnableMalfunctions(bool value);
 	SoundSystem* GetSoundSystem();
