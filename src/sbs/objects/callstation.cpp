@@ -69,7 +69,7 @@ CallStation::CallStation(Object *parent, int floornum, int number) : Object(pare
 	panel = 0;
 	controller = 0;
 	indicator = 0;
-	TimerDelay = 2;
+	TimerDelay = 3;
 	ShowDirection = true;
 
 	//create timer
