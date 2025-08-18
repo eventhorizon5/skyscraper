@@ -2108,16 +2108,16 @@ void PolyMesh::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool c
 					emit(b);
 					work.swap(a);
 				}
-
-				// Y (common)
-				SplitWithPlaneUV(1, work, a, b, start.y);
-				emit(a);
-				work.swap(b);
-
-				SplitWithPlaneUV(1, work, a, b, end.y);
-				emit(b);
-				work.swap(a);
 			}
+
+			// Y (common)
+			SplitWithPlaneUV(1, work, a, b, start.y);
+			emit(a);
+			work.swap(b);
+
+			SplitWithPlaneUV(1, work, a, b, end.y);
+			emit(b);
+			work.swap(a);
 
 			//'work' is the inside slab (hole) — drop it, but pass to doorway extents if needed
 			if (!work.empty())
