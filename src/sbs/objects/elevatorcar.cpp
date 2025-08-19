@@ -3615,6 +3615,7 @@ bool ElevatorCar::Input(const std::string& text)
 		UpdateKeypadIndicator(InputCache, false);
 
 		//start timeout timer
+		keypad_timer->Stop();
 		keypad_timer->Start(2000, true);
 
 		return true;
@@ -3635,6 +3636,7 @@ bool ElevatorCar::Input(const std::string& text)
 	}
 
 	//start timeout timer
+	keypad_timer->Stop();
 	keypad_timer->Start(TimerDelay * 1000.0f, true);
 
 	return true;
