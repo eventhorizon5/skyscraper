@@ -39,8 +39,9 @@ class LoadDialog: public wxDialog
 {
 	public:
 
-		LoadDialog(DebugPanel *root, EngineContext *parent_engine, wxWindow* parent,wxWindowID id=wxID_ANY,const wxPoint& pos=wxDefaultPosition,const wxSize& size=wxDefaultSize);
+		LoadDialog(DebugPanel *root, wxWindow* parent,wxWindowID id=wxID_ANY,const wxPoint& pos=wxDefaultPosition,const wxSize& size=wxDefaultSize);
 		virtual ~LoadDialog();
+		void SetEngineParent(EngineContext *parent);
 
 		//(*Declarations(LoadDialog)
 		wxButton* bLoad;

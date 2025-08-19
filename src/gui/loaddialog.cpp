@@ -77,7 +77,7 @@ BEGIN_EVENT_TABLE(LoadDialog,wxDialog)
 	//*)
 END_EVENT_TABLE()
 
-LoadDialog::LoadDialog(DebugPanel *root, EngineContext *parent_engine, wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxSize& size)
+LoadDialog::LoadDialog(DebugPanel *root, wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxSize& size)
 {
 	//(*Initialize(LoadDialog)
 	wxBoxSizer* BoxSizer1;
@@ -218,8 +218,6 @@ LoadDialog::LoadDialog(DebugPanel *root, EngineContext *parent_engine, wxWindow*
 	chkCutBuildings->SetValue(vm->CutBuildings);
 	chkCutExternal->SetValue(vm->CutExternal);
 	chkCutFloors->SetValue(vm->CutFloors);
-	if (parent_engine)
-		txtParent->SetValue(SBS::ToString(parent_engine->GetNumber()));
 }
 
 LoadDialog::~LoadDialog()
@@ -293,6 +291,12 @@ void LoadDialog::On_bLoad_Click(wxCommandEvent& event)
 	vm->Load(false, false, filename, parent_engine, position, rot, min, max);
 
 	this->Close();
+}
+
+void LoadDialog::SetEngineParent(EngineContext *parent)
+{
+	if (parent)
+		txtParent->SetValue(SBS::ToString(parent->GetNumber()));
 }
 
 }

@@ -326,8 +326,9 @@ void EngineManager::On_bLoad_Click(wxCommandEvent& event)
 	engine = panel->GetRoot()->GetEngine(selection);
 
 	if (!loader)
-		loader = new LoadDialog(panel, engine, this, -1);
+		loader = new LoadDialog(panel, this, -1);
 
+	loader->SetEngineParent(engine);
 	loader->CenterOnScreen();
 	loader->Show();
 }
