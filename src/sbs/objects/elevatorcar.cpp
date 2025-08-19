@@ -140,7 +140,7 @@ ElevatorCar::ElevatorCar(Elevator *parent, int number) : Object(parent)
 	MessageOnStart = false;
 	MessageOnClose = false;
 	indicator = 0;
-	TimerDelay = 2;
+	TimerDelay = 2.5;
 	reverb = 0;
 
 	std::string name = parent->GetName() + ":Car " + ToString(number);
@@ -3616,7 +3616,7 @@ bool ElevatorCar::Input(const std::string& text)
 
 		//start timeout timer
 		keypad_timer->Stop();
-		keypad_timer->Start(2000, true);
+		keypad_timer->Start(TimerDelay * 1000.0f, true);
 
 		return true;
 	}
