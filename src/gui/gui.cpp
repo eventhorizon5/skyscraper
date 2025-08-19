@@ -332,7 +332,7 @@ void GUI::ShowControlReference()
 void GUI::ShowLoadDialog()
 {
 	if (!loaddialog)
-		loaddialog = new LoadDialog(dpanel, vm->GetParent(), -1);
+		loaddialog = new LoadDialog(dpanel, vm->GetActiveEngine(), vm->GetParent(), -1);
 	loaddialog->CenterOnScreen();
 	loaddialog->Show();
 }

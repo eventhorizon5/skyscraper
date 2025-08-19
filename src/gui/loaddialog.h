@@ -39,7 +39,7 @@ class LoadDialog: public wxDialog
 {
 	public:
 
-		LoadDialog(DebugPanel *root, wxWindow* parent,wxWindowID id=wxID_ANY,const wxPoint& pos=wxDefaultPosition,const wxSize& size=wxDefaultSize);
+		LoadDialog(DebugPanel *root, EngineContext *parent_engine, wxWindow* parent,wxWindowID id=wxID_ANY,const wxPoint& pos=wxDefaultPosition,const wxSize& size=wxDefaultSize);
 		virtual ~LoadDialog();
 
 		//(*Declarations(LoadDialog)
@@ -120,6 +120,7 @@ class LoadDialog: public wxDialog
 		//*)
 
 		DebugPanel *panel;
+		EngineContext *parent_engine;
 
 		DECLARE_EVENT_TABLE()
 };

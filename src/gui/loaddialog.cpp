@@ -72,7 +72,7 @@ BEGIN_EVENT_TABLE(LoadDialog,wxDialog)
 	//*)
 END_EVENT_TABLE()
 
-LoadDialog::LoadDialog(DebugPanel *root, wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxSize& size)
+LoadDialog::LoadDialog(DebugPanel *root, EngineContext *parent_engine, wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxSize& size)
 {
 	//(*Initialize(LoadDialog)
 	wxBoxSizer* BoxSizer1;
@@ -200,6 +200,7 @@ LoadDialog::LoadDialog(DebugPanel *root, wxWindow* parent,wxWindowID id,const wx
 	Connect(ID_bLoad,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&LoadDialog::On_bLoad_Click);
 	//*)
 	panel = root;
+	this->parent_engine = parent_engine;
 
 	//set cut options
 	VM *vm = panel->GetRoot();
@@ -224,6 +225,9 @@ void LoadDialog::On_bSelect_Click(wxCommandEvent& event)
 
 void LoadDialog::On_bLoad_Click(wxCommandEvent& event)
 {
+	if (!parent_engine)
+		return;
+
 	Vector3 position, min, max;
 	Real rotation;
 
@@ -273,7 +277,7 @@ void LoadDialog::On_bLoad_Click(wxCommandEvent& event)
 	vm->CutFloors = chkCutFloors->GetValue();
 
 	Vector3 rot (0, rotation, 0);
-	vm->Load(false, false, filename, vm->GetActiveEngine(), position, rot, min, max);
+	vm->Load(false, false, filename, parent_engine, position, rot, min, max);
 
 	this->Close();
 }

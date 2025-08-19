@@ -319,7 +319,7 @@ bool CallStation::Input(const std::string &text)
 		return true;
 	}
 
-	//start timeout timer
+	//restart timeout timer
 	timer->Stop();
 	timer->Start(TimerDelay * 1000.0f, true);
 
