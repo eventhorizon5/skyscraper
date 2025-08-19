@@ -191,6 +191,7 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 	//Input8
 	//Input9
 	//Input0
+	//InputA - Z
 	//InputMinus
 	//InputStar
 	//InputBackspace
@@ -214,6 +215,7 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 	//InputMinus
 	//InputStar
 	//InputBackspace
+	//InputA - Z
 	//Up
 	//Down
 	//PressUp
@@ -702,6 +704,58 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 			return car->Input("*");
 		if (command_name == "inputbackspace")
 			return car->Input("<");
+		if (command_name == "inputa")
+			return car->Input("A");
+		if (command_name == "inputb")
+			return car->Input("B");
+		if (command_name == "inputc")
+			return car->Input("C");
+		if (command_name == "inputd")
+			return car->Input("D");
+		if (command_name == "inpute")
+			return car->Input("E");
+		if (command_name == "inputf")
+			return car->Input("F");
+		if (command_name == "inputg")
+			return car->Input("G");
+		if (command_name == "inputh")
+			return car->Input("H");
+		if (command_name == "inputi")
+			return car->Input("I");
+		if (command_name == "inputj")
+			return car->Input("J");
+		if (command_name == "inputk")
+			return car->Input("K");
+		if (command_name == "inputl")
+			return car->Input("L");
+		if (command_name == "inputm")
+			return car->Input("M");
+		if (command_name == "inputn")
+			return car->Input("N");
+		if (command_name == "inputo")
+			return car->Input("O");
+		if (command_name == "inputp")
+			return car->Input("P");
+		if (command_name == "inputq")
+			return car->Input("Q");
+		if (command_name == "inputr")
+			return car->Input("R");
+		if (command_name == "inputs")
+			return car->Input("S");
+		if (command_name == "inputt")
+			return car->Input("T");
+		if (command_name == "inputu")
+			return car->Input("U");
+		if (command_name == "inputv")
+			return car->Input("V");
+		if (command_name == "inputw")
+			return car->Input("W");
+		if (command_name == "inputx")
+			return car->Input("X");
+		if (command_name == "inputy")
+			return car->Input("Y");
+		if (command_name == "inputz")
+			return car->Input("Z");
 	}
 
 	//if parent is a call station, get parent floor object
@@ -759,6 +813,58 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 			return callstation->Press(true);
 		if (command_name == "pressdown")
 			return callstation->Press(false);
+		if (command_name == "inputa")
+			return callstation->Input("A");
+		if (command_name == "inputb")
+			return callstation->Input("B");
+		if (command_name == "inputc")
+			return callstation->Input("C");
+		if (command_name == "inputd")
+			return callstation->Input("D");
+		if (command_name == "inpute")
+			return callstation->Input("E");
+		if (command_name == "inputf")
+			return callstation->Input("F");
+		if (command_name == "inputg")
+			return callstation->Input("G");
+		if (command_name == "inputh")
+			return callstation->Input("H");
+		if (command_name == "inputi")
+			return callstation->Input("I");
+		if (command_name == "inputj")
+			return callstation->Input("J");
+		if (command_name == "inputk")
+			return callstation->Input("K");
+		if (command_name == "inputl")
+			return callstation->Input("L");
+		if (command_name == "inputm")
+			return callstation->Input("M");
+		if (command_name == "inputn")
+			return callstation->Input("N");
+		if (command_name == "inputo")
+			return callstation->Input("O");
+		if (command_name == "inputp")
+			return callstation->Input("P");
+		if (command_name == "inputq")
+			return callstation->Input("Q");
+		if (command_name == "inputr")
+			return callstation->Input("R");
+		if (command_name == "inputs")
+			return callstation->Input("S");
+		if (command_name == "inputt")
+			return callstation->Input("T");
+		if (command_name == "inputu")
+			return callstation->Input("U");
+		if (command_name == "inputv")
+			return callstation->Input("V");
+		if (command_name == "inputw")
+			return callstation->Input("W");
+		if (command_name == "inputx")
+			return callstation->Input("X");
+		if (command_name == "inputy")
+			return callstation->Input("Y");
+		if (command_name == "inputz")
+			return callstation->Input("Z");
 	}
 
 	//escalator-specific commands
