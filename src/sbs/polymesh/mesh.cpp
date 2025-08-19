@@ -1281,4 +1281,93 @@ void MeshObject::CreateBoundingBox()
 	}
 }
 
+void MeshObject::RemoveTriOwner(Wall *wall)
+{
+	//remove a TriOwner by wall object
+
+	for (size_t i = 0; i < triOwners.size(); /*no++*/)
+	{
+		if (triOwners[i].wall == wall)
+		{
+			RemoveTriOwnerFast(i);
+			// Don’t increment i — we just moved the last tri here
+		}
+		else
+		{
+			++i;
+		}
+	}
+}
+
+void MeshObject::RemoveTriOwner(Polygon *poly)
+{
+	//remove a TriOwner by polygon object
+
+	for (size_t i = 0; i < triOwners.size(); /*no++*/)
+	{
+		if (triOwners[i].poly == poly)
+		{
+			RemoveTriOwnerFast(i);
+			// Don’t increment i — we just moved the last tri here
+		}
+		else
+		{
+			++i;
+		}
+	}
+}
+
+void MeshObject::AddTriOwner(Wall *wall, Polygon *poly)
+{
+	//add a triangle owner
+
+	uint32_t base = static_cast<uint32_t>(pickPositions.size() - 3);
+
+	pickIndices.push_back(base + 0);
+	pickIndices.push_back(base + 1);
+	pickIndices.push_back(base + 2);
+
+	triOwners.push_back({wall, poly});
+}
+
+void MeshObject::RemoveTriOwner(size_t triIndex)
+{
+	//remove a TriOwner by triangle index
+
+	size_t idxOffset = triIndex * 3;
+
+	//erase the three indices
+	pickIndices.erase(pickIndices.begin() + idxOffset, pickIndices.begin() + idxOffset + 3);
+
+	//erase the owner
+	triOwners.erase(triOwners.begin() + triIndex);
+}
+
+void MeshObject::RemoveTriOwnerFast(size_t triIndex)
+{
+	//remove a TriOwner by triangle index, ignoring triangle order
+
+	size_t triCount = triOwners.size();
+	if (triIndex >= triCount)
+		return;
+
+	size_t idxOffset = triIndex * 3;
+	size_t lastIdxOffset = (triCount - 1) * 3;
+
+	if (triIndex != triCount - 1)
+	{
+		//move last tri’s indices into this slot
+		pickIndices[idxOffset + 0] = pickIndices[lastIdxOffset + 0];
+		pickIndices[idxOffset + 1] = pickIndices[lastIdxOffset + 1];
+		pickIndices[idxOffset + 2] = pickIndices[lastIdxOffset + 2];
+
+		//move last triOwner
+		triOwners[triIndex] = triOwners.back();
+	}
+
+	//pop last tri
+	pickIndices.resize(pickIndices.size() - 3);
+	triOwners.pop_back();
+}
+
 }

@@ -93,6 +93,11 @@ public:
 	void SetMaterial(const std::string& material);
 	void EnablePhysics(bool value, Real restitution = 0, Real friction = 0, Real mass = 0);
 	size_t GetSize();
+	void RemoveTriOwner(Wall *wall);
+	void RemoveTriOwner(Polygon *poly);
+	void RemoveTriOwner(size_t triIndex);
+	void RemoveTriOwnerFast(size_t triIndex);
+	void AddTriOwner(Wall *wall, Polygon *poly);
 
 	DynamicMesh *MeshWrapper; //dynamic mesh this mesh object uses
 	std::vector<Wall*> Walls; //associated wall (polygon container) objects
@@ -127,6 +132,7 @@ private:
 	bool LoadFromFile(const std::string &filename);
 	bool LoadColliderModel(Ogre::MeshPtr &collidermesh);
 	void CreateBoundingBox();
+
 	Ogre::MeshPtr collidermesh;
 	size_t size;
 };

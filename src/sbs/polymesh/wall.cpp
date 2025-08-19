@@ -73,6 +73,10 @@ Wall::~Wall()
 
 	//delete polygons
 	DeletePolygons(!sbs->FastDelete);
+
+	//remove the reference to this wall from the mesh's triangle owner list
+	if (sbs->FastDelete == false)
+		meshwrapper->RemoveTriOwner(this);
 }
 
 Polygon* Wall::AddQuad(const std::string &name, const std::string &texture, const Vector3 &v1, const Vector3 &v2, const Vector3 &v3, const Vector3 &v4, Real tw, Real th, bool autosize)
