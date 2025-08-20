@@ -51,6 +51,15 @@ namespace Ogre {
     constexpr static XrViewConfigurationType primaryViewConfigType{ XR_VIEW_CONFIGURATION_TYPE_PRIMARY_STEREO };
     XrEnvironmentBlendMode* GetEnvironmentBlendModes();
     xr::SpaceHandle& getAppSpace();
+    void InitializeControllers();
+
+    //controller data
+    XrActionSet actionSet;
+    XrSpace leftControllerSpace;
+    XrSpace rightControllerSpace;
+    XrAction poseActionLeft;
+    XrAction poseActionRight;
+    XrAction selectAction;
 
   private:
     std::unique_ptr<OpenXRInstance> m_xrInstance;
@@ -62,5 +71,6 @@ namespace Ogre {
 
     xr::SpaceHandle _appSpace;
     XrReferenceSpaceType _appSpaceType{ XR_REFERENCE_SPACE_TYPE_LOCAL };
+
   };
 }

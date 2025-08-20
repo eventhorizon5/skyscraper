@@ -75,6 +75,8 @@ namespace Ogre {
     // Choosing a reasonable depth range can help improve hologram visual quality.
     // Use reversed-Z (near > far) for more uniform Z resolution.
     // m_nearFar = { 20.f, 0.1f };
+
+    InitializeControllers();
   }
 
   const LUID OpenXRState::GetAdapterLUID() {
@@ -181,4 +183,108 @@ namespace Ogre {
     return _appSpace;
   }
 
+  void OpenXRState::InitializeControllers()
+  {
+    XrInstance instance = m_xrInstance->getHandle().Get();
+  
+    //create action set
+    XrActionSetCreateInfo actionSetInfo{XR_TYPE_ACTION_SET_CREATE_INFO};
+    strcpy(actionSetInfo.actionSetName, "gameplay");
+    strcpy(actionSetInfo.localizedActionSetName, "Gameplay");
+    actionSetInfo.priority = 0;
+    xrCreateActionSet(instance, &actionSetInfo, &actionSet);
+
+    {
+      //create pose action for left controller
+      XrPath leftHandPath;
+      xrStringToPath(instance, "/user/hand/left", &leftHandPath);
+      XrActionCreateInfo actionInfo{XR_TYPE_ACTION_CREATE_INFO};
+      actionInfo.actionType = XR_ACTION_TYPE_POSE_INPUT;
+      strcpy(actionInfo.actionName, "left_hand_pose");
+      strcpy(actionInfo.localizedActionName, "Left Hand Pose");
+      actionInfo.countSubactionPaths = 1;
+      XrPath subactionPathsLeft[1] = { leftHandPath };
+      actionInfo.subactionPaths = subactionPathsLeft;
+      xrCreateAction(actionSet, &actionInfo, &poseActionLeft);
+
+      //create space for left controller
+      XrActionSpaceCreateInfo spaceInfo{XR_TYPE_ACTION_SPACE_CREATE_INFO};
+      spaceInfo.action = poseActionLeft;
+      spaceInfo.subactionPath = leftHandPath;
+      spaceInfo.poseInActionSpace.orientation.w = 1.0f; // identity rotation
+      xrCreateActionSpace(_sessionHandle.Get(), &spaceInfo, &leftControllerSpace);
+    }
+
+    {
+      //create pose action for right controller
+      XrPath rightHandPath;
+      xrStringToPath(instance, "/user/hand/right", &rightHandPath);
+      XrActionCreateInfo actionInfo{XR_TYPE_ACTION_CREATE_INFO};
+      actionInfo.actionType = XR_ACTION_TYPE_POSE_INPUT;
+      strcpy(actionInfo.actionName, "right_hand_pose");
+      strcpy(actionInfo.localizedActionName, "Right Hand Pose");
+      actionInfo.countSubactionPaths = 1;
+      XrPath subactionPathsLeft[1] = { rightHandPath };
+      actionInfo.subactionPaths = subactionPathsLeft;
+      xrCreateAction(actionSet, &actionInfo, &poseActionRight);
+
+      //create space for right controller
+      {
+        XrActionSpaceCreateInfo spaceInfo{XR_TYPE_ACTION_SPACE_CREATE_INFO};
+        spaceInfo.action = poseActionRight;
+        spaceInfo.subactionPath = rightHandPath;
+        spaceInfo.poseInActionSpace.orientation.w = 1.0f;
+        xrCreateActionSpace(_sessionHandle.Get(), &spaceInfo, &rightControllerSpace);
+      }
+    }
+
+    //select/trigger button
+    {
+      XrPath leftHandPath, rightHandPath;
+      xrStringToPath(instance, "/user/hand/left", &leftHandPath);
+      xrStringToPath(instance, "/user/hand/right", &rightHandPath);
+      XrPath subactionPathsBoth[2] = { leftHandPath, rightHandPath };
+      XrActionCreateInfo selectActionInfo{XR_TYPE_ACTION_CREATE_INFO};
+      selectActionInfo.actionType = XR_ACTION_TYPE_BOOLEAN_INPUT;
+      strcpy(selectActionInfo.actionName, "select_action");
+      strcpy(selectActionInfo.localizedActionName, "Select Action");
+      selectActionInfo.countSubactionPaths = 2;
+      selectActionInfo.subactionPaths = subactionPathsBoth;
+      XrAction selectAction;
+      xrCreateAction(actionSet, &selectActionInfo, &selectAction);
+    }
+
+    // Suggest bindings for Meta Quest (Oculus Touch)
+    {
+      XrPath interactionProfilePath;
+      xrStringToPath(instance, "/interaction_profiles/oculus/touch_controller", &interactionProfilePath);
+
+      XrPath leftHandPath, rightHandPath;
+      xrStringToPath(instance, "/user/hand/left", &leftHandPath);
+      xrStringToPath(instance, "/user/hand/right", &rightHandPath);
+
+      XrPath gripPosePath, triggerClickPath;
+      xrStringToPath(instance, "/input/grip/pose", &gripPosePath);
+      xrStringToPath(instance, "/input/trigger/click", &triggerClickPath);
+
+      std::vector<XrActionSuggestedBinding> bindings = {
+          {poseActionLeft, gripPosePath},
+          {poseActionRight, gripPosePath},
+          {selectAction, triggerClickPath},
+      };
+
+      //attach the action set to the session
+      XrInteractionProfileSuggestedBinding suggestedBindings{XR_TYPE_INTERACTION_PROFILE_SUGGESTED_BINDING};
+      suggestedBindings.interactionProfile = interactionProfilePath;
+      suggestedBindings.suggestedBindings = bindings.data();
+      suggestedBindings.countSuggestedBindings = (uint32_t)bindings.size();
+
+      xrSuggestInteractionProfileBindings(instance, &suggestedBindings);
+
+      XrSessionActionSetsAttachInfo attachInfo{XR_TYPE_SESSION_ACTION_SETS_ATTACH_INFO};
+      attachInfo.countActionSets = 1;
+      attachInfo.actionSets = &actionSet;
+      xrAttachSessionActionSets(_sessionHandle.Get(), &attachInfo);
+    }
+  }
 }

@@ -98,6 +98,7 @@ namespace Ogre {
     bool shouldRender() { return sessionReady() && mXrFrameState.shouldRender; }
 
     void ProcessOpenXREvents();
+    void ProcessControllers();
     void _startXrFrame();
     void _endXrFrame();
   };
@@ -415,6 +416,9 @@ namespace Ogre {
     mXrLayer = { XR_TYPE_COMPOSITION_LAYER_PROJECTION };
     mXrLayer.layerFlags = XR_COMPOSITION_LAYER_BLEND_TEXTURE_SOURCE_ALPHA_BIT;
     mXrLayers.push_back(reinterpret_cast<XrCompositionLayerBaseHeader*>(&mXrLayer));
+
+    ProcessControllers();
+
   }
 
   void OpenXRRenderWindow::_endXrFrame()
@@ -431,8 +435,55 @@ namespace Ogre {
 
     CHECK_XRCMD(xrEndFrame(mXrState->GetSession().Get(), &frameEndInfo));
   }
-}
 
+  void OpenXRRenderWindow::ProcessControllers()
+  {
+      //sync input actions
+      XrActiveActionSet activeActionSet{};
+      activeActionSet.actionSet = mXrState->actionSet;
+
+      XrActionsSyncInfo syncInfo{XR_TYPE_ACTIONS_SYNC_INFO};
+      syncInfo.countActiveActionSets = 1;
+      syncInfo.activeActionSets = &activeActionSet;
+
+      xrSyncActions(mXrState->GetSession().Get(), &syncInfo);
+
+      //poll left controller pose
+      XrSpaceLocation leftLocation{XR_TYPE_SPACE_LOCATION};
+      xrLocateSpace(mXrState->leftControllerSpace, mXrState->getAppSpace().Get(), mXrFrameState.predictedDisplayTime, &leftLocation);
+
+      if ((leftLocation.locationFlags & XR_SPACE_LOCATION_POSITION_VALID_BIT) &&
+        (leftLocation.locationFlags & XR_SPACE_LOCATION_ORIENTATION_VALID_BIT))
+      {
+          // Extract left controller pose
+          XrPosef pose = leftLocation.pose;
+          // Convert XrPosef to your math type and use it
+      }
+
+      //poll right controller pose
+      XrSpaceLocation rightLocation{XR_TYPE_SPACE_LOCATION};
+      xrLocateSpace(mXrState->rightControllerSpace, mXrState->getAppSpace().Get(), mXrFrameState.predictedDisplayTime, &rightLocation);
+
+      if ((rightLocation.locationFlags & XR_SPACE_LOCATION_POSITION_VALID_BIT) &&
+        (rightLocation.locationFlags & XR_SPACE_LOCATION_ORIENTATION_VALID_BIT))
+      {
+          // Extract right controller pose
+          XrPosef pose = rightLocation.pose;
+          // Convert XrPosef to your math type and use it
+      }
+
+      XrActionStateGetInfo getInfo{XR_TYPE_ACTION_STATE_GET_INFO};
+      getInfo.action = mXrState->selectAction;
+
+      XrActionStateBoolean state{XR_TYPE_ACTION_STATE_BOOLEAN};
+      xrGetActionStateBoolean(mXrState->GetSession().Get(), &getInfo, &state);
+
+      if (state.isActive && state.currentState)
+      {
+          // Trigger/button is pressed
+      }
+  }
+}
 Ogre::RenderWindow* CreateOpenXRRenderWindow(Ogre::RenderSystem* rsys)
 {
   Ogre::OpenXRRenderWindow* xrRenderWindow = new Ogre::OpenXRRenderWindow(rsys);
