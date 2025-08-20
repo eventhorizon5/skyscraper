@@ -22,7 +22,7 @@ target_include_directories(OgreProcedural
 )
 
 if(MSVC)
-  target_compile_options(OgreProcedural PRIVATE /W3 /permissive-)
+  target_compile_options(OgreProcedural PRIVATE /W3 /permissive- /MD)
 else()
   target_compile_options(OgreProcedural PRIVATE -Wall -Wextra -Wpedantic)
 endif()
