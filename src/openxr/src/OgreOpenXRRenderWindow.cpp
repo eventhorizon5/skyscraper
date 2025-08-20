@@ -36,7 +36,7 @@ std::vector<Ogre::Quaternion> XROrientation;
 
 static inline Ogre::Quaternion yawFromQuat(const Ogre::Quaternion& q)
 {
-    // Ogre forward is -Z. Project forward to XZ, compute yaw about +Y.
+    //ogre forward is -Z. Project forward to XZ, compute yaw about +Y.
     const Ogre::Vector3 fwd = q * Ogre::Vector3(0,0,-1);
     Ogre::Vector3 f = Ogre::Vector3(fwd.x, 0, fwd.z);
     if (!f.isZeroLength()) f.normalise();
@@ -234,7 +234,7 @@ void OpenXRRenderWindow::_beginUpdate()
         (Ogre::Real)vps[0].Pose.orientation.y,
         (Ogre::Real)vps[0].Pose.orientation.z);
 
-    // Convert to yaw-only so pitch/roll don’t affect movement
+    //convert to yaw-only so pitch/roll don’t affect movement
     mHeadYaw = yawFromQuat(hmdOriCenter);
 
     //compute head-center in app space from the two views (positions only)
@@ -276,7 +276,7 @@ void OpenXRRenderWindow::_beginUpdate()
 
     if (mNumberOfEyesAdded != 2) return;
 
-    // --- helpers to convert & rotate for the submitted layer poses ---
+    //helpers to convert & rotate for the submitted layer poses
     const auto toXr = [](const Ogre::Quaternion& q){
         return XrQuaternionf{ (float)q.x, (float)q.y, (float)q.z, (float)q.w };
     };
@@ -295,7 +295,7 @@ void OpenXRRenderWindow::_beginUpdate()
         return XrVector3f{ (float)ro.x,(float)ro.y,(float)ro.z };
     };
 
-    //drive the Ogre cameras: apply SAME yaw to orientation AND position
+    //drive the Ogre cameras: apply same yaw to orientation and position
     for (uint32_t k = 0; k < viewCount; ++k) {
         const auto& vpk = vps[k];
 
@@ -310,7 +310,7 @@ void OpenXRRenderWindow::_beginUpdate()
             (Ogre::Real)vpk.Pose.position.y,
             (Ogre::Real)vpk.Pose.position.z);
 
-        //eye position in APP space (like above for L/R):
+        //eye position in app space (like above for L/R):
         const Ogre::Vector3 eyePosApp(
             (Ogre::Real)vpk.Pose.position.x,
             (Ogre::Real)vpk.Pose.position.y,
@@ -536,9 +536,9 @@ void OpenXRRenderWindow::_beginUpdate()
       if ((leftLocation.locationFlags & XR_SPACE_LOCATION_POSITION_VALID_BIT) &&
         (leftLocation.locationFlags & XR_SPACE_LOCATION_ORIENTATION_VALID_BIT))
       {
-          // Extract left controller pose
+          //extract left controller pose
           XrPosef pose = leftLocation.pose;
-          // Convert XrPosef to your math type and use it
+          //convert XrPosef to your math type and use it
       }
 
       //poll right controller pose
@@ -548,9 +548,9 @@ void OpenXRRenderWindow::_beginUpdate()
       if ((rightLocation.locationFlags & XR_SPACE_LOCATION_POSITION_VALID_BIT) &&
         (rightLocation.locationFlags & XR_SPACE_LOCATION_ORIENTATION_VALID_BIT))
       {
-          // Extract right controller pose
+          //extract right controller pose
           XrPosef pose = rightLocation.pose;
-          // Convert XrPosef to your math type and use it
+          //convert XrPosef to your math type and use it
       }
 
       XrActionStateGetInfo getInfo{XR_TYPE_ACTION_STATE_GET_INFO};
@@ -559,7 +559,7 @@ void OpenXRRenderWindow::_beginUpdate()
       XrActionStateBoolean state{XR_TYPE_ACTION_STATE_BOOLEAN};
       xrGetActionStateBoolean(mXrState->GetSession().Get(), &getInfo, &state);
 
-      // Left hand
+      //left hand
       {
         int handIndex = 0;
         auto& state = gControllerStates[handIndex];
@@ -575,7 +575,7 @@ void OpenXRRenderWindow::_beginUpdate()
             state.orientation = Ogre::Quaternion(loc.pose.orientation.w, loc.pose.orientation.x, loc.pose.orientation.y, loc.pose.orientation.z);
         }
 
-        // Trigger
+        //trigger
         {
             auto& state = gControllerStates[handIndex];
             XrActionStateGetInfo getInfo{XR_TYPE_ACTION_STATE_GET_INFO};
@@ -588,7 +588,7 @@ void OpenXRRenderWindow::_beginUpdate()
             state.triggerPressed = (triggerState.isActive && triggerState.currentState);
         }
 
-        // Joystick
+        //joystick
         {
             auto& state = gControllerStates[handIndex];
             XrActionStateGetInfo getInfo{XR_TYPE_ACTION_STATE_GET_INFO};
@@ -613,7 +613,7 @@ void OpenXRRenderWindow::_beginUpdate()
         gControllerStates[0].joystickY = axisState.currentState.y;
       }
 
-      // Right hand
+      //right hand
       {
         int handIndex = 1;
         auto& state = gControllerStates[handIndex];
@@ -629,7 +629,7 @@ void OpenXRRenderWindow::_beginUpdate()
             state.orientation = Ogre::Quaternion(loc.pose.orientation.w, loc.pose.orientation.x, loc.pose.orientation.y, loc.pose.orientation.z);
         }
 
-        // Trigger
+        //trigger
         {
             XrActionStateGetInfo getInfo{XR_TYPE_ACTION_STATE_GET_INFO};
             getInfo.action = mXrState->selectAction;
@@ -641,7 +641,7 @@ void OpenXRRenderWindow::_beginUpdate()
             state.triggerPressed = (triggerState.isActive && triggerState.currentState);
         }
 
-        // Joystick
+        //joystick
         {
             XrActionStateGetInfo getInfo{XR_TYPE_ACTION_STATE_GET_INFO};
             getInfo.action = mXrState->thumbstickVector; // a VECTOR2F action
@@ -666,7 +666,7 @@ void OpenXRRenderWindow::_beginUpdate()
 
       }
 
-      // Integrate smooth body yaw from right stick X
+      //integrate smooth body yaw from right stick X
       double dt = 0.0;
       if (mPrevDisplayTime != 0)
           dt = double(mXrFrameState.predictedDisplayTime - mPrevDisplayTime) / 1e9;
@@ -694,13 +694,7 @@ void OpenXRRenderWindow::_beginUpdate()
       //local (camera) movement vector: X = right, Z = forward(-)
       Ogre::Vector3 localMove(lx, 0.f, -ly);
 
-      //heading mode:
-      //   body-relative:     heading = mBodyYaw
-      //   head-relative yaw: heading = mBodyYaw * yawFromQuat(headOri)
       Ogre::Quaternion heading = mBodyYaw * mHeadYaw;
-
-      //uncomment this if you want movement to follow head yaw.
-      //heading = mBodyYaw * yawFromQuat(cachedHmdOri);
 
       //rotate local vector into world/app space
       Ogre::Vector3 worldMove = heading * localMove;
@@ -713,7 +707,7 @@ void OpenXRRenderWindow::_beginUpdate()
 
       if (state.isActive && state.currentState)
       {
-          // Trigger/button is pressed
+          //trigger/button is pressed
       }
 
       if (mXrSessionState == XR_SESSION_STATE_FOCUSED)
