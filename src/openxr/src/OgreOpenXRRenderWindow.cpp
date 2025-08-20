@@ -109,6 +109,7 @@ namespace Ogre {
 
     Ogre::Quaternion mBodyYaw = Ogre::Quaternion::IDENTITY;
     Ogre::Vector3    mBodyPos = Ogre::Vector3::ZERO;
+    Ogre::Quaternion mHeadYaw = Ogre::Quaternion::IDENTITY;
     XrTime mPrevDisplayTime = 0; // to compute dt
 
     bool sessionReady() {
@@ -226,6 +227,34 @@ void OpenXRRenderWindow::_beginUpdate()
     mViewProjections->CalculateViewProjections(vps);
     const auto imageRect = swapchainL->getImageRect();
 
+    //cache HMD yaw (use either eye’s orientation; they are the same)
+    const Ogre::Quaternion hmdOriCenter(
+        (Ogre::Real)vps[0].Pose.orientation.w,
+        (Ogre::Real)vps[0].Pose.orientation.x,
+        (Ogre::Real)vps[0].Pose.orientation.y,
+        (Ogre::Real)vps[0].Pose.orientation.z);
+
+    // Convert to yaw-only so pitch/roll don’t affect movement
+    mHeadYaw = yawFromQuat(hmdOriCenter);
+
+    //compute head-center in app space from the two views (positions only)
+    const Ogre::Vector3 eyePosL(
+        (Ogre::Real)vps[0].Pose.position.x,
+        (Ogre::Real)vps[0].Pose.position.y,
+        (Ogre::Real)vps[0].Pose.position.z);
+
+    const Ogre::Vector3 eyePosR(
+        (Ogre::Real)vps[1].Pose.position.x,
+        (Ogre::Real)vps[1].Pose.position.y,
+        (Ogre::Real)vps[1].Pose.position.z);
+
+    //center of head (between eyes) in app space
+    const Ogre::Vector3 headCenterApp = (eyePosL + eyePosR) * 0.5f;
+
+    //world transform parts
+    const Ogre::Quaternion worldFromApp_R = mBodyYaw;     //rig yaw
+    const Ogre::Vector3    worldFromApp_T = mBodyPos;     //accumulated locomotion (in world space)
+
     //wire the layer views to the correct swapchains & rects
     mViewProjections->ProjectionLayerViews[0].subImage.swapchain = swapchainL->getColorSwapchain();
     mViewProjections->ProjectionLayerViews[1].subImage.swapchain = swapchainR->getColorSwapchain();
@@ -281,8 +310,22 @@ void OpenXRRenderWindow::_beginUpdate()
             (Ogre::Real)vpk.Pose.position.y,
             (Ogre::Real)vpk.Pose.position.z);
 
-        const Ogre::Quaternion finalOri = mBodyYaw * hmdOri;
-        const Ogre::Vector3    finalPos = (mBodyYaw * hmdPos) + mBodyPos;
+        //eye position in APP space (like above for L/R):
+        const Ogre::Vector3 eyePosApp(
+            (Ogre::Real)vpk.Pose.position.x,
+            (Ogre::Real)vpk.Pose.position.y,
+            (Ogre::Real)vpk.Pose.position.z);
+
+        //rotate *around the head center*, then translate the center
+        const Ogre::Vector3 eyeOffsetApp = eyePosApp - headCenterApp;
+        const Ogre::Vector3 finalPos =
+            (worldFromApp_R * eyeOffsetApp) +        // rotate the eye offset
+            (worldFromApp_R * headCenterApp) +       // rotate the center
+            worldFromApp_T;                          // then add locomotion
+
+        //const Ogre::Quaternion finalOri = mBodyYaw * hmdOri;
+        const Ogre::Quaternion finalOri = worldFromApp_R * hmdOri;
+        //const Ogre::Vector3    finalPos = (mBodyYaw * hmdPos) + mBodyPos;
 
         //build Ogre projection from OpenXR FOV
         xr::math::NearFar nf = { 0.1f, std::numeric_limits<float>::infinity() };
@@ -654,7 +697,7 @@ void OpenXRRenderWindow::_beginUpdate()
       //heading mode:
       //   body-relative:     heading = mBodyYaw
       //   head-relative yaw: heading = mBodyYaw * yawFromQuat(headOri)
-      Ogre::Quaternion heading = mBodyYaw;
+      Ogre::Quaternion heading = mBodyYaw * mHeadYaw;
 
       //uncomment this if you want movement to follow head yaw.
       //heading = mBodyYaw * yawFromQuat(cachedHmdOri);
