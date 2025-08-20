@@ -8,6 +8,8 @@ set (CMAKE_CXX_FLAGS "-DBT_USE_DOUBLE_PRECISION ${CMAKE_CXX_FLAGS}")
 
 set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/tools/cmake;${CMAKE_MODULE_PATH}")
 
+option(USE_WXWIDGETS "Build with wxWidgets" ON)
+
 if(NOT APPLE)
 	if(UNIX)
 		set(FRONTENDGLINC "-lGL")
@@ -57,11 +59,11 @@ endif()
  
 set (OGRE_LIBRARIES ${OGRE_LIBRARIES} ${OGRE_Overlay_LIBRARIES} ${OGRE_RTShaderSystem_LIBRARIES} ${OGRE_Bites_LIBRARIES})
 
-#find OgreProcedural
-find_package(OgreProcedural REQUIRED)
+#OgreProcedural
+add_subdirectory(dependencies/ogre-procedural)
 
 #find wxWidgets
-if (NOT ANDROID)
+if (USE_WXWIDGETS)
 	find_package(wxWidgets COMPONENTS core base REQUIRED)
 endif ()
 
@@ -190,7 +192,6 @@ include_directories( ${OGRE_INCLUDE_DIRS}
 	${BULLET_INCLUDE_DIRS}
 	${Caelum_INCLUDE_DIRS}
 	${OpenXR_INCLUDE_DIR}
-	${OgreProcedural_INCLUDE_DIR}
 	src/frontend
 	src/vm
 	src/net
@@ -214,6 +215,7 @@ include_directories( ${OGRE_INCLUDE_DIRS}
 	dependencies/ImGuizmo
 	dependencies/imgui
 	dependencies/angelscript/include
+	dependencies/ogre-procedural/include
 )
 else()
 include_directories( ${OGRE_INCLUDE_DIRS}
@@ -224,7 +226,6 @@ include_directories( ${OGRE_INCLUDE_DIRS}
         ${BULLET_INCLUDE_DIRS}
         ${Caelum_INCLUDE_DIRS}
         ${OpenXR_INCLUDE_DIR}
-        ${OgreProcedural_INCLUDE_DIR}
         src/frontend
         src/vm
         src/net
@@ -248,6 +249,7 @@ include_directories( ${OGRE_INCLUDE_DIRS}
 	dependencies/ImGuizmo
 	dependencies/imgui
 	dependencies/angelscript/include
+	dependencies/ogre-procedural/include
 )
 endif()
  
@@ -336,9 +338,9 @@ if (WIN32)
 endif ()
 
 if(FMOD_FOUND)
-target_link_libraries(SBS OgreBulletCol OgreBulletDyn AngelScript ${OGRE_LIBRARIES} ${FMOD_LIBRARY} ${OgreProcedural_LIBRARIES})
+target_link_libraries(SBS OgreBulletCol OgreBulletDyn OgreProcedural AngelScript ${OGRE_LIBRARIES} ${FMOD_LIBRARY} ${OgreProcedural_LIBRARIES})
 else()
-target_link_libraries(SBS OgreBulletCol OgreBulletDyn AngelScript ${OGRE_LIBRARIES} ${OgreProcedural_LIBRARIES})
+target_link_libraries(SBS OgreBulletCol OgreBulletDyn OgreProcedural AngelScript ${OGRE_LIBRARIES} ${OgreProcedural_LIBRARIES})
 endif()
 
 if (NOT WIN32 AND wxWidgets_FOUND)
@@ -386,28 +388,28 @@ ADD_CUSTOM_COMMAND(TARGET OgreBulletDyn
 		COMMAND ${CMAKE_HOME_DIRECTORY}/gitrev.cmd)
 endif ()
 
-if (APPLE)
-ADD_CUSTOM_COMMAND(TARGET VM
-                POST_BUILD
-                COMMAND install_name_tool -change libOgreProcedural.dylib "@rpath/libOgreProcedural.dylib" libVM.dylib)
-ADD_CUSTOM_COMMAND(TARGET SBS
-		POST_BUILD
-		COMMAND install_name_tool -change libOgreProcedural.dylib "@rpath/libOgreProcedural.dylib" libSBS.dylib)
+#if (APPLE)
+#ADD_CUSTOM_COMMAND(TARGET VM
+#                POST_BUILD
+#                COMMAND install_name_tool -change libOgreProcedural.dylib "@rpath/libOgreProcedural.dylib" libVM.dylib)
+#ADD_CUSTOM_COMMAND(TARGET SBS
+#		POST_BUILD
+#		COMMAND install_name_tool -change libOgreProcedural.dylib "@rpath/libOgreProcedural.dylib" libSBS.dylib)
 
-ADD_CUSTOM_COMMAND(TARGET ScriptProc
-                POST_BUILD
-                COMMAND install_name_tool -change libOgreProcedural.dylib "@rpath/libOgreProcedural.dylib" libScriptProc.dylib)
+#ADD_CUSTOM_COMMAND(TARGET ScriptProc
+#                POST_BUILD
+#                COMMAND install_name_tool -change libOgreProcedural.dylib "@rpath/libOgreProcedural.dylib" libScriptProc.dylib)
 
-ADD_CUSTOM_COMMAND(TARGET skyscraper
-		POST_BUILD
-		COMMAND install_name_tool -change libOgreProcedural.dylib "@rpath/libOgreProcedural.dylib" Skyscraper.app/Contents/MacOS/Skyscraper)
-endif ()
+#ADD_CUSTOM_COMMAND(TARGET skyscraper
+#		POST_BUILD
+#		COMMAND install_name_tool -change libOgreProcedural.dylib "@rpath/libOgreProcedural.dylib" Skyscraper.app/Contents/MacOS/Skyscraper)
+#endif ()
 
-if (APPLE AND wxWidgets_FOUND)
-ADD_CUSTOM_COMMAND(TARGET GUI
-                POST_BUILD
-                COMMAND install_name_tool -change libOgreProcedural.dylib "@rpath/libOgreProcedural.dylib" libGUI.dylib)
-endif ()
+#if (APPLE AND wxWidgets_FOUND)
+#ADD_CUSTOM_COMMAND(TARGET GUI
+#                POST_BUILD
+#                COMMAND install_name_tool -change libOgreProcedural.dylib "@rpath/libOgreProcedural.dylib" libGUI.dylib)
+#endif ()
 
 if (UNIX AND NOT APPLE)
 	file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/tools/scripts/skyscraper
