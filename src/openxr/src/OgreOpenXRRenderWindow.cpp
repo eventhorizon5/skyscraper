@@ -234,7 +234,11 @@ namespace Ogre {
       Ogre::Affine3 viewMatrix;
       for (size_t i = 0; i < 4; ++i) {
         for (size_t j = 0; j < 4; ++j) {
+#if OGRE_CPU == OGRE_CPU_ARM
+          viewMatrix[i][j] = spaceToView.r[i].n128_f32[j];
+#else
           viewMatrix[i][j] = spaceToView.r[i].m128_f32[j];
+#endif
         }
       }
 
@@ -248,7 +252,11 @@ namespace Ogre {
       // Note the transpose
       for (size_t i = 0; i < 4; ++i) {
         for (size_t j = 0; j < 4; ++j) {
+#if OGRE_CPU == OGRE_CPU_ARM
+          eyeProjectionMatrix[i][j] = projectionMatrix.r[j].n128_f32[i];
+#else
           eyeProjectionMatrix[i][j] = projectionMatrix.r[j].m128_f32[i];
+#endif
         }
       }
       //mEyeCameras[k]->setCustomViewMatrix(true, viewMatrix);
