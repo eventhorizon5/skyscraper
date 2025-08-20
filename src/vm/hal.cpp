@@ -216,6 +216,28 @@ void HAL::UpdateOpenXR()
 					Vector3 cameranode_pos = Simcore->camera->GetSceneNode()->GetPosition() - Simcore->camera->GetPosition();
 					SetOpenXRParameters(i, Simcore->ToRemote(cameranode_pos), camera->getDerivedOrientation());
 				}
+
+				//update controllers
+				OpenXRControllerState leftState;
+				if (GetControllerState(0, &leftState))
+				{
+					//if (leftState.poseValid)
+						//player->SetHandPose(0, leftState.position, leftState.orientation);
+
+					Vector2 moveVec(leftState.joystickX, leftState.joystickY);
+					Simcore->camera->Turn(leftState.joystickX);
+					Simcore->camera->Step(leftState.joystickY);
+				}
+				OpenXRControllerState rightState;
+				if (GetControllerState(0, &rightState))
+				{
+					//if (rightState.poseValid)
+						//player->SetHandPose(0, rightState.position, rightState.orientation);
+
+					Vector2 moveVec(rightState.joystickX, rightState.joystickY);
+					Simcore->camera->Turn(rightState.joystickX);
+					Simcore->camera->Step(rightState.joystickY);
+				}
 			}
 		}
 	}
