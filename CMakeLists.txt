@@ -213,6 +213,7 @@ include_directories( ${OGRE_INCLUDE_DIRS}
 	ogrebullet/Dynamics/include/Prefab
 	dependencies/ImGuizmo
 	dependencies/imgui
+	dependencies/angelscript/include
 )
 else()
 include_directories( ${OGRE_INCLUDE_DIRS}
@@ -246,6 +247,7 @@ include_directories( ${OGRE_INCLUDE_DIRS}
         ogrebullet/Dynamics/include/Prefab
 	dependencies/ImGuizmo
 	dependencies/imgui
+	dependencies/angelscript/include
 )
 endif()
  
@@ -284,6 +286,9 @@ endif ()
 #ImGuizmo Library
 #add_library(ImGuizmo SHARED ${IMGUIZMO_FILES})
 
+#angelscript
+add_subdirectory(dependencies/angelscript)
+
 #frontend executable
 if (WIN32)
 	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /ENTRY:mainCRTStartup")
@@ -296,6 +301,7 @@ if (NOT WIN32)
 else ()
 	add_library(VM SHARED ${VM_FILES} ${SCRIPTPROC_FILES})
 	#target_compile_options(ImGuizmo PRIVATE "/MD")
+	target_compile_options(AngelScript PRIVATE "/MD")
 	target_compile_options(OgreBulletCol PRIVATE -D_OGREBULLET_EXPORTS "/MD")
 	target_compile_options(OgreBulletDyn PRIVATE -D_OGREBULLET_EXPORTS "/MD")
 	target_compile_options(OpenXR PRIVATE -DOGREOPENXRDLL_EXPORTS "/MD")
@@ -330,9 +336,9 @@ if (WIN32)
 endif ()
 
 if(FMOD_FOUND)
-target_link_libraries(SBS OgreBulletCol OgreBulletDyn ${OGRE_LIBRARIES} ${FMOD_LIBRARY} ${OgreProcedural_LIBRARIES})
+target_link_libraries(SBS OgreBulletCol OgreBulletDyn AngelScript ${OGRE_LIBRARIES} ${FMOD_LIBRARY} ${OgreProcedural_LIBRARIES})
 else()
-target_link_libraries(SBS OgreBulletCol OgreBulletDyn ${OGRE_LIBRARIES} ${OgreProcedural_LIBRARIES})
+target_link_libraries(SBS OgreBulletCol OgreBulletDyn AngelScript ${OGRE_LIBRARIES} ${OgreProcedural_LIBRARIES})
 endif()
 
 if (NOT WIN32 AND wxWidgets_FOUND)
