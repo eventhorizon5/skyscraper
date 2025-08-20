@@ -183,139 +183,75 @@ namespace Ogre {
 
   void OpenXRState::InitializeControllers()
   {
-    XrInstance instance = m_xrInstance->getHandle().Get();
-  
-    //create action set
-    XrActionSetCreateInfo actionSetInfo{XR_TYPE_ACTION_SET_CREATE_INFO};
-    strcpy(actionSetInfo.actionSetName, "gameplay");
-    strcpy(actionSetInfo.localizedActionSetName, "Gameplay");
-    actionSetInfo.priority = 0;
-    CHECK_XRCMD(xrCreateActionSet(instance, &actionSetInfo, &actionSet));
+      // 0) REQUIREMENTS: instance has been created; session has been created.
+      // Call this AFTER initializeSession().
+      XrInstance instance = m_xrInstance->getHandle().Get();
+      CHECK(instance != XR_NULL_HANDLE);
 
-    {
-      //create pose action for left controller
-      xrStringToPath(instance, "/user/hand/left", &leftHandPath);
-      XrActionCreateInfo actionInfo{XR_TYPE_ACTION_CREATE_INFO};
-      actionInfo.actionType = XR_ACTION_TYPE_POSE_INPUT;
-      strcpy(actionInfo.actionName, "left_hand_pose");
-      strcpy(actionInfo.localizedActionName, "Left Hand Pose");
-      actionInfo.countSubactionPaths = 1;
-      XrPath subactionPathsLeft[1] = { leftHandPath };
-      actionInfo.subactionPaths = subactionPathsLeft;
-      xrCreateAction(actionSet, &actionInfo, &poseActionLeft);
+      // 1) Resolve hand user paths ONCE (members in your state)
+      CHECK_XRCMD(xrStringToPath(instance, "/user/hand/left", &leftHandPath));
+      CHECK_XRCMD(xrStringToPath(instance, "/user/hand/right", &rightHandPath));
 
-      //create space for left controller
-      XrActionSpaceCreateInfo spaceInfo{XR_TYPE_ACTION_SPACE_CREATE_INFO};
-      spaceInfo.action = poseActionLeft;
-      spaceInfo.subactionPath = leftHandPath;
-      spaceInfo.poseInActionSpace.orientation.w = 1.0f; // identity rotation
-      CHECK_XRCMD(xrCreateActionSpace(_sessionHandle.Get(), &spaceInfo, &leftControllerSpace));
-    }
+      // 2) Create the action set
+      XrActionSetCreateInfo asInfo{ XR_TYPE_ACTION_SET_CREATE_INFO };
+      std::strcpy(asInfo.actionSetName, "gameplay");
+      std::strcpy(asInfo.localizedActionSetName, "Gameplay");
+      asInfo.priority = 0;
+      CHECK_XRCMD(xrCreateActionSet(instance, &asInfo, &actionSet));
 
-    {
-      //create pose action for right controller
-      xrStringToPath(instance, "/user/hand/right", &rightHandPath);
-      XrActionCreateInfo actionInfo{XR_TYPE_ACTION_CREATE_INFO};
-      actionInfo.actionType = XR_ACTION_TYPE_POSE_INPUT;
-      strcpy(actionInfo.actionName, "right_hand_pose");
-      strcpy(actionInfo.localizedActionName, "Right Hand Pose");
-      actionInfo.countSubactionPaths = 1;
-      XrPath subactionPathsRight[1] = { rightHandPath };
-      actionInfo.subactionPaths = subactionPathsRight;
-      xrCreateAction(actionSet, &actionInfo, &poseActionRight);
+      // 3) Create the thumbstick Vector2f action (for both hands)
+      XrActionCreateInfo aci{ XR_TYPE_ACTION_CREATE_INFO };
+      aci.actionType = XR_ACTION_TYPE_VECTOR2F_INPUT;
+      std::strcpy(aci.actionName, "thumbstick_vector");
+      std::strcpy(aci.localizedActionName, "Thumbstick Vector");
+      XrPath subBoth[2] = { leftHandPath, rightHandPath };
+      aci.countSubactionPaths = 2;
+      aci.subactionPaths = subBoth;
+      CHECK_XRCMD(xrCreateAction(actionSet, &aci, &thumbstickVector));
 
-      //create space for right controller
-      {
-        XrActionSpaceCreateInfo spaceInfo{XR_TYPE_ACTION_SPACE_CREATE_INFO};
-        spaceInfo.action = poseActionRight;
-        spaceInfo.subactionPath = rightHandPath;
-        spaceInfo.poseInActionSpace.orientation.w = 1.0f;
-        CHECK_XRCMD(xrCreateActionSpace(_sessionHandle.Get(), &spaceInfo, &rightControllerSpace));
-      }
-    }
+      // 4) Suggest bindings (profile + hand-scoped component paths)
+      XrPath profileTouch;
+      CHECK_XRCMD(xrStringToPath(instance, "/interaction_profiles/oculus/touch_controller", &profileTouch));
 
-    //select/trigger button
-    {
-      XrPath subactionPathsBoth[2] = { leftHandPath, rightHandPath };
-      XrActionCreateInfo selectActionInfo{XR_TYPE_ACTION_CREATE_INFO};
-      selectActionInfo.actionType = XR_ACTION_TYPE_FLOAT_INPUT;
-      strcpy(selectActionInfo.actionName, "select_action");
-      strcpy(selectActionInfo.localizedActionName, "Select Action");
-      selectActionInfo.countSubactionPaths = 2;
-      selectActionInfo.subactionPaths = subactionPathsBoth;
-      xrCreateAction(actionSet, &selectActionInfo, &selectAction);
-    }
+      XrPath leftThumbstick, rightThumbstick;
+      CHECK_XRCMD(xrStringToPath(instance, "/user/hand/left/input/thumbstick", &leftThumbstick));
+      CHECK_XRCMD(xrStringToPath(instance, "/user/hand/right/input/thumbstick", &rightThumbstick));
 
-    // Thumbstick vector2f input (left + right)
-    {
-      XrPath subactionPathsBoth[2] = { leftHandPath, rightHandPath };
+      // (Optional) probe each binding individually to see which fails.
+      auto TrySuggest = [&](XrAction a, XrPath p, const char* label) {
+          XrActionSuggestedBinding b{ a, p };
+          XrInteractionProfileSuggestedBinding one{ XR_TYPE_INTERACTION_PROFILE_SUGGESTED_BINDING };
+          one.interactionProfile = profileTouch;
+          one.countSuggestedBindings = 1;
+          one.suggestedBindings = &b;
+          XrResult rr = xrSuggestInteractionProfileBindings(instance, &one);
 
-      XrActionCreateInfo actionInfo{ XR_TYPE_ACTION_CREATE_INFO };
-      actionInfo.actionType = XR_ACTION_TYPE_VECTOR2F_INPUT;
-      strcpy(actionInfo.actionName, "thumbstick_vector");
-      strcpy(actionInfo.localizedActionName, "Thumbstick Vector");
-      actionInfo.countSubactionPaths = 2;
-      actionInfo.subactionPaths = subactionPathsBoth;
+          char pstr[XR_MAX_PATH_LENGTH] = {}; uint32_t len = 0;
+          xrPathToString(instance, p, XR_MAX_PATH_LENGTH, &len, pstr);
+          LogManager::getSingleton().logMessage(
+              Ogre::String("Suggest ") + label + " path=" + pstr +
+              " r=0x" + Ogre::StringConverter::toString(rr));
+          return rr;
+          };
+      CHECK_XRRESULT(TrySuggest(thumbstickVector, leftThumbstick, "thumbstick L"), "thumbstick L");
+      CHECK_XRRESULT(TrySuggest(thumbstickVector, rightThumbstick, "thumbstick R"), "thumbstick R");
 
-      xrCreateAction(actionSet, &actionInfo, &thumbstickVector);
-    }
+      // Or do the batch after the probes:
+      XrActionSuggestedBinding bindingsArr[] = {
+          { thumbstickVector, leftThumbstick  },
+          { thumbstickVector, rightThumbstick },
+      };
+      XrInteractionProfileSuggestedBinding suggest{ XR_TYPE_INTERACTION_PROFILE_SUGGESTED_BINDING };
+      suggest.interactionProfile = profileTouch;
+      suggest.countSuggestedBindings = (uint32_t)(sizeof(bindingsArr) / sizeof(bindingsArr[0]));
+      suggest.suggestedBindings = bindingsArr;
+      CHECK_XRRESULT(xrSuggestInteractionProfileBindings(instance, &suggest),
+          "xrSuggestInteractionProfileBindings (thumbstick-only)");
 
-    // Suggest bindings for Meta Quest (Oculus Touch)
-    {
-        XrInstance instance = m_xrInstance->getHandle().Get();
-
-        XrPath profileTouch;
-        CHECK_XRCMD(xrStringToPath(instance, "/interaction_profiles/oculus/touch_controller", &profileTouch));
-
-        // Per-hand component paths (POSE)
-        XrPath leftGripPose, rightGripPose;
-        CHECK_XRCMD(xrStringToPath(instance, "/user/hand/left/input/grip/pose", &leftGripPose));
-        CHECK_XRCMD(xrStringToPath(instance, "/user/hand/right/input/grip/pose", &rightGripPose));
-
-        //XrPath leftAimPose, rightAimPose;
-        //CHECK_XRCMD(xrStringToPath(instance, "/user/hand/left/input/aim/pose",  &leftAimPose));
-        //CHECK_XRCMD(xrStringToPath(instance, "/user/hand/right/input/aim/pose", &rightAimPose));
-
-        // Per-hand TRIGGER (boolean)
-        XrPath leftTriggerClick, rightTriggerClick;
-        CHECK_XRCMD(xrStringToPath(instance, "/user/hand/left/input/trigger/value", &leftTriggerClick));
-        CHECK_XRCMD(xrStringToPath(instance, "/user/hand/right/input/trigger/value", &rightTriggerClick));
-
-        // Per-hand THUMBSTICK (vector2)
-        XrPath leftThumbstick, rightThumbstick;
-        CHECK_XRCMD(xrStringToPath(instance, "/user/hand/left/input/thumbstick", &leftThumbstick));
-        CHECK_XRCMD(xrStringToPath(instance, "/user/hand/right/input/thumbstick", &rightThumbstick));
-
-        std::vector<XrActionSuggestedBinding> bindings = {
-            // Pose (bind each action to the matching hand component)
-            { poseActionLeft,  leftGripPose  },
-            { poseActionRight, rightGripPose },
-
-            //{ aimPoseActionLeft,  leftAimPose  },
-            //{ aimPoseActionRight, rightAimPose },
-
-            // Trigger (boolean)
-            { selectAction, leftTriggerClick  },
-            { selectAction, rightTriggerClick },
-
-            // Thumbstick (vector2)
-            { thumbstickVector, leftThumbstick  },
-            { thumbstickVector, rightThumbstick },
-        };
-
-        XrInteractionProfileSuggestedBinding suggest{ XR_TYPE_INTERACTION_PROFILE_SUGGESTED_BINDING };
-        suggest.interactionProfile = profileTouch;
-        suggest.countSuggestedBindings = static_cast<uint32_t>(bindings.size());
-        suggest.suggestedBindings = bindings.data();
-
-        XrResult r = xrSuggestInteractionProfileBindings(instance, &suggest);
-        CHECK_XRRESULT(r, "xrSuggestInteractionProfileBindings");
-
-        // Attach the action set to the session
-        XrSessionActionSetsAttachInfo attach{ XR_TYPE_SESSION_ACTION_SETS_ATTACH_INFO };
-        attach.countActionSets = 1;
-        attach.actionSets = &actionSet;
-        CHECK_XRCMD(xrAttachSessionActionSets(_sessionHandle.Get(), &attach));
+      // 5) Attach the action set to the session
+      XrSessionActionSetsAttachInfo attach{ XR_TYPE_SESSION_ACTION_SETS_ATTACH_INFO };
+      attach.countActionSets = 1;
+      attach.actionSets = &actionSet;
+      CHECK_XRCMD(xrAttachSessionActionSets(_sessionHandle.Get(), &attach));
     }
   }
-}

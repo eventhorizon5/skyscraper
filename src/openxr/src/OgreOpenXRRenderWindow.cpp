@@ -97,6 +97,9 @@ namespace Ogre {
     XrCompositionLayerProjection mXrLayer{ XR_TYPE_COMPOSITION_LAYER_PROJECTION };
     std::vector<XrCompositionLayerBaseHeader*> mXrLayers;
 
+    Ogre::Quaternion mBodyYaw = Ogre::Quaternion::IDENTITY;
+    XrTime mPrevDisplayTime = 0; // to compute dt
+
     bool sessionReady() {
         return (mXrSessionState == XR_SESSION_STATE_READY) ||
             (mXrSessionState == XR_SESSION_STATE_FOCUSED);
