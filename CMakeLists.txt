@@ -8,6 +8,8 @@ set (CMAKE_CXX_FLAGS "-DBT_USE_DOUBLE_PRECISION ${CMAKE_CXX_FLAGS}")
 
 set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/tools/cmake;${CMAKE_MODULE_PATH}")
 
+option(USE_WXWIDGETS "Build with wxWidgets" ON)
+
 if(NOT APPLE)
 	if(UNIX)
 		set(FRONTENDGLINC "-lGL")
@@ -61,7 +63,7 @@ set (OGRE_LIBRARIES ${OGRE_LIBRARIES} ${OGRE_Overlay_LIBRARIES} ${OGRE_RTShaderS
 find_package(OgreProcedural REQUIRED)
 
 #find wxWidgets
-if (NOT ANDROID)
+if (USE_WXWIDGETS)
 	find_package(wxWidgets COMPONENTS core base REQUIRED)
 endif ()
 
