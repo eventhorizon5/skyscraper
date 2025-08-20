@@ -33,10 +33,10 @@ ObjectScript::ObjectScript(Object *parent) : ObjectBase(parent)
 	engine = asCreateScriptEngine();
 
 	//register callback
-	int r = engine->SetMessageCallback(asFUNCTION(MessageCallback), 0, asCALL_CDECL); assert( r >= 0 );
+	/*int r = engine->SetMessageCallback(asFUNCTION(MessageCallback), 0, asCALL_CDECL); assert(r >= 0);
 	//register string type
 	RegisterStdString(engine);
-	r = engine->RegisterGlobalFunction("void print(const string &in)", asFUNCTION(print), asCALL_CDECL); assert( r >= 0 );
+	r = engine->RegisterGlobalFunction("void print(const string &in)", asFUNCTION(print), asCALL_CDECL); assert( r >= 0 );*/
 }
 
 ObjectScript::~ObjectScript()
