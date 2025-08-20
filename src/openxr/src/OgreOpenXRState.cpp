@@ -238,7 +238,7 @@ namespace Ogre {
     {
       XrPath subactionPathsBoth[2] = { leftHandPath, rightHandPath };
       XrActionCreateInfo selectActionInfo{XR_TYPE_ACTION_CREATE_INFO};
-      selectActionInfo.actionType = XR_ACTION_TYPE_BOOLEAN_INPUT;
+      selectActionInfo.actionType = XR_ACTION_TYPE_FLOAT_INPUT;
       strcpy(selectActionInfo.actionName, "select_action");
       strcpy(selectActionInfo.localizedActionName, "Select Action");
       selectActionInfo.countSubactionPaths = 2;
@@ -262,35 +262,60 @@ namespace Ogre {
 
     // Suggest bindings for Meta Quest (Oculus Touch)
     {
-      XrPath interactionProfilePath;
-      xrStringToPath(instance, "/interaction_profiles/oculus/touch_controller", &interactionProfilePath);
+        XrInstance instance = m_xrInstance->getHandle().Get();
 
-      XrPath gripPosePath, triggerClickPath, thumbstickPathLeft, thumbstickPathRight;
-      xrStringToPath(instance, "/input/grip/pose", &gripPosePath);
-      xrStringToPath(instance, "/input/trigger/click", &triggerClickPath);
-      xrStringToPath(instance, "/user/hand/left/input/thumbstick", &thumbstickPathLeft); // for Vector2f
-      xrStringToPath(instance, "/user/hand/right/input/thumbstick", &thumbstickPathRight); // for Vector2f
+        XrPath profileTouch;
+        CHECK_XRCMD(xrStringToPath(instance, "/interaction_profiles/oculus/touch_controller", &profileTouch));
 
-      std::vector<XrActionSuggestedBinding> bindings = {
-          {poseActionLeft, gripPosePath},
-          {poseActionRight, gripPosePath},
-          {selectAction, triggerClickPath},
-          {thumbstickVector, thumbstickPathLeft},
-          {thumbstickVector, thumbstickPathRight}
-      };
+        // Per-hand component paths (POSE)
+        XrPath leftGripPose, rightGripPose;
+        CHECK_XRCMD(xrStringToPath(instance, "/user/hand/left/input/grip/pose", &leftGripPose));
+        CHECK_XRCMD(xrStringToPath(instance, "/user/hand/right/input/grip/pose", &rightGripPose));
 
-      //attach the action set to the session
-      XrInteractionProfileSuggestedBinding suggestedBindings{XR_TYPE_INTERACTION_PROFILE_SUGGESTED_BINDING};
-      suggestedBindings.interactionProfile = interactionProfilePath;
-      suggestedBindings.suggestedBindings = bindings.data();
-      suggestedBindings.countSuggestedBindings = (uint32_t)bindings.size();
+        //XrPath leftAimPose, rightAimPose;
+        //CHECK_XRCMD(xrStringToPath(instance, "/user/hand/left/input/aim/pose",  &leftAimPose));
+        //CHECK_XRCMD(xrStringToPath(instance, "/user/hand/right/input/aim/pose", &rightAimPose));
 
-      xrSuggestInteractionProfileBindings(instance, &suggestedBindings);
+        // Per-hand TRIGGER (boolean)
+        XrPath leftTriggerClick, rightTriggerClick;
+        CHECK_XRCMD(xrStringToPath(instance, "/user/hand/left/input/trigger/value", &leftTriggerClick));
+        CHECK_XRCMD(xrStringToPath(instance, "/user/hand/right/input/trigger/value", &rightTriggerClick));
 
-      XrSessionActionSetsAttachInfo attachInfo{XR_TYPE_SESSION_ACTION_SETS_ATTACH_INFO};
-      attachInfo.countActionSets = 1;
-      attachInfo.actionSets = &actionSet;
-      xrAttachSessionActionSets(_sessionHandle.Get(), &attachInfo);
+        // Per-hand THUMBSTICK (vector2)
+        XrPath leftThumbstick, rightThumbstick;
+        CHECK_XRCMD(xrStringToPath(instance, "/user/hand/left/input/thumbstick", &leftThumbstick));
+        CHECK_XRCMD(xrStringToPath(instance, "/user/hand/right/input/thumbstick", &rightThumbstick));
+
+        std::vector<XrActionSuggestedBinding> bindings = {
+            // Pose (bind each action to the matching hand component)
+            { poseActionLeft,  leftGripPose  },
+            { poseActionRight, rightGripPose },
+
+            //{ aimPoseActionLeft,  leftAimPose  },
+            //{ aimPoseActionRight, rightAimPose },
+
+            // Trigger (boolean)
+            { selectAction, leftTriggerClick  },
+            { selectAction, rightTriggerClick },
+
+            // Thumbstick (vector2)
+            { thumbstickVector, leftThumbstick  },
+            { thumbstickVector, rightThumbstick },
+        };
+
+        XrInteractionProfileSuggestedBinding suggest{ XR_TYPE_INTERACTION_PROFILE_SUGGESTED_BINDING };
+        suggest.interactionProfile = profileTouch;
+        suggest.countSuggestedBindings = static_cast<uint32_t>(bindings.size());
+        suggest.suggestedBindings = bindings.data();
+
+        XrResult r = xrSuggestInteractionProfileBindings(instance, &suggest);
+        CHECK_XRRESULT(r, "xrSuggestInteractionProfileBindings");
+
+        // Attach the action set to the session
+        XrSessionActionSetsAttachInfo attach{ XR_TYPE_SESSION_ACTION_SETS_ATTACH_INFO };
+        attach.countActionSets = 1;
+        attach.actionSets = &actionSet;
+        CHECK_XRCMD(xrAttachSessionActionSets(_sessionHandle.Get(), &attach));
     }
   }
 }

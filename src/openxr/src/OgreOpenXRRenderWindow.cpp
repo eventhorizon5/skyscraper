@@ -599,15 +599,17 @@ namespace Ogre {
 
       if (mXrSessionState == XR_SESSION_STATE_FOCUSED)
       {
-          XrInteractionProfileState profileState{ XR_TYPE_INTERACTION_PROFILE_STATE };
-          char pathStr[XR_MAX_PATH_LENGTH];
-          uint32_t length;
-
-          profileState.type = XR_TYPE_INTERACTION_PROFILE_STATE;
-          xrGetCurrentInteractionProfile(mXrState->GetSession().Get(), mXrState->leftHandPath, &profileState);
-          xrPathToString(mXrState->GetInstanceHandle().Get(), profileState.interactionProfile, XR_MAX_PATH_LENGTH, &length, pathStr);
-
-          LogManager::getSingleton().logMessage("Left hand profile: " + String(pathStr));
+          XrInteractionProfileState ps{ XR_TYPE_INTERACTION_PROFILE_STATE };
+          XrResult pr = xrGetCurrentInteractionProfile(mXrState->GetSession().Get(), mXrState->leftHandPath, &ps);
+          if (XR_SUCCEEDED(pr) && ps.interactionProfile != XR_NULL_PATH) {
+              char s[XR_MAX_PATH_LENGTH] = {};
+              uint32_t len = 0;
+              xrPathToString(mXrState->GetInstanceHandle().Get(), ps.interactionProfile, XR_MAX_PATH_LENGTH, &len, s);
+              LogManager::getSingleton().logMessage("Left hand profile: " + Ogre::String(s));
+          }
+          else {
+              LogManager::getSingleton().logMessage("Left hand profile: (none) r=0x" + Ogre::StringConverter::toString(pr));
+          }
       }
   }
 }
