@@ -75,8 +75,6 @@ namespace Ogre {
     // Choosing a reasonable depth range can help improve hologram visual quality.
     // Use reversed-Z (near > far) for more uniform Z resolution.
     // m_nearFar = { 20.f, 0.1f };
-
-    InitializeControllers();
   }
 
   const LUID OpenXRState::GetAdapterLUID() {
@@ -192,7 +190,7 @@ namespace Ogre {
     strcpy(actionSetInfo.actionSetName, "gameplay");
     strcpy(actionSetInfo.localizedActionSetName, "Gameplay");
     actionSetInfo.priority = 0;
-    xrCreateActionSet(instance, &actionSetInfo, &actionSet);
+    CHECK_XRCMD(xrCreateActionSet(instance, &actionSetInfo, &actionSet));
 
     {
       //create pose action for left controller
@@ -211,7 +209,7 @@ namespace Ogre {
       spaceInfo.action = poseActionLeft;
       spaceInfo.subactionPath = leftHandPath;
       spaceInfo.poseInActionSpace.orientation.w = 1.0f; // identity rotation
-      xrCreateActionSpace(_sessionHandle.Get(), &spaceInfo, &leftControllerSpace);
+      CHECK_XRCMD(xrCreateActionSpace(_sessionHandle.Get(), &spaceInfo, &leftControllerSpace));
     }
 
     {
@@ -232,14 +230,12 @@ namespace Ogre {
         spaceInfo.action = poseActionRight;
         spaceInfo.subactionPath = rightHandPath;
         spaceInfo.poseInActionSpace.orientation.w = 1.0f;
-        xrCreateActionSpace(_sessionHandle.Get(), &spaceInfo, &rightControllerSpace);
+        CHECK_XRCMD(xrCreateActionSpace(_sessionHandle.Get(), &spaceInfo, &rightControllerSpace));
       }
     }
 
     //select/trigger button
     {
-      //xrStringToPath(instance, "/user/hand/left", &leftHandPath);
-      //xrStringToPath(instance, "/user/hand/right", &rightHandPath);
       XrPath subactionPathsBoth[2] = { leftHandPath, rightHandPath };
       XrActionCreateInfo selectActionInfo{XR_TYPE_ACTION_CREATE_INFO};
       selectActionInfo.actionType = XR_ACTION_TYPE_BOOLEAN_INPUT;
@@ -268,10 +264,6 @@ namespace Ogre {
     {
       XrPath interactionProfilePath;
       xrStringToPath(instance, "/interaction_profiles/oculus/touch_controller", &interactionProfilePath);
-
-      //XrPath leftHandPath, rightHandPath;
-      //xrStringToPath(instance, "/user/hand/left", &leftHandPath);
-      //xrStringToPath(instance, "/user/hand/right", &rightHandPath);
 
       XrPath gripPosePath, triggerClickPath, thumbstickPathLeft, thumbstickPathRight;
       xrStringToPath(instance, "/input/grip/pose", &gripPosePath);

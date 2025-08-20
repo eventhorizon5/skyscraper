@@ -97,7 +97,10 @@ namespace Ogre {
     XrCompositionLayerProjection mXrLayer{ XR_TYPE_COMPOSITION_LAYER_PROJECTION };
     std::vector<XrCompositionLayerBaseHeader*> mXrLayers;
 
-    bool sessionReady() { return mXrSessionState == XR_SESSION_STATE_READY || XR_SESSION_STATE_FOCUSED; }
+    bool sessionReady() {
+        return (mXrSessionState == XR_SESSION_STATE_READY) ||
+            (mXrSessionState == XR_SESSION_STATE_FOCUSED);
+    }
     bool shouldRender() { return sessionReady() && mXrFrameState.shouldRender; }
 
     void ProcessOpenXREvents();
@@ -165,6 +168,7 @@ namespace Ogre {
     mXrState->Initialize(name);
     mXrState->InitializeSystem();
     mXrState->initializeSession(mDevice);
+    mXrState->InitializeControllers();
 
     mViewProjections->Initialize(mXrState.get());
     mWidth = mViewProjections->getWidth();
@@ -591,6 +595,19 @@ namespace Ogre {
       if (state.isActive && state.currentState)
       {
           // Trigger/button is pressed
+      }
+
+      if (mXrSessionState == XR_SESSION_STATE_FOCUSED)
+      {
+          XrInteractionProfileState profileState{ XR_TYPE_INTERACTION_PROFILE_STATE };
+          char pathStr[XR_MAX_PATH_LENGTH];
+          uint32_t length;
+
+          profileState.type = XR_TYPE_INTERACTION_PROFILE_STATE;
+          xrGetCurrentInteractionProfile(mXrState->GetSession().Get(), mXrState->leftHandPath, &profileState);
+          xrPathToString(mXrState->GetInstanceHandle().Get(), profileState.interactionProfile, XR_MAX_PATH_LENGTH, &length, pathStr);
+
+          LogManager::getSingleton().logMessage("Left hand profile: " + String(pathStr));
       }
   }
 }
