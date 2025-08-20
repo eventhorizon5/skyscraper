@@ -273,16 +273,18 @@ namespace Ogre {
       //xrStringToPath(instance, "/user/hand/left", &leftHandPath);
       //xrStringToPath(instance, "/user/hand/right", &rightHandPath);
 
-      XrPath gripPosePath, triggerClickPath, thumbstickPath;
+      XrPath gripPosePath, triggerClickPath, thumbstickPathLeft, thumbstickPathRight;
       xrStringToPath(instance, "/input/grip/pose", &gripPosePath);
       xrStringToPath(instance, "/input/trigger/click", &triggerClickPath);
-      xrStringToPath(instance, "/input/thumbstick", &thumbstickPath); // for Vector2f
+      xrStringToPath(instance, "/user/hand/left/input/thumbstick", &thumbstickPathLeft); // for Vector2f
+      xrStringToPath(instance, "/user/hand/right/input/thumbstick", &thumbstickPathRight); // for Vector2f
 
       std::vector<XrActionSuggestedBinding> bindings = {
           {poseActionLeft, gripPosePath},
           {poseActionRight, gripPosePath},
           {selectAction, triggerClickPath},
-          { thumbstickVector, thumbstickPath }
+          {thumbstickVector, thumbstickPathLeft},
+          {thumbstickVector, thumbstickPathRight}
       };
 
       //attach the action set to the session
