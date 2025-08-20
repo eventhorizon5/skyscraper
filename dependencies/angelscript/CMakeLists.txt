@@ -20,9 +20,9 @@ add_library(AngelScript ${libkind} ${AS_SOURCES})
 
 # Put all AngelScript artifacts in the parent build folder
 set_target_properties(AngelScript PROPERTIES
-    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}"
-    LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}"
-    ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}"
+    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}$<0:>"
+    LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}$<0:>"
+    ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}$<0:>"
 )
 
 target_include_directories(AngelScript
