@@ -183,102 +183,101 @@ namespace Ogre {
   }
 
 
-  void OpenXRRenderWindow::_beginUpdate()
-  {
+void OpenXRRenderWindow::_beginUpdate()
+{
     RenderTarget::_beginUpdate();
     ProcessOpenXREvents();
     _startXrFrame();
 
     if (!shouldRender()) return;
 
+    // Update OpenXR view state
     mViewProjections->UpdateXrViewInfo(mXrViewState, mXrState.get(), mXrFrameState.predictedDisplayTime);
-    uint32_t viewCount = 2;
- 
+    const uint32_t viewCount = 2;
+
+    // Acquire swapchain images
     swapchainL->AcquireImages();
     swapchainR->AcquireImages();
 
-    const CD3D11_RENDER_TARGET_VIEW_DESC renderTargetViewDescL(D3D11_RTV_DIMENSION_TEXTURE2DARRAY, swapchainL->ColorSwapchainPixelFormat);
+    // Build RTVs for each eye
+    const CD3D11_RENDER_TARGET_VIEW_DESC rtvDescL(D3D11_RTV_DIMENSION_TEXTURE2DARRAY, swapchainL->ColorSwapchainPixelFormat);
     mRenderTargetViewL = nullptr;
-    CHECK_HRCMD(
-      mDevice->CreateRenderTargetView(swapchainL->getColorTexture(), &renderTargetViewDescL, mRenderTargetViewL.put()));
+    CHECK_HRCMD(mDevice->CreateRenderTargetView(swapchainL->getColorTexture(), &rtvDescL, mRenderTargetViewL.put()));
 
-    const CD3D11_RENDER_TARGET_VIEW_DESC renderTargetViewDescR(D3D11_RTV_DIMENSION_TEXTURE2DARRAY, swapchainR->ColorSwapchainPixelFormat);
+    const CD3D11_RENDER_TARGET_VIEW_DESC rtvDescR(D3D11_RTV_DIMENSION_TEXTURE2DARRAY, swapchainR->ColorSwapchainPixelFormat);
     mRenderTargetViewR = nullptr;
-    CHECK_HRCMD(
-      mDevice->CreateRenderTargetView(swapchainR->getColorTexture(), &renderTargetViewDescR, mRenderTargetViewR.put()));
+    CHECK_HRCMD(mDevice->CreateRenderTargetView(swapchainR->getColorTexture(), &rtvDescR, mRenderTargetViewR.put()));
 
+    // Compute projections
     std::vector<xr::math::ViewProjection> vps(viewCount);
     mViewProjections->CalculateViewProjections(vps);
-    auto imageRect = swapchainL->getImageRect();
+    const auto imageRect = swapchainL->getImageRect();
 
+    // Wire up subImages
     mViewProjections->ProjectionLayerViews[0].subImage.swapchain = swapchainL->getColorSwapchain();
     mViewProjections->ProjectionLayerViews[1].subImage.swapchain = swapchainR->getColorSwapchain();
-
-    mViewProjections->DepthInfoViews[0].subImage.swapchain = swapchainL->getDepthSwapchain();
-    mViewProjections->DepthInfoViews[1].subImage.swapchain = swapchainR->getDepthSwapchain();
-
+    mViewProjections->DepthInfoViews[0].subImage.swapchain      = swapchainL->getDepthSwapchain();
+    mViewProjections->DepthInfoViews[1].subImage.swapchain      = swapchainR->getDepthSwapchain();
     for (uint32_t i = 0; i < viewCount; ++i) {
-      mViewProjections->ProjectionLayerViews[i].subImage.imageRect = imageRect;
-      mViewProjections->DepthInfoViews[i].subImage.imageRect = imageRect;
+        mViewProjections->ProjectionLayerViews[i].subImage.imageRect = imageRect;
+        mViewProjections->DepthInfoViews[i].subImage.imageRect       = imageRect;
     }
 
-    auto deviceContext = mDevice.GetImmediateContext();
-
-    const uint32_t viewInstanceCount = (uint32_t)vps.size();
-
-    CD3D11_VIEWPORT viewport(
-      (float)imageRect.offset.x, (float)imageRect.offset.y, (float)imageRect.extent.width, (float)imageRect.extent.height);
-    deviceContext->RSSetViewports(1, &viewport);
-
+    // Set D3D viewport
+    auto* deviceContext = mDevice.GetImmediateContext();
+    CD3D11_VIEWPORT vp(
+        static_cast<float>(imageRect.offset.x),
+        static_cast<float>(imageRect.offset.y),
+        static_cast<float>(imageRect.extent.width),
+        static_cast<float>(imageRect.extent.height));
+    deviceContext->RSSetViewports(1, &vp);
     mpBackBuffer = swapchainR->getColorTexture();
-
-    const bool reversedZ = vps[0].NearFar.Near > vps[0].NearFar.Far;
-    const float depthClearValue = reversedZ ? 0.f : 1.f;
 
     if (mNumberOfEyesAdded != 2) return;
 
-    for (uint32_t k = 0; k < 2; ++k) {
-      const DirectX::XMMATRIX spaceToView = xr::math::LoadXrPose(vps[k].Pose);
-      Ogre::Quaternion orientation(vps[k].Pose.orientation.w, vps[k].Pose.orientation.x, vps[k].Pose.orientation.y, vps[k].Pose.orientation.z);
-      Ogre::Vector3 position(vps[k].Pose.position.x, vps[k].Pose.position.y, vps[k].Pose.position.z);
+    // Per-eye cameras
+    for (uint32_t k = 0; k < viewCount; ++k) {
+        const xr::math::ViewProjection& vpk = vps[k];
 
-      Ogre::Affine3 viewMatrix;
-      for (size_t i = 0; i < 4; ++i) {
-        for (size_t j = 0; j < 4; ++j) {
+        // Raw HMD pose
+        Ogre::Quaternion hmdOri(
+            static_cast<Ogre::Real>(vpk.Pose.orientation.w),
+            static_cast<Ogre::Real>(vpk.Pose.orientation.x),
+            static_cast<Ogre::Real>(vpk.Pose.orientation.y),
+            static_cast<Ogre::Real>(vpk.Pose.orientation.z));
+
+        Ogre::Vector3 hmdPos(
+            static_cast<Ogre::Real>(vpk.Pose.position.x),
+            static_cast<Ogre::Real>(vpk.Pose.position.y),
+            static_cast<Ogre::Real>(vpk.Pose.position.z));
+
+        // Apply smooth yaw ONLY to orientation
+        Ogre::Quaternion finalOri = mBodyYaw * hmdOri;
+        Ogre::Vector3    finalPos = hmdPos; // preserve IPD
+
+        // Build projection matrix
+        xr::math::NearFar nf = { 0.1f, std::numeric_limits<float>::infinity() };
+        DirectX::XMMATRIX projM = ComposeProjectionMatrix(vpk.Fov, nf);
+
+        Ogre::Matrix4 ogreProj;
+        for (size_t i = 0; i < 4; ++i) {
+            for (size_t j = 0; j < 4; ++j) {
 #if OGRE_CPU == OGRE_CPU_ARM
-          viewMatrix[i][j] = spaceToView.r[i].n128_f32[j];
+                ogreProj[i][j] = static_cast<Ogre::Real>(projM.r[j].n128_f32[i]);
 #else
-          viewMatrix[i][j] = spaceToView.r[i].m128_f32[j];
+                ogreProj[i][j] = static_cast<Ogre::Real>(projM.r[j].m128_f32[i]);
 #endif
+            }
         }
-      }
 
-      xr::math::NearFar nf = { 0.1, std::numeric_limits<float>::infinity() };
-
-      DirectX::XMMATRIX projectionMatrix = ComposeProjectionMatrix(
-        vps[k].Fov,
-        nf);
-      Ogre::Matrix4 eyeProjectionMatrix;
-
-      // Note the transpose
-      for (size_t i = 0; i < 4; ++i) {
-        for (size_t j = 0; j < 4; ++j) {
-#if OGRE_CPU == OGRE_CPU_ARM
-          eyeProjectionMatrix[i][j] = projectionMatrix.r[j].n128_f32[i];
-#else
-          eyeProjectionMatrix[i][j] = projectionMatrix.r[j].m128_f32[i];
-#endif
-        }
-      }
-      //mEyeCameras[k]->setCustomViewMatrix(true, viewMatrix);
-      //mEyeCameras[k]->setPosition(XRPosition[k] + position);
-      mEyeCameras[k]->setPosition(position);
-      mEyeCameras[k]->setOrientation(orientation);
-      mEyeCameras[k]->setCustomProjectionMatrix(true, eyeProjectionMatrix);
-      //mEyeCameras[k]->setFarClipDistance(3000);
-      mEyeCameras[k]->setAspectRatio(Ogre::Real(imageRect.extent.height / imageRect.extent.width));
+        // Apply to cameras
+        mEyeCameras[k]->setPosition(finalPos);
+        mEyeCameras[k]->setOrientation(finalOri);
+        mEyeCameras[k]->setCustomProjectionMatrix(true, ogreProj);
+        mEyeCameras[k]->setAspectRatio(
+            Ogre::Real(imageRect.extent.width) / Ogre::Real(imageRect.extent.height));
     }
-  }
+}
 
   void OpenXRRenderWindow::_endUpdate()
   {
@@ -593,6 +592,22 @@ namespace Ogre {
         gControllerStates[1].joystickX = axisState.currentState.x;
         gControllerStates[1].joystickY = axisState.currentState.y;
 
+      }
+
+      // Integrate smooth body yaw from right stick X
+      double dt = 0.0;
+      if (mPrevDisplayTime != 0)
+          dt = double(mXrFrameState.predictedDisplayTime - mPrevDisplayTime) / 1e9;
+      mPrevDisplayTime = mXrFrameState.predictedDisplayTime;
+
+      const float deadzone = 0.15f;
+      const float turnRateDegPerSec = 120.0f; // tune to taste
+      float rx = gControllerStates[1].joystickX; // right-hand stick X
+
+      if (std::fabs(rx) > deadzone && dt > 0.0) {
+          float yawDeg = -rx * turnRateDegPerSec * float(dt);
+          mBodyYaw = Ogre::Quaternion(Ogre::Degree(yawDeg), Ogre::Vector3::UNIT_Y) * mBodyYaw;
+          mBodyYaw.normalise();
       }
 
       if (state.isActive && state.currentState)
