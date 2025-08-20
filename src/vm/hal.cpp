@@ -223,6 +223,8 @@ void HAL::UpdateOpenXR()
 				OpenXRControllerState leftState;
 				if (GetControllerState(0, &leftState))
 				{
+					std::string out = "Thumbstick: (" + ToString(leftState.joystickX) + ", " + ToString(leftState.joystickY) + ")";
+					Report(out);
 					const float deadzone = 0.1f;
 					float x = leftState.joystickX;
 					float y = leftState.joystickY;

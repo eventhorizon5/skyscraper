@@ -567,7 +567,7 @@ namespace Ogre {
         {
             XrActionStateGetInfo getInfo{XR_TYPE_ACTION_STATE_GET_INFO};
             getInfo.action = mXrState->thumbstickVector; // a VECTOR2F action
-            getInfo.subactionPath = mXrState->leftHandPath;
+            getInfo.subactionPath = mXrState->rightHandPath;
 
             XrActionStateVector2f axisState{XR_TYPE_ACTION_STATE_VECTOR2F};
             xrGetActionStateVector2f(mXrState->GetSession().Get(), &getInfo, &axisState);
@@ -583,8 +583,8 @@ namespace Ogre {
         XrActionStateVector2f axisState{ XR_TYPE_ACTION_STATE_VECTOR2F };
         xrGetActionStateVector2f(mXrState->GetSession().Get(), &getInfo, &axisState);
 
-        gControllerStates[0].joystickX = axisState.currentState.x;
-        gControllerStates[0].joystickY = axisState.currentState.y;
+        gControllerStates[1].joystickX = axisState.currentState.x;
+        gControllerStates[1].joystickY = axisState.currentState.y;
 
       }
 
