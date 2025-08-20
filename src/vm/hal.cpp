@@ -218,25 +218,36 @@ void HAL::UpdateOpenXR()
 				}
 
 				//update controllers
+
+				//left controller for movement
 				OpenXRControllerState leftState;
 				if (GetControllerState(0, &leftState))
 				{
-					//if (leftState.poseValid)
-						//player->SetHandPose(0, leftState.position, leftState.orientation);
+					const float deadzone = 0.1f;
+					float x = leftState.joystickX;
+					float y = leftState.joystickY;
 
-					Vector2 moveVec(leftState.joystickX, leftState.joystickY);
-					Simcore->camera->Turn(leftState.joystickX);
-					Simcore->camera->Step(leftState.joystickY);
+					if (std::abs(x) > deadzone || std::abs(y) > deadzone) {
+						Ogre::Vector3 localMove(x, 0, -y);
+
+						Ogre::Quaternion viewRot = Simcore->camera->GetOrientation();
+						Ogre::Vector3 worldMove = viewRot * localMove;
+
+						float walkSpeed = 3.0f; // units per second
+						worldMove *= walkSpeed * Simcore->delta;
+
+						Ogre::Vector3 currentPos = Simcore->camera->GetPosition();
+						Simcore->camera->SetPosition(currentPos + worldMove);
+					}
 				}
+
+				//right controller for rotation
 				OpenXRControllerState rightState;
 				if (GetControllerState(0, &rightState))
 				{
-					//if (rightState.poseValid)
-						//player->SetHandPose(0, rightState.position, rightState.orientation);
-
-					Vector2 moveVec(rightState.joystickX, rightState.joystickY);
-					Simcore->camera->Turn(rightState.joystickX);
-					Simcore->camera->Step(rightState.joystickY);
+					float turnRate = 1.0;
+					float yawChange = rightState.joystickX * turnRate * Simcore->delta;
+					Simcore->camera->Turn(yawChange);
 				}
 			}
 		}
