@@ -207,6 +207,9 @@ void OpenXRRenderWindow::_beginUpdate()
     mRenderTargetViewR = nullptr;
     CHECK_HRCMD(mDevice->CreateRenderTargetView(swapchainR->getColorTexture(), &rtvDescR, mRenderTargetViewR.put()));
 
+    //default to left eye at frame start so Ogre has a valid target before the listener switches per camera.
+    setActiveEye(0);  // sets mpBackBuffer to left’s color texture under the hood
+
     //compute views/projections for both eyes
     std::vector<xr::math::ViewProjection> vps(viewCount);
     mViewProjections->CalculateViewProjections(vps);
@@ -230,7 +233,6 @@ void OpenXRRenderWindow::_beginUpdate()
         static_cast<float>(imageRect.extent.width),
         static_cast<float>(imageRect.extent.height));
     deviceContext->RSSetViewports(1, &vp);
-    mpBackBuffer = swapchainR->getColorTexture();
 
     if (mNumberOfEyesAdded != 2) return;
 
