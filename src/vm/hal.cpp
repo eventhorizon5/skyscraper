@@ -675,16 +675,19 @@ bool HAL::LoadSystem(const std::string &data_path, Ogre::RenderWindow *renderwin
 	Report("");
 
 	//initialize ImGui Overlay
-	try
+	if (GetConfigBool(configfile, "Skyscraper.Frontend.VR", false) == false)
 	{
-		imgui = new Ogre::ImGuiOverlay();
-		imgui->setZOrder(300);
-		imgui->show();
-		Ogre::OverlayManager::getSingleton().addOverlay(imgui);
-	}
-	catch(Ogre::Exception &e)
-	{
-		return ReportFatalError("Error initializing ImGui overlay\nDetails: " + e.getDescription());
+		try
+		{
+			imgui = new Ogre::ImGuiOverlay();
+			imgui->setZOrder(300);
+			imgui->show();
+			Ogre::OverlayManager::getSingleton().addOverlay(imgui);
+		}
+		catch(Ogre::Exception &e)
+		{
+			return ReportFatalError("Error initializing ImGui overlay\nDetails: " + e.getDescription());
+		}
 	}
 
 	return true;
@@ -695,7 +698,8 @@ bool HAL::Render()
 	SBS_PROFILE_MAIN("Render");
 
 	//process imgui
-	Ogre::ImGuiOverlay::NewFrame();
+	if (imgui)
+		Ogre::ImGuiOverlay::NewFrame();
 	//ImGuizmo::BeginFrame();
 
 	//ImGui::ShowDemoWindow();
