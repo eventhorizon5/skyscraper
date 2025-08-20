@@ -129,7 +129,7 @@ private:
 	Ogre::Timer *timer;
 
 	//ImGui Overlay
-	//Ogre::ImGuiOverlay *imgui;
+	Ogre::ImGuiOverlay *imgui;
 
     VM *vm;
 };

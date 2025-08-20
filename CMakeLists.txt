@@ -212,6 +212,7 @@ include_directories( ${OGRE_INCLUDE_DIRS}
 	ogrebullet/Dynamics/include/Constraints
 	ogrebullet/Dynamics/include/Prefab
 	dependencies/ImGuizmo
+	dependencies/imgui
 )
 else()
 include_directories( ${OGRE_INCLUDE_DIRS}
@@ -244,6 +245,7 @@ include_directories( ${OGRE_INCLUDE_DIRS}
         ogrebullet/Dynamics/include/Constraints
         ogrebullet/Dynamics/include/Prefab
 	dependencies/ImGuizmo
+	dependencies/imgui
 )
 endif()
  
@@ -280,7 +282,7 @@ if (WIN32)
 endif ()
 
 #ImGuizmo Library
-#add_library(ImGuizmo SHARED ${IMGUIZMO_FILES})
+add_library(ImGuizmo SHARED ${IMGUIZMO_FILES})
 
 #frontend executable
 if (WIN32)
@@ -293,7 +295,7 @@ if (NOT WIN32)
 	add_library(VM SHARED ${VM_FILES})
 else ()
 	add_library(VM SHARED ${VM_FILES} ${SCRIPTPROC_FILES})
-	#target_compile_options(ImGuizmo PRIVATE "/MD")
+	target_compile_options(ImGuizmo PRIVATE "/MD")
 	target_compile_options(OgreBulletCol PRIVATE -D_OGREBULLET_EXPORTS "/MD")
 	target_compile_options(OgreBulletDyn PRIVATE -D_OGREBULLET_EXPORTS "/MD")
 	target_compile_options(OpenXR PRIVATE -DOGREOPENXRDLL_EXPORTS "/MD")
