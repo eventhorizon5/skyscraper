@@ -224,8 +224,8 @@ namespace Ogre {
       strcpy(actionInfo.actionName, "right_hand_pose");
       strcpy(actionInfo.localizedActionName, "Right Hand Pose");
       actionInfo.countSubactionPaths = 1;
-      XrPath subactionPathsLeft[1] = { rightHandPath };
-      actionInfo.subactionPaths = subactionPathsLeft;
+      XrPath subactionPathsRight[1] = { rightHandPath };
+      actionInfo.subactionPaths = subactionPathsRight;
       xrCreateAction(actionSet, &actionInfo, &poseActionRight);
 
       //create space for right controller
@@ -250,7 +250,6 @@ namespace Ogre {
       strcpy(selectActionInfo.localizedActionName, "Select Action");
       selectActionInfo.countSubactionPaths = 2;
       selectActionInfo.subactionPaths = subactionPathsBoth;
-      XrAction selectAction;
       xrCreateAction(actionSet, &selectActionInfo, &selectAction);
     }
 
