@@ -144,7 +144,9 @@ bool EngineContext::IsCameraActive()
 	if (!Simcore)
 		return false;
 
-	return Simcore->camera->IsActive();
+	if (Simcore->camera)
+		return Simcore->camera->IsActive();
+	return false;
 }
 
 void EngineContext::Shutdown()
@@ -268,7 +270,9 @@ bool EngineContext::InitSim()
 void EngineContext::Boot()
 {
 	//boot simulator
-	processor->Start();
+
+	if (processor)
+		processor->Start();
 }
 
 bool EngineContext::LoadDefault()
@@ -578,6 +582,9 @@ CameraState EngineContext::GetCameraState()
 	state.fov = 0;
 	state.speed = 0;
 
+	if (!Simcore)
+		return state;
+
 	if (Simcore->camera)
 		return Simcore->camera->GetCameraState();
 	return state;
@@ -633,6 +640,9 @@ void EngineContext::DetachCamera(bool reset_building)
 {
 	//detach the camera from this engine
 
+	if (!Simcore)
+		return;
+
 	Simcore->DetachCamera();
 
 	if (reset_building == true)
@@ -642,6 +652,9 @@ void EngineContext::DetachCamera(bool reset_building)
 bool EngineContext::AttachCamera(std::vector<Ogre::Camera*> &cameras, bool init_state)
 {
 	//attach the camera to this engine
+
+	if (!Simcore)
+		return false;
 
 	bool result = Simcore->AttachCamera(cameras, init_state);
 
@@ -654,6 +667,9 @@ bool EngineContext::AttachCamera(std::vector<Ogre::Camera*> &cameras, bool init_
 
 void EngineContext::RefreshCamera()
 {
+	if (!Simcore)
+		return;
+
 	if (!Simcore->camera)
 		return;
 
@@ -662,6 +678,9 @@ void EngineContext::RefreshCamera()
 
 void EngineContext::ResetCamera()
 {
+	if (!Simcore)
+		return;
+
 	if (!Simcore->camera)
 		return;
 
@@ -671,6 +690,9 @@ void EngineContext::ResetCamera()
 
 void EngineContext::RevertMovement()
 {
+	if (!Simcore)
+		return;
+
 	if (!Simcore->camera)
 		return;
 
@@ -681,6 +703,9 @@ void EngineContext::RevertMovement()
 Vector3 EngineContext::GetCameraPosition()
 {
 	//get this engine's camera position, in global positioning
+
+	if (!Simcore)
+		return Vector3::ZERO;
 
 	if (!Simcore->camera)
 		return Vector3::ZERO;
@@ -719,6 +744,9 @@ void EngineContext::CutForEngine(EngineContext *engine, bool child)
 	//cut holes in this sim engine, for a newly loaded building, if possible
 
 	if (!engine || engine == this)
+		return;
+
+	if (!Simcore)
 		return;
 
 	//limit cuts on system engines
@@ -791,7 +819,8 @@ void EngineContext::Move(Vector3 &vector, Real speed, bool move_children)
 	//move this engine
 	//if move_children is true, recursively call this function on all children
 
-	Simcore->Move(vector, speed);
+	if (Simcore)
+		Simcore->Move(vector, speed);
 
 	if (move_children == true)
 	{
@@ -877,6 +906,9 @@ void EngineContext::Reset(bool full)
 {
 	//reset an engine context's SBS engine
 
+	if (!Simcore)
+		return;
+
 	Simcore->ResetState();
 	if (processor && full)
 		processor->Reset();
@@ -884,16 +916,25 @@ void EngineContext::Reset(bool full)
 
 Vector3 EngineContext::GetPosition(bool relative)
 {
+	if (!Simcore)
+		return Vector3::ZERO;
+
 	return Simcore->GetPosition(relative);
 }
 
 void EngineContext::Rotate(const Vector3 &vector, Real speed, bool relative)
 {
+	if (!Simcore)
+		return;
+
 	Simcore->Rotate(vector, speed, relative);
 }
 
 Vector3 EngineContext::GetRotation()
 {
+	if (!Simcore)
+		return Vector3::ZERO;
+
 	return Simcore->GetRotation();
 }
 
