@@ -34,6 +34,16 @@
 std::vector<Ogre::Vector3> XRPosition;
 std::vector<Ogre::Quaternion> XROrientation;
 
+static inline Ogre::Quaternion yawFromQuat(const Ogre::Quaternion& q)
+{
+    // Ogre forward is -Z. Project forward to XZ, compute yaw about +Y.
+    const Ogre::Vector3 fwd = q * Ogre::Vector3(0,0,-1);
+    Ogre::Vector3 f = Ogre::Vector3(fwd.x, 0, fwd.z);
+    if (!f.isZeroLength()) f.normalise();
+    const Ogre::Radian yaw = Ogre::Math::ATan2(f.x, -f.z);
+    return Ogre::Quaternion(yaw, Ogre::Vector3::UNIT_Y);
+}
+
 //controller states
 static OpenXRControllerState gControllerStates[2] = {};
 
@@ -98,6 +108,7 @@ namespace Ogre {
     std::vector<XrCompositionLayerBaseHeader*> mXrLayers;
 
     Ogre::Quaternion mBodyYaw = Ogre::Quaternion::IDENTITY;
+    Ogre::Vector3    mBodyPos = Ogre::Vector3::ZERO;
     XrTime mPrevDisplayTime = 0; // to compute dt
 
     bool sessionReady() {
@@ -259,7 +270,7 @@ void OpenXRRenderWindow::_beginUpdate()
     for (uint32_t k = 0; k < viewCount; ++k) {
         const auto& vpk = vps[k];
 
-        // Raw HMD per-eye pose (already includes IPD)
+        //raw HMD per-eye pose (already includes IPD)
         const Ogre::Quaternion hmdOri(
             (Ogre::Real)vpk.Pose.orientation.w,
             (Ogre::Real)vpk.Pose.orientation.x,
@@ -271,7 +282,7 @@ void OpenXRRenderWindow::_beginUpdate()
             (Ogre::Real)vpk.Pose.position.z);
 
         const Ogre::Quaternion finalOri = mBodyYaw * hmdOri;
-        const Ogre::Vector3    finalPos = mBodyYaw * hmdPos;
+        const Ogre::Vector3    finalPos = (mBodyYaw * hmdPos) + mBodyPos;
 
         //build Ogre projection from OpenXR FOV
         xr::math::NearFar nf = { 0.1f, std::numeric_limits<float>::infinity() };
@@ -626,6 +637,35 @@ void OpenXRRenderWindow::_beginUpdate()
           float yawDeg = -rx * turnRateDegPerSec * float(dt);
           mBodyYaw = Ogre::Quaternion(Ogre::Degree(yawDeg), Ogre::Vector3::UNIT_Y) * mBodyYaw;
           mBodyYaw.normalise();
+      }
+
+      //left stick drives movement (x=strafe, y=forward)
+      float lx = gControllerStates[0].joystickX;
+      float ly = gControllerStates[0].joystickY;
+
+      //deadzone & scaling
+      const float dz = 0.15f;
+      if (std::fabs(lx) < dz) lx = 0.f;
+      if (std::fabs(ly) < dz) ly = 0.f;
+
+      //local (camera) movement vector: X = right, Z = forward(-)
+      Ogre::Vector3 localMove(lx, 0.f, -ly);
+
+      //heading mode:
+      //   body-relative:     heading = mBodyYaw
+      //   head-relative yaw: heading = mBodyYaw * yawFromQuat(headOri)
+      Ogre::Quaternion heading = mBodyYaw;
+
+      //uncomment this if you want movement to follow head yaw.
+      //heading = mBodyYaw * yawFromQuat(cachedHmdOri);
+
+      //rotate local vector into world/app space
+      Ogre::Vector3 worldMove = heading * localMove;
+
+      //speed (meters/second) and integration
+      const float speed = 3.0f; // tune
+      if (dt > 0.0) {
+          mBodyPos += worldMove * (speed * (float)dt);
       }
 
       if (state.isActive && state.currentState)
