@@ -27,5 +27,10 @@ else()
   target_compile_options(OgreProcedural PRIVATE -Wall -Wextra -Wpedantic)
 endif()
 
+if(MSVC AND OGREPROCEDURAL_BUILD_SHARED)
+  # target-scoped property (CMake ≥3.4)
+  set_target_properties(OgreProcedural PROPERTIES WINDOWS_EXPORT_ALL_SYMBOLS ON)
+endif()
+
 target_link_libraries(OgreProcedural ${OGRE_LIBRARIES})
 
