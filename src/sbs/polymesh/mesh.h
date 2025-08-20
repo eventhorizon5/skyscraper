@@ -50,7 +50,7 @@ public:
 
 	MeshObject(Object* parent, const std::string &name, DynamicMesh* wrapper = 0, const std::string &filename = "", const std::string &meshname = "", Real max_render_distance = 0, Real scale_multiplier = 1, bool create_collider = true, bool dynamic_buffers = false);
 	virtual ~MeshObject();
-	void Enabled(bool value);
+	bool Enabled(bool value);
 	void EnableCollider(bool value);
 	bool IsEnabled();
 	Wall* CreateWallObject(const std::string &name);
@@ -93,6 +93,11 @@ public:
 	void SetMaterial(const std::string& material);
 	void EnablePhysics(bool value, Real restitution = 0, Real friction = 0, Real mass = 0);
 	size_t GetSize();
+	void RemoveTriOwner(Wall *wall);
+	void RemoveTriOwner(Polygon *poly);
+	void RemoveTriOwner(size_t triIndex);
+	void RemoveTriOwnerFast(size_t triIndex);
+	void AddTriOwner(Wall *wall, Polygon *poly);
 
 	DynamicMesh *MeshWrapper; //dynamic mesh this mesh object uses
 	std::vector<Wall*> Walls; //associated wall (polygon container) objects
@@ -107,6 +112,16 @@ public:
 	std::string Meshname; //name of loaded Ogre mesh (used for primitives)
 	bool model_loaded; //true if a model was loaded successfully
 
+	struct TriOwner
+	{
+		Wall* wall;      //owning wall
+		Polygon* poly;   //owning polygon
+	};
+
+	std::vector<Vector3>   pickPositions; //flattened positions
+	std::vector<uint32_t>  pickIndices;   //3 indices per triangle
+	std::vector<TriOwner>  triOwners;     //size == pickIndices.size() / 3
+
 private:
 	bool enabled;
 	bool is_physical;
@@ -116,6 +131,7 @@ private:
 
 	bool LoadFromFile(const std::string &filename);
 	bool LoadColliderModel(Ogre::MeshPtr &collidermesh);
+	void CreateBoundingBox();
 
 	Ogre::MeshPtr collidermesh;
 	size_t size;

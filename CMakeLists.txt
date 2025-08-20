@@ -7,6 +7,7 @@ set(CMAKE_AUTORCC ON)
 set (CMAKE_CXX_FLAGS "-DBT_USE_DOUBLE_PRECISION ${CMAKE_CXX_FLAGS}")
 
 set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/tools/cmake;${CMAKE_MODULE_PATH}")
+
 if(NOT APPLE)
 	if(UNIX)
 		set(FRONTENDGLINC "-lGL")
@@ -90,6 +91,9 @@ find_package(Bullet REQUIRED)
 #find Caelum
 find_package(Caelum REQUIRED)
 
+#find ImGUI
+#find_package(ImGUI REQUIRED)
+
 #find OpenXR
 if(WIN32)
 	find_package(OpenXR)
@@ -171,12 +175,17 @@ file (GLOB OGREBULLET_DYN_FILES
 	ogrebullet/Dynamics/src/Prefab/*.cpp
 )
 
+file (GLOB IMGUIZMO_FILES
+	dependencies/ImGuizmo/*.cpp
+)
+
 if(FMOD_FOUND)
 include_directories( ${OGRE_INCLUDE_DIRS}
 	${OGRE_Overlay_INCLUDE_DIRS}
 	${OGRE_RTShaderSystem_INCLUDE_DIRS}
 	${OGRE_Bites_INCLUDE_DIRS}
 	${FMOD_INCLUDE_DIR}
+#	${IMGUI_INCLUDE_DIR}
 	${GTK3_INCLUDE_DIRS}
 	${BULLET_INCLUDE_DIRS}
 	${Caelum_INCLUDE_DIRS}
@@ -202,6 +211,8 @@ include_directories( ${OGRE_INCLUDE_DIRS}
 	ogrebullet/Dynamics/include
 	ogrebullet/Dynamics/include/Constraints
 	ogrebullet/Dynamics/include/Prefab
+	dependencies/ImGuizmo
+	dependencies/imgui
 )
 else()
 include_directories( ${OGRE_INCLUDE_DIRS}
@@ -233,6 +244,8 @@ include_directories( ${OGRE_INCLUDE_DIRS}
         ogrebullet/Dynamics/include
         ogrebullet/Dynamics/include/Constraints
         ogrebullet/Dynamics/include/Prefab
+	dependencies/ImGuizmo
+	dependencies/imgui
 )
 endif()
  
@@ -268,6 +281,9 @@ if (WIN32)
 	add_library(OpenXR SHARED ${OPENXR_FILES})
 endif ()
 
+#ImGuizmo Library
+#add_library(ImGuizmo SHARED ${IMGUIZMO_FILES})
+
 #frontend executable
 if (WIN32)
 	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /ENTRY:mainCRTStartup")
@@ -279,6 +295,7 @@ if (NOT WIN32)
 	add_library(VM SHARED ${VM_FILES})
 else ()
 	add_library(VM SHARED ${VM_FILES} ${SCRIPTPROC_FILES})
+	#target_compile_options(ImGuizmo PRIVATE "/MD")
 	target_compile_options(OgreBulletCol PRIVATE -D_OGREBULLET_EXPORTS "/MD")
 	target_compile_options(OgreBulletDyn PRIVATE -D_OGREBULLET_EXPORTS "/MD")
 	target_compile_options(OpenXR PRIVATE -DOGREOPENXRDLL_EXPORTS "/MD")
@@ -304,6 +321,8 @@ target_precompile_headers(skyscraper PRIVATE src/sbs/globals.h)
  
 target_link_libraries(OgreBulletCol ${OGRE_LIBRARIES} ${BULLET_LIBRARIES})
 target_link_libraries(OgreBulletDyn OgreBulletCol ${OGRE_LIBRARIES} ${BULLET_LIBRARIES})
+
+#target_link_libraries(ImGuizmo ${OGRE_LIBRARIES})
 
 if (WIN32)
 	set (OGRE_D3D11_LIB ${OGRE_DIR}/../../lib/RelWithDebInfo/RenderSystem_Direct3D11.lib)

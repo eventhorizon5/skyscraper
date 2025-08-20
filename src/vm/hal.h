@@ -38,6 +38,7 @@ namespace Ogre {
 	class Rectangle2D;
 	class ConfigFile;
 	class OverlaySystem;
+	class ImGuiOverlay;
 }
 
 namespace FMOD {
@@ -126,6 +127,9 @@ private:
 
 	//Ogre timer
 	Ogre::Timer *timer;
+
+	//ImGui Overlay
+	Ogre::ImGuiOverlay *imgui;
 
     VM *vm;
 };

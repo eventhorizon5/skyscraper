@@ -35,7 +35,7 @@
 #include "vm.h"
 #include "sky.h"
 #include "enginecontext.h"
-#include "texture.h"
+#include "texman.h"
 #include "floor.h"
 #include "camera.h"
 #include "random.h"
@@ -99,17 +99,13 @@ ScriptProcessor::~ScriptProcessor()
 		delete callstation_section;
 }
 
-void ScriptProcessor::Reset()
+void ScriptProcessor::Reset(bool full)
 {
 	line = 0; //line number
 	LineData = "";  //line contents
 	wall = 0;
 	startpos = 0;
 	getfloordata = false;
-	BuildingData.clear();
-	BuildingDataOrig.clear();
-	BuildingData.reserve(1024);
-	BuildingDataOrig.reserve(1024);
 	InFunction = 0;
 	FunctionStack.clear();
 	ReplaceLine = false;
@@ -123,6 +119,14 @@ void ScriptProcessor::Reset()
 	variables.clear();
 	in_runloop = false;
 	processed_runloop = false;
+
+	if (full == true)
+	{
+		BuildingData.clear();
+		BuildingDataOrig.clear();
+		BuildingData.reserve(1024);
+		BuildingDataOrig.reserve(1024);
+	}
 
 	//reset configuration
 	config->Reset();
@@ -2073,6 +2077,23 @@ void ScriptProcessor::Start()
 {
 	IsFinished = true;
 	show_percent = false;
+}
+
+size_t ScriptProcessor::GetFunctionCount()
+{
+	return functions.size();
+}
+
+ScriptProcessor::FunctionInfo ScriptProcessor::GetFunctionInfo(size_t index)
+{
+	FunctionInfo info;
+	info.line = 0;
+	info.name = "";
+
+	if (index >= functions.size())
+		return info;
+
+	return functions[index];
 }
 
 }

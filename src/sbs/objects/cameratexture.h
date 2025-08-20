@@ -33,7 +33,7 @@ public:
 	//functions
 	CameraTexture(Object *parent, const std::string &name, int quality, Real fov, const Vector3 &position, bool use_rotation, const Vector3 &rotation, bool permanent = false);
 	~CameraTexture();
-	void Enabled(bool value);
+	bool Enabled(bool value);
 	bool IsEnabled();
 	void SetFOVAngle(Real angle);
 	Real GetFOVAngle();

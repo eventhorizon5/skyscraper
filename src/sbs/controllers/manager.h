@@ -32,7 +32,7 @@ public:
 	explicit Manager(Object* parent);
 	virtual ~Manager() {};
 	virtual int GetCount() = 0;
-	virtual void Loop() = 0;
+	virtual bool Loop() = 0;
 };
 
 class SBSIMPEXP FloorManager : public Manager
@@ -47,11 +47,11 @@ public:
 	Floor* GetByID(const std::string &id);
 	Floor* GetByNumberID(const std::string &id);
 	void Remove(Floor *floor);
-	void EnableAll(bool value);
+	bool EnableAll(bool value);
 	DynamicMesh* GetFloorDynMesh() { return floors; }
 	DynamicMesh* GetIFloorDynMesh() { return interfloors; }
 	DynamicMesh* GetColumnDynMesh() { return columnframes; }
-	void Loop() override;
+	bool Loop() override;
 
 private:
 	struct Map
@@ -82,8 +82,8 @@ public:
 	Elevator* Get(int number);
 	Elevator* GetIndex(int index);
 	void Remove(Elevator *elevator);
-	void EnableAll(bool value);
-	void Loop() override;
+	bool EnableAll(bool value);
+	bool Loop() override;
 
 private:
 	struct Map
@@ -109,8 +109,8 @@ public:
 	Shaft* Get(int number);
 	Shaft* GetIndex(int index);
 	void Remove(Shaft *shaft);
-	void EnableAll(bool value);
-	void Loop() override;
+	bool EnableAll(bool value);
+	bool Loop() override;
 
 private:
 	struct Map
@@ -136,8 +136,8 @@ public:
 	Stairwell* Get(int number);
 	Stairwell* GetIndex(int index);
 	void Remove(Stairwell *stairs);
-	void EnableAll(bool value);
-	void Loop() override;
+	bool EnableAll(bool value);
+	bool Loop() override;
 
 private:
 	struct Map
@@ -164,7 +164,7 @@ public:
 	void RemoveDoor(Door *door);
 	int GetCount() override;
 	Door* GetIndex(int index);
-	void Loop() override;
+	bool Loop() override;
 
 private:
 	std::vector<Door*> Array;
@@ -180,7 +180,7 @@ public:
 	void RemoveDoor(RevolvingDoor *door);
 	int GetCount() override;
 	RevolvingDoor* GetIndex(int index);
-	void Loop() override;
+	bool Loop() override;
 
 private:
 	std::vector<RevolvingDoor*> Array;
@@ -197,7 +197,7 @@ public:
 	Vehicle* Get(int number);
 	Vehicle* GetIndex(int index);
 	void Remove(Vehicle *elevator);
-	void Loop() override;
+	bool Loop() override;
 
 private:
 	struct Map
@@ -223,7 +223,7 @@ public:
 	DispatchController* Get(int number);
 	DispatchController* GetIndex(int index);
 	void Remove(DispatchController *controller);
-	void Loop() override;
+	bool Loop() override;
 
 private:
 	struct Map
@@ -237,6 +237,24 @@ private:
 	//function caching
 	DispatchController* get_result;
 	int get_number;
+};
+
+class SBSIMPEXP TeleporterManager : public Manager
+{
+public:
+	explicit TeleporterManager(Object* parent);
+	~TeleporterManager() override;
+	Teleporter* Create(std::string name, const std::string &idle_sound, const std::string &teleport_sound, Real width, Real height, const Vector3 &destination);
+	Teleporter* Get(const std::string &name);
+	void Remove(Teleporter *teleporter);
+	int GetCount() override;
+	Teleporter* GetIndex(int index);
+	bool Loop() override;
+
+	bool teleported;
+
+private:
+	std::vector<Teleporter*> Array;
 };
 
 }

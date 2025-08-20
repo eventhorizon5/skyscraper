@@ -21,6 +21,7 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+#include <cmath>
 #include "globals.h"
 #include "sbs.h"
 #include "polymesh.h"
@@ -28,7 +29,7 @@
 #include "polygon.h"
 #include "polymesh.h"
 #include "triangle.h"
-#include "texture.h"
+#include "texman.h"
 #include "profiler.h"
 #include "utility.h"
 #include "wall.h"
@@ -72,6 +73,10 @@ Wall::~Wall()
 
 	//delete polygons
 	DeletePolygons(!sbs->FastDelete);
+
+	//remove the reference to this wall from the mesh's triangle owner list
+	if (sbs->FastDelete == false)
+		meshwrapper->RemoveTriOwner(this);
 }
 
 Polygon* Wall::AddQuad(const std::string &name, const std::string &texture, const Vector3 &v1, const Vector3 &v2, const Vector3 &v3, const Vector3 &v4, Real tw, Real th, bool autosize)
@@ -88,6 +93,19 @@ Polygon* Wall::AddQuad(const std::string &name, const std::string &texture, cons
 	return AddPolygon(name, texture, vertices, tw, th, autosize);
 }
 
+Polygon* Wall::AddTriangle(const std::string &name, const std::string &texture, const Vector3 &v1, const Vector3 &v2, const Vector3 &v3, Real tw, Real th, bool autosize)
+{
+	//add a triangle
+
+	PolyArray vertices;
+	vertices.reserve(3);
+	vertices.emplace_back(v1);
+	vertices.emplace_back(v2);
+	vertices.emplace_back(v3);
+
+	return AddPolygon(name, texture, vertices, tw, th, autosize);
+}
+
 Polygon* Wall::AddPolygon(const std::string &name, const std::string &texture, PolyArray &vertices, Real tw, Real th, bool autosize)
 {
 	//create a generic polygon
@@ -95,10 +113,14 @@ Polygon* Wall::AddPolygon(const std::string &name, const std::string &texture, P
 	Matrix3 tm;
 	Vector3 tv;
 	//std::vector<Extents> index_extents;
-	std::vector<std::vector<Polygon::Geometry> > geometry;
+	GeometrySet geometry;
 	std::vector<Triangle> triangles;
 	PolygonSet converted_vertices;
-	if (!polymesh->CreateMesh(meshwrapper, name, texture, vertices, tw, th, autosize, tm, tv, geometry, triangles, converted_vertices))
+
+	//create polygon
+	Polygon* poly = new Polygon(this, name, meshwrapper);
+
+	if (!polymesh->CreateMesh(meshwrapper, this, poly, name, texture, vertices, tw, th, autosize, tm, tv, geometry, triangles, converted_vertices))
 	{
 		ReportError("Error creating wall '" + name + "'");
 		return 0;
@@ -111,9 +133,45 @@ Polygon* Wall::AddPolygon(const std::string &name, const std::string &texture, P
 	std::string material = sbs->GetTextureManager()->GetTextureMaterial(texture, result, true, name);
 
 	//compute plane
-	Plane plane = sbs->GetUtility()->ComputePlane(converted_vertices[0]);
+	Plane plane = sbs->GetPolyMesh()->ComputePlane(converted_vertices[0]);
 
-	Polygon* poly = new Polygon(this, name, meshwrapper, geometry, triangles, tm, tv, material, plane);
+	//store geometry data in polygon
+	poly->Create(geometry, triangles, tm, tv, material, plane);
+
+	polygons.emplace_back(poly);
+	return poly;
+}
+
+Polygon* Wall::AddPolygon(const std::string &name, const std::string &texture, PolygonSet &vertices, std::vector<std::vector<Vector2>> &uvMap, std::vector<Triangle> &triangles, Real tw, Real th, bool autosize)
+{
+	//create a generic polygon, providing the UV texture mapping and triangles
+
+	Matrix3 tm;
+	Vector3 tv;
+	//std::vector<Extents> index_extents;
+	GeometrySet geometry;
+	std::vector<Triangle> output_triangles;
+	PolygonSet converted_vertices;
+
+	//create polygon
+	Polygon* poly = new Polygon(this, name, meshwrapper);
+
+	if (!polymesh->CreateMesh(meshwrapper, this, poly, name, texture, vertices, uvMap, geometry, output_triangles, converted_vertices, tw, th))
+	{
+		ReportError("Error creating wall '" + name + "'");
+		return 0;
+	}
+
+	if (triangles.size() == 0)
+		return 0;
+
+	bool result;
+	std::string material = sbs->GetTextureManager()->GetTextureMaterial(texture, result, true, name);
+
+	//compute plane
+	Plane plane = sbs->GetPolyMesh()->ComputePlane(converted_vertices[0]);
+
+	poly->Create(geometry, triangles, tm, tv, material, plane);
 	polygons.emplace_back(poly);
 	return poly;
 }
@@ -122,10 +180,14 @@ Polygon* Wall::AddPolygonSet(const std::string &name, const std::string &materia
 {
 	//create a set of polygons, providing the original material and texture mapping
 
-	std::vector<std::vector<Polygon::Geometry> > geometry;
+	GeometrySet geometry;
 	std::vector<Triangle> triangles;
 	PolygonSet converted_vertices;
-	if (!polymesh->CreateMesh(meshwrapper, name, material, vertices, tex_matrix, tex_vector, geometry, triangles, converted_vertices, 0, 0))
+
+	//create polygon
+	Polygon* poly = new Polygon(this, name, meshwrapper);
+
+	if (!polymesh->CreateMesh(meshwrapper, this, poly, name, material, vertices, tex_matrix, tex_vector, geometry, triangles, converted_vertices, 0, 0))
 	{
 		ReportError("Error creating wall '" + name + "'");
 		return 0;
@@ -135,9 +197,75 @@ Polygon* Wall::AddPolygonSet(const std::string &name, const std::string &materia
 		return 0;
 
 	//compute plane
-	Plane plane = sbs->GetUtility()->ComputePlane(converted_vertices[0]);
+	Plane plane = sbs->GetPolyMesh()->ComputePlane(converted_vertices[0]);
 
-	Polygon* poly = new Polygon(this, name, meshwrapper, geometry, triangles, tex_matrix, tex_vector, material, plane);
+	poly->Create(geometry, triangles, tex_matrix, tex_vector, material, plane);
+	polygons.emplace_back(poly);
+
+	return poly;
+}
+
+Polygon* Wall::AddPolygonSet(const std::string& name, const std::string& material, const GeometrySet& geometry)
+{
+    // create a set of polygons, providing the original material and geometry data
+
+	if (!meshwrapper || geometry.empty())
+		return nullptr;
+
+	PolygonSet vertices;
+	std::vector<std::vector<Vector2>> uvMap;
+	vertices.reserve(geometry.size());
+	uvMap.reserve(geometry.size());
+
+	for (const auto& ring : geometry)
+	{
+		PolyArray verts;
+		std::vector<Vector2> uvs;
+		verts.reserve(ring.size());
+		uvs.reserve(ring.size());
+
+		for (const auto& g : ring)
+		{
+			verts.emplace_back(g.vertex);
+			uvs.emplace_back(g.texel);
+		}
+		vertices.emplace_back(std::move(verts));
+		uvMap.emplace_back(std::move(uvs));
+	}
+
+	//build mesh with explicit UVs
+	GeometrySet outGeom;
+	std::vector<Triangle> triangles;
+	PolygonSet converted_vertices;
+
+	const bool convert_vertices = true;
+	const Real tw = 1.0f, th = 1.0f;
+
+	//create polygon
+	Polygon* poly = new Polygon(this, name, meshwrapper);
+
+	if (!polymesh->CreateMesh(meshwrapper, this, poly, name, material, vertices, uvMap, outGeom, triangles, converted_vertices, tw, th, convert_vertices))
+	{
+		ReportError("Error creating wall '" + name + "'");
+		return 0;
+	}
+
+	//compute plane
+	Plane plane;
+	if (!converted_vertices.empty() && !converted_vertices[0].empty())
+		plane = sbs->GetPolyMesh()->ComputePlane(converted_vertices[0]);
+	else
+	{
+		plane.normal = Vector3(0,1,0);
+		plane.d = 0;
+	}
+
+	//construct the polygon (tm/tv identity because UVs are explicit)
+	Matrix3 tm;
+	tm.FromAxes(Vector3(1,0,0), Vector3(0,1,0), Vector3(0,0,1));
+	Vector3 tv(0,0,0);
+
+	poly->Create(outGeom, triangles, tm, tv, material, plane);
 	polygons.emplace_back(poly);
 
 	return poly;
@@ -313,7 +441,7 @@ Vector3 Wall::GetWallExtents(Real altitude, bool get_max)
 {
 	//return the X and Z extents of this wall object at a specific altitude, by doing a double plane cut
 
-	Utility* utility = sbs->GetUtility();
+	PolyMesh* polymesh = sbs->GetPolyMesh();
 
 	for (int i = 0; i < GetPolygonCount(); i++)
 	{
@@ -327,29 +455,29 @@ Vector3 Wall::GetWallExtents(Real altitude, bool get_max)
 		}
 
 		//if given altitude is outside of polygon's range, return 0
-		Vector2 yextents = utility->GetExtents(poly, 2);
+		Vector2 yextents = polymesh->GetExtents(poly, 2);
 		Real tmpaltitude = altitude;
 		if (tmpaltitude < yextents.x || tmpaltitude > yextents.y)
 			return Vector3(0, 0, 0);
 
 		//get upper
-		utility->SplitWithPlane(1, poly, tmp1, tmp2, tmpaltitude - 0.001);
+		polymesh->SplitWithPlane(1, poly, tmp1, tmp2, tmpaltitude - 0.001);
 
 		//get lower part of upper
-		utility->SplitWithPlane(1, tmp2, poly, tmp1, tmpaltitude + 0.001);
+		polymesh->SplitWithPlane(1, tmp2, poly, tmp1, tmpaltitude + 0.001);
 
 		Vector3 result;
 		if (get_max == false)
 		{
 			//get minimum extents
-			result.x = utility->GetExtents(poly, 1).x;
-			result.z = utility->GetExtents(poly, 3).x;
+			result.x = polymesh->GetExtents(poly, 1).x;
+			result.z = polymesh->GetExtents(poly, 3).x;
 		}
 		else
 		{
 			//get maximum extents
-			result.x = utility->GetExtents(poly, 1).y;
-			result.z = utility->GetExtents(poly, 3).y;
+			result.x = polymesh->GetExtents(poly, 1).y;
+			result.z = polymesh->GetExtents(poly, 3).y;
 		}
 		result.y = altitude;
 		return result; //only check the first polygon for now

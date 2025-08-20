@@ -257,7 +257,7 @@ void VMConsole::Process(const std::string &text, bool echo)
 		if (params.size() != 1)
 			Report("Incorrect number of parameters");
 		else
-			vm->Load(false, params[0]);
+			vm->Load(false, false, params[0]);
 		consoleresult.ready = false;
 		consoleresult.threadwait = false;
 		return;
@@ -278,7 +278,7 @@ void VMConsole::Process(const std::string &text, bool echo)
 	//version command
 	if (command == "version")
 	{
-		Report("Skyscraper Frontend version " + vm->version + " " + vm->version_state);
+		Report("Skyscraper version " + vm->version + " " + vm->version_state);
 		Report("VM version " + vm->version_full);
 		if (processor)
 			Report("SBS version " + processor->GetEngine()->GetSystem()->version);
@@ -311,7 +311,12 @@ void VMConsole::Process(const std::string &text, bool echo)
 	if (command == "uname")
 	{
 		if (params.size() > 0)
-			Report("VM " + vm->version + " " + vm->version_state + " (" + vm->Architecture + " " + vm->Bits + "), build " + vm->version_rev);
+		{
+			std::string delim = " ";
+			if (vm->version_state == "")
+				delim = "";
+			Report("VM " + vm->version + delim + vm->version_state + " (" + vm->Architecture + " " + vm->Bits + "), build " + vm->version_rev);
+		}
 		else
 			Report("VM");
 		consoleresult.ready = false;
@@ -322,7 +327,7 @@ void VMConsole::Process(const std::string &text, bool echo)
 	//start command
 	if (command == "start")
 	{
-		vm->Load(false, "Ground.bld");
+		vm->Load(false, false, "Ground.bld");
 		consoleresult.ready = false;
 		consoleresult.threadwait = false;
 		return;
@@ -333,12 +338,21 @@ void VMConsole::Process(const std::string &text, bool echo)
 	{
 		int count = vm->GetEngineCount();
 		Report(SBS::ToString(count) + " engines running\n", "cyan");
+		Report("Instance\tElapsed Time\t\tRun Time\t\tFilename", "cyan");
+		Report("--------\t------------\t\t---------\t\t--------", "cyan");
+		Report("");
 		for (int i = 0; i < count; i++)
 		{
 			EngineContext *engine = vm->GetEngine(i);
+			if (!engine)
+				continue;
+
 			Real elapsed_time = 0;
 			if (vm->GetElapsedTime(i) > 0)
-				elapsed_time = Real(vm->GetElapsedTime(i) / Real(vm->time_stat));
+			{
+				if (vm->time_stat > 0)
+					elapsed_time = Real(vm->GetElapsedTime(i) / Real(vm->time_stat));
+			}
 			unsigned long runtime = engine->GetSystem()->GetRunTime();
 			Report(SBS::ToString(i) + ":\t" + SBS::ToString(elapsed_time * 100) + "\t\t" + SBS::ToString(runtime / 1000) + "\t\t" + engine->GetFilename(), "green");
 		}
@@ -451,7 +465,7 @@ void VMConsole::Process(const std::string &text, bool echo)
 		return;
 	}
 
-	//uptime command
+	//vmuptime command
 	if (command == "vmuptime")
 	{
 		unsigned long uptime = vm->Uptime() / 1000;
@@ -522,6 +536,139 @@ void VMConsole::Process(const std::string &text, bool echo)
 		return;
 	}
 
+	//pause command
+	if (command == "pause")
+	{
+		if (vm->GetEngineCount() == 0)
+		{
+			ReportError("No engine, run vminit");
+			consoleresult.ready = false;
+			consoleresult.threadwait = false;
+			return;
+		}
+
+		if (params.size() == 0)
+		{
+			vm->GetActiveEngine()->Paused = true;
+			Report("Paused active engine");
+			consoleresult.ready = false;
+			consoleresult.threadwait = false;
+			return;
+		}
+		else
+		{
+			EngineContext *engine = vm->GetEngine(SBS::ToInt(params[0]));
+			if (engine)
+			{
+				engine->Paused = true;
+				Report("Paused engine " + SBS::ToString(engine->GetNumber()));
+			}
+			else
+				ReportError("Invalid engine");
+		}
+		consoleresult.ready = false;
+		consoleresult.threadwait = false;
+		return;
+	}
+
+	//resume command
+	if (command == "resume")
+	{
+		if (vm->GetEngineCount() == 0)
+		{
+			ReportError("No engine, run vminit");
+			consoleresult.ready = false;
+			consoleresult.threadwait = false;
+			return;
+		}
+
+		if (params.size() == 0)
+		{
+			vm->GetActiveEngine()->Paused = false;
+			Report("Resumed active engine");
+			consoleresult.ready = false;
+			consoleresult.threadwait = false;
+			return;
+		}
+		else
+		{
+			EngineContext *engine = vm->GetEngine(SBS::ToInt(params[0]));
+			if (engine)
+			{
+				engine->Paused = false;
+				Report("Resumed engine " + SBS::ToString(engine->GetNumber()));
+			}
+			else
+				ReportError("Invalid engine");
+		}
+		consoleresult.ready = false;
+		consoleresult.threadwait = false;
+		return;
+	}
+
+	//show command
+	if (command == "show")
+	{
+		if (params.size() != 1)
+			Report ("Incorrect number of parameters");
+		else
+		{
+			EngineContext *engine = vm->GetEngine(SBS::ToInt(params[0]));
+
+			if (engine)
+			{
+				Report("Engine instance: " + SBS::ToString(engine->GetNumber()));
+				if (engine->GetParent())
+					Report("Parent: " + SBS::ToString(engine->GetParent()->GetNumber()));
+				Report("Filename: " + engine->GetFilename());
+				Report("Type: " + engine->GetType());
+
+				std::string pos = SBS::ToString(engine->GetPosition().x) + ", " + SBS::ToString(engine->GetPosition().y) + ", " + SBS::ToString(engine->GetPosition().z);
+				Report("Position: " + pos);
+
+				Vector3 min, max;
+				engine->GetSystem()->GetBounds(min, max);
+				if (min.y <= -999999)
+					min.y = 0;
+				if (max.y >= 999999)
+					max.y = 0;
+				std::string bounds_min = SBS::ToString(min.x) + ", " + SBS::ToString(min.y) + ", " + SBS::ToString(min.z);
+				std::string bounds_max = SBS::ToString(max.x) + ", " + SBS::ToString(max.y) + ", " + SBS::ToString(max.z);
+				Report("Bounds minimum: " + bounds_min);
+				Report("Bounds maximum: " + bounds_max);
+
+				Report("Camera active: " + SBS::BoolToString(engine->IsCameraActive()));
+				Report("Status: " + engine->GetStatus());
+				Report("Paused: " + SBS::BoolToString(engine->Paused));
+				Report("Uptime: " + SBS::ToString(engine->GetSystem()->GetRunTime() / 1000));
+			}
+			else
+				Report("Instance unloaded");
+		}
+		consoleresult.ready = false;
+		consoleresult.threadwait = false;
+		return;
+	}
+
+	//status command
+	if (command == "status")
+	{
+		if (params.size() != 1)
+			Report ("Incorrect number of parameters");
+		else
+		{
+			EngineContext *engine = vm->GetEngine(SBS::ToInt(params[0]));
+
+			if (engine)
+				Report(engine->GetStatus());
+			else
+				Report("Instance unloaded");
+		}
+		consoleresult.ready = false;
+		consoleresult.threadwait = false;
+		return;
+	}
+
 	//help command
 	if (command == "help" || command == "?")
 	{
@@ -545,6 +692,10 @@ void VMConsole::Process(const std::string &text, bool echo)
 			Report("profile [-a] - shows function-level profiling statistics");
 			Report("vminit - create and initialize a simulator engine");
 			Report("boot [engine_number] - start a simulator engine");
+			Report("pause [engine_number] - pause a simulator engine");
+			Report("resume [engine_number] - resume a simulator engine");
+			Report("show [engine_number] - show information of the specified engine");
+			Report("status [engine_number] - show status of the specified engine");
 			Report("help - print this help guide\n");
 			Report("All other commands will be passed to the active simulator engine, if available");
 #ifdef USING_WX

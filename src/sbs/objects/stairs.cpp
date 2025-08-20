@@ -34,12 +34,13 @@
 #include "model.h"
 #include "primitive.h"
 #include "custom.h"
-#include "texture.h"
+#include "texman.h"
 #include "light.h"
 #include "profiler.h"
 #include "cameratexture.h"
 #include "utility.h"
 #include "trigger.h"
+#include "shape.h"
 #include "stairs.h"
 
 namespace SBS {
@@ -133,15 +134,17 @@ void Stairwell::SetShowFull(int value)
 	}
 }
 
-void Stairwell::EnableWhole(bool value, bool force)
+bool Stairwell::EnableWhole(bool value, bool force)
 {
 	//turn on/off entire stairwell
 
 	if (value == false && ShowFullStairs == 2)
-		return;
+		return true;
 
 	if (force == true)
 		IsEnabled = !value;
+
+	bool status = true;
 
 	if (IsEnabled == !value)
 	{
@@ -149,15 +152,22 @@ void Stairwell::EnableWhole(bool value, bool force)
 		{
 			if (force == true)
 				GetLevel(i)->enabled = !value;
-			GetLevel(i)->Enabled(value);
+			bool result = GetLevel(i)->Enabled(value);
+			if (!result)
+				status = false;
 		}
 	}
 
 	//enable/disable dynamic meshes
-	dynamic_mesh->Enabled(value);
-	DoorWrapper->Enabled(value);
+	bool result = dynamic_mesh->Enabled(value);
+	if (!result)
+		status = false;
+	result = DoorWrapper->Enabled(value);
+	if (!result)
+		status = false;
 
 	IsEnabled = value;
+	return status;
 }
 
 bool Stairwell::IsInside(const Vector3 &position)
@@ -270,9 +280,9 @@ void Stairwell::CutFloors(bool relative, const Vector2 &start, const Vector2 &en
 				continue;
 
 			if (relative == true)
-				sbs->GetUtility()->Cut(sbs->External->Walls[i], Vector3(GetPosition().x + start.x, voffset1, GetPosition().z + start.y), Vector3(GetPosition().x + end.x, voffset2, GetPosition().z + end.y), false, true);
+				sbs->GetPolyMesh()->Cut(sbs->External->Walls[i], Vector3(GetPosition().x + start.x, voffset1, GetPosition().z + start.y), Vector3(GetPosition().x + end.x, voffset2, GetPosition().z + end.y), false, true);
 			else
-				sbs->GetUtility()->Cut(sbs->External->Walls[i], Vector3(start.x, voffset1, start.y), Vector3(end.x, voffset2, end.y), false, true);
+				sbs->GetPolyMesh()->Cut(sbs->External->Walls[i], Vector3(start.x, voffset1, start.y), Vector3(end.x, voffset2, end.y), false, true);
 		}
 	}
 }
@@ -356,7 +366,7 @@ void Stairwell::ReplaceTexture(const std::string &oldtexture, const std::string 
 		Levels[i]->ReplaceTexture(oldtexture, newtexture);
 }
 
-void Stairwell::OnInit()
+bool Stairwell::OnInit()
 {
 	//startup initialization of stairs
 
@@ -364,6 +374,8 @@ void Stairwell::OnInit()
 		EnableWhole(true);
 	else
 		EnableWhole(false);
+
+	return true;
 }
 
 void Stairwell::AddShowFloor(int floor)
@@ -493,11 +505,11 @@ void Stairwell::Check(Vector3 position, int current_floor, int previous_floor)
 	}
 }
 
-void Stairwell::Loop()
+bool Stairwell::Loop()
 {
 	//stairwell runloop
 
-	LoopChildren();
+	return LoopChildren();
 }
 
 DynamicMesh* Stairwell::GetDynamicMesh()
@@ -779,65 +791,58 @@ bool Stairwell::Level::AddFloor(Wall *wall, const std::string &name, const std::
 	return sbs->GetPolyMesh()->AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, voffset1, voffset2, reverse_axis, texture_direction, tw, th, true, legacy_behavior);
 }
 
-void Stairwell::Level::Enabled(bool value)
+bool Stairwell::Level::Enabled(bool value)
 {
 	//turns stairwell on/off for a specific floor
 
 	SBS_PROFILE("Stairwell::Level::Enabled");
+	bool status = true;
+	Utility *utility = sbs->GetUtility();
+
 	if (IsEnabled() != value)
 	{
-		mesh->Enabled(value);
+		bool result = mesh->Enabled(value);
+		if (!result)
+			status = false;
 		enabled = value;
 
 		//doors
-		for (size_t i = 0; i < DoorArray.size(); i++)
-		{
-			if (DoorArray[i])
-				DoorArray[i]->Enabled(value);
-		}
+		result = EnableArray(DoorArray, value);
+		if (!result)
+			status = false;
 
 		//controls
-		for (size_t i = 0; i < ControlArray.size(); i++)
-		{
-			if (ControlArray[i])
-				ControlArray[i]->Enabled(value);
-		}
+		result = EnableArray(ControlArray, value);
+		if (!result)
+			status = false;
 
 		//triggers
-		for (size_t i = 0; i < TriggerArray.size(); i++)
-		{
-			if (TriggerArray[i])
-				TriggerArray[i]->Enabled(value);
-		}
+		result = EnableArray(TriggerArray, value);
+		if (!result)
+			status = false;
 
 		//models
-		for (size_t i = 0; i < ModelArray.size(); i++)
-		{
-			if (ModelArray[i])
-				ModelArray[i]->Enabled(value);
-		}
+		result = EnableArray(ModelArray, value);
+		if (!result)
+			status = false;
 
 		//primitives
-		for (size_t i = 0; i < PrimArray.size(); i++)
-		{
-			if (PrimArray[i])
-				PrimArray[i]->Enabled(value);
-		}
+		result = EnableArray(PrimArray, value);
+		if (!result)
+			status = false;
 
 		//custom objects
-		for (size_t i = 0; i < CustomObjectArray.size(); i++)
-		{
-			if (CustomObjectArray[i])
-				CustomObjectArray[i]->Enabled(value);
-		}
+		result = EnableArray(CustomObjectArray, value);
+		if (!result)
+			status = false;
 
 		//lights
-		for (size_t i = 0; i < lights.size(); i++)
-		{
-			if (lights[i])
-				lights[i]->Enabled(value);
-		}
+		result = EnableArray(lights, value);
+		if (!result)
+			status = false;
 	}
+
+	return status;
 }
 
 Door* Stairwell::Level::AddDoor(std::string name, const std::string &open_sound, const std::string &close_sound, bool open_state, const std::string &texture, const std::string &side_texture, Real thickness, const std::string &face_direction, const std::string &open_direction, bool rotate, Real open_speed, Real close_speed, Real CenterX, Real CenterZ, Real width, Real height, Real voffset, Real tw, Real th, Real side_tw, Real side_th)
@@ -873,7 +878,7 @@ Door* Stairwell::Level::AddDoor(std::string name, const std::string &open_sound,
 	}
 
 	//cut area
-	sbs->GetUtility()->ResetDoorwayWalls();
+	sbs->GetPolyMesh()->ResetDoorwayWalls();
 	if (face_direction == "left" || face_direction == "right")
 	{
 		Cut(1, Vector3(x1 - 0.5, voffset, z1), Vector3(x2 + 0.5, voffset + height, z2), true, false, 1);
@@ -886,7 +891,7 @@ Door* Stairwell::Level::AddDoor(std::string name, const std::string &open_sound,
 	}
 
 	//create doorway walls
-	sbs->GetUtility()->AddDoorwayWalls(mesh, "Connection Walls", "ConnectionWall", 0, 0);
+	sbs->GetPolyMesh()->AddDoorwayWalls(mesh, "Connection Walls", "ConnectionWall", 0, 0);
 
 	std::string num = ToString((int)DoorArray.size());
 	if (name == "")
@@ -952,9 +957,9 @@ bool Stairwell::Level::Cut(bool relative, const Vector3 &start, const Vector3 &e
 			reset = false;
 
 		if (relative == true)
-			sbs->GetUtility()->Cut(mesh->Walls[i], Vector3(start.x, start.y, start.z), Vector3(end.x, end.y, end.z), cutwalls, cutfloors, checkwallnumber, reset);
+			sbs->GetPolyMesh()->Cut(mesh->Walls[i], Vector3(start.x, start.y, start.z), Vector3(end.x, end.y, end.z), cutwalls, cutfloors, checkwallnumber, reset);
 		else
-			sbs->GetUtility()->Cut(mesh->Walls[i], Vector3(start.x - GetPosition().x, start.y, start.z - GetPosition().z), Vector3(end.x - GetPosition().x, end.y, end.z - GetPosition().z), cutwalls, cutfloors, checkwallnumber, reset);
+			sbs->GetPolyMesh()->Cut(mesh->Walls[i], Vector3(start.x - GetPosition().x, start.y, start.z - GetPosition().z), Vector3(end.x - GetPosition().x, end.y, end.z - GetPosition().z), cutwalls, cutfloors, checkwallnumber, reset);
 	}
 
 	return true;
@@ -968,92 +973,50 @@ bool Stairwell::Level::IsEnabled()
 void Stairwell::Level::RemoveDoor(Door *door)
 {
 	//remove a door reference (this does not delete the object)
-	for (size_t i = 0; i < DoorArray.size(); i++)
-	{
-		if (DoorArray[i] == door)
-		{
-			DoorArray.erase(DoorArray.begin() + i);
-			return;
-		}
-	}
+
+	RemoveArrayElement(DoorArray, door);
 }
 
 void Stairwell::Level::RemoveLight(Light *light)
 {
 	//remove a light reference (does not delete the object itself)
-	for (size_t i = 0; i < lights.size(); i++)
-	{
-		if (lights[i] == light)
-		{
-			lights.erase(lights.begin() + i);
-			return;
-		}
-	}
+
+	RemoveArrayElement(lights, light);
 }
 
 void Stairwell::Level::RemoveModel(Model *model)
 {
 	//remove a model reference (does not delete the object itself)
-	for (size_t i = 0; i < ModelArray.size(); i++)
-	{
-		if (ModelArray[i] == model)
-		{
-			ModelArray.erase(ModelArray.begin() + i);
-			return;
-		}
-	}
+
+	RemoveArrayElement(ModelArray, model);
 }
 
 void Stairwell::Level::RemovePrimitive(Primitive *prim)
 {
 	//remove a prim reference (does not delete the object itself)
-	for (size_t i = 0; i < PrimArray.size(); i++)
-	{
-		if (PrimArray[i] == prim)
-		{
-			PrimArray.erase(PrimArray.begin() + i);
-			return;
-		}
-	}
+
+	RemoveArrayElement(PrimArray, prim);
 }
 
 void Stairwell::Level::RemoveCustomObject(CustomObject *object)
 {
 	//remove a custom object reference (does not delete the object itself)
-	for (size_t i = 0; i < CustomObjectArray.size(); i++)
-	{
-		if (CustomObjectArray[i] == object)
-		{
-			CustomObjectArray.erase(CustomObjectArray.begin() + i);
-			return;
-		}
-	}
+
+	RemoveArrayElement(CustomObjectArray, object);
 }
 
 void Stairwell::Level::RemoveControl(Control *control)
 {
 	//remove a control reference (does not delete the object itself)
-	for (size_t i = 0; i < ControlArray.size(); i++)
-	{
-		if (ControlArray[i] == control)
-		{
-			ControlArray.erase(ControlArray.begin() + i);
-			return;
-		}
-	}
+
+	RemoveArrayElement(ControlArray, control);
 }
 
 void Stairwell::Level::RemoveTrigger(Trigger *trigger)
 {
 	//remove a trigger reference (does not delete the object itself)
-	for (size_t i = 0; i < TriggerArray.size(); i++)
-	{
-		if (TriggerArray[i] == trigger)
-		{
-			TriggerArray.erase(TriggerArray.begin() + i);
-			return;
-		}
-	}
+
+	RemoveArrayElement(TriggerArray, trigger);
 }
 
 Light* Stairwell::Level::AddLight(const std::string &name, int type)
@@ -1103,13 +1066,7 @@ void Stairwell::Level::AddModel(Model *model)
 	if (!model)
 		return;
 
-	for (size_t i = 0; i < ModelArray.size(); i++)
-	{
-		if (ModelArray[i] == model)
-			return;
-	}
-
-	ModelArray.emplace_back(model);
+	AddArrayElement(ModelArray, model);
 }
 
 Primitive* Stairwell::Level::AddPrimitive(const std::string &name)
@@ -1127,13 +1084,7 @@ void Stairwell::Level::AddPrimitive(Primitive *primitive)
 	if (!primitive)
 		return;
 
-	for (size_t i = 0; i < PrimArray.size(); i++)
-	{
-		if (PrimArray[i] == primitive)
-			return;
-	}
-
-	PrimArray.emplace_back(primitive);
+	AddArrayElement(PrimArray, primitive);
 }
 
 CustomObject* Stairwell::Level::AddCustomObject(const std::string &name, const Vector3 &position, const Vector3 &rotation, Real max_render_distance, Real scale_multiplier)
@@ -1151,13 +1102,7 @@ void Stairwell::Level::AddCustomObject(CustomObject *object)
 	if (!object)
 		return;
 
-	for (size_t i = 0; i < CustomObjectArray.size(); i++)
-	{
-		if (CustomObjectArray[i] == object)
-			return;
-	}
-
-	CustomObjectArray.emplace_back(object);
+	AddArrayElement(CustomObjectArray, object);
 }
 
 
@@ -1236,11 +1181,11 @@ int Stairwell::Level::GetFloor()
 	return floornum;
 }
 
-void Stairwell::Level::Loop()
+bool Stairwell::Level::Loop()
 {
 	//level runloop
 
-	LoopChildren();
+	return LoopChildren();
 }
 
 CameraTexture* Stairwell::Level::AddCameraTexture(const std::string &name, int quality, Real fov, const Vector3 &position, bool use_rotation, const Vector3 &rotation)
@@ -1254,14 +1199,21 @@ CameraTexture* Stairwell::Level::AddCameraTexture(const std::string &name, int q
 void Stairwell::Level::RemoveCameraTexture(CameraTexture* camtex)
 {
 	//remove a cameratexture reference (does not delete the object itself)
-	for (size_t i = 0; i < CameraTextureArray.size(); i++)
-	{
-		if (CameraTextureArray[i] == camtex)
-		{
-			CameraTextureArray.erase(CameraTextureArray.begin() + i);
-			return;
-		}
-	}
+
+	RemoveArrayElement(CameraTextureArray, camtex);
+}
+
+Shape* Stairwell::Level::CreateShape(Wall *wall)
+{
+	//Creates a shape in the specified wall object
+	//returns a Shape object, which must be deleted by the caller after use
+
+	if (!wall)
+		return 0;
+
+	Shape *shape = new Shape(wall);
+	//shape->origin = Vector3(0, 0, 0);
+	return shape;
 }
 
 }

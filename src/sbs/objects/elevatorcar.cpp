@@ -42,7 +42,7 @@
 #include "shaft.h"
 #include "camera.h"
 #include "dynamicmesh.h"
-#include "texture.h"
+#include "texman.h"
 #include "profiler.h"
 #include "cameratexture.h"
 #include "elevatorcar.h"
@@ -51,6 +51,8 @@
 #include "timer.h"
 #include "controller.h"
 #include "elevroute.h"
+#include "utility.h"
+#include "shape.h"
 #include "reverb.h"
 
 #include <time.h>
@@ -138,7 +140,7 @@ ElevatorCar::ElevatorCar(Elevator *parent, int number) : Object(parent)
 	MessageOnStart = false;
 	MessageOnClose = false;
 	indicator = 0;
-	TimerDelay = 2;
+	TimerDelay = 2.5;
 	reverb = 0;
 
 	std::string name = parent->GetName() + ":Car " + ToString(number);
@@ -684,7 +686,7 @@ void ElevatorCar::Alarm()
 		//ring alarm
 		AlarmActive = true;
 		Report("alarm on");
-		if (AlarmSound != "")
+		if (AlarmSound != "" && alarm)
 		{
 			alarm->Load(AlarmSound);
 			alarm->SetLoopState(true);
@@ -695,7 +697,7 @@ void ElevatorCar::Alarm()
 	{
 		//stop alarm
 		AlarmActive = false;
-		if (AlarmSound != "")
+		if (AlarmSound != "" && alarm)
 		{
 			alarm->Stop();
 			alarm->Load(AlarmSoundStop);
@@ -713,32 +715,39 @@ void ElevatorCar::OpenHatch()
 	Report("opening hatch");
 }
 
-void ElevatorCar::OnInit()
+bool ElevatorCar::OnInit()
 {
 	//startup car initialization
 
 	//exit if not created properly
 	if (Created == false)
-		return;
+		return false;
 
 	//disable objects
 	EnableObjects(false);
 
 	//move car (and possibly elevator) to starting position
 	SetFloor(StartingFloor, (Number == 1));
+
+	return true;
 }
 
-void ElevatorCar::Loop()
+bool ElevatorCar::Loop()
 {
 	//elevator car monitor loop
 
 	SBS_PROFILE("ElevatorCar::Loop");
 
+	bool status = true;
+
 	//only run if power is enabled
 	if (sbs->GetPower() == false)
 	{
-		idlesound->Stop();
-		musicsound->Stop();
+		if (idlesound && musicsound)
+		{
+			idlesound->Stop();
+			musicsound->Stop();
+		}
 	}
 
 	ControlPressActive = false;
@@ -753,17 +762,18 @@ void ElevatorCar::Loop()
 	}
 
 	//play car idle sound if in elevator, or if doors open
-	if (IdleSound != "" && sbs->GetPower() == true)
+	if (IdleSound != "" && sbs->GetPower() == true && idlesound)
 	{
 		if (idlesound->IsPlaying() == false && Fan == true)
 		{
 			if (InCar() == true || AreDoorsOpen() == true || AreDoorsMoving(0, true, false) != 0)
 			{
-				if (sbs->Verbose)
-					Report("playing car idle sound");
-
+				bool result = false;
 				if (idlesound->IsLoaded() == false)
-					idlesound->Load(IdleSound);
+					result = idlesound->Load(IdleSound);
+
+				if (sbs->Verbose && result == true)
+					Report("playing car idle sound");
 
 				idlesound->SetLoopState(true);
 				idlesound->Play();
@@ -787,7 +797,7 @@ void ElevatorCar::Loop()
 	}
 
 	//music processing
-	if ((MusicUp != "" || MusicDown != "") && sbs->GetPower() == true)
+	if ((MusicUp != "" || MusicDown != "") && sbs->GetPower() == true && musicsound)
 	{
 		if (MusicAlwaysOn == false) //standard mode
 		{
@@ -900,6 +910,9 @@ void ElevatorCar::Loop()
 	//turn on lights if in elevator, or if doors are open
 	for (size_t i = 0; i < lights.size(); i++)
 	{
+		if (!lights[i])
+			continue;
+
 		if (lights[i]->IsEnabled() == false)
 		{
 			if (InCar() == true || AreDoorsOpen() == true || AreDoorsMoving(0, true, false) != 0)
@@ -942,12 +955,15 @@ void ElevatorCar::Loop()
 		if ((parent->UpPeak == true || parent->DownPeak == true))
 		{
 			RouteController *controller = parent->GetRouteController();
-			if ((controller->UpQueue.empty() == false || controller->DownQueue.empty() == false) && (AreDoorsOpen() == true && AreDoorsMoving() == 0))
+			if (controller)
 			{
-				if (door)
+				if ((controller->UpQueue.empty() == false || controller->DownQueue.empty() == false) && (AreDoorsOpen() == true && AreDoorsMoving() == 0))
 				{
-					if (door->TimerIsRunning() == false)
-						door->Reset();
+					if (door)
+					{
+						if (door->TimerIsRunning() == false)
+							door->Reset();
+					}
 				}
 			}
 		}
@@ -955,7 +971,11 @@ void ElevatorCar::Loop()
 
 	//run child object runloops
 	if (IsEnabled == true)
-		LoopChildren();
+	{
+		bool result = LoopChildren();
+		if (!result)
+			status = false;
+	}
 
 	//process door sensors
 	for (size_t i = 0; i < DoorArray.size(); i++)
@@ -965,19 +985,22 @@ void ElevatorCar::Loop()
 	}
 
 	//process queued sounds
-	announcesnd->ProcessQueue();
+	if (announcesnd)
+		announcesnd->ProcessQueue();
 
 	//reset message sound status
 	DirMessageSound = false;
 	DoorMessageSound = false;
+
+	return status;
 }
 
-void ElevatorCar::Enabled(bool value)
+bool ElevatorCar::Enabled(bool value)
 {
 	//shows/hides elevator car
 
 	if (IsEnabled == value)
-		return;
+		return true;
 
 	if (sbs->Verbose)
 	{
@@ -987,7 +1010,12 @@ void ElevatorCar::Enabled(bool value)
 			Report("disabling car");
 	}
 
-	Mesh->Enabled(value);
+	bool status = true;
+
+	bool result = Mesh->Enabled(value);
+	if (!result)
+		status = false;
+
 	EnableDoors(value);
 	IsEnabled = value;
 
@@ -995,7 +1023,11 @@ void ElevatorCar::Enabled(bool value)
 	for (size_t i = 0; i < FloorIndicatorArray.size(); i++)
 	{
 		if (FloorIndicatorArray[i])
-			FloorIndicatorArray[i]->Enabled(value);
+		{
+			bool result = FloorIndicatorArray[i]->Enabled(value);
+			if (!result)
+				status = false;
+		}
 	}
 
 	//interior directional indicators
@@ -1003,14 +1035,18 @@ void ElevatorCar::Enabled(bool value)
 
 	if (value == false)
 		EnableObjects(false);
+
+	return status;
 }
 
-void ElevatorCar::EnableObjects(bool value)
+bool ElevatorCar::EnableObjects(bool value)
 {
 	//enable or disable interior objects, such as floor indicators and button panels
 
 	if (AutoEnable == false)
-		return;
+		return true;
+
+	bool status = true;
 
 	//SBS_PROFILE("ElevatorCar::EnableObjects");
 	if (sbs->Verbose)
@@ -1022,53 +1058,42 @@ void ElevatorCar::EnableObjects(bool value)
 	}
 
 	//floor indicators
-	/*for (size_t i = 0; i < FloorIndicatorArray.size(); i++)
-	{
-		if (FloorIndicatorArray[i])
-			FloorIndicatorArray[i]->Enabled(value);
-	}*/
+	/*bool result = EnableArray(FloorIndicatorArray, value);
+	if (!result)
+		status = false;*/
 
 	//interior directional indicators
 	//EnableDirectionalIndicators(value);
 
 	//controls
-	for (size_t i = 0; i < ControlArray.size(); i++)
-	{
-		if (ControlArray[i])
-			ControlArray[i]->Enabled(value);
-	}
+	bool result = EnableArray(ControlArray, value);
+	if (!result)
+		status = false;
 
 	//triggers
-	for (size_t i = 0; i < TriggerArray.size(); i++)
-	{
-		if (TriggerArray[i])
-			TriggerArray[i]->Enabled(value);
-	}
+	result = EnableArray(TriggerArray, value);
+	if (!result)
+		status = false;
 
 	//models
-	for (size_t i = 0; i < ModelArray.size(); i++)
-	{
-		if (ModelArray[i])
-			ModelArray[i]->Enabled(value);
-	}
+	result = EnableArray(ModelArray, value);
+	if (!result)
+		status = false;
 
 	//panels
-	for (size_t i = 0; i < PanelArray.size(); i++)
-		PanelArray[i]->Enabled(value);
+	result = EnableArray(PanelArray, value);
+	if (!result)
+		status = false;
 
 	//primitives
-	for (size_t i = 0; i < PrimArray.size(); i++)
-	{
-		if (PrimArray[i])
-			PrimArray[i]->Enabled(value);
-	}
+	result = EnableArray(PrimArray, value);
+	if (!result)
+		status = false;
 
 	//custom objects
-	for (size_t i = 0; i < CustomObjectArray.size(); i++)
-	{
-		if (CustomObjectArray[i])
-			CustomObjectArray[i]->Enabled(value);
-	}
+	result = EnableArray(CustomObjectArray, value);
+	if (!result)
+		status = false;
 
 	//sounds
 	for (size_t i = 0; i < sounds.size(); i++)
@@ -1080,7 +1105,11 @@ void ElevatorCar::EnableObjects(bool value)
 				if (value == false)
 					sounds[i]->Stop();
 				else
-					sounds[i]->Play();
+				{
+					bool result = sounds[i]->Play();
+					if (!result)
+						status = false;
+				}
 			}
 		}
 	}
@@ -1088,6 +1117,8 @@ void ElevatorCar::EnableObjects(bool value)
 	//reverb
 	if (reverb)
 		reverb->Enabled(value);
+
+	return status;
 }
 
 void ElevatorCar::UpdateFloorIndicators()
@@ -1530,7 +1561,7 @@ DoorWrapper* ElevatorCar::AddDoors(int number, const std::string &lefttexture, c
 	return 0;
 }
 
-bool ElevatorCar::AddShaftDoors(int number, const std::string &lefttexture, const std::string &righttexture, Real thickness, Real CenterX, Real CenterZ, Real voffset, Real tw, Real th)
+bool ElevatorCar::AddShaftDoors(int number, Real rotation, const std::string &lefttexture, const std::string &righttexture, Real thickness, Real CenterX, Real CenterZ, Real voffset, Real tw, Real th)
 {
 	//adds shaft's elevator doors specified at a relative central position (off of elevator origin)
 	//uses some parameters (width, height, direction) from AddDoors function
@@ -1538,31 +1569,31 @@ bool ElevatorCar::AddShaftDoors(int number, const std::string &lefttexture, cons
 	if (GetDoor(number))
 	{
 		Report("Adding shaft doors...");
-		return GetDoor(number)->AddShaftDoors(lefttexture, righttexture, thickness, CenterX, CenterZ, voffset, tw, th);
+		return GetDoor(number)->AddShaftDoors(rotation, lefttexture, righttexture, thickness, CenterX, CenterZ, voffset, tw, th);
 	}
 	else
 		ReportError("Invalid door " + ToString(number));
 	return false;
 }
 
-DoorWrapper* ElevatorCar::AddShaftDoor(int floor, int number, const std::string &lefttexture, const std::string &righttexture, Real tw, Real th)
+DoorWrapper* ElevatorCar::AddShaftDoor(int floor, int number, Real rotation, const std::string &lefttexture, const std::string &righttexture, Real tw, Real th)
 {
 	//adds a single elevator shaft door on the specified floor, with position and thickness parameters first specified
 	//by the SetShaftDoors command.
 
 	if (IsServicedFloor(floor) == true && GetDoor(number))
-		return GetDoor(number)->AddShaftDoor(floor, lefttexture, righttexture, tw, th);
+		return GetDoor(number)->AddShaftDoor(floor, rotation, lefttexture, righttexture, tw, th);
 	else
 		return 0;
 }
 
-DoorWrapper* ElevatorCar::AddShaftDoor(int floor, int number, const std::string &lefttexture, const std::string &righttexture, Real thickness, Real CenterX, Real CenterZ, Real voffset, Real tw, Real th)
+DoorWrapper* ElevatorCar::AddShaftDoor(int floor, int number, Real rotation, const std::string &lefttexture, const std::string &righttexture, Real thickness, Real CenterX, Real CenterZ, Real voffset, Real tw, Real th)
 {
 	//adds a single elevator shaft door on the specified floor, with position and thickness parameters first specified
 	//by the SetShaftDoors command.
 
 	if (IsServicedFloor(floor) == true && GetDoor(number))
-		return GetDoor(number)->AddShaftDoor(floor, lefttexture, righttexture, thickness, CenterX, CenterZ, voffset, tw, th);
+		return GetDoor(number)->AddShaftDoor(floor, rotation, lefttexture, righttexture, thickness, CenterX, CenterZ, voffset, tw, th);
 	else
 		return 0;
 }
@@ -2194,162 +2225,94 @@ Door* ElevatorCar::GetDoor(const std::string &name)
 void ElevatorCar::RemovePanel(ButtonPanel* panel)
 {
 	//remove a button panel reference (does not delete the object itself)
-	for (size_t i = 0; i < PanelArray.size(); i++)
-	{
-		if (PanelArray[i] == panel)
-		{
-			PanelArray.erase(PanelArray.begin() + i);
-			return;
-		}
-	}
+
+	RemoveArrayElement(PanelArray, panel);
 }
 
 void ElevatorCar::RemoveDirectionalIndicator(DirectionalIndicator* indicator)
 {
 	//remove a directional indicator reference (does not delete the object itself)
-	for (size_t i = 0; i < DirIndicatorArray.size(); i++)
-	{
-		if (DirIndicatorArray[i] == indicator)
-		{
-			DirIndicatorArray.erase(DirIndicatorArray.begin() + i);
-			return;
-		}
-	}
+
+	RemoveArrayElement(DirIndicatorArray, indicator);
 }
 
 void ElevatorCar::RemoveElevatorDoor(ElevatorDoor* door)
 {
 	//remove an elevator door reference (does not delete the object itself)
-	for (size_t i = 0; i < DoorArray.size(); i++)
-	{
-		if (DoorArray[i] == door)
-		{
-			DoorArray.erase(DoorArray.begin() + i);
-			NumDoors--;
 
-			//reset cache values
-			lastdoor_number = 0;
-			lastdoor_result = 0;
-			return;
-		}
+	bool result = RemoveArrayElement(DoorArray, door);
+
+	if (result == true)
+	{
+		NumDoors--;
+
+		//reset cache values
+		lastdoor_number = 0;
+		lastdoor_result = 0;
 	}
 }
 
 void ElevatorCar::RemoveFloorIndicator(FloorIndicator* indicator)
 {
 	//remove a floor indicator reference (does not delete the object itself)
-	for (size_t i = 0; i < FloorIndicatorArray.size(); i++)
-	{
-		if (FloorIndicatorArray[i] == indicator)
-		{
-			FloorIndicatorArray.erase(FloorIndicatorArray.begin() + i);
-			return;
-		}
-	}
+
+	RemoveArrayElement(FloorIndicatorArray, indicator);
 }
 
 void ElevatorCar::RemoveDoor(Door* door)
 {
 	//remove a door reference (does not delete the object itself)
-	for (size_t i = 0; i < StdDoorArray.size(); i++)
-	{
-		if (StdDoorArray[i] == door)
-		{
-			StdDoorArray.erase(StdDoorArray.begin() + i);
-			return;
-		}
-	}
+
+	RemoveArrayElement(StdDoorArray, door);
 }
 
 void ElevatorCar::RemoveSound(Sound *sound)
 {
 	//remove a sound reference (does not delete the object itself)
-	for (size_t i = 0; i < sounds.size(); i++)
-	{
-		if (sounds[i] == sound)
-		{
-			sounds.erase(sounds.begin() + i);
-			return;
-		}
-	}
+
+	RemoveArrayElement(sounds, sound);
 }
 
 void ElevatorCar::RemoveLight(Light *light)
 {
 	//remove a light reference (does not delete the object itself)
-	for (size_t i = 0; i < lights.size(); i++)
-	{
-		if (lights[i] == light)
-		{
-			lights.erase(lights.begin() + i);
-			return;
-		}
-	}
+
+	RemoveArrayElement(lights, light);
 }
 
 void ElevatorCar::RemoveModel(Model *model)
 {
 	//remove a model reference (does not delete the object itself)
-	for (size_t i = 0; i < ModelArray.size(); i++)
-	{
-		if (ModelArray[i] == model)
-		{
-			ModelArray.erase(ModelArray.begin() + i);
-			return;
-		}
-	}
+
+	RemoveArrayElement(ModelArray, model);
 }
 
 void ElevatorCar::RemovePrimitive(Primitive *prim)
 {
 	//remove a prim reference (does not delete the object itself)
-	for (size_t i = 0; i < PrimArray.size(); i++)
-	{
-		if (PrimArray[i] == prim)
-		{
-			PrimArray.erase(PrimArray.begin() + i);
-			return;
-		}
-	}
+
+	RemoveArrayElement(PrimArray, prim);
 }
 
 void ElevatorCar::RemoveCustomObject(CustomObject *object)
 {
 	//remove a custom object reference (does not delete the object itself)
-	for (size_t i = 0; i < CustomObjectArray.size(); i++)
-	{
-		if (CustomObjectArray[i] == object)
-		{
-			CustomObjectArray.erase(CustomObjectArray.begin() + i);
-			return;
-		}
-	}
+
+	RemoveArrayElement(CustomObjectArray, object);
 }
 
 void ElevatorCar::RemoveControl(Control *control)
 {
 	//remove a control reference (does not delete the object itself)
-	for (size_t i = 0; i < ControlArray.size(); i++)
-	{
-		if (ControlArray[i] == control)
-		{
-			ControlArray.erase(ControlArray.begin() + i);
-			return;
-		}
-	}
+
+	RemoveArrayElement(ControlArray, control);
 }
 
 void ElevatorCar::RemoveTrigger(Trigger *trigger)
 {
 	//remove a trigger reference (does not delete the object itself)
-	for (size_t i = 0; i < TriggerArray.size(); i++)
-	{
-		if (TriggerArray[i] == trigger)
-		{
-			TriggerArray.erase(TriggerArray.begin() + i);
-			return;
-		}
-	}
+
+	RemoveArrayElement(TriggerArray, trigger);
 }
 
 bool ElevatorCar::IsNudgeModeActive(int number)
@@ -3530,14 +3493,8 @@ CameraTexture* ElevatorCar::AddCameraTexture(const std::string &name, int qualit
 void ElevatorCar::RemoveCameraTexture(CameraTexture* camtex)
 {
 	//remove a cameratexture reference (does not delete the object itself)
-	for (size_t i = 0; i < CameraTextureArray.size(); i++)
-	{
-		if (CameraTextureArray[i] == camtex)
-		{
-			CameraTextureArray.erase(CameraTextureArray.begin() + i);
-			return;
-		}
-	}
+
+	RemoveArrayElement(CameraTextureArray, camtex);
 }
 
 bool ElevatorCar::RespondingToCall(int floor, int direction)
@@ -3658,7 +3615,8 @@ bool ElevatorCar::Input(const std::string& text)
 		UpdateKeypadIndicator(InputCache, false);
 
 		//start timeout timer
-		keypad_timer->Start(2000, true);
+		keypad_timer->Stop();
+		keypad_timer->Start(TimerDelay * 1000.0f, true);
 
 		return true;
 	}
@@ -3668,16 +3626,17 @@ bool ElevatorCar::Input(const std::string& text)
 	UpdateKeypadIndicator(InputCache, false);
 
 	//verify that the floor entry is valid, error if not
-	int result = 0;
+	/*int result = 0;
 	if (GetFloorFromID(InputCache, result) == false && InputCache != "*" && InputCache != "-")
 	{
 		keypad_timer->Stop();
 		InputCache = "";
 		KeypadError(1);
 		return true;
-	}
+	}*/
 
 	//start timeout timer
+	keypad_timer->Stop();
 	keypad_timer->Start(TimerDelay * 1000.0f, true);
 
 	return true;
@@ -3698,13 +3657,6 @@ void ElevatorCar::ProcessCache()
 		return;
 	}
 
-	if (!IsNumeric(InputCache))
-	{
-		InputCache = "";
-		KeypadError();
-		return;
-	}
-
 	//don't allow input values in the InvalidInput list
 	for (size_t i = 0; i < InvalidInput.size(); i++)
 	{
@@ -3717,7 +3669,14 @@ void ElevatorCar::ProcessCache()
 	}
 
 	int floor = 0;
-	GetFloorFromID(InputCache, floor);
+	bool result = GetFloorFromID(InputCache, floor);
+	if (!result)
+	{
+		InputCache = "";
+		KeypadError();
+		return;
+	}
+
 	Requested(floor);
 	e->SelectFloor(floor);
 
@@ -3726,17 +3685,22 @@ void ElevatorCar::ProcessCache()
 
 bool ElevatorCar::GetFloorFromID(const std::string& floor, int& result)
 {
-	if (!IsNumeric(floor))
-		return false;
+	std::string converted = floor;
+	int rawfloor = 0;
 
-	int rawfloor = ToInt(floor);
+	if (IsNumeric(floor))
+	{
+		rawfloor = ToInt(floor);
 
-	//convert back to string, to strip off any leading 0's
-	std::string converted = ToString(rawfloor);
+		//convert back to string, to strip off any leading 0's
+		converted = ToString(rawfloor);
+	}
 
-	Floor* floorobj = sbs->GetFloorManager()->GetByNumberID(converted);
-	Floor* floorobj2 = sbs->GetFloorManager()->GetByID(converted);
-	Floor* floorobj3 = sbs->GetFloorManager()->Get(rawfloor);
+	Floor *floorobj = sbs->GetFloorManager()->GetByNumberID(converted);
+	Floor *floorobj2 = sbs->GetFloorManager()->GetByID(converted);
+	Floor *floorobj3 = 0;
+	if (IsNumeric(floor))
+		floorobj3 = sbs->GetFloorManager()->Get(rawfloor);
 
 	if (floorobj)
 	{
@@ -3862,5 +3826,17 @@ void ElevatorCar::RemoveReverb()
 	reverb = 0;
 }
 
+Shape* ElevatorCar::CreateShape(Wall *wall)
+{
+	//Creates a shape in the specified wall object
+	//returns a Shape object, which must be deleted by the caller after use
+
+	if (!wall)
+		return 0;
+
+	Shape *shape = new Shape(wall);
+	//shape->origin = Vector3(0, 0, 0);
+	return shape;
+}
 
 }

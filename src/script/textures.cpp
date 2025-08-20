@@ -23,7 +23,7 @@
 #include "globals.h"
 #include "sbs.h"
 #include "enginecontext.h"
-#include "texture.h"
+#include "texman.h"
 #include "scriptproc.h"
 #include "section.h"
 
@@ -118,6 +118,36 @@ int ScriptProcessor::TexturesSection::Run(std::string &LineData)
 			texturemanager->LoadAnimatedTexture(filenames, tempdata[params - 4], ToFloat(tempdata[params - 3]), ToFloat(tempdata[params - 2]), ToFloat(tempdata[params - 1]));
 		else
 			texturemanager->LoadAnimatedTexture(filenames, tempdata[params - 5], ToFloat(tempdata[params - 4]), ToFloat(tempdata[params - 3]), ToFloat(tempdata[params - 2]), true, ToBool(tempdata[params - 1]));
+		return sNextLine;
+	}
+
+	//CreateSlideshow command
+	if (StartsWithNoCase(LineData, "createslideshow"))
+	{
+		//get data
+		int params = SplitData(LineData, 15, false);
+
+		if (params < 9)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = (params - 3); i <= (params - 2); i++)
+		{
+			if (!IsNumeric(tempdata[i]))
+				return ScriptError("Invalid value: " + tempdata[i]);
+		}
+
+		std::vector<std::string> filenames;
+		std::vector<Real> durations;
+		for (int i = 2; i < params - 4; i++)
+		{
+			parent->CheckFile(tempdata[i]); //check existence of file
+			filenames.emplace_back(tempdata[i]);
+			i++;
+			durations.emplace_back(ToFloat(tempdata[i]));
+		}
+
+		texturemanager->CreateSlideshow(tempdata[0], ToBool(tempdata[1]), filenames, durations, ToFloat(tempdata[params - 3]), ToFloat(tempdata[params - 2]), ToBool(tempdata[params - 1]));
 		return sNextLine;
 	}
 

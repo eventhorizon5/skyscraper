@@ -34,7 +34,7 @@
 #include "elevatorcar.h"
 #include "timer.h"
 #include "profiler.h"
-#include "texture.h"
+#include "texman.h"
 #include "controller.h"
 #include "random.h"
 #include "elevroute.h"
@@ -636,14 +636,16 @@ bool Elevator::Stop(bool emergency)
 	return true;
 }
 
-void Elevator::Loop()
+bool Elevator::Loop()
 {
 	//Monitors elevator and starts actions if needed
 
 	SBS_PROFILE("Elevator::Loop");
 
 	if (Created == false)
-		return;
+		return false;
+
+	bool status = true;
 
 	//only run if power is enabled
 	if (sbs->GetPower() == false)
@@ -720,11 +722,12 @@ void Elevator::Loop()
 		//play motor idle sound
 		if (motoridlesound->IsPlaying() == false && Running == true)
 		{
-			if (sbs->Verbose)
-				Report("playing motor idle sound");
-
+			bool result = false;
 			if (motoridlesound->IsLoaded() == false)
-				motoridlesound->Load(MotorIdleSound);
+				result = motoridlesound->Load(MotorIdleSound);
+
+			if (sbs->Verbose && result == true)
+				Report("playing motor idle sound");
 
 			motoridlesound->SetLoopState(true);
 			motoridlesound->Play();
@@ -765,12 +768,16 @@ void Elevator::Loop()
 	//run per-car loops
 	for (int i = 1; i <= GetCarCount(); i++)
 	{
-		GetCar(i)->Loop();
+		bool result = GetCar(i)->Loop();
+		if (!result)
+			status = false;
 	}
 
 	//elevator movement
 	if (MoveElevator == true)
 		MoveElevatorToFloor();
+
+	return status;
 }
 
 void Elevator::MoveElevatorToFloor()
@@ -1674,13 +1681,14 @@ void Elevator::DumpQueues()
 	route_controller->DumpQueues();
 }
 
-void Elevator::Enabled(bool value)
+bool Elevator::Enabled(bool value)
 {
 	//shows/hides elevator
 
 	if (IsEnabled == value)
-		return;
+		return true;
 
+	bool status = true;
 	EnableLoop(value);
 
 	if (sbs->Verbose)
@@ -1693,9 +1701,12 @@ void Elevator::Enabled(bool value)
 
 	for (size_t i = 0; i < Cars.size(); i++)
 	{
-		Cars[i]->Enabled(value);
+		bool result = Cars[i]->Enabled(value);
+		if (!result)
+			status = false;
 	}
 	IsEnabled = value;
+	return status;
 }
 
 ElevatorCar* Elevator::IsInElevator(const Vector3 &position, bool camera)
@@ -2988,18 +2999,20 @@ Real Elevator::GetDestinationOffset(int floor)
 	return car->GetDestinationOffset(floor);
 }
 
-void Elevator::OnInit()
+bool Elevator::OnInit()
 {
 	//startup elevator initialization
 
 	//exit if not created properly
 	if (Created == false)
-		return;
+		return false;
 
 	bool enable_elevators = sbs->GetConfigBool("Skyscraper.SBS.Elevator.IsEnabled", true);
 
 	if (enable_elevators == false)
 		Enabled(false);
+
+	return true;
 }
 
 int Elevator::AvailableForCall(bool destination, int floor, int direction, bool report_on_failure)

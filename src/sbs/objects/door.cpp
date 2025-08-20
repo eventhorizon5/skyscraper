@@ -30,7 +30,7 @@
 #include "elevatorcar.h"
 #include "shaft.h"
 #include "stairs.h"
-#include "texture.h"
+#include "texman.h"
 #include "sound.h"
 #include "timer.h"
 #include "doorsystem.h"
@@ -187,16 +187,17 @@ bool Door::IsOpen()
 	return OpenState;
 }
 
-void Door::Enabled(bool value)
+bool Door::Enabled(bool value)
 {
 	if (is_enabled == value)
-		return;
+		return true;
 
-	door->Enabled(value);
+	bool status = door->Enabled(value);
 	is_enabled = value;
+	return status;
 }
 
-void Door::Loop()
+bool Door::Loop()
 {
 	SBS_PROFILE("Door::Loop");
 
@@ -204,6 +205,8 @@ void Door::Loop()
 		MoveDoor();
 	else
 		EnableLoop(false);
+
+	return true;
 }
 
 void Door::MoveDoor()

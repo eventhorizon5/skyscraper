@@ -54,6 +54,11 @@
 	#define SBSIMPEXP_DATA(type)
 #endif
 
+#undef EPSILON
+#define EPSILON 0.001f
+#undef SMALL_EPSILON
+#define SMALL_EPSILON 0.000001f
+
 typedef Ogre::Real Real;
 typedef Ogre::Vector3 Vector3;
 typedef Ogre::Vector2 Vector2;

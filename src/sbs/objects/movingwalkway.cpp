@@ -28,7 +28,7 @@
 #include "mesh.h"
 #include "floor.h"
 #include "sound.h"
-#include "texture.h"
+#include "texman.h"
 #include "profiler.h"
 #include "dynamicmesh.h"
 #include "step.h"
@@ -116,22 +116,28 @@ MovingWalkway::~MovingWalkway()
 	}
 }
 
-void MovingWalkway::Enabled(bool value)
+bool MovingWalkway::Enabled(bool value)
 {
 	//enable or disable walkway
 
 	if (is_enabled == value)
-		return;
+		return true;
 
+	bool status = true;
 	EnableLoop(value);
 
 	for (size_t i = 0; i < Steps.size(); i++)
-		Steps[i]->Enabled(value);
+	{
+		bool result = Steps[i]->Enabled(value);
+		if (!result)
+				status = false;
+	}
 
 	if (value == false && sound->IsPlaying() == true)
 		sound->Stop();
 
 	is_enabled = value;
+	return status;
 }
 
 void MovingWalkway::SetRun(int value)
@@ -160,7 +166,7 @@ bool MovingWalkway::ReportError(const std::string &message)
 	return Object::ReportError("Moving Walkway " + GetName() + ": " + message);
 }
 
-void MovingWalkway::Loop()
+bool MovingWalkway::Loop()
 {
 	//run loop
 
@@ -170,14 +176,14 @@ void MovingWalkway::Loop()
 	if (sbs->GetPower() == false)
 	{
 		sound->Stop();
-		return;
+		return true;
 	}
 
 	if (!IsEnabled() || Run == 0)
 	{
 		if (sound->IsPlaying() == true)
 			sound->Stop();
-		return;
+		return false;
 	}
 
 	if (sound->IsPlaying() == false)
@@ -187,6 +193,7 @@ void MovingWalkway::Loop()
 	}
 
 	MoveSteps();
+	return true;
 }
 
 void MovingWalkway::CreateSteps(const std::string &texture, const std::string &direction, Real width, Real treadsize, Real tw, Real th)

@@ -116,6 +116,11 @@ namespace SBS {
 	class Map;
 	class RouteController;
 	class ObjectScript;
+	class Texture;
+	class TextureImage;
+	class Shape;
+	class Teleporter;
+	class TeleporterManager;
 
 	typedef std::vector<Vector3> PolyArray;
 	typedef std::vector<PolyArray> PolygonSet;
@@ -197,13 +202,13 @@ public:
 	int Lobby; //lobby level (used or random activity)
 
 	//public functions
-	SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instance_number, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0f, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
+	SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instance_number, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
 	~SBS();
 	void Initialize();
-	bool Start(std::vector<Ogre::Camera*> &cameras);
+	bool Start();
 	void CreateSky();
 	void CalculateFrameRate();
-	void Loop(bool loading, bool isready);
+	bool Loop(bool loading, bool isready);
 	void EnableBuildings(bool value);
 	void EnableLandscape(bool value);
 	void EnableExternal(bool value);
@@ -326,7 +331,7 @@ public:
 	int GetEscalatorCount();
 	int GetMovingWalkwayCount();
 	int GetRevolvingDoorCount();
-	bool HitBeam(const Ray &ray, Real max_distance, MeshObject *&mesh, Wall *&wall, Vector3 &hit_position);
+	bool HitBeam(const Ray &ray, Real max_distance, MeshObject *&mesh, Wall *&wall, Polygon *&polygon, Vector3 &hit_position);
 	void EnableRandomActivity(bool value);
 	void EnableMalfunctions(bool value);
 	SoundSystem* GetSoundSystem();
@@ -358,6 +363,7 @@ public:
 	StairwellManager* GetStairwellManager();
 	DoorManager* GetDoorManager();
 	ControllerManager* GetControllerManager();
+	TeleporterManager* GetTeleporterManager();
 	void RegisterDynamicMesh(DynamicMesh *dynmesh);
 	void UnregisterDynamicMesh(DynamicMesh *dynmesh);
 	TextureManager* GetTextureManager();
@@ -390,6 +396,8 @@ public:
 	MeshObject* GetLandscapeMesh();
 	Real GetUnitScale();
 	Vector3 GetCenter();
+	Shape* CreateShape(Wall *wall);
+	void MergeBounds(Ogre::AxisAlignedBox &box);
 
 	//Meshes
 	MeshObject* Buildings;
@@ -421,6 +429,7 @@ private:
 	DoorManager* door_manager;
 	VehicleManager* vehicle_manager;
 	ControllerManager* controller_manager;
+	TeleporterManager* teleporter_manager;
 
 	//dynamic meshes
 	std::vector<DynamicMesh*> dynamic_meshes;
@@ -443,6 +452,7 @@ private:
 	void CalculateAverageTime();
 	std::vector<ElevatorRoute*> GetIndirectRoute(std::vector<int> &checked_floors, int StartingFloor, int DestinationFloor, bool service_access = false, bool top_level = true);
 	ElevatorRoute* GetDirectRoute(Floor *floor, int DestinationFloor, bool service_access = false);
+	void GenerateBounds(Vector3 &min, Vector3 &max);
 
 	//timer callback array
 	std::vector<TimerObject*> timercallbacks;
@@ -527,6 +537,10 @@ private:
 
 	//sim engine area trigger
 	Trigger *area_trigger;
+
+	//sim engine bounds state
+	Ogre::AxisAlignedBox bounds;
+	bool bounds_set;
 
 	//camera texture references
 	std::vector<CameraTexture*> camtexarray;

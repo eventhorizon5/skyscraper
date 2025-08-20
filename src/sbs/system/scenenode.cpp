@@ -255,7 +255,7 @@ void SceneNode::Move(const Vector3 &vector, Real speed, bool local, bool force)
 	Vector3 v = vector * speed;
 
 	//prevent movement outside sim engine boundaries
-	if (sbs->GetAreaTrigger() && force == false)
+	if (sbs->GetAreaTrigger() && force == false && GetParent() != sbs)
 	{
 		if (sbs->GetAreaTrigger()->IsOutside(GetPosition() + v) == true && local == false)
 		{

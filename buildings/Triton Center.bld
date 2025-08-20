@@ -85,6 +85,7 @@
     Load data/miscdoor8.jpg, StairsDoor2, 1, 1
     Load data/miscdoor9b.jpg, HotelDoor, 1, 1
     Load data/downtown.jpg, Downtown, 1, 1
+    Load data/misc/grass.jpg, Grass, 1, 1
     Load data/bracing1.jpg, VentsInt, 1, 1
     Load data/vents1.jpg, VentsExt, 1, 1
     Load data/stucco22b.jpg, HotelWalls, 0.269, 0.25

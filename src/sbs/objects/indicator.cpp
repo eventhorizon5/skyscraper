@@ -26,7 +26,7 @@
 #include "polymesh.h"
 #include "mesh.h"
 #include "manager.h"
-#include "texture.h"
+#include "texman.h"
 #include "timer.h"
 #include "sound.h"
 #include "indicator.h"
@@ -133,15 +133,16 @@ Indicator::~Indicator()
 	}*/
 }
 
-void Indicator::Enabled(bool value)
+bool Indicator::Enabled(bool value)
 {
 	//turns display on/off
 
 	if (is_enabled == value)
-		return;
+		return true;
 
-	Mesh->Enabled(value);
+	bool status = Mesh->Enabled(value);
 	is_enabled = value;
+	return status;
 }
 
 void Indicator::Update(const std::string &text, bool play_sound)
@@ -168,7 +169,9 @@ void Indicator::Update(const std::string &text, bool play_sound)
 	if (play_sound == true)
 		PlaySound();
 
-	timer->Start(timer_duration * 1000.0);
+	//restart timer
+	timer->Stop();
+	timer->Start(timer_duration * 1000.0, true);
 }
 
 void Indicator::Off()
@@ -220,10 +223,12 @@ bool Indicator::PlaySound()
 	return true;
 }
 
-void Indicator::Loop()
+bool Indicator::Loop()
 {
 	if (sbs->GetPower() == false)
 		Off();
+
+	return true;
 }
 
 }

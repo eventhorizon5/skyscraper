@@ -76,7 +76,7 @@ SoundSystem::~SoundSystem()
 		//delete reverbs[i].object;
 }
 
-void SoundSystem::Loop()
+bool SoundSystem::Loop()
 {
 #ifndef DISABLE_SOUND
 	//update sound
@@ -86,19 +86,27 @@ void SoundSystem::Loop()
 		ProfileManager::Start_Profile("FMOD");
 
 	//sync sound listener object to camera position
-	if (sbs->camera->IsActive() == true)
-		SetListenerPosition(sbs->camera->GetPosition());
+	if (sbs->camera)
+	{
+		if (sbs->camera->IsActive() == true)
+			SetListenerPosition(sbs->camera->GetPosition());
+	}
 
 	//set direction of listener to camera's direction
 	Vector3 front = Vector3::ZERO;
 	Vector3 top = Vector3::ZERO;
-	sbs->camera->GetDirection(front, top, true);
-	SetListenerDirection(front, top);
+	if (sbs->camera)
+	{
+		sbs->camera->GetDirection(front, top, true);
+		SetListenerDirection(front, top);
+	}
 
 	//update FMOD
-	soundsys->update();
+	FMOD_RESULT result = soundsys->update();
 
 	ProfileManager::Stop_Profile();
+
+	return (result == FMOD_OK);
 #endif
 }
 

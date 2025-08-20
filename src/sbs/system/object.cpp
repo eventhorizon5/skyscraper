@@ -26,6 +26,7 @@
 #include "sbs.h"
 #include "scenenode.h"
 #include "profiler.h"
+#include "utility.h"
 #include "object.h"
 
 namespace SBS {
@@ -475,33 +476,45 @@ bool Object::IsGlobal()
 	return (Parent->GetNumber() == 0);
 }
 
-void Object::Init(bool children)
+bool Object::Init(bool children)
 {
 	//initialize object
+
+	bool status = true;
 
 	//call custom object initialization code
 	if (initialized == false)
 	{
-		OnInit();
+		bool result = OnInit();
+		if (!result)
+			return false;
 		initialized = true;
 	}
 
 	//initialize children
 	if (children == true)
-		InitChildren();
+		status = InitChildren();
+	return status;
 }
 
-void Object::InitChildren()
+bool Object::InitChildren()
 {
 	//initialize child objects
 
 	int count = GetChildrenCount();
 
 	if (count == 0)
-		return;
+		return true;
 
+	bool status = true;
 	for (int i = 0; i < count; i++)
-			children[i]->Init();
+	{
+		bool result = children[i]->Init();
+		if (!result)
+			status = false;
+	}
+
+	return status;
 }
 
 void Object::EnableLoop(bool value)
@@ -530,53 +543,31 @@ void Object::RegisterLoop(Object *object)
 {
 	//register a child object dynamic runloop
 
-	if (!object)
-		return;
-
-	for (size_t i = 0; i < runloops.size(); i++)
-	{
-		if (runloops[i] == object)
-			return;
-	}
-
-	runloops.emplace_back(object);
+	AddArrayElement(runloops, object);
 }
 
 void Object::UnregisterLoop(Object *object)
 {
 	//unregister a child object dynamic runloop
 
-	if (!object)
-		return;
-
-	if (runloops.empty())
-		return;
-
-	if (runloops.back() == object)
-	{
-		runloops.pop_back();
-		return;
-	}
-
-	for (size_t i = 0; i < runloops.size(); i++)
-	{
-		if (runloops[i] == object)
-		{
-			runloops.erase(runloops.begin() + i);
-			return;
-		}
-	}
+	RemoveArrayElement(runloops, object);
 }
 
-void Object::LoopChildren()
+bool Object::LoopChildren()
 {
 	//run dynamic child runloops
 
+	bool status = true;
 	for (size_t i = 0; i < runloops.size(); i++)
 	{
 		if (runloops[i])
-			runloops[i]->Loop();
+		{
+			bool result = runloops[i]->Loop();
+			if (!result)
+				status = false;
+		}
 	}
+	return status;
 }
 
 bool Object::SelfDestruct()

@@ -30,7 +30,7 @@
 #include "shaft.h"
 #include "mesh.h"
 #include "camera.h"
-#include "texture.h"
+#include "texman.h"
 #include "trigger.h"
 #include "profiler.h"
 #include "sound.h"
@@ -1032,7 +1032,7 @@ DoorWrapper* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool Sha
 		base += floorobj->GetBase(true);
 
 		//cut shaft and floor walls
-		sbs->GetUtility()->ResetDoorwayWalls();
+		sbs->GetPolyMesh()->ResetDoorwayWalls();
 		if (DoorDirection == false)
 		{
 			if (shaft->GetLevel(floor))
@@ -1056,7 +1056,7 @@ DoorWrapper* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool Sha
 		if (DoorWalls == true)
 		{
 			sbs->GetTextureManager()->ResetTextureMapping(true);
-			sbs->GetUtility()->AddDoorwayWalls(floorobj->Level, "Connection Walls", "ConnectionWall", 0, 0);
+			sbs->GetPolyMesh()->AddDoorwayWalls(floorobj->Level, "Connection Walls", "ConnectionWall", 0, 0);
 			sbs->GetTextureManager()->ResetTextureMapping();
 		}
 	}
@@ -1166,7 +1166,7 @@ bool ElevatorDoor::FinishShaftDoors(bool DoorWalls, bool TrackWalls)
 	return true;
 }
 
-bool ElevatorDoor::AddShaftDoors(const std::string &lefttexture, const std::string &righttexture, Real thickness, Real CenterX, Real CenterZ, Real voffset, Real tw, Real th)
+bool ElevatorDoor::AddShaftDoors(Real rotation, const std::string &lefttexture, const std::string &righttexture, Real thickness, Real CenterX, Real CenterZ, Real voffset, Real tw, Real th)
 {
 	//adds shaft's elevator doors specified at a relative central position (off of elevator origin)
 	//uses some parameters (width, height, direction) from AddDoor/AddDoors function
@@ -1178,21 +1178,21 @@ bool ElevatorDoor::AddShaftDoors(const std::string &lefttexture, const std::stri
 	//create doors
 	for (size_t i = 0; i < car->ServicedFloors.size(); i++)
 	{
-		if (!AddShaftDoor(car->ServicedFloors[i], lefttexture, righttexture, ShaftDoorThickness, ShaftDoorOrigin.x, ShaftDoorOrigin.z, voffset, tw, th))
+		if (!AddShaftDoor(car->ServicedFloors[i], rotation, lefttexture, righttexture, ShaftDoorThickness, ShaftDoorOrigin.x, ShaftDoorOrigin.z, voffset, tw, th))
 			return false;
 	}
 
 	return true;
 }
 
-DoorWrapper* ElevatorDoor::AddShaftDoor(int floor, const std::string &lefttexture, const std::string &righttexture, Real tw, Real th)
+DoorWrapper* ElevatorDoor::AddShaftDoor(int floor, Real rotation, const std::string &lefttexture, const std::string &righttexture, Real tw, Real th)
 {
 	//compatibility version of AddShaftDoor; please use newer implementation instead
 
-	return AddShaftDoor(floor, lefttexture, righttexture, ShaftDoorThickness, ShaftDoorOrigin.x, ShaftDoorOrigin.z, 0, tw, th);
+	return AddShaftDoor(floor, rotation, lefttexture, righttexture, ShaftDoorThickness, ShaftDoorOrigin.x, ShaftDoorOrigin.z, 0, tw, th);
 }
 
-DoorWrapper* ElevatorDoor::AddShaftDoor(int floor, const std::string &lefttexture, const std::string &righttexture, Real thickness, Real CenterX, Real CenterZ, Real voffset, Real tw, Real th)
+DoorWrapper* ElevatorDoor::AddShaftDoor(int floor, Real rotation, const std::string &lefttexture, const std::string &righttexture, Real thickness, Real CenterX, Real CenterZ, Real voffset, Real tw, Real th)
 {
 	//adds a single elevator shaft door, with position and thickness parameters first specified
 	//by the SetShaftDoors command.
@@ -1243,7 +1243,7 @@ DoorWrapper* ElevatorDoor::AddShaftDoor(int floor, const std::string &lefttextur
 
 	//finish doors
 	DoorWrapper *wrapper = FinishShaftDoor(floor);
-
+	wrapper->Rotate(Vector3(0, rotation, 0));
 	return wrapper;
 }
 
@@ -1476,7 +1476,7 @@ bool ElevatorDoor::DoorsStopped()
 	return doors_stopped;
 }
 
-void ElevatorDoor::Loop()
+bool ElevatorDoor::Loop()
 {
 	//main loop
 	SBS_PROFILE("ElevatorDoor::Loop");
@@ -1492,11 +1492,13 @@ void ElevatorDoor::Loop()
 		MoveDoors(true, true);
 	if (OpenDoor == -2)
 		MoveDoors(false, true);
+
+	return true;
 }
 
-void ElevatorDoor::Enabled(bool value)
+bool ElevatorDoor::Enabled(bool value)
 {
-	Doors->Enabled(value);
+	return Doors->Enabled(value);
 }
 
 bool ElevatorDoor::IsEnabled()

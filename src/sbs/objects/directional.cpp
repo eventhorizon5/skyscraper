@@ -26,7 +26,7 @@
 #include "polymesh.h"
 #include "floor.h"
 #include "mesh.h"
-#include "texture.h"
+#include "texman.h"
 #include "elevator.h"
 #include "elevatorcar.h"
 #include "timer.h"
@@ -398,22 +398,41 @@ DirectionalIndicator::~DirectionalIndicator()
 	}
 }
 
-void DirectionalIndicator::Enabled(bool value)
+bool DirectionalIndicator::Enabled(bool value)
 {
 	//turns panel on/off
 
 	if (value == is_enabled)
-		return;
+		return true;
 
-	DirectionalMeshBack->Enabled(value);
+	bool status = true, result;
+
+	result = DirectionalMeshBack->Enabled(value);
+	if (!result)
+		status = false;
+
 	if (DirectionalMeshUp)
-		DirectionalMeshUp->Enabled(value);
+	{
+		bool result = DirectionalMeshUp->Enabled(value);
+		if (!result)
+			status = false;
+	}
 	if (DirectionalMeshDown)
-		DirectionalMeshDown->Enabled(value);
+	{
+		bool result = DirectionalMeshDown->Enabled(value);
+		if (!result)
+			status = false;
+	}
 	if (DirectionalMesh)
-		DirectionalMesh->Enabled(value);
+	{
+		bool result = DirectionalMesh->Enabled(value);
+		if (!result)
+			status = false;
+	}
 
 	is_enabled = value;
+
+	return status;
 }
 
 void DirectionalIndicator::UpLight(bool value)
@@ -580,10 +599,12 @@ void DirectionalIndicator::Off()
 	SetLights(2, 2);
 }
 
-void DirectionalIndicator::Loop()
+bool DirectionalIndicator::Loop()
 {
 	if (sbs->GetPower() == false)
 		Off();
+
+	return true;
 }
 
 }

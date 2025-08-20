@@ -100,7 +100,7 @@ public:
 	//functions
 	explicit Camera(Object *parent);
 	~Camera();
-	void SetPosition(const Vector3 &position);
+	void SetPosition(const Vector3 &position, bool force = false);
 	void SetDirection(const Vector3 &direction);
 	void SetRotation(const Vector3 &rotation);
 	Vector3 GetPosition(bool relative = false);
@@ -130,7 +130,7 @@ public:
 	int GetClickedObjectLine();
 	std::string GetClickedObjectCommand();
 	std::string GetClickedObjectCommandP();
-	void Loop();
+	bool Loop();
 	void Strafe(Real speed = 1.0);
 	void Step(Real speed = 1.0);
 	void Float(Real speed = 1.0);

@@ -27,7 +27,7 @@
 #include "manager.h"
 #include "mesh.h"
 #include "floor.h"
-#include "texture.h"
+#include "texman.h"
 #include "sound.h"
 #include "profiler.h"
 #include "revolvingdoor.h"
@@ -178,26 +178,29 @@ void RevolvingDoor::OnHit()
 	brake = false;
 }
 
-void RevolvingDoor::Enabled(bool value)
+bool RevolvingDoor::Enabled(bool value)
 {
 	if (is_enabled == value)
-		return;
+		return true;
 
-	DoorMesh->Enabled(value);
+	bool status = DoorMesh->Enabled(value);
 	is_enabled = value;
+	return status;
 }
 
-void RevolvingDoor::Loop()
+bool RevolvingDoor::Loop()
 {
 	SBS_PROFILE("RevolvingDoor::Loop");
 
 	if (sbs->GetPower() == false)
-		return;
+		return true;
 
 	if (IsMoving == true)
 		MoveDoor();
 	else
 		EnableLoop(false);
+
+	return true;
 }
 
 void RevolvingDoor::MoveDoor()

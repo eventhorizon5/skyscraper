@@ -28,6 +28,7 @@
 #include "floor.h"
 #include "callstation.h"
 #include "profiler.h"
+#include "utility.h"
 #include "controller.h"
 
 namespace SBS {
@@ -61,19 +62,21 @@ DispatchController::~DispatchController()
 		sbs->RemoveController(this);
 }
 
-void DispatchController::Loop()
+bool DispatchController::Loop()
 {
 	//this function runs for every registered dispatch controller via timer callback
 
 	//only run if power is enabled
 	if (sbs->GetPower() == false)
-		return;
+		return true;
 
 	//process pending requests
 	ProcessRoutes();
 
 	//check arrivals
 	CheckArrivals();
+
+	return true;
 }
 
 void DispatchController::CheckArrivals()
@@ -1087,14 +1090,7 @@ void DispatchController::RegisterCallStation(CallStation *station)
 	if (sbs->GetPower() == false)
 		return;
 
-	//exit if already registered
-	for (size_t i = 0; i < CallStations.size(); i++)
-	{
-		if (CallStations[i] == station)
-			return;
-	}
-
-	CallStations.emplace_back(station);
+	AddArrayElement(CallStations, station);
 }
 
 void DispatchController::UnregisterCallStation(CallStation *station)
@@ -1105,14 +1101,7 @@ void DispatchController::UnregisterCallStation(CallStation *station)
 	if (sbs->GetPower() == false)
 		return;
 
-	for (size_t i = 0; i < CallStations.size(); i++)
-	{
-		if (CallStations[i] == station)
-		{
-			CallStations.erase(CallStations.begin() + i);
-			return;
-		}
-	}
+	RemoveArrayElement(CallStations, station);
 }
 
 std::vector<CallStation*> DispatchController::GetCallStations(int floor)

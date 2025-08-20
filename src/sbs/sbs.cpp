@@ -44,7 +44,7 @@
 #include "stairs.h"
 #include "action.h"
 #include "person.h"
-#include "texture.h"
+#include "texman.h"
 #include "light.h"
 #include "wall.h"
 #include "control.h"
@@ -66,11 +66,12 @@
 #include "geometry.h"
 #include "escalator.h"
 #include "map.h"
+#include "shape.h"
 #include "reverb.h"
 
 namespace SBS {
 
-SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instance_number, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max) : Object(0)
+SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instance_number, const Vector3 &area_min, const Vector3 &area_max) : Object(0)
 {
 	sbs = this;
 	this->mSceneManager = mSceneManager;
@@ -180,6 +181,15 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instan
 	soundsystem = 0;
 	area_trigger = 0;
 	texturemanager = 0;
+	floor_manager = 0;
+	elevator_manager = 0;
+	shaft_manager = 0;
+	stairwell_manager = 0;
+	door_manager = 0;
+	revolvingdoor_manager = 0;
+	vehicle_manager = 0;
+	controller_manager = 0;
+	teleporter_manager = 0;
 
 	//Print SBS banner
 	PrintBanner();
@@ -187,14 +197,10 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instan
 	//add instance number to reports
 	InstancePrompt = ToString(InstanceNumber) + ">";
 
-	//move to specified position
-	Move(position);
-
-	//rotate engine
-	Rotate(0.0, rotation, 0.0);
-
 	//create main engine area trigger
 	SetBounds(area_min, area_max);
+	bounds = Ogre::AxisAlignedBox::BOX_NULL;
+	bounds_set = false;
 
 	//create sound system object if sound is enabled
 	if (fmodsystem)
@@ -239,6 +245,7 @@ void SBS::Initialize()
 	revolvingdoor_manager = new RevolvingDoorManager(this);
 	vehicle_manager = new VehicleManager(this);
 	controller_manager = new ControllerManager(this);
+	teleporter_manager = new TeleporterManager(this);
 
 	//create camera object
 	this->camera = new Camera(this);
@@ -405,6 +412,13 @@ SBS::~SBS()
 	}
 	controller_manager = 0;
 
+	if (teleporter_manager)
+	{
+		teleporter_manager->parent_deleting = true;
+		delete teleporter_manager;
+	}
+	teleporter_manager = 0;
+
 	//delete sounds
 	for (size_t i = 0; i < sounds.size(); i++)
 	{
@@ -511,12 +525,16 @@ SBS::~SBS()
 	sbs = 0;
 }
 
-bool SBS::Start(std::vector<Ogre::Camera*> &cameras)
+bool SBS::Start()
 {
 	//Post-init startup code goes here, before the runloop
 
 	//prepare 3D geometry for use
 	Prepare();
+
+	//if no bounds trigger was created, set it according to generated engine bounds
+	if (!area_trigger && !bounds.isNull())
+		SetBounds(bounds.getMinimum(), bounds.getMaximum());
 
 	//free text texture memory
 	texturemanager->FreeTextureBoxes();
@@ -536,9 +554,6 @@ bool SBS::Start(std::vector<Ogre::Camera*> &cameras)
 				sounds[i]->Play();
 		}
 	}
-
-	//attach camera object
-	AttachCamera(cameras);
 
 	//enable random activity if specified
 	if (RandomActivity == true)
@@ -574,16 +589,21 @@ void SBS::PrintBanner()
 	Report(" conditions. For details, see the file named LICENSE\n");
 }
 
-void SBS::Loop(bool loading, bool isready)
+bool SBS::Loop(bool loading, bool isready)
 {
 	//Main simulator loop
 	SBS_PROFILE_MAIN("SBS");
+
+	if (!camera)
+		return false;
+
+	bool status = true;
 
 	if (RenderOnStartup == true && (loading == true || isready == false))
 		Prepare(false);
 
 	if (loading == true)
-		return;
+		return true;
 
 	//This makes sure all timer steps are the same size, in order to prevent the physics from changing
 	//depending on frame rate
@@ -621,7 +641,11 @@ void SBS::Loop(bool loading, bool isready)
 
 	//update sound
 	if (soundsystem)
-		soundsystem->Loop();
+	{
+		bool result = soundsystem->Loop();
+		if (result == false)
+			status = false;
+	}
 
 	elapsed += remaining_delta;
 
@@ -658,6 +682,8 @@ void SBS::Loop(bool loading, bool isready)
 
 	//process camera loop
 	camera->Loop();
+
+	return status;
 }
 
 void SBS::CalculateFrameRate()
@@ -676,14 +702,17 @@ void SBS::CalculateFrameRate()
 void SBS::EnableBuildings(bool value)
 {
 	//turns buildings on/off
-	Buildings->Enabled(value);
+
+	if (Buildings)
+		Buildings->Enabled(value);
 	IsBuildingsEnabled = value;
 }
 
 void SBS::EnableLandscape(bool value)
 {
 	//turns landscape on/off
-	Landscape->Enabled(value);
+	if (Landscape)
+		Landscape->Enabled(value);
 	IsLandscapeEnabled = value;
 }
 
@@ -1110,17 +1139,7 @@ bool SBS::UnregisterTimerCallback(TimerObject *timer)
 	if (!timer)
 		return false;
 
-	for (size_t i = 0; i < timercallbacks.size(); i++)
-	{
-		//unregister existing call button callback
-		if (timercallbacks[i] == timer)
-		{
-			timercallbacks.erase(timercallbacks.begin() + i);
-			return true;
-		}
-	}
-
-	return false;
+	return RemoveArrayElement(timercallbacks, timer);
 }
 
 void SBS::ProcessTimers()
@@ -1705,14 +1724,7 @@ void SBS::RemoveSound(Sound *sound)
 	//remove a sound from the array
 	//this does not delete the object
 
-	for (size_t i = 0; i < sounds.size(); i++)
-	{
-		if (sounds[i] == sound)
-		{
-			sounds.erase(sounds.begin() + i);
-			return;
-		}
-	}
+	RemoveArrayElement(sounds, sound);
 }
 
 void SBS::RemoveReverb(Reverb *reverb)
@@ -1720,92 +1732,49 @@ void SBS::RemoveReverb(Reverb *reverb)
 	//remove a reverb from the array
 	//this does not delete the object
 
-	for (size_t i = 0; i < reverbs.size(); i++)
-	{
-		if (reverbs[i] == reverb)
-		{
-			reverbs.erase(reverbs.begin() + i);
-			return;
-		}
-	}
+	RemoveArrayElement(reverbs, reverb);
 }
 
 void SBS::RemoveLight(Light *light)
 {
 	//remove a light reference (does not delete the object itself)
-	for (size_t i = 0; i < lights.size(); i++)
-	{
-		if (lights[i] == light)
-		{
-			lights.erase(lights.begin() + i);
-			return;
-		}
-	}
+
+	RemoveArrayElement(lights, light);
 }
 
 void SBS::RemoveModel(Model *model)
 {
 	//remove a model reference (does not delete the object itself)
-	for (size_t i = 0; i < ModelArray.size(); i++)
-	{
-		if (ModelArray[i] == model)
-		{
-			ModelArray.erase(ModelArray.begin() + i);
-			return;
-		}
-	}
+
+	RemoveArrayElement(ModelArray, model);
 }
 
 void SBS::RemovePrimitive(Primitive *prim)
 {
 	//remove a prim reference (does not delete the object itself)
-	for (size_t i = 0; i < PrimArray.size(); i++)
-	{
-		if (PrimArray[i] == prim)
-		{
-			PrimArray.erase(PrimArray.begin() + i);
-			return;
-		}
-	}
+
+	RemoveArrayElement(PrimArray, prim);
 }
 
 void SBS::RemoveCustomObject(CustomObject *object)
 {
 	//remove a custom object reference (does not delete the object itself)
-	for (size_t i = 0; i < CustomObjectArray.size(); i++)
-	{
-		if (CustomObjectArray[i] == object)
-		{
-			CustomObjectArray.erase(CustomObjectArray.begin() + i);
-			return;
-		}
-	}
+
+	RemoveArrayElement(CustomObjectArray, object);
 }
 
 void SBS::RemoveControl(Control *control)
 {
 	//remove a control reference (does not delete the object itself)
-	for (size_t i = 0; i < ControlArray.size(); i++)
-	{
-		if (ControlArray[i] == control)
-		{
-			ControlArray.erase(ControlArray.begin() + i);
-			return;
-		}
-	}
+
+	RemoveArrayElement(ControlArray, control);
 }
 
 void SBS::RemoveTrigger(Trigger *trigger)
 {
 	//remove a trigger reference (does not delete the object itself)
-	for (size_t i = 0; i < TriggerArray.size(); i++)
-	{
-		if (TriggerArray[i] == trigger)
-		{
-			TriggerArray.erase(TriggerArray.begin() + i);
-			return;
-		}
-	}
+
+	RemoveArrayElement(TriggerArray, trigger);
 }
 
 void SBS::RemoveController(DispatchController *controller)
@@ -1867,19 +1836,12 @@ Light* SBS::AddLight(const std::string &name, int type)
 
 void SBS::AddMeshHandle(MeshObject* handle)
 {
-	meshes.emplace_back(handle);
+	AddArrayElement(meshes, handle);
 }
 
 void SBS::DeleteMeshHandle(MeshObject* handle)
 {
-	for (size_t i = 0; i < meshes.size(); i++)
-	{
-		if (meshes[i] == handle)
-		{
-			meshes.erase(meshes.begin() + i);
-			return;
-		}
-	}
+	RemoveArrayElement(meshes, handle);
 }
 
 MeshObject* SBS::FindMeshObject(const std::string &name)
@@ -2648,21 +2610,15 @@ void SBS::ListKeys()
 void SBS::RegisterControl(Control *control)
 {
 	//add control to index
-	control_index.emplace_back(control);
+
+	AddArrayElement(control_index, control);
 }
 
 void SBS::UnregisterControl(Control *control)
 {
 	//remove control from index
 
-	for (size_t i = 0; i < control_index.size(); i++)
-	{
-		if (control_index[i] == control)
-		{
-			control_index.erase(control_index.begin() + i);
-			return;
-		}
-	}
+	RemoveArrayElement(control_index, control);
 }
 
 void SBS::ShowFloorList()
@@ -2746,52 +2702,82 @@ int SBS::GetRevolvingDoorCount()
 	return (int)RevolvingDoorArray.size();
 }
 
-bool SBS::HitBeam(const Ray &ray, Real max_distance, MeshObject *&mesh, Wall *&wall, Vector3 &hit_position)
+struct PickRays {
+    Ray global;  // global space
+    Ray engine;  // engine space
+};
+
+//build both rays at once from the Ogre camera ray
+static PickRays MakePickRays(const Ray& camRay, SBS* sbs)
+{
+    //start in Ogre camera space (camRay is Ogre/remote)
+
+    //engine space for polygon/triangle picking:
+    Ray engineRay(
+        sbs->ToRemote(sbs->ToLocal(camRay.getOrigin())),
+        sbs->GetOrientation().Inverse() * camRay.getDirection()
+    );
+
+    //global space for Bullet
+    Ray globalRay(
+        sbs->ToRemote(sbs->GetUtility()->ToGlobal(sbs->ToLocal(camRay.getOrigin()))),
+        sbs->GetOrientation() * camRay.getDirection()
+    );
+
+    return {globalRay, engineRay};
+}
+
+bool SBS::HitBeam(const Ray &ray, Real max_distance, MeshObject *&mesh, Wall *&wall, Polygon *&polygon, Vector3 &hit_position)
 {
 	//use a given ray and distance, and return the nearest hit mesh and if applicable, wall object
 	//note that the ray's origin and direction need to be in engine-relative values
 
-	//create a new ray that has absolute positioning, for engine offsets
-	Ray ray2 (ToRemote(GetUtility()->ToGlobal(ToLocal(ray.getOrigin()))), GetOrientation() * ray.getDirection());
+	//create a ray for absolute (global) positioning, and another for engine offsets (engine-relative positioning)
+	const PickRays rays = MakePickRays(ray, this);
+	wall = 0;
+	polygon = 0;
 
-	//get a collision callback from Bullet
-	OgreBulletCollisions::CollisionClosestRayResultCallback callback (ray2, mWorld, max_distance);
+    //ray test in Bullet; get a collision callback
+    OgreBulletCollisions::CollisionClosestRayResultCallback callback(rays.global, mWorld, max_distance);
 
 	//check for collision
-	mWorld->launchRay(callback);
+    mWorld->launchRay(callback);
 
 	//exit if no collision
-	if (callback.doesCollide() == false)
+    if (!callback.doesCollide())
 		return false;
 
-	//get collided collision object
-	OgreBulletCollisions::Object* object = callback.getCollidedObject();
-
-	if (!object)
+    //get collided collision object
+    OgreBulletCollisions::Object* object = callback.getCollidedObject();
+    if (!object)
 		return false;
 
 	//get name of collision object's grandparent scenenode (which is the same name as the mesh object)
-	std::string meshname;
-	if (dynamic_cast<OgreBulletDynamics::WheeledRigidBody*>(object) == 0)
-		meshname = object->getRootNode()->getParentSceneNode()->getName();
-	else
-		meshname = object->getRootNode()->getChild(0)->getName(); //for vehicles, the child of the root node is the mesh
-
-	//get hit/intersection position
-	hit_position = ToLocal(callback.getCollisionPoint());
+    std::string meshname;
+    if (dynamic_cast<OgreBulletDynamics::WheeledRigidBody*>(object) == 0)
+        meshname = object->getRootNode()->getParentSceneNode()->getName();
+    else
+        meshname = object->getRootNode()->getChild(0)->getName(); //for vehicles, the child of the root node is the mesh
 
 	//get associated mesh object
-	mesh = FindMeshObject(meshname);
-	if (!mesh)
+    mesh = FindMeshObject(meshname);
+    if (!mesh)
 		return false;
 
-	//get wall object, if any
-	Vector3 isect;
-	Real distance = 2000000000.;
-	Vector3 normal = Vector3::ZERO;
-	wall = GetPolyMesh()->FindWallIntersect(mesh, ray.getOrigin(), ray.getPoint(max_distance), isect, distance, normal);
+    //hit position — keep space consistent
+    hit_position = ToLocal(callback.getCollisionPoint());
 
-	return true;
+    //wall resolution
+    Vector3 rs = rays.engine.getOrigin();
+    Vector3 re = rays.engine.getPoint(max_distance);
+
+	//get wall object, if any
+    Vector3 isect; Real distance = 2e9; Vector3 normal = Vector3::ZERO;
+    MeshObject::TriOwner owner = GetPolyMesh()->FindWallIntersect_Tri(mesh, rs, re, isect, distance, normal);
+	wall = owner.wall;
+	polygon = owner.poly;
+
+    return true;
 }
 
 void SBS::EnableRandomActivity(bool value)
@@ -2950,14 +2936,7 @@ void SBS::RemovePerson(Person *person)
 {
 	//remove a person (does not delete the object)
 
-	for (size_t i = 0; i < PersonArray.size(); i++)
-	{
-		if (PersonArray[i] == person)
-		{
-			PersonArray.erase(PersonArray.begin() + i);
-			return;
-		}
-	}
+	RemoveArrayElement(PersonArray, person);
 }
 
 bool SBS::AttachCamera(std::vector<Ogre::Camera*> &cameras, bool init_state)
@@ -2969,6 +2948,9 @@ bool SBS::AttachCamera(std::vector<Ogre::Camera*> &cameras, bool init_state)
 
 bool SBS::DetachCamera()
 {
+	if (!camera)
+		return false;
+
 	return camera->Detach();
 }
 
@@ -3050,9 +3032,9 @@ void SBS::CutOutsideBoundaries(bool landscape, bool buildings, bool external, bo
 	Vector3 min = area_trigger->GetMin();
 	Vector3 max = area_trigger->GetMax();
 
-	if (landscape == true)
+	if (landscape == true && Landscape)
 		Landscape->CutOutsideBounds(min, max, true, true);
-	if (buildings == true)
+	if (buildings == true && Buildings)
 		Buildings->CutOutsideBounds(min, max, true, true);
 	if (external == true && External)
 		External->CutOutsideBounds(min, max, true, true);
@@ -3069,9 +3051,9 @@ void SBS::CutInsideBoundaries(const Vector3 &min, const Vector3 &max, bool lands
 	//cut landscape and buildings for specified bounds
 	//run this function before calling Start()
 
-	if (landscape == true)
+	if (landscape == true && Landscape)
 		Landscape->Cut(min, max, true, true);
-	if (buildings == true)
+	if (buildings == true && Buildings)
 		Buildings->Cut(min, max, true, true);
 	if (external == true && External)
 		External->Cut(min, max, true, true);
@@ -3108,10 +3090,14 @@ void SBS::ResetState()
 	EnableSkybox(true);
 
 	//turn off interior objects
-	floor_manager->EnableAll(false);
-	shaft_manager->EnableAll(false);
-	stairwell_manager->EnableAll(false);
-	elevator_manager->EnableAll(false);
+	if (floor_manager)
+		floor_manager->EnableAll(false);
+	if (shaft_manager)
+		shaft_manager->EnableAll(false);
+	if (stairwell_manager)
+		stairwell_manager->EnableAll(false);
+	if (elevator_manager)
+		elevator_manager->EnableAll(false);
 
 	//turn off reverbs
 	for (size_t i = 0; i < reverbs.size(); i++)
@@ -3121,7 +3107,8 @@ void SBS::ResetState()
 	}
 
 	//reset camera state
-	camera->ResetState();
+	if (camera)
+		camera->ResetState();
 }
 
 Light* SBS::GetLight(std::string name)
@@ -3188,21 +3175,14 @@ void SBS::RegisterDynamicMesh(DynamicMesh *dynmesh)
 {
 	//register a dynamic mesh with the system
 
-	dynamic_meshes.emplace_back(dynmesh);
+	AddArrayElement(dynamic_meshes, dynmesh);
 }
 
 void SBS::UnregisterDynamicMesh(DynamicMesh *dynmesh)
 {
 	//unregister a dynamic mesh from the system
 
-	for (size_t i = 0; i < dynamic_meshes.size(); i++)
-	{
-		if (dynamic_meshes[i] == dynmesh)
-		{
-			dynamic_meshes.erase(dynamic_meshes.begin() + i);
-			return;
-		}
-	}
+	RemoveArrayElement(dynamic_meshes, dynmesh);
 }
 
 SoundSystem* SBS::GetSoundSystem()
@@ -3265,25 +3245,23 @@ ControllerManager* SBS::GetControllerManager()
 	return controller_manager;
 }
 
+TeleporterManager* SBS::GetTeleporterManager()
+{
+	return teleporter_manager;
+}
+
 void SBS::RegisterCameraTexture(CameraTexture *camtex)
 {
 	//register a camera texture
 
-	camtexarray.emplace_back(camtex);
+	AddArrayElement(camtexarray, camtex);
 }
 
 void SBS::UnregisterCameraTexture(CameraTexture *camtex)
 {
 	//unregister a camera texture
 
-	for (size_t i = 0; i < camtexarray.size(); i++)
-	{
-		if (camtexarray[i] == camtex)
-		{
-			camtexarray.erase(camtexarray.begin() + i);
-			return;
-		}
-	}
+	RemoveArrayElement(camtexarray, camtex);
 }
 
 int SBS::GetCameraTextureCount()
@@ -3330,21 +3308,15 @@ void SBS::MemoryReport()
 void SBS::RegisterEscalator(Escalator *escalator)
 {
 	//add escalator to index
-	EscalatorArray.emplace_back(escalator);
+
+	AddArrayElement(EscalatorArray, escalator);
 }
 
 void SBS::UnregisterEscalator(Escalator *escalator)
 {
 	//remove escalator from index
 
-	for (size_t i = 0; i < EscalatorArray.size(); i++)
-	{
-		if (EscalatorArray[i] == escalator)
-		{
-			EscalatorArray.erase(EscalatorArray.begin() + i);
-			return;
-		}
-	}
+	RemoveArrayElement(EscalatorArray, escalator);
 }
 
 Escalator* SBS::GetEscalator(int index)
@@ -3357,21 +3329,15 @@ Escalator* SBS::GetEscalator(int index)
 void SBS::RegisterMovingWalkway(MovingWalkway *walkway)
 {
 	//add moving walkway to index
-	MovingWalkwayArray.emplace_back(walkway);
+
+	AddArrayElement(MovingWalkwayArray, walkway);
 }
 
 void SBS::UnregisterMovingWalkway(MovingWalkway *walkway)
 {
 	//remove moving walkway from index
 
-	for (size_t i = 0; i < MovingWalkwayArray.size(); i++)
-	{
-		if (MovingWalkwayArray[i] == walkway)
-		{
-			MovingWalkwayArray.erase(MovingWalkwayArray.begin() + i);
-			return;
-		}
-	}
+	RemoveArrayElement(MovingWalkwayArray, walkway);
 }
 
 MovingWalkway* SBS::GetMovingWalkway(int index)
@@ -3391,14 +3357,7 @@ void SBS::UnregisterRevolvingDoor(RevolvingDoor* door)
 {
 	//remove revolving door from index
 
-	for (size_t i = 0; i < RevolvingDoorArray.size(); i++)
-	{
-		if (RevolvingDoorArray[i] == door)
-		{
-			RevolvingDoorArray.erase(RevolvingDoorArray.begin() + i);
-			return;
-		}
-	}
+	RemoveArrayElement(RevolvingDoorArray, door);
 }
 
 RevolvingDoor* SBS::GetRevolvingDoor(int index)
@@ -3480,6 +3439,30 @@ Vector3 SBS::GetCenter()
 		return Vector3(0, 0, 0);
 
 	return area_trigger->GetBounds().getCenter();
+}
+
+Shape* SBS::CreateShape(Wall *wall)
+{
+	//Creates a shape in the specified wall object
+	//returns a Shape object, which must be deleted by the caller after use
+
+	if (!wall)
+		return 0;
+
+	Shape *shape = new Shape(wall);
+	return shape;
+}
+
+void SBS::MergeBounds(Ogre::AxisAlignedBox &box)
+{
+	if (box.isNull())
+		return;
+
+	if (bounds_set == true)
+		bounds.merge(box);
+	else
+		bounds = box;
+	bounds_set = true;
 }
 
 }

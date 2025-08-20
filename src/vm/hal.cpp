@@ -30,6 +30,8 @@
 #include <OgreBitesConfigDialog.h>
 #include <OgreSGTechniqueResolverListener.h>
 #include <OgreOverlaySystem.h>
+#include <OgreImGuiOverlay.h>
+#include <OgreImGuiInputListener.h>
 
 #ifndef DISABLE_SOUND
 	//FMOD
@@ -47,6 +49,9 @@
 #endif
 
 #include <iostream>
+
+//ImGuizmo system
+//#include "ImGuizmo.h"
 
 //simulator interfaces
 #include "globals.h"
@@ -85,6 +90,7 @@ HAL::HAL(VM *vm)
 	keyconfigfile = 0;
 	joyconfigfile = 0;
 	DX11 = false;
+	imgui = 0;
 	timer = new Ogre::Timer();
 }
 
@@ -557,7 +563,9 @@ bool HAL::LoadSystem(const std::string &data_path, Ogre::RenderWindow *renderwin
 			mCameras.emplace_back(mSceneMgr->createCamera("Camera " + ToString(i + 1)));
 			if (mRenderWindow)
 			{
-				mViewports.emplace_back(mRenderWindow->addViewport(mCameras[i], (cameras - 1) - i, 0, 0, 1, 1));
+				Ogre::Viewport* viewport = mRenderWindow->addViewport(mCameras[i], (cameras - 1) - i, 0, 0, 1, 1);
+				viewport->setOverlaysEnabled(true);
+				mViewports.emplace_back(viewport);
 				mCameras[i]->setAspectRatio(Real(mViewports[i]->getActualWidth()) / Real(mViewports[i]->getActualHeight()));
 			}
 		}
@@ -666,12 +674,31 @@ bool HAL::LoadSystem(const std::string &data_path, Ogre::RenderWindow *renderwin
 	Report("Initialization complete");
 	Report("");
 
+	//initialize ImGui Overlay
+	try
+	{
+		imgui = new Ogre::ImGuiOverlay();
+		imgui->setZOrder(300);
+		imgui->show();
+		Ogre::OverlayManager::getSingleton().addOverlay(imgui);
+	}
+	catch(Ogre::Exception &e)
+	{
+		return ReportFatalError("Error initializing ImGui overlay\nDetails: " + e.getDescription());
+	}
+
 	return true;
 }
 
 bool HAL::Render()
 {
 	SBS_PROFILE_MAIN("Render");
+
+	//process imgui
+	Ogre::ImGuiOverlay::NewFrame();
+	//ImGuizmo::BeginFrame();
+
+	//ImGui::ShowDemoWindow();
 
 	//render to the frame buffer
 	try

@@ -33,7 +33,7 @@
 #include "sbs.h"
 #include "camera.h"
 #include "wall.h"
-#include "texture.h"
+#include "texman.h"
 #include "profiler.h"
 #include "scenenode.h"
 #include "dynamicmesh.h"
@@ -146,7 +146,7 @@ void MeshObject::GetBounds()
 	*Bounds = MeshWrapper->GetBounds(this);
 }
 
-void MeshObject::Enabled(bool value)
+bool MeshObject::Enabled(bool value)
 {
 	//enables or disables the mesh
 
@@ -159,16 +159,17 @@ void MeshObject::Enabled(bool value)
 			EnableCollider(false);
 			remove_on_disable = false;
 		}
-		return;
+		return true;
 	}
 
 	SBS_PROFILE("MeshObject::Enable");
 
-	MeshWrapper->Enabled(value, this);
+	bool status = MeshWrapper->Enabled(value, this);
 
 	EnableCollider(value);
 
 	enabled = value;
+	return status;
 }
 
 void MeshObject::EnableCollider(bool value)
@@ -241,28 +242,7 @@ void MeshObject::Prepare(bool force)
 		return;
 
 	//set up bounding box
-	if (model_loaded == false)
-	{
-		Bounds->setNull();
-		for (size_t i = 0; i < Walls.size(); i++)
-		{
-			if (!Walls[i])
-				continue;
-
-			for (size_t j = 0; j < Walls[i]->polygons.size(); j++)
-			{
-				Polygon *poly = Walls[i]->polygons[j];
-
-				if (!poly)
-					continue;
-				for (size_t k = 0; k < poly->geometry.size(); k++)
-				{
-					for (size_t l = 0; l < poly->geometry[k].size(); l++)
-						Bounds->merge(poly->geometry[k][l].vertex);
-				}
-			}
-		}
-	}
+	CreateBoundingBox();
 
 	//update dynamic mesh
 	MeshWrapper->NeedsUpdate(this);
@@ -510,7 +490,7 @@ void MeshObject::Cut(Vector3 start, Vector3 end, bool cutwalls, bool cutfloors, 
 		if (!Walls[i])
 			continue;
 
-		sbs->GetUtility()->Cut(Walls[i], start, end, cutwalls, cutfloors, checkwallnumber, reset_check);
+		sbs->GetPolyMesh()->Cut(Walls[i], start, end, cutwalls, cutfloors, checkwallnumber, reset_check);
 	}
 }
 
@@ -1256,6 +1236,138 @@ size_t MeshObject::GetSize()
 	}
 
 	return size;
+}
+
+void MeshObject::CreateBoundingBox()
+{
+	//create a new bounding box for this mesh object
+	//based on the geometry of all associated wall objects
+
+	if (model_loaded == false)
+	{
+		Bounds->setNull();
+		bool merge = false;
+		for (size_t i = 0; i < Walls.size(); i++)
+		{
+			if (!Walls[i])
+				continue;
+
+			//step through each wall polygon, and merge it's vertices into the bounding box
+			for (size_t j = 0; j < Walls[i]->polygons.size(); j++)
+			{
+				Polygon *poly = Walls[i]->polygons[j];
+
+				if (!poly)
+					continue;
+				for (size_t k = 0; k < poly->geometry.size(); k++)
+				{
+					for (size_t l = 0; l < poly->geometry[k].size(); l++)
+					{
+						Bounds->merge(sbs->GetUtility()->ToLocal(poly->geometry[k][l].vertex));
+						merge = true;
+					}
+				}
+			}
+		}
+
+		//merge bounds into sim engine bounding box
+		if (merge == true)
+		{
+			Ogre::AxisAlignedBox box = *Bounds;
+			box.setMinimum(Bounds->getMinimum() + GetPosition());
+			box.setMaximum(Bounds->getMaximum() + GetPosition());
+			sbs->MergeBounds(box);
+		}
+	}
+}
+
+void MeshObject::RemoveTriOwner(Wall *wall)
+{
+	//remove a TriOwner by wall object
+
+	for (size_t i = 0; i < triOwners.size(); /*no++*/)
+	{
+		if (triOwners[i].wall == wall)
+		{
+			RemoveTriOwnerFast(i);
+			// Don’t increment i — we just moved the last tri here
+		}
+		else
+		{
+			++i;
+		}
+	}
+}
+
+void MeshObject::RemoveTriOwner(Polygon *poly)
+{
+	//remove a TriOwner by polygon object
+
+	for (size_t i = 0; i < triOwners.size(); /*no++*/)
+	{
+		if (triOwners[i].poly == poly)
+		{
+			RemoveTriOwnerFast(i);
+			// Don’t increment i — we just moved the last tri here
+		}
+		else
+		{
+			++i;
+		}
+	}
+}
+
+void MeshObject::AddTriOwner(Wall *wall, Polygon *poly)
+{
+	//add a triangle owner
+
+	uint32_t base = static_cast<uint32_t>(pickPositions.size() - 3);
+
+	pickIndices.push_back(base + 0);
+	pickIndices.push_back(base + 1);
+	pickIndices.push_back(base + 2);
+
+	triOwners.push_back({wall, poly});
+}
+
+void MeshObject::RemoveTriOwner(size_t triIndex)
+{
+	//remove a TriOwner by triangle index
+
+	size_t idxOffset = triIndex * 3;
+
+	//erase the three indices
+	pickIndices.erase(pickIndices.begin() + idxOffset, pickIndices.begin() + idxOffset + 3);
+
+	//erase the owner
+	triOwners.erase(triOwners.begin() + triIndex);
+}
+
+void MeshObject::RemoveTriOwnerFast(size_t triIndex)
+{
+	//remove a TriOwner by triangle index, ignoring triangle order
+
+	size_t triCount = triOwners.size();
+	if (triIndex >= triCount)
+		return;
+
+	size_t idxOffset = triIndex * 3;
+	size_t lastIdxOffset = (triCount - 1) * 3;
+
+	if (triIndex != triCount - 1)
+	{
+		//move last tri’s indices into this slot
+		pickIndices[idxOffset + 0] = pickIndices[lastIdxOffset + 0];
+		pickIndices[idxOffset + 1] = pickIndices[lastIdxOffset + 1];
+		pickIndices[idxOffset + 2] = pickIndices[lastIdxOffset + 2];
+
+		//move last triOwner
+		triOwners[triIndex] = triOwners.back();
+	}
+
+	//pop last tri
+	pickIndices.resize(pickIndices.size() - 3);
+	triOwners.pop_back();
 }
 
 }

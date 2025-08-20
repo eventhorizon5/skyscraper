@@ -73,7 +73,7 @@ struct DoorWrapper : public Object
 	~DoorWrapper();
 
 	DoorComponent* CreateDoor(const std::string &doorname, const std::string &Direction, bool OpenClockwise, Real OpenSpeed, Real CloseSpeed, DynamicMesh *dynmesh);
-	void Enabled(bool value);
+	bool Enabled(bool value);
 	bool IsEnabled();
 	bool CheckDoorsOpen();
 	bool IsFinished();

@@ -323,7 +323,7 @@
 										<orient>wxVERTICAL</orient>
 										<object class="sizeritem">
 											<object class="wxButton" name="ID_bFloorList" variable="bFloorList" member="yes">
-												<label>Floor List</label>
+												<label>Floor Information</label>
 												<handler function="On_bFloorList_Click" entry="EVT_BUTTON" />
 											</object>
 											<flag>wxEXPAND</flag>
@@ -489,7 +489,7 @@
 										</object>
 										<object class="sizeritem">
 											<object class="wxButton" name="ID_bFloorInfo" variable="bFloorInfo" member="yes">
-												<label>Floor Information</label>
+												<label>Current Floor Info</label>
 												<handler function="On_bFloorInfo_Click" entry="EVT_BUTTON" />
 											</object>
 											<flag>wxEXPAND</flag>

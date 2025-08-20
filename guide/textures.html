@@ -76,9 +76,11 @@
 
 
 
+
           <em>startnumber</em>, <em>endnumber</em>, <em>filename</em>,
           <em>name</em>, <em>tile_x</em>, <em>tile_y[, force] </em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">LoadRange
+
 
 
 
@@ -176,9 +178,11 @@
 
 
 
+
           LoadAnimated</strong> - loads a set of textures to use as a
         single animated texture<br>
         Syntax: <font size="2" face="Courier New, Courier, mono">LoadAnimated
+
 
 
 
@@ -283,10 +287,12 @@
 
 
 
+
           LoadAlphaBlend</strong> - loads a texture with a specular mask
         texture and blending texture, used to make things like
         reflection effects<br>
         Syntax: <font size="2" face="Courier New, Courier, mono">LoadAlphaBlend
+
 
 
 
@@ -392,9 +398,11 @@
 
 
 
+
           LoadMaterial</strong> - loads a custom OGRE material, used for
         advanced/specific texture definitions<br>
         Syntax: <font size="2" face="Courier New, Courier, mono">LoadMaterial
+
 
 
 
@@ -495,6 +503,7 @@ manual's
 
 
 
+
           "Material Scripts" section</a>.</p>
       <p align="left"><strong>6. AddText</strong> - draws text onto a
         texture - this only creates a new texture during runtime (in
@@ -543,9 +552,11 @@ manual's
 
 
 
+
           <em>texture_name, name, font_filename, font_size, text, x1,
             y1, x2, y2, h_align, v_align, ColorR, ColorG, ColorB[, force</em></font><em>]<br>
         </em>Example: <font size="2" face="Courier New, Courier, mono">AddText
+
 
 
 
@@ -657,10 +668,12 @@ manual's
 
 
 
+
           <em>startnumber, endnumber, texture_name, name, font_filename,
             font_size, text, x1, y1, x2, y2, h_align, v_align, ColorR,
             ColorG, ColorB[, force</em></font><em>]<br>
         </em>Example: <font size="2" face="Courier New, Courier, mono">AddText
+
 
 
 
@@ -750,10 +763,12 @@ manual's
 
 
 
+
           <em>filename, name, x, y, width, height, tile_x, tile_y[,
             force</em></font><em>]<br>
         </em>Example: <font size="2" face="Courier New, Courier, mono">LoadCropped
 data\brick1.jpg,
+
 
 
 
@@ -851,10 +866,12 @@ data\brick1.jpg,
 
 
 
+
           <em>texture_name, overlay_texture_name, name, x, y, width,
             height, tile_x, tile_y[, force]</em></font><em><br>
         </em>Example: <font size="2" face="Courier New, Courier, mono">AddOverlay
 Brick1,
+
 
 
 
@@ -968,9 +985,11 @@ Brick1,
 
 
 
+
           RotateAnim</strong> - applies rotation animation to a texture.
         This can be used with other texture modifiers.<br>
         Syntax: <font size="2" face="Courier New, Courier, mono">RotateAnim
+
 
 
 
@@ -1021,6 +1040,7 @@ Brick1,
         example, the Brick1 texture's rotation animation is set to 0.2
         rotations per second.</p>
       <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>12.
+
 
 
 
@@ -1115,9 +1135,11 @@ Brick1,
 
 
 
+
           ScrollAnim</strong> - applies scrolling animation to a
         texture. This can be used with other texture modifiers.<br>
         Syntax: <font size="2" face="Courier New, Courier, mono">ScrollAnim
+
 
 
 
@@ -1167,6 +1189,7 @@ Brick1,
         scrolls per second. In the example, the Brick1 texture will
         scroll to the right once per second, and up once per second.</p>
       <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>14.
+
 
 
 
@@ -1260,11 +1283,13 @@ Brick1,
 
 
 
+
           Transform</strong> - sets an advanced transformation method on
         the texture. This can be used with other texture modifiers, and
         also can be used multiple times to create multiple
         transformations.<br>
         Syntax: <font size="2" face="Courier New, Courier, mono">Transform
+
 
 
 
@@ -1377,6 +1402,7 @@ Brick1,
 
 
 
+
           SetCulling</strong> - sets the culling value for a specified
         texture.&nbsp; This determines which sides of the object the
         texture should be displayed.<br>
@@ -1393,7 +1419,86 @@ Brick1,
         the texture.</p>
       <p></p>
       <p></p>
-      <br>
+      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>17.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          CreateSlideshow</strong> - creates a slideshow of
+        images.&nbsp; This is similar to the <i>LoadAnimated</i>
+        command, but allows you to set the duration of each image.<br>
+        Syntax:<font size="2"><font face="Courier New, Courier, mono"><em>
+            </em>CreateSlideshow <i>name</i>, <em>start, filename1,
+              duration1, filename2, duration2, ..., </em></font></font><font
+          size="2" face="Courier New, Courier, mono"><em>tile_x,
+            tile_y[, force]<br>
+          </em></font>Example: <font size="2"><font face="Courier New,
+            Courier, mono">CreateSlideshow MySlideshow, true,
+            data/red.png, 10, data/green.png, 10, data/yellow.png, 2.5,
+            1, 1</font></font><font size="2" face="Courier New, Courier,
+          mono"><br>
+        </font></p>
+      <p align="left">Start determines if the slideshow will start after
+        it's created.&nbsp; If set to false, you can use Actions to turn
+        on and off the slideshow.&nbsp; To use Actions, see the
+        AddAction parameter; the parent object for slideshows is <i>TextureManager</i>,
+        and the commands are <i>StartSlideshow</i> and <i>StopSlideshow</i>,
+        with the name of the slideshow as the parameter.&nbsp; Here is
+        an example:<br>
+      </p>
+      <p align="left"><tt>&lt;Floor 0&gt;</tt><tt><br>
+        </tt><tt>&nbsp;&nbsp;&nbsp; AddAction StartSlideshow,
+          TextureManager, StartSlideshow, MySlideshow</tt><tt><br>
+        </tt><tt>&nbsp;&nbsp;&nbsp; AddAction StopSlideshow,
+          TextureManager, StopSlideshow, MySlideshow</tt><tt><br>
+        </tt><tt>&nbsp;&nbsp;&nbsp; AddActionControl MyControl,
+          switch.wav, front, -10, 10, 1.5, 1.5, 5, 2, StopSlideshow,
+          StartSlideshow, Touch, TouchLit</tt><tt><br>
+        </tt><tt>&lt;EndFloor&gt;<br>
+        </tt></p>
+      <p align="left"><tt><br>
+        </tt></p>
+      <p align="left"><br>
+      </p>
     </div>
   </body>
 </html>

@@ -30,10 +30,12 @@ class SBSIMPEXP Trigger : public Object
 {
 public:
 
+	bool teleporter;
+
 	//functions
 	Trigger(Object *parent, const std::string &name, bool permanent, const std::string &sound_file, Vector3 area_min, Vector3 area_max, const std::vector<std::string> &action_names);
 	~Trigger();
-	void Enabled(bool value);
+	bool Enabled(bool value);
 	bool SetSelectPosition(int position);
 	bool ChangeSelectPosition(int position);
 	bool NextSelectPosition(bool check_state = true);
@@ -47,7 +49,7 @@ public:
 	void PlaySound();
 	int FindActionPosition(const std::string &name);
 	bool DoAction();
-	void Loop();
+	bool Loop();
 	bool IsInside();
 	bool IsInside(const Vector3 &position);
 	bool IsInside(const Vector3 &v1, const Vector3 &v2);
@@ -57,8 +59,9 @@ public:
 	Vector3 GetMax();
 	bool IsOutside(const Vector3 &position);
 	bool IsOutside(Vector3 v1, Vector3 v2);
-	virtual void OnEntry() {}
-	virtual void OnExit() {}
+	void Merge(Ogre::AxisAlignedBox &box);
+	void OnEntry();
+	void OnExit();
 
 private:
 	Ogre::AxisAlignedBox *area_box;

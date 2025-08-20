@@ -100,14 +100,16 @@ public:
 	virtual void ResetState() {} //resets the internal state of an object
 	void ChangeParent(Object *new_parent);
 	bool IsGlobal();
-	void Init(bool children = true); //pre-runloop (first-run) object initialization
-	virtual void OnInit() {} //called when object is initialized
-	virtual void Loop() {} //object runloop
+	bool Init(bool children = true); //pre-runloop (first-run) object initialization
+	virtual bool OnInit() { return true; } //called when object is initialized
+	virtual bool Loop() { return true; } //object runloop
 	void RegisterLoop(Object *object);
 	void UnregisterLoop(Object *object);
-	virtual void Enabled(bool value) {}
+	virtual bool Enabled(bool value) { return true; }
 	virtual bool IsEnabled() { return true; }
 	std::string GetNameBase();
+	virtual void OnEntry() {}
+	virtual void OnExit() {}
 
 	template <typename T> bool IsType()
 	{
@@ -123,12 +125,12 @@ public:
 
 protected:
 	void EnableLoop(bool value);
-	void LoopChildren();
+	bool LoopChildren();
 	bool SelfDestruct();
 
 private:
 	void NotifyChildren(bool move, bool rotate);
-	void InitChildren();
+	bool InitChildren();
 
 	bool Permanent; //is object permanent?
 	std::string Type; //object type

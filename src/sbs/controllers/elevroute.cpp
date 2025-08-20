@@ -34,7 +34,7 @@ namespace SBS {
 RouteController::RouteController(Elevator *parent) : Object(parent)
 {
 	//set up SBS object
-	SetValues("RouteController", "", false);
+	SetValues("RouteController", "Route Controller " + ToString(parent->Number), false);
 
 	//set elevator number
 	elevator = parent;
@@ -810,6 +810,18 @@ void RouteController::HandleDequeue(int direction, bool stop_if_empty)
 		ActiveCall.call_type = 0;
 		ActiveCall.car = 0;
 	}
+}
+
+void RouteController::Report(const std::string &message)
+{
+	//general reporting function
+	Object::Report(GetName() + ": " + message);
+}
+
+bool RouteController::ReportError(const std::string &message)
+{
+	//general reporting function
+	return Object::ReportError(GetName() + ": " + message);
 }
 
 }

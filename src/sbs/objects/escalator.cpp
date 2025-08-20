@@ -28,7 +28,7 @@
 #include "mesh.h"
 #include "floor.h"
 #include "sound.h"
-#include "texture.h"
+#include "texman.h"
 #include "profiler.h"
 #include "dynamicmesh.h"
 #include "step.h"
@@ -158,22 +158,30 @@ Escalator::~Escalator()
 	}
 }
 
-void Escalator::Enabled(bool value)
+bool Escalator::Enabled(bool value)
 {
 	//enable or disable escalator
 
 	if (is_enabled == value)
-		return;
+		return true;
+
+	bool status = true;
 
 	EnableLoop(value);
 
 	for (size_t i = 0; i < Steps.size(); i++)
-		Steps[i]->Enabled(value);
+	{
+		bool result = Steps[i]->Enabled(value);
+		if (!result)
+			status = false;
+	}
 
 	if (value == false && sound->IsPlaying() == true)
 		sound->Stop();
 
 	is_enabled = value;
+
+	return status;
 }
 
 void Escalator::SetRun(int value)
@@ -202,7 +210,7 @@ bool Escalator::ReportError(const std::string &message)
 	return Object::ReportError("Escalator " + GetName() + ": " + message);
 }
 
-void Escalator::Loop()
+bool Escalator::Loop()
 {
 	//run loop
 
@@ -212,14 +220,14 @@ void Escalator::Loop()
 	if (sbs->GetPower() == false)
 	{
 		sound->Stop();
-		return;
+		return true;
 	}
 
 	if (!IsEnabled() || Run == 0)
 	{
 		if (sound->IsPlaying() == true)
 			sound->Stop();
-		return;
+		return false;
 	}
 
 	if (sound->IsPlaying() == false)
@@ -229,6 +237,8 @@ void Escalator::Loop()
 	}
 
 	MoveSteps();
+
+	return true;
 }
 
 void Escalator::CreateSteps(const std::string &riser_texture, const std::string &tread_texture, const std::string &direction, Real width, Real risersize, Real treadsize, Real tw, Real th)

@@ -30,7 +30,7 @@
 #include "shaft.h"
 #include "stairs.h"
 #include "buttonpanel.h"
-#include "texture.h"
+#include "texman.h"
 #include "sound.h"
 #include "mesh.h"
 #include "control.h"
@@ -179,15 +179,17 @@ Control::~Control()
 	}
 }
 
-void Control::Enabled(bool value)
+bool Control::Enabled(bool value)
 {
 	//enable or disable control
 
 	if (is_enabled == value)
-		return;
+		return true;
 
-	ControlMesh->Enabled(value);
+	bool status = ControlMesh->Enabled(value);
 	is_enabled = value;
+
+	return status;
 }
 
 bool Control::SetSelectPosition(int position)

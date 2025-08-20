@@ -48,11 +48,15 @@ TimerObject::~TimerObject()
 
 void TimerObject::Start(int milliseconds, bool oneshot)
 {
+	if (Running == true)
+		return;
+
 	Interval = milliseconds;
 	OneShot = oneshot;
 	Running = true;
 	StartTime = sbs->GetCurrentTime();
 	LastHit = 0;
+	CurrentTime = 0;
 	sbs->RegisterTimerCallback(this);
 
 	if (sbs->Verbose)
@@ -76,10 +80,10 @@ bool TimerObject::IsRunning()
 	return Running;
 }
 
-void TimerObject::Loop()
+bool TimerObject::Loop()
 {
 	if (Running == false)
-		return;
+		return true;
 
 	CurrentTime = sbs->GetCurrentTime() - StartTime;
 
@@ -88,12 +92,14 @@ void TimerObject::Loop()
 		if (sbs->Verbose)
 			Report("Notify");
 
-		Notify();
-		LastHit = CurrentTime;
-
 		if (OneShot == true)
 			Stop();
+
+		Notify();
+		LastHit = CurrentTime;
 	}
+
+	return true;
 }
 
 unsigned long TimerObject::GetCurrentTime()

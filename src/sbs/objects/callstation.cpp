@@ -29,7 +29,7 @@
 #include "indicator.h"
 #include "timer.h"
 #include "manager.h"
-#include "texture.h"
+#include "texman.h"
 #include "control.h"
 #include "callstation.h"
 #include "profiler.h"
@@ -69,7 +69,7 @@ CallStation::CallStation(Object *parent, int floornum, int number) : Object(pare
 	panel = 0;
 	controller = 0;
 	indicator = 0;
-	TimerDelay = 2;
+	TimerDelay = 2.5;
 	ShowDirection = true;
 
 	//create timer
@@ -120,17 +120,19 @@ ButtonPanel* CallStation::CreateButtonPanel(const std::string &texture, int rows
 	return panel;
 }
 
-void CallStation::Enabled(bool value)
+bool CallStation::Enabled(bool value)
 {
 	//turns station on/off
 	if (is_enabled == value)
-		return;
+		return true;
 
 	is_enabled = value;
 
+	bool status = true;
+
 	//enable or disable the button panel
 	if (panel)
-		panel->Enabled(value);
+		status = panel->Enabled(value);
 
 	if (sbs->Verbose)
 	{
@@ -139,6 +141,8 @@ void CallStation::Enabled(bool value)
 		else
 			Report("Disabled");
 	}
+
+	return status;
 }
 
 bool CallStation::IsEnabled()
@@ -306,16 +310,17 @@ bool CallStation::Input(const std::string &text)
 	UpdateIndicator(InputCache, false);
 
 	//verify that the floor entry is valid, error if not
-	int result = 0;
+	/*int result = 0;
 	if (GetFloorFromID(InputCache, result) == false && InputCache != "*" && InputCache != "-")
 	{
 		timer->Stop();
 		InputCache = "";
 		Error(1);
 		return true;
-	}
+	}*/
 
-	//start timeout timer
+	//restart timeout timer
+	timer->Stop();
 	timer->Start(TimerDelay * 1000.0f, true);
 
 	return true;
@@ -333,13 +338,6 @@ void CallStation::ProcessCache()
 		return;
 	}
 
-	if (!IsNumeric(InputCache))
-	{
-		InputCache = "";
-		Error();
-		return;
-	}
-
 	//don't allow input values in the InvalidInput list
 	for (size_t i = 0; i < InvalidInput.size(); i++)
 	{
@@ -352,7 +350,14 @@ void CallStation::ProcessCache()
 	}
 
 	int floor = 0;
-	GetFloorFromID(InputCache, floor);
+	bool result = GetFloorFromID(InputCache, floor);
+	if (!result)
+	{
+		InputCache = "";
+		Error();
+		return;
+	}
+
 	SelectFloor(floor);
 
 	InputCache = "";
@@ -360,17 +365,22 @@ void CallStation::ProcessCache()
 
 bool CallStation::GetFloorFromID(const std::string &floor, int &result)
 {
-	if (!IsNumeric(floor))
-		return false;
+	std::string converted = floor;
+	int rawfloor = 0;
 
-	int rawfloor = ToInt(floor);
+	if (IsNumeric(floor))
+	{
+		rawfloor = ToInt(floor);
 
-	//convert back to string, to strip off any leading 0's
-	std::string converted = ToString(rawfloor);
+		//convert back to string, to strip off any leading 0's
+		converted = ToString(rawfloor);
+	}
 
 	Floor *floorobj = sbs->GetFloorManager()->GetByNumberID(converted);
 	Floor *floorobj2 = sbs->GetFloorManager()->GetByID(converted);
-	Floor *floorobj3 = sbs->GetFloorManager()->Get(rawfloor);
+	Floor *floorobj3 = 0;
+	if (IsNumeric(floor))
+		floorobj3 = sbs->GetFloorManager()->Get(rawfloor);
 
 	if (floorobj)
 	{

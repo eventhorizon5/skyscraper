@@ -323,7 +323,11 @@ bool Sound::Play(bool reset)
 {
 	//exit if sound is disabled
 	if (!system || !enabled)
-		return false;
+		return true;
+
+	//blacklist certain empty sounds
+	if (Filename == "none.wav" || Filename == "beno/none.wav")
+		return true;
 
 #ifndef DISABLE_SOUND
 	if (!sound)
@@ -388,6 +392,10 @@ bool Sound::Load(const std::string &filename, bool force)
 {
 	//exit if sound is disabled
 	if (!system || !enabled)
+		return false;
+
+	//blacklist certain empty sounds
+	if (Filename == "none.wav" || Filename == "beno/none.wav")
 		return false;
 
 	//exit if filename is the same
@@ -618,7 +626,7 @@ bool Sound::GetNearestReverbPosition(Vector3 &position)
 	return result;
 }
 
-void Sound::Enabled(bool value)
+bool Sound::Enabled(bool value)
 {
 	//enable or disable this sound object
 
@@ -626,6 +634,7 @@ void Sound::Enabled(bool value)
 		Stop();
 
 	enabled = value;
+	return true;
 }
 
 bool Sound::IsEnabled()

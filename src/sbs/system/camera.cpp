@@ -176,7 +176,7 @@ Camera::~Camera()
 	}
 }
 
-void Camera::SetPosition(const Vector3 &position)
+void Camera::SetPosition(const Vector3 &position, bool force)
 {
 	//sets the camera to an absolute position in 3D space
 
@@ -184,7 +184,7 @@ void Camera::SetPosition(const Vector3 &position)
 		return;
 
 	if (EnableBullet == true)
-		GetSceneNode()->SetPosition(position - sbs->ToLocal(Cameras[0]->getPosition()));
+		GetSceneNode()->SetPosition(position - sbs->ToLocal(Cameras[0]->getPosition()), false, force);
 	else
 	{
 		for (size_t i = 0; i < Cameras.size(); i++)
@@ -590,6 +590,7 @@ Real Camera::ClickedObject(Camera *camera, bool shift, bool ctrl, bool alt, bool
 
 	MeshObject* mesh = 0;
 	Wall* wall = 0;
+	Polygon* polygon = 0;
 
 	Vector3 pos = sbs->ToLocal(ray.getOrigin());
 
@@ -602,7 +603,7 @@ Real Camera::ClickedObject(Camera *camera, bool shift, bool ctrl, bool alt, bool
 		}
 	}
 
-	bool hit = sbs->HitBeam(ray, 1000.0, mesh, wall, HitPosition);
+	bool hit = sbs->HitBeam(ray, 1000.0, mesh, wall, polygon, HitPosition);
 	Vector3 hit_pos = HitPosition - sbs->GetPosition();
 
 	//report hit position if in verbose mode
@@ -770,12 +771,12 @@ std::string Camera::GetClickedObjectCommandP()
 	return object_cmd_processed;
 }
 
-void Camera::Loop()
+bool Camera::Loop()
 {
 	SBS_PROFILE_MAIN("Camera Loop");
 
 	if (Cameras.empty())
-		return;
+		return true;
 
 	//get delta value
 	unsigned long timing;
@@ -849,6 +850,8 @@ void Camera::Loop()
 
 	//sync camera with collider
 	Sync();
+
+	return true;
 }
 
 void Camera::Strafe(Real speed)
@@ -1256,6 +1259,7 @@ bool Camera::PickUpModel()
 	Vector3 hit_position;
 	MeshObject *mesh = 0;
 	Wall *wall = 0;
+	Polygon *polygon = 0;
 	bool hit = false;
 
 	//do a raycast from the collider's position, in the forward direction
@@ -1266,7 +1270,7 @@ bool Camera::PickUpModel()
 		position.y = i;
 		Ray ray (sbs->ToRemote(position), sbs->ToRemote(front, false));
 
-		hit = sbs->HitBeam(ray, 2.0, mesh, wall, hit_position);
+		hit = sbs->HitBeam(ray, 2.0, mesh, wall, polygon, hit_position);
 
 		if (hit == true)
 			break;
@@ -1518,8 +1522,9 @@ void Camera::Teleport(Real X, Real Y, Real Z)
 
 	Vector3 destination (X, Y, Z);
 
+	sbs->GetTeleporterManager()->teleported = true;
 	GotoFloor(sbs->GetFloorNumber(destination.y));
-	SetPosition(destination);
+	SetPosition(destination, true);
 }
 
 void Camera::Drive(bool left, bool right, bool down, bool up, bool key_down)
@@ -1583,8 +1588,9 @@ void Camera::AttachToVehicle(bool value)
 
 		MeshObject* mesh = 0;
 		Wall* wall = 0;
+		Polygon* polygon = 0;
 
-		bool hit = sbs->HitBeam(ray, 50, mesh, wall, HitPosition);
+		bool hit = sbs->HitBeam(ray, 50, mesh, wall, polygon, HitPosition);
 
 		if (hit == false)
 		{

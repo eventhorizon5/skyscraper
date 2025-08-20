@@ -35,19 +35,20 @@ public:
 	Model(Object *parent, const std::string &name, const std::string &filename, bool center, const Vector3 &position, const Vector3 &rotation, Real max_render_distance = 0, Real scale_multiplier = 1, bool enable_physics = false, Real restitution = 0, Real friction = 0, Real mass = 0);
 	~Model();
 	bool IsEnabled();
-	void Enabled(bool value);
+	bool Enabled(bool value);
 	bool IsKey();
 	int GetKeyID();
 	void SetKey(int keyid);
 	bool IsPhysical();
-	void Loop();
+	bool Loop();
 	void PickUp();
 	void Drop();
 	bool IsPickedUp();
 	MeshObject* GetMeshObject() { return mesh; }
-	void OnInit();
+	bool OnInit();
 	bool IsCustom() { return custom; }
 	void OnClick(Vector3 &position, bool shift, bool ctrl, bool alt, bool right);
+	Shape* CreateShape(Wall *wall);
 
 private:
 	void RemoveFromParent();

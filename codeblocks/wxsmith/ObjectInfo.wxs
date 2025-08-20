@@ -110,11 +110,9 @@
 								<option>1</option>
 							</object>
 							<object class="sizeritem">
-								<object class="wxButton" name="ID_bSave" variable="bSave" member="yes">
-									<label>Save Script</label>
-									<enabled>0</enabled>
-									<hidden>1</hidden>
-									<handler function="On_bSave_Click" entry="EVT_BUTTON" />
+								<object class="wxButton" name="ID_bDebug" variable="bDebug" member="yes">
+									<label>Script Debug</label>
+									<handler function="On_bDebug_Click" entry="EVT_BUTTON" />
 								</object>
 								<flag>wxALL|wxALIGN_TOP</flag>
 								<border>5</border>

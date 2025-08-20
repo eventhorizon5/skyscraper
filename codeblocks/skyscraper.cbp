@@ -63,6 +63,10 @@
 		<Unit filename="../src/gui/controllereditor.h" />
 		<Unit filename="../src/gui/escalatorcontrol.cpp" />
 		<Unit filename="../src/gui/escalatorcontrol.h" />
+		<Unit filename="../src/gui/floorinfo.cpp" />
+		<Unit filename="../src/gui/floorinfo.h" />
+		<Unit filename="../src/gui/scriptdebug.cpp" />
+		<Unit filename="../src/gui/scriptdebug.h" />
 		<Unit filename="../src/gui/texturemanager.cpp" />
 		<Unit filename="../src/gui/texturemanager.h" />
 		<Unit filename="../src/gui/walkwaycontrol.cpp" />
@@ -131,7 +135,9 @@
 		<Unit filename="wxsmith/ControllerEditor1.wxs" />
 		<Unit filename="wxsmith/EngineManager.wxs" />
 		<Unit filename="wxsmith/EscalatorControl.wxs" />
+		<Unit filename="wxsmith/FloorInfo.wxs" />
 		<Unit filename="wxsmith/PeopleManager.wxs" />
+		<Unit filename="wxsmith/ScriptDebug.wxs" />
 		<Unit filename="wxsmith/SkyControl.wxs" />
 		<Unit filename="wxsmith/SoundManager.wxs" />
 		<Unit filename="wxsmith/TextureManager.wxs" />
@@ -165,6 +171,9 @@
 					<wxDialog wxs="wxsmith/WalkwayControl.wxs" src="../src/gui/walkwaycontrol.cpp" hdr="../src/gui/walkwaycontrol.h" fwddecl="0" i18n="1" name="WalkwayControl" language="CPP" />
 					<wxDialog wxs="wxsmith/RevolvingDoorControl.wxs" src="../src/gui/revdoorcontrol.cpp" hdr="../src/gui/revdoorcontrol.h" fwddecl="0" i18n="1" name="RevolvingDoorControl" language="CPP" />
 					<wxDialog wxs="wxsmith/ControllerEditor.wxs" src="../src/gui/controllereditor.cpp" hdr="../src/gui/controllereditor.h" fwddecl="0" i18n="1" name="ControllerEditor" language="CPP" />
+					<wxDialog wxs="wxsmith/ScriptDebug.wxs" src="../src/gui/scriptdebug.cpp" hdr="../src/gui/scriptdebug.h" fwddecl="0" i18n="1" name="ScriptDebug" language="CPP" />
+					<wxDialog wxs="wxsmith/FloorInfo.wxs" src="../src/gui/floorinfo.cpp" hdr="../src/gui/floorinfo.h" fwddecl="0" i18n="1" name="FloorInfo" language="CPP" />
+					<wxDialog wxs="wxsmith/MoveEngine.wxs" src="../src/gui/moveengine.cpp" hdr="../src/gui/moveengine.h" fwddecl="0" i18n="1" name="MoveEngine" language="CPP" />
 				</resources>
 			</wxsmith>
 		</Extensions>

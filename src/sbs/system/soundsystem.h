@@ -43,7 +43,7 @@ public:
 	void SetListenerPosition(const Vector3 &position);
 	void SetListenerDirection(const Vector3 &front, const Vector3 &top);
 	Vector3 GetListenerPosition() { return listener_position; }
-	void Loop();
+	bool Loop();
 	void Cleanup(int index = -1);
 	unsigned int GetLength(SoundData *data);
 	SoundData* Load(const std::string &filename);

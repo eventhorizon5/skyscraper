@@ -41,7 +41,7 @@ public:
 	void SetSpotlightRange(Real spot_inner_angle = 30.f, Real spot_outer_angle = 40.f, Real spot_falloff = 1.f);
 	void SetDirection(const Vector3 &direction);
 	void SetRenderingDistance(Real distance);
-	void Enabled(bool value);
+	bool Enabled(bool value);
 	bool IsEnabled();
 
 private:

@@ -30,7 +30,7 @@
 #include "profiler.h"
 #include "floor.h"
 #include "timer.h"
-#include "texture.h"
+#include "texman.h"
 #include "floorindicator.h"
 
 namespace SBS {
@@ -144,15 +144,16 @@ FloorIndicator::~FloorIndicator()
 	}
 }
 
-void FloorIndicator::Enabled(bool value)
+bool FloorIndicator::Enabled(bool value)
 {
 	//turns indicator on/off
 
 	if (is_enabled == value)
-		return;
+		return true;
 
-	FloorIndicatorMesh->Enabled(value);
+	bool status = FloorIndicatorMesh->Enabled(value);
 	is_enabled = value;
+	return status;
 }
 
 void FloorIndicator::Update(bool blank)
@@ -237,12 +238,14 @@ void FloorIndicator::On()
 	Update();
 }
 
-void FloorIndicator::Loop()
+bool FloorIndicator::Loop()
 {
 	if (sbs->GetPower() == false)
 		Off();
 	else
 		On();
+
+	return true;
 }
 
 }
