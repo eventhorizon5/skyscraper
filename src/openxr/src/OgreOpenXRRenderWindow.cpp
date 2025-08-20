@@ -191,90 +191,92 @@ namespace Ogre {
 
     if (!shouldRender()) return;
 
-    //refresh OpenXR view info for this predicted display time
     mViewProjections->UpdateXrViewInfo(mXrViewState, mXrState.get(), mXrFrameState.predictedDisplayTime);
-
-    const uint32_t viewCount = 2;
-
-    //acquire swapchain images and build RTVs
+    uint32_t viewCount = 2;
+ 
     swapchainL->AcquireImages();
     swapchainR->AcquireImages();
 
-    const CD3D11_RENDER_TARGET_VIEW_DESC rtvDescL(D3D11_RTV_DIMENSION_TEXTURE2DARRAY, swapchainL->ColorSwapchainPixelFormat);
+    const CD3D11_RENDER_TARGET_VIEW_DESC renderTargetViewDescL(D3D11_RTV_DIMENSION_TEXTURE2DARRAY, swapchainL->ColorSwapchainPixelFormat);
     mRenderTargetViewL = nullptr;
-    CHECK_HRCMD(mDevice->CreateRenderTargetView(swapchainL->getColorTexture(), &rtvDescL, mRenderTargetViewL.put()));
+    CHECK_HRCMD(
+      mDevice->CreateRenderTargetView(swapchainL->getColorTexture(), &renderTargetViewDescL, mRenderTargetViewL.put()));
 
-    const CD3D11_RENDER_TARGET_VIEW_DESC rtvDescR(D3D11_RTV_DIMENSION_TEXTURE2DARRAY, swapchainR->ColorSwapchainPixelFormat);
+    const CD3D11_RENDER_TARGET_VIEW_DESC renderTargetViewDescR(D3D11_RTV_DIMENSION_TEXTURE2DARRAY, swapchainR->ColorSwapchainPixelFormat);
     mRenderTargetViewR = nullptr;
-    CHECK_HRCMD(mDevice->CreateRenderTargetView(swapchainR->getColorTexture(), &rtvDescR, mRenderTargetViewR.put()));
+    CHECK_HRCMD(
+      mDevice->CreateRenderTargetView(swapchainR->getColorTexture(), &renderTargetViewDescR, mRenderTargetViewR.put()));
 
-    //compute views/projections for both eyes
     std::vector<xr::math::ViewProjection> vps(viewCount);
     mViewProjections->CalculateViewProjections(vps);
-    const auto imageRect = swapchainL->getImageRect();
+    auto imageRect = swapchainL->getImageRect();
 
-    //wire the layer views to the correct swapchains & rects
     mViewProjections->ProjectionLayerViews[0].subImage.swapchain = swapchainL->getColorSwapchain();
     mViewProjections->ProjectionLayerViews[1].subImage.swapchain = swapchainR->getColorSwapchain();
-    mViewProjections->DepthInfoViews[0].subImage.swapchain      = swapchainL->getDepthSwapchain();
-    mViewProjections->DepthInfoViews[1].subImage.swapchain      = swapchainR->getDepthSwapchain();
+
+    mViewProjections->DepthInfoViews[0].subImage.swapchain = swapchainL->getDepthSwapchain();
+    mViewProjections->DepthInfoViews[1].subImage.swapchain = swapchainR->getDepthSwapchain();
 
     for (uint32_t i = 0; i < viewCount; ++i) {
-        mViewProjections->ProjectionLayerViews[i].subImage.imageRect = imageRect;
-        mViewProjections->DepthInfoViews[i].subImage.imageRect       = imageRect;
+      mViewProjections->ProjectionLayerViews[i].subImage.imageRect = imageRect;
+      mViewProjections->DepthInfoViews[i].subImage.imageRect = imageRect;
     }
 
-    //set D3D viewport; update backbuffer pointer so Ogre renders to active eye
-    auto* deviceContext = mDevice.GetImmediateContext();
-    CD3D11_VIEWPORT vp((float)imageRect.offset.x, (float)imageRect.offset.y,
-                       (float)imageRect.extent.width, (float)imageRect.extent.height);
-    deviceContext->RSSetViewports(1, &vp);
+    auto deviceContext = mDevice.GetImmediateContext();
 
-    //pick one so Ogre’s rendering goes somewhere valid (we change per eye in camera listener)
+    const uint32_t viewInstanceCount = (uint32_t)vps.size();
+
+    CD3D11_VIEWPORT viewport(
+      (float)imageRect.offset.x, (float)imageRect.offset.y, (float)imageRect.extent.width, (float)imageRect.extent.height);
+    deviceContext->RSSetViewports(1, &viewport);
+
     mpBackBuffer = swapchainR->getColorTexture();
+
+    const bool reversedZ = vps[0].NearFar.Near > vps[0].NearFar.Far;
+    const float depthClearValue = reversedZ ? 0.f : 1.f;
 
     if (mNumberOfEyesAdded != 2) return;
 
-    //drive the Ogre cameras — preserve IPD: DO NOT rotate per-eye positions
     for (uint32_t k = 0; k < 2; ++k) {
-        const xr::math::ViewProjection& vpX = vps[k];
+      const DirectX::XMMATRIX spaceToView = xr::math::LoadXrPose(vps[k].Pose);
+      Ogre::Quaternion orientation(vps[k].Pose.orientation.w, vps[k].Pose.orientation.x, vps[k].Pose.orientation.y, vps[k].Pose.orientation.z);
+      Ogre::Vector3 position(vps[k].Pose.position.x, vps[k].Pose.position.y, vps[k].Pose.position.z);
 
-        //raw HMD eye pose from OpenXR (already contains the eye offset/IPD)
-        Ogre::Quaternion hmdOri(vpX.Pose.orientation.w,
-                                vpX.Pose.orientation.x,
-                                vpX.Pose.orientation.y,
-                                vpX.Pose.orientation.z);
-
-        Ogre::Vector3 hmdPos(vpX.Pose.position.x,
-                             vpX.Pose.position.y,
-                             vpX.Pose.position.z);
-
-        const Ogre::Quaternion finalOri = hmdOri;
-        const Ogre::Vector3    finalPos = hmdPos;
-
-        //build Ogre projection from OpenXR FOV (transpose from row-major XMMATRIX)
-        xr::math::NearFar nf = { 0.1f, std::numeric_limits<float>::infinity() };
-        DirectX::XMMATRIX projM = ComposeProjectionMatrix(vpX.Fov, nf);
-
-        Ogre::Matrix4 ogreProj;
-        for (size_t i = 0; i < 4; ++i) {
-            for (size_t j = 0; j < 4; ++j) {
+      Ogre::Affine3 viewMatrix;
+      for (size_t i = 0; i < 4; ++i) {
+        for (size_t j = 0; j < 4; ++j) {
 #if OGRE_CPU == OGRE_CPU_ARM
-                ogreProj[i][j] = projM.r[j].n128_f32[i];
+          viewMatrix[i][j] = spaceToView.r[i].n128_f32[j];
 #else
-                ogreProj[i][j] = projM.r[j].m128_f32[i];
+          viewMatrix[i][j] = spaceToView.r[i].m128_f32[j];
 #endif
-            }
         }
+      }
 
-        //set camera
-        mEyeCameras[k]->setPosition(finalPos);
-        mEyeCameras[k]->setOrientation(finalOri);
-        mEyeCameras[k]->setCustomProjectionMatrix(true, ogreProj);
+      xr::math::NearFar nf = { 0.1, std::numeric_limits<float>::infinity() };
 
-        //ogre expects width / height
-        mEyeCameras[k]->setAspectRatio(
-            Ogre::Real(imageRect.extent.width) / Ogre::Real(imageRect.extent.height));
+      DirectX::XMMATRIX projectionMatrix = ComposeProjectionMatrix(
+        vps[k].Fov,
+        nf);
+      Ogre::Matrix4 eyeProjectionMatrix;
+
+      // Note the transpose
+      for (size_t i = 0; i < 4; ++i) {
+        for (size_t j = 0; j < 4; ++j) {
+#if OGRE_CPU == OGRE_CPU_ARM
+          eyeProjectionMatrix[i][j] = projectionMatrix.r[j].n128_f32[i];
+#else
+          eyeProjectionMatrix[i][j] = projectionMatrix.r[j].m128_f32[i];
+#endif
+        }
+      }
+      //mEyeCameras[k]->setCustomViewMatrix(true, viewMatrix);
+      //mEyeCameras[k]->setPosition(XRPosition[k] + position);
+      mEyeCameras[k]->setPosition(position);
+      mEyeCameras[k]->setOrientation(orientation);
+      mEyeCameras[k]->setCustomProjectionMatrix(true, eyeProjectionMatrix);
+      //mEyeCameras[k]->setFarClipDistance(3000);
+      mEyeCameras[k]->setAspectRatio(Ogre::Real(imageRect.extent.height / imageRect.extent.width));
     }
   }
 
@@ -591,24 +593,6 @@ namespace Ogre {
         gControllerStates[1].joystickX = axisState.currentState.x;
         gControllerStates[1].joystickY = axisState.currentState.y;
 
-      }
-
-      // compute dt from predictedDisplayTime (XrTime is ns)
-      static XrTime prev = 0;
-      double dt = 0.0;
-      if (prev != 0)
-          dt = double(mXrFrameState.predictedDisplayTime - prev) / 1e9;
-      prev = mXrFrameState.predictedDisplayTime;
-
-      // smooth turn from right stick X
-      const float deadzone = 0.15f;
-      const float turnRateDegPerSec = 120.0f;
-      float rx = gControllerStates[1].joystickX; // right-hand X axis
-
-      if (std::fabs(rx) > deadzone && dt > 0.0) {
-          float yawDeg = -rx * turnRateDegPerSec * float(dt);
-          mBodyYaw = Ogre::Quaternion(Ogre::Degree(yawDeg), Ogre::Vector3::UNIT_Y) * mBodyYaw;
-          mBodyYaw.normalise();
       }
 
       if (state.isActive && state.currentState)
