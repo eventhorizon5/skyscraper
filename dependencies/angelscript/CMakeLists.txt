@@ -41,3 +41,7 @@ else()
   target_compile_options(AngelScript PRIVATE -Wall -Wextra -Wpedantic)
 endif()
 
+if(MSVC AND ANGELSCRIPT_BUILD_SHARED)
+  # target-scoped property (CMake ≥3.4)
+  set_target_properties(AngelScript PROPERTIES WINDOWS_EXPORT_ALL_SYMBOLS ON)
+endif()
