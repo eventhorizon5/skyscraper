@@ -188,18 +188,17 @@ void OpenXRRenderWindow::_beginUpdate()
     RenderTarget::_beginUpdate();
     ProcessOpenXREvents();
     _startXrFrame();
-
     if (!shouldRender()) return;
 
-    // Update OpenXR view state
+    //refresh OpenXR view info for this predicted display time
     mViewProjections->UpdateXrViewInfo(mXrViewState, mXrState.get(), mXrFrameState.predictedDisplayTime);
+
     const uint32_t viewCount = 2;
 
-    // Acquire swapchain images
+    //acquire swapchain images and build RTVs
     swapchainL->AcquireImages();
     swapchainR->AcquireImages();
 
-    // Build RTVs for each eye
     const CD3D11_RENDER_TARGET_VIEW_DESC rtvDescL(D3D11_RTV_DIMENSION_TEXTURE2DARRAY, swapchainL->ColorSwapchainPixelFormat);
     mRenderTargetViewL = nullptr;
     CHECK_HRCMD(mDevice->CreateRenderTargetView(swapchainL->getColorTexture(), &rtvDescL, mRenderTargetViewL.put()));
@@ -208,12 +207,12 @@ void OpenXRRenderWindow::_beginUpdate()
     mRenderTargetViewR = nullptr;
     CHECK_HRCMD(mDevice->CreateRenderTargetView(swapchainR->getColorTexture(), &rtvDescR, mRenderTargetViewR.put()));
 
-    // Compute projections
+    //compute views/projections for both eyes
     std::vector<xr::math::ViewProjection> vps(viewCount);
     mViewProjections->CalculateViewProjections(vps);
     const auto imageRect = swapchainL->getImageRect();
 
-    // Wire up subImages
+    //wire the layer views to the correct swapchains & rects
     mViewProjections->ProjectionLayerViews[0].subImage.swapchain = swapchainL->getColorSwapchain();
     mViewProjections->ProjectionLayerViews[1].subImage.swapchain = swapchainR->getColorSwapchain();
     mViewProjections->DepthInfoViews[0].subImage.swapchain      = swapchainL->getDepthSwapchain();
@@ -223,7 +222,7 @@ void OpenXRRenderWindow::_beginUpdate()
         mViewProjections->DepthInfoViews[i].subImage.imageRect       = imageRect;
     }
 
-    // Set D3D viewport
+    //D3D viewport & backbuffer
     auto* deviceContext = mDevice.GetImmediateContext();
     CD3D11_VIEWPORT vp(
         static_cast<float>(imageRect.offset.x),
@@ -235,27 +234,44 @@ void OpenXRRenderWindow::_beginUpdate()
 
     if (mNumberOfEyesAdded != 2) return;
 
-    // Per-eye cameras
+    // --- helpers to convert & rotate for the submitted layer poses ---
+    const auto toXr = [](const Ogre::Quaternion& q){
+        return XrQuaternionf{ (float)q.x, (float)q.y, (float)q.z, (float)q.w };
+    };
+    const auto qmul = [](const XrQuaternionf& a, const XrQuaternionf& b){
+        // a * b  (OpenXR order: x,y,z,w)
+        return XrQuaternionf{
+            a.w*b.x + a.x*b.w + a.y*b.z - a.z*b.y,
+            a.w*b.y - a.x*b.z + a.y*b.w + a.z*b.x,
+            a.w*b.z + a.x*b.y - a.y*b.x + a.z*b.w,
+            a.w*b.w - a.x*b.x - a.y*b.y - a.z*b.z
+        };
+    };
+    const auto vrot = [&](const Ogre::Quaternion& q, const XrVector3f& v)->XrVector3f{
+        Ogre::Vector3 ov((Ogre::Real)v.x,(Ogre::Real)v.y,(Ogre::Real)v.z);
+        Ogre::Vector3 ro = q * ov; // rotate by yaw
+        return XrVector3f{ (float)ro.x,(float)ro.y,(float)ro.z };
+    };
+
+    //drive the Ogre cameras: apply SAME yaw to orientation AND position
     for (uint32_t k = 0; k < viewCount; ++k) {
-        const xr::math::ViewProjection& vpk = vps[k];
+        const auto& vpk = vps[k];
 
-        // Raw HMD pose
-        Ogre::Quaternion hmdOri(
-            static_cast<Ogre::Real>(vpk.Pose.orientation.w),
-            static_cast<Ogre::Real>(vpk.Pose.orientation.x),
-            static_cast<Ogre::Real>(vpk.Pose.orientation.y),
-            static_cast<Ogre::Real>(vpk.Pose.orientation.z));
+        // Raw HMD per-eye pose (already includes IPD)
+        const Ogre::Quaternion hmdOri(
+            (Ogre::Real)vpk.Pose.orientation.w,
+            (Ogre::Real)vpk.Pose.orientation.x,
+            (Ogre::Real)vpk.Pose.orientation.y,
+            (Ogre::Real)vpk.Pose.orientation.z);
+        const Ogre::Vector3 hmdPos(
+            (Ogre::Real)vpk.Pose.position.x,
+            (Ogre::Real)vpk.Pose.position.y,
+            (Ogre::Real)vpk.Pose.position.z);
 
-        Ogre::Vector3 hmdPos(
-            static_cast<Ogre::Real>(vpk.Pose.position.x),
-            static_cast<Ogre::Real>(vpk.Pose.position.y),
-            static_cast<Ogre::Real>(vpk.Pose.position.z));
+        const Ogre::Quaternion finalOri = mBodyYaw * hmdOri;
+        const Ogre::Vector3    finalPos = mBodyYaw * hmdPos;
 
-        // Apply smooth yaw ONLY to orientation
-        Ogre::Quaternion finalOri = mBodyYaw * hmdOri;
-        Ogre::Vector3    finalPos = hmdPos; // preserve IPD
-
-        // Build projection matrix
+        //build Ogre projection from OpenXR FOV
         xr::math::NearFar nf = { 0.1f, std::numeric_limits<float>::infinity() };
         DirectX::XMMATRIX projM = ComposeProjectionMatrix(vpk.Fov, nf);
 
@@ -263,14 +279,14 @@ void OpenXRRenderWindow::_beginUpdate()
         for (size_t i = 0; i < 4; ++i) {
             for (size_t j = 0; j < 4; ++j) {
 #if OGRE_CPU == OGRE_CPU_ARM
-                ogreProj[i][j] = static_cast<Ogre::Real>(projM.r[j].n128_f32[i]);
+                ogreProj[i][j] = (Ogre::Real)projM.r[j].n128_f32[i];
 #else
-                ogreProj[i][j] = static_cast<Ogre::Real>(projM.r[j].m128_f32[i]);
+                ogreProj[i][j] = (Ogre::Real)projM.r[j].m128_f32[i];
 #endif
             }
         }
 
-        // Apply to cameras
+        //set camera ONCE (don’t overwrite later)
         mEyeCameras[k]->setPosition(finalPos);
         mEyeCameras[k]->setOrientation(finalOri);
         mEyeCameras[k]->setCustomProjectionMatrix(true, ogreProj);
