@@ -196,7 +196,6 @@ namespace Ogre {
 
     {
       //create pose action for left controller
-      XrPath leftHandPath;
       xrStringToPath(instance, "/user/hand/left", &leftHandPath);
       XrActionCreateInfo actionInfo{XR_TYPE_ACTION_CREATE_INFO};
       actionInfo.actionType = XR_ACTION_TYPE_POSE_INPUT;
@@ -217,7 +216,6 @@ namespace Ogre {
 
     {
       //create pose action for right controller
-      XrPath rightHandPath;
       xrStringToPath(instance, "/user/hand/right", &rightHandPath);
       XrActionCreateInfo actionInfo{XR_TYPE_ACTION_CREATE_INFO};
       actionInfo.actionType = XR_ACTION_TYPE_POSE_INPUT;
@@ -240,9 +238,8 @@ namespace Ogre {
 
     //select/trigger button
     {
-      XrPath leftHandPath, rightHandPath;
-      xrStringToPath(instance, "/user/hand/left", &leftHandPath);
-      xrStringToPath(instance, "/user/hand/right", &rightHandPath);
+      //xrStringToPath(instance, "/user/hand/left", &leftHandPath);
+      //xrStringToPath(instance, "/user/hand/right", &rightHandPath);
       XrPath subactionPathsBoth[2] = { leftHandPath, rightHandPath };
       XrActionCreateInfo selectActionInfo{XR_TYPE_ACTION_CREATE_INFO};
       selectActionInfo.actionType = XR_ACTION_TYPE_BOOLEAN_INPUT;
@@ -253,23 +250,39 @@ namespace Ogre {
       xrCreateAction(actionSet, &selectActionInfo, &selectAction);
     }
 
+    // Thumbstick vector2f input (left + right)
+    {
+      XrPath subactionPathsBoth[2] = { leftHandPath, rightHandPath };
+
+      XrActionCreateInfo actionInfo{ XR_TYPE_ACTION_CREATE_INFO };
+      actionInfo.actionType = XR_ACTION_TYPE_VECTOR2F_INPUT;
+      strcpy(actionInfo.actionName, "thumbstick_vector");
+      strcpy(actionInfo.localizedActionName, "Thumbstick Vector");
+      actionInfo.countSubactionPaths = 2;
+      actionInfo.subactionPaths = subactionPathsBoth;
+
+      xrCreateAction(actionSet, &actionInfo, &thumbstickVector);
+    }
+
     // Suggest bindings for Meta Quest (Oculus Touch)
     {
       XrPath interactionProfilePath;
       xrStringToPath(instance, "/interaction_profiles/oculus/touch_controller", &interactionProfilePath);
 
-      XrPath leftHandPath, rightHandPath;
-      xrStringToPath(instance, "/user/hand/left", &leftHandPath);
-      xrStringToPath(instance, "/user/hand/right", &rightHandPath);
+      //XrPath leftHandPath, rightHandPath;
+      //xrStringToPath(instance, "/user/hand/left", &leftHandPath);
+      //xrStringToPath(instance, "/user/hand/right", &rightHandPath);
 
-      XrPath gripPosePath, triggerClickPath;
+      XrPath gripPosePath, triggerClickPath, thumbstickPath;
       xrStringToPath(instance, "/input/grip/pose", &gripPosePath);
       xrStringToPath(instance, "/input/trigger/click", &triggerClickPath);
+      xrStringToPath(instance, "/input/thumbstick", &thumbstickPath); // for Vector2f
 
       std::vector<XrActionSuggestedBinding> bindings = {
           {poseActionLeft, gripPosePath},
           {poseActionRight, gripPosePath},
           {selectAction, triggerClickPath},
+          { thumbstickVector, thumbstickPath }
       };
 
       //attach the action set to the session

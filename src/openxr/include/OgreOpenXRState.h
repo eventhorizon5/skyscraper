@@ -60,6 +60,9 @@ namespace Ogre {
     XrAction poseActionLeft;
     XrAction poseActionRight;
     XrAction selectAction;
+    XrPath leftHandPath;
+    XrPath rightHandPath;
+    XrAction thumbstickVector;
 
   private:
     std::unique_ptr<OpenXRInstance> m_xrInstance;

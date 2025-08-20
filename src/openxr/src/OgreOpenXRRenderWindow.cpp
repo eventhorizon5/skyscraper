@@ -34,6 +34,9 @@
 std::vector<Ogre::Vector3> XRPosition;
 std::vector<Ogre::Quaternion> XROrientation;
 
+//controller states
+static OpenXRControllerState gControllerStates[2] = {};
+
 namespace Ogre {
   class OpenXRState;
   class OpenXRViewProjection;
@@ -478,12 +481,120 @@ namespace Ogre {
       XrActionStateBoolean state{XR_TYPE_ACTION_STATE_BOOLEAN};
       xrGetActionStateBoolean(mXrState->GetSession().Get(), &getInfo, &state);
 
+      // Left hand
+      {
+        int handIndex = 0;
+        auto& state = gControllerStates[handIndex];
+        state.poseValid = false;
+
+        XrSpaceLocation loc{XR_TYPE_SPACE_LOCATION};
+        xrLocateSpace(mXrState->leftControllerSpace, mXrState->getAppSpace().Get(), mXrFrameState.predictedDisplayTime, &loc);
+        if ((loc.locationFlags & XR_SPACE_LOCATION_POSITION_VALID_BIT) &&
+            (loc.locationFlags & XR_SPACE_LOCATION_ORIENTATION_VALID_BIT))
+        {
+            state.poseValid = true;
+            state.position = Ogre::Vector3(loc.pose.position.x, loc.pose.position.y, loc.pose.position.z);
+            state.orientation = Ogre::Quaternion(loc.pose.orientation.w, loc.pose.orientation.x, loc.pose.orientation.y, loc.pose.orientation.z);
+        }
+
+        // Trigger
+        {
+            auto& state = gControllerStates[handIndex];
+            XrActionStateGetInfo getInfo{XR_TYPE_ACTION_STATE_GET_INFO};
+            getInfo.action = mXrState->selectAction;
+            getInfo.subactionPath = mXrState->leftHandPath;
+
+            XrActionStateBoolean triggerState{XR_TYPE_ACTION_STATE_BOOLEAN};
+            xrGetActionStateBoolean(mXrState->GetSession().Get(), &getInfo, &triggerState);
+
+            state.triggerPressed = (triggerState.isActive && triggerState.currentState);
+        }
+
+        // Joystick
+        {
+            auto& state = gControllerStates[handIndex];
+            XrActionStateGetInfo getInfo{XR_TYPE_ACTION_STATE_GET_INFO};
+            getInfo.action = mXrState->thumbstickVector; // a VECTOR2F action
+            getInfo.subactionPath = mXrState->leftHandPath;
+
+            XrActionStateVector2f axisState{XR_TYPE_ACTION_STATE_VECTOR2F};
+            xrGetActionStateVector2f(mXrState->GetSession().Get(), &getInfo, &axisState);
+
+            state.joystickX = axisState.currentState.x;
+            state.joystickY = axisState.currentState.y;
+        }
+
+        XrActionStateGetInfo getInfo{ XR_TYPE_ACTION_STATE_GET_INFO };
+        getInfo.action = mXrState->thumbstickVector;
+        getInfo.subactionPath = mXrState->leftHandPath; // or rightHandPath for handIndex 1
+
+        XrActionStateVector2f axisState{ XR_TYPE_ACTION_STATE_VECTOR2F };
+        xrGetActionStateVector2f(mXrState->GetSession().Get(), &getInfo, &axisState);
+
+        gControllerStates[0].joystickX = axisState.currentState.x;
+        gControllerStates[0].joystickY = axisState.currentState.y;
+      }
+
+      // Right hand
+      {
+        int handIndex = 1;
+        auto& state = gControllerStates[handIndex];
+        state.poseValid = false;
+
+        XrSpaceLocation loc{XR_TYPE_SPACE_LOCATION};
+        xrLocateSpace(mXrState->rightControllerSpace, mXrState->getAppSpace().Get(), mXrFrameState.predictedDisplayTime, &loc);
+        if ((loc.locationFlags & XR_SPACE_LOCATION_POSITION_VALID_BIT) &&
+            (loc.locationFlags & XR_SPACE_LOCATION_ORIENTATION_VALID_BIT))
+        {
+            state.poseValid = true;
+            state.position = Ogre::Vector3(loc.pose.position.x, loc.pose.position.y, loc.pose.position.z);
+            state.orientation = Ogre::Quaternion(loc.pose.orientation.w, loc.pose.orientation.x, loc.pose.orientation.y, loc.pose.orientation.z);
+        }
+
+        // Trigger
+        {
+            XrActionStateGetInfo getInfo{XR_TYPE_ACTION_STATE_GET_INFO};
+            getInfo.action = mXrState->selectAction;
+            getInfo.subactionPath = mXrState->rightHandPath;
+
+            XrActionStateBoolean triggerState{XR_TYPE_ACTION_STATE_BOOLEAN};
+            xrGetActionStateBoolean(mXrState->GetSession().Get(), &getInfo, &triggerState);
+
+            state.triggerPressed = (triggerState.isActive && triggerState.currentState);
+        }
+
+        // Joystick
+        {
+            XrActionStateGetInfo getInfo{XR_TYPE_ACTION_STATE_GET_INFO};
+            getInfo.action = mXrState->thumbstickVector; // a VECTOR2F action
+            getInfo.subactionPath = mXrState->leftHandPath;
+
+            XrActionStateVector2f axisState{XR_TYPE_ACTION_STATE_VECTOR2F};
+            xrGetActionStateVector2f(mXrState->GetSession().Get(), &getInfo, &axisState);
+
+            state.joystickX = axisState.currentState.x;
+            state.joystickY = axisState.currentState.y;
+        }
+
+        XrActionStateGetInfo getInfo{ XR_TYPE_ACTION_STATE_GET_INFO };
+        getInfo.action = mXrState->thumbstickVector;
+        getInfo.subactionPath = mXrState->rightHandPath;
+
+        XrActionStateVector2f axisState{ XR_TYPE_ACTION_STATE_VECTOR2F };
+        xrGetActionStateVector2f(mXrState->GetSession().Get(), &getInfo, &axisState);
+
+        gControllerStates[0].joystickX = axisState.currentState.x;
+        gControllerStates[0].joystickY = axisState.currentState.y;
+
+      }
+
       if (state.isActive && state.currentState)
       {
           // Trigger/button is pressed
       }
   }
 }
+
 Ogre::RenderWindow* CreateOpenXRRenderWindow(Ogre::RenderSystem* rsys)
 {
   Ogre::OpenXRRenderWindow* xrRenderWindow = new Ogre::OpenXRRenderWindow(rsys);
@@ -495,4 +606,13 @@ void SetOpenXRParameters(int index, const Ogre::Vector3& position, const Ogre::Q
 {
     XRPosition[index] = position;
     XROrientation[index] = orientation;
+}
+
+bool GetControllerState(int handIndex, OpenXRControllerState* outState)
+{
+    if (handIndex < 0 || handIndex > 1 || !outState)
+        return false;
+
+    *outState = gControllerStates[handIndex];
+    return true;
 }
