@@ -859,6 +859,15 @@ void HAL::ReInit()
 	delete mTrayMgr;
 	mTrayMgr = 0;
 
+	//remove imgui overlay
+	if (imgui)
+	{
+		imgui->hide();
+		Ogre::OverlayManager::getSingleton().destroy(imgui);
+		//delete imgui;
+		imgui = 0;
+	}
+
 	//reinit overlay system
 	try
 	{
