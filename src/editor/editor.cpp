@@ -39,6 +39,7 @@ namespace Skyscraper {
 Editor::Editor(VM *parent)
 {
 	this->vm = parent;
+	enabled = false;
 }
 
 Editor::~Editor()
@@ -79,6 +80,9 @@ bool Editor::Run()
 	Ogre::ImGuiOverlay::NewFrame();
 	//ImGuizmo::BeginFrame();
 
+	if (!enabled)
+		return true;
+
 	ImGui::ShowDemoWindow();
 
 	return true;
@@ -95,6 +99,11 @@ void Editor::Unload()
 	Ogre::OverlayManager::getSingleton().destroy(imgui);
 	//delete imgui;
 	imgui = 0;
+}
+
+void Editor::Enable(bool value)
+{
+	enabled = value;
 }
 
 }

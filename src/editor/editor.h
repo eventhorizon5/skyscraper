@@ -40,11 +40,14 @@ public:
 	bool Initialize();
 	bool Run();
 	void Unload();
+	void Enable(bool value);
 
 private:
 
 	//ImGui Overlay
 	Ogre::ImGuiOverlay *imgui;
+
+	bool enabled;
 
 	VM *vm;
 };
