@@ -76,6 +76,7 @@ class SkySystem;
 class GUI;
 class VMConsole;
 class Monitor;
+class Editor;
 
 //Virtual Manager system
 class VMIMPEXP VM
@@ -128,6 +129,7 @@ public:
 	bool IsRootLoaded();
 	bool LoadPending();
 	bool IsRunning() { return running; }
+	Editor* GetEditor();
 
 	bool Shutdown;
 	bool ConcurrentLoads; //set to true for buildings to be loaded while another sim is active and rendering
@@ -173,6 +175,7 @@ private:
 	GUI *gui; //GUI subsystem
 	VMConsole *vmconsole; //VM console system
 	Monitor *monitor; //monitor system object
+	Editor *editor; //editor interface
 
 	wxWindow *parent;
 

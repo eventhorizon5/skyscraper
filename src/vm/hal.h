@@ -128,9 +128,6 @@ private:
 	//Ogre timer
 	Ogre::Timer *timer;
 
-	//ImGui Overlay
-	Ogre::ImGuiOverlay *imgui;
-
     VM *vm;
 };
 

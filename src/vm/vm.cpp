@@ -45,6 +45,7 @@
 #include "profiler.h"
 #include "gitrev.h"
 #include "monitor.h"
+#include "editor.h"
 #include "vmconsole.h"
 
 using namespace SBS;
@@ -105,6 +106,9 @@ VM::VM()
 	//create monitor instance
 	monitor = new Monitor(this);
 
+	//create editor instance
+	editor = new Editor(this);
+
 	//LoadLibrary("test");
 
 	Report("Started");
@@ -113,6 +117,11 @@ VM::VM()
 VM::~VM()
 {
 	Report("Shutting down...");
+
+	//delete editor instance
+	if (editor)
+		delete editor;
+	editor = 0;
 
 	//delete monitor instance
 	if (monitor)
@@ -1241,6 +1250,11 @@ bool VM::IsRootLoaded()
 bool VM::LoadPending()
 {
 	return !load_queue.empty();
+}
+
+Editor* VM::GetEditor()
+{
+	return editor;
 }
 
 }

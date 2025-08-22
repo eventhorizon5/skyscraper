@@ -123,6 +123,7 @@ if(WIN32 AND wxWidgets_FOUND)
 	file(GLOB VM_FILES
 		src/vm/*.cpp
 		src/gui/*.cpp
+		src/editor/*.cpp
 		msvc/VM.rc
 	)
 else()
@@ -137,6 +138,10 @@ if (NOT WIN32 AND wxWidgets_FOUND)
 		src/gui/*.cpp
 	)
 endif ()
+
+file(GLOB EDITOR_FILES
+	src/editor/*.cpp
+)
 
 file(GLOB NETWORK_FILES
 	src/net/*.cpp
@@ -205,6 +210,7 @@ include_directories( ${OGRE_INCLUDE_DIRS}
 	src/alloc
 	src/openxr/include
 	src/openxr
+	src/editor
 	ogrebullet/Collisions/include
 	ogrebullet/Collisions/include/Debug
 	ogrebullet/Collisions/include/Shapes
@@ -239,6 +245,7 @@ include_directories( ${OGRE_INCLUDE_DIRS}
         src/alloc
         src/openxr/include
         src/openxr
+	src/editor
         ogrebullet/Collisions/include
         ogrebullet/Collisions/include/Debug
         ogrebullet/Collisions/include/Shapes
@@ -291,6 +298,11 @@ endif ()
 #angelscript
 add_subdirectory(dependencies/angelscript)
 
+#Editor Library
+if (NOT WIN32)
+	add_library(Editor SHARED ${EDITOR_FILES})
+endif ()
+
 #frontend executable
 if (WIN32)
 	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /ENTRY:mainCRTStartup")
@@ -320,6 +332,7 @@ target_precompile_headers(VM PRIVATE src/sbs/globals.h)
 
 if (NOT WIN32)
 	target_precompile_headers(ScriptProc PRIVATE src/sbs/globals.h)
+#	target_precompile_headers(Editor PRIVATE src/sbs/globals.h)
 endif ()
 if (NOT WIN32 AND wxWidgets_FOUND)
 	target_precompile_headers(GUI PRIVATE src/sbs/globals.h)
@@ -345,17 +358,19 @@ endif()
 
 if (NOT WIN32 AND wxWidgets_FOUND)
 	target_link_libraries(ScriptProc SBS ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES})
-	target_link_libraries(VM GUI Network SBS dylib ${OGRE_LIBRARIES} ${Caelum_LIBRARIES} ${FMOD_LIBRARY} ${wxWidgets_LIBRARIES})
+	target_link_libraries(Editor SBS ${OGRE_LIBRARIES})
+	target_link_libraries(VM GUI Network Editor SBS dylib ${OGRE_LIBRARIES} ${Caelum_LIBRARIES} ${FMOD_LIBRARY} ${wxWidgets_LIBRARIES})
 	target_link_libraries(GUI SBS ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES})
 	target_link_libraries(skyscraper VM GUI ScriptProc SBS ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES} ${FMOD_LIBRARY} ${GTK3_LIBRARIES} ${FRONTENDGLINC})
 elseif (WIN32)
-	target_link_libraries(VM SBS Network OpenXR dylib ${OGRE_LIBRARIES} ${Caelum_LIBRARIES} ${FMOD_LIBRARY} ${wxWidgets_LIBRARIES} ${OPENXR_loader_LIBRARY})
+	target_link_libraries(VM SBS Network Editor OpenXR dylib ${OGRE_LIBRARIES} ${Caelum_LIBRARIES} ${FMOD_LIBRARY} ${wxWidgets_LIBRARIES} ${OPENXR_loader_LIBRARY})
 	target_link_libraries(skyscraper VM SBS ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES} ${GTK3_LIBRARIES} ${FRONTENDGLINC})
 endif ()
 
 if (NOT WIN32 AND NOT wxWidgets_FOUND)
 	target_link_libraries(ScriptProc SBS ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES})
-        target_link_libraries(VM SBS Network dylib ${OGRE_LIBRARIES} ${Caelum_LIBRARIES} ${FMOD_LIBRARY} ${wxWidgets_LIBRARIES})
+	target_link_libraries(Editor SBS ${OGRE_LIBRARIES})
+        target_link_libraries(VM SBS Network Editor dylib ${OGRE_LIBRARIES} ${Caelum_LIBRARIES} ${FMOD_LIBRARY} ${wxWidgets_LIBRARIES})
         target_link_libraries(skyscraper VM ScriptProc SBS ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES} ${FMOD_LIBRARY} ${GTK3_LIBRARIES} ${FRONTENDGLINC})
 endif ()
 

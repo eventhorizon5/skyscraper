@@ -30,8 +30,6 @@
 #include <OgreBitesConfigDialog.h>
 #include <OgreSGTechniqueResolverListener.h>
 #include <OgreOverlaySystem.h>
-#include <OgreImGuiOverlay.h>
-#include <OgreImGuiInputListener.h>
 
 #ifndef DISABLE_SOUND
 	//FMOD
@@ -50,9 +48,6 @@
 
 #include <iostream>
 
-//ImGuizmo system
-//#include "ImGuizmo.h"
-
 //simulator interfaces
 #include "globals.h"
 #include "sbs.h"
@@ -62,6 +57,7 @@
 #include "enginecontext.h"
 #include "hal.h"
 #include "gui.h"
+#include "editor.h"
 #include "profiler.h"
 
 using namespace SBS;
@@ -90,7 +86,6 @@ HAL::HAL(VM *vm)
 	keyconfigfile = 0;
 	joyconfigfile = 0;
 	DX11 = false;
-	imgui = 0;
 	timer = new Ogre::Timer();
 }
 
@@ -709,21 +704,8 @@ bool HAL::LoadSystem(const std::string &data_path, Ogre::RenderWindow *renderwin
 	Report("Initialization complete");
 	Report("");
 
-	//initialize ImGui Overlay
-	if (GetConfigBool(configfile, "Skyscraper.Frontend.VR", false) == false)
-	{
-		try
-		{
-			imgui = new Ogre::ImGuiOverlay();
-			imgui->setZOrder(300);
-			imgui->show();
-			Ogre::OverlayManager::getSingleton().addOverlay(imgui);
-		}
-		catch(Ogre::Exception &e)
-		{
-			return ReportFatalError("Error initializing ImGui overlay\nDetails: " + e.getDescription());
-		}
-	}
+	//initialize editor
+	vm->GetEditor()->Initialize();
 
 	return true;
 }
@@ -732,12 +714,8 @@ bool HAL::Render()
 {
 	SBS_PROFILE_MAIN("Render");
 
-	//process imgui
-	if (imgui)
-		Ogre::ImGuiOverlay::NewFrame();
-	//ImGuizmo::BeginFrame();
-
-	//ImGui::ShowDemoWindow();
+	//process editor
+	vm->GetEditor()->Run();
 
 	//render to the frame buffer
 	try
@@ -859,14 +837,8 @@ void HAL::ReInit()
 	delete mTrayMgr;
 	mTrayMgr = 0;
 
-	//remove imgui overlay
-	if (imgui)
-	{
-		imgui->hide();
-		Ogre::OverlayManager::getSingleton().destroy(imgui);
-		//delete imgui;
-		imgui = 0;
-	}
+	//unload editor interface
+	vm->GetEditor()->Unload();
 
 	//reinit overlay system
 	try
