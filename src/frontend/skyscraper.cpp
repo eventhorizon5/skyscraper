@@ -28,6 +28,7 @@
 #include "wx/filefn.h"
 #include "wx/stdpaths.h"
 #include "wx/joystick.h"
+#include "wx/display.h"
 #else
 #include <filesystem>
 #include "Ogre.h"
@@ -688,6 +689,18 @@ void Skyscraper::SetFullScreen(bool enabled)
 	FullScreen = enabled;
 #ifdef USING_WX
 	window->ShowFullScreen(FullScreen);
+
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
+if (FullScreen == true)
+{
+	wxDisplay display(wxDisplay::GetFromWindow(window));
+	wxRect area = display.GetClientArea(); //excludes menu bar/dock
+	window->Move(area.GetTopLeft());
+}
+else
+	window->Center();
+#endif
+
 #endif
 
 #if defined(__WXMSW__)
