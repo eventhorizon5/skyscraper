@@ -515,4 +515,13 @@ bool Utility::HitBeam(const Ray &ray, Real max_distance, MeshObject *&mesh, Wall
     return true;
 }
 
+bool Utility::InBox(const Vector3 &start, const Vector3 &end, const Vector3 &test)
+{
+	//determine if a point (test) is inside the box defines by start and end vertices
+
+	if (test.x > start.x && test.y > start.y && test.z > start.z && test.x < end.x && test.y < end.y && test.z < end.z)
+		return true;
+	return false;
+}
+
 }

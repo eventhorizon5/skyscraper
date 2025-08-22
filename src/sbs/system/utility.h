@@ -57,6 +57,7 @@ public:
 	bool GetFloorFromID(const std::string &floor, int &result);
 	std::string ProcessFullName(std::string name, int &instance, int &object_number, bool strip_number = false);
 	bool HitBeam(const Ray &ray, Real max_distance, MeshObject *&mesh, Wall *&wall, Polygon *&polygon, Vector3 &hit_position);
+	bool InBox(const Vector3 &start, const Vector3 &end, const Vector3 &test);
 
 private:
 

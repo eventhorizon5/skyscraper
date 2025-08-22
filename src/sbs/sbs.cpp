@@ -1186,7 +1186,7 @@ void SBS::CheckAutoAreas()
 		if (FloorAutoArea[i].camerafloor != floor)
 			FloorAutoArea[i].inside = false;
 
-		if (InBox(FloorAutoArea[i].start, FloorAutoArea[i].end, position) == true && FloorAutoArea[i].inside == false)
+		if (GetUtility()->InBox(FloorAutoArea[i].start, FloorAutoArea[i].end, position) == true && FloorAutoArea[i].inside == false)
 		{
 			//user moved into box; enable floors
 			FloorAutoArea[i].inside = true;
@@ -1204,7 +1204,7 @@ void SBS::CheckAutoAreas()
 				GetFloor(floor + 1)->EnableGroup(true);
 			}
 		}
-		if (InBox(FloorAutoArea[i].start, FloorAutoArea[i].end, position) == false && FloorAutoArea[i].inside == true)
+		if (GetUtility()->InBox(FloorAutoArea[i].start, FloorAutoArea[i].end, position) == false && FloorAutoArea[i].inside == true)
 		{
 			//user moved out of box; disable floors except current
 			FloorAutoArea[i].inside = false;
@@ -1952,15 +1952,6 @@ Real SBS::GetConfigFloat(const std::string &key, Real default_value)
 {
 	std::string result = configfile->getSetting(key, "", ToString(default_value));
 	return ToFloat(result);
-}
-
-bool SBS::InBox(const Vector3 &start, const Vector3 &end, const Vector3 &test)
-{
-	//determine if a point (test) is inside the box defines by start and end vertices
-
-	if (test.x > start.x && test.y > start.y && test.z > start.z && test.x < end.x && test.y < end.y && test.z < end.z)
-		return true;
-	return false;
 }
 
 void SBS::AdvanceClock()

@@ -292,7 +292,6 @@ public:
 	std::string GetConfigString(const std::string &key, const std::string &default_value);
 	bool GetConfigBool(const std::string &key, bool default_value);
 	Real GetConfigFloat(const std::string &key, Real default_value);
-	bool InBox(const Vector3 &start, const Vector3 &end, const Vector3 &test);
 	void AdvanceClock();
 	unsigned long GetCurrentTime();
 	unsigned long GetRunTime();
