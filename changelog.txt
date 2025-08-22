@@ -165,6 +165,22 @@ Version 2.1
 -SBS: properly restart call station input timer
 -PolyMesh: add a merge check to CreateBoundingBox()
 -PolyMesh: when creating the bounding box, the vertices need to be converted to Local space first
+-PolyMesh: remove related triangle owner from mesh if a wall object is deleted
+-SBS: adjust default call station timer timeout to 2.5 seconds
+-GUI: engine load dialog should use the engine selected in the Engine Manager window as the parent of the new engine to load
+-GUI: added a parent engine selection box to the Load dialog
+-SBS: added alphabetical input for keypad objects
+-SBS: properly restart in-car DD keypad timers
+-SBS: adjusted in-car DD keypad timer to 2.5 seconds
+-GUI: refresh engine parent display when opening load dialog
+-Added ImGui internal header, which matches the Ogre version
+-Added AngelScript library as a dependency for SBS
+-Added CMake option to disable wxWidgets
+-Moved Ogre-Procedural to dependencies folder, to simplify building
+-VM: in enginecontext, check Simcore and processor objects before use
+-OpenXR: update SIMD types for ARM architecture, fixes build issues
+-OpenXR: added basic support for VR controllers
+
 
 Version 2.0 - July 24, 2025
 -------------------------
