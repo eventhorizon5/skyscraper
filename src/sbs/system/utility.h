@@ -55,6 +55,8 @@ public:
 	std::string GetMountPath(std::string filename, std::string &newfilename);
 	void CacheFilename(const std::string &filename, const std::string &result);
 	bool GetFloorFromID(const std::string &floor, int &result);
+	std::string ProcessFullName(std::string name, int &instance, int &object_number, bool strip_number = false);
+	bool HitBeam(const Ray &ray, Real max_distance, MeshObject *&mesh, Wall *&wall, Polygon *&polygon, Vector3 &hit_position);
 
 private:
 

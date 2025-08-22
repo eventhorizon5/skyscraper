@@ -331,7 +331,6 @@ public:
 	int GetEscalatorCount();
 	int GetMovingWalkwayCount();
 	int GetRevolvingDoorCount();
-	bool HitBeam(const Ray &ray, Real max_distance, MeshObject *&mesh, Wall *&wall, Polygon *&polygon, Vector3 &hit_position);
 	void EnableRandomActivity(bool value);
 	void EnableMalfunctions(bool value);
 	SoundSystem* GetSoundSystem();
@@ -342,7 +341,6 @@ public:
 	void RemovePerson(Person *person);
 	bool AttachCamera(std::vector<Ogre::Camera*> &cameras, bool init_state = true);
 	bool DetachCamera();
-	std::string ProcessFullName(std::string name, int &instance, int &object_number, bool strip_number = false);
 	int GetPersonCount();
 	Person* GetPerson(int number);
 	bool IsInside();

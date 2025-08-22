@@ -31,7 +31,6 @@
 #include <fmod.hpp>
 #endif
 #include <OgreBulletDynamicsRigidBody.h>
-#include <OgreBulletCollisionsRay.h>
 #include "globals.h"
 #include "sbs.h"
 #include "manager.h"
@@ -2702,84 +2701,6 @@ int SBS::GetRevolvingDoorCount()
 	return (int)RevolvingDoorArray.size();
 }
 
-struct PickRays {
-    Ray global;  // global space
-    Ray engine;  // engine space
-};
-
-//build both rays at once from the Ogre camera ray
-static PickRays MakePickRays(const Ray& camRay, SBS* sbs)
-{
-    //start in Ogre camera space (camRay is Ogre/remote)
-
-    //engine space for polygon/triangle picking:
-    Ray engineRay(
-        sbs->ToRemote(sbs->ToLocal(camRay.getOrigin())),
-        sbs->GetOrientation().Inverse() * camRay.getDirection()
-    );
-
-    //global space for Bullet
-    Ray globalRay(
-        sbs->ToRemote(sbs->GetUtility()->ToGlobal(sbs->ToLocal(camRay.getOrigin()))),
-        sbs->GetOrientation() * camRay.getDirection()
-    );
-
-    return {globalRay, engineRay};
-}
-
-bool SBS::HitBeam(const Ray &ray, Real max_distance, MeshObject *&mesh, Wall *&wall, Polygon *&polygon, Vector3 &hit_position)
-{
-	//use a given ray and distance, and return the nearest hit mesh and if applicable, wall object
-	//note that the ray's origin and direction need to be in engine-relative values
-
-	//create a ray for absolute (global) positioning, and another for engine offsets (engine-relative positioning)
-	const PickRays rays = MakePickRays(ray, this);
-	wall = 0;
-	polygon = 0;
-
-    //ray test in Bullet; get a collision callback
-    OgreBulletCollisions::CollisionClosestRayResultCallback callback(rays.global, mWorld, max_distance);
-
-	//check for collision
-    mWorld->launchRay(callback);
-
-	//exit if no collision
-    if (!callback.doesCollide())
-		return false;
-
-    //get collided collision object
-    OgreBulletCollisions::Object* object = callback.getCollidedObject();
-    if (!object)
-		return false;
-
-	//get name of collision object's grandparent scenenode (which is the same name as the mesh object)
-    std::string meshname;
-    if (dynamic_cast<OgreBulletDynamics::WheeledRigidBody*>(object) == 0)
-        meshname = object->getRootNode()->getParentSceneNode()->getName();
-    else
-        meshname = object->getRootNode()->getChild(0)->getName(); //for vehicles, the child of the root node is the mesh
-
-	//get associated mesh object
-    mesh = FindMeshObject(meshname);
-    if (!mesh)
-		return false;
-
-    //hit position — keep space consistent
-    hit_position = ToLocal(callback.getCollisionPoint());
-
-    //wall resolution
-    Vector3 rs = rays.engine.getOrigin();
-    Vector3 re = rays.engine.getPoint(max_distance);
-
-	//get wall object, if any
-    Vector3 isect; Real distance = 2e9; Vector3 normal = Vector3::ZERO;
-    MeshObject::TriOwner owner = GetPolyMesh()->FindWallIntersect_Tri(mesh, rs, re, isect, distance, normal);
-	wall = owner.wall;
-	polygon = owner.poly;
-
-    return true;
-}
-
 void SBS::EnableRandomActivity(bool value)
 {
 	//enable random activity, by creating random people
@@ -2952,28 +2873,6 @@ bool SBS::DetachCamera()
 		return false;
 
 	return camera->Detach();
-}
-
-std::string SBS::ProcessFullName(std::string name, int &instance, int &object_number, bool strip_number)
-{
-	//if given a full object ID name (such as "0:(4)Landscape"),
-	//return base name and parse out instance number and object number
-
-	//if strip_number is false, leave object number identifier in string
-
-	//get and strip off engine instance number
-	size_t index = name.find(":(");
-	instance = ToInt(name.substr(0, index));
-	name.erase(name.begin(), name.begin() + index + 1);
-
-	//get and optionally strip off object number
-	index = name.find(")");
-	object_number = ToInt(name.substr(1, index - 1));
-
-	if (strip_number == true)
-		name.erase(name.begin(), name.begin() + index + 1);
-
-	return name;
 }
 
 Person* SBS::GetPerson(int number)

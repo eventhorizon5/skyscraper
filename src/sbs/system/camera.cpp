@@ -603,7 +603,7 @@ Real Camera::ClickedObject(Camera *camera, bool shift, bool ctrl, bool alt, bool
 		}
 	}
 
-	bool hit = sbs->HitBeam(ray, 1000.0, mesh, wall, polygon, HitPosition);
+	bool hit = sbs->GetUtility()->HitBeam(ray, 1000.0, mesh, wall, polygon, HitPosition);
 	Vector3 hit_pos = HitPosition - sbs->GetPosition();
 
 	//report hit position if in verbose mode
@@ -802,7 +802,7 @@ bool Camera::Loop()
 				if (node)
 				{
 					int instance = 0, number = 0;
-					std::string name = sbs->ProcessFullName(node->getParentSceneNode()->getName(), instance, number, false);
+					std::string name = sbs->GetUtility()->ProcessFullName(node->getParentSceneNode()->getName(), instance, number, false);
 
 					if (instance == sbs->InstanceNumber)
 					{
@@ -1270,7 +1270,7 @@ bool Camera::PickUpModel()
 		position.y = i;
 		Ray ray (sbs->ToRemote(position), sbs->ToRemote(front, false));
 
-		hit = sbs->HitBeam(ray, 2.0, mesh, wall, polygon, hit_position);
+		hit = sbs->GetUtility()->HitBeam(ray, 2.0, mesh, wall, polygon, hit_position);
 
 		if (hit == true)
 			break;
@@ -1590,7 +1590,7 @@ void Camera::AttachToVehicle(bool value)
 		Wall* wall = 0;
 		Polygon* polygon = 0;
 
-		bool hit = sbs->HitBeam(ray, 50, mesh, wall, polygon, HitPosition);
+		bool hit = sbs->GetUtility()->HitBeam(ray, 50, mesh, wall, polygon, HitPosition);
 
 		if (hit == false)
 		{
