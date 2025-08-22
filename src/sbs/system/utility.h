@@ -54,6 +54,7 @@ public:
 	std::string GetFilesystemPath(std::string filename);
 	std::string GetMountPath(std::string filename, std::string &newfilename);
 	void CacheFilename(const std::string &filename, const std::string &result);
+	bool GetFloorFromID(const std::string &floor, int &result);
 
 private:
 

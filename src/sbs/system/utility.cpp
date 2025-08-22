@@ -26,6 +26,8 @@
 #include "polymesh.h"
 #include "wall.h"
 #include "polygon.h"
+#include "manager.h"
+#include "floor.h"
 #include "utility.h"
 
 namespace SBS {
@@ -371,6 +373,44 @@ void Utility::CacheFilename(const std::string &filename, const std::string &resu
 	verify.filename = filename;
 	verify.result = result;
 	verify_results.emplace_back(verify);
+}
+
+bool Utility::GetFloorFromID(const std::string &floor, int &result)
+{
+	std::string converted = floor;
+	int rawfloor = 0;
+
+	if (IsNumeric(floor))
+	{
+		rawfloor = ToInt(floor);
+
+		//convert back to string, to strip off any leading 0's
+		converted = ToString(rawfloor);
+	}
+
+	Floor *floorobj = sbs->GetFloorManager()->GetByNumberID(converted);
+	Floor *floorobj2 = sbs->GetFloorManager()->GetByID(converted);
+	Floor *floorobj3 = 0;
+	if (IsNumeric(floor))
+		floorobj3 = sbs->GetFloorManager()->Get(rawfloor);
+
+	if (floorobj)
+	{
+		result = floorobj->Number; //get by number ID first
+		return true;
+	}
+	else if (floorobj2)
+	{
+		result = floorobj2->Number; //next try floor ID
+		return true;
+	}
+	else if (floorobj3)
+	{
+		result = rawfloor; //and last, get by raw floor number
+		return true;
+	}
+
+	return false;
 }
 
 }

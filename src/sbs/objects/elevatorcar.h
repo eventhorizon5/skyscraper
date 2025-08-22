@@ -324,7 +324,6 @@ private:
 	void UpdateKeypadIndicator(const std::string& text, bool play_sound = true);
 	Indicator* indicator;
 	void KeypadError(bool type = 0);
-	bool GetFloorFromID(const std::string& floor, int& result);
 	void Requested(int floor);
 
 	class KeypadTimer; //internal timer class
