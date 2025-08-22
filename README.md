@@ -153,6 +153,8 @@ Plus or ] - Zoom in (decrease FOV angle)
 
 Minus or [ - Zoom out (increase FOV angle)
 
+= - Open editor
+
 Esc - exit to main menu
 
 V - Toggle noclip mode (gravity and collisions off)

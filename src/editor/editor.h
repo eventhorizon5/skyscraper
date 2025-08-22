@@ -41,6 +41,7 @@ public:
 	bool Run();
 	void Unload();
 	void Enable(bool value);
+	bool IsEnabled();
 
 private:
 

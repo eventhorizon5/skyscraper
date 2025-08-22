@@ -37,6 +37,7 @@
 #include "hal.h"
 #include "sky.h"
 #include "gui.h"
+#include "editor.h"
 #include "enginecontext.h"
 #include "loaddialog.h"
 #include "mainscreen.h"
@@ -417,6 +418,13 @@ void MainScreen::OnKeyDown(wxKeyEvent& event)
 			//decrease FOV angle
 			Real angle = camera->GetFOVAngle() - camera->cfg_zoomspeed;
 			camera->SetFOVAngle(angle);
+		}
+
+		//editor window
+		if (key == (wxKeyCode)'=')
+		{
+			Editor *editor = frontend->GetVM()->GetEditor();
+			editor->Enable(!editor->IsEnabled());
 		}
 
 		//model pick-up

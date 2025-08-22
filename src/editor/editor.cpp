@@ -106,4 +106,9 @@ void Editor::Enable(bool value)
 	enabled = value;
 }
 
+bool Editor::IsEnabled()
+{
+	return enabled;
+}
+
 }
