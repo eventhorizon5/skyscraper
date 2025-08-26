@@ -180,6 +180,12 @@ Version 2.1
 -VM: in enginecontext, check Simcore and processor objects before use
 -OpenXR: update SIMD types for ARM architecture, fixes build issues
 -OpenXR: added basic support for VR controllers
+-VM: added Editor system, and moved the ImGui code into it
+-Editor: have editor only enable when called using the Enable() function
+-Frontend: the editor can now be opened with the '=' key
+-SBS: moved some functions from Simcore (sbs.cpp) to Utility
+-SBS: Moved InBox() function to Utility
+-Frontend: fix fullscreen window positioning on MacOS
 
 
 Version 2.0 - July 24, 2025
