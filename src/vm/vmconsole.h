@@ -47,6 +47,8 @@ public:
 private:
 	VM *vm;
 	std::string buffer;
+
+	bool ProcessCommand(const std::string &command, Ogre::StringVector &params);
 };
 
 //Virtual Manager Console
