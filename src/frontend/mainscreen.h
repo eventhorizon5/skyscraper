@@ -45,7 +45,12 @@ public:
 	void OnActivate(wxActivateEvent & event);
 	void OnKeyDown(wxKeyEvent& event);
 	void OnKeyUp(wxKeyEvent& event);
+	void OnChar(wxKeyEvent& event);
+	void OnFocus(wxFocusEvent& event);
+	void OnKillFocus(wxFocusEvent& event);
 	void OnMouseButton(wxMouseEvent& event);
+	void OnMouseMove(wxMouseEvent& event);
+	void OnMouseLeave(wxMouseEvent& event);
 	void EnableFreelook(bool value);
 #ifndef __FreeBSD__
 	void OnJoystickEvent(wxJoystickEvent& event);

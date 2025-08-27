@@ -114,6 +114,7 @@ MainScreen::MainScreen(Skyscraper *parent, int width, int height) : wxFrame(0, -
 	panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(width, height), wxNO_BORDER);
 	panel->Connect(wxID_ANY, wxEVT_KEY_DOWN, wxKeyEventHandler(MainScreen::OnKeyDown), NULL, this);
 	panel->Connect(wxID_ANY, wxEVT_KEY_UP, wxKeyEventHandler(MainScreen::OnKeyUp), NULL, this);
+	panel->Connect(wxID_ANY, wxEVT_MOTION, wxMouseEventHandler(MainScreen::OnMouseMove), NULL, this);
 	panel->Connect(wxID_ANY, wxEVT_LEFT_DOWN, wxMouseEventHandler(MainScreen::OnMouseButton), NULL, this);
 	panel->Connect(wxID_ANY, wxEVT_LEFT_UP, wxMouseEventHandler(MainScreen::OnMouseButton), NULL, this);
 	panel->Connect(wxID_ANY, wxEVT_LEFT_DCLICK, wxMouseEventHandler(MainScreen::OnMouseButton), NULL, this);
@@ -124,6 +125,10 @@ MainScreen::MainScreen(Skyscraper *parent, int width, int height) : wxFrame(0, -
 	panel->Connect(wxID_ANY, wxEVT_RIGHT_UP, wxMouseEventHandler(MainScreen::OnMouseButton), NULL, this);
 	panel->Connect(wxID_ANY, wxEVT_RIGHT_DCLICK, wxMouseEventHandler(MainScreen::OnMouseButton), NULL, this);
 	panel->Connect(wxID_ANY, wxEVT_MOUSEWHEEL, wxMouseEventHandler(MainScreen::OnMouseButton), NULL, this);
+	panel->Connect(wxID_ANY, wxEVT_LEAVE_WINDOW, wxMouseEventHandler(MainScreen::OnMouseLeave), NULL, this);
+	panel->Connect(wxID_ANY, wxEVT_CHAR, wxKeyEventHandler(MainScreen::OnChar), NULL, this);
+	panel->Connect(wxID_ANY, wxEVT_SET_FOCUS, wxFocusEventHandler(MainScreen::OnFocus), NULL, this);
+	panel->Connect(wxID_ANY, wxEVT_KILL_FOCUS, wxFocusEventHandler(MainScreen::OnKillFocus), NULL, this);
 }
 
 MainScreen::~MainScreen()
@@ -927,6 +932,31 @@ void MainScreen::OnJoystickEvent(wxJoystickEvent &event)
 		camera->Jump();
 }
 #endif
+
+void MainScreen::OnMouseMove(wxMouseEvent &event)
+{
+
+}
+
+void MainScreen::OnMouseLeave(wxMouseEvent &event)
+{
+
+}
+
+void MainScreen::OnChar(wxKeyEvent &event)
+{
+
+}
+
+void MainScreen::OnFocus(wxFocusEvent &event)
+{
+
+}
+
+void MainScreen::OnKillFocus(wxFocusEvent &event)
+{
+
+}
 
 }
 
