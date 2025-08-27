@@ -90,7 +90,7 @@ static ImGuiKey ToImGuiKey(int k)
 		case WXK_SHIFT:   return ImGuiKey_LeftShift;
 		case WXK_ALT:     return ImGuiKey_LeftAlt;
 	#if defined(__APPLE__)
-		case WXK_COMMAND: return ImGuiKey_LeftSuper;
+		//case WXK_COMMAND: return ImGuiKey_LeftSuper;
 	#else
 		case WXK_WINDOWS_MENU: return ImGuiKey_LeftSuper;
 	#endif
