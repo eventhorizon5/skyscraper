@@ -43,6 +43,7 @@ public:
 	void Enable(bool value);
 	bool IsEnabled();
 	bool IsInitialized();
+	void UpdateFrame(Real size_x, Real size_y, Real scale, Real delta);
 
 private:
 

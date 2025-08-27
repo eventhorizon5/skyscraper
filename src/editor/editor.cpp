@@ -119,4 +119,14 @@ bool Editor::IsInitialized()
 	return initialized;
 }
 
+void Editor::UpdateFrame(Real size_x, Real size_y, Real scale, Real delta)
+{
+	//update ImGui frame data
+
+	ImGuiIO& io = ImGui::GetIO();
+	io.DisplaySize = ImVec2((float)size_x, (float)size_y);
+	io.DisplayFramebufferScale = ImVec2(scale, scale);
+	io.DeltaTime = delta > 0.f ? delta : (1.0f / 60.0f);
+}
+
 }

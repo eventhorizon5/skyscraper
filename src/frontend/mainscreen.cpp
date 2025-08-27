@@ -203,6 +203,11 @@ void MainScreen::OnIdle(wxIdleEvent& event)
 				panel->SetFocus();
 
 			try {
+				Editor *editor = frontend->GetVM()->GetEditor();
+				EngineContext *engine = frontend->GetVM()->GetActiveEngine();
+				if (editor && engine)
+					editor->UpdateFrame(GetClientSize().x, GetClientSize().y, GetContentScaleFactor(), engine->GetSystem()->delta); //update editor frame
+
 				bool result = frontend->Loop(); //run simulator loop
 				if (!result)
 					frontend->Quit();
