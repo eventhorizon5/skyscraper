@@ -53,7 +53,7 @@ bool Editor::Initialize()
 	HAL *hal = vm->GetHAL();
 
 	//initialize ImGui Overlay
-	if (hal->GetConfigBool(hal->configfile, "Skyscraper.Frontend.VR", false) == false)
+	if (vm->GetHAL()->IsVREnabled() == false)
 	{
 		try
 		{
@@ -66,9 +66,9 @@ bool Editor::Initialize()
 		{
 			return hal->ReportFatalError("Error initializing ImGui overlay\nDetails: " + e.getDescription(), "editor:");
 		}
+		initialized = true;
 	}
 
-	initialized = true;
 	return true;
 }
 
@@ -122,6 +122,9 @@ bool Editor::IsInitialized()
 void Editor::UpdateFrame(Real size_x, Real size_y, Real scale, Real delta)
 {
 	//update ImGui frame data
+
+	if (!imgui || !initialized)
+		return;
 
 	ImGuiIO& io = ImGui::GetIO();
 	io.DisplaySize = ImVec2((float)size_x, (float)size_y);

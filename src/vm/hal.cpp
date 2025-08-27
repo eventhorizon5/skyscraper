@@ -1067,4 +1067,9 @@ unsigned long HAL::GetCurrentTime()
 	return timer->getMilliseconds();
 }
 
+bool HAL::IsVREnabled()
+{
+	return GetConfigBool(configfile, "Skyscraper.Frontend.VR", false);
+}
+
 }
