@@ -697,15 +697,15 @@ bool HAL::LoadSystem(const std::string &data_path, Ogre::RenderWindow *renderwin
 		mTrayMgr->hideCursor();
 	}
 
+	//initialize editor
+	vm->GetEditor()->Initialize();
+
 	//report hardware concurrency
 	int c = std::thread::hardware_concurrency();
 	Report("Reported hardware concurrency: " + ToString(c) + "\n");
 
 	Report("Initialization complete");
 	Report("");
-
-	//initialize editor
-	vm->GetEditor()->Initialize();
 
 	return true;
 }

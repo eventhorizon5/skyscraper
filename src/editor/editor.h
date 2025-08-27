@@ -42,13 +42,14 @@ public:
 	void Unload();
 	void Enable(bool value);
 	bool IsEnabled();
+	bool IsInitialized();
 
 private:
 
 	//ImGui Overlay
 	Ogre::ImGuiOverlay *imgui;
 
-	bool enabled;
+	bool enabled, initialized;
 
 	VM *vm;
 };

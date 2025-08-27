@@ -40,6 +40,7 @@ Editor::Editor(VM *parent)
 {
 	this->vm = parent;
 	enabled = false;
+	initialized = false;
 }
 
 Editor::~Editor()
@@ -67,6 +68,7 @@ bool Editor::Initialize()
 		}
 	}
 
+	initialized = true;
 	return true;
 }
 
@@ -74,7 +76,7 @@ bool Editor::Run()
 {
 	//process imgui
 
-	if (!imgui)
+	if (!imgui || !initialized)
 		return false;
 
 	Ogre::ImGuiOverlay::NewFrame();
@@ -92,13 +94,14 @@ void Editor::Unload()
 {
 	//remove imgui overlay
 
-	if (!imgui)
+	if (!imgui || !initialized)
 		return;
 
 	imgui->hide();
 	Ogre::OverlayManager::getSingleton().destroy(imgui);
 	//delete imgui;
 	imgui = 0;
+	initialized = false;
 }
 
 void Editor::Enable(bool value)
@@ -109,6 +112,11 @@ void Editor::Enable(bool value)
 bool Editor::IsEnabled()
 {
 	return enabled;
+}
+
+bool Editor::IsInitialized()
+{
+	return initialized;
 }
 
 }
