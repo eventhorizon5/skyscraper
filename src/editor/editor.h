@@ -47,6 +47,8 @@ public:
 
 private:
 
+	void Process();
+
 	//ImGui Overlay
 	Ogre::ImGuiOverlay *imgui;
 

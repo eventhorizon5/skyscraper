@@ -85,9 +85,16 @@ bool Editor::Run()
 	if (!enabled)
 		return true;
 
-	ImGui::ShowDemoWindow();
+	Process();
 
 	return true;
+}
+
+void Editor::Process()
+{
+	//process ImGui
+
+	ImGui::ShowDemoWindow();
 }
 
 void Editor::Unload()
