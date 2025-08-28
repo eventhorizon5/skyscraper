@@ -48,6 +48,7 @@ public:
 private:
 
 	void Process();
+	void ShowTransformGizmoWindow();
 
 	//ImGui Overlay
 	Ogre::ImGuiOverlay *imgui;

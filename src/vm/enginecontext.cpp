@@ -127,7 +127,7 @@ void EngineContext::Init(const EngineType type, EngineContext *parent, VM *vm, O
 	InstancePrompt = ToString(instance) + ">";
 
 	if (parent)
-			parent->AddChild(this);
+		parent->AddChild(this);
 
 	StartSim(position, rotation);
 }
