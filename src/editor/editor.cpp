@@ -165,15 +165,14 @@ void Editor::UpdateFrame(Real size_x, Real size_y, Real scale, Real delta)
 
 void Editor::ShowTransformGizmoWindow()
 {
-	static bool show = true;
-	if (!show || !vm->GetActiveSystem())
+	if (!vm->GetActiveSystem())
 		return;
 
 	::SBS::SBS *Simcore = vm->GetActiveSystem();
 	if (!Simcore->camera)
 		return;
 
-	ImGui::Begin("Transform Gizmo", &show);
+	ImGui::Begin("Transform Gizmo", &enabled);
 
 	static int objId = vm->GetActiveSystem()->camera->GetClickedObjectNumber();
 	SBS::Object *object = Simcore->GetObject(objId);
