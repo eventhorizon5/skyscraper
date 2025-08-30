@@ -696,7 +696,12 @@ VMStatus VM::Run(std::vector<EngineContext*> &newengines)
 {
 	//run system
 
-	//return codes are -1 for fatal error, 0 for failure, 1 for success, 2 to unload, and 3 to load new buildings
+	//return codes:
+	//VMSTATUS_FATAL: fatal error
+	//VMSTATUS_ERROR: failure
+	//VMSTATUS_SUCCESS: success
+	//VMSTATUS_UNLOAD: unload
+	//VMSTATUS_LOAD: load new building(s)
 
 	SBS_PROFILE_MAIN("VM");
 
