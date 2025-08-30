@@ -232,7 +232,7 @@ public:
 	bool AddElevatorIDSigns(int door_number, bool relative, const std::string& texture_prefix, const std::string& direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset);
 	Shape* CreateShape(Wall *wall);
 	bool KeypadEnter();
-	bool KeypadCancel();
+	bool KeypadClear();
 	
 	MeshObject* Mesh; //car mesh object
 

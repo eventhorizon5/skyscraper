@@ -3710,7 +3710,7 @@ bool ElevatorCar::KeypadEnter()
 	return true;
 }
 
-bool ElevatorCar::KeypadCancel()
+bool ElevatorCar::KeypadClear()
 {
 	//keypad cancel key
 

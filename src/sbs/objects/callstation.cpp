@@ -385,9 +385,9 @@ bool CallStation::KeypadEnter()
 	return true;
 }
 
-bool CallStation::KeypadCancel()
+bool CallStation::KeypadClear()
 {
-	//keypad cancel key
+	//keypad clear key
 
 	timer->Stop();
 	InputCache = "";

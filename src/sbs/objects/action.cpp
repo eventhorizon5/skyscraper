@@ -711,7 +711,7 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 		if (command_name == "inputenter")
 			return car->KeypadEnter();
 		if (command_name == "inputcancel")
-			return car->KeypadCancel();
+			return car->KeypadClear();
 		if (command_name == "inputa")
 			return car->Input("A");
 		if (command_name == "inputb")
@@ -816,7 +816,7 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 		if (command_name == "inputenter")
 			return callstation->KeypadEnter();
 		if (command_name == "inputcancel")
-			return callstation->KeypadCancel();
+			return callstation->KeypadClear();
 		if (command_name == "up")
 			return callstation->Call(true);
 		if (command_name == "down")
