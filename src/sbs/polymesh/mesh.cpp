@@ -1243,39 +1243,39 @@ void MeshObject::CreateBoundingBox()
 	//create a new bounding box for this mesh object
 	//based on the geometry of all associated wall objects
 
-	if (model_loaded == false)
+	if (model_loaded == true)
+		return;
+
+	Ogre::AxisAlignedBox local_box;
+	Bounds->setNull();
+	bool merge = false;
+	for (size_t i = 0; i < Walls.size(); i++)
 	{
-		Ogre::AxisAlignedBox local_box;
-		Bounds->setNull();
-		bool merge = false;
-		for (size_t i = 0; i < Walls.size(); i++)
+		if (!Walls[i])
+			continue;
+
+		//step through each wall polygon, and merge it's vertices into the bounding box
+		for (size_t j = 0; j < Walls[i]->polygons.size(); j++)
 		{
-			if (!Walls[i])
+			Polygon *poly = Walls[i]->polygons[j];
+
+			if (!poly)
 				continue;
-
-			//step through each wall polygon, and merge it's vertices into the bounding box
-			for (size_t j = 0; j < Walls[i]->polygons.size(); j++)
+			for (size_t k = 0; k < poly->geometry.size(); k++)
 			{
-				Polygon *poly = Walls[i]->polygons[j];
-
-				if (!poly)
-					continue;
-				for (size_t k = 0; k < poly->geometry.size(); k++)
+				for (size_t l = 0; l < poly->geometry[k].size(); l++)
 				{
-					for (size_t l = 0; l < poly->geometry[k].size(); l++)
-					{
-						Bounds->merge(poly->geometry[k][l].vertex);
-						local_box.merge(sbs->ToLocal(poly->geometry[k][l].vertex) + GetPosition());
-						merge = true;
-					}
+					Bounds->merge(poly->geometry[k][l].vertex);
+					local_box.merge(sbs->ToLocal(poly->geometry[k][l].vertex) + GetPosition());
+					merge = true;
 				}
 			}
 		}
-
-		//merge bounds into sim engine bounding box
-		if (merge == true)
-			sbs->MergeBounds(local_box);
 	}
+
+	//merge bounds into sim engine bounding box
+	if (merge == true)
+		sbs->MergeBounds(local_box);
 }
 
 void MeshObject::RemoveTriOwner(Wall *wall)
