@@ -23,32 +23,33 @@
       <p align="left">The section headers and footers are similar to the
         ones in the <em>Elevator</em> section.<br>
         To specify a single car, you would type something like:<br>
-        <font face="Courier New, Courier, mono" size="2">&lt;Car 2&gt;</font><br>
+        <font size="2" face="Courier New, Courier, mono">&lt;Car 2&gt;</font><br>
         and end it with:<br>
-        <font face="Courier New, Courier, mono" size="2">&lt;EndCar&gt;</font><br>
+        <font size="2" face="Courier New, Courier, mono">&lt;EndCar&gt;</font><br>
         <br>
         For a range of elevators, you would use something like:<br>
-        <font face="Courier New, Courier, mono" size="2">&lt;Cars 1 to
+        <font size="2" face="Courier New, Courier, mono">&lt;Cars 1 to
           2&gt;</font><br>
         and end with:<br>
-        <font face="Courier New, Courier, mono" size="2">&lt;EndCars&gt;</font></p>
+        <font size="2" face="Courier New, Courier, mono">&lt;EndCars&gt;</font></p>
       <p align="left">When creating a new elevator car, the required
         values for each are the <em>ServicedFloors</em> parameter and
         the <em>CreateCar</em> command.</p>
       <p align="left"><strong>Variables:</strong></p>
-      <p align="left"><font face="Courier New, Courier, mono" size="2"><strong>%elevator%</strong></font>
+      <p align="left"><font size="2" face="Courier New, Courier, mono"><strong>%elevator%</strong></font>
         - number of the current elevator<br>
-        <font face="Courier New, Courier, mono" size="2"><strong>%car%</strong></font>
+        <font size="2" face="Courier New, Courier, mono"><strong>%car%</strong></font>
         - number of the current car</p>
       <p align="left"><strong>Parameters</strong>:</p>
       <p align="left"><strong>1. Name</strong> - sets the name of the
         car<br>
-        Example: <font face="Courier New, Courier, mono" size="2">Name
+        Example: <font size="2" face="Courier New, Courier, mono">Name
           = Lower Car </font></p>
       <p align="left"><strong>2. OpenSpeed</strong> - open/close speed
         of the elevator doors. This must be specified after the
         CreateCar command.<br>
-        Syntax: <font face="Courier New, Courier, mono" size="2">OpenSpeed
+        Syntax: <font size="2" face="Courier New, Courier, mono">OpenSpeed
+
 
 
 
@@ -93,7 +94,8 @@
 
 
           <em>doornumber</em> = <em>value</em></font><br>
-        Example: <font face="Courier New, Courier, mono" size="2">OpenSpeed
+        Example: <font size="2" face="Courier New, Courier, mono">OpenSpeed
+
 
 
 
@@ -143,7 +145,8 @@
         nudge mode. The default is 0.5, which ends up being half of the
         door's speed value. This must be specified after the CreateCar
         command.<br>
-        Syntax: <font face="Courier New, Courier, mono" size="2">SlowSpeed
+        Syntax: <font size="2" face="Courier New, Courier, mono">SlowSpeed
+
 
 
 
@@ -188,7 +191,8 @@
 
 
           <em>doornumber</em> = <em>value</em></font><br>
-        Example: <font face="Courier New, Courier, mono" size="2">SlowSpeed
+        Example: <font size="2" face="Courier New, Courier, mono">SlowSpeed
+
 
 
 
@@ -237,7 +241,8 @@
         multiplier of the elevator doors used for manual movement. The
         default is 0.2. This must be specified after the CreateCar
         command.<br>
-        Syntax: <font face="Courier New, Courier, mono" size="2">ManualSpeed
+        Syntax: <font size="2" face="Courier New, Courier, mono">ManualSpeed
+
 
 
 
@@ -282,7 +287,8 @@
 
 
           <em>doornumber</em> = <em>value</em></font><br>
-        Example: <font face="Courier New, Courier, mono" size="2">ManualSpeed
+        Example: <font size="2" face="Courier New, Courier, mono">ManualSpeed
+
 
 
 
@@ -331,7 +337,8 @@
         comma-separated list of floors this elevator car services.
         Ranges can also be specified by putting a "-" between the
         numbers. Please note that each car must serve different floors.<br>
-        Example: <font face="Courier New, Courier, mono" size="2">ServicedFloors
+        Example: <font size="2" face="Courier New, Courier, mono">ServicedFloors
+
 
 
 
@@ -381,7 +388,8 @@
         before automatically closing. Specify 0 to disable. The default
         is 5000, or 5 seconds. This must be specified after the
         CreateCar command.<br>
-        Syntax: <font face="Courier New, Courier, mono" size="2">DoorTimer
+        Syntax: <font size="2" face="Courier New, Courier, mono">DoorTimer
+
 
 
 
@@ -426,7 +434,8 @@
 
 
           <em>doornumber</em> = <em>value</em></font><br>
-        Example: <font face="Courier New, Courier, mono" size="2">DoorTimer
+        Example: <font size="2" face="Courier New, Courier, mono">DoorTimer
+
 
 
 
@@ -476,7 +485,8 @@
         before automatically closing, in quick-close mode. Specify 0 to
         disable. The default is 3000, or 3 seconds. This must be
         specified after the CreateCar command.<br>
-        Syntax: <font face="Courier New, Courier, mono" size="2">QuickClose
+        Syntax: <font size="2" face="Courier New, Courier, mono">QuickClose
+
 
 
 
@@ -521,7 +531,8 @@
 
 
           <em>doornumber</em> = <em>value</em></font><br>
-        Example: <font face="Courier New, Courier, mono" size="2">QuickClose
+        Example: <font size="2" face="Courier New, Courier, mono">QuickClose
+
 
 
 
@@ -571,7 +582,8 @@
         elevator car activates nudge mode for the related door. Specify
         0 to disable. The default is 30 seconds. This must be specified
         after the CreateCar command.<br>
-        Syntax: <font face="Courier New, Courier, mono" size="2">NudgeTimer
+        Syntax: <font size="2" face="Courier New, Courier, mono">NudgeTimer
+
 
 
 
@@ -616,7 +628,8 @@
 
 
           <em>doornumber</em> = <em>value</em></font><br>
-        Example: <font face="Courier New, Courier, mono" size="2">NudgeTimer
+        Example: <font size="2" face="Courier New, Courier, mono">NudgeTimer
+
 
 
 
@@ -665,7 +678,8 @@
         play when the elevator doors open. Default is <em>elevatoropen.wav</em>.
         Leave the filename field blank for no sound. This must be
         specified after the CreateCar command.<br>
-        Syntax: <font face="Courier New, Courier, mono" size="2">OpenSound
+        Syntax: <font size="2" face="Courier New, Courier, mono">OpenSound
+
 
 
 
@@ -710,7 +724,8 @@
 
 
           <em>doornumber</em> = <em>filename</em></font><br>
-        Example: <font face="Courier New, Courier, mono" size="2">OpenSound
+        Example: <font size="2" face="Courier New, Courier, mono">OpenSound
+
 
 
 
@@ -759,7 +774,8 @@
         to play when the elevator doors close. Default is <em>elevatorclose.wav</em>.
         Leave the filename field blank for no sound. This must be
         specified after the CreateCar command.<br>
-        Syntax: <font face="Courier New, Courier, mono" size="2">CloseSound
+        Syntax: <font size="2" face="Courier New, Courier, mono">CloseSound
+
 
 
 
@@ -804,7 +820,8 @@
 
 
           <em>doornumber</em> = <em>filename</em></font><br>
-        Example: <font face="Courier New, Courier, mono" size="2">CloseSound
+        Example: <font size="2" face="Courier New, Courier, mono">CloseSound
+
 
 
 
@@ -855,7 +872,8 @@
         blank for no sound. By default no sound is played. The first
         command specifies both up and down sounds, while the others are
         for either upwards movement or downwards movement.<br>
-        Example: <font face="Courier New, Courier, mono" size="2">CarStartSound
+        Example: <font size="2" face="Courier New, Courier, mono">CarStartSound
+
 
 
 
@@ -907,7 +925,8 @@
         field blank for no sound. The first command specifies both up
         and down sounds, while the others are for either upwards
         movement or downwards movement.<br>
-        Example: <font face="Courier New, Courier, mono" size="2">CarMoveSound
+        Example: <font size="2" face="Courier New, Courier, mono">CarMoveSound
+
 
 
 
@@ -958,7 +977,8 @@
         played. Leave the filename field blank for no sound. The first
         command specifies both up and down sounds, while the others are
         for either upwards movement or downwards movement.<br>
-        Example: <font face="Courier New, Courier, mono" size="2">CarStopSound
+        Example: <font size="2" face="Courier New, Courier, mono">CarStopSound
+
 
 
 
@@ -1007,7 +1027,8 @@
         to play when the elevator car is idle (generally the fan sound).
         Default is <em>elevidle.wav</em>. Leave the filename field
         blank for no sound. <br>
-        Example: <font face="Courier New, Courier, mono" size="2">CarIdleSound
+        Example: <font size="2" face="Courier New, Courier, mono">CarIdleSound
+
 
 
 
@@ -1057,7 +1078,8 @@
         This must be specified after the CreateCar command. This is used
         for both up and down chimes. Leave the filename field blank for
         no sound. <br>
-        Syntax: <font face="Courier New, Courier, mono" size="2">ChimeSound
+        Syntax: <font size="2" face="Courier New, Courier, mono">ChimeSound
+
 
 
 
@@ -1102,7 +1124,8 @@
 
 
           <em>doornumber</em> = <em>filename</em></font><br>
-        Example: <font face="Courier New, Courier, mono" size="2">ChimeSound
+        Example: <font size="2" face="Courier New, Courier, mono">ChimeSound
+
 
 
 
@@ -1152,7 +1175,8 @@
         direction is up. Default is <em>chime1-up.wav</em>. Leave the
         filename field blank for no sound. This must be specified after
         the CreateCar command.<br>
-        Syntax: <font face="Courier New, Courier, mono" size="2">UpChimeSound
+        Syntax: <font size="2" face="Courier New, Courier, mono">UpChimeSound
+
 
 
 
@@ -1197,7 +1221,8 @@
 
 
           <em>doornumber</em> = <em>filename</em></font><br>
-        Example: <font face="Courier New, Courier, mono" size="2">UpChimeSound
+        Example: <font size="2" face="Courier New, Courier, mono">UpChimeSound
+
 
 
 
@@ -1247,7 +1272,8 @@
         direction is down. Default is <em>chime1-down.wav</em>. Leave
         the filename field blank for no sound. This must be specified
         after the CreateCar command.<br>
-        Syntax: <font face="Courier New, Courier, mono" size="2">DownChimeSound
+        Syntax: <font size="2" face="Courier New, Courier, mono">DownChimeSound
+
 
 
 
@@ -1292,7 +1318,8 @@
 
 
           <em>doornumber</em> = <em>filename</em></font><br>
-        Example: <font face="Courier New, Courier, mono" size="2">DownChimeSound
+        Example: <font size="2" face="Courier New, Courier, mono">DownChimeSound
+
 
 
 
@@ -1342,7 +1369,8 @@
         elevator and the direction is up.. Default is <em>chime1-up.wav</em>.
         Leave the filename field blank for no sound. This must be
         specified after the CreateCar command.<br>
-        Syntax: <font face="Courier New, Courier, mono" size="2">EarlyUpChimeSound
+        Syntax: <font size="2" face="Courier New, Courier, mono">EarlyUpChimeSound
+
 
 
 
@@ -1387,7 +1415,8 @@
 
 
           <em>doornumber</em> = <em>filename</em></font><br>
-        Example: <font face="Courier New, Courier, mono" size="2">EarlyUpChimeSound
+        Example: <font size="2" face="Courier New, Courier, mono">EarlyUpChimeSound
+
 
 
 
@@ -1437,7 +1466,8 @@
         elevator, and the direction is down. Default is <em>chime1-down.wav</em>.
         Leave the filename field blank for no sound. This must be
         specified after the CreateCar command.<br>
-        Syntax: <font face="Courier New, Courier, mono" size="2">EarlyDownChimeSound
+        Syntax: <font size="2" face="Courier New, Courier, mono">EarlyDownChimeSound
+
 
 
 
@@ -1482,7 +1512,8 @@
 
 
           <em>doornumber</em> = <em>filename</em></font><br>
-        Example: <font face="Courier New, Courier, mono" size="2">EarlyDownChimeSound
+        Example: <font size="2" face="Courier New, Courier, mono">EarlyDownChimeSound
+
 
 
 
@@ -1531,7 +1562,8 @@
         to play when the elevator car's alarm button is pressed. Default
         is <em>bell1.wav</em>. Leave the filename field blank for no
         sound. <br>
-        Example: <font face="Courier New, Courier, mono" size="2">AlarmSound
+        Example: <font size="2" face="Courier New, Courier, mono">AlarmSound
+
 
 
 
@@ -1579,7 +1611,8 @@
       <p align="left"><strong>21. AlarmSoundStop</strong> - the sound
         file to play when the elevator car's alarm button is released.
         Leave the filename field blank for no sound. Default is <em>bell1-stop.wav</em>.<br>
-        Example: <font face="Courier New, Courier, mono" size="2">AlarmSoundStop
+        Example: <font size="2" face="Courier New, Courier, mono">AlarmSoundStop
+
 
 
 
@@ -1629,7 +1662,8 @@
         default; if this is set, the beeps will be automatically
         enabled. If an asterisk (*) is specified, it is replaced with
         the current floor number.<br>
-        Example: <font face="Courier New, Courier, mono" size="2">BeepSound
+        Example: <font size="2" face="Courier New, Courier, mono">BeepSound
+
 
 
 
@@ -1680,7 +1714,8 @@
         There is no default; if this is set, the sounds will be
         automatically enabled. If an asterisk (*) is specified, it is
         replaced with the current floor number.<br>
-        Example: <font face="Courier New, Courier, mono" size="2">FloorSound
+        Example: <font size="2" face="Courier New, Courier, mono">FloorSound
+
 
 
 
@@ -1731,7 +1766,8 @@
         is going up. There is no default; if this is set, the sound will
         be automatically enabled. If an asterisk (*) is specified, it is
         replaced with the current floor number.<br>
-        Example: <font face="Courier New, Courier, mono" size="2">UpMessage
+        Example: <font size="2" face="Courier New, Courier, mono">UpMessage
+
 
 
 
@@ -1783,7 +1819,8 @@
         if this is set, the sound will be automatically enabled. If an
         asterisk (*) is specified, it is replaced with the current floor
         number.<br>
-        Example: <font face="Courier New, Courier, mono" size="2">DownMessage
+        Example: <font size="2" face="Courier New, Courier, mono">DownMessage
+
 
 
 
@@ -1834,7 +1871,8 @@
         There is no default; if this is set, the sound will be
         automatically enabled. If an asterisk (*) is specified, it is
         replaced with the current floor number.<br>
-        Example: <font face="Courier New, Courier, mono" size="2">OpenMessage
+        Example: <font size="2" face="Courier New, Courier, mono">OpenMessage
+
 
 
 
@@ -1885,7 +1923,8 @@
         There is no default; if this is set, the sound will be
         automatically enabled. If an asterisk (*) is specified, it is
         replaced with the current floor number.<br>
-        Example: <font face="Courier New, Courier, mono" size="2">CloseMessage
+        Example: <font size="2" face="Courier New, Courier, mono">CloseMessage
+
 
 
 
@@ -1935,7 +1974,8 @@
         true, the Up/Down messages will be played when the elevator
         starts moving, otherwise it'll play after the doors open.&nbsp;
         The default is false.<br>
-        Example: <font face="Courier New, Courier, mono" size="2">MessageOnMove
+        Example: <font size="2" face="Courier New, Courier, mono">MessageOnMove
+
 
 
 
@@ -1968,24 +2008,25 @@
         doors start opening, otherwise it'll play after the doors finish
         opening.&nbsp; The default is false.<br>
         Example: <font size="2"><font face="Courier New, Courier, mono">MessageOnStart</font></font><font
-          face="Courier New, Courier, mono" size="2"> = true</font></p>
+          size="2" face="Courier New, Courier, mono"> = true</font></p>
       <p align="left"><strong>30. MessageOnClose</strong> - if set to
         true, the Up/Down messages will be played before the elevator
         moves once the doors start closing, otherwise it'll play after
         the doors finish opening.&nbsp; The default is false.<br>
         Example: <font size="2"><font face="Courier New, Courier, mono">MessageOnClose</font></font><font
-          face="Courier New, Courier, mono" size="2"> = true</font></p>
+          size="2" face="Courier New, Courier, mono"> = true</font></p>
       <p align="left"><strong>31. Music</strong> - the sound file to
         play for the elevator car music in both movement directions -
         the sound is automatically looped. There is no default; if this
         is set, the sound will be automatically enabled. <br>
-        Example: <font face="Courier New, Courier, mono" size="2">Music
+        Example: <font size="2" face="Courier New, Courier, mono">Music
           = musicfile.wav</font></p>
       <p align="left"><strong>32. MusicUp</strong> - the sound file to
         play for the elevator car music in the up direction - the sound
         is automatically looped. There is no default; if this is set,
         the sound will be automatically enabled. <br>
-        Example: <font face="Courier New, Courier, mono" size="2">MusicUp
+        Example: <font size="2" face="Courier New, Courier, mono">MusicUp
+
 
 
 
@@ -2017,7 +2058,8 @@
         play for the elevator car music in the down direction - the
         sound is automatically looped. There is no default; if this is
         set, the sound will be automatically enabled. <br>
-        Example: <font face="Courier New, Courier, mono" size="2">MusicDown
+        Example: <font size="2" face="Courier New, Courier, mono">MusicDown
+
 
 
 
@@ -2050,7 +2092,8 @@
         to play while in nudge mode. Default is <em>buzz.wav</em>.
         Leave the filename field blank for no sound. This must be
         specified after the CreateCar command.<br>
-        Syntax: <font face="Courier New, Courier, mono" size="2">NudgeSound
+        Syntax: <font size="2" face="Courier New, Courier, mono">NudgeSound
+
 
 
 
@@ -2095,7 +2138,8 @@
 
 
           <em>doornumber</em> = <em>filename</em></font><br>
-        Example: <font face="Courier New, Courier, mono" size="2">NudgeSound
+        Example: <font size="2" face="Courier New, Courier, mono">NudgeSound
+
 
 
 
@@ -2143,13 +2187,14 @@
       <p align="left"><strong>35. Doors</strong> - sets the number of
         doors the elevator car will have. The default is 1. Set to 0 in
         order to have a doorless elevator car.<br>
-        Example: <font face="Courier New, Courier, mono" size="2">Doors
+        Example: <font size="2" face="Courier New, Courier, mono">Doors
           = 2</font></p>
       <p align="left"><strong>36. MusicPosition</strong> - sets the
         position of the music sound emitter relative of the elevator
         car's position. If this command is not specified, it'll be
         placed in the center of the elevator car on the ceiling.<br>
-        Syntax: <font face="Courier New, Courier, mono" size="2">MusicPosition
+        Syntax: <font size="2" face="Courier New, Courier, mono">MusicPosition
+
 
 
 
@@ -2194,11 +2239,12 @@
 
 
           = <em>x, y, z</em><br>
-        </font>Example: <font face="Courier New, Courier, mono"
-          size="2">MusicPosition = 0, 8, 0</font></p>
+        </font>Example: <font size="2" face="Courier New, Courier,
+          mono">MusicPosition = 0, 8, 0</font></p>
       <p align="left"><strong>37. MusicOn</strong> - Enables or disables
         music on start. Default is true.<br>
-        Syntax: <font face="Courier New, Courier, mono" size="2">MusicOn
+        Syntax: <font size="2" face="Courier New, Courier, mono">MusicOn
+
 
 
 
@@ -2246,7 +2292,8 @@
       <p align="left"><strong>38. MusicOnMove</strong> - Determines if
         music should only be played while the elevator is moving or not.
         Default is false.<br>
-        Syntax: <font face="Courier New, Courier, mono" size="2">MusicOnMove
+        Syntax: <font size="2" face="Courier New, Courier, mono">MusicOnMove
+
 
 
 
@@ -2294,7 +2341,8 @@
       <p align="left"><strong>39. DisplayFloors</strong> - sets the
         floors that will be displayed by the elevator car's indicators.
         This command uses the same syntax as the ServicedFloors command.<br>
-        Syntax: <font face="Courier New, Courier, mono" size="2">DisplayFloors
+        Syntax: <font size="2" face="Courier New, Courier, mono">DisplayFloors
+
 
 
 
@@ -2383,10 +2431,12 @@
 
 
 
+
           AutoEnable</strong> - Determines if interior objects should
         automatically be enabled or disabled when the user enters/exits
         the elevator car (set to false for glass elevators).<br>
-        Syntax: <font face="Courier New, Courier, mono" size="2">AutoEnable
+        Syntax: <font size="2" face="Courier New, Courier, mono">AutoEnable
+
 
 
 
@@ -2439,7 +2489,8 @@
         for a relay switch sound effect. Only specify the first
         parameter for no sound. This must be specified after the
         CreateCar command.<br>
-        Syntax: <font face="Courier New, Courier, mono" size="2">DoorSensor
+        Syntax: <font size="2" face="Courier New, Courier, mono">DoorSensor
+
 
 
 
@@ -2484,7 +2535,8 @@
 
 
           <em>doornumber</em> = <em>enable[, filename]</em></font><br>
-        Example: <font face="Courier New, Courier, mono" size="2">DoorSensor
+        Example: <font size="2" face="Courier New, Courier, mono">DoorSensor
+
 
 
 
@@ -2542,7 +2594,8 @@
         sound file to play for the elevator car when an emergency stop
         is initiated. Leave the filename field blank to use the normal
         car stop sound, if specified. By default no sound is played.<br>
-        Example: <font face="Courier New, Courier, mono" size="2">CarEmergencyStopSound
+        Example: <font size="2" face="Courier New, Courier, mono">CarEmergencyStopSound
+
 
 
 
@@ -2590,7 +2643,8 @@
       <p align="left"><strong>43. IndependentService</strong> - enables
         independent service mode for the elevator, and makes this car
         the active car for the mode.<br>
-        Example: <font face="Courier New, Courier, mono" size="2">IndependentService
+        Example: <font size="2" face="Courier New, Courier, mono">IndependentService
+
 
 
 
@@ -2639,7 +2693,8 @@
         service phase 2 mode that the elevator will start with, and
         makes this car the active car for the mode. Default is 0. Values
         are 0 for off, 1 for on, 2 for hold.<br>
-        Syntax: <font face="Courier New, Courier, mono" size="2">FireService2
+        Syntax: <font size="2" face="Courier New, Courier, mono">FireService2
+
 
 
 
@@ -2690,12 +2745,12 @@
         seconds<strong>.</strong><strong><br>
         </strong>Example: <font size="2"><font face="Courier New,
             Courier, mono">TimerDelay = 1</font></font><strong><font
-            face="Courier New, Courier, mono" size="2"><br>
+            size="2" face="Courier New, Courier, mono"><br>
           </font></strong></p>
       <p align="left"><strong>46. InvalidInput</strong> - specifies
         keypad input values that should be treated as invalid.<br>
         Example: <font size="2"><font face="Courier New, Courier, mono">InvalidInput</font></font><font
-          face="Courier New, Courier, mono" size="2"> = 13, 23</font></p>
+          size="2" face="Courier New, Courier, mono"> = 13, 23</font></p>
       <br>
       <p align="left"><strong>Commands:</strong></p>
       <p align="left"><strong>1. CreateCar</strong> - creates an
@@ -2703,7 +2758,8 @@
         for creating additional cars, since the elevator's
         CreateElevator command creates Car 1 automatically. The <em>Floor</em>
         value must be greater than the previous car's floor.<br>
-        Syntax: <font face="Courier New, Courier, mono" size="2">CreateCar
+        Syntax: <font size="2" face="Courier New, Courier, mono">CreateCar
+
 
 
 
@@ -2748,11 +2804,12 @@
 
 
           <em>floor<br>
-          </em></font>Example:<font face="Courier New, Courier, mono"
-          size="2"><em></em> CreateCar 1</font></p>
+          </em></font>Example:<font size="2" face="Courier New, Courier,
+          mono"><em></em> CreateCar 1</font></p>
       <p align="left"><strong>2. AddFloor</strong> - adds a textured
         floor with the specified dimensions for the car<br>
-        Syntax: <font face="Courier New, Courier, mono" size="2">AddFloor
+        Syntax: <font size="2" face="Courier New, Courier, mono">AddFloor
+
 
 
 
@@ -2799,7 +2856,8 @@
           <em>name, texturename</em>, <em>thickness, x1</em>, <em>z1</em>,
           <em>x2</em>, <em>z2</em>, <em>voffset1</em>, <em>voffset2,
             reverse_axis, texture_direction, tw</em>, <em>th</em></font><br>
-        Example: <font face="Courier New, Courier, mono" size="2">AddFloor
+        Example: <font size="2" face="Courier New, Courier, mono">AddFloor
+
 
 
 
@@ -2846,7 +2904,8 @@
           Floor1, Wood2, 0.5, -3.5, -3, 3.5, 3, 0, 0, false, false, 0, 0</font></p>
       <p align="left"><strong>3. AddWall</strong> - adds a textured wall
         for the car<br>
-        Syntax: <font face="Courier New, Courier, mono" size="2">AddWall
+        Syntax: <font size="2" face="Courier New, Courier, mono">AddWall
+
 
 
 
@@ -2893,7 +2952,8 @@
           <em>name, texturename</em>, <em>thickness, x1</em>, <em>z1</em>,
           <em>x2</em>, z2, <em>height1</em>, <em>height2</em>, <em>voffset1</em>,
           <em>voffset2, </em><em>tw</em>, <em>th</em></font><br>
-        Example: <font face="Courier New, Courier, mono" size="2">AddWall
+        Example: <font size="2" face="Courier New, Courier, mono">AddWall
+
 
 
 
@@ -2942,7 +3002,8 @@
         AddWall commands.</p>
       <p align="left"><strong>4. AddDoors</strong> - creates elevator
         car doors<br>
-        Syntax: <font face="Courier New, Courier, mono" size="2">AddDoors
+        Syntax: <font size="2" face="Courier New, Courier, mono">AddDoors
+
 
 
 
@@ -3001,7 +3062,8 @@
         1 here.</p>
       <p align="left"><strong>5. AddShaftDoors</strong> - creates
         elevator shaft doors<br>
-        Syntax: <font face="Courier New, Courier, mono" size="2">AddShaftDoors
+        Syntax: <font size="2" face="Courier New, Courier, mono">AddShaftDoors
+
 
 
 
@@ -3070,7 +3132,8 @@
       </p>
       <p align="left"><strong>6. CreatePanel</strong> - creates a button
         panel<br>
-        Syntax: <font face="Courier New, Courier, mono" size="2">CreatePanel
+        Syntax: <font size="2" face="Courier New, Courier, mono">CreatePanel
+
 
 
 
@@ -3117,9 +3180,9 @@
           <em>texturename</em>, <em>rows, columns, direction, CenterX,
             CenterZ, buttonwidth, buttonheight, spacingX, spacingY,
             voffset, tw, th<br>
-          </em></font> Example<font face="Courier New, Courier, mono"
-          size="2"><em>: </em><font face="Courier New, Courier, mono"
-            size="2">CreatePanel Wall1, 5, 5, right, -3, -3, 0.15, 0.15,
+          </em></font> Example<font size="2" face="Courier New, Courier,
+          mono"><em>: </em><font size="2" face="Courier New, Courier,
+            mono">CreatePanel Wall1, 5, 5, right, -3, -3, 0.15, 0.15,
             0.3, 0.45, 4.5, 0, 0</font></font></p>
       <p align="left">The CreatePanel command creates a button panel at
         a position relative to the elevator car's center position
@@ -3139,7 +3202,8 @@
         not specified, the back portion of the panel will not be shown.</p>
       <p align="left"><strong>7. AddButton</strong> - creates a standard
         button on the panel<br>
-        Syntax: <font face="Courier New, Courier, mono" size="2">AddButton
+        Syntax: <font size="2" face="Courier New, Courier, mono">AddButton
+
 
 
 
@@ -3185,7 +3249,8 @@
 
           <em>panel_number, sound, texture_unlit</em>, <em>texture_lit,
             row, column, floor/type, width, height[, hoffset, voffset]</em></font><br>
-        Example 1: <font face="Courier New, Courier, mono" size="2">AddButton
+        Example 1: <font size="2" face="Courier New, Courier, mono">AddButton
+
 
 
 
@@ -3230,7 +3295,8 @@
 
 
           1, switch.wav, Button5, ButtonLit5, 7, 3, 4, 1, 1</font><br>
-        Example 2: <font face="Courier New, Courier, mono" size="2">AddButton
+        Example 2: <font size="2" face="Courier New, Courier, mono">AddButton
+
 
 
 
@@ -3298,7 +3364,8 @@
         played.</p>
       <p align="left"><strong>8. AddControl</strong> - advanced command
         for creating buttons, switches and knobs on the panel<br>
-        Syntax: <font face="Courier New, Courier, mono" size="2">AddControl
+        Syntax: <font size="2" face="Courier New, Courier, mono">AddControl
+
 
 
 
@@ -3345,10 +3412,11 @@
           <em>panel_number, sound, row, column, width, height, hoffset,
             voffset, selection_position, command_name(s),
             texture_name(s)<br>
-          </em></font>Example 1: <font face="Courier New, Courier,
-          mono" size="2">AddControl 1, switch.wav, 7, 3, 1, 1, 0, 0, 1,
+          </em></font>Example 1: <font size="2" face="Courier New,
+          Courier, mono">AddControl 1, switch.wav, 7, 3, 1, 1, 0, 0, 1,
           open, ButtonOpen</font><br>
-        Example 2: <font face="Courier New, Courier, mono" size="2">AddControl
+        Example 2: <font size="2" face="Courier New, Courier, mono">AddControl
+
 
 
 
@@ -3394,7 +3462,8 @@
 
           1, switch.wav, 7, 3, 1, 1, 0, 0, 1, FanOff, FanOn,
           SwitchFanOff, SwitchFanOn</font><br>
-        Example 3: <font face="Courier New, Courier, mono" size="2">AddControl
+        Example 3: <font size="2" face="Courier New, Courier, mono">AddControl
+
 
 
 
@@ -3440,7 +3509,8 @@
 
           1, switch.wav, 7, 3, 1, 1, 0, 0, 1, Off, 4, Button5,
           ButtonLit5</font><br>
-        Example 4: <font face="Courier New, Courier, mono" size="2">AddControl
+        Example 4: <font size="2" face="Courier New, Courier, mono">AddControl
+
 
 
 
@@ -3595,6 +3665,8 @@
         <em>InputMinus</em> (minus on keypad)<br>
         <em>InputStar</em> (star on keypad)<br>
         <em>InputBackspace</em> (extra feature with character "&lt;")<br>
+        <i>InputEnter</i> (enter key on keypad)<br>
+        <i>InputCancel</i> (cancel key on keypad)<br>
       </p>
       <p align="left">Some commands in the above list have an optional <em>Door</em>
         parameter. For example, <em>Open 2</em> will open door 2, while
@@ -3611,7 +3683,8 @@
         <br>
         <strong>9. AddFloorIndicator</strong> - creates a floor
         indicator<br>
-        Syntax: <font face="Courier New, Courier, mono" size="2">AddFloorIndicator<em>&nbsp;texture_prefix,
+        Syntax: <font size="2" face="Courier New, Courier, mono">AddFloorIndicator<em>&nbsp;texture_prefix,
+
 
 
 
@@ -3670,7 +3743,8 @@
         is blank.</p>
       <p align="left"><strong>10. AddDirectionalIndicator</strong> -
         creates an internal directional indicator/lantern<br>
-        Syntax: <font face="Courier New, Courier, mono" size="2">AddDirectionalIndicator<em>&nbsp;ActiveDirection,
+        Syntax: <font size="2" face="Courier New, Courier, mono">AddDirectionalIndicator<em>&nbsp;ActiveDirection,
+
 
 
 
@@ -3758,10 +3832,11 @@
 
 
 
+
             DownTexture, DownTextureLit, CenterX, CenterZ, voffset,
             direction, BackWidth, BackHeight, ShowBack, tw, th<br>
-          </em></font>Example:&nbsp;<font face="Courier New, Courier,
-          mono" size="2"><em>AddDirectionalIndicator false, false, true,
+          </em></font>Example:&nbsp;<font size="2" face="Courier New,
+          Courier, mono"><em>AddDirectionalIndicator false, false, true,
             Metal, UpLight, UpLightOn, DownLight, DownLightOn, -3,
             -4.162, 6, front, 0.5, 1, true, 0, 0</em></font></p>
       <p align="left">This command will create a directional indicator
@@ -3804,7 +3879,8 @@
           AddDirectionalIndicators</strong> - creates the elevator's
         exterior directional indicator/lanterns (similar to the
         CreateCallButtons command) <br>
-        Syntax: <font face="Courier New, Courier, mono" size="2">AddDirectionalIndicators<em>&nbsp;Relative,
+        Syntax: <font size="2" face="Courier New, Courier, mono">AddDirectionalIndicators<em>&nbsp;Relative,
+
 
 
 
@@ -3852,10 +3928,10 @@
           <em>UpTextureLit, DownTexture, DownTextureLit, CenterX,
             CenterZ, voffset, direction, BackWidth, BackHeight,
             ShowBack, tw, th<br>
-          </em></font>Example:<font face="Courier New, Courier, mono"
-          size="2"><em>&nbsp;AddDirectionalIndicators true, false,
-            false, true, Metal, UpLight, UpLightOn, DownLight,
-            DownLightOn, -3, -4.162, 6, front, 0.5, 1, true, 0, 0</em></font></p>
+          </em></font>Example:<font size="2" face="Courier New, Courier,
+          mono"><em>&nbsp;AddDirectionalIndicators true, false, false,
+            true, Metal, UpLight, UpLightOn, DownLight, DownLightOn, -3,
+            -4.162, 6, front, 0.5, 1, true, 0, 0</em></font></p>
       <p align="left">This command will create directional indicators on
         all floors the elevator car serves. It'll also automatically
         create the up and down lights depending on the floor. To create
@@ -3901,7 +3977,7 @@
         sets positioning and thickness of shaft doors which will be
         created with the <em>older AddShaftDoor</em> command. Please
         use the newer AddShaftDoor syntax instead.<br>
-        Syntax: <font face="Courier New, Courier, mono" size="2">SetShaftDoors<em>&nbsp;number</em>,
+        Syntax: <font size="2" face="Courier New, Courier, mono">SetShaftDoors<em>&nbsp;number</em>,
           <em>thickness, CenterX, CenterZ</em></font> </p>
       <p align="left">This command must be used before calling <em>the
           older AddShaftDoor</em> command. This specifies the thickness
@@ -3910,7 +3986,8 @@
         one door).</p>
       <p align="left"><strong>13. AddFloorSigns</strong> - creates floor
         signs on all floors serviced by the elevator car<br>
-        Syntax: <font face="Courier New, Courier, mono" size="2">AddFloorSigns<em>&nbsp;door_number,
+        Syntax: <font size="2" face="Courier New, Courier, mono">AddFloorSigns<em>&nbsp;door_number,
+
 
 
 
@@ -3970,7 +4047,8 @@
         to 0.</p>
       <p align="left"><strong>14. AddSound</strong> - creates a
         user-defined sound at the specified position<br>
-        Syntax: <font face="Courier New, Courier, mono" size="2">AddSound
+        Syntax: <font size="2" face="Courier New, Courier, mono">AddSound
+
 
 
 
@@ -4018,7 +4096,8 @@
             min_distance, max_distance, doppler_level,
             cone_inside_angle, cone_outside_angle, cone_outside_volume,
             direction_x, direction_y, direction_z]</em></font><br>
-        Example 1: <font face="Courier New, Courier, mono" size="2">AddSound
+        Example 1: <font size="2" face="Courier New, Courier, mono">AddSound
+
 
 
 
@@ -4063,9 +4142,9 @@
 
 
           MySound, sound.wav, 10, 100, 5, true<br>
-        </font>Example 2: <font face="Courier New, Courier, mono"
-          size="2">AddSound MySound, ambient.ogg, 10, 100, 5, true, 1,
-          100, 1, -1, 0, 360, 360, 1, 0, 0, 0</font></p>
+        </font>Example 2: <font size="2" face="Courier New, Courier,
+          mono">AddSound MySound, ambient.ogg, 10, 100, 5, true, 1, 100,
+          1, -1, 0, 360, 360, 1, 0, 0, 0</font></p>
       <p align="left">For information on the parameters, see the
         AddSound command in the Global Commands section. The only
         difference here is that the X, Y and Z position values are
@@ -4074,7 +4153,8 @@
       <p align="left"><strong>15. AddDoorComponent</strong> - creates a
         single elevator car door component, used for creating custom
         door styles<br>
-        Syntax: <font face="Courier New, Courier, mono" size="2">AddDoorComponent
+        Syntax: <font size="2" face="Courier New, Courier, mono">AddDoorComponent
+
 
 
 
@@ -4121,9 +4201,9 @@
           <em>number, name, texture, sidetexture, thickness, direction,
             openspeed, closespeed, x1, z1, x2, z2, height, voffset, tw,
             th, side_tw, side_th</em></font></p>
-      <p align="left">Example: <font face="Courier New, Courier, mono"
-          size="2">AddDoorComponent 1, Left, ElevDoors, Black, 0.2,
-          left, 0.3, 0.3, -1.75, 0, 0, 0, 8, 0, 0, 0, 0, 0</font></p>
+      <p align="left">Example: <font size="2" face="Courier New,
+          Courier, mono">AddDoorComponent 1, Left, ElevDoors, Black,
+          0.2, left, 0.3, 0.3, -1.75, 0, 0, 0, 8, 0, 0, 0, 0, 0</font></p>
       <p align="left">The AddDoorComponent command allows you to create
         your own custom door styles. It creates a single door component
         within a set - for example, the standard center-open doors have
@@ -4147,7 +4227,8 @@
       <p align="left"><strong>16. AddShaftDoorsComponent</strong> -
         creates a single shaft door component for all serviced floors -
         used for creating custom door styles<br>
-        Syntax: <font face="Courier New, Courier, mono" size="2">AddShaftDoorsComponent
+        Syntax: <font size="2" face="Courier New, Courier, mono">AddShaftDoorsComponent
+
 
 
 
@@ -4203,7 +4284,8 @@
       <p align="left"><strong>17. FinishDoors</strong> - finishes
         elevator car door creation - use this after all related
         AddDoorComponent commands are used.<br>
-        Syntax: <font face="Courier New, Courier, mono" size="2">FinishDoors
+        Syntax: <font size="2" face="Courier New, Courier, mono">FinishDoors
+
 
 
 
@@ -4261,7 +4343,8 @@
         related AddShaftDoorsComponent commands are used, or specify it
         without the AddShaftDoorComponent commands if you're creating a
         manual shaft door.<br>
-        Syntax: <font face="Courier New, Courier, mono" size="2">FinishShaftDoors
+        Syntax: <font size="2" face="Courier New, Courier, mono">FinishShaftDoors
+
 
 
 
@@ -4312,7 +4395,8 @@
       <p align="left"><strong>19. AddDoor</strong> - adds a textured
         door in the specified location, which moves with the elevator
         car<br>
-        Syntax: <font face="Courier New, Courier, mono" size="2">AddDoor
+        Syntax: <font size="2" face="Courier New, Courier, mono">AddDoor
+
 
 
 
@@ -4372,8 +4456,9 @@
         it's name can be used as the <em>destobject</em> parameter in
         other commands (in the related Elevator or Car section), and a
         collider will be automatically created.<br>
-        Syntax: <font face="Courier New, Courier, mono" size="2">AddModel<em>&nbsp;name,
+        Syntax: <font size="2" face="Courier New, Courier, mono">AddModel<em>&nbsp;name,
 filename,
+
 
 
 
@@ -4420,10 +4505,11 @@ filename,
             center, CenterX, CenterY, CenterZ, RotationX, RotationY,
             RotationZ, MaxRenderDistance, ScaleMultiplier,
             EnablePhysics, Restitution, Friction, Mass</em><em><br>
-          </em></font>Example 1:<font face="Courier New, Courier, mono"
-          size="2">&nbsp;AddModel MyModel, cube.mesh, true, 0, 0, 0, 0,
-          0, 0, 0, 1, false, 0, 0, 0</font><br>
-        Example 2:<font face="Courier New, Courier, mono" size="2">&nbsp;AddModel
+          </em></font>Example 1:<font size="2" face="Courier New,
+          Courier, mono">&nbsp;AddModel MyModel, cube.mesh, true, 0, 0,
+          0, 0, 0, 0, 0, 1, false, 0, 0, 0</font><br>
+        Example 2:<font size="2" face="Courier New, Courier, mono">&nbsp;AddModel
+
 
 
 
@@ -4469,7 +4555,8 @@ filename,
 
           MyModel, cube.mesh, true, 0, 0, 0, 0, 0, 0, 0, 1, true, 0.1,
           0.5, 0.1</font><br>
-        Example 3:<font face="Courier New, Courier, mono" size="2">&nbsp;AddModel
+        Example 3:<font size="2" face="Courier New, Courier, mono">&nbsp;AddModel
+
 
 
 
@@ -4573,9 +4660,11 @@ filename,
 
 
 
+
           AddActionControl</strong> - creates a custom control that uses
         a specific action defined by AddAction.<br>
-        Syntax: <font face="Courier New, Courier, mono" size="2">AddActionControl
+        Syntax: <font size="2" face="Courier New, Courier, mono">AddActionControl
+
 
 
 
@@ -4621,9 +4710,10 @@ filename,
 
           <em>name, sound, direction, centerx, centerz, width, height,
             voffset, selection_position, action_name(s), texture_name(s)<br>
-          </em></font>Example: <font face="Courier New, Courier, mono"
-          size="2">AddActionControl MyControl, switch.wav, front, -10,
-          10, 1.5, 1.5, 4, 1, UndoMyAction, MyAction, Touch, TouchLit<br>
+          </em></font>Example: <font size="2" face="Courier New,
+          Courier, mono">AddActionControl MyControl, switch.wav, front,
+          -10, 10, 1.5, 1.5, 4, 1, UndoMyAction, MyAction, Touch,
+          TouchLit<br>
         </font><br>
         AddActionControl command creates an advanced control similar to
         elevator button panel controls, but assigned to an action
@@ -4683,10 +4773,12 @@ filename,
 
 
 
+
           AddTrigger</strong> - creates a trigger that is used to signal
         an action when the user's camera enters or leaves the defined
         area.<br>
-        Syntax:<font face="Courier New, Courier, mono" size="2">&nbsp;AddTrigger
+        Syntax:<font size="2" face="Courier New, Courier, mono">&nbsp;AddTrigger
+
 
 
 
@@ -4732,8 +4824,8 @@ filename,
 
           <em>name, sound, start_x, start_y, start_z, end_x, end_y,
             end_z, action_names(s)<br>
-          </em></font>Example:<font face="Courier New, Courier, mono"
-          size="2">&nbsp;AddTrigger MyTrigger, switch.wav, -30, 0, -30,
+          </em></font>Example:<font size="2" face="Courier New, Courier,
+          mono">&nbsp;AddTrigger MyTrigger, switch.wav, -30, 0, -30,
           -20, 10, -20, UndoMyAction, MyAction</font><br>
         <br>
         AddTrigger creates a trigger similar to action controls
@@ -4767,10 +4859,12 @@ filename,
 
 
 
+
           AddKeypadIndicator</strong> - creates a keypad indicator for
         this car.<br>
         Syntax: <font size="2"><font face="Courier New, Courier, mono">AddKeypadIndicator</font></font><font
-          face="Courier New, Courier, mono" size="2"> <em>sound</em>, <em>texture_prefix,
+          size="2" face="Courier New, Courier, mono"> <em>sound</em>, <em>texture_prefix,
+
 
 
 
@@ -4811,12 +4905,12 @@ filename,
 
             blank_texture, direction, CenterX, CenterZ, width, height,
             voffset, timer_duration<br>
-          </em></font> Example<font face="Courier New, Courier, mono"
-          size="2"><em>: <font face="Courier New, Courier, mono">Add</font></em></font><font
-          face="Courier New, Courier, mono" size="2"><em><font
+          </em></font> Example<font size="2" face="Courier New, Courier,
+          mono"><em>: <font face="Courier New, Courier, mono">Add</font></em></font><font
+          size="2" face="Courier New, Courier, mono"><em><font
               face="Courier New, Courier, mono"><font size="2"><font
                   face="Courier New, Courier, mono">Keypad</font></font>Indicator</font></em><font
-            face="Courier New, Courier, mono" size="2"> mechchime9.wav,
+            size="2" face="Courier New, Courier, mono"> mechchime9.wav,
             Button, Black, right, 0, 0, 0.5, 0.5, 1, 5</font></font> </p>
       <p align="left"> </p>
       <p align="left">The <i>AddKeypadIndicator</i> command creates a
@@ -4844,7 +4938,8 @@ filename,
         </em></p>
       <p align="left"><strong>24. AddElevatorIDSigns</strong> - creates
         elevator ID signs on all floors serviced by the elevator car<br>
-        Syntax: <font face="Courier New, Courier, mono" size="2">AddElevatorIDSigns<em>&nbsp;door_number,
+        Syntax: <font size="2" face="Courier New, Courier, mono">AddElevatorIDSigns<em>&nbsp;door_number,
+
 
 
 
@@ -4903,7 +4998,8 @@ filename,
         can be bypassed by setting <em>door_number</em> to 0.</p>
       <p align="left"><strong>25. AddReverb</strong> - creates a reverb
         object at the specified position<br>
-        Syntax: <font face="Courier New, Courier, mono" size="2">AddReverb
+        Syntax: <font size="2" face="Courier New, Courier, mono">AddReverb
+
 
 
 
@@ -4948,7 +5044,8 @@ filename,
 
 
           <em>name, type, x, y, z, min_distance, max_distance</em></font><br>
-        Example: <font face="Courier New, Courier, mono" size="2">AddReverb
+        Example: <font size="2" face="Courier New, Courier, mono">AddReverb
+
 
 
 

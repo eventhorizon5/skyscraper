@@ -195,6 +195,8 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 	//InputMinus
 	//InputStar
 	//InputBackspace
+	//InputEnter
+	//InputCancel
 
 	//CallStation actions:
 	//Off
@@ -216,6 +218,8 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 	//InputStar
 	//InputBackspace
 	//InputA - Z
+	//InputEnter
+	//InputCancel
 	//Up
 	//Down
 	//PressUp
@@ -704,6 +708,10 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 			return car->Input("*");
 		if (command_name == "inputbackspace")
 			return car->Input("<");
+		if (command_name == "inputenter")
+			return car->KeypadEnter();
+		if (command_name == "inputcancel")
+			return car->KeypadCancel();
 		if (command_name == "inputa")
 			return car->Input("A");
 		if (command_name == "inputb")
@@ -805,6 +813,10 @@ bool Action::Run(Object *caller, Object *parent, bool &hold)
 			return callstation->Input("*");
 		if (command_name == "inputbackspace")
 			return callstation->Input("<");
+		if (command_name == "inputenter")
+			return callstation->KeypadEnter();
+		if (command_name == "inputcancel")
+			return callstation->KeypadCancel();
 		if (command_name == "up")
 			return callstation->Call(true);
 		if (command_name == "down")

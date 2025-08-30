@@ -75,6 +75,8 @@ public:
 	bool Press(bool up);
 	bool CreateCallButtons(const std::string &sound_file_up, const std::string &sound_file_down, std::string BackTexture, const std::string &UpButtonTexture, const std::string &UpButtonTexture_Lit, const std::string &DownButtonTexture, const std::string &DownButtonTexture_Lit, const std::string &direction, Real BackWidth, Real BackHeight, bool ShowBack, Real tw, Real th);
 	int GetElevatorArrivedStandard(int floor, bool direction);
+	bool KeypadEnter();
+	bool KeypadCancel();
 
 private:
 	ButtonPanel* panel; //button panel object

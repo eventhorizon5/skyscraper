@@ -3701,6 +3701,27 @@ void ElevatorCar::KeypadError(bool type)
 	UpdateKeypadIndicator(message);
 }
 
+bool ElevatorCar::KeypadEnter()
+{
+	//keypad enter key
+
+	keypad_timer->Stop();
+	ProcessCache();
+	return true;
+}
+
+bool ElevatorCar::KeypadCancel()
+{
+	//keypad cancel key
+
+	keypad_timer->Stop();
+	InputCache = "";
+
+	//update indicator display
+	UpdateKeypadIndicator(InputCache, false);
+	return true;
+}
+
 bool ElevatorCar::AddElevatorIDSigns(int door_number, bool relative, const std::string& texture_prefix, const std::string& direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset)
 {
 	//adds elevator ID signs at the specified position and direction for each serviced floor,

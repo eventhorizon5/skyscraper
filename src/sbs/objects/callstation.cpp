@@ -376,6 +376,24 @@ void CallStation::Error(bool type)
 	UpdateIndicator(message);
 }
 
+bool CallStation::KeypadEnter()
+{
+	//keypad enter key
+
+	timer->Stop();
+	ProcessCache();
+	return true;
+}
+
+bool CallStation::KeypadCancel()
+{
+	//keypad cancel key
+
+	timer->Stop();
+	InputCache = "";
+	return true;
+}
+
 int CallStation::GetRecallFloor()
 {
 	//get recall floor of elevator group from controller
