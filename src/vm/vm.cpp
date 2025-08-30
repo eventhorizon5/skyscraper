@@ -692,7 +692,7 @@ ScriptProcessor* VM::GetActiveScriptProcessor()
 	return 0;
 }
 
-int VM::Run(std::vector<EngineContext*> &newengines)
+VMStatus VM::Run(std::vector<EngineContext*> &newengines)
 {
 	//run system
 
@@ -719,7 +719,7 @@ int VM::Run(std::vector<EngineContext*> &newengines)
 	time_stat = hal->GetCurrentTime() - last;
 
 	if (newengines.size() > 0)
-		return 3;
+		return VMSTATUS_LOAD;
 
 	//delete an engine if requested
 	HandleEngineShutdown();
@@ -729,29 +729,29 @@ int VM::Run(std::vector<EngineContext*> &newengines)
 	{
 		Shutdown = false;
 		Report("Unloading due to shutdown request");
-		return 2;
+		return VMSTATUS_UNLOAD;
 	}
 
 	//exit if an engine failed to run, if it's either the only engine or if ConcurrentLoads is on
 	if (result == false && (ConcurrentLoads == false || GetEngineCount() == 1))
-		return 0;
+		return VMSTATUS_ERROR;
 
 	//don't continue if no available active engine
 	if (!GetActiveEngine())
-		return 0;
+		return VMSTATUS_ERROR;
 
 	//make sure active engine is the one the camera is active in
 	CheckCamera();
 
 	//exit if any engine is loading, unless RenderOnStartup is true
 	if (IsEngineLoading() == true && RenderOnStartup == false)
-		return 1;
+		return VMSTATUS_SUCCESS;
 
 	//if in CheckScript mode, exit
 	if (CheckScript == true)
 	{
 		Report("Unloading to menu...");
-		return 2;
+		return VMSTATUS_UNLOAD;
 	}
 
 	//update running state;
@@ -766,7 +766,7 @@ int VM::Run(std::vector<EngineContext*> &newengines)
 	//render graphics
 	result = hal->Render();
 	if (!result)
-		return -1;
+		return VMSTATUS_FATAL;
 
 	//handle a building reload
 	HandleReload();
@@ -778,7 +778,7 @@ int VM::Run(std::vector<EngineContext*> &newengines)
 	if (first_run == true)
 		first_run = false;
 
-	return 1;
+	return VMSTATUS_SUCCESS;
 }
 
 bool VM::Load(bool system, bool clear, const std::string &filename, EngineContext *parent, const Vector3 &position, const Vector3 &rotation, const Vector3 &area_min, const Vector3 &area_max)

@@ -1263,7 +1263,8 @@ void MeshObject::CreateBoundingBox()
 				{
 					for (size_t l = 0; l < poly->geometry[k].size(); l++)
 					{
-						Bounds->merge(sbs->GetUtility()->ToLocal(poly->geometry[k][l].vertex));
+						Vector3 vec = sbs->GetUtility()->ToLocal(poly->geometry[k][l].vertex);
+						Bounds->merge(vec);
 						merge = true;
 					}
 				}

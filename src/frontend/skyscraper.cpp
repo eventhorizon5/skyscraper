@@ -456,10 +456,10 @@ bool Skyscraper::Loop()
 
 	//run sim engine instances
 	std::vector<EngineContext*> newengines;
-	int status = vm->Run(newengines);
+	VMStatus status = vm->Run(newengines);
 
 	//start a new engine if needed
-	if (status == 3)
+	if (status == VMSTATUS_LOAD)
 	{
 		for (size_t i = 0; i < newengines.size(); i++)
 		{
@@ -467,7 +467,7 @@ bool Skyscraper::Loop()
 		}
 	}
 
-	if (status == 2 ||  status == -1)
+	if (status == VMSTATUS_UNLOAD ||  status == VMSTATUS_FATAL)
 		UnloadToMenu();
 
 	//ProfileManager::dumpAll();

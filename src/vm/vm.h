@@ -69,6 +69,15 @@ enum EngineType
 	ENGINETYPE_SOLARSYSTEM
 };
 
+enum VMStatus
+{
+	VMSTATUS_FATAL = -1,
+	VMSTATUS_ERROR = 0,
+	VMSTATUS_SUCCESS = 1,
+	VMSTATUS_UNLOAD = 2,
+	VMSTATUS_LOAD = 3
+};
+
 class EngineContext;
 class ScriptProcessor;
 class HAL;
@@ -106,7 +115,7 @@ public:
 	int RegisterEngine(EngineContext *engine);
 	EngineContext* GetFirstValidEngine();
 	int GetFreeInstanceNumber();
-	int Run(std::vector<EngineContext*> &newengine);
+	VMStatus Run(std::vector<EngineContext*> &newengine);
 	bool StartEngine(EngineContext* engine);
 	::SBS::SBS* GetActiveSystem();
 	ScriptProcessor* GetActiveScriptProcessor();
