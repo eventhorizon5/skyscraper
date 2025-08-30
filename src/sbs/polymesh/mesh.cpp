@@ -1245,6 +1245,7 @@ void MeshObject::CreateBoundingBox()
 
 	if (model_loaded == false)
 	{
+		Ogre::AxisAlignedBox local_box;
 		Bounds->setNull();
 		bool merge = false;
 		for (size_t i = 0; i < Walls.size(); i++)
@@ -1264,6 +1265,7 @@ void MeshObject::CreateBoundingBox()
 					for (size_t l = 0; l < poly->geometry[k].size(); l++)
 					{
 						Bounds->merge(poly->geometry[k][l].vertex);
+						local_box.merge(sbs->ToLocal(poly->geometry[k][l].vertex) + GetPosition());
 						merge = true;
 					}
 				}
@@ -1272,12 +1274,7 @@ void MeshObject::CreateBoundingBox()
 
 		//merge bounds into sim engine bounding box
 		if (merge == true)
-		{
-			Ogre::AxisAlignedBox box = *Bounds;
-			box.setMinimum(Bounds->getMinimum() + GetPosition());
-			box.setMaximum(Bounds->getMaximum() + GetPosition());
-			sbs->MergeBounds(box);
-		}
+			sbs->MergeBounds(local_box);
 	}
 }
 
