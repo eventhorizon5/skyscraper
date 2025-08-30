@@ -391,6 +391,9 @@ bool CallStation::KeypadCancel()
 
 	timer->Stop();
 	InputCache = "";
+
+	//update indicator display
+	UpdateIndicator(InputCache, false);
 	return true;
 }
 
