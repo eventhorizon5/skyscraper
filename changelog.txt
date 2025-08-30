@@ -186,6 +186,18 @@ Version 2.1
 -SBS: moved some functions from Simcore (sbs.cpp) to Utility
 -SBS: Moved InBox() function to Utility
 -Frontend: fix fullscreen window positioning on MacOS
+-VM: added multiline command processing to VMConsole
+-Editor: added initialized state
+-Editor: update ImGui frame data on each frame cycle, fixes sizing issues
+-Frontend: added ImGui input handling code to MainScreen
+-Disabled ImGui in VR mode
+-Editor: moved ImGui processing code into new Process() function
+-Editor: started experimental transform window
+-Editor: fix window close behavior
+-VM: changed Run() return type to VMStatus enum
+-Revert "PolyMesh: when creating the bounding box, the vertices need to be co
+nverted to Local space first"
+-PolyMesh: fixed ToLocal scaling of sim engine bounds
 
 
 Version 2.0 - July 24, 2025
