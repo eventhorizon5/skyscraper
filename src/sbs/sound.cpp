@@ -394,7 +394,7 @@ bool Sound::Load(const std::string &filename, bool force)
 		return false;
 
 	//blacklist certain empty sounds
-	if (Filename == "none.wav" || Filename == "beno/none.wav")
+	if (filename == "none.wav" || filename == "beno/none.wav")
 		return false;
 
 	//exit if filename is the same
