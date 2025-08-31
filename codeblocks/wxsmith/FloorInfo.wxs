@@ -59,6 +59,7 @@
 							<object class="sizeritem">
 								<object class="wxTextCtrl" name="ID_txtName" variable="txtName" member="yes">
 									<size>150,-1</size>
+									<style>wxTE_READONLY</style>
 								</object>
 								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 								<border>5</border>
@@ -80,6 +81,7 @@
 							<object class="sizeritem">
 								<object class="wxTextCtrl" name="ID_txtID" variable="txtID" member="yes">
 									<size>150,-1</size>
+									<style>wxTE_READONLY</style>
 								</object>
 								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 								<border>5</border>
@@ -101,6 +103,7 @@
 							<object class="sizeritem">
 								<object class="wxTextCtrl" name="ID_txtNumberID" variable="txtNumberID" member="yes">
 									<size>150,-1</size>
+									<style>wxTE_READONLY</style>
 								</object>
 								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 								<border>5</border>
@@ -122,6 +125,7 @@
 							<object class="sizeritem">
 								<object class="wxTextCtrl" name="ID_txtFloorType" variable="txtFloorType" member="yes">
 									<size>150,-1</size>
+									<style>wxTE_READONLY</style>
 								</object>
 								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 								<border>5</border>
@@ -143,6 +147,7 @@
 							<object class="sizeritem">
 								<object class="wxTextCtrl" name="ID_txtDescription" variable="txtDescription" member="yes">
 									<size>150,-1</size>
+									<style>wxTE_READONLY</style>
 								</object>
 								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 								<border>5</border>
@@ -164,6 +169,7 @@
 							<object class="sizeritem">
 								<object class="wxTextCtrl" name="ID_txtAltitude" variable="txtAltitude" member="yes">
 									<size>150,-1</size>
+									<style>wxTE_READONLY</style>
 								</object>
 								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 								<border>5</border>
@@ -185,6 +191,7 @@
 							<object class="sizeritem">
 								<object class="wxTextCtrl" name="ID_txtHeight" variable="txtHeight" member="yes">
 									<size>150,-1</size>
+									<style>wxTE_READONLY</style>
 								</object>
 								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 								<border>5</border>
@@ -206,6 +213,7 @@
 							<object class="sizeritem">
 								<object class="wxTextCtrl" name="ID_txtIntHeight" variable="txtIntHeight" member="yes">
 									<size>150,-1</size>
+									<style>wxTE_READONLY</style>
 								</object>
 								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 								<border>5</border>
