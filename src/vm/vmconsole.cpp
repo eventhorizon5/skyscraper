@@ -715,11 +715,15 @@ bool VMConsole::ProcessCommand(const std::string &command, Ogre::StringVector &p
 	//show command
 	if (command == "show")
 	{
-		if (params.size() != 1)
+		if (params.size() > 1)
 			ReportError("Incorrect number of parameters");
 		else
 		{
-			EngineContext *engine = vm->GetEngine(SBS::ToInt(params[0]));
+			EngineContext *engine;
+			if (params.size() == 1)
+				engine = vm->GetEngine(SBS::ToInt(params[0]));
+			else
+				engine = vm->GetActiveEngine();
 
 			if (engine)
 			{
@@ -749,7 +753,7 @@ bool VMConsole::ProcessCommand(const std::string &command, Ogre::StringVector &p
 				Report("Uptime: " + SBS::ToString(engine->GetSystem()->GetRunTime() / 1000));
 			}
 			else
-				Report("Instance unloaded");
+				ReportError("Instance unloaded");
 		}
 		consoleresult.ready = false;
 		consoleresult.threadwait = false;
@@ -759,16 +763,20 @@ bool VMConsole::ProcessCommand(const std::string &command, Ogre::StringVector &p
 	//status command
 	if (command == "status")
 	{
-		if (params.size() != 1)
+		if (params.size() > 1)
 			ReportError("Incorrect number of parameters");
 		else
 		{
-			EngineContext *engine = vm->GetEngine(SBS::ToInt(params[0]));
+			EngineContext *engine;
+			if (params.size() == 1)
+				engine = vm->GetEngine(SBS::ToInt(params[0]));
+			else
+				engine = vm->GetActiveEngine();
 
 			if (engine)
 				Report(engine->GetStatus());
 			else
-				Report("Instance unloaded");
+				ReportError("Instance unloaded");
 		}
 		consoleresult.ready = false;
 		consoleresult.threadwait = false;
