@@ -28,7 +28,6 @@ namespace SBS {
 
 enum ElevatorStatus
 {
-	STATUS_NONE,
 	STATUS_BUSY,
 	STATUS_AVAILABLE,
 	STATUS_UNAVAILABLE
