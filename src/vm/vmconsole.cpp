@@ -285,7 +285,7 @@ bool VMConsole::ProcessCommand(const std::string &command, Ogre::StringVector &p
 	if (command == "shutdown")
 	{
 		if (params.size() != 1)
-			Report("Incorrect number of parameters");
+			ReportError("Incorrect number of parameters");
 		else
 		{
 			if (params[0] == "all")
@@ -307,7 +307,7 @@ bool VMConsole::ProcessCommand(const std::string &command, Ogre::StringVector &p
 	if (command == "setactive")
 	{
 		if (params.size() != 1)
-			Report("Incorrect number of parameters");
+			ReportError("Incorrect number of parameters");
 		else
 			vm->SetActiveEngine(SBS::ToInt(params[0]));
 		consoleresult.ready = false;
@@ -351,7 +351,7 @@ bool VMConsole::ProcessCommand(const std::string &command, Ogre::StringVector &p
 	if (command == "vmload")
 	{
 		if (params.size() != 1)
-			Report("Incorrect number of parameters");
+			ReportError("Incorrect number of parameters");
 		else
 			vm->Load(false, false, params[0]);
 		consoleresult.ready = false;
@@ -363,7 +363,7 @@ bool VMConsole::ProcessCommand(const std::string &command, Ogre::StringVector &p
 	if (command == "switch")
 	{
 		if (params.size() != 1)
-			Report("Incorrect number of parameters");
+			ReportError("Incorrect number of parameters");
 		else
 			vm->SetActiveEngine(SBS::ToInt(params[0]), true);
 		consoleresult.ready = false;
@@ -379,7 +379,7 @@ bool VMConsole::ProcessCommand(const std::string &command, Ogre::StringVector &p
 		if (processor)
 			Report("SBS version " + processor->GetEngine()->GetSystem()->version);
 		else
-			Report("No SBS loaded");
+			ReportError("No engine loaded");
 		consoleresult.ready = false;
 		consoleresult.threadwait = false;
 		return true;
@@ -433,6 +433,14 @@ bool VMConsole::ProcessCommand(const std::string &command, Ogre::StringVector &p
 	if (command == "ps")
 	{
 		int count = vm->GetEngineCount();
+		if (count == 0)
+		{
+			ReportError("No engine loaded");
+			consoleresult.ready = false;
+			consoleresult.threadwait = false;
+			return true;
+		}
+
 		Report(SBS::ToString(count) + " engines running\n", "cyan");
 		Report("Instance\tElapsed Time\t\tRun Time\t\tFilename", "cyan");
 		Report("--------\t------------\t\t---------\t\t--------", "cyan");
@@ -532,7 +540,7 @@ bool VMConsole::ProcessCommand(const std::string &command, Ogre::StringVector &p
 			Report(month_s + " " + SBS::ToString(day) + ", " + SBS::ToString(year) + " " + SBS::ToString(hr) + ":" + SBS::ToString(minute) + ":" + SBS::ToString(second) + " " + pm);
 		}
 		else
-			Report("No sky system loaded");
+			ReportError("No sky system loaded");
 
 		consoleresult.ready = false;
 		consoleresult.threadwait = false;
@@ -556,6 +564,8 @@ bool VMConsole::ProcessCommand(const std::string &command, Ogre::StringVector &p
 
 			Report(SBS::ToString(uptime) + " seconds");
 		}
+		else
+			ReportError("No engine loaded");
 		consoleresult.ready = false;
 		consoleresult.threadwait = false;
 		return true;
@@ -706,7 +716,7 @@ bool VMConsole::ProcessCommand(const std::string &command, Ogre::StringVector &p
 	if (command == "show")
 	{
 		if (params.size() != 1)
-			Report ("Incorrect number of parameters");
+			ReportError("Incorrect number of parameters");
 		else
 		{
 			EngineContext *engine = vm->GetEngine(SBS::ToInt(params[0]));
@@ -750,7 +760,7 @@ bool VMConsole::ProcessCommand(const std::string &command, Ogre::StringVector &p
 	if (command == "status")
 	{
 		if (params.size() != 1)
-			Report ("Incorrect number of parameters");
+			ReportError("Incorrect number of parameters");
 		else
 		{
 			EngineContext *engine = vm->GetEngine(SBS::ToInt(params[0]));
