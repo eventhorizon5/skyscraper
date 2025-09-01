@@ -774,7 +774,7 @@ int DispatchController::FindClosestElevator(bool &busy, bool destination, int st
 					ElevatorStatus result = elevator->AvailableForCall(destination, starting_floor, direction, true);
 
 					//if an elevator is not busy and available, reset closest_busy value
-					if (closest_busy >= 0 && result == 1)
+					if (closest_busy >= 0 && result == STATUS_AVAILABLE)
 					{
 						closest_busy = -1;
 					}
