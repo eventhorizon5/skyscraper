@@ -459,7 +459,12 @@ bool VMConsole::ProcessCommand(const std::string &command, Ogre::StringVector &p
 					elapsed_time = Real(vm->GetElapsedTime(i) / Real(vm->time_stat));
 			}
 			unsigned long runtime = engine->GetSystem()->GetRunTime();
-			Report(SBS::ToString(i) + ":\t" + SBS::ToString(elapsed_time * 100) + "\t\t" + SBS::ToString(runtime / 1000) + "\t\t" + engine->GetFilename(), "green");
+			std::string s_runtime;
+			if (vm->GetEngine(i)->IsLoading() == true)
+				s_runtime = "Loading";
+			else
+				s_runtime = SBS::ToString(runtime / 1000);
+			Report(SBS::ToString(i) + ":\t" + SBS::ToString(elapsed_time * 100) + "\t\t" + s_runtime + "\t\t" + engine->GetFilename(), "green");
 		}
 		consoleresult.ready = false;
 		consoleresult.threadwait = false;
