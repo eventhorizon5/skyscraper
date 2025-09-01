@@ -492,7 +492,9 @@ AddAction FireServiceBypass, Elevator1, Fire1Bypass
 #define a runloop function, to run code after the sim engine has started
 Set prev = 0
 <Function runloop>
-    if[%second% ! %prev%] Print Hello
-    Set prev = %second%
+    #this runloop prints "Hello" every second
+    Set status = %second%
+    if[%status% ! %prev%] Print Hello
+    Set prev = %status%
 <EndFunction>
 
