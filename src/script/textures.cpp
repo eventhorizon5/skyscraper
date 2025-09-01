@@ -548,7 +548,7 @@ int ScriptProcessor::TexturesSection::Run(std::string &LineData)
 	if (StartsWithNoCase(LineData, "<endtextures>"))
 	{
 		Simcore->GetTextureManager()->FreeTextureImages();
-		config->SectionNum = 0;
+		config->SectionNum = SECTION_NONE;
 		config->Context = "None";
 		if (parent->InRunloop() == false)
 			engine->Report("Finished textures");

@@ -231,6 +231,8 @@ public:
 	int RespondingToCall(int floor);
 	bool AddElevatorIDSigns(int door_number, bool relative, const std::string& texture_prefix, const std::string& direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset);
 	Shape* CreateShape(Wall *wall);
+	bool KeypadEnter();
+	bool KeypadClear();
 	
 	MeshObject* Mesh; //car mesh object
 
@@ -324,7 +326,6 @@ private:
 	void UpdateKeypadIndicator(const std::string& text, bool play_sound = true);
 	Indicator* indicator;
 	void KeypadError(bool type = 0);
-	bool GetFloorFromID(const std::string& floor, int& result);
 	void Requested(int floor);
 
 	class KeypadTimer; //internal timer class

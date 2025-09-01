@@ -32,6 +32,7 @@
 #include "sound.h"
 #include "action.h"
 #include "profiler.h"
+#include "manager.h"
 #include "trigger.h"
 
 namespace SBS {
@@ -54,6 +55,7 @@ Trigger::Trigger(Object *parent, const std::string &name, bool permanent, const 
 	area_box = new Ogre::AxisAlignedBox(area_min, area_max);
 	is_inside = false;
 	sound = 0;
+	teleporter = false;
 
 	//create sound object
 	if (sound_file != "")
@@ -299,10 +301,18 @@ bool Trigger::Loop()
 				Report("Outside trigger area '" + GetName() + "', parent '" + GetParent()->GetName() + "'");
 		}
 
+		//run parent's OnEntry() or OnExit() functions
 		if (is_inside == true)
 			OnEntry();
 		else
 			OnExit();
+
+		//if this trigger is a teleporter, prevent teleporter loops by skipping processing on the receiving end
+		if (teleporter == true && sbs->GetTeleporterManager()->teleported == true)
+		{
+			sbs->GetTeleporterManager()->teleported = false;
+			return true;
+		}
 
 		//get action name of next position state
 		std::string name = GetPositionAction(GetNextSelectPosition());
@@ -410,6 +420,18 @@ void Trigger::Merge(Ogre::AxisAlignedBox &box)
 {
 	//expand this trigger box to encompass the given box
 	area_box->merge(box);
+}
+
+void Trigger::OnEntry()
+{
+	//notify parent of entry
+	GetParent()->OnEntry();
+}
+
+void Trigger::OnExit()
+{
+	//notify parent of exit
+	GetParent()->OnExit();
 }
 
 }

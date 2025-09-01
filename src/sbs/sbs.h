@@ -115,9 +115,12 @@ namespace SBS {
 	class Reverb;
 	class Map;
 	class RouteController;
+	class ObjectScript;
 	class Texture;
 	class TextureImage;
 	class Shape;
+	class Teleporter;
+	class TeleporterManager;
 
 	typedef std::vector<Vector3> PolyArray;
 	typedef std::vector<PolyArray> PolygonSet;
@@ -199,7 +202,7 @@ public:
 	int Lobby; //lobby level (used or random activity)
 
 	//public functions
-	SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instance_number, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0f, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
+	SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instance_number, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
 	~SBS();
 	void Initialize();
 	bool Start();
@@ -289,7 +292,6 @@ public:
 	std::string GetConfigString(const std::string &key, const std::string &default_value);
 	bool GetConfigBool(const std::string &key, bool default_value);
 	Real GetConfigFloat(const std::string &key, Real default_value);
-	bool InBox(const Vector3 &start, const Vector3 &end, const Vector3 &test);
 	void AdvanceClock();
 	unsigned long GetCurrentTime();
 	unsigned long GetRunTime();
@@ -328,7 +330,6 @@ public:
 	int GetEscalatorCount();
 	int GetMovingWalkwayCount();
 	int GetRevolvingDoorCount();
-	bool HitBeam(const Ray &ray, Real max_distance, MeshObject *&mesh, Wall *&wall, Vector3 &hit_position);
 	void EnableRandomActivity(bool value);
 	void EnableMalfunctions(bool value);
 	SoundSystem* GetSoundSystem();
@@ -339,7 +340,6 @@ public:
 	void RemovePerson(Person *person);
 	bool AttachCamera(std::vector<Ogre::Camera*> &cameras, bool init_state = true);
 	bool DetachCamera();
-	std::string ProcessFullName(std::string name, int &instance, int &object_number, bool strip_number = false);
 	int GetPersonCount();
 	Person* GetPerson(int number);
 	bool IsInside();
@@ -360,6 +360,7 @@ public:
 	StairwellManager* GetStairwellManager();
 	DoorManager* GetDoorManager();
 	ControllerManager* GetControllerManager();
+	TeleporterManager* GetTeleporterManager();
 	void RegisterDynamicMesh(DynamicMesh *dynmesh);
 	void UnregisterDynamicMesh(DynamicMesh *dynmesh);
 	TextureManager* GetTextureManager();
@@ -429,6 +430,7 @@ private:
 	DoorManager* door_manager;
 	VehicleManager* vehicle_manager;
 	ControllerManager* controller_manager;
+	TeleporterManager* teleporter_manager;
 
 	//dynamic meshes
 	std::vector<DynamicMesh*> dynamic_meshes;

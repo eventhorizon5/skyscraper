@@ -30,7 +30,7 @@
 #include "debugpanel.h"
 #include "vm.h"
 #include "enginecontext.h"
-#include "moveobject.h"
+#include "moveengine.h"
 #include "loaddialog.h"
 #include "enginemanager.h"
 
@@ -202,7 +202,7 @@ EngineManager::EngineManager(DebugPanel* parent,wxWindowID id,const wxPoint& pos
 	//*)
 	panel = parent;
 	loader = 0;
-	moveobject = 0;
+	moveengine = 0;
 	OnInit();
 }
 
@@ -214,9 +214,9 @@ EngineManager::~EngineManager()
 	if (loader)
 		loader->Destroy();
 	loader = 0;
-	if (moveobject)
-		moveobject->Destroy();
-	moveobject = 0;
+	if (moveengine)
+		moveengine->Destroy();
+	moveengine = 0;
 }
 
 void EngineManager::OnInit()
@@ -281,7 +281,7 @@ void EngineManager::Loop()
 			max.y = 0;
 
 		tPosition->SetValue(TruncateNumber(position.x, 2) + wxT(", ") + TruncateNumber(position.y, 2) + wxT(", ") + TruncateNumber(position.z, 2));
-			tBoundsMin->SetValue(TruncateNumber(min.x, 2) + wxT(", ") + TruncateNumber(min.y, 2) + wxT(", ") + TruncateNumber(min.z, 2));
+		tBoundsMin->SetValue(TruncateNumber(min.x, 2) + wxT(", ") + TruncateNumber(min.y, 2) + wxT(", ") + TruncateNumber(min.z, 2));
 		tBoundsMax->SetValue(TruncateNumber(max.x, 2) + wxT(", ") + TruncateNumber(max.y, 2) + wxT(", ") + TruncateNumber(max.z, 2));
 
 		//set camera state
@@ -291,14 +291,7 @@ void EngineManager::Loop()
 			tActive->SetValue("False");
 
 		//set engine running state
-		if (engine->GetShutdownState() == true)
-			tState->SetValue("Shutdown");
-		else if (engine->IsLoading() == true)
-			tState->SetValue("Loading");
-		else if (engine->Paused)
-			tState->SetValue("Paused");
-		else if (engine->IsRunning() == true)
-			tState->SetValue("Running");
+		tState->SetValue(engine->GetStatus());
 
 		//set engine uptime
 		tUptime->SetValue(SBS::ToString(engine->GetSystem()->GetRunTime() / 1000));
@@ -309,22 +302,9 @@ void EngineManager::Loop()
 		//set paused state
 		chkPaused->SetValue(engine->Paused);
 
-		//set type value
-		std::string type;
-		if (engine->type == ENGINETYPE_BUILDING)
-			type = "Building";
-		else if (engine->type == ENGINETYPE_CITY)
-			type = "City";
-		else if (engine->type == ENGINETYPE_GENERIC)
-			type = "Generic";
-		else if (engine->type == ENGINETYPE_PLANET)
-			type = "Planet";
-		else if (engine->type == ENGINETYPE_SOLARSYSTEM)
-			type = "Solar System";
-
 		if (engine->GetParent())
 			tParent->SetValue(SBS::ToString(engine->GetParent()->GetNumber()));
-		tType->SetValue(type);
+		tType->SetValue(engine->GetType());
 	}
 	else
 	{
@@ -337,8 +317,8 @@ void EngineManager::Loop()
 		tParent->Clear();
 	}
 
-	if (moveobject)
-		moveobject->Loop();
+	if (moveengine)
+		moveengine->Loop();
 }
 
 void EngineManager::On_bSetActive_Click(wxCommandEvent& event)
@@ -351,9 +331,13 @@ void EngineManager::On_bSetActive_Click(wxCommandEvent& event)
 
 void EngineManager::On_bLoad_Click(wxCommandEvent& event)
 {
+	int selection = EngineList->GetSelection();
+	engine = panel->GetRoot()->GetEngine(selection);
+
 	if (!loader)
 		loader = new LoadDialog(panel, this, -1);
 
+	loader->SetEngineParent(engine);
 	loader->CenterOnScreen();
 	loader->Show();
 }
@@ -409,12 +393,12 @@ void EngineManager::On_bMove_Click(wxCommandEvent& event)
 
 		if (engine)
 		{
-			if (moveobject)
-				delete moveobject;
-			moveobject = 0;
+			if (moveengine)
+				delete moveengine;
+			moveengine = 0;
 
-			moveobject = new MoveObject(panel, this, -1, engine, 0);
-			moveobject->Show();
+			moveengine = new MoveEngine(panel, this, -1, engine);
+			moveengine->Show();
 		}
 	}
 }

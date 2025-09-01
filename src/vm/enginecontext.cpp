@@ -52,14 +52,14 @@ using namespace SBS;
 
 namespace Skyscraper {
 
-EngineContext::EngineContext(const EngineType type, EngineContext *parent, VM *vm, Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
+EngineContext::EngineContext(const EngineType type, EngineContext *parent, VM *vm, Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, const Vector3 &position, const Vector3 &rotation, const Vector3 &area_min, const Vector3 &area_max)
 {
 	this->fmodsystem = fmodsystem;
 	IsSystem = false;
 	Init(type, parent, vm, mSceneManager, position, rotation, area_min, area_max);
 }
 
-EngineContext::EngineContext(const EngineType type, EngineContext *parent, VM *vm, Ogre::SceneManager* mSceneManager, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
+EngineContext::EngineContext(const EngineType type, EngineContext *parent, VM *vm, Ogre::SceneManager* mSceneManager, const Vector3 &position, const Vector3 &rotation, const Vector3 &area_min, const Vector3 &area_max)
 {
 	IsSystem = false;
 	Init(type, parent, vm, mSceneManager, position, rotation, area_min, area_max);
@@ -92,7 +92,7 @@ EngineContext::~EngineContext()
 	reload_state = 0;
 }
 
-void EngineContext::Init(const EngineType type, EngineContext *parent, VM *vm, Ogre::SceneManager* mSceneManager, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
+void EngineContext::Init(const EngineType type, EngineContext *parent, VM *vm, Ogre::SceneManager* mSceneManager, const Vector3 &position, const Ogre::Vector3 &rotation, const Vector3 &area_min, const Vector3 &area_max)
 {
 	//initialize this engine context
 
@@ -110,10 +110,8 @@ void EngineContext::Init(const EngineType type, EngineContext *parent, VM *vm, O
 	reload_state->gravity = false;
 	reload_state->freelook = false;
 	this->mSceneManager = mSceneManager;
-	this->position = position;
 	this->area_min = area_min;
 	this->area_max = area_max;
-	this->rotation = rotation;
 	this->parent = parent;
 	Simcore = 0;
 	processor = 0;
@@ -125,6 +123,7 @@ void EngineContext::Init(const EngineType type, EngineContext *parent, VM *vm, O
 	prepared = false;
 	NewEngine = true;
 	Paused = false;
+	was_reloaded = false;
 
 	//register this engine, and get it's instance number
 	instance = vm->RegisterEngine(this);
@@ -135,9 +134,9 @@ void EngineContext::Init(const EngineType type, EngineContext *parent, VM *vm, O
 	InstancePrompt = ToString(instance) + ">";
 
 	if (parent)
-			parent->AddChild(this);
+		parent->AddChild(this);
 
-	StartSim();
+	StartSim(position, rotation);
 
 	//enable runloop thread
 	ex = std::thread{&EngineContext::Run, this};
@@ -162,8 +161,7 @@ bool EngineContext::IsCameraActive()
 
 	if (Simcore->camera)
 		return Simcore->camera->IsActive();
-	else
-		return false;
+	return false;
 }
 
 void EngineContext::Shutdown()
@@ -294,7 +292,9 @@ bool EngineContext::InitSim()
 void EngineContext::Boot()
 {
 	//boot simulator
-	processor->Start();
+
+	if (processor)
+		processor->Start();
 }
 
 bool EngineContext::LoadDefault()
@@ -377,11 +377,15 @@ void EngineContext::DoReload()
 	std::string filename = Simcore->BuildingFilename;
 	*reload_state = GetCameraState();
 
+	//get current simulator state
+	Vector3 pos = GetPosition();
+	Vector3 rot = GetRotation();
+
 	//unload current simulator
 	UnloadSim();
 
 	//start a new simulator
-	StartSim();
+	StartSim(pos, rot);
 
 	//load building file
 	if (Load(filename) == false)
@@ -401,7 +405,7 @@ std::string EngineContext::GetFilename()
 	return "";
 }
 
-void EngineContext::StartSim()
+void EngineContext::StartSim(const Vector3 &position, const Vector3 &rotation)
 {
 	//create simulator and script interpreter objects
 
@@ -412,7 +416,7 @@ void EngineContext::StartSim()
 	//get offset of parent engine
 	Vector3 offset;
 	if (parent)
-		offset = parent->GetSystem()->GetPosition();
+		offset = parent->GetPosition();
 	else
 		offset = Vector3::ZERO;
 
@@ -421,7 +425,14 @@ void EngineContext::StartSim()
 
 	//Create simulator object
 	if (!Simcore)
-		Simcore = new ::SBS::SBS(mSceneManager, fmodsystem, instance, position + offset, rotation, area_min, area_max);
+	{
+		Simcore = new ::SBS::SBS(mSceneManager, fmodsystem, instance, area_min, area_max);
+
+		//move and rotate sim engine
+		Vector3 pos = position + offset;
+		Simcore->Move(pos);
+		Simcore->Rotate(rotation);
+	}
 
 	//load script processor
 	if (!processor)
@@ -526,6 +537,7 @@ bool EngineContext::Start()
 	if (reloading == true)
 	{
 		reloading = false;
+		was_reloaded = true;
 		SetCameraState(*reload_state);
 	}
 
@@ -592,6 +604,9 @@ CameraState EngineContext::GetCameraState()
 	state.fov = 0;
 	state.speed = 0;
 
+	if (!Simcore)
+		return state;
+
 	if (Simcore->camera)
 		return Simcore->camera->GetCameraState();
 	return state;
@@ -606,6 +621,17 @@ void EngineContext::SetCameraState(const CameraState &state, bool set_floor)
 
 	if (Simcore->camera)
 		Simcore->camera->SetCameraState(state, set_floor);
+}
+
+void EngineContext::SetCameraState(bool set_floor)
+{
+	//set camera state data
+
+	if (!Simcore || !reload_state)
+		return;
+
+	if (Simcore->camera)
+		Simcore->camera->SetCameraState(*reload_state, set_floor);
 }
 
 bool EngineContext::IsInside()
@@ -636,6 +662,9 @@ void EngineContext::DetachCamera(bool reset_building)
 {
 	//detach the camera from this engine
 
+	if (!Simcore)
+		return;
+
 	Simcore->DetachCamera();
 
 	if (reset_building == true)
@@ -645,6 +674,9 @@ void EngineContext::DetachCamera(bool reset_building)
 bool EngineContext::AttachCamera(std::vector<Ogre::Camera*> &cameras, bool init_state)
 {
 	//attach the camera to this engine
+
+	if (!Simcore)
+		return false;
 
 	bool result = Simcore->AttachCamera(cameras, init_state);
 
@@ -657,6 +689,9 @@ bool EngineContext::AttachCamera(std::vector<Ogre::Camera*> &cameras, bool init_
 
 void EngineContext::RefreshCamera()
 {
+	if (!Simcore)
+		return;
+
 	if (!Simcore->camera)
 		return;
 
@@ -665,6 +700,9 @@ void EngineContext::RefreshCamera()
 
 void EngineContext::ResetCamera()
 {
+	if (!Simcore)
+		return;
+
 	if (!Simcore->camera)
 		return;
 
@@ -674,6 +712,9 @@ void EngineContext::ResetCamera()
 
 void EngineContext::RevertMovement()
 {
+	if (!Simcore)
+		return;
+
 	if (!Simcore->camera)
 		return;
 
@@ -684,6 +725,9 @@ void EngineContext::RevertMovement()
 Vector3 EngineContext::GetCameraPosition()
 {
 	//get this engine's camera position, in global positioning
+
+	if (!Simcore)
+		return Vector3::ZERO;
 
 	if (!Simcore->camera)
 		return Vector3::ZERO;
@@ -722,6 +766,9 @@ void EngineContext::CutForEngine(EngineContext *engine, bool child)
 	//cut holes in this sim engine, for a newly loaded building, if possible
 
 	if (!engine || engine == this)
+		return;
+
+	if (!Simcore)
 		return;
 
 	//limit cuts on system engines
@@ -789,19 +836,19 @@ void EngineContext::RemoveChild(const EngineContext *engine)
 	}
 }
 
-void EngineContext::Move(Vector3 &position, bool move_children)
+void EngineContext::Move(Vector3 &vector, Real speed, bool move_children)
 {
 	//move this engine
 	//if move_children is true, recursively call this function on all children
 
-	this->position += position;
-	Simcore->Move(position);
+	if (Simcore)
+		Simcore->Move(vector, speed);
 
 	if (move_children == true)
 	{
 		for (size_t i = 0; i < children.size(); i++)
 		{
-			children[i]->Move(position, move_children);
+			children[i]->Move(vector, speed, move_children);
 		}
 	}
 }
@@ -896,6 +943,9 @@ void EngineContext::Reset(bool full)
 {
 	//reset an engine context's SBS engine
 
+	if (!Simcore)
+		return;
+
 	Simcore->ResetState();
 	if (processor && full)
 		processor->Reset();
@@ -907,9 +957,80 @@ std::string EngineContext::GetThreadID()
 	return id;
 }
 
-Vector3 EngineContext::GetPosition()
+Vector3 EngineContext::GetPosition(bool relative)
 {
-	return position;
+	if (!Simcore)
+		return Vector3::ZERO;
+
+	return Simcore->GetPosition(relative);
+}
+
+void EngineContext::Rotate(const Vector3 &vector, Real speed, bool relative)
+{
+	if (!Simcore)
+		return;
+
+	Simcore->Rotate(vector, speed, relative);
+}
+
+Vector3 EngineContext::GetRotation()
+{
+	if (!Simcore)
+		return Vector3::ZERO;
+
+	return Simcore->GetRotation();
+}
+
+EngineContext* EngineContext::GetChild(size_t index)
+{
+	if (index >= children.size())
+		return 0;
+
+	return children[index];
+}
+
+size_t EngineContext::GetChildCount()
+{
+	return children.size();
+}
+
+std::string EngineContext::GetStatus()
+{
+	//returns a string describing the state of this engine context
+
+	std::string state;
+	if (GetShutdownState() == true)
+		state = "Shutdown";
+	else if (IsLoading() == true)
+		state = "Loading";
+	else if (Paused)
+		state = "Paused";
+	else if (IsRunning() == true)
+		state = "Running";
+	else
+		state = "Unknown";
+
+	return state;
+}
+
+std::string EngineContext::GetType()
+{
+	//returns the type of this engine context, as a string
+
+	std::string typestr;
+	if (type == ENGINETYPE_BUILDING)
+		typestr = "Building";
+	else if (type == ENGINETYPE_CITY)
+		typestr = "City";
+	else if (type == ENGINETYPE_GENERIC)
+		typestr = "Generic";
+	else if (type == ENGINETYPE_PLANET)
+		typestr = "Planet";
+	else if (type == ENGINETYPE_SOLARSYSTEM)
+		typestr = "Solar System";
+	else
+		typestr = "Unknown";
+	return typestr;
 }
 
 }

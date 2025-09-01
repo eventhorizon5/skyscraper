@@ -41,6 +41,7 @@ class LoadDialog: public wxDialog
 
 		LoadDialog(DebugPanel *root, wxWindow* parent,wxWindowID id=wxID_ANY,const wxPoint& pos=wxDefaultPosition,const wxSize& size=wxDefaultSize);
 		virtual ~LoadDialog();
+		void SetEngineParent(EngineContext *parent);
 
 		//(*Declarations(LoadDialog)
 		wxButton* bLoad;
@@ -54,6 +55,7 @@ class LoadDialog: public wxDialog
 		wxStaticLine* StaticLine3;
 		wxStaticLine* StaticLine4;
 		wxStaticText* StaticText10;
+		wxStaticText* StaticText11;
 		wxStaticText* StaticText1;
 		wxStaticText* StaticText2;
 		wxStaticText* StaticText3;
@@ -74,42 +76,45 @@ class LoadDialog: public wxDialog
 		wxTextCtrl* tPosY;
 		wxTextCtrl* tPosZ;
 		wxTextCtrl* tRotation;
+		wxTextCtrl* txtParent;
 		//*)
 
 	protected:
 
 		//(*Identifiers(LoadDialog)
-		static const long ID_tFilename;
-		static const long ID_bSelect;
-		static const long ID_STATICTEXT1;
-		static const long ID_PosX;
-		static const long ID_STATICTEXT4;
-		static const long ID_tPosY;
-		static const long ID_STATICTEXT5;
-		static const long ID_tPosZ;
-		static const long ID_STATICLINE3;
-		static const long ID_STATICLINE4;
-		static const long ID_STATICTEXT2;
-		static const long ID_tRotation;
-		static const long ID_chkCutLandscape;
-		static const long ID_chkCutBuildings;
-		static const long ID_chkCutExternal;
-		static const long ID_chkCutFloors;
-		static const long ID_STATICTEXT3;
-		static const long ID_tMinX;
-		static const long ID_STATICTEXT6;
-		static const long ID_tMinY;
-		static const long ID_STATICTEXT7;
-		static const long ID_tMinZ;
-		static const long ID_STATICLINE1;
-		static const long ID_STATICLINE2;
-		static const long ID_STATICTEXT8;
-		static const long ID_tMaxX;
-		static const long ID_STATICTEXT9;
-		static const long ID_tMaxY;
-		static const long ID_STATICTEXT10;
-		static const long ID_tMaxZ;
-		static const long ID_bLoad;
+		static const wxWindowID ID_tFilename;
+		static const wxWindowID ID_bSelect;
+		static const wxWindowID ID_STATICTEXT11;
+		static const wxWindowID ID_txtParent;
+		static const wxWindowID ID_STATICTEXT1;
+		static const wxWindowID ID_PosX;
+		static const wxWindowID ID_STATICTEXT4;
+		static const wxWindowID ID_tPosY;
+		static const wxWindowID ID_STATICTEXT5;
+		static const wxWindowID ID_tPosZ;
+		static const wxWindowID ID_STATICLINE3;
+		static const wxWindowID ID_STATICLINE4;
+		static const wxWindowID ID_STATICTEXT2;
+		static const wxWindowID ID_tRotation;
+		static const wxWindowID ID_chkCutLandscape;
+		static const wxWindowID ID_chkCutBuildings;
+		static const wxWindowID ID_chkCutExternal;
+		static const wxWindowID ID_chkCutFloors;
+		static const wxWindowID ID_STATICTEXT3;
+		static const wxWindowID ID_tMinX;
+		static const wxWindowID ID_STATICTEXT6;
+		static const wxWindowID ID_tMinY;
+		static const wxWindowID ID_STATICTEXT7;
+		static const wxWindowID ID_tMinZ;
+		static const wxWindowID ID_STATICLINE1;
+		static const wxWindowID ID_STATICLINE2;
+		static const wxWindowID ID_STATICTEXT8;
+		static const wxWindowID ID_tMaxX;
+		static const wxWindowID ID_STATICTEXT9;
+		static const wxWindowID ID_tMaxY;
+		static const wxWindowID ID_STATICTEXT10;
+		static const wxWindowID ID_tMaxZ;
+		static const wxWindowID ID_bLoad;
 		//*)
 
 	private:

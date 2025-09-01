@@ -173,6 +173,7 @@
 					<wxDialog wxs="wxsmith/ControllerEditor.wxs" src="../src/gui/controllereditor.cpp" hdr="../src/gui/controllereditor.h" fwddecl="0" i18n="1" name="ControllerEditor" language="CPP" />
 					<wxDialog wxs="wxsmith/ScriptDebug.wxs" src="../src/gui/scriptdebug.cpp" hdr="../src/gui/scriptdebug.h" fwddecl="0" i18n="1" name="ScriptDebug" language="CPP" />
 					<wxDialog wxs="wxsmith/FloorInfo.wxs" src="../src/gui/floorinfo.cpp" hdr="../src/gui/floorinfo.h" fwddecl="0" i18n="1" name="FloorInfo" language="CPP" />
+					<wxDialog wxs="wxsmith/MoveEngine.wxs" src="../src/gui/moveengine.cpp" hdr="../src/gui/moveengine.h" fwddecl="0" i18n="1" name="MoveEngine" language="CPP" />
 				</resources>
 			</wxsmith>
 		</Extensions>

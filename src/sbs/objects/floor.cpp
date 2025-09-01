@@ -54,6 +54,7 @@
 #include "reverb.h"
 #include "wall.h"
 #include "shape.h"
+#include "teleporter.h"
 #include "floor.h"
 
 namespace SBS {

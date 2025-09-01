@@ -239,6 +239,24 @@ private:
 	int get_number;
 };
 
+class SBSIMPEXP TeleporterManager : public Manager
+{
+public:
+	explicit TeleporterManager(Object* parent);
+	~TeleporterManager() override;
+	Teleporter* Create(std::string name, const std::string &idle_sound, const std::string &teleport_sound, Real width, Real height, const Vector3 &destination);
+	Teleporter* Get(const std::string &name);
+	void Remove(Teleporter *teleporter);
+	int GetCount() override;
+	Teleporter* GetIndex(int index);
+	bool Loop() override;
+
+	bool teleported;
+
+private:
+	std::vector<Teleporter*> Array;
+};
+
 }
 
 #endif

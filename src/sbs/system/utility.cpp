@@ -21,16 +21,45 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+#include <OgreBulletDynamicsRigidBody.h>
+#include <OgreBulletCollisionsRay.h>
 #include "globals.h"
 #include "sbs.h"
 #include "polymesh.h"
 #include "wall.h"
 #include "polygon.h"
+#include "manager.h"
+#include "floor.h"
 #include "utility.h"
 
 namespace SBS {
 
 std::mutex report_lock;
+
+struct PickRays {
+    Ray global;  // global space
+    Ray engine;  // engine space
+};
+
+//build both rays at once from the Ogre camera ray
+static PickRays MakePickRays(const Ray& camRay, SBS* sbs)
+{
+    //start in Ogre camera space (camRay is Ogre/remote)
+
+    //engine space for polygon/triangle picking:
+    Ray engineRay(
+        sbs->ToRemote(sbs->ToLocal(camRay.getOrigin())),
+        sbs->GetOrientation().Inverse() * camRay.getDirection()
+    );
+
+    //global space for Bullet
+    Ray globalRay(
+        sbs->ToRemote(sbs->GetUtility()->ToGlobal(sbs->ToLocal(camRay.getOrigin()))),
+        sbs->GetOrientation() * camRay.getDirection()
+    );
+
+    return {globalRay, engineRay};
+}
 
 Utility::Utility(Object *parent) : ObjectBase(parent)
 {
@@ -428,6 +457,128 @@ void Utility::CacheFilename(const std::string &filename, const std::string &resu
 	verify.filename = filename;
 	verify.result = result;
 	verify_results.emplace_back(verify);
+}
+
+bool Utility::GetFloorFromID(const std::string &floor, int &result)
+{
+	std::string converted = floor;
+	int rawfloor = 0;
+
+	if (IsNumeric(floor))
+	{
+		rawfloor = ToInt(floor);
+
+		//convert back to string, to strip off any leading 0's
+		converted = ToString(rawfloor);
+	}
+
+	Floor *floorobj = sbs->GetFloorManager()->GetByNumberID(converted);
+	Floor *floorobj2 = sbs->GetFloorManager()->GetByID(converted);
+	Floor *floorobj3 = 0;
+	if (IsNumeric(floor))
+		floorobj3 = sbs->GetFloorManager()->Get(rawfloor);
+
+	if (floorobj)
+	{
+		result = floorobj->Number; //get by number ID first
+		return true;
+	}
+	else if (floorobj2)
+	{
+		result = floorobj2->Number; //next try floor ID
+		return true;
+	}
+	else if (floorobj3)
+	{
+		result = rawfloor; //and last, get by raw floor number
+		return true;
+	}
+
+	return false;
+}
+
+std::string Utility::ProcessFullName(std::string name, int &instance, int &object_number, bool strip_number)
+{
+	//if given a full object ID name (such as "0:(4)Landscape"),
+	//return base name and parse out instance number and object number
+
+	//if strip_number is false, leave object number identifier in string
+
+	//get and strip off engine instance number
+	size_t index = name.find(":(");
+	instance = ToInt(name.substr(0, index));
+	name.erase(name.begin(), name.begin() + index + 1);
+
+	//get and optionally strip off object number
+	index = name.find(")");
+	object_number = ToInt(name.substr(1, index - 1));
+
+	if (strip_number == true)
+		name.erase(name.begin(), name.begin() + index + 1);
+
+	return name;
+}
+
+bool Utility::HitBeam(const Ray &ray, Real max_distance, MeshObject *&mesh, Wall *&wall, Polygon *&polygon, Vector3 &hit_position)
+{
+	//use a given ray and distance, and return the nearest hit mesh and if applicable, wall object
+	//note that the ray's origin and direction need to be in engine-relative values
+
+	//create a ray for absolute (global) positioning, and another for engine offsets (engine-relative positioning)
+	const PickRays rays = MakePickRays(ray, sbs);
+	wall = 0;
+	polygon = 0;
+
+    //ray test in Bullet; get a collision callback
+    OgreBulletCollisions::CollisionClosestRayResultCallback callback(rays.global, sbs->mWorld, max_distance);
+
+	//check for collision
+    sbs->mWorld->launchRay(callback);
+
+	//exit if no collision
+    if (!callback.doesCollide())
+		return false;
+
+    //get collided collision object
+    OgreBulletCollisions::Object* object = callback.getCollidedObject();
+    if (!object)
+		return false;
+
+	//get name of collision object's grandparent scenenode (which is the same name as the mesh object)
+    std::string meshname;
+    if (dynamic_cast<OgreBulletDynamics::WheeledRigidBody*>(object) == 0)
+        meshname = object->getRootNode()->getParentSceneNode()->getName();
+    else
+        meshname = object->getRootNode()->getChild(0)->getName(); //for vehicles, the child of the root node is the mesh
+
+	//get associated mesh object
+    mesh = sbs->FindMeshObject(meshname);
+    if (!mesh)
+		return false;
+
+    //hit position — keep space consistent
+    hit_position = ToLocal(callback.getCollisionPoint());
+
+    //wall resolution
+    Vector3 rs = rays.engine.getOrigin();
+    Vector3 re = rays.engine.getPoint(max_distance);
+
+	//get wall object, if any
+    Vector3 isect; Real distance = 2e9; Vector3 normal = Vector3::ZERO;
+    MeshObject::TriOwner owner = sbs->GetPolyMesh()->FindWallIntersect_Tri(mesh, rs, re, isect, distance, normal);
+	wall = owner.wall;
+	polygon = owner.poly;
+
+    return true;
+}
+
+bool Utility::InBox(const Vector3 &start, const Vector3 &end, const Vector3 &test)
+{
+	//determine if a point (test) is inside the box defines by start and end vertices
+
+	if (test.x > start.x && test.y > start.y && test.z > start.z && test.x < end.x && test.y < end.y && test.z < end.z)
+		return true;
+	return false;
 }
 
 }

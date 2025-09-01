@@ -58,6 +58,7 @@
 #include "enginecontext.h"
 #include "hal.h"
 #include "gui.h"
+#include "editor.h"
 #include "profiler.h"
 
 using namespace SBS;
@@ -210,6 +211,41 @@ void HAL::UpdateOpenXR()
 					Ogre::Camera* camera = Simcore->camera->GetOgreCamera(i);
 					Vector3 cameranode_pos = Simcore->camera->GetSceneNode()->GetPosition() - Simcore->camera->GetPosition();
 					SetOpenXRParameters(i, Simcore->ToRemote(cameranode_pos), camera->getDerivedOrientation());
+				}
+
+				//update controllers
+
+				//left controller for movement
+				OpenXRControllerState leftState;
+				if (GetControllerState(0, &leftState))
+				{
+					//std::string out = "Thumbstick: (" + ToString(leftState.joystickX) + ", " + ToString(leftState.joystickY) + ")";
+					//Report(out);
+					const float deadzone = 0.1f;
+					float x = leftState.joystickX;
+					float y = leftState.joystickY;
+
+					if (std::abs(x) > deadzone || std::abs(y) > deadzone) {
+						Ogre::Vector3 localMove(x, 0, -y);
+
+						Ogre::Quaternion viewRot = Simcore->camera->GetOrientation();
+						Ogre::Vector3 worldMove = viewRot * localMove;
+
+						float walkSpeed = 3.0f; // units per second
+						worldMove *= walkSpeed * Simcore->delta;
+
+						Ogre::Vector3 currentPos = Simcore->camera->GetPosition();
+						Simcore->camera->SetPosition(currentPos + worldMove);
+					}
+				}
+
+				//right controller for rotation
+				OpenXRControllerState rightState;
+				if (GetControllerState(0, &rightState))
+				{
+					float turnRate = 1.0;
+					float yawChange = rightState.joystickX * turnRate * Simcore->delta;
+					Simcore->camera->Turn(yawChange);
 				}
 			}
 		}
@@ -560,7 +596,9 @@ bool HAL::LoadSystem(const std::string &data_path, Ogre::RenderWindow *renderwin
 			mCameras.emplace_back(mSceneMgr->createCamera("Camera " + ToString(i + 1)));
 			if (mRenderWindow)
 			{
-				mViewports.emplace_back(mRenderWindow->addViewport(mCameras[i], (cameras - 1) - i, 0, 0, 1, 1));
+				Ogre::Viewport* viewport = mRenderWindow->addViewport(mCameras[i], (cameras - 1) - i, 0, 0, 1, 1);
+				viewport->setOverlaysEnabled(true);
+				mViewports.emplace_back(viewport);
 				mCameras[i]->setAspectRatio(Real(mViewports[i]->getActualWidth()) / Real(mViewports[i]->getActualHeight()));
 			}
 		}
@@ -662,6 +700,9 @@ bool HAL::LoadSystem(const std::string &data_path, Ogre::RenderWindow *renderwin
 		mTrayMgr->hideCursor();
 	}
 
+	//initialize editor
+	vm->GetEditor()->Initialize();
+
 	//report hardware concurrency
 	int c = std::thread::hardware_concurrency();
 	Report("Reported hardware concurrency: " + ToString(c) + "\n");
@@ -675,6 +716,9 @@ bool HAL::LoadSystem(const std::string &data_path, Ogre::RenderWindow *renderwin
 bool HAL::Render()
 {
 	SBS_PROFILE_MAIN("Render");
+
+	//process editor
+	vm->GetEditor()->Run();
 
 	//render to the frame buffer
 	try
@@ -795,6 +839,9 @@ void HAL::ReInit()
 
 	delete mTrayMgr;
 	mTrayMgr = 0;
+
+	//unload editor interface
+	vm->GetEditor()->Unload();
 
 	//reinit overlay system
 	try
@@ -1068,6 +1115,11 @@ void HAL::RegisterThread()
 void HAL::UnregisterThread()
 {
 	mRoot->getRenderSystem()->unregisterThread();
+}
+
+bool HAL::IsVREnabled()
+{
+	return GetConfigBool(configfile, "Skyscraper.Frontend.VR", false);
 }
 
 }

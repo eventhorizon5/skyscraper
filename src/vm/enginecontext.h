@@ -41,11 +41,12 @@ public:
 	bool Paused;
 	bool IsSystem;
 	EngineType type;
+	bool was_reloaded;
 
-	EngineContext(const EngineType type, EngineContext *parent, VM *vm, Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
-	EngineContext(const EngineType type, EngineContext *parent, VM *vm, Ogre::SceneManager* mSceneManager, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
+	EngineContext(const EngineType type, EngineContext *parent, VM *vm, Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, const Vector3 &position = Vector3::ZERO, const Vector3 &rotation = Vector3::ZERO, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
+	EngineContext(const EngineType type, EngineContext *parent, VM *vm, Ogre::SceneManager* mSceneManager, const Vector3 &position = Vector3::ZERO, const Vector3 &rotation = Vector3::ZERO, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
 	~EngineContext();
-	void Init(const EngineType type, EngineContext *parent, VM *vm, Ogre::SceneManager* mSceneManager, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max);
+	void Init(const EngineType type, EngineContext *parent, VM *vm, Ogre::SceneManager* mSceneManager, const Vector3 &position, const Vector3 &rotation, const Vector3 &area_min, const Vector3 &area_max);
 	ScriptProcessor* GetScriptProcessor();
 	::SBS::SBS *GetSystem() { return Simcore; }
 	bool IsCameraActive();
@@ -69,6 +70,7 @@ public:
 	int GetNumber() { return instance; }
 	::SBS::CameraState GetCameraState();
 	void SetCameraState(const ::SBS::CameraState &state, bool set_floor = true);
+	void SetCameraState(bool set_floor);
 	bool IsInside();
 	bool IsInside(const Vector3 &position);
 	void DetachCamera(bool reset_building = false);
@@ -83,7 +85,8 @@ public:
 	void AddChild(EngineContext *engine);
 	void RemoveChild(const EngineContext *engine);
 	void RemoveParent() { parent = 0; }
-	void Move(Vector3 &position, bool move_children = false);
+	void Move(Vector3 &vector, Real speed, bool move_children = false);
+	void Rotate(const Vector3 &vector, Real speed, bool relative);
 	EngineContext* GetParent() { return parent; }
 	bool IsParent(EngineContext *engine, bool recursive = false);
 	VM* GetVM();
@@ -98,11 +101,16 @@ public:
 	std::string GetThreadID();
 	void CancelShutdown() { shutdown = false; }
 	void Reset(bool full = true);
-	Vector3 GetPosition();
+	Vector3 GetPosition(bool relative = false);
+	Vector3 GetRotation();
+	EngineContext* GetChild(size_t index);
+	size_t GetChildCount();
+	std::string GetStatus();
+	std::string GetType();
 
 private:
 
-	void StartSim();
+	void StartSim(const Vector3 &position, const Vector3 &rotation);
 	void UnloadSim();
 	void ThreadWait();
 	void Init();
@@ -127,10 +135,8 @@ private:
 
 	Ogre::SceneManager* mSceneManager;
 	FMOD::System *fmodsystem;
-	Vector3 position;
 	Vector3 area_min;
 	Vector3 area_max;
-	Real rotation;
 
 	//child engines
 	std::vector<EngineContext*> children;

@@ -317,7 +317,7 @@ int ScriptProcessor::GlobalsSection::Run(std::string &LineData)
 	//handle end of globals section
 	if (StartsWithNoCase(LineData, "<endglobals>"))
 	{
-		config->SectionNum = 0;
+		config->SectionNum = SECTION_NONE;
 		config->Context = "None";
 		engine->Report("Finished globals");
 		return sNextLine;

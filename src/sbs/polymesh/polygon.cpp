@@ -34,16 +34,37 @@
 
 namespace SBS {
 
-Polygon::Polygon(Object *parent, const std::string &name, MeshObject *meshwrapper, GeometrySet &geometry, std::vector<Triangle> &triangles, Matrix3 &tex_matrix, Vector3 &tex_vector, const std::string &material, Plane &plane) : ObjectBase(parent)
+Polygon::Polygon(Object *parent, const std::string &name, MeshObject *meshwrapper) : ObjectBase(parent)
 {
 	mesh = meshwrapper;
+	t_matrix = Matrix3::ZERO;
+	t_vector = Vector3::ZERO;
+	SetName(name);
+	size = 0;
+
+	sbs->GetPolyMesh()->PolygonCount++;
+}
+
+Polygon::~Polygon()
+{
+	if (material != "" && sbs->FastDelete == false)
+		sbs->GetTextureManager()->DecrementTextureUsage(material);
+
+	mesh->ResetPrepare();
+
+	sbs->GetPolyMesh()->PolygonCount--;
+}
+
+void Polygon::Create(GeometrySet &geometry, std::vector<Triangle> &triangles, Matrix3 &tex_matrix, Vector3 &tex_vector, const std::string &material, Plane &plane)
+{
+	//create a polygon
+
 	t_matrix = tex_matrix;
 	t_vector = tex_vector;
 	this->material = material;
 	this->plane = plane;
 	this->geometry = geometry;
 	this->triangles = triangles;
-	SetName(name);
 	size = triangles.size() * (sizeof(unsigned int) * 3);
 
 	vertex_count = 0;
@@ -55,23 +76,19 @@ Polygon::Polygon(Object *parent, const std::string &name, MeshObject *meshwrappe
 
 	mesh->ResetPrepare();
 
-	sbs->GetPolyMesh()->PolygonCount++;
-
 	//register texture usage
 	if (material != "")
 		sbs->GetTextureManager()->IncrementTextureUsage(material);
 }
 
-Polygon::Polygon(Object *parent, const std::string &name, MeshObject *meshwrapper, std::vector<Geometry> &geometry, std::vector<Triangle> &triangles, Matrix3 &tex_matrix, Vector3 &tex_vector, const std::string &material, Plane &plane) : ObjectBase(parent)
+void Polygon::Create(std::vector<Geometry> &geometry, std::vector<Triangle> &triangles, Matrix3 &tex_matrix, Vector3 &tex_vector, const std::string &material, Plane &plane)
 {
-	mesh = meshwrapper;
 	t_matrix = tex_matrix;
 	t_vector = tex_vector;
 	this->material = material;
 	this->plane = plane;
 	this->geometry.emplace_back(geometry);
 	this->triangles = triangles;
-	SetName(name);
 	size = triangles.size() * (sizeof(unsigned int) * 3);
 
 	vertex_count = geometry.size();
@@ -79,21 +96,9 @@ Polygon::Polygon(Object *parent, const std::string &name, MeshObject *meshwrappe
 
 	mesh->ResetPrepare();
 
-	sbs->GetPolyMesh()->PolygonCount++;
-
 	//register texture usage
 	if (material != "")
 		sbs->GetTextureManager()->IncrementTextureUsage(material);
-}
-
-Polygon::~Polygon()
-{
-	if (material != "" && sbs->FastDelete == false)
-		sbs->GetTextureManager()->DecrementTextureUsage(material);
-
-	mesh->ResetPrepare();
-
-	sbs->GetPolyMesh()->PolygonCount--;
 }
 
 void Polygon::GetTextureMapping(Matrix3 &tm, Vector3 &tv)

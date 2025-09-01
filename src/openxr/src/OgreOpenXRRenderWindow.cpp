@@ -34,6 +34,19 @@
 std::vector<Ogre::Vector3> XRPosition;
 std::vector<Ogre::Quaternion> XROrientation;
 
+static inline Ogre::Quaternion yawFromQuat(const Ogre::Quaternion& q)
+{
+    //ogre forward is -Z. Project forward to XZ, compute yaw about +Y.
+    const Ogre::Vector3 fwd = q * Ogre::Vector3(0,0,-1);
+    Ogre::Vector3 f = Ogre::Vector3(fwd.x, 0, fwd.z);
+    if (!f.isZeroLength()) f.normalise();
+    const Ogre::Radian yaw = Ogre::Math::ATan2(f.x, -f.z);
+    return Ogre::Quaternion(yaw, Ogre::Vector3::UNIT_Y);
+}
+
+//controller states
+static OpenXRControllerState gControllerStates[2] = {};
+
 namespace Ogre {
   class OpenXRState;
   class OpenXRViewProjection;
@@ -94,10 +107,19 @@ namespace Ogre {
     XrCompositionLayerProjection mXrLayer{ XR_TYPE_COMPOSITION_LAYER_PROJECTION };
     std::vector<XrCompositionLayerBaseHeader*> mXrLayers;
 
-    bool sessionReady() { return mXrSessionState == XR_SESSION_STATE_READY || XR_SESSION_STATE_FOCUSED; }
+    Ogre::Quaternion mBodyYaw = Ogre::Quaternion::IDENTITY;
+    Ogre::Vector3    mBodyPos = Ogre::Vector3::ZERO;
+    Ogre::Quaternion mHeadYaw = Ogre::Quaternion::IDENTITY;
+    XrTime mPrevDisplayTime = 0; // to compute dt
+
+    bool sessionReady() {
+        return (mXrSessionState == XR_SESSION_STATE_READY) ||
+            (mXrSessionState == XR_SESSION_STATE_FOCUSED);
+    }
     bool shouldRender() { return sessionReady() && mXrFrameState.shouldRender; }
 
     void ProcessOpenXREvents();
+    void ProcessControllers();
     void _startXrFrame();
     void _endXrFrame();
   };
@@ -161,6 +183,7 @@ namespace Ogre {
     mXrState->Initialize(name);
     mXrState->InitializeSystem();
     mXrState->initializeSession(mDevice);
+    mXrState->InitializeControllers();
 
     mViewProjections->Initialize(mXrState.get());
     mWidth = mViewProjections->getWidth();
@@ -172,94 +195,161 @@ namespace Ogre {
   }
 
 
-  void OpenXRRenderWindow::_beginUpdate()
-  {
+void OpenXRRenderWindow::_beginUpdate()
+{
     RenderTarget::_beginUpdate();
     ProcessOpenXREvents();
     _startXrFrame();
-
     if (!shouldRender()) return;
 
+    //refresh OpenXR view info for this predicted display time
     mViewProjections->UpdateXrViewInfo(mXrViewState, mXrState.get(), mXrFrameState.predictedDisplayTime);
-    uint32_t viewCount = 2;
- 
+
+    const uint32_t viewCount = 2;
+
+    //acquire swapchain images and build RTVs
     swapchainL->AcquireImages();
     swapchainR->AcquireImages();
 
-    const CD3D11_RENDER_TARGET_VIEW_DESC renderTargetViewDescL(D3D11_RTV_DIMENSION_TEXTURE2DARRAY, swapchainL->ColorSwapchainPixelFormat);
+    const CD3D11_RENDER_TARGET_VIEW_DESC rtvDescL(D3D11_RTV_DIMENSION_TEXTURE2DARRAY, swapchainL->ColorSwapchainPixelFormat);
     mRenderTargetViewL = nullptr;
-    CHECK_HRCMD(
-      mDevice->CreateRenderTargetView(swapchainL->getColorTexture(), &renderTargetViewDescL, mRenderTargetViewL.put()));
+    CHECK_HRCMD(mDevice->CreateRenderTargetView(swapchainL->getColorTexture(), &rtvDescL, mRenderTargetViewL.put()));
 
-    const CD3D11_RENDER_TARGET_VIEW_DESC renderTargetViewDescR(D3D11_RTV_DIMENSION_TEXTURE2DARRAY, swapchainR->ColorSwapchainPixelFormat);
+    const CD3D11_RENDER_TARGET_VIEW_DESC rtvDescR(D3D11_RTV_DIMENSION_TEXTURE2DARRAY, swapchainR->ColorSwapchainPixelFormat);
     mRenderTargetViewR = nullptr;
-    CHECK_HRCMD(
-      mDevice->CreateRenderTargetView(swapchainR->getColorTexture(), &renderTargetViewDescR, mRenderTargetViewR.put()));
+    CHECK_HRCMD(mDevice->CreateRenderTargetView(swapchainR->getColorTexture(), &rtvDescR, mRenderTargetViewR.put()));
 
+    //default to left eye at frame start so Ogre has a valid target before the listener switches per camera.
+    setActiveEye(0);  // sets mpBackBuffer to left’s color texture under the hood
+
+    //compute views/projections for both eyes
     std::vector<xr::math::ViewProjection> vps(viewCount);
     mViewProjections->CalculateViewProjections(vps);
-    auto imageRect = swapchainL->getImageRect();
+    const auto imageRect = swapchainL->getImageRect();
 
+    //cache HMD yaw (use either eye’s orientation; they are the same)
+    const Ogre::Quaternion hmdOriCenter(
+        (Ogre::Real)vps[0].Pose.orientation.w,
+        (Ogre::Real)vps[0].Pose.orientation.x,
+        (Ogre::Real)vps[0].Pose.orientation.y,
+        (Ogre::Real)vps[0].Pose.orientation.z);
+
+    //convert to yaw-only so pitch/roll don’t affect movement
+    mHeadYaw = yawFromQuat(hmdOriCenter);
+
+    //compute head-center in app space from the two views (positions only)
+    const Ogre::Vector3 eyePosL(
+        (Ogre::Real)vps[0].Pose.position.x,
+        (Ogre::Real)vps[0].Pose.position.y,
+        (Ogre::Real)vps[0].Pose.position.z);
+
+    const Ogre::Vector3 eyePosR(
+        (Ogre::Real)vps[1].Pose.position.x,
+        (Ogre::Real)vps[1].Pose.position.y,
+        (Ogre::Real)vps[1].Pose.position.z);
+
+    //center of head (between eyes) in app space
+    const Ogre::Vector3 headCenterApp = (eyePosL + eyePosR) * 0.5f;
+
+    //world transform parts
+    const Ogre::Quaternion worldFromApp_R = mBodyYaw;     //rig yaw
+    const Ogre::Vector3    worldFromApp_T = mBodyPos;     //accumulated locomotion (in world space)
+
+    //wire the layer views to the correct swapchains & rects
     mViewProjections->ProjectionLayerViews[0].subImage.swapchain = swapchainL->getColorSwapchain();
     mViewProjections->ProjectionLayerViews[1].subImage.swapchain = swapchainR->getColorSwapchain();
-
-    mViewProjections->DepthInfoViews[0].subImage.swapchain = swapchainL->getDepthSwapchain();
-    mViewProjections->DepthInfoViews[1].subImage.swapchain = swapchainR->getDepthSwapchain();
-
+    mViewProjections->DepthInfoViews[0].subImage.swapchain      = swapchainL->getDepthSwapchain();
+    mViewProjections->DepthInfoViews[1].subImage.swapchain      = swapchainR->getDepthSwapchain();
     for (uint32_t i = 0; i < viewCount; ++i) {
-      mViewProjections->ProjectionLayerViews[i].subImage.imageRect = imageRect;
-      mViewProjections->DepthInfoViews[i].subImage.imageRect = imageRect;
+        mViewProjections->ProjectionLayerViews[i].subImage.imageRect = imageRect;
+        mViewProjections->DepthInfoViews[i].subImage.imageRect       = imageRect;
     }
 
-    auto deviceContext = mDevice.GetImmediateContext();
-
-    const uint32_t viewInstanceCount = (uint32_t)vps.size();
-
-    CD3D11_VIEWPORT viewport(
-      (float)imageRect.offset.x, (float)imageRect.offset.y, (float)imageRect.extent.width, (float)imageRect.extent.height);
-    deviceContext->RSSetViewports(1, &viewport);
-
-    mpBackBuffer = swapchainR->getColorTexture();
-
-    const bool reversedZ = vps[0].NearFar.Near > vps[0].NearFar.Far;
-    const float depthClearValue = reversedZ ? 0.f : 1.f;
+    //D3D viewport & backbuffer
+    auto* deviceContext = mDevice.GetImmediateContext();
+    CD3D11_VIEWPORT vp(
+        static_cast<float>(imageRect.offset.x),
+        static_cast<float>(imageRect.offset.y),
+        static_cast<float>(imageRect.extent.width),
+        static_cast<float>(imageRect.extent.height));
+    deviceContext->RSSetViewports(1, &vp);
 
     if (mNumberOfEyesAdded != 2) return;
 
-    for (uint32_t k = 0; k < 2; ++k) {
-      const DirectX::XMMATRIX spaceToView = xr::math::LoadXrPose(vps[k].Pose);
-      Ogre::Quaternion orientation(vps[k].Pose.orientation.w, vps[k].Pose.orientation.x, vps[k].Pose.orientation.y, vps[k].Pose.orientation.z);
-      Ogre::Vector3 position(vps[k].Pose.position.x, vps[k].Pose.position.y, vps[k].Pose.position.z);
+    //helpers to convert & rotate for the submitted layer poses
+    const auto toXr = [](const Ogre::Quaternion& q){
+        return XrQuaternionf{ (float)q.x, (float)q.y, (float)q.z, (float)q.w };
+    };
+    const auto qmul = [](const XrQuaternionf& a, const XrQuaternionf& b){
+        // a * b  (OpenXR order: x,y,z,w)
+        return XrQuaternionf{
+            a.w*b.x + a.x*b.w + a.y*b.z - a.z*b.y,
+            a.w*b.y - a.x*b.z + a.y*b.w + a.z*b.x,
+            a.w*b.z + a.x*b.y - a.y*b.x + a.z*b.w,
+            a.w*b.w - a.x*b.x - a.y*b.y - a.z*b.z
+        };
+    };
+    const auto vrot = [&](const Ogre::Quaternion& q, const XrVector3f& v)->XrVector3f{
+        Ogre::Vector3 ov((Ogre::Real)v.x,(Ogre::Real)v.y,(Ogre::Real)v.z);
+        Ogre::Vector3 ro = q * ov; // rotate by yaw
+        return XrVector3f{ (float)ro.x,(float)ro.y,(float)ro.z };
+    };
 
-      Ogre::Affine3 viewMatrix;
-      for (size_t i = 0; i < 4; ++i) {
-        for (size_t j = 0; j < 4; ++j) {
-          viewMatrix[i][j] = spaceToView.r[i].m128_f32[j];
+    //drive the Ogre cameras: apply same yaw to orientation and position
+    for (uint32_t k = 0; k < viewCount; ++k) {
+        const auto& vpk = vps[k];
+
+        //raw HMD per-eye pose (already includes IPD)
+        const Ogre::Quaternion hmdOri(
+            (Ogre::Real)vpk.Pose.orientation.w,
+            (Ogre::Real)vpk.Pose.orientation.x,
+            (Ogre::Real)vpk.Pose.orientation.y,
+            (Ogre::Real)vpk.Pose.orientation.z);
+        const Ogre::Vector3 hmdPos(
+            (Ogre::Real)vpk.Pose.position.x,
+            (Ogre::Real)vpk.Pose.position.y,
+            (Ogre::Real)vpk.Pose.position.z);
+
+        //eye position in app space (like above for L/R):
+        const Ogre::Vector3 eyePosApp(
+            (Ogre::Real)vpk.Pose.position.x,
+            (Ogre::Real)vpk.Pose.position.y,
+            (Ogre::Real)vpk.Pose.position.z);
+
+        //rotate *around the head center*, then translate the center
+        const Ogre::Vector3 eyeOffsetApp = eyePosApp - headCenterApp;
+        const Ogre::Vector3 finalPos =
+            (worldFromApp_R * eyeOffsetApp) +        // rotate the eye offset
+            (worldFromApp_R * headCenterApp) +       // rotate the center
+            worldFromApp_T;                          // then add locomotion
+
+        //const Ogre::Quaternion finalOri = mBodyYaw * hmdOri;
+        const Ogre::Quaternion finalOri = worldFromApp_R * hmdOri;
+        //const Ogre::Vector3    finalPos = (mBodyYaw * hmdPos) + mBodyPos;
+
+        //build Ogre projection from OpenXR FOV
+        xr::math::NearFar nf = { 0.1f, std::numeric_limits<float>::infinity() };
+        DirectX::XMMATRIX projM = ComposeProjectionMatrix(vpk.Fov, nf);
+
+        Ogre::Matrix4 ogreProj;
+        for (size_t i = 0; i < 4; ++i) {
+            for (size_t j = 0; j < 4; ++j) {
+#if OGRE_CPU == OGRE_CPU_ARM
+                ogreProj[i][j] = (Ogre::Real)projM.r[j].n128_f32[i];
+#else
+                ogreProj[i][j] = (Ogre::Real)projM.r[j].m128_f32[i];
+#endif
+            }
         }
-      }
 
-      xr::math::NearFar nf = { 0.1, std::numeric_limits<float>::infinity() };
-
-      DirectX::XMMATRIX projectionMatrix = ComposeProjectionMatrix(
-        vps[k].Fov,
-        nf);
-      Ogre::Matrix4 eyeProjectionMatrix;
-
-      // Note the transpose
-      for (size_t i = 0; i < 4; ++i) {
-        for (size_t j = 0; j < 4; ++j) {
-          eyeProjectionMatrix[i][j] = projectionMatrix.r[j].m128_f32[i];
-        }
-      }
-      //mEyeCameras[k]->setCustomViewMatrix(true, viewMatrix);
-      //mEyeCameras[k]->setPosition(XRPosition[k] + position);
-      mEyeCameras[k]->setPosition(position);
-      mEyeCameras[k]->setOrientation(orientation);
-      mEyeCameras[k]->setCustomProjectionMatrix(true, eyeProjectionMatrix);
-      //mEyeCameras[k]->setFarClipDistance(3000);
-      mEyeCameras[k]->setAspectRatio(Ogre::Real(imageRect.extent.height / imageRect.extent.width));
+        //set camera ONCE (don’t overwrite later)
+        mEyeCameras[k]->setPosition(finalPos);
+        mEyeCameras[k]->setOrientation(finalOri);
+        mEyeCameras[k]->setCustomProjectionMatrix(true, ogreProj);
+        mEyeCameras[k]->setAspectRatio(
+            Ogre::Real(imageRect.extent.width) / Ogre::Real(imageRect.extent.height));
     }
-  }
+}
 
   void OpenXRRenderWindow::_endUpdate()
   {
@@ -407,6 +497,9 @@ namespace Ogre {
     mXrLayer = { XR_TYPE_COMPOSITION_LAYER_PROJECTION };
     mXrLayer.layerFlags = XR_COMPOSITION_LAYER_BLEND_TEXTURE_SOURCE_ALPHA_BIT;
     mXrLayers.push_back(reinterpret_cast<XrCompositionLayerBaseHeader*>(&mXrLayer));
+
+    ProcessControllers();
+
   }
 
   void OpenXRRenderWindow::_endXrFrame()
@@ -423,6 +516,215 @@ namespace Ogre {
 
     CHECK_XRCMD(xrEndFrame(mXrState->GetSession().Get(), &frameEndInfo));
   }
+
+  void OpenXRRenderWindow::ProcessControllers()
+  {
+      //sync input actions
+      XrActiveActionSet activeActionSet{};
+      activeActionSet.actionSet = mXrState->actionSet;
+
+      XrActionsSyncInfo syncInfo{XR_TYPE_ACTIONS_SYNC_INFO};
+      syncInfo.countActiveActionSets = 1;
+      syncInfo.activeActionSets = &activeActionSet;
+
+      xrSyncActions(mXrState->GetSession().Get(), &syncInfo);
+
+      //poll left controller pose
+      XrSpaceLocation leftLocation{XR_TYPE_SPACE_LOCATION};
+      xrLocateSpace(mXrState->leftControllerSpace, mXrState->getAppSpace().Get(), mXrFrameState.predictedDisplayTime, &leftLocation);
+
+      if ((leftLocation.locationFlags & XR_SPACE_LOCATION_POSITION_VALID_BIT) &&
+        (leftLocation.locationFlags & XR_SPACE_LOCATION_ORIENTATION_VALID_BIT))
+      {
+          //extract left controller pose
+          XrPosef pose = leftLocation.pose;
+          //convert XrPosef to your math type and use it
+      }
+
+      //poll right controller pose
+      XrSpaceLocation rightLocation{XR_TYPE_SPACE_LOCATION};
+      xrLocateSpace(mXrState->rightControllerSpace, mXrState->getAppSpace().Get(), mXrFrameState.predictedDisplayTime, &rightLocation);
+
+      if ((rightLocation.locationFlags & XR_SPACE_LOCATION_POSITION_VALID_BIT) &&
+        (rightLocation.locationFlags & XR_SPACE_LOCATION_ORIENTATION_VALID_BIT))
+      {
+          //extract right controller pose
+          XrPosef pose = rightLocation.pose;
+          //convert XrPosef to your math type and use it
+      }
+
+      XrActionStateGetInfo getInfo{XR_TYPE_ACTION_STATE_GET_INFO};
+      getInfo.action = mXrState->selectAction;
+
+      XrActionStateBoolean state{XR_TYPE_ACTION_STATE_BOOLEAN};
+      xrGetActionStateBoolean(mXrState->GetSession().Get(), &getInfo, &state);
+
+      //left hand
+      {
+        int handIndex = 0;
+        auto& state = gControllerStates[handIndex];
+        state.poseValid = false;
+
+        XrSpaceLocation loc{XR_TYPE_SPACE_LOCATION};
+        xrLocateSpace(mXrState->leftControllerSpace, mXrState->getAppSpace().Get(), mXrFrameState.predictedDisplayTime, &loc);
+        if ((loc.locationFlags & XR_SPACE_LOCATION_POSITION_VALID_BIT) &&
+            (loc.locationFlags & XR_SPACE_LOCATION_ORIENTATION_VALID_BIT))
+        {
+            state.poseValid = true;
+            state.position = Ogre::Vector3(loc.pose.position.x, loc.pose.position.y, loc.pose.position.z);
+            state.orientation = Ogre::Quaternion(loc.pose.orientation.w, loc.pose.orientation.x, loc.pose.orientation.y, loc.pose.orientation.z);
+        }
+
+        //trigger
+        {
+            auto& state = gControllerStates[handIndex];
+            XrActionStateGetInfo getInfo{XR_TYPE_ACTION_STATE_GET_INFO};
+            getInfo.action = mXrState->selectAction;
+            getInfo.subactionPath = mXrState->leftHandPath;
+
+            XrActionStateBoolean triggerState{XR_TYPE_ACTION_STATE_BOOLEAN};
+            xrGetActionStateBoolean(mXrState->GetSession().Get(), &getInfo, &triggerState);
+
+            state.triggerPressed = (triggerState.isActive && triggerState.currentState);
+        }
+
+        //joystick
+        {
+            auto& state = gControllerStates[handIndex];
+            XrActionStateGetInfo getInfo{XR_TYPE_ACTION_STATE_GET_INFO};
+            getInfo.action = mXrState->thumbstickVector; // a VECTOR2F action
+            getInfo.subactionPath = mXrState->leftHandPath;
+
+            XrActionStateVector2f axisState{XR_TYPE_ACTION_STATE_VECTOR2F};
+            xrGetActionStateVector2f(mXrState->GetSession().Get(), &getInfo, &axisState);
+
+            state.joystickX = axisState.currentState.x;
+            state.joystickY = axisState.currentState.y;
+        }
+
+        XrActionStateGetInfo getInfo{ XR_TYPE_ACTION_STATE_GET_INFO };
+        getInfo.action = mXrState->thumbstickVector;
+        getInfo.subactionPath = mXrState->leftHandPath; // or rightHandPath for handIndex 1
+
+        XrActionStateVector2f axisState{ XR_TYPE_ACTION_STATE_VECTOR2F };
+        xrGetActionStateVector2f(mXrState->GetSession().Get(), &getInfo, &axisState);
+
+        gControllerStates[0].joystickX = axisState.currentState.x;
+        gControllerStates[0].joystickY = axisState.currentState.y;
+      }
+
+      //right hand
+      {
+        int handIndex = 1;
+        auto& state = gControllerStates[handIndex];
+        state.poseValid = false;
+
+        XrSpaceLocation loc{XR_TYPE_SPACE_LOCATION};
+        xrLocateSpace(mXrState->rightControllerSpace, mXrState->getAppSpace().Get(), mXrFrameState.predictedDisplayTime, &loc);
+        if ((loc.locationFlags & XR_SPACE_LOCATION_POSITION_VALID_BIT) &&
+            (loc.locationFlags & XR_SPACE_LOCATION_ORIENTATION_VALID_BIT))
+        {
+            state.poseValid = true;
+            state.position = Ogre::Vector3(loc.pose.position.x, loc.pose.position.y, loc.pose.position.z);
+            state.orientation = Ogre::Quaternion(loc.pose.orientation.w, loc.pose.orientation.x, loc.pose.orientation.y, loc.pose.orientation.z);
+        }
+
+        //trigger
+        {
+            XrActionStateGetInfo getInfo{XR_TYPE_ACTION_STATE_GET_INFO};
+            getInfo.action = mXrState->selectAction;
+            getInfo.subactionPath = mXrState->rightHandPath;
+
+            XrActionStateBoolean triggerState{XR_TYPE_ACTION_STATE_BOOLEAN};
+            xrGetActionStateBoolean(mXrState->GetSession().Get(), &getInfo, &triggerState);
+
+            state.triggerPressed = (triggerState.isActive && triggerState.currentState);
+        }
+
+        //joystick
+        {
+            XrActionStateGetInfo getInfo{XR_TYPE_ACTION_STATE_GET_INFO};
+            getInfo.action = mXrState->thumbstickVector; // a VECTOR2F action
+            getInfo.subactionPath = mXrState->rightHandPath;
+
+            XrActionStateVector2f axisState{XR_TYPE_ACTION_STATE_VECTOR2F};
+            xrGetActionStateVector2f(mXrState->GetSession().Get(), &getInfo, &axisState);
+
+            state.joystickX = axisState.currentState.x;
+            state.joystickY = axisState.currentState.y;
+        }
+
+        XrActionStateGetInfo getInfo{ XR_TYPE_ACTION_STATE_GET_INFO };
+        getInfo.action = mXrState->thumbstickVector;
+        getInfo.subactionPath = mXrState->rightHandPath;
+
+        XrActionStateVector2f axisState{ XR_TYPE_ACTION_STATE_VECTOR2F };
+        xrGetActionStateVector2f(mXrState->GetSession().Get(), &getInfo, &axisState);
+
+        gControllerStates[1].joystickX = axisState.currentState.x;
+        gControllerStates[1].joystickY = axisState.currentState.y;
+
+      }
+
+      //integrate smooth body yaw from right stick X
+      double dt = 0.0;
+      if (mPrevDisplayTime != 0)
+          dt = double(mXrFrameState.predictedDisplayTime - mPrevDisplayTime) / 1e9;
+      mPrevDisplayTime = mXrFrameState.predictedDisplayTime;
+
+      const float deadzone = 0.15f;
+      const float turnRateDegPerSec = 120.0f; // tune to taste
+      float rx = gControllerStates[1].joystickX; // right-hand stick X
+
+      if (std::fabs(rx) > deadzone && dt > 0.0) {
+          float yawDeg = -rx * turnRateDegPerSec * float(dt);
+          mBodyYaw = Ogre::Quaternion(Ogre::Degree(yawDeg), Ogre::Vector3::UNIT_Y) * mBodyYaw;
+          mBodyYaw.normalise();
+      }
+
+      //left stick drives movement (x=strafe, y=forward)
+      float lx = gControllerStates[0].joystickX;
+      float ly = gControllerStates[0].joystickY;
+
+      //deadzone & scaling
+      const float dz = 0.15f;
+      if (std::fabs(lx) < dz) lx = 0.f;
+      if (std::fabs(ly) < dz) ly = 0.f;
+
+      //local (camera) movement vector: X = right, Z = forward(-)
+      Ogre::Vector3 localMove(lx, 0.f, -ly);
+
+      Ogre::Quaternion heading = mBodyYaw * mHeadYaw;
+
+      //rotate local vector into world/app space
+      Ogre::Vector3 worldMove = heading * localMove;
+
+      //speed (meters/second) and integration
+      const float speed = 3.0f; // tune
+      if (dt > 0.0) {
+          mBodyPos += worldMove * (speed * (float)dt);
+      }
+
+      if (state.isActive && state.currentState)
+      {
+          //trigger/button is pressed
+      }
+
+      if (mXrSessionState == XR_SESSION_STATE_FOCUSED)
+      {
+          XrInteractionProfileState ps{ XR_TYPE_INTERACTION_PROFILE_STATE };
+          XrResult pr = xrGetCurrentInteractionProfile(mXrState->GetSession().Get(), mXrState->leftHandPath, &ps);
+          if (XR_SUCCEEDED(pr) && ps.interactionProfile != XR_NULL_PATH) {
+              char s[XR_MAX_PATH_LENGTH] = {};
+              uint32_t len = 0;
+              xrPathToString(mXrState->GetInstanceHandle().Get(), ps.interactionProfile, XR_MAX_PATH_LENGTH, &len, s);
+              LogManager::getSingleton().logMessage("Left hand profile: " + Ogre::String(s));
+          }
+          else {
+              LogManager::getSingleton().logMessage("Left hand profile: (none) r=0x" + Ogre::StringConverter::toString(pr));
+          }
+      }
+  }
 }
 
 Ogre::RenderWindow* CreateOpenXRRenderWindow(Ogre::RenderSystem* rsys)
@@ -436,4 +738,13 @@ void SetOpenXRParameters(int index, const Ogre::Vector3& position, const Ogre::Q
 {
     XRPosition[index] = position;
     XROrientation[index] = orientation;
+}
+
+bool GetControllerState(int handIndex, OpenXRControllerState* outState)
+{
+    if (handIndex < 0 || handIndex > 1 || !outState)
+        return false;
+
+    *outState = gControllerStates[handIndex];
+    return true;
 }

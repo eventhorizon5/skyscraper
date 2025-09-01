@@ -107,7 +107,7 @@ Wall* PolyMesh::FindWallIntersect(MeshObject *mesh, const Vector3 &start, const 
         return 0;
 }
 
-bool PolyMesh::CreateMesh(MeshObject *mesh, const std::string &name, const std::string &texture, PolyArray &vertices, Real tw, Real th, bool autosize, Matrix3 &t_matrix, Vector3 &t_vector, GeometrySet &geometry, std::vector<Triangle> &triangles, PolygonSet &converted_vertices)
+bool PolyMesh::CreateMesh(MeshObject *mesh, Wall* ownerWall, Polygon* ownerPoly, const std::string &name, const std::string &texture, PolyArray &vertices, Real tw, Real th, bool autosize, Matrix3 &t_matrix, Vector3 &t_vector, GeometrySet &geometry, std::vector<Triangle> &triangles, PolygonSet &converted_vertices)
 {
 	//create custom mesh geometry, apply a texture map and material, and return the created submesh
 
@@ -162,10 +162,10 @@ bool PolyMesh::CreateMesh(MeshObject *mesh, const std::string &name, const std::
 	if (!sbs->GetTextureManager()->ComputeTextureMap(t_matrix, t_vector, converted_vertices[0], v1, v2, v3, tw2, th2))
 		return false;
 
-	return CreateMesh(mesh, name, material, converted_vertices, t_matrix, t_vector, geometry, triangles, converted_vertices, tw2, th2, false);
+	return CreateMesh(mesh, ownerWall, ownerPoly, name, material, converted_vertices, t_matrix, t_vector, geometry, triangles, converted_vertices, tw2, th2, false);
 }
 
-bool PolyMesh::CreateMesh(MeshObject *mesh, const std::string &name, const std::string &material, PolygonSet &vertices, Matrix3 &tex_matrix, Vector3 &tex_vector, GeometrySet &geometry, std::vector<Triangle> &triangles, PolygonSet &converted_vertices, Real tw, Real th, bool convert_vertices)
+bool PolyMesh::CreateMesh(MeshObject *mesh, Wall* ownerWall, Polygon* ownerPoly, const std::string &name, const std::string &material, PolygonSet &vertices, Matrix3 &tex_matrix, Vector3 &tex_vector, GeometrySet &geometry, std::vector<Triangle> &triangles, PolygonSet &converted_vertices, Real tw, Real th, bool convert_vertices)
 {
 	//create custom geometry, apply a texture map and material, and return the created submesh
 	//tw and th are only used when overriding texel map
@@ -187,6 +187,16 @@ bool PolyMesh::CreateMesh(MeshObject *mesh, const std::string &name, const std::
 	//texture mapping
 	size_t texel_count;
 	Vector2 *table = GetTexels(tex_matrix, tex_vector, converted_vertices, tw, th, texel_count);
+
+	//append to flattened pick buffers
+	uint32_t base = static_cast<uint32_t>(mesh->pickPositions.size());
+	for (size_t i = 0; i < converted_vertices.size(); ++i)
+	{
+		for (const auto& p : converted_vertices[i])
+		{
+			mesh->pickPositions.emplace_back(p); //remote space
+		}
+	}
 
 	//triangulate mesh
 	TriangleIndices *trimesh = new TriangleIndices[converted_vertices.size()];
@@ -245,6 +255,14 @@ bool PolyMesh::CreateMesh(MeshObject *mesh, const std::string &name, const std::
 			Triangle tri = trimesh[i].triangles[j];
 			tri += location;
 			triangles.emplace_back(tri);
+
+			//also append to pick index buffer + ownership in the same order
+			mesh->pickIndices.push_back(base + tri.a);
+			mesh->pickIndices.push_back(base + tri.b);
+			mesh->pickIndices.push_back(base + tri.c);
+
+			//append ownership information
+			mesh->triOwners.push_back({ownerWall, ownerPoly});
 		}
 		location += converted_vertices[i].size();
 	}
@@ -260,7 +278,7 @@ bool PolyMesh::CreateMesh(MeshObject *mesh, const std::string &name, const std::
 	return true;
 }
 
-bool PolyMesh::CreateMesh(MeshObject *mesh, const std::string &name, const std::string &material, PolygonSet &vertices, std::vector<std::vector<Vector2>> &uvMap, GeometrySet &geometry, std::vector<Triangle> &triangles, PolygonSet &converted_vertices, Real tw, Real th, bool convert_vertices)
+bool PolyMesh::CreateMesh(MeshObject *mesh, Wall* ownerWall, Polygon* ownerPoly, const std::string &name, const std::string &material, PolygonSet &vertices, std::vector<std::vector<Vector2>> &uvMap, GeometrySet &geometry, std::vector<Triangle> &triangles, PolygonSet &converted_vertices, Real tw, Real th, bool convert_vertices)
 {
 	//create custom geometry, apply a texture map and material, and return the created submesh
 	//tw and th are only used when overriding texel map
@@ -278,6 +296,16 @@ bool PolyMesh::CreateMesh(MeshObject *mesh, const std::string &name, const std::
 	}
 	else
 		converted_vertices = vertices;
+
+	//append to flattened pick buffers
+	uint32_t base = static_cast<uint32_t>(mesh->pickPositions.size());
+	for (size_t i = 0; i < converted_vertices.size(); ++i)
+	{
+		for (const auto& p : converted_vertices[i])
+		{
+			mesh->pickPositions.emplace_back(p); //remote space
+		}
+	}
 
 	//triangulate mesh
 	TriangleIndices *trimesh = new TriangleIndices[converted_vertices.size()];
@@ -333,6 +361,14 @@ bool PolyMesh::CreateMesh(MeshObject *mesh, const std::string &name, const std::
 			Triangle tri = trimesh[i].triangles[j];
 			tri += location;
 			triangles.emplace_back(tri);
+
+			//also append to pick index buffer + ownership in the same order
+			mesh->pickIndices.push_back(base + tri.a);
+			mesh->pickIndices.push_back(base + tri.b);
+			mesh->pickIndices.push_back(base + tri.c);
+
+			//append ownership information
+			mesh->triOwners.push_back({ownerWall, ownerPoly});
 		}
 		location += converted_vertices[i].size();
 	}
@@ -1541,9 +1577,311 @@ Vector2 PolyMesh::GetExtents(PolyArray &varray, int coord, bool flip_z)
 	return Vector2(esmall, ebig);
 }
 
+void PolyMesh::CutOrig(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool cutfloors, int checkwallnumber, bool reset_check)
+{
+	//cuts a rectangular hole in the polygons within the specified range
+	//this function only works on flat polygons
+
+	if (cutwalls == false && cutfloors == false)
+		return;
+
+	//swap values if the first is greater than the second
+	if (start.x > end.x)
+		std::swap(start.x, end.x);
+	if (start.y > end.y)
+		std::swap(start.y, end.y);
+	if (start.z > end.z)
+		std::swap(start.z, end.z);
+
+	bool polycheck = false;
+
+	if (reset_check == true)
+	{
+		if (checkwallnumber == 1)
+		{
+			wall1a = false;
+			wall1b = false;
+		}
+		if (checkwallnumber == 2)
+		{
+			wall2a = false;
+			wall2b = false;
+		}
+	}
+
+	//step through each polygon
+	int polycount = wall->GetPolygonCount();
+	for (int i = 0; i < polycount; i++)
+	{
+		//get name
+		Polygon *polygon = wall->GetPolygon(i);
+
+		PolygonSet newpolys;
+
+		//skip empty polygons
+		if (polygon->geometry.size() == 0)
+			continue;
+
+		//cut all polygons within range
+		for (size_t j = 0; j < polygon->geometry.size(); j++)
+		{
+			//skip null geometry
+			if (polygon->geometry[j].size() == 0)
+				continue;
+
+			PolyArray temppoly, temppoly2, temppoly3, temppoly4, temppoly5, worker;
+
+			Vector2 extentsx, extentsy, extentsz;
+			Ogre::AxisAlignedBox bounds (start, end);
+			Ogre::AxisAlignedBox polybounds;
+			bool polycheck2 = false;
+
+			//copy source polygon vertices
+			for (size_t k = 0; k < polygon->geometry[j].size(); k++)
+			{
+				Ogre::Vector3 vertex = sbs->ToLocal(polygon->geometry[j][k].vertex);
+				temppoly.emplace_back(vertex);
+				polybounds.merge(vertex);
+			}
+
+			//skip if the polygon is completely inside the bounding box
+			/*if (bounds.contains(polybounds) == true)
+			{
+				polycheck = true;
+				continue;
+			}*/
+
+			//make sure the polygon intersects bounds (is not outside the cut area)
+			if (bounds.intersects(polybounds) == true)
+			{
+				extentsx = GetExtents(temppoly, 1);
+				extentsy = GetExtents(temppoly, 2);
+				extentsz = GetExtents(temppoly, 3);
+
+				//is polygon a wall?
+				if (extentsy.x != extentsy.y)
+				{
+					if (cutwalls == true)
+					{
+						//wall
+						if (std::abs(extentsx.x - extentsx.y) > std::abs(extentsz.x - extentsz.y))
+						{
+							//wall is facing forward/backward
+
+							//get left side
+							worker = temppoly;
+							SplitWithPlane(0, worker, temppoly, temppoly2, start.x);
+							worker.clear();
+
+							//get right side
+							if (temppoly2.size() > 0)
+								worker = temppoly2;
+							else
+								worker = temppoly;
+							SplitWithPlane(0, worker, temppoly3, temppoly2, end.x);
+							worker.clear();
+
+							//get lower
+							if (temppoly3.size() > 0)
+								worker = temppoly3;
+							else if (temppoly2.size() > 0)
+								worker = temppoly2;
+							else if (temppoly.size() > 0)
+								worker = temppoly;
+							SplitWithPlane(1, worker, temppoly3, temppoly4, start.y);
+							worker.clear();
+
+							//get upper
+							if (temppoly4.size() > 0)
+								worker = temppoly4;
+							else if (temppoly3.size() > 0)
+								worker = temppoly3;
+							else if (temppoly2.size() > 0)
+								worker = temppoly2;
+							else if (temppoly.size() > 0)
+								worker = temppoly;
+							SplitWithPlane(1, worker, temppoly5, temppoly4, end.y);
+							worker.clear();
+						}
+						else
+						{
+							//wall is facing left/right
+
+							//get left side
+							worker = temppoly;
+							SplitWithPlane(2, worker, temppoly, temppoly2, start.z);
+							worker.clear();
+
+							//get right side
+							if (temppoly2.size() > 0)
+								worker = temppoly2;
+							else
+								worker = temppoly;
+							SplitWithPlane(2, worker, temppoly3, temppoly2, end.z);
+							worker.clear();
+
+							//get lower
+							if (temppoly3.size() > 0)
+								worker = temppoly3;
+							else if (temppoly2.size() > 0)
+								worker = temppoly2;
+							else if (temppoly.size() > 0)
+								worker = temppoly;
+							SplitWithPlane(1, worker, temppoly3, temppoly4, start.y);
+							worker.clear();
+
+							//get upper
+							if (temppoly4.size() > 0)
+								worker = temppoly4;
+							else if (temppoly3.size() > 0)
+								worker = temppoly3;
+							else if (temppoly2.size() > 0)
+								worker = temppoly2;
+							else if (temppoly.size() > 0)
+								worker = temppoly;
+							SplitWithPlane(1, worker, temppoly5, temppoly4, end.y);
+							worker.clear();
+						}
+						polycheck = true;
+						polycheck2 = true;
+
+						//store extents of temppoly5 for door sides if needed
+						GetDoorwayExtents(wall->GetMesh(), checkwallnumber, temppoly5);
+					}
+				}
+				else if (cutfloors == true)
+				{
+					//floor
+
+					//get left side
+					worker = temppoly;
+					SplitWithPlane(0, worker, temppoly, temppoly2, start.x);
+					worker.clear();
+
+					//get right side
+					if (temppoly2.size() > 0)
+						worker = temppoly2;
+					else
+						worker = temppoly;
+					SplitWithPlane(0, worker, temppoly3, temppoly2, end.x);
+					worker.clear();
+
+					//get lower
+					if (temppoly3.size() > 0)
+						worker = temppoly3;
+					else if (temppoly2.size() > 0)
+						worker = temppoly2;
+					else if (temppoly.size() > 0)
+						worker = temppoly;
+					SplitWithPlane(2, worker, temppoly3, temppoly4, start.z);
+					worker.clear();
+
+					//get upper
+					if (temppoly4.size() > 0)
+						worker = temppoly4;
+					else if (temppoly3.size() > 0)
+						worker = temppoly3;
+					else if (temppoly2.size() > 0)
+						worker = temppoly2;
+					else if (temppoly.size() > 0)
+						worker = temppoly;
+					SplitWithPlane(2, worker, temppoly5, temppoly4, end.z);
+					worker.clear();
+					temppoly5.clear();
+
+					polycheck = true;
+					polycheck2 = true;
+				}
+
+				//create split polygons
+				if (polycheck2 == true)
+				{
+					if (temppoly.size() > 2)
+					{
+						newpolys.resize(newpolys.size() + 1);
+						if (newpolys[newpolys.size() - 1].capacity() < temppoly.size())
+							newpolys[newpolys.size() - 1].reserve(temppoly.size());
+						for (size_t k = 0; k < temppoly.size(); k++)
+							newpolys[newpolys.size() - 1].emplace_back(temppoly[k]);
+					}
+					if (temppoly2.size() > 2)
+					{
+						newpolys.resize(newpolys.size() + 1);
+						if (newpolys[newpolys.size() - 1].capacity() < temppoly2.size())
+							newpolys[newpolys.size() - 1].reserve(temppoly2.size());
+						for (size_t k = 0; k < temppoly2.size(); k++)
+							newpolys[newpolys.size() - 1].emplace_back(temppoly2[k]);
+					}
+					if (temppoly3.size() > 2)
+					{
+						newpolys.resize(newpolys.size() + 1);
+						if (newpolys[newpolys.size() - 1].capacity() < temppoly3.size())
+							newpolys[newpolys.size() - 1].reserve(temppoly3.size());
+						for (size_t k = 0; k < temppoly3.size(); k++)
+							newpolys[newpolys.size() - 1].emplace_back(temppoly3[k]);
+					}
+					if (temppoly4.size() > 2)
+					{
+						newpolys.resize(newpolys.size() + 1);
+						if (newpolys[newpolys.size() - 1].capacity() < temppoly4.size())
+							newpolys[newpolys.size() - 1].reserve(temppoly4.size());
+						for (size_t k = 0; k < temppoly4.size(); k++)
+							newpolys[newpolys.size() - 1].emplace_back(temppoly4[k]);
+					}
+
+					temppoly.clear();
+					temppoly2.clear();
+					temppoly3.clear();
+					temppoly4.clear();
+				}
+			}
+			else
+			{
+				//otherwise put original polygon into array (will only be used if the related submesh is recreated)
+				PolyArray poly;
+				for (size_t k = 0; k < polygon->geometry[j].size(); k++)
+				{
+					poly.emplace_back(sbs->ToLocal(polygon->geometry[j][k].vertex));
+				}
+				newpolys.emplace_back(poly);
+			}
+		}
+
+		//create new polygon
+		if (polycheck == true)
+		{
+			std::string oldmat;
+			Vector3 oldvector;
+			Matrix3 mapping;
+			std::string name = polygon->GetName();
+
+			if (newpolys.size() > 0)
+			{
+				//get texture data from original polygon
+				oldmat = polygon->material;
+				polygon->GetTextureMapping(mapping, oldvector);
+			}
+
+			//delete original polygon
+			wall->DeletePolygon(i, false);
+			polygon = 0;
+
+			//create new polygon
+			if (newpolys.size() > 0)
+				wall->AddPolygonSet(name, oldmat, newpolys, mapping, oldvector);
+
+			//reset search position
+			i--;
+			polycount--;
+			polycheck = false;
+		}
+	}
+}
+
 void PolyMesh::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool cutfloors, int checkwallnumber, bool reset_check)
 {
 	//cuts a rectangular hole in the polygons within the specified range
+	//this function works on 3D shapes, and also preserves the UV texture mapping
 
 	if (!cutwalls && !cutfloors)
 		return;
@@ -1570,7 +1908,145 @@ void PolyMesh::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool c
 		}
 	}
 
-	Ogre::AxisAlignedBox bounds(start, end);
+	const Real EPS = SMALL_EPSILON;
+
+	auto computeNormal = [&](const GeometryArray& p)->Vector3
+	{
+		for (size_t i = 0; i + 2 < p.size(); ++i)
+		{
+			Vector3 n = (p[i + 1].vertex - p[i].vertex).crossProduct(p[i + 2].vertex - p[i + 1].vertex);
+			if (n.squaredLength() > EPS * EPS)
+				return n.normalisedCopy();
+		}
+		return Vector3(0, 1, 0);
+	};
+
+	auto extentsAxis = [](const GeometryArray& p, int axis)->Vector2
+	{
+		Real mn = std::numeric_limits<Real>::infinity();
+		Real mx = -mn;
+		for (const auto& v : p)
+		{
+			Real c = (axis == 0) ? v.vertex.x : (axis == 1) ? v.vertex.y : v.vertex.z;
+			if (c < mn)
+				mn = c;
+			if (c > mx)
+				mx = c;
+		}
+		return Vector2(mn, mx);
+	};
+
+	//2D early-outs for floors (XZ)
+	auto outside_all_floor_strict = [&](const GeometryArray& p)->bool
+	{
+		bool xl = true, xr = true, zb = true, zf = true;
+		for (const auto& v: p)
+		{
+			const Real x = v.vertex.x, z = v.vertex.z;
+			xl &= (x <= start.x - EPS);
+			xr &= (x >= end.x + EPS);
+			zb &= (z <= start.z - EPS);
+			zf &= (z >= end.z + EPS);
+		}
+		return xl || xr || zb || zf;
+	};
+	auto outside_all_floor_relaxed = [&](const GeometryArray& p)->bool
+	{
+		bool xl = true, xr = true, zb = true, zf = true;
+		for (const auto& v: p)
+		{
+			const Real x = v.vertex.x, z = v.vertex.z;
+			xl &= (x <= start.x + EPS);
+			xr &= (x >= end.x - EPS);
+			zb &= (z <= start.z + EPS);
+			zf &= (z >= end.z - EPS);
+		}
+		return xl || xr || zb || zf;
+	};
+
+	auto inside_all_floor_strict = [&](const GeometryArray& p)->bool
+	{
+		for (const auto& v: p)
+		{
+			const Real x = v.vertex.x, z = v.vertex.z;
+			if (x < start.x + EPS || x > end.x - EPS ||
+				z < start.z + EPS || z > end.z - EPS)
+				return false;
+		}
+		return true;
+	};
+
+	auto inside_all_floor_relaxed = [&](const GeometryArray& p)->bool
+	{
+		for (const auto& v: p)
+		{
+			const Real x = v.vertex.x, z = v.vertex.z;
+			if (x < start.x - EPS || x > end.x + EPS ||
+				z < start.z - EPS || z > end.z + EPS)
+				return false;
+		}
+		return true;
+	};
+
+	//3D early-outs for walls (use full AABB)
+	auto outside_all_wall_strict = [&](const GeometryArray& p)->bool
+	{
+		bool xl = true, xr = true, yl = true, yh = true, zb = true, zf = true;
+		for (const auto& v: p)
+		{
+			const Real x = v.vertex.x, y = v.vertex.y, z = v.vertex.z;
+			xl &= (x <= start.x - EPS);
+			xr &= (x >= end.x + EPS);
+			yl &= (y <= start.y - EPS);
+			yh &= (y >= end.y + EPS);
+			zb &= (z <= start.z - EPS);
+			zf &= (z >= end.z + EPS);
+		}
+		return xl || xr || yl || yh || zb || zf;
+	};
+
+	auto inside_all_wall_strict = [&](const GeometryArray& p)->bool
+	{
+		for (const auto& v: p)
+		{
+			const Real x = v.vertex.x, y = v.vertex.y, z = v.vertex.z;
+			if (x < start.x + EPS || x > end.x - EPS ||
+				y < start.y + EPS || y > end.y - EPS ||
+				z < start.z + EPS || z > end.z - EPS)
+				return false;
+		}
+		return true;
+	};
+
+	//ring XZ bbox + Y thickness
+	auto ring_metrics = [&](const GeometryArray& p)
+	{
+		Vector2 mnXZ( std::numeric_limits<Real>::infinity()), mxXZ(-std::numeric_limits<Real>::infinity());
+		Real yMin =  std::numeric_limits<Real>::infinity();
+		Real yMax = -std::numeric_limits<Real>::infinity();
+		for (const auto& g : p)
+		{
+			mnXZ.x = std::min(mnXZ.x, g.vertex.x);
+			mxXZ.x = std::max(mxXZ.x, g.vertex.x);
+			mnXZ.y = std::min(mnXZ.y, g.vertex.z);
+			mxXZ.y = std::max(mxXZ.y, g.vertex.z);
+			yMin   = std::min(yMin, g.vertex.y);
+			yMax   = std::max(yMax, g.vertex.y);
+		}
+		return std::tuple<Vector2,Vector2,Real>(mnXZ, mxXZ, (yMax - yMin));
+	};
+
+	//small heuristic: likely a terrain/ground tile?
+	auto likely_terrain = [&](const GeometryArray& p)->bool
+	{
+		auto [mn,mx,yt] = ring_metrics(p);
+		const Real dx = mx.x - mn.x;
+		const Real dz = mx.y - mn.y;
+		const Real extent = std::max(dx, dz);
+		const Real Y_FLAT = SMALL_EPSILON * 64; // your prior flatness threshold
+		// Big and flat → probably terrain/landscape
+		return (extent >= 50.0f && yt <= Y_FLAT); // tune '50' to your project scale
+	};
 
 	int polycount = wall->GetPolygonCount();
 	for (int i = 0; i < polycount; ++i)
@@ -1579,25 +2055,22 @@ void PolyMesh::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool c
 		if (!polygon)
 			continue;
 
-		bool touchedAny = false;
-		GeometrySet rebuilt; // output polys w/ explicit UVs
-
-		// skip empty poly
+		//skip empty poly
 		if (polygon->geometry.empty())
 			continue;
 
-		//for each subpoly in this Polygon
+		GeometrySet rebuilt;
+		bool touchedAny = false;
+
 		for (size_t j = 0; j < polygon->geometry.size(); ++j)
 		{
 			const auto& src = polygon->geometry[j];
 			if (src.empty())
 				continue;
 
-			//build local-space geometry ring + compute bounds
+			//build local-space geometry ring
 			GeometryArray ring;
 			ring.reserve(src.size());
-
-			Ogre::AxisAlignedBox polybounds;
 			for (const auto& g : src)
 			{
 				Geometry v;
@@ -1605,115 +2078,174 @@ void PolyMesh::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool c
 				v.texel  = g.texel;
 				v.normal = g.normal;
 				ring.emplace_back(v);
-				polybounds.merge(v.vertex);
 			}
 
-			//if polygon is entirely outside the cut AABB, keep as-is
-			if (!bounds.intersects(polybounds))
+			//classify by normal: floor if near-horizontal
+			Vector3 nrm = computeNormal(ring);
+			const bool isFloor = (std::abs(nrm.y) > Real(0.70710678)); // > ~45° from vertical
+			const bool isWall  = !isFloor;
+
+			//respect cut flags
+			if ((isWall  && !cutwalls) || (isFloor && !cutfloors))
 			{
-				//direct pass-through
 				rebuilt.emplace_back(ring);
 				continue;
 			}
 
-			//decide 'isWall' by vertical extent: if it spans Y, we treat as wall.
-			auto getExtents = [&](const GeometryArray& p, int axis)->Vector2
+			//early-outs per orientation
+			if (isFloor)
 			{
-				Real mn = std::numeric_limits<Real>::infinity();
-				Real mx = -mn;
-				for (auto& v : p)
+				if (outside_all_floor_strict(ring))
 				{
-					Real c = (axis == 0) ? v.vertex.x : (axis == 1) ? v.vertex.y : v.vertex.z;
-					mn = std::min(mn, c);
-					mx = std::max(mx, c);
+					rebuilt.emplace_back(ring);
+					continue;
 				}
-				return Vector2(mn, mx);
-			};
-			Vector2 ey = getExtents(ring, 1);
-			const bool isWall = (ey.x != ey.y);
-			const bool isFloor = !isWall;
+				if (inside_all_floor_strict(ring))
+				{
+					touchedAny = true;
+					continue;
+				}
 
-			if ((isWall && !cutwalls) || (isFloor && !cutfloors))
+				if (likely_terrain(ring))
+				{
+					if (outside_all_floor_relaxed(ring))
+					{
+						rebuilt.emplace_back(ring);
+						continue;
+					}
+					if (inside_all_floor_relaxed(ring))
+					{
+						touchedAny = true;
+						continue;
+					}
+				}
+			}
+			else
 			{
-				//keep original
-				rebuilt.emplace_back(ring);
-				continue;
+				if (outside_all_wall_strict(ring))
+				{
+					rebuilt.emplace_back(ring);
+					continue;
+				}
+				if (inside_all_wall_strict(ring))
+				{
+					touchedAny = true;
+					continue;
+				}
 			}
 
-			// Six-plane partition (emit outside pieces; discard inside)
-			GeometryArray work = ring, tmpA, tmpB;
-			auto emitIf = [&](const GeometryArray& poly)
+			//orientation-aware 4-way cut
+			GeometryArray work = ring, a, b;
+			std::vector<GeometryArray> pieces;
+			pieces.reserve(4);
+			bool changed = false;
+
+			auto emit = [&](const GeometryArray& poly)
 			{
 				if (poly.size() > 2)
-					rebuilt.emplace_back(poly);
+				{
+					pieces.emplace_back(poly);
+					changed = true;
+				}
 			};
 
-			// 1) x < start.x (LEFT)
-			tmpA.clear();
-			tmpB.clear();
-			SplitWithPlaneUV(0, work, tmpA, tmpB, start.x);
-			emitIf(tmpA);      // <= start.x
-			work.swap(tmpB);   // remainder >= start.x
-
-			// 2) x > end.x (RIGHT)
-			tmpA.clear();
-			tmpB.clear();
-			SplitWithPlaneUV(0, work, tmpA, tmpB, end.x);
-			emitIf(tmpB);      // >= end.x
-			work.swap(tmpA);   // remainder <= end.x
-
-			// 3) y < start.y (BELOW)
-			tmpA.clear();
-			tmpB.clear();
-			SplitWithPlaneUV(1, work, tmpA, tmpB, start.y);
-			emitIf(tmpA);      // <= start.y
-			work.swap(tmpB);   // remainder >= start.y
-
-			// 4) y > end.y (ABOVE)
-			tmpA.clear();
-			tmpB.clear();
-			SplitWithPlaneUV(1, work, tmpA, tmpB, end.y);
-			emitIf(tmpB);      // >= end.y
-			work.swap(tmpA);   // remainder <= end.y
-
-			// 5) z < start.z (FRONT)
-			tmpA.clear();
-			tmpB.clear();
-			SplitWithPlaneUV(2, work, tmpA, tmpB, start.z);
-			emitIf(tmpA);      // <= start.z
-			work.swap(tmpB);   // remainder >= start.z
-
-			// 6) z > end.z (BACK)
-			tmpA.clear();
-			tmpB.clear();
-			SplitWithPlaneUV(2, work, tmpA, tmpB, end.z);
-			emitIf(tmpB);      // >= end.z
-
-			//store extents for door sides if needed
-			PolyArray poly;
-			for (size_t i = 0; i < tmpA.size(); i++)
+			if (isFloor)
 			{
-				poly.push_back(tmpA[i].vertex);
+				// Floors/ceilings: split X then Z (ignore Y)
+				// left of start.x
+				SplitWithPlaneUV(0, work, a, b, start.x);
+				emit(a);
+				work.swap(b); // keep >= start.x
+
+				// right of end.x
+				SplitWithPlaneUV(0, work, a, b, end.x);
+				emit(b);
+				work.swap(a); // keep <= end.x
+
+				// back of start.z
+				SplitWithPlaneUV(2, work, a, b, start.z);
+				emit(a);
+				work.swap(b); // keep >= start.z
+
+				// front of end.z
+				SplitWithPlaneUV(2, work, a, b, end.z);
+				emit(b);
+				work.swap(a); // keep <= end.z
 			}
-			GetDoorwayExtents(wall->GetMesh(), checkwallnumber, poly);
+			else
+			{
+				// Walls: pick major horizontal axis (X vs Z), then clip that + Y
+				Vector2 ex = extentsAxis(ring, 0);
+				Vector2 ez = extentsAxis(ring, 2);
+				const bool facesXZ = (std::abs(ex.y - ex.x) >= std::abs(ez.y - ez.x));
 
-			// 'work' now is the inside-of-box piece -> hole; drop it
+				if (facesXZ)
+				{
+					// X major (forward/back)
+					SplitWithPlaneUV(0, work, a, b, start.x);
+					emit(a);
+					work.swap(b);
 
-			touchedAny = true;
+					SplitWithPlaneUV(0, work, a, b, end.x);
+					emit(b);
+					work.swap(a);
+				}
+				else
+				{
+					// Z major (left/right)
+					SplitWithPlaneUV(2, work, a, b, start.z);
+					emit(a);
+					work.swap(b);
+
+					SplitWithPlaneUV(2, work, a, b, end.z);
+					emit(b);
+					work.swap(a);
+				}
+			}
+
+			// Y (common)
+			SplitWithPlaneUV(1, work, a, b, start.y);
+			emit(a);
+			work.swap(b);
+
+			SplitWithPlaneUV(1, work, a, b, end.y);
+			emit(b);
+			work.swap(a);
+
+			//'work' is the inside slab (hole) — drop it, but pass to doorway extents if needed
+			if (!work.empty())
+			{
+				PolyArray hole; hole.reserve(work.size());
+				for (const auto& v : work)
+					hole.emplace_back(v.vertex);
+				GetDoorwayExtents(wall->GetMesh(), checkwallnumber, hole);
+			}
+
+			if (changed)
+			{
+				for (const auto& p : pieces)
+					rebuilt.emplace_back(p);
+				touchedAny = true;
+			}
+			else
+			{
+				//nothing changed (grazing): keep original ring
+				rebuilt.emplace_back(ring);
+			}
 		}
 
 		if (touchedAny)
 		{
-			//capture material + mapping from the original polygon
-			std::string name = polygon->GetName();
-			std::string oldmat = polygon->material;
+			//get material and mapping from the original polygon
+			const std::string name = polygon->GetName();
+			const std::string oldmat = polygon->material;
 
-			//remove original polygon
+			//delete original polygon
 			wall->DeletePolygon(i, false);
 			--i;
-			--polycount;  //keep indices valid
+			--polycount;
 
-			//add rebuilt polygons with explicit UVs (no planar remap)
+			//add new polygon set to replace original
 			if (!rebuilt.empty())
 				wall->AddPolygonSet(name, oldmat, rebuilt);
 		}
@@ -1982,62 +2514,218 @@ void PolyMesh::SplitWithPlane(int axis, const PolyArray &orig, PolyArray &poly1,
 	}
 }
 
-void PolyMesh::SplitWithPlaneUV(int axis, const GeometryArray &orig, GeometryArray &poly1, GeometryArray &poly2, Real value)
+void PolyMesh::SplitWithPlaneUV(int axis, const GeometryArray &orig, GeometryArray &polyLE, GeometryArray &polyGE, Real value)
 {
 	//splits the given polygon into two polygons, on the desired plane (defined by the axis and value parameters)
 	//axis is 0 for X, 1 for Y, 2 for Z
 
-	//clear output polygons
-	poly1.clear();
-	poly2.clear();
+	polyLE.clear();
+	polyGE.clear();
 
-	//helper lambda to get coordinate by axis
-	auto getCoord = [axis](const Vector3& v) -> Real
+	const Real EPS = SMALL_EPSILON;
+
+	//accessor for coordinate along axis
+	auto coord = [&](const Vector3& v)->Real
 	{
-		if (axis == 0)
-			return v.x;
-		if (axis == 1)
-			return v.y;
-		return v.z;
+		return (axis == 0) ? v.x : (axis == 1) ? v.y : v.z;
+	};
+	auto dist = [&](const Vector3& v)->Real
+	{
+		return coord(v) - value;
 	};
 
-	size_t n = orig.size();
-	if (n < 2)
-		return; //not enough vertices
-
-	Geometry prev = orig[n - 1];
-	Real prevSide = getCoord(prev.vertex) - value;
-	if (std::abs(prevSide) < SMALL_EPSILON)
-		prevSide = 0;
-
-	for (size_t i = 0; i < n; i++)
+	//append a vertex to a polygon if it's not a near-duplicate of the last one
+	auto pushUnique = [&](GeometryArray& poly, const Geometry& g)
 	{
-		Geometry curr = orig[i];
-		Real currSide = getCoord(curr.vertex) - value;
-		if (std::abs(currSide) < SMALL_EPSILON)
-			currSide = 0;
-
-		//if edge crosses the plane, compute intersection
-		if ((prevSide < 0 && currSide > 0) || (prevSide > 0 && currSide < 0))
+		if (!poly.empty())
 		{
-			Real t = prevSide / (prevSide - currSide);
-			Geometry inter;
-			inter.vertex = prev.vertex + (curr.vertex - prev.vertex) * t;
-			inter.texel = prev.texel + (curr.texel - prev.texel) * t;
-			inter.normal = prev.normal + (curr.normal - prev.normal) * t;
-			poly1.emplace_back(inter);
-			poly2.emplace_back(inter);
+			const Vector3& p = poly.back().vertex;
+			if ((g.vertex - p).squaredLength() <= EPS * EPS)
+				return; // skip dup
+		}
+		poly.emplace_back(g);
+	};
+
+	//basic colinearity test for removing spikes
+	auto colinear = [&](const Vector3& A, const Vector3& B, const Vector3& C)->bool
+	{
+		Vector3 u = B - A, v = C - B;
+		return u.crossProduct(v).squaredLength() <= EPS * EPS;
+	};
+
+	//light sanitize: remove consecutive duplicates & colinear spikes
+	auto sanitize = [&](GeometryArray& poly)
+	{
+		if (poly.size() < 3)
+			return;
+
+		//remove consecutive duplicates (already guarded in pushUnique)
+		//remove colinear spikes
+		GeometryArray out;
+		out.reserve(poly.size());
+		for (size_t i = 0; i < poly.size(); ++i)
+		{
+			const Vector3& A = poly[(i + poly.size() - 1) % poly.size()].vertex;
+			const Vector3& B = poly[i].vertex;
+			const Vector3& C = poly[(i + 1) % poly.size()].vertex;
+			if (colinear(A, B, C))
+				continue;
+			out.emplace_back(poly[i]);
+		}
+		poly.swap(out);
+
+		//drop closing duplicate
+		if (poly.size() >= 2 && (poly.front().vertex - poly.back().vertex).squaredLength() <= EPS * EPS)
+			poly.pop_back();
+	};
+
+	auto lerpGeom = [](const Geometry& a, const Geometry& b, Real t)->Geometry
+	{
+		Geometry r;
+		r.vertex = a.vertex + (b.vertex - a.vertex) * t;
+		r.texel  = a.texel  + (b.texel  - a.texel ) * t;
+		r.normal = a.normal + (b.normal - a.normal) * t;
+		return r;
+	};
+
+	const size_t n = orig.size();
+	if (n < 2)
+		return;
+
+	Geometry A = orig[n - 1];
+	Real dA = dist(A.vertex);
+	if (std::abs(dA) < EPS)
+		dA = 0;
+
+	for (size_t i = 0; i < n; ++i)
+	{
+		Geometry B = orig[i];
+		Real dB = dist(B.vertex);
+		if (std::abs(dB) < EPS)
+			dB = 0;
+
+		// Edge cases:
+		// 1) Crossing: (dA<0 && dB>0) or (dA>0 && dB<0)
+		// 2) On-plane endpoints: d==0 -> belong to BOTH sides, but de-dup
+		// 3) Completely on one side: append endpoint to that side
+
+		//crossing: emit intersection to BOTH sides (once), then endpoint to its side (or both if on-plane)
+		if ((dA < 0 && dB > 0) || (dA > 0 && dB < 0))
+		{
+			Real t = dA / (dA - dB); // safe: denominator has opposite sign
+			t = std::max(Real(0), std::min(Real(1), t));
+			Geometry I = lerpGeom(A, B, t);
+			//add intersection once to each (unique-guarded)
+			pushUnique(polyLE, I);
+			pushUnique(polyGE, I);
+
+			//now process the endpoint B
+			if (dB < 0)
+				pushUnique(polyLE, B);
+			else if (dB > 0)
+				pushUnique(polyGE, B);
+			else
+			{
+				//exactly on plane
+				pushUnique(polyLE, B);
+				pushUnique(polyGE, B);
+			}
+		}
+		else
+		{
+			//no crossing
+			if (dB < 0)
+				pushUnique(polyLE, B);
+			else if (dB > 0)
+				pushUnique(polyGE, B);
+			else
+			{
+				//endpoint on plane: belongs to BOTH, unique-guarded
+				pushUnique(polyLE, B);
+				pushUnique(polyGE, B);
+			}
 		}
 
-		//add current vertex to appropriate polygon(s)
-		if (currSide >= 0)
-			poly2.emplace_back(curr);
-		if (currSide <= 0)
-			poly1.emplace_back(curr);
-
-		prev = curr;
-		prevSide = currSide;
+		A = B; dA = dB;
 	}
+
+	sanitize(polyLE);
+	sanitize(polyGE);
+
+	//if either side collapses to <3 verts, clear it so callers can test size() > 2
+	if (polyLE.size() < 3)
+		polyLE.clear();
+	if (polyGE.size() < 3)
+		polyGE.clear();
+}
+
+// Two-sided, double-precision Möller–Trumbore
+bool PolyMesh::IntersectRayTri(const Vector3& ro, const Vector3& rd, const Vector3& a, const Vector3& b, const Vector3& c, double& t, double& u, double& v)
+{
+    const Vector3 ab = b - a;
+    const Vector3 ac = c - a;
+    const Vector3 p  = rd.crossProduct(ac);
+    const Real det = static_cast<double>(ab.dotProduct(p));
+
+    //two-sided: if nearly zero, the ray is parallel
+    if (std::abs(det) < 1e-12)
+		return false;
+
+    const Real invDet = 1.0 / det;
+    const Vector3 s = ro - a;
+    u = static_cast<Real>(s.dotProduct(p)) * invDet;
+    if (u < -1e-8 || u > 1.0 + 1e-8)
+		return false;
+
+    const Vector3 q = s.crossProduct(ab);
+    v = static_cast<Real>(rd.dotProduct(q)) * invDet;
+    if (v < -1e-8 || (u + v) > 1.0 + 1e-8)
+		return false;
+
+    t = static_cast<Real>(ac.dotProduct(q)) * invDet;
+		return t > 1e-8;
+}
+
+MeshObject::TriOwner PolyMesh::FindWallIntersect_Tri(MeshObject* mesh, const Vector3& start, const Vector3& end, Vector3& isect, Real& distance, Vector3& normal)
+{
+    const Vector3 ro = start;
+    const Vector3 rd = (end - start).normalisedCopy();
+    Real bestT = std::numeric_limits<double>::infinity();
+    int bestTri = -1;
+
+    const auto& pos = mesh->pickPositions;
+    const auto& idx = mesh->pickIndices;
+
+    for (size_t i = 0; i < idx.size(); i += 3)
+	{
+        const Vector3& a = pos[idx[i + 0]];
+        const Vector3& b = pos[idx[i + 1]];
+        const Vector3& c = pos[idx[i + 2]];
+        Real t, u, v;
+        if (IntersectRayTri(ro, rd, a,b,c, t,u,v))
+		{
+            if (t < bestT)
+			{
+                bestT = t;
+                bestTri = static_cast<int>(i / 3);
+                // compute normal in the same space
+                normal = (b - a).crossProduct(c - a).normalisedCopy();
+                // Two-sided: make normal face the ray (optional)
+                if (normal.dotProduct(rd) > 0)
+					normal = -normal;
+            }
+        }
+    }
+
+	MeshObject::TriOwner owner;
+	owner.poly = 0;
+	owner.wall = 0;
+    if (bestTri < 0)
+		return owner;
+
+    isect = ro + rd * static_cast<Real>(bestT);
+    distance = (isect - ro).length();
+    return mesh->triOwners[bestTri]; // deterministic ownership
 }
 
 }

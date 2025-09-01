@@ -34,6 +34,7 @@
 #include "controller.h"
 #include "profiler.h"
 #include "utility.h"
+#include "teleporter.h"
 #include "manager.h"
 
 namespace SBS {
@@ -1147,5 +1148,77 @@ bool ControllerManager::Loop()
 	return LoopChildren();
 }
 
+TeleporterManager::TeleporterManager(Object* parent) : Manager(parent)
+{
+	//set up SBS object
+	SetValues("TeleporterManager", "Teleporter Manager", true);
 
+	EnableLoop(true);
+}
+
+TeleporterManager::~TeleporterManager()
+{
+	//delete doors
+	for (size_t i = 0; i < Array.size(); i++)
+	{
+		if (Array[i])
+		{
+			Array[i]->parent_deleting = true;
+			delete Array[i];
+		}
+		Array[i] = 0;
+	}
+}
+
+Teleporter* TeleporterManager::Create(std::string name, const std::string &idle_sound, const std::string &teleport_sound, Real width, Real height, const Vector3 &destination)
+{
+	int number = (int)Array.size() + 1;
+	if (name == "")
+		name = "Teleporter " + ToString(number);
+
+	teleported = false;
+
+	Teleporter* teleporter = new Teleporter(this, name, idle_sound, teleport_sound, width, height, destination);
+	Array.emplace_back(teleporter);
+	return teleporter;
+}
+
+Teleporter* TeleporterManager::Get(const std::string &name)
+{
+	for (size_t i = 0; i < Array.size(); i++)
+	{
+		if (Array[i]->GetName() == name)
+			return Array[i];
+	}
+	return 0;
+}
+
+void TeleporterManager::Remove(Teleporter *door)
+{
+	//remove a teleporter from the array
+	//this does not delete the object
+
+	RemoveArrayElement(Array, door);
+}
+
+int TeleporterManager::GetCount()
+{
+	//return the number of teleporters
+	return (int)Array.size();
+}
+
+Teleporter* TeleporterManager::GetIndex(int index)
+{
+	if (index < 0 || index >= (int)Array.size())
+		return 0;
+
+	return Array[index];
+}
+
+bool TeleporterManager::Loop()
+{
+	SBS_PROFILE("TeleporterManager::Loop");
+
+	return LoopChildren();
+}
 }

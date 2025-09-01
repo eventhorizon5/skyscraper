@@ -49,7 +49,6 @@
 #include "manager.h"
 #include "indicator.h"
 #include "timer.h"
-#include "controller.h"
 #include "elevroute.h"
 #include "utility.h"
 #include "shape.h"
@@ -140,7 +139,7 @@ ElevatorCar::ElevatorCar(Elevator *parent, int number) : Object(parent)
 	MessageOnStart = false;
 	MessageOnClose = false;
 	indicator = 0;
-	TimerDelay = 2;
+	TimerDelay = 2.5;
 	reverb = 0;
 
 	std::string name = parent->GetName() + ":Car " + ToString(number);
@@ -3615,7 +3614,8 @@ bool ElevatorCar::Input(const std::string& text)
 		UpdateKeypadIndicator(InputCache, false);
 
 		//start timeout timer
-		keypad_timer->Start(2000, true);
+		keypad_timer->Stop();
+		keypad_timer->Start(TimerDelay * 1000.0f, true);
 
 		return true;
 	}
@@ -3625,16 +3625,17 @@ bool ElevatorCar::Input(const std::string& text)
 	UpdateKeypadIndicator(InputCache, false);
 
 	//verify that the floor entry is valid, error if not
-	int result = 0;
+	/*int result = 0;
 	if (GetFloorFromID(InputCache, result) == false && InputCache != "*" && InputCache != "-")
 	{
 		keypad_timer->Stop();
 		InputCache = "";
 		KeypadError(1);
 		return true;
-	}
+	}*/
 
 	//start timeout timer
+	keypad_timer->Stop();
 	keypad_timer->Start(TimerDelay * 1000.0f, true);
 
 	return true;
@@ -3655,13 +3656,6 @@ void ElevatorCar::ProcessCache()
 		return;
 	}
 
-	if (!IsNumeric(InputCache))
-	{
-		InputCache = "";
-		KeypadError();
-		return;
-	}
-
 	//don't allow input values in the InvalidInput list
 	for (size_t i = 0; i < InvalidInput.size(); i++)
 	{
@@ -3674,44 +3668,18 @@ void ElevatorCar::ProcessCache()
 	}
 
 	int floor = 0;
-	GetFloorFromID(InputCache, floor);
+	bool result = sbs->GetUtility()->GetFloorFromID(InputCache, floor);
+	if (!result)
+	{
+		InputCache = "";
+		KeypadError();
+		return;
+	}
+
 	Requested(floor);
 	e->SelectFloor(floor);
 
 	InputCache = "";
-}
-
-bool ElevatorCar::GetFloorFromID(const std::string& floor, int& result)
-{
-	if (!IsNumeric(floor))
-		return false;
-
-	int rawfloor = ToInt(floor);
-
-	//convert back to string, to strip off any leading 0's
-	std::string converted = ToString(rawfloor);
-
-	Floor* floorobj = sbs->GetFloorManager()->GetByNumberID(converted);
-	Floor* floorobj2 = sbs->GetFloorManager()->GetByID(converted);
-	Floor* floorobj3 = sbs->GetFloorManager()->Get(rawfloor);
-
-	if (floorobj)
-	{
-		result = floorobj->Number; //get by number ID first
-		return true;
-	}
-	else if (floorobj2)
-	{
-		result = floorobj2->Number; //next try floor ID
-		return true;
-	}
-	else if (floorobj3)
-	{
-		result = rawfloor; //and last, get by raw floor number
-		return true;
-	}
-
-	return false;
 }
 
 void ElevatorCar::KeypadTimer::Notify()
@@ -3731,6 +3699,27 @@ void ElevatorCar::KeypadError(bool type)
 		message = "??";
 
 	UpdateKeypadIndicator(message);
+}
+
+bool ElevatorCar::KeypadEnter()
+{
+	//keypad enter key
+
+	keypad_timer->Stop();
+	ProcessCache();
+	return true;
+}
+
+bool ElevatorCar::KeypadClear()
+{
+	//keypad cancel key
+
+	keypad_timer->Stop();
+	InputCache = "";
+
+	//update indicator display
+	UpdateKeypadIndicator(InputCache, false);
+	return true;
 }
 
 bool ElevatorCar::AddElevatorIDSigns(int door_number, bool relative, const std::string& texture_prefix, const std::string& direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset)

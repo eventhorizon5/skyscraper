@@ -69,6 +69,15 @@ enum EngineType
 	ENGINETYPE_SOLARSYSTEM
 };
 
+enum VMStatus
+{
+	VMSTATUS_FATAL = -1,
+	VMSTATUS_ERROR = 0,
+	VMSTATUS_SUCCESS = 1,
+	VMSTATUS_UNLOAD = 2,
+	VMSTATUS_LOAD = 3
+};
+
 class EngineContext;
 class ScriptProcessor;
 class HAL;
@@ -76,6 +85,7 @@ class SkySystem;
 class GUI;
 class VMConsole;
 class Monitor;
+class Editor;
 
 //Virtual Manager system
 class VMIMPEXP VM
@@ -92,7 +102,7 @@ public:
 	GUI* GetGUI();
 	EngineContext* GetActiveEngine() { return active_engine; }
 	EngineContext* GetEngine(int number);
-	EngineContext* CreateEngine(EngineContext *parent = 0, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
+	EngineContext* CreateEngine(EngineContext *parent = 0, const Vector3 &position = Vector3::ZERO, const Vector3 &rotation = Vector3::ZERO, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
 	bool DeleteEngine(const EngineContext *engine);
 	void DeleteEngines();
 	int GetEngineCount(bool loading_only = false);
@@ -106,11 +116,11 @@ public:
 	EngineContext* GetFirstValidEngine();
 	int GetFreeInstanceNumber();
 	void Run0();
-	int Run(std::vector<EngineContext*> &newengine);
+	VMStatus Run(std::vector<EngineContext*> &newengine);
 	bool StartEngine(EngineContext* engine);
 	::SBS::SBS* GetActiveSystem();
 	ScriptProcessor* GetActiveScriptProcessor();
-	bool Load(bool system, bool clear, const std::string &filename, EngineContext *parent = 0, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
+	bool Load(bool system, bool clear, const std::string &filename, EngineContext *parent = 0, const Vector3 &position = Vector3::ZERO, const Vector3 &rotation = Vector3::ZERO, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
 	void ShowPlatform();
 	wxWindow* GetParent();
 	void ExtLoad(const std::string &filename, EngineContext *parent = 0, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
@@ -119,7 +129,7 @@ public:
 	void StartConsole();
 	void ProcessConsole();
 	VMConsole* GetConsole();
-	EngineContext* Initialize(bool clear, EngineContext *parent = 0, const Vector3 &position = Vector3::ZERO, Real rotation = 0.0, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
+	EngineContext* Initialize(bool clear, EngineContext *parent = 0, const Vector3 &position = Vector3::ZERO, const Vector3 &rotation = Vector3::ZERO, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
 	void SetRenderOnStartup(bool value);
 	bool GetRenderOnStartup();
 	dylib* LoadLibrary(const std::string &name);
@@ -130,6 +140,7 @@ public:
 	bool IsRootLoaded();
 	bool LoadPending();
 	bool IsRunning() { return running; }
+	Editor* GetEditor();
 
 	bool Shutdown;
 	bool ConcurrentLoads; //set to true for buildings to be loaded while another sim is active and rendering
@@ -177,6 +188,7 @@ private:
 	GUI *gui; //GUI subsystem
 	VMConsole *vmconsole; //VM console system
 	Monitor *monitor; //monitor system object
+	Editor *editor; //editor interface
 
 	wxWindow *parent;
 
@@ -208,7 +220,7 @@ private:
 		bool clear;
 		EngineContext *parent;
 		Vector3 position;
-		Real rotation;
+		Vector3 rotation;
 		Vector3 area_min, area_max;
 		bool system;
 	};

@@ -31,7 +31,6 @@
 #include <fmod.hpp>
 #endif
 #include <OgreBulletDynamicsRigidBody.h>
-#include <OgreBulletCollisionsRay.h>
 #include "globals.h"
 #include "sbs.h"
 #include "manager.h"
@@ -71,7 +70,7 @@
 
 namespace SBS {
 
-SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instance_number, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max) : Object(0)
+SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instance_number, const Vector3 &area_min, const Vector3 &area_max) : Object(0)
 {
 	sbs = this;
 	initialized = false;
@@ -182,18 +181,21 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instan
 	soundsystem = 0;
 	area_trigger = 0;
 	texturemanager = 0;
+	floor_manager = 0;
+	elevator_manager = 0;
+	shaft_manager = 0;
+	stairwell_manager = 0;
+	door_manager = 0;
+	revolvingdoor_manager = 0;
+	vehicle_manager = 0;
+	controller_manager = 0;
+	teleporter_manager = 0;
 
 	//Print SBS banner
 	PrintBanner();
 
 	//add instance number to reports
 	InstancePrompt = ToString(InstanceNumber) + ">";
-
-	//move to specified position
-	Move(position);
-
-	//rotate engine
-	Rotate(0.0, rotation, 0.0);
 
 	//create main engine area trigger
 	SetBounds(area_min, area_max);
@@ -243,6 +245,7 @@ void SBS::Initialize()
 	revolvingdoor_manager = new RevolvingDoorManager(this);
 	vehicle_manager = new VehicleManager(this);
 	controller_manager = new ControllerManager(this);
+	teleporter_manager = new TeleporterManager(this);
 
 	//create camera object
 	this->camera = new Camera(this);
@@ -409,6 +412,13 @@ SBS::~SBS()
 		delete controller_manager;
 	}
 	controller_manager = 0;
+
+	if (teleporter_manager)
+	{
+		teleporter_manager->parent_deleting = true;
+		delete teleporter_manager;
+	}
+	teleporter_manager = 0;
 
 	//delete sounds
 	for (size_t i = 0; i < sounds.size(); i++)
@@ -1178,7 +1188,7 @@ void SBS::CheckAutoAreas()
 		if (FloorAutoArea[i].camerafloor != floor)
 			FloorAutoArea[i].inside = false;
 
-		if (InBox(FloorAutoArea[i].start, FloorAutoArea[i].end, position) == true && FloorAutoArea[i].inside == false)
+		if (GetUtility()->InBox(FloorAutoArea[i].start, FloorAutoArea[i].end, position) == true && FloorAutoArea[i].inside == false)
 		{
 			//user moved into box; enable floors
 			FloorAutoArea[i].inside = true;
@@ -1196,7 +1206,7 @@ void SBS::CheckAutoAreas()
 				GetFloor(floor + 1)->EnableGroup(true);
 			}
 		}
-		if (InBox(FloorAutoArea[i].start, FloorAutoArea[i].end, position) == false && FloorAutoArea[i].inside == true)
+		if (GetUtility()->InBox(FloorAutoArea[i].start, FloorAutoArea[i].end, position) == false && FloorAutoArea[i].inside == true)
 		{
 			//user moved out of box; disable floors except current
 			FloorAutoArea[i].inside = false;
@@ -1946,15 +1956,6 @@ Real SBS::GetConfigFloat(const std::string &key, Real default_value)
 	return ToFloat(result);
 }
 
-bool SBS::InBox(const Vector3 &start, const Vector3 &end, const Vector3 &test)
-{
-	//determine if a point (test) is inside the box defines by start and end vertices
-
-	if (test.x > start.x && test.y > start.y && test.z > start.z && test.x < end.x && test.y < end.y && test.z < end.z)
-		return true;
-	return false;
-}
-
 void SBS::AdvanceClock()
 {
 	//advance the clock
@@ -2693,54 +2694,6 @@ int SBS::GetRevolvingDoorCount()
 	return (int)RevolvingDoorArray.size();
 }
 
-bool SBS::HitBeam(const Ray &ray, Real max_distance, MeshObject *&mesh, Wall *&wall, Vector3 &hit_position)
-{
-	//use a given ray and distance, and return the nearest hit mesh and if applicable, wall object
-	//note that the ray's origin and direction need to be in engine-relative values
-
-	//create a new ray that has absolute positioning, for engine offsets
-	Ray ray2 (ToRemote(GetUtility()->ToGlobal(ToLocal(ray.getOrigin()))), GetOrientation() * ray.getDirection());
-
-	//get a collision callback from Bullet
-	OgreBulletCollisions::CollisionClosestRayResultCallback callback (ray2, mWorld, max_distance);
-
-	//check for collision
-	mWorld->launchRay(callback);
-
-	//exit if no collision
-	if (callback.doesCollide() == false)
-		return false;
-
-	//get collided collision object
-	OgreBulletCollisions::Object* object = callback.getCollidedObject();
-
-	if (!object)
-		return false;
-
-	//get name of collision object's grandparent scenenode (which is the same name as the mesh object)
-	std::string meshname;
-	if (dynamic_cast<OgreBulletDynamics::WheeledRigidBody*>(object) == 0)
-		meshname = object->getRootNode()->getParentSceneNode()->getName();
-	else
-		meshname = object->getRootNode()->getChild(0)->getName(); //for vehicles, the child of the root node is the mesh
-
-	//get hit/intersection position
-	hit_position = ToLocal(callback.getCollisionPoint());
-
-	//get associated mesh object
-	mesh = FindMeshObject(meshname);
-	if (!mesh)
-		return false;
-
-	//get wall object, if any
-	Vector3 isect;
-	Real distance = 2000000000.;
-	Vector3 normal = Vector3::ZERO;
-	wall = GetPolyMesh()->FindWallIntersect(mesh, ray.getOrigin(), ray.getPoint(max_distance), isect, distance, normal);
-
-	return true;
-}
-
 void SBS::EnableRandomActivity(bool value)
 {
 	//enable random activity, by creating random people
@@ -2913,28 +2866,6 @@ bool SBS::DetachCamera()
 		return false;
 
 	return camera->Detach();
-}
-
-std::string SBS::ProcessFullName(std::string name, int &instance, int &object_number, bool strip_number)
-{
-	//if given a full object ID name (such as "0:(4)Landscape"),
-	//return base name and parse out instance number and object number
-
-	//if strip_number is false, leave object number identifier in string
-
-	//get and strip off engine instance number
-	size_t index = name.find(":(");
-	instance = ToInt(name.substr(0, index));
-	name.erase(name.begin(), name.begin() + index + 1);
-
-	//get and optionally strip off object number
-	index = name.find(")");
-	object_number = ToInt(name.substr(1, index - 1));
-
-	if (strip_number == true)
-		name.erase(name.begin(), name.begin() + index + 1);
-
-	return name;
 }
 
 Person* SBS::GetPerson(int number)
@@ -3204,6 +3135,11 @@ VehicleManager* SBS::GetVehicleManager()
 ControllerManager* SBS::GetControllerManager()
 {
 	return controller_manager;
+}
+
+TeleporterManager* SBS::GetTeleporterManager()
+{
+	return teleporter_manager;
 }
 
 void SBS::RegisterCameraTexture(CameraTexture *camtex)

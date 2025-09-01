@@ -7,6 +7,9 @@ set(CMAKE_AUTORCC ON)
 set (CMAKE_CXX_FLAGS "-DBT_USE_DOUBLE_PRECISION ${CMAKE_CXX_FLAGS}")
 
 set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/tools/cmake;${CMAKE_MODULE_PATH}")
+
+option(USE_WXWIDGETS "Build with wxWidgets" ON)
+
 if(NOT APPLE)
 	if(UNIX)
 		set(FRONTENDGLINC "-lGL")
@@ -56,11 +59,11 @@ endif()
  
 set (OGRE_LIBRARIES ${OGRE_LIBRARIES} ${OGRE_Overlay_LIBRARIES} ${OGRE_RTShaderSystem_LIBRARIES} ${OGRE_Bites_LIBRARIES})
 
-#find OgreProcedural
-find_package(OgreProcedural REQUIRED)
+#OgreProcedural
+add_subdirectory(dependencies/ogre-procedural)
 
 #find wxWidgets
-if (NOT ANDROID)
+if (USE_WXWIDGETS)
 	find_package(wxWidgets COMPONENTS core base REQUIRED)
 endif ()
 
@@ -90,6 +93,9 @@ find_package(Bullet REQUIRED)
 #find Caelum
 find_package(Caelum REQUIRED)
 
+#find ImGUI
+#find_package(ImGUI REQUIRED)
+
 #find OpenXR
 if(WIN32)
 	find_package(OpenXR)
@@ -117,6 +123,7 @@ if(WIN32 AND wxWidgets_FOUND)
 	file(GLOB VM_FILES
 		src/vm/*.cpp
 		src/gui/*.cpp
+		src/editor/*.cpp
 		msvc/VM.rc
 	)
 else()
@@ -131,6 +138,10 @@ if (NOT WIN32 AND wxWidgets_FOUND)
 		src/gui/*.cpp
 	)
 endif ()
+
+file(GLOB EDITOR_FILES
+	src/editor/*.cpp
+)
 
 file(GLOB NETWORK_FILES
 	src/net/*.cpp
@@ -171,17 +182,21 @@ file (GLOB OGREBULLET_DYN_FILES
 	ogrebullet/Dynamics/src/Prefab/*.cpp
 )
 
+file (GLOB IMGUIZMO_FILES
+	dependencies/ImGuizmo/*.cpp
+)
+
 if(FMOD_FOUND)
 include_directories( ${OGRE_INCLUDE_DIRS}
 	${OGRE_Overlay_INCLUDE_DIRS}
 	${OGRE_RTShaderSystem_INCLUDE_DIRS}
 	${OGRE_Bites_INCLUDE_DIRS}
 	${FMOD_INCLUDE_DIR}
+#	${IMGUI_INCLUDE_DIR}
 	${GTK3_INCLUDE_DIRS}
 	${BULLET_INCLUDE_DIRS}
 	${Caelum_INCLUDE_DIRS}
 	${OpenXR_INCLUDE_DIR}
-	${OgreProcedural_INCLUDE_DIR}
 	src/frontend
 	src/vm
 	src/net
@@ -195,6 +210,7 @@ include_directories( ${OGRE_INCLUDE_DIRS}
 	src/alloc
 	src/openxr/include
 	src/openxr
+	src/editor
 	ogrebullet/Collisions/include
 	ogrebullet/Collisions/include/Debug
 	ogrebullet/Collisions/include/Shapes
@@ -202,6 +218,10 @@ include_directories( ${OGRE_INCLUDE_DIRS}
 	ogrebullet/Dynamics/include
 	ogrebullet/Dynamics/include/Constraints
 	ogrebullet/Dynamics/include/Prefab
+	dependencies/ImGuizmo
+	dependencies/imgui
+	dependencies/angelscript/include
+	dependencies/ogre-procedural/include
 )
 else()
 include_directories( ${OGRE_INCLUDE_DIRS}
@@ -212,7 +232,6 @@ include_directories( ${OGRE_INCLUDE_DIRS}
         ${BULLET_INCLUDE_DIRS}
         ${Caelum_INCLUDE_DIRS}
         ${OpenXR_INCLUDE_DIR}
-        ${OgreProcedural_INCLUDE_DIR}
         src/frontend
         src/vm
         src/net
@@ -226,6 +245,7 @@ include_directories( ${OGRE_INCLUDE_DIRS}
         src/alloc
         src/openxr/include
         src/openxr
+	src/editor
         ogrebullet/Collisions/include
         ogrebullet/Collisions/include/Debug
         ogrebullet/Collisions/include/Shapes
@@ -233,6 +253,10 @@ include_directories( ${OGRE_INCLUDE_DIRS}
         ogrebullet/Dynamics/include
         ogrebullet/Dynamics/include/Constraints
         ogrebullet/Dynamics/include/Prefab
+	dependencies/ImGuizmo
+	dependencies/imgui
+	dependencies/angelscript/include
+	dependencies/ogre-procedural/include
 )
 endif()
  
@@ -268,6 +292,17 @@ if (WIN32)
 	add_library(OpenXR SHARED ${OPENXR_FILES})
 endif ()
 
+#ImGuizmo Library
+#add_library(ImGuizmo SHARED ${IMGUIZMO_FILES})
+
+#angelscript
+add_subdirectory(dependencies/angelscript)
+
+#Editor Library
+if (NOT WIN32)
+	add_library(Editor SHARED ${EDITOR_FILES})
+endif ()
+
 #frontend executable
 if (WIN32)
 	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /ENTRY:mainCRTStartup")
@@ -279,6 +314,8 @@ if (NOT WIN32)
 	add_library(VM SHARED ${VM_FILES})
 else ()
 	add_library(VM SHARED ${VM_FILES} ${SCRIPTPROC_FILES})
+	#target_compile_options(ImGuizmo PRIVATE "/MD")
+	target_compile_options(AngelScript PRIVATE "/MD")
 	target_compile_options(OgreBulletCol PRIVATE -D_OGREBULLET_EXPORTS "/MD")
 	target_compile_options(OgreBulletDyn PRIVATE -D_OGREBULLET_EXPORTS "/MD")
 	target_compile_options(OpenXR PRIVATE -DOGREOPENXRDLL_EXPORTS "/MD")
@@ -295,6 +332,7 @@ target_precompile_headers(VM PRIVATE src/sbs/globals.h)
 
 if (NOT WIN32)
 	target_precompile_headers(ScriptProc PRIVATE src/sbs/globals.h)
+#	target_precompile_headers(Editor PRIVATE src/sbs/globals.h)
 endif ()
 if (NOT WIN32 AND wxWidgets_FOUND)
 	target_precompile_headers(GUI PRIVATE src/sbs/globals.h)
@@ -305,20 +343,23 @@ target_precompile_headers(skyscraper PRIVATE src/sbs/globals.h)
 target_link_libraries(OgreBulletCol ${OGRE_LIBRARIES} ${BULLET_LIBRARIES})
 target_link_libraries(OgreBulletDyn OgreBulletCol ${OGRE_LIBRARIES} ${BULLET_LIBRARIES})
 
+#target_link_libraries(ImGuizmo ${OGRE_LIBRARIES})
+
 if (WIN32)
 	set (OGRE_D3D11_LIB ${OGRE_DIR}/../../lib/RelWithDebInfo/RenderSystem_Direct3D11.lib)
 	target_link_libraries(OpenXR ${OGRE_LIBRARIES} ${OPENXR_loader_LIBRARY} ${OGRE_D3D11_LIB})
 endif ()
 
 if(FMOD_FOUND)
-target_link_libraries(SBS OgreBulletCol OgreBulletDyn ${OGRE_LIBRARIES} ${FMOD_LIBRARY} ${OgreProcedural_LIBRARIES})
+target_link_libraries(SBS OgreBulletCol OgreBulletDyn OgreProcedural AngelScript ${OGRE_LIBRARIES} ${FMOD_LIBRARY} ${OgreProcedural_LIBRARIES})
 else()
-target_link_libraries(SBS OgreBulletCol OgreBulletDyn ${OGRE_LIBRARIES} ${OgreProcedural_LIBRARIES})
+target_link_libraries(SBS OgreBulletCol OgreBulletDyn OgreProcedural AngelScript ${OGRE_LIBRARIES} ${OgreProcedural_LIBRARIES})
 endif()
 
 if (NOT WIN32 AND wxWidgets_FOUND)
 	target_link_libraries(ScriptProc SBS ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES})
-	target_link_libraries(VM GUI Network SBS dylib ${OGRE_LIBRARIES} ${Caelum_LIBRARIES} ${FMOD_LIBRARY} ${wxWidgets_LIBRARIES})
+	target_link_libraries(Editor SBS ${OGRE_LIBRARIES})
+	target_link_libraries(VM GUI Network Editor SBS dylib ${OGRE_LIBRARIES} ${Caelum_LIBRARIES} ${FMOD_LIBRARY} ${wxWidgets_LIBRARIES})
 	target_link_libraries(GUI SBS ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES})
 	target_link_libraries(skyscraper VM GUI ScriptProc SBS ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES} ${FMOD_LIBRARY} ${GTK3_LIBRARIES} ${FRONTENDGLINC})
 elseif (WIN32)
@@ -328,7 +369,8 @@ endif ()
 
 if (NOT WIN32 AND NOT wxWidgets_FOUND)
 	target_link_libraries(ScriptProc SBS ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES})
-        target_link_libraries(VM SBS Network dylib ${OGRE_LIBRARIES} ${Caelum_LIBRARIES} ${FMOD_LIBRARY} ${wxWidgets_LIBRARIES})
+	target_link_libraries(Editor SBS ${OGRE_LIBRARIES})
+        target_link_libraries(VM SBS Network Editor dylib ${OGRE_LIBRARIES} ${Caelum_LIBRARIES} ${FMOD_LIBRARY} ${wxWidgets_LIBRARIES})
         target_link_libraries(skyscraper VM ScriptProc SBS ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES} ${FMOD_LIBRARY} ${GTK3_LIBRARIES} ${FRONTENDGLINC})
 endif ()
 
@@ -361,28 +403,28 @@ ADD_CUSTOM_COMMAND(TARGET OgreBulletDyn
 		COMMAND ${CMAKE_HOME_DIRECTORY}/gitrev.cmd)
 endif ()
 
-if (APPLE)
-ADD_CUSTOM_COMMAND(TARGET VM
-                POST_BUILD
-                COMMAND install_name_tool -change libOgreProcedural.dylib "@rpath/libOgreProcedural.dylib" libVM.dylib)
-ADD_CUSTOM_COMMAND(TARGET SBS
-		POST_BUILD
-		COMMAND install_name_tool -change libOgreProcedural.dylib "@rpath/libOgreProcedural.dylib" libSBS.dylib)
+#if (APPLE)
+#ADD_CUSTOM_COMMAND(TARGET VM
+#                POST_BUILD
+#                COMMAND install_name_tool -change libOgreProcedural.dylib "@rpath/libOgreProcedural.dylib" libVM.dylib)
+#ADD_CUSTOM_COMMAND(TARGET SBS
+#		POST_BUILD
+#		COMMAND install_name_tool -change libOgreProcedural.dylib "@rpath/libOgreProcedural.dylib" libSBS.dylib)
 
-ADD_CUSTOM_COMMAND(TARGET ScriptProc
-                POST_BUILD
-                COMMAND install_name_tool -change libOgreProcedural.dylib "@rpath/libOgreProcedural.dylib" libScriptProc.dylib)
+#ADD_CUSTOM_COMMAND(TARGET ScriptProc
+#                POST_BUILD
+#                COMMAND install_name_tool -change libOgreProcedural.dylib "@rpath/libOgreProcedural.dylib" libScriptProc.dylib)
 
-ADD_CUSTOM_COMMAND(TARGET skyscraper
-		POST_BUILD
-		COMMAND install_name_tool -change libOgreProcedural.dylib "@rpath/libOgreProcedural.dylib" Skyscraper.app/Contents/MacOS/Skyscraper)
-endif ()
+#ADD_CUSTOM_COMMAND(TARGET skyscraper
+#		POST_BUILD
+#		COMMAND install_name_tool -change libOgreProcedural.dylib "@rpath/libOgreProcedural.dylib" Skyscraper.app/Contents/MacOS/Skyscraper)
+#endif ()
 
-if (APPLE AND wxWidgets_FOUND)
-ADD_CUSTOM_COMMAND(TARGET GUI
-                POST_BUILD
-                COMMAND install_name_tool -change libOgreProcedural.dylib "@rpath/libOgreProcedural.dylib" libGUI.dylib)
-endif ()
+#if (APPLE AND wxWidgets_FOUND)
+#ADD_CUSTOM_COMMAND(TARGET GUI
+#                POST_BUILD
+#                COMMAND install_name_tool -change libOgreProcedural.dylib "@rpath/libOgreProcedural.dylib" libGUI.dylib)
+#endif ()
 
 if (UNIX AND NOT APPLE)
 	file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/tools/scripts/skyscraper

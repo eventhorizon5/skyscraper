@@ -181,4 +181,75 @@ namespace Ogre {
     return _appSpace;
   }
 
-}
+  void OpenXRState::InitializeControllers()
+  {
+      XrInstance instance = m_xrInstance->getHandle().Get();
+      CHECK(instance != XR_NULL_HANDLE);
+
+      //resolve hand user paths once (members in your state)
+      CHECK_XRCMD(xrStringToPath(instance, "/user/hand/left", &leftHandPath));
+      CHECK_XRCMD(xrStringToPath(instance, "/user/hand/right", &rightHandPath));
+
+      //create the action set
+      XrActionSetCreateInfo asInfo{ XR_TYPE_ACTION_SET_CREATE_INFO };
+      std::strcpy(asInfo.actionSetName, "gameplay");
+      std::strcpy(asInfo.localizedActionSetName, "Gameplay");
+      asInfo.priority = 0;
+      CHECK_XRCMD(xrCreateActionSet(instance, &asInfo, &actionSet));
+
+      //create the thumbstick Vector2f action (for both hands)
+      XrActionCreateInfo aci{ XR_TYPE_ACTION_CREATE_INFO };
+      aci.actionType = XR_ACTION_TYPE_VECTOR2F_INPUT;
+      std::strcpy(aci.actionName, "thumbstick_vector");
+      std::strcpy(aci.localizedActionName, "Thumbstick Vector");
+      XrPath subBoth[2] = { leftHandPath, rightHandPath };
+      aci.countSubactionPaths = 2;
+      aci.subactionPaths = subBoth;
+      CHECK_XRCMD(xrCreateAction(actionSet, &aci, &thumbstickVector));
+
+      //suggest bindings (profile + hand-scoped component paths)
+      XrPath profileTouch;
+      CHECK_XRCMD(xrStringToPath(instance, "/interaction_profiles/oculus/touch_controller", &profileTouch));
+
+      XrPath leftThumbstick, rightThumbstick;
+      CHECK_XRCMD(xrStringToPath(instance, "/user/hand/left/input/thumbstick", &leftThumbstick));
+      CHECK_XRCMD(xrStringToPath(instance, "/user/hand/right/input/thumbstick", &rightThumbstick));
+
+      //probe each binding individually to see which fails.
+      auto TrySuggest = [&](XrAction a, XrPath p, const char* label) {
+          XrActionSuggestedBinding b{ a, p };
+          XrInteractionProfileSuggestedBinding one{ XR_TYPE_INTERACTION_PROFILE_SUGGESTED_BINDING };
+          one.interactionProfile = profileTouch;
+          one.countSuggestedBindings = 1;
+          one.suggestedBindings = &b;
+          XrResult rr = xrSuggestInteractionProfileBindings(instance, &one);
+
+          char pstr[XR_MAX_PATH_LENGTH] = {}; uint32_t len = 0;
+          xrPathToString(instance, p, XR_MAX_PATH_LENGTH, &len, pstr);
+          LogManager::getSingleton().logMessage(
+              Ogre::String("Suggest ") + label + " path=" + pstr +
+              " r=0x" + Ogre::StringConverter::toString(rr));
+          return rr;
+          };
+      CHECK_XRRESULT(TrySuggest(thumbstickVector, leftThumbstick, "thumbstick L"), "thumbstick L");
+      CHECK_XRRESULT(TrySuggest(thumbstickVector, rightThumbstick, "thumbstick R"), "thumbstick R");
+
+      //or do the batch after the probes:
+      XrActionSuggestedBinding bindingsArr[] = {
+          { thumbstickVector, leftThumbstick  },
+          { thumbstickVector, rightThumbstick },
+      };
+      XrInteractionProfileSuggestedBinding suggest{ XR_TYPE_INTERACTION_PROFILE_SUGGESTED_BINDING };
+      suggest.interactionProfile = profileTouch;
+      suggest.countSuggestedBindings = (uint32_t)(sizeof(bindingsArr) / sizeof(bindingsArr[0]));
+      suggest.suggestedBindings = bindingsArr;
+      CHECK_XRRESULT(xrSuggestInteractionProfileBindings(instance, &suggest),
+          "xrSuggestInteractionProfileBindings (thumbstick-only)");
+
+      //attach the action set to the session
+      XrSessionActionSetsAttachInfo attach{ XR_TYPE_SESSION_ACTION_SETS_ATTACH_INFO };
+      attach.countActionSets = 1;
+      attach.actionSets = &actionSet;
+      CHECK_XRCMD(xrAttachSessionActionSets(_sessionHandle.Get(), &attach));
+    }
+  }

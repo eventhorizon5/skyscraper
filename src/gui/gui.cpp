@@ -370,6 +370,7 @@ void GUI::ShowLoadDialog()
 	gui_mtx.lock();
 	if (!loaddialog)
 		loaddialog = new LoadDialog(dpanel, vm->GetParent(), -1);
+	loaddialog->SetEngineParent(vm->GetActiveEngine());
 	loaddialog->CenterOnScreen();
 	loaddialog->Show();
 	gui_mtx.unlock();

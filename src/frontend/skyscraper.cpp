@@ -28,6 +28,7 @@
 #include "wx/filefn.h"
 #include "wx/stdpaths.h"
 #include "wx/joystick.h"
+#include "wx/display.h"
 #else
 #include <filesystem>
 #include "Ogre.h"
@@ -455,10 +456,10 @@ bool Skyscraper::Loop()
 
 	//run sim engine instances
 	std::vector<EngineContext*> newengines;
-	int status = vm->Run(newengines);
+	VMStatus status = vm->Run(newengines);
 
 	//start a new engine if needed
-	if (status == 3)
+	if (status == VMSTATUS_LOAD)
 	{
 		for (size_t i = 0; i < newengines.size(); i++)
 		{
@@ -466,7 +467,7 @@ bool Skyscraper::Loop()
 		}
 	}
 
-	if (status == 2 ||  status == -1)
+	if (status == VMSTATUS_UNLOAD ||  status == VMSTATUS_FATAL)
 		UnloadToMenu();
 
 	//ProfileManager::dumpAll();
@@ -523,7 +524,7 @@ std::string Skyscraper::SelectBuilding(bool native_dialog)
 #endif
 }
 
-bool Skyscraper::Load(const std::string &filename, EngineContext *parent, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
+bool Skyscraper::Load(const std::string &filename, EngineContext *parent, const Vector3 &position, const Vector3 &rotation, const Vector3 &area_min, const Vector3 &area_max)
 {
 	//load simulator and data file
 
@@ -690,6 +691,18 @@ void Skyscraper::SetFullScreen(bool enabled)
 	FullScreen = enabled;
 #ifdef USING_WX
 	window->ShowFullScreen(FullScreen);
+
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
+if (FullScreen == true)
+{
+	wxDisplay display(wxDisplay::GetFromWindow(window));
+	wxRect area = display.GetClientArea(); //excludes menu bar/dock
+	window->Move(area.GetTopLeft());
+}
+else
+	window->Center();
+#endif
+
 #endif
 
 #if defined(__WXMSW__)

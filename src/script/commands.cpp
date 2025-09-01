@@ -49,6 +49,7 @@
 #include "geometry.h"
 #include "scriptproc.h"
 #include "shape.h"
+#include "teleporter.h"
 #include "section.h"
 
 using namespace SBS;
@@ -97,7 +98,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 			return sNextLine; //skip line
 	}
 
-	if (config->SectionNum != 2 && config->SectionNum != 4)
+	if (config->SectionNum != SECTION_FLOOR && config->SectionNum != SECTION_ELEVATOR)
 	{
 		//process math functions
 		if (MathFunctions(LineData) == sError)
@@ -137,7 +138,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		Real voffset2 = ToFloat(tempdata[7]);
 		Real voffset3 = ToFloat(tempdata[10]);
 
-		if (config->SectionNum == 2)
+		if (config->SectionNum == SECTION_FLOOR)
 		{
 			if (meshname == "floor")
 			{
@@ -386,7 +387,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 
 		Real voffset = ToFloat(tempdata[8]);
 
-		if (config->SectionNum == 2)
+		if (config->SectionNum == SECTION_FLOOR)
 		{
 			if (meshname == "floor")
 				voffset += Real(Simcore->GetFloor(config->Current)->GetBase(true));
@@ -428,7 +429,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 
 		Real voffset = ToFloat(tempdata[8]);
 
-		if (config->SectionNum == 2)
+		if (config->SectionNum == SECTION_FLOOR)
 		{
 			if (meshname == "floor")
 				voffset += Real(Simcore->GetFloor(config->Current)->GetBase(true));
@@ -481,7 +482,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 
 		Real voffset = 0;
 
-		if (config->SectionNum == 2)
+		if (config->SectionNum == SECTION_FLOOR)
 		{
 			if (relative == true)
 			{
@@ -492,7 +493,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 			}
 			else if (relative_option == false)
 			{
-				if (meshname == "floor" && config->SectionNum == 2)
+				if (meshname == "floor" && config->SectionNum == SECTION_FLOOR)
 					voffset -= mesh->GetPosition().y; //subtract altitude for new positioning model
 			}
 		}
@@ -532,7 +533,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 
 		Real altitude = ToFloat(tempdata[params - 3]);
 
-		if (config->SectionNum == 2)
+		if (config->SectionNum == SECTION_FLOOR)
 		{
 			if (meshname == "floor")
 				altitude += Simcore->GetFloor(config->Current)->GetBase(true);
@@ -580,7 +581,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 
 		Real voffset = 0.0;
 
-		if (config->SectionNum == 2)
+		if (config->SectionNum == SECTION_FLOOR)
 		{
 			if (meshname == "floor")
 				voffset += Simcore->GetFloor(config->Current)->GetBase(true);
@@ -2650,7 +2651,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (config->CheckScript == true)
 			return sNextLine;
 
-		if (meshname == "floor" && config->SectionNum == 2)
+		if (meshname == "floor" && config->SectionNum == SECTION_FLOOR)
 			offset = mesh->GetPosition().y;
 
 		Real alt = ToFloat(tempdata[2]);
@@ -5134,6 +5135,40 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		return sNextLine;
 	}
 
+	//CreateTeleporter command
+	if (StartsWithNoCase(LineData, "createteleporter"))
+	{
+		//get data
+		int params = SplitData(LineData, 16);
+
+		if (params != 10)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 3; i < params; i++)
+		{
+			if (!IsNumeric(tempdata[i]))
+				return ScriptError("Invalid value: " + tempdata[i]);
+		}
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
+		Real voffset = 0;
+
+		if (config->SectionNum == SECTION_FLOOR)
+			voffset += Real(Simcore->GetFloor(config->Current)->GetBase());
+
+		Vector3 pos (ToFloat(tempdata[3]), voffset, ToFloat(tempdata[4]));
+		Vector3 dest (ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]));
+		Teleporter *teleporter = Simcore->GetTeleporterManager()->Create(tempdata[0], tempdata[1], tempdata[2], ToFloat(tempdata[5]), ToFloat(tempdata[6]), dest);
+		teleporter->Move(pos);
+		StoreCommand(teleporter);
+
+		return sNextLine;
+	}
+
 	//Rotate command
 	if (StartsWithNoCase(LineData, "rotate "))
 	{
@@ -5234,7 +5269,7 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 	}
 
 	//SetPosition command
-	if (StartsWithNoCase(LineData, "setposition ") && config->SectionNum != 9)
+	if (StartsWithNoCase(LineData, "setposition ") && config->SectionNum != SECTION_CALLSTATION)
 	{
 		//get data
 		int params = SplitData(LineData, 12);
@@ -5345,6 +5380,18 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 
 		StoreCommand(mesh->CreateWallObject(tempdata[1]));
 
+		return sNextLine;
+	}
+
+	//SetTexture command
+	if (StartsWithNoCase(LineData, "settexture"))
+	{
+		int params = SplitData(LineData, 10, false);
+
+		if (params != 2)
+			return ScriptError("Incorrect number of parameters");
+
+		texturemanager->SetTexture(tempdata[0], tempdata[1]);
 		return sNextLine;
 	}
 

@@ -45,6 +45,7 @@
 #include "profiler.h"
 #include "gitrev.h"
 #include "monitor.h"
+#include "editor.h"
 #include "vmconsole.h"
 
 using namespace SBS;
@@ -116,6 +117,9 @@ VM::VM()
 	//create monitor instance
 	monitor = new Monitor(this);
 
+	//create editor instance
+	editor = new Editor(this);
+
 	//LoadLibrary("test");
 
 	Report("Started");
@@ -124,6 +128,11 @@ VM::VM()
 VM::~VM()
 {
 	Report("Shutting down...");
+
+	//delete editor instance
+	if (editor)
+		delete editor;
+	editor = 0;
 
 	//delete monitor instance
 	if (monitor)
@@ -179,7 +188,7 @@ GUI* VM::GetGUI()
 	return gui;
 }
 
-EngineContext* VM::CreateEngine(EngineContext *parent, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
+EngineContext* VM::CreateEngine(EngineContext *parent, const Vector3 &position, const Vector3 &rotation, const Vector3 &area_min, const Vector3 &area_max)
 {
 	EngineContext* engine = new EngineContext(ENGINETYPE_GENERIC, parent, this, hal->GetSceneManager(), hal->GetSoundSystem(), position, rotation, area_min, area_max);
 	return engine;
@@ -266,7 +275,7 @@ EngineContext* VM::FindActiveEngine()
 				return engines[i];
 		}
 	}
-	return active_engine;
+	return 0;
 }
 
 void VM::SetActiveEngine(int number, bool switch_engines, bool force)
@@ -278,7 +287,8 @@ void VM::SetActiveEngine(int number, bool switch_engines, bool force)
 	if (!engine)
 		return;
 
-	if (active_engine == engine)
+	//don't switch if the engine is fully active (active and camera attached)
+	if (active_engine == engine && engine->IsCameraActive() == true)
 		return;
 
 	//don't switch if the camera's already active in the specified engine
@@ -292,7 +302,7 @@ void VM::SetActiveEngine(int number, bool switch_engines, bool force)
 	CameraState state;
 	bool state_set = false;
 
-	if (active_engine && (engine->IsSystem == false || running == true))
+	if (active_engine && (engine->IsSystem == false || running == true) && engine->was_reloaded == false)
 	{
 		//get previous engine's camera state
 		if (switch_engines == true)
@@ -323,8 +333,14 @@ void VM::SetActiveEngine(int number, bool switch_engines, bool force)
 	if (switch_engines == true && state_set == true && running == true)
 		active_engine->SetCameraState(state, false);
 
+	//apply camera state after reloading
+	if (engine->was_reloaded == true)
+		active_engine->SetCameraState(false);
+
 	//update mouse cursor for freelook mode
 	//frontend->GetWindow()->EnableFreelook(active_engine->GetSystem()->camera->Freelook); //FIXME
+
+	engine->was_reloaded = false;
 }
 
 bool VM::RunEngines(std::vector<EngineContext*> &newengines)
@@ -525,8 +541,20 @@ void VM::SwitchEngines()
 		return;
 
 	//exit if user is inside an engine
-	if (active_engine->IsInside() == true)
+	//continue to processing if the camera is not active in the engine
+	if (active_engine->IsInside() == true && active_engine->IsCameraActive() == true)
 		return;
+
+	//exit if active engine is loading
+	if (active_engine->IsLoading() == true)
+		return;
+
+	//if the active engine was reloaded, try to reattach to that engine after load
+	if (active_engine->IsInside() == true && active_engine->IsCameraActive() == false && active_engine->Paused == false)
+	{
+		SetActiveEngine(active_engine->GetNumber(), true);
+		return;
+	}
 
 	EngineContext *parent = active_engine->GetParent();
 
@@ -641,9 +669,11 @@ void VM::CheckCamera()
 	if (active_engine->IsCameraActive() == false)
 	{
 		EngineContext *newengine = FindActiveEngine();
-		if (newengine != active_engine)
+		if (newengine)
+		{
 			Report("Switching to active engine " + ToString(newengine->GetNumber()));
-		active_engine = newengine;
+			active_engine = newengine;
+		}
 	}
 }
 
@@ -673,11 +703,16 @@ ScriptProcessor* VM::GetActiveScriptProcessor()
 	return 0;
 }
 
-int VM::Run(std::vector<EngineContext*> &newengines)
+VMStatus VM::Run(std::vector<EngineContext*> &newengines)
 {
 	//run system
 
-	//return codes are -1 for fatal error, 0 for failure, 1 for success, 2 to unload, and 3 to load new buildings
+	//return codes:
+	//VMSTATUS_FATAL: fatal error
+	//VMSTATUS_ERROR: failure
+	//VMSTATUS_SUCCESS: success
+	//VMSTATUS_UNLOAD: unload
+	//VMSTATUS_LOAD: load new building(s)
 
 	SBS_PROFILE_MAIN("VM");
 
@@ -712,7 +747,7 @@ int VM::Run(std::vector<EngineContext*> &newengines)
 	time_stat = hal->GetCurrentTime() - last;
 
 	if (newengines.size() > 0)
-		return 3;
+		return VMSTATUS_LOAD;
 
 	//delete an engine if requested
 	HandleEngineShutdown();
@@ -722,29 +757,29 @@ int VM::Run(std::vector<EngineContext*> &newengines)
 	{
 		Shutdown = false;
 		Report("Unloading due to shutdown request");
-		return 2;
+		return VMSTATUS_UNLOAD;
 	}
 
 	//exit if an engine failed to run, if it's either the only engine or if ConcurrentLoads is on
 	if (result == false && (ConcurrentLoads == false || GetEngineCount() == 1))
-		return 0;
+		return VMSTATUS_ERROR;
 
 	//don't continue if no available active engine
 	if (!GetActiveEngine())
-		return 0;
+		return VMSTATUS_ERROR;
 
 	//make sure active engine is the one the camera is active in
 	CheckCamera();
 
 	//exit if any engine is loading, unless RenderOnStartup is true
 	if (IsEngineLoading() == true && RenderOnStartup == false)
-		return 1;
+		return VMSTATUS_SUCCESS;
 
 	//if in CheckScript mode, exit
 	if (CheckScript == true)
 	{
 		Report("Unloading to menu...");
-		return 2;
+		return VMSTATUS_UNLOAD;
 	}
 
 	//update running state;
@@ -759,7 +794,7 @@ int VM::Run(std::vector<EngineContext*> &newengines)
 	//render graphics
 	result = hal->Render();
 	if (!result)
-		return -1;
+		return VMSTATUS_FATAL;
 
 	//handle a building reload
 	HandleReload();
@@ -771,10 +806,10 @@ int VM::Run(std::vector<EngineContext*> &newengines)
 	if (first_run == true)
 		first_run = false;
 
-	return 1;
+	return VMSTATUS_SUCCESS;
 }
 
-bool VM::Load(bool system, bool clear, const std::string &filename, EngineContext *parent, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
+bool VM::Load(bool system, bool clear, const std::string &filename, EngineContext *parent, const Vector3 &position, const Vector3 &rotation, const Vector3 &area_min, const Vector3 &area_max)
 {
 	//load simulator and data file
 
@@ -878,7 +913,7 @@ bool VM::LoadQueued()
 	return true;
 }
 
-EngineContext* VM::Initialize(bool clear, EngineContext *parent, const Vector3 &position, Real rotation, const Vector3 &area_min, const Vector3 &area_max)
+EngineContext* VM::Initialize(bool clear, EngineContext *parent, const Vector3 &position, const Vector3 &rotation, const Vector3 &area_min, const Vector3 &area_max)
 {
 	//bootstrap simulator
 
@@ -1202,7 +1237,9 @@ unsigned long VM::GetElapsedTime(int instance)
 
 	if (instance >= engines.size())
 		return 0;
-	return engines[instance]->time_stat;
+	if (engines[instance])
+		return engines[instance]->time_stat;
+	return 0;
 }
 
 void VM::ListPlayingSounds()
@@ -1283,6 +1320,11 @@ bool VM::IsRootLoaded()
 bool VM::LoadPending()
 {
 	return !load_queue.empty();
+}
+
+Editor* VM::GetEditor()
+{
+	return editor;
 }
 
 }

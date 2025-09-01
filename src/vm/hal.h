@@ -38,6 +38,7 @@ namespace Ogre {
 	class Rectangle2D;
 	class ConfigFile;
 	class OverlaySystem;
+	class ImGuiOverlay;
 }
 
 namespace FMOD {
@@ -88,6 +89,7 @@ public:
 	void ConsoleOut(const std::string &message, const std::string &color = "white");
 	std::string GetColors(const std::string &color);
 	unsigned long GetCurrentTime();
+	bool IsVREnabled();
 
 	bool RTSS;
 	std::string Renderer;

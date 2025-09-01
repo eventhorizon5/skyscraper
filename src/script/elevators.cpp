@@ -752,7 +752,7 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 	//handle end of elevator section
 	if (StartsWithNoCase(LineData, "<endelevator>") && config->RangeL == config->RangeH)
 	{
-		config->SectionNum = 0;
+		config->SectionNum = SECTION_NONE;
 		config->Context = "None";
 		if (parent->InRunloop() == false)
 			engine->Report("Finished elevator");
@@ -770,7 +770,7 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		}
 		else
 		{
-			config->SectionNum = 0; //break out of loop
+			config->SectionNum = SECTION_NONE; //break out of loop
 			config->Context = "None";
 			config->RangeL = 0;
 			config->RangeH = 0;

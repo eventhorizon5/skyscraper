@@ -48,6 +48,7 @@ class ScriptDebug: public wxDialog
         wxButton* bRun;
         wxButton* bStart;
         wxButton* bStop;
+        wxListBox* lstFunctions;
         wxListBox* lstScript;
         wxListBox* lstVariables;
         wxStaticText* StaticText1;
@@ -55,24 +56,27 @@ class ScriptDebug: public wxDialog
         wxStaticText* StaticText3;
         wxTextCtrl* txtFilename;
         wxTextCtrl* txtLine;
+        wxTextCtrl* txtSection;
         //*)
 		void OnInit();
 
     protected:
 
         //(*Identifiers(ScriptDebug)
-        static const wxWindowID ID_lstScript;
-        static const wxWindowID ID_STATICTEXT1;
-        static const wxWindowID ID_txtFilename;
-        static const wxWindowID ID_STATICTEXT2;
-        static const wxWindowID ID_txtLine;
-        static const wxWindowID ID_STATICTEXT3;
-        static const wxWindowID ID_bGoto;
-        static const wxWindowID ID_bRun;
-        static const wxWindowID ID_bStart;
-        static const wxWindowID ID_bStop;
-        static const wxWindowID ID_bReset;
-        static const wxWindowID ID_lstVariables;
+        static const long ID_lstScript;
+        static const long ID_STATICTEXT1;
+        static const long ID_txtFilename;
+        static const long ID_STATICTEXT2;
+        static const long ID_txtLine;
+        static const long ID_STATICTEXT3;
+        static const long ID_txtSection;
+        static const long ID_lstFunctions;
+        static const long ID_bGoto;
+        static const long ID_bRun;
+        static const long ID_bStart;
+        static const long ID_bStop;
+        static const long ID_bReset;
+        static const long ID_lstVariables;
         //*)
 
     private:
@@ -88,6 +92,7 @@ class ScriptDebug: public wxDialog
         ScriptProcessor *scriptproc;
 		DebugPanel *panel;
         size_t variable_count;
+        size_t function_count;
 
         DECLARE_EVENT_TABLE()
 };

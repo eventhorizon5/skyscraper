@@ -47,6 +47,7 @@
 #include "cameracontrol.h"
 #include "skycontrol.h"
 #include "objectinfo.h"
+#include "moveengine.h"
 #include "enginemanager.h"
 #include "peoplemanager.h"
 #include "camtex.h"

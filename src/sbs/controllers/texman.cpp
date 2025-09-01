@@ -239,12 +239,9 @@ bool TextureManager::LoadTexture(const std::string &filename, const std::string 
 	//first verify the filename
 	std::string filename2 = sbs->GetUtility()->VerifyFile(filename);
 
-	//unload texture if already loaded
+	//exit if already loaded
 	if (MaterialExists(name))
-	{
-		if (UnloadMaterial(name, "General") == true)
-			UnregisterTexture(name);
-	}
+		return ReportError("Texture " + name + " already exists");
 
 	//load texture
 	bool has_alpha = false;
@@ -289,12 +286,9 @@ bool TextureManager::CreateSlideshow(const std::string &name, bool start, std::v
 
 	size_t num_frames = filenames.size();
 
-	//unload texture if already loaded
+	//exit if already loaded
 	if (MaterialExists(name))
-	{
-		if (UnloadMaterial(name, "General") == true)
-			UnregisterTexture(name);
-	}
+		return ReportError("Texture " + name + " already exists");
 
 	//first verify the filenames
 	for (size_t i = 0; i < filenames.size(); i++)
@@ -367,12 +361,9 @@ bool TextureManager::LoadAnimatedTexture(std::vector<std::string> filenames, con
 
 	size_t num_frames = filenames.size();
 
-	//unload texture if already loaded
+	//exit if already loaded
 	if (MaterialExists(name))
-	{
-		if (UnloadMaterial(name, "General") == true)
-			UnregisterTexture(name);
-	}
+		return ReportError("Texture " + name + " already exists");
 
 	//first verify the filenames
 	for (size_t i = 0; i < filenames.size(); i++)
@@ -439,12 +430,9 @@ bool TextureManager::LoadAlphaBlendTexture(const std::string &filename, const st
 	std::string specular_filename2 = sbs->GetUtility()->VerifyFile(specular_filename);
 	std::string blend_filename2 = sbs->GetUtility()->VerifyFile(blend_filename);
 
-	//unload texture if already loaded
+	//exit if already loaded
 	if (MaterialExists(name))
-	{
-		if (UnloadMaterial(name, "General") == true)
-			UnregisterTexture(name);
-	}
+		return ReportError("Texture " + name + " already exists");
 
 	//load texture
 	bool has_alpha = false, has_alpha2 = false;
@@ -593,12 +581,9 @@ bool TextureManager::LoadTextureCropped(const std::string &filename, const std::
 	int mipmaps = -1;
 	bool use_alpha_color = false;
 
-	//unload texture if already loaded
+	//exit if already loaded
 	if (MaterialExists(name))
-	{
-		if (UnloadMaterial(name, "General") == true)
-			UnregisterTexture(name);
-	}
+		return ReportError("Texture " + name + " already exists");
 
 	//first verify the filename
 	std::string filename2 = sbs->GetUtility()->VerifyFile(filename);
@@ -641,16 +626,7 @@ bool TextureManager::LoadTextureCropped(const std::string &filename, const std::
 	}
 	catch (Ogre::Exception &e)
 	{
-		ReportError("Error creating new texture " + texturename + "\n" + e.getDescription());
-		Ogre::TexturePtr tex = GetTextureByName(texturename, "General");
-		if (tex)
-		{
-			new_texture = tex;
-			manual_textures.emplace_back(new_texture);
-			IncrementTextureCount();
-		}
-		else
-			return false;
+		return ReportError("Error creating new texture " + texturename + "\n" + e.getDescription());
 	}
 
 	//copy source and overlay images onto new image
@@ -902,12 +878,9 @@ bool TextureManager::AddTextToTexture(const std::string &origname, const std::st
 
 	std::string font_filename2 = sbs->GetUtility()->VerifyFile(font_filename);
 
-	//unload texture if already loaded
+	//exit if already loaded
 	if (MaterialExists(name))
-	{
-		if (UnloadMaterial(name, "General") == true)
-			UnregisterTexture(name);
-	}
+		return ReportError("Texture " + name + " already exists");
 
 	//load font
 	Ogre::FontPtr font;
@@ -988,16 +961,7 @@ bool TextureManager::AddTextToTexture(const std::string &origname, const std::st
 	}
 	catch (Ogre::Exception &e)
 	{
-		ReportError("Error creating new texture " + texturename + "\n" + e.getDescription());
-		Ogre::TexturePtr tex = GetTextureByName(texturename, "General");
-		if (tex)
-		{
-			texture = tex;
-			manual_textures.emplace_back(texture);
-			IncrementTextureCount();
-		}
-		else
-			return false;
+		return ReportError("Error creating new texture " + texturename + "\n" + e.getDescription());
 	}
 
 	//get new texture dimensions, if it was resized
@@ -1064,12 +1028,9 @@ bool TextureManager::AddTextureOverlay(const std::string &orig_texture, const st
 	std::string Origname = orig_texture;
 	std::string Overlay = overlay_texture;
 
-	//unload texture if already loaded
+	//exit if already loaded
 	if (MaterialExists(name))
-	{
-		if (UnloadMaterial(name, "General") == true)
-			UnregisterTexture(name);
-	}
+		return ReportError("Texture " + name + " already exists");
 
 	//get original texture
 	Ogre::MaterialPtr ptr = GetMaterialByName(Origname);
@@ -1128,16 +1089,7 @@ bool TextureManager::AddTextureOverlay(const std::string &orig_texture, const st
 	}
 	catch (Ogre::Exception &e)
 	{
-		ReportError("Error creating new texture " + texturename + "\n" + e.getDescription());
-		Ogre::TexturePtr tex = GetTextureByName(texturename, "General");
-		if (tex)
-		{
-			new_texture = tex;
-			manual_textures.emplace_back(new_texture);
-			IncrementTextureCount();
-		}
-		else
-			return false;
+		return ReportError("Error creating new texture " + texturename + "\n" + e.getDescription());
 	}
 
 	//copy source and overlay images onto new image
@@ -2639,6 +2591,8 @@ bool TextureManager::ReportError(const std::string &message)
 
 bool TextureManager::SetTexture(const std::string &name, const std::string &texture)
 {
+	//changes the texture file of the given material
+
 	//get texture unit state
 	Ogre::MaterialPtr mMat = GetMaterialByName(name);
 	for (size_t i = 0; i < mMat->getNumTechniques(); i++)
@@ -2650,6 +2604,8 @@ bool TextureManager::SetTexture(const std::string &name, const std::string &text
 			//set texture unit's texture image
 			if (state)
 				state->setTextureName(texture);
+
+			Report("Texture " + name + " set to filename " + texture);
 		}
 		catch (Ogre::Exception& e)
 		{
@@ -2698,7 +2654,7 @@ bool TextureManager::ComputeTextureMap(Matrix3 &t_matrix, Vector3 &t_vector, Pol
 	auto map_point = [&](Real u, Real v) -> Vector3 {
 		Vector2 delta(u - uv1.x, v - uv1.y);
 		Real lambda = im11 * delta.x + im12 * delta.y;
-		Real mu     = im21 * delta.x + im22 * delta.y;
+		Real mu = im21 * delta.x + im22 * delta.y;
 		return p1 + lambda * (p2 - p1) + mu * (p3 - p1);
 	};
 
