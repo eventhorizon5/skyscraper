@@ -2043,9 +2043,9 @@ void PolyMesh::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool c
 		const Real dx = mx.x - mn.x;
 		const Real dz = mx.y - mn.y;
 		const Real extent = std::max(dx, dz);
-		const Real Y_FLAT = SMALL_EPSILON * 64; // your prior flatness threshold
-		// Big and flat → probably terrain/landscape
-		return (extent >= 50.0f && yt <= Y_FLAT); // tune '50' to your project scale
+		const Real Y_FLAT = SMALL_EPSILON * 64;
+		//probably terrain/landscape
+		return (extent >= 50.0f && yt <= Y_FLAT);
 	};
 
 	int polycount = wall->GetPolygonCount();
@@ -2151,37 +2151,37 @@ void PolyMesh::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool c
 
 			if (isFloor)
 			{
-				// Floors/ceilings: split X then Z (ignore Y)
-				// left of start.x
+				//floors/ceilings: split X then Z (ignore Y)
+				//left of start.x
 				SplitWithPlaneUV(0, work, a, b, start.x);
 				emit(a);
 				work.swap(b); // keep >= start.x
 
-				// right of end.x
+				//right of end.x
 				SplitWithPlaneUV(0, work, a, b, end.x);
 				emit(b);
 				work.swap(a); // keep <= end.x
 
-				// back of start.z
+				//back of start.z
 				SplitWithPlaneUV(2, work, a, b, start.z);
 				emit(a);
 				work.swap(b); // keep >= start.z
 
-				// front of end.z
+				//front of end.z
 				SplitWithPlaneUV(2, work, a, b, end.z);
 				emit(b);
 				work.swap(a); // keep <= end.z
 			}
 			else
 			{
-				// Walls: pick major horizontal axis (X vs Z), then clip that + Y
+				//walls: pick major horizontal axis (X vs Z), then clip that + Y
 				Vector2 ex = extentsAxis(ring, 0);
 				Vector2 ez = extentsAxis(ring, 2);
 				const bool facesXZ = (std::abs(ex.y - ex.x) >= std::abs(ez.y - ez.x));
 
 				if (facesXZ)
 				{
-					// X major (forward/back)
+					//X major (forward/back)
 					SplitWithPlaneUV(0, work, a, b, start.x);
 					emit(a);
 					work.swap(b);
@@ -2192,7 +2192,7 @@ void PolyMesh::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool c
 				}
 				else
 				{
-					// Z major (left/right)
+					//Z major (left/right)
 					SplitWithPlaneUV(2, work, a, b, start.z);
 					emit(a);
 					work.swap(b);
@@ -2203,7 +2203,7 @@ void PolyMesh::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool c
 				}
 			}
 
-			// Y (common)
+			//Y (common)
 			SplitWithPlaneUV(1, work, a, b, start.y);
 			emit(a);
 			work.swap(b);
