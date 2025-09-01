@@ -1,3 +1,9 @@
+Version 2.0.2
+-------------------------
+-SBS: allow teleport outside of sim engine boundary
+-Frontend: fix fullscreen window positioning on MacOS
+-SBS: fix sound blacklist code (fixes issues with floor announcements)
+
 Version 2.0.1
 -------------------------
 -SBS: allow all movement on engine object, restrict based on bounds for others
