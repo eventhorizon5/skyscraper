@@ -1262,4 +1262,11 @@ Editor* VM::GetEditor()
 	return editor;
 }
 
+struct tm VM::GetDateTime()
+{
+	time_t timestamp = time(0);
+	struct tm datetime = *localtime(&timestamp);
+	return datetime;
+}
+
 }

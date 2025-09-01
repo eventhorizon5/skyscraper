@@ -469,8 +469,7 @@ bool VMConsole::ProcessCommand(const std::string &command, Ogre::StringVector &p
 	if (command == "date")
 	{
 		//print current date and time
-		time_t timestamp = time(0);
-		struct tm datetime = *localtime(&timestamp);
+		struct tm datetime = vm->GetDateTime();
 		Report(asctime(&datetime));
 
 		if (!vm->GetActiveScriptProcessor())

@@ -139,6 +139,7 @@ public:
 	bool LoadPending();
 	bool IsRunning() { return running; }
 	Editor* GetEditor();
+	struct tm GetDateTime();
 
 	bool Shutdown;
 	bool ConcurrentLoads; //set to true for buildings to be loaded while another sim is active and rendering
