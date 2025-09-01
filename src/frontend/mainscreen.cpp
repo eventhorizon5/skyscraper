@@ -193,6 +193,8 @@ void MainScreen::OnIconize(wxIconizeEvent& event)
 	//pause simulator while minimized
 
 	VM *vm = frontend->GetVM();
+	if (!vm)
+		return;
 	vm->Pause = event.IsIconized();
 
 	if (vm->Pause == true)
@@ -204,6 +206,8 @@ void MainScreen::OnIconize(wxIconizeEvent& event)
 void MainScreen::OnSize(wxSizeEvent& WXUNUSED(event))
 {
 	VM *vm = frontend->GetVM();
+	if (!vm)
+		return;
 	HAL *hal = vm->GetHAL();
 
 	if (panel)
@@ -246,6 +250,9 @@ void MainScreen::ShowWindow()
 
 void MainScreen::OnIdle(wxIdleEvent& event)
 {
+	if (!frontend->GetVM())
+		return;
+
 	//prevent simultaneous executions - this fixes an issue with wxYield
 	if (InLoop == false)
 	{
@@ -297,6 +304,9 @@ void MainScreen::OnActivate(wxActivateEvent &event)
 void MainScreen::OnKeyDown(wxKeyEvent& event)
 {
 	//this function is run when a key is pressed
+
+	if (!frontend->GetVM())
+		return;
 
 	if (frontend->GetVM()->GetEditor()->IsInitialized() == true && frontend->GetVM()->GetHAL()->IsVREnabled() == false)
 	{
@@ -575,6 +585,9 @@ void MainScreen::OnKeyUp(wxKeyEvent& event)
 {
 	//this function is run when a key is released
 
+	if (!frontend->GetVM())
+		return;
+
 	if (frontend->GetVM()->GetEditor()->IsInitialized() == true && frontend->GetVM()->GetHAL()->IsVREnabled() == false)
 	{
 		UpdateImguiModsFromWx(event);
@@ -771,6 +784,9 @@ void MainScreen::ProcessMovement(EngineContext *engine, bool control, bool shift
 void MainScreen::OnMouseButton(wxMouseEvent& event)
 {
 	//this function is run when a mouse button is pressed
+
+	if (!frontend->GetVM())
+		return;
 
 	if (frontend->GetVM()->GetEditor()->IsInitialized() == true && frontend->GetVM()->GetHAL()->IsVREnabled() == false)
 	{
@@ -981,6 +997,9 @@ void MainScreen::EnableFreelook(bool value)
 #ifndef __FreeBSD__
 void MainScreen::OnJoystickEvent(wxJoystickEvent &event)
 {
+	if (!frontend->GetVM())
+		return;
+
 	if (event.IsZMove())
 		return;
 
@@ -1051,6 +1070,9 @@ void MainScreen::OnJoystickEvent(wxJoystickEvent &event)
 
 void MainScreen::OnMouseMove(wxMouseEvent &event)
 {
+	if (!frontend->GetVM())
+		return;
+
 	if (frontend->GetVM()->GetEditor()->IsInitialized() == true && frontend->GetVM()->GetHAL()->IsVREnabled() == false)
 	{
 		if (ImGui::GetIO().WantCaptureMouse)
@@ -1062,6 +1084,9 @@ void MainScreen::OnMouseMove(wxMouseEvent &event)
 
 void MainScreen::OnMouseLeave(wxMouseEvent &event)
 {
+	if (!frontend->GetVM())
+		return;
+
 	if (frontend->GetVM()->GetEditor()->IsInitialized() == true && frontend->GetVM()->GetHAL()->IsVREnabled() == false)
 	{
 		ImGui::GetIO().AddMousePosEvent(-FLT_MAX, -FLT_MAX);
@@ -1071,6 +1096,9 @@ void MainScreen::OnMouseLeave(wxMouseEvent &event)
 
 void MainScreen::OnChar(wxKeyEvent &event)
 {
+	if (!frontend->GetVM())
+		return;
+
 	if (frontend->GetVM()->GetEditor()->IsInitialized() == true && frontend->GetVM()->GetHAL()->IsVREnabled() == false)
 	{
 		const int uni = event.GetUnicodeKey();
@@ -1087,6 +1115,9 @@ void MainScreen::OnChar(wxKeyEvent &event)
 
 void MainScreen::OnFocus(wxFocusEvent &event)
 {
+	if (!frontend->GetVM())
+		return;
+
 	if (frontend->GetVM()->GetEditor()->IsInitialized() == true && frontend->GetVM()->GetHAL()->IsVREnabled() == false)
 	{
 		ImGui::GetIO().AddFocusEvent(true);
@@ -1096,6 +1127,9 @@ void MainScreen::OnFocus(wxFocusEvent &event)
 
 void MainScreen::OnKillFocus(wxFocusEvent &event)
 {
+	if (!frontend->GetVM())
+		return;
+
 	if (frontend->GetVM()->GetEditor()->IsInitialized() == true && frontend->GetVM()->GetHAL()->IsVREnabled() == false)
 	{
 		ImGui::GetIO().AddFocusEvent(false);

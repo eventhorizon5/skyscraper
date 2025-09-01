@@ -357,7 +357,9 @@ int Skyscraper::OnExit()
 #endif
 
 	delete startscreen;
+	startscreen = 0;
 	delete vm;
+	vm = 0;
 
 #ifdef USING_WX
 	return wxApp::OnExit();
