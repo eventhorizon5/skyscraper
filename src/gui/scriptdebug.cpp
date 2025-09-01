@@ -31,23 +31,26 @@
 #include "gui.h"
 #include "debugpanel.h"
 #include "scriptproc.h"
+#include "section.h"
 #include "scriptdebug.h"
 
 namespace Skyscraper {
 
 //(*IdInit(ScriptDebug)
-const wxWindowID ScriptDebug::ID_lstScript = wxNewId();
-const wxWindowID ScriptDebug::ID_STATICTEXT1 = wxNewId();
-const wxWindowID ScriptDebug::ID_txtFilename = wxNewId();
-const wxWindowID ScriptDebug::ID_STATICTEXT2 = wxNewId();
-const wxWindowID ScriptDebug::ID_txtLine = wxNewId();
-const wxWindowID ScriptDebug::ID_lstFunctions = wxNewId();
-const wxWindowID ScriptDebug::ID_bGoto = wxNewId();
-const wxWindowID ScriptDebug::ID_bRun = wxNewId();
-const wxWindowID ScriptDebug::ID_bStart = wxNewId();
-const wxWindowID ScriptDebug::ID_bStop = wxNewId();
-const wxWindowID ScriptDebug::ID_bReset = wxNewId();
-const wxWindowID ScriptDebug::ID_lstVariables = wxNewId();
+const long ScriptDebug::ID_lstScript = wxNewId();
+const long ScriptDebug::ID_STATICTEXT1 = wxNewId();
+const long ScriptDebug::ID_txtFilename = wxNewId();
+const long ScriptDebug::ID_STATICTEXT2 = wxNewId();
+const long ScriptDebug::ID_txtLine = wxNewId();
+const long ScriptDebug::ID_STATICTEXT3 = wxNewId();
+const long ScriptDebug::ID_txtSection = wxNewId();
+const long ScriptDebug::ID_lstFunctions = wxNewId();
+const long ScriptDebug::ID_bGoto = wxNewId();
+const long ScriptDebug::ID_bRun = wxNewId();
+const long ScriptDebug::ID_bStart = wxNewId();
+const long ScriptDebug::ID_bStop = wxNewId();
+const long ScriptDebug::ID_bReset = wxNewId();
+const long ScriptDebug::ID_lstVariables = wxNewId();
 //*)
 
 BEGIN_EVENT_TABLE(ScriptDebug,wxDialog)
@@ -90,6 +93,11 @@ ScriptDebug::ScriptDebug(DebugPanel* root, wxWindow* parent)
     txtLine = new wxTextCtrl(this, ID_txtLine, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY, wxDefaultValidator, _T("ID_txtLine"));
     FlexGridSizer3->Add(txtLine, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     FlexGridSizer3->Add(-1,-1,1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    StaticText3 = new wxStaticText(this, ID_STATICTEXT3, _("Section:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT3"));
+    FlexGridSizer3->Add(StaticText3, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    txtSection = new wxTextCtrl(this, ID_txtSection, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY, wxDefaultValidator, _T("ID_txtSection"));
+    FlexGridSizer3->Add(txtSection, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    FlexGridSizer3->Add(-1,-1,1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     FlexGridSizer6->Add(FlexGridSizer3, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     FlexGridSizer7 = new wxFlexGridSizer(0, 3, 0, 0);
     StaticBoxSizer3 = new wxStaticBoxSizer(wxHORIZONTAL, this, _("Functions"));
@@ -121,11 +129,11 @@ ScriptDebug::ScriptDebug(DebugPanel* root, wxWindow* parent)
     SetSizer(FlexGridSizer1);
     FlexGridSizer1->SetSizeHints(this);
 
-    Connect(ID_bGoto, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&ScriptDebug::On_bGoto_Click);
-    Connect(ID_bRun, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&ScriptDebug::On_bRun_Click);
-    Connect(ID_bStart, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&ScriptDebug::On_bStart_Click);
-    Connect(ID_bStop, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&ScriptDebug::On_bStop_Click);
-    Connect(ID_bReset, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&ScriptDebug::On_bReset_Click);
+    Connect(ID_bGoto,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&ScriptDebug::On_bGoto_Click);
+    Connect(ID_bRun,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&ScriptDebug::On_bRun_Click);
+    Connect(ID_bStart,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&ScriptDebug::On_bStart_Click);
+    Connect(ID_bStop,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&ScriptDebug::On_bStop_Click);
+    Connect(ID_bReset,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&ScriptDebug::On_bReset_Click);
     //*)
     this->panel = root;
     variable_count = 0;
@@ -166,6 +174,29 @@ void ScriptDebug::Loop()
 
     txtLine->SetValue(SBS::ToString(scriptproc->line + 1));
     txtFilename->SetValue(Simcore->BuildingFilename);
+
+    if (scriptproc->GetConfigHandler()->SectionNum == SECTION_NONE)
+        txtSection->SetValue("None");
+    else if (scriptproc->GetConfigHandler()->SectionNum == SECTION_GLOBAL)
+        txtSection->SetValue("Global");
+    else if (scriptproc->GetConfigHandler()->SectionNum == SECTION_FLOOR)
+        txtSection->SetValue("Floor");
+    else if (scriptproc->GetConfigHandler()->SectionNum == SECTION_BUILDINGS)
+        txtSection->SetValue("Buildings");
+    else if (scriptproc->GetConfigHandler()->SectionNum == SECTION_ELEVATOR)
+        txtSection->SetValue("Elevator");
+    else if (scriptproc->GetConfigHandler()->SectionNum == SECTION_TEXTURE)
+        txtSection->SetValue("Texture");
+    else if (scriptproc->GetConfigHandler()->SectionNum == SECTION_ELEVATORCAR)
+        txtSection->SetValue("Elevator Car");
+    else if (scriptproc->GetConfigHandler()->SectionNum == SECTION_VEHICLE)
+        txtSection->SetValue("Vehicle");
+    else if (scriptproc->GetConfigHandler()->SectionNum == SECTION_CONTROLLER)
+        txtSection->SetValue("Controller");
+    else if (scriptproc->GetConfigHandler()->SectionNum == SECTION_CALLSTATION)
+        txtSection->SetValue("CallStation");
+    else
+        txtSection->SetValue("Error");
 
     size_t temp_count = scriptproc->variables.size();
     if (variable_count != temp_count)
