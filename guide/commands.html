@@ -51,8 +51,8 @@
         as one named "Test", can either be specified directly as "Test",
         or as part of a Shaft or Stairwell object, as "Shaft 1:Test".<br>
       </p>
-      <p align="left"><strong>3. Global variables</strong> </p>
-      <p align="left">The simulator has a number of global variables,
+      <p align="left"><strong>3. Runloop variables</strong> </p>
+      <p align="left">The simulator has a number of runloop variables,
         that can be used to get system information.&nbsp; The current
         variables are:<br>
         1. <i>uptime</i> - stores the SBS engine uptime<br>
@@ -62,9 +62,18 @@
         5. <i>real_hour</i> - stores the system hour<br>
         6. <i>real_minute</i> - stores the system minute<br>
         7. <i>real_second</i> - stores the system second<br>
-        Example: if [%uptime% = 10] Print hello</p>
-      <p align="left">The example prints the word "hello" after the sim
-        engine has been running for 10 seconds.<br>
+        <br>
+        Example:</p>
+      <p align="left"><font size="2" face="Courier New, Courier, mono">Set
+          firstrun = true<br>
+          &lt;Function runloop&gt;<br>
+          &nbsp;&nbsp;&nbsp; if[%uptime% = 10 &amp; %firstrun% = true]
+          Print hello<br>
+          &nbsp;&nbsp;&nbsp; Set firstrun = false<br>
+          &lt;EndFunction&gt;<br>
+        </font><br>
+        The example prints the word "hello" after the sim engine has
+        been running for 10 seconds.<br>
         <br>
       </p>
       <p align="left"> <strong>a. AddTriangleWall</strong> - adds a
@@ -72,6 +81,7 @@
         with only 3 coordinates used. If specified in a floor section,
         the Y values are then relative to the floor base.<br>
         Syntax: <font size="2" face="Courier New, Courier, mono">AddTriangleWall
+
 
 
 
@@ -183,9 +193,11 @@ external,
 
 
 
+
           My Triangle, Brick, 0, 0, 0, 0, 10, 0, 0, 0, 10, 0, 0</font></p>
       <p align="left"><strong>b. AddWall</strong> - adds a textured wall<br>
         Syntax: <font size="2" face="Courier New, Courier, mono">AddWall
+
 
 
 
@@ -243,6 +255,7 @@ external,
           <em>z1</em>, <em>x2</em>, z2, <em>height1</em>, <em>height2</em>,
           <em>altitude1</em>, <em>altitude2</em>, <em>tw</em>, <em>th</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">AddWall
+
 
 
 
@@ -357,6 +370,7 @@ external,
 
 
 
+
           <em>destobject, name, texturename</em>, <em>thickness, x1</em>,
           <em>z1</em>, <em>x2</em>, <em>z2</em>, <em>altitude1</em>,
           <em>altitude2</em>, reverse_axis, texture_direction, <em>tw</em>,
@@ -367,6 +381,7 @@ external,
       <p align="left"><strong>d. AddGround</strong> - adds a tile-based
         ground<br>
         Syntax: <font size="2" face="Courier New, Courier, mono">AddGround
+
 
 
 
@@ -491,11 +506,13 @@ external,
 
 
 
+
           <em>destobject</em>, <em>name, texturename</em>, <em>x1</em>,
           <em>x2</em>, <em>z1</em>, <em>z2</em>, <em>height</em>, <em>voffset</em>,
           <em>tw</em>, <em>th, inside, outside, top, bottom </em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">CreateWallBox
 external,
+
 
 
 
@@ -614,6 +631,7 @@ external,
 
 
 
+
           <em>destobject</em>, <em>name, texturename</em>, <em>centerx</em>,
           <em>centerz</em>, <em>widthx</em>, <em>lengthz</em>, <em>height</em>,
           <em>voffset</em>, <em>tw</em>, <em>th</em></font><font
@@ -621,6 +639,7 @@ external,
             outside, top, bottom </em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">CreateWallBox2
 external,
+
 
 
 
@@ -746,6 +765,7 @@ external,
 
 
 
+
           <em>destobject, name, texturename[, RelativeY], x1, y1, z1,
             x2, y2, z2, x3, y3, z3, ..., tw, th</em></font><br>
         Example 1: <font size="2" face="Courier New, Courier, mono">AddCustomWall
@@ -803,10 +823,12 @@ external,
 
 
 
+
           My Wall, Brick, 0, 0, 0, 0, 10, 0, 10, 10, 0, 15, 5, 0, 10, 0,
           0, 0, 0</font><br>
         Example 2: <font size="2" face="Courier New, Courier, mono">AddCustomWall
 external,
+
 
 
 
@@ -920,10 +942,12 @@ external,
 
 
 
+
           <em>destobject, name, texturename, x1, z1, x2, z2, x3, z3,
             ..., altitude, tw, th</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">AddCustomFloor
 external,
+
 
 
 
@@ -1034,8 +1058,10 @@ external,
 
 
 
+
           <em>number, centerx, centerz, startfloor, endfloor</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">AddShaft
+
 
 
 
@@ -1152,8 +1178,10 @@ external,
 
 
 
+
           <em>number, centerx, centerz, startfloor, endfloor</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">CreateStairwell
+
 
 
 
@@ -1270,8 +1298,10 @@ external,
 
 
 
+
           = <em>direction</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">WallOrientation
+
 
 
 
@@ -1400,8 +1430,10 @@ external,
 
 
 
+
           = <em>direction</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">FloorOrientation
+
 
 
 
@@ -1521,9 +1553,11 @@ external,
 
 
 
+
           = <em>MainNegative, MainPositive, SideNegative, SidePositive,
             Top, Bottom</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">DrawWalls
+
 
 
 
@@ -1647,9 +1681,11 @@ external,
 
 
 
+
           <em>Flat, FlipX, FlipY, FlipZ, Rotate</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">SetPlanarMapping
 false,
+
 
 
 
@@ -1791,8 +1827,10 @@ false,
 
 
 
+
           <em>vertex1, u1, v1, vertex2, u2, v2, vertex3, u3, v3</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">SetTextureMapping
+
 
 
 
@@ -1925,6 +1963,7 @@ false,
 
 
 
+
           0, 0.25, 0.25, 1, 0.75, 0.25, 2, 0.75, 0.75</font></p>
       <p align="left">Here's an easier way to see the example above:</p>
       <p align="left"><font size="2" face="Courier New, Courier, mono">0
@@ -1995,10 +2034,12 @@ false,
 
 
 
+
           <em>v1x, v1y, v1z, u1, v1, v2x, v2y, v2z, u2, v2, v3x, v3y,
             v3z, u3, v3</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">SetTextureMapping2
 x0,
+
 
 
 
@@ -2122,6 +2163,7 @@ x0,
 
 
 
+
           y0, z0 -&gt; 0, 0<br>
           x1, y1, z1 -&gt; 1, 0<br>
           x2, y2, z2 -&gt; 1, 1</font></p>
@@ -2182,8 +2224,10 @@ x0,
 
 
 
+
           = <em>default</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">ResetTextureMapping
+
 
 
 
@@ -2305,6 +2349,7 @@ x0,
 
 
 
+
           = <em>value</em></font></p>
       <p align="left"><strong>s. ShaftCut</strong> - used in conjunction
         with a shaft object - performs a vertical box cut on all floor
@@ -2364,9 +2409,11 @@ x0,
 
 
 
+
           <em>number, startx, startz, endx, endz, start_voffset,
             end_voffset</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">ShaftCut
+
 
 
 
@@ -2494,6 +2541,7 @@ x0,
 
 
 
+
           1, -4, -3.5, 4, 3.5, 0, 5</font></p>
       <p align="left"><strong>u. Isect</strong> - the Isect function
         calculates the position that a line intersects with a certain
@@ -2554,9 +2602,11 @@ objectname,
 
 
 
+
             startx, starty, startz, endx, endy, endz</em>)</font><br>
         Example: <font size="2" face="Courier New, Courier, mono">isect(external,
 wall1,
+
 
 
 
@@ -2685,8 +2735,10 @@ wall1,
 
 
 
+
           = <em>AutoWidth, AutoHeight </em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">SetAutoSize
+
 
 
 
@@ -2815,11 +2867,13 @@ wall1,
 
 
 
+
           <em>MainNegativeTex, MainPositiveTex, SideNegativeTex,
             SidePositiveTex, TopTex, Bottom</em></font><font size="2"
           face="Courier New, Courier, mono"><em>Tex</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">TextureOverride
 Metal1,
+
 
 
 
@@ -2936,6 +2990,7 @@ Metal1,
 
 
 
+
           <em>ShaftNumber</em> = <em>range/list[, full]</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">ShaftShowFloors
 
@@ -2991,8 +3046,10 @@ Metal1,
 
 
 
+
           1 = 1 - 10</font><br>
         Example 2: <font size="2" face="Courier New, Courier, mono">ShaftShowFloors
+
 
 
 
@@ -3123,8 +3180,10 @@ Metal1,
 
 
 
+
           <em>ShaftNumber</em> = <em>range/list</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">ShaftShowInterfloors
+
 
 
 
@@ -3237,8 +3296,10 @@ Metal1,
 
 
 
+
           <em>ShaftNumber</em> = <em>range/list</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">ShaftShowOutside
+
 
 
 
@@ -3362,6 +3423,7 @@ Metal1,
 
 
 
+
           <em>ShaftNumber</em> = <em>value</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">ShowFullShaft
 
@@ -3417,8 +3479,10 @@ Metal1,
 
 
 
+
           1 = true</font></p>
       <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>ab.
+
 
 
 
@@ -3528,8 +3592,10 @@ Metal1,
 
 
 
+
           <em>StairwellNumber</em> = <em>range/list</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">StairsShowFloors
+
 
 
 
@@ -3644,6 +3710,7 @@ Metal1,
 
 
 
+
           ShowFullStairs</strong> - determines if an entire stairwell
         should be shown. If set to "true" or "inside", the full
         stairwell is shown only when the user is inside the stairwell.
@@ -3704,8 +3771,10 @@ Metal1,
 
 
 
+
           <em>StairwellNumber</em> = <em>value</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">ShowFullStairs
+
 
 
 
@@ -3819,9 +3888,11 @@ Metal1,
 
 
 
+
           <em>MainNegative, MainPositive, SideNegative, SidePositive,
             Top, Bottom</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">TextureFlip
+
 
 
 
@@ -3886,6 +3957,7 @@ Metal1,
         cut on an object<br>
         Syntax: <font size="2" face="Courier New, Courier, mono">Cut <em>destobject,
 x1,
+
 
 
 
@@ -4013,9 +4085,11 @@ x1,
 
 
 
+
           <em>x1, y1, z1, x2, y2, z2</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">AddFloorAutoArea
 -100,
+
 
 
 
@@ -4126,11 +4200,13 @@ x1,
 
 
 
+
           <em>name, filename, x, y, z, loop[, volume, speed,
             min_distance, max_distance, doppler_level,
             cone_inside_angle, cone_outside_angle, cone_outside_volume,
             direction_x, direction_y, direction_z]</em></font><br>
         Example 1: <font size="2" face="Courier New, Courier, mono">AddSound
+
 
 
 
@@ -4265,8 +4341,10 @@ x1,
 
 
 
+
           <em>name, type, x, y, z, min_distance, max_distance</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">AddReverb
+
 
 
 
@@ -4374,9 +4452,11 @@ x1,
 
 
 
+
           <em>destobject, wallname, altitude</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">GetWallExtents
 external,
+
 
 
 
@@ -4504,9 +4584,11 @@ external,
 
 
 
+
           AddAction</strong> - defines an action, to be used by custom
         controls and triggers.<br>
         Syntax:<font size="2" face="Courier New, Courier, mono">&nbsp;AddAction
+
 
 
 
@@ -4616,9 +4698,11 @@ MyAction,
 
 
 
+
           Floor 2, ChangeTexture, OldTexture, NewTexture</font><br>
         Example:<font size="2" face="Courier New, Courier, mono">&nbsp;AddAction
 MySoundAction,
+
 
 
 
@@ -4687,6 +4771,7 @@ MySoundAction,
         0:Call Panel 1", and can also be specified as a range of
         objects, such as "Floors 3 to 8".</p>
       <p style="text-align:left;margin-left:0;margin-right:auto;">Commands
+
 
 
 
@@ -4837,11 +4922,13 @@ example,
 
 
 
+
         to open elevator 1's shaft doors on floor 2:</p>
       <p style="text-align:left;margin-left:0;margin-right:auto;"><font
           size="2" face="Courier New, Courier, mono">AddAction
           MyDoorOpen, Elevator 1, OpenShaftDoor, 0, 2</font></p>
       <p style="text-align:left;margin-left:0;margin-right:auto;">PlaySound
+
 
 
 
@@ -4914,6 +5001,7 @@ example,
       </p>
       <p style="text-align:left;margin-left:0;margin-right:auto;">Actions
 
+
         can be performed on the TextureManager system too.&nbsp; To
         change the filename of a loaded texture for example, do
         something like this:<br>
@@ -4979,9 +5067,11 @@ example,
 
 
 
+
           AddActionControl</strong> - creates a custom control that uses
         a specific action defined by AddAction.<br>
         Syntax: <font size="2" face="Courier New, Courier, mono">AddActionControl
+
 
 
 
@@ -5109,10 +5199,12 @@ example,
 
 
 
+
           AddTrigger</strong> - creates a trigger that is used to signal
         an action when the user's camera enters or leaves the defined
         area.<br>
         Syntax:<font size="2" face="Courier New, Courier, mono">&nbsp;AddTrigger
+
 
 
 
@@ -5235,6 +5327,7 @@ example,
 
 
 
+
           AddModel</strong> - adds a global 3D model. If a filename is
         specified, the model's textures/materials must be defined in a
         separate ".material" file, and a separate collider mesh
@@ -5246,6 +5339,7 @@ example,
         automatically created.<br>
         Syntax: <font size="2" face="Courier New, Courier, mono">AddModel<em>&nbsp;name,
 filename,
+
 
 
 
@@ -5359,9 +5453,11 @@ filename,
 
 
 
+
           MyModel, cube.mesh, true, 0, 0, 0, 0, 0, 0, 0, 1, true, 0.1,
           0.5, 0.1</font><br>
         Example 3:<font size="2" face="Courier New, Courier, mono">&nbsp;AddModel
+
 
 
 
@@ -5486,12 +5582,14 @@ filename,
 
 
 
+
           CreateWallObject</strong> - creates a custom wall object, in
         the specified mesh object. Wall objects are used to contain a
         number of polygons, to represent a wall structure, and are
         normally automatically created by other commands. The AddPolygon
         command is used with this command, to create the polygons.<br>
         Syntax:<font size="2" face="Courier New, Courier, mono">&nbsp;CreateWallObject
+
 
 
 
@@ -5600,8 +5698,10 @@ filename,
 
 
 
+
           landscape, mywall</font></p>
       <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>ap.
+
 
 
 
@@ -5718,10 +5818,12 @@ filename,
 
 
 
+
           <em>destobject, wallname, texturename, x1, y1, z1, x2, y2, z2,
             x3, y3, z3, ..., tw, th</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">AddPolygon
 landscape,
+
 
 
 
@@ -5786,6 +5888,7 @@ landscape,
 
 
 
+
           ExtrudePoly</strong> - extrude the following polygon(s).&nbsp;
         This command sets the thickness of the polygons following the
         command, and the side texture to use.&nbsp; The EndExtrude
@@ -5805,6 +5908,7 @@ landscape,
 
 
 
+
           side_texture, thickness, tw, th<em></em></font><br>
         Example: <br>
         <font size="2"><font face="Courier New, Courier, mono">DrawWalls
@@ -5815,6 +5919,7 @@ landscape,
           EndExtrude<br>
         </font></p>
       <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>ar.
+
 
 
 
@@ -5935,6 +6040,7 @@ landscape,
 
 
 
+
           AddBox</strong> - this command creates a box in a given wall
         object.&nbsp; If created in a Floor section, the Y values will
         be relative to that floor's base.<br>
@@ -6002,6 +6108,7 @@ landscape,
 
 
 
+
           AddCylinder</strong> - this command creates a cylinder in a
         given wall object.&nbsp; If created in a Floor section, the Y
         values will be relative to that floor's base.<br>
@@ -6010,6 +6117,7 @@ landscape,
             wallname, texturename, </em></font><font size="2"
           face="Courier New, Courier, mono"><em><font size="2"
               face="Courier New, Courier, mono"><em>x, y, z, </em></font>radius,
+
             height, slices, tw, th</em></font><font size="2"
           face="Courier New, Courier, mono"><em>, inside</em></font><br>
         Example: <font size="2"><font face="Courier New, Courier, mono">AddCylinder</font></font><font
@@ -6073,6 +6181,7 @@ landscape,
 
 
 
+
           AddCone</strong> - this command creates a cone in a given wall
         object.&nbsp; If created in a Floor section, the Y values will
         be relative to that floor's base.<br>
@@ -6081,6 +6190,7 @@ landscape,
             wallname, texturename, </em></font><font size="2"
           face="Courier New, Courier, mono"><em><font size="2"
               face="Courier New, Courier, mono"><em>x, y, z, </em></font>radius,
+
             height, slices, tw, th</em></font><font size="2"
           face="Courier New, Courier, mono"><em>, inside</em></font><br>
         Example: <font size="2"><font face="Courier New, Courier, mono">AddCone</font></font><font
@@ -6144,6 +6254,7 @@ landscape,
 
 
 
+
           AddCapsule</strong> - this command creates a capsule in a
         given wall object.&nbsp; If created in a Floor section, the Y
         values will be relative to that floor's base.<br>
@@ -6152,6 +6263,7 @@ landscape,
             wallname, texturename, </em></font><font size="2"
           face="Courier New, Courier, mono"><em><font size="2"
               face="Courier New, Courier, mono"><em>x, y, z, </em></font>radius,
+
             height, latSteps, lonSteps, tw, th</em></font><font size="2"
           face="Courier New, Courier, mono"><em>, inside</em></font><br>
         Example: <font size="2"><font face="Courier New, Courier, mono">AddCapsule</font></font><font
@@ -6215,6 +6327,7 @@ landscape,
 
 
 
+
           AddPlane</strong> - this command creates a plane in a given
         wall object.&nbsp; If created in a Floor section, the Y values
         will be relative to that floor's base.<br>
@@ -6223,6 +6336,7 @@ landscape,
             wallname, texturename, </em></font><font size="2"
           face="Courier New, Courier, mono"><em><font size="2"
               face="Courier New, Courier, mono"><em>x, y, z, </em></font>width,
+
             depth, x_segments, z_segments, tw, th</em></font><font
           size="2" face="Courier New, Courier, mono"><em>, inside</em></font><br>
         Example: <font size="2"><font face="Courier New, Courier, mono">AddPlane</font></font><font
@@ -6286,6 +6400,7 @@ landscape,
 
 
 
+
           AddCircle</strong> - this command creates a circle in a given
         wall object.&nbsp; If created in a Floor section, the Y values
         will be relative to that floor's base.<br>
@@ -6294,6 +6409,7 @@ landscape,
             wallname, texturename, </em></font><font size="2"
           face="Courier New, Courier, mono"><em><font size="2"
               face="Courier New, Courier, mono"><em>x, y, z, </em></font>radius,
+
             slices, tw, th</em></font><font size="2" face="Courier New,
           Courier, mono"><em>, inside</em></font><br>
         Example: <font size="2"><font face="Courier New, Courier, mono">AddCircle</font></font><font
@@ -6357,6 +6473,7 @@ landscape,
 
 
 
+
           AddTorus</strong> - this command creates a torus in a given
         wall object.&nbsp; If created in a Floor section, the Y values
         will be relative to that floor's base.<br>
@@ -6365,6 +6482,7 @@ landscape,
             wallname, texturename, </em></font><font size="2"
           face="Courier New, Courier, mono"><em><font size="2"
               face="Courier New, Courier, mono"><em>x, y, z, </em></font>majorRadius,
+
 
             minorRadius, radialSteps, tubeSteps, tw, th</em></font><font
           size="2" face="Courier New, Courier, mono"><em>, inside</em></font><br>
@@ -6429,6 +6547,7 @@ landscape,
 
 
 
+
           AddDome</strong> - this command creates a dome in a given wall
         object.&nbsp; If created in a Floor section, the Y values will
         be relative to that floor's base.<br>
@@ -6437,6 +6556,7 @@ landscape,
             wallname, texturename, </em></font><font size="2"
           face="Courier New, Courier, mono"><em><font size="2"
               face="Courier New, Courier, mono"><em>x, y, z, </em></font>radius,
+
             latSteps, lonSteps, tw, th</em></font><font size="2"
           face="Courier New, Courier, mono"><em>, inside</em></font><br>
         Example: <font size="2"><font face="Courier New, Courier, mono">AddDome</font></font><font
@@ -6500,6 +6620,7 @@ landscape,
 
 
 
+
           AddPyramid</strong> - this command creates a pyramid in a
         given wall object.&nbsp; If created in a Floor section, the Y
         values will be relative to that floor's base.<br>
@@ -6508,6 +6629,7 @@ landscape,
             wallname, texturename, </em></font><font size="2"
           face="Courier New, Courier, mono"><em><font size="2"
               face="Courier New, Courier, mono"><em>x, y, z, </em></font>width,
+
             depth, height, tw, th</em></font><font size="2"
           face="Courier New, Courier, mono"><em>, inside</em></font><br>
         Example: <font size="2"><font face="Courier New, Courier, mono">AddPyramid</font></font><font
@@ -6518,6 +6640,7 @@ landscape,
           size="2" face="Courier New, Courier, mono"> </font></p>
       <strong></strong>
       <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>bb.
+
 
 
 
@@ -6639,6 +6762,7 @@ landscape,
 
 
 
+
           AddTetrahedron</strong> - this command creates a tetrahedron
         in a given wall object.&nbsp; If created in a Floor section, the
         Y values will be relative to that floor's base.<br>
@@ -6654,6 +6778,7 @@ landscape,
           size="2" face="Courier New, Courier, mono"> </font></p>
       <strong></strong>
       <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>bd.
+
 
 
 
@@ -6778,6 +6903,7 @@ landscape,
 
 
 
+
           AddIcosahedron</strong> - this command creates an icosahedron
         in a given wall object.&nbsp; If created in a Floor section, the
         Y values will be relative to that floor's base.<br>
@@ -6796,6 +6922,7 @@ landscape,
           size="2" face="Courier New, Courier, mono"> </font></p>
       <strong></strong>
       <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>bf.
+
 
 
 
@@ -6920,12 +7047,14 @@ landscape,
 
 
 
+
           SetKey</strong> - specifies that the next created model will
         be a key. The model will be tagged with a specific key ID
         number, and when clicked, the key ID will be added to the user's
         keyring and the model will be deleted. The value must be greater
         than 0.<br>
         Syntax:<font size="2" face="Courier New, Courier, mono">&nbsp;SetKey
+
 
 
 
@@ -7034,8 +7163,10 @@ landscape,
 
 
 
+
           1</font></p>
       <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>bh.
+
 
 
 
@@ -7146,8 +7277,10 @@ landscape,
 
 
 
+
           <em>locked</em>, <em>keyid</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">SetLock
+
 
 
 
@@ -7274,6 +7407,7 @@ landscape,
 
 
 
+
           Print</strong> - prints the contents of a line to the console.
         This command will still convert variables and even math
         expressions, and output the results.<br>
@@ -7283,6 +7417,7 @@ landscape,
           1+1</font></p>
       <p style="text-align:left;margin-left:0;margin-right:auto;"></p>
       <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>bj.
+
 
 
 
@@ -7394,9 +7529,11 @@ landscape,
 
 
 
+
           12</font></p>
       <p style="text-align:left;margin-left:0;margin-right:auto;"></p>
       <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>bk.
+
 
 
 
@@ -7506,8 +7643,10 @@ landscape,
 
 
 
+
           <em>name</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">RunAction
+
 
 
 
@@ -7617,9 +7756,11 @@ landscape,
 
 
 
+
           AddActionParent</strong> - adds a parent object to an existing
         action. See the AddAction command for details on parent objects<br>
         Syntax: <font size="2" face="Courier New, Courier, mono">AddActionParent
+
 
 
 
@@ -7729,6 +7870,7 @@ myaction,
 
 
 
+
           Elevator 2</font><br>
         Example: <font size="2" face="Courier New, Courier, mono">AddActionParent
 myaction,
@@ -7785,9 +7927,11 @@ myaction,
 
 
 
+
           Floors 2 to 5</font></p>
       <p style="text-align:left;margin-left:0;margin-right:auto;"></p>
       <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>bm.
+
 
 
 
@@ -7899,9 +8043,11 @@ myaction,
 
 
 
+
           <em>name, object</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">RemoveActionParent
 myaction,
+
 
 
 
@@ -8011,9 +8157,11 @@ myaction,
 
 
 
+
           Floors 2 to 5</font></p>
       <p style="text-align:left;margin-left:0;margin-right:auto;"></p>
       <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>bn.
+
 
 
 
@@ -8123,8 +8271,10 @@ myaction,
 
 
 
+
           <em>floor</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">GotoFloor
+
 
 
 
@@ -8238,8 +8388,10 @@ starty,
 
 
 
+
             angle, distance</em>)</font><br>
         Example: <font size="2" face="Courier New, Courier, mono">endpoint(-150,
+
 
 
 
@@ -8351,9 +8503,11 @@ starty,
 
 
 
+
           FloorInfo</strong> - show information on all floors or
         optionally a specified floor<br>
         Syntax: <font size="2" face="Courier New, Courier, mono">FloorInfo
+
 
 
 
@@ -8462,9 +8616,11 @@ starty,
 
 
 
+
           3</font></p>
       <p style="text-align:left;margin-left:0;margin-right:auto;"></p>
       <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>bq.
+
 
 
 
@@ -8576,11 +8732,13 @@ starty,
 
 
 
+
           ListVisibleMeshes</strong> - list the mesh objects currently
         visible by the camera<br>
       </p>
       <p style="text-align:left;margin-left:0;margin-right:auto;"></p>
       <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>bs.
+
 
 
 
@@ -8693,12 +8851,14 @@ starty,
 
 
 
+
           ShowPlayingSounds</strong> - show the sounds currently playing
         in the sound system, with each filename followed by a listing of
         playing sound objects<br>
       </p>
       <p style="text-align:left;margin-left:0;margin-right:auto;"></p>
       <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>bu.
+
 
 
 
@@ -8808,8 +8968,10 @@ starty,
 
 
 
+
           <em>X, Y, Z</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">Teleport
+
 
 
 
@@ -8867,6 +9029,7 @@ starty,
         </font></p>
       <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>bv.
 
+
           SetTexture</strong> - sets the texture filename of the given
         texture.&nbsp; This allows you to change textures after they've
         been loaded.&nbsp; The example changes the Brick texture to the
@@ -8874,9 +9037,11 @@ starty,
         data/brick1.jpg.<br>
         Syntax: <font size="2"><font face="Courier New, Courier, mono">SetTexture
 
+
             name, filename</font></font><font size="2" face="Courier
           New, Courier, mono"><em></em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">SetTexture
+
 
           Brick, data/cutston.jpg<br>
         </font></p>
