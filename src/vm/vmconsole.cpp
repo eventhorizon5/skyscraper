@@ -102,6 +102,7 @@ void VMConsoleInput::operator()(int delay)
 VMConsole::VMConsole(VM *vm)
 {
 	this->vm = vm;
+	prompt = "\n> ";
 
 	//create VM console instance
 #ifdef USING_WX
