@@ -26,6 +26,14 @@
 
 namespace SBS {
 
+enum ElevatorStatus
+{
+	STATUS_NONE,
+	STATUS_BUSY,
+	STATUS_AVAILABLE,
+	STATUS_UNAVAILABLE
+};
+
 class SBSIMPEXP Elevator : public Object
 {
 	friend class ElevatorDoor;
@@ -177,7 +185,7 @@ public:
 	bool GetArrivalDirection(int floor);
 	void MoveObjects(Real offset);
 	bool OnInit();
-	int AvailableForCall(bool destination, int floor, int direction, bool report_on_failure = true);
+	ElevatorStatus AvailableForCall(bool destination, int floor, int direction, bool report_on_failure = true);
 	bool SelectFloor(int floor);
 	bool Check(Vector3 position);
 	bool ReturnToNearestFloor(bool parking = true, int car = 1);

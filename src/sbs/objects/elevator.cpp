@@ -3015,21 +3015,21 @@ bool Elevator::OnInit()
 	return true;
 }
 
-int Elevator::AvailableForCall(bool destination, int floor, int direction, bool report_on_failure)
+ElevatorStatus Elevator::AvailableForCall(bool destination, int floor, int direction, bool report_on_failure)
 {
 	//determines if the elevator is available for the specified hall call
 	//if report_on_failure is true, and verbose mode is enabled, report the reason for call rejection
 
 	//return codes:
-	//0 - busy and will eventually be available
-	//1 - available for call
-	//2 - unavailable due to a service mode or error
+	//STATUS_BUSY - busy and will eventually be available
+	//STATUS_AVAILABLE - available for call
+	//STATUS_UNAVAILABLE - unavailable due to a service mode or error
 
 	SBS_PROFILE("Elevator::AvailableForCall");
 
 	//only run if power is enabled
 	if (sbs->GetPower() == false)
-		return 2;
+		return STATUS_UNAVAILABLE;
 
 	ElevatorCar *car = GetCarForFloor(floor, report_on_failure);
 
@@ -3073,89 +3073,89 @@ int Elevator::AvailableForCall(bool destination, int floor, int direction, bool 
 												{
 													if (sbs->Verbose)
 														Report("Available for call");
-													return 1;
+													return STATUS_AVAILABLE;
 												}
 												else
 												{
 													if (sbs->Verbose == true && report_on_failure == true)
 														Report("Not available for call - going a different direction and is not idle");
-													return 0;
+													return STATUS_BUSY;
 												}
 											}
 											else
 											{
 												if (sbs->Verbose == true && report_on_failure == true)
 													Report("Not available for call - position/direction wrong for call and is not idle");
-												return 0;
+												return STATUS_BUSY;
 											}
 										}
 										else
 										{
 											if (sbs->Verbose == true && report_on_failure == true)
 												Report("Not available for call - in nudge mode");
-											return 0;
+											return STATUS_BUSY;
 										}
 									}
 									else
 									{
 										if (sbs->Verbose == true && report_on_failure == true)
 											Report("Not available for call - interlock check failed");
-										return 2;
+										return STATUS_UNAVAILABLE;
 									}
 								}
 								else
 								{
 									if (sbs->Verbose == true && report_on_failure == true)
 										Report("Not available for call - door hold is enabled");
-									return 0;
+									return STATUS_BUSY;
 								}
 							}
 							else
 							{
 								if (sbs->Verbose == true && report_on_failure == true)
 									Report("Not available for call - queueresets is on and opposite queue direction is active");
-								return 0;
+								return STATUS_BUSY;
 							}
 						}
 						else
 						{
 							if (sbs->Verbose == true && report_on_failure == true)
 								Report("Not available for call - limitqueue is on and queue is active");
-							return 0;
+							return STATUS_BUSY;
 						}
 					}
 					else
 					{
 						if (sbs->Verbose == true && report_on_failure == true)
 							Report("Not available for call - queue change is pending");
-						return 0;
+						return STATUS_BUSY;
 					}
 				}
 				else
 				{
 					if (sbs->Verbose == true && report_on_failure == true)
 						Report("Not available for call - in service mode");
-					return 2;
+					return STATUS_UNAVAILABLE;
 				}
 			}
 			else
 			{
 				if (sbs->Verbose == true && report_on_failure == true)
 					Report("Not available for call - elevator not running");
-				return 2;
+				return STATUS_UNAVAILABLE;
 			}
 		}
 		else
 		{
 			if (sbs->Verbose == true && report_on_failure == true)
 				Report("Not available for call - direction beyond serviced range");
-			return 2;
+			return STATUS_UNAVAILABLE;
 		}
 	}
 
 	if (sbs->Verbose == true && report_on_failure == true)
 		Report("Not available for call - not a serviced floor");
-	return 2;
+	return STATUS_UNAVAILABLE;
 }
 
 bool Elevator::SelectFloor(int floor)
