@@ -2153,22 +2153,22 @@ void PolyMesh::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool c
 			{
 				//floors/ceilings: split X then Z (ignore Y)
 				//left of start.x
-				SplitWithPlaneUV(0, work, a, b, start.x);
+				SplitWithPlaneUV(0, work, a, b, start.x, true);
 				emit(a);
 				work.swap(b); // keep >= start.x
 
 				//right of end.x
-				SplitWithPlaneUV(0, work, a, b, end.x);
+				SplitWithPlaneUV(0, work, a, b, end.x, false);
 				emit(b);
 				work.swap(a); // keep <= end.x
 
 				//back of start.z
-				SplitWithPlaneUV(2, work, a, b, start.z);
+				SplitWithPlaneUV(2, work, a, b, start.z, true);
 				emit(a);
 				work.swap(b); // keep >= start.z
 
 				//front of end.z
-				SplitWithPlaneUV(2, work, a, b, end.z);
+				SplitWithPlaneUV(2, work, a, b, end.z, false);
 				emit(b);
 				work.swap(a); // keep <= end.z
 			}
@@ -2182,33 +2182,33 @@ void PolyMesh::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool c
 				if (facesXZ)
 				{
 					//X major (forward/back)
-					SplitWithPlaneUV(0, work, a, b, start.x);
+					SplitWithPlaneUV(0, work, a, b, start.x, true);
 					emit(a);
 					work.swap(b);
 
-					SplitWithPlaneUV(0, work, a, b, end.x);
+					SplitWithPlaneUV(0, work, a, b, end.x, false);
 					emit(b);
 					work.swap(a);
 				}
 				else
 				{
 					//Z major (left/right)
-					SplitWithPlaneUV(2, work, a, b, start.z);
+					SplitWithPlaneUV(2, work, a, b, start.z, true);
 					emit(a);
 					work.swap(b);
 
-					SplitWithPlaneUV(2, work, a, b, end.z);
+					SplitWithPlaneUV(2, work, a, b, end.z, false);
 					emit(b);
 					work.swap(a);
 				}
 			}
 
 			//Y (common)
-			SplitWithPlaneUV(1, work, a, b, start.y);
+			SplitWithPlaneUV(1, work, a, b, start.y, true);
 			emit(a);
 			work.swap(b);
 
-			SplitWithPlaneUV(1, work, a, b, end.y);
+			SplitWithPlaneUV(1, work, a, b, end.y, false);
 			emit(b);
 			work.swap(a);
 
@@ -2514,7 +2514,7 @@ void PolyMesh::SplitWithPlane(int axis, const PolyArray &orig, PolyArray &poly1,
 	}
 }
 
-void PolyMesh::SplitWithPlaneUV(int axis, const GeometryArray &orig, GeometryArray &polyLE, GeometryArray &polyGE, Real value)
+/*void PolyMesh::SplitWithPlaneUV(int axis, const GeometryArray &orig, GeometryArray &polyLE, GeometryArray &polyGE, Real value)
 {
 	//splits the given polygon into two polygons, on the desired plane (defined by the axis and value parameters)
 	//axis is 0 for X, 1 for Y, 2 for Z
@@ -2657,6 +2657,134 @@ void PolyMesh::SplitWithPlaneUV(int axis, const GeometryArray &orig, GeometryArr
 		polyLE.clear();
 	if (polyGE.size() < 3)
 		polyGE.clear();
+}*/
+
+void PolyMesh::SplitWithPlaneUV(int axis, const GeometryArray &orig, GeometryArray &polyLE, GeometryArray &polyGE, Real value, bool /*bias*/)
+{
+	//splits the given polygon into two polygons, on the desired plane (defined by the axis and value parameters)
+	//axis is 0 for X, 1 for Y, 2 for Z
+
+	polyLE.clear();
+	polyGE.clear();
+
+	// ---------- adaptive EPS from polygon scale ----------
+	auto bboxOf = [&](const GeometryArray& g)
+	{
+		Vector3 mn( std::numeric_limits<Real>::max(), std::numeric_limits<Real>::max(), std::numeric_limits<Real>::max()); Vector3 mx(-std::numeric_limits<Real>::max(), -std::numeric_limits<Real>::max(), -std::numeric_limits<Real>::max());
+		for (const auto& it : g)
+		{
+			mn.makeFloor(it.vertex);
+			mx.makeCeil(it.vertex);
+		}
+		return std::make_pair(mn, mx);
+	};
+	auto [mnBox, mxBox] = bboxOf(orig);
+	Real scale = std::max({ mxBox.x - mnBox.x, mxBox.y - mnBox.y, mxBox.z - mnBox.z, Real(1) });
+	const Real EPS = std::max<Real>(SMALL_EPSILON, std::max<Real>(Real(1e-6) * scale, Real(1e-7)));
+
+	auto coord = [&](const Vector3& v)->Real
+	{
+		return (axis == 0) ? v.x : (axis == 1) ? v.y : v.z;
+	};
+	auto dist = [&](const Vector3& v)->Real
+	{
+		return coord(v) - value;
+	};
+
+	auto lerpGeom = [](const Geometry& a, const Geometry& b, Real t)->Geometry
+	{
+		Geometry r;
+		r.vertex = a.vertex + (b.vertex - a.vertex) * t;
+		r.texel  = a.texel  + (b.texel  - a.texel ) * t;
+		r.normal = a.normal + (b.normal - a.normal) * t;
+		return r;
+	};
+
+	auto pushUnique = [&](GeometryArray& poly, const Geometry& g)
+	{
+		if (!poly.empty())
+		{
+			const Vector3& p = poly.back().vertex;
+			const Real d2 = (g.vertex - p).squaredLength();
+			const Real tol  = std::max<Real>(EPS * Real(0.25), Real(1e-9)); // tight de-dup
+			if (d2 <= tol * tol)
+				return;
+		}
+		poly.emplace_back(g);
+	};
+
+	auto sanitize = [&](GeometryArray& poly)
+	{
+		if (poly.size() >= 2 && (poly.front().vertex - poly.back().vertex).squaredLength() <= (EPS * EPS))
+			poly.pop_back();
+	};
+
+	auto clipOne = [&](bool keepGE, GeometryArray& out)
+	{
+		out.clear();
+		const size_t n = orig.size();
+		if (n < 3)
+			return;
+
+		auto inside = [&](Real d)->bool
+		{
+			// Inclusive: GE uses d >= -EPS; LE uses d <= +EPS
+			return keepGE ? (d >= -EPS) : (d <= +EPS);
+		};
+
+		Geometry A = orig[n - 1];
+		Real dA = dist(A.vertex);
+		bool inA = inside(dA);
+
+		for (size_t i = 0; i < n; ++i)
+		{
+			Geometry B = orig[i];
+			Real dB = dist(B.vertex);
+			bool inB = inside(dB);
+
+			if (inA && inB)
+			{
+				// I -> I
+				pushUnique(out, B);
+			}
+			else if (inA && !inB)
+			{
+				// I -> O : add intersection
+				Real denom = (dA - dB);
+				Real t = (denom != 0) ? (dA / (dA - dB)) : Real(0.5);
+				if (t < Real(0))
+					t = Real(0);
+				else if (t > Real(1))
+					t = Real(1);
+				Geometry I = lerpGeom(A, B, t);
+				pushUnique(out, I);
+			}
+			else if (!inA && inB)
+			{
+				// O -> I : add intersection, then B
+				Real denom = (dA - dB);
+				Real t = (denom != 0) ? (dA / (dA - dB)) : Real(0.5);
+				if (t < Real(0))
+					t = Real(0);
+				else if (t > Real(1))
+					t = Real(1);
+				Geometry I = lerpGeom(A, B, t);
+				pushUnique(out, I);
+				pushUnique(out, B);
+			}
+			// O -> O : add nothing
+
+			A = B; dA = dB; inA = inB;
+		}
+
+		sanitize(out);
+		if (out.size() < 3)
+			out.clear();
+	};
+
+	//compute both sides independently
+	clipOne(/*keepGE=*/false, polyLE); // coord <= value (+EPS)
+	clipOne(/*keepGE=*/true,  polyGE); // coord >= value (-EPS)
 }
 
 // Two-sided, double-precision Möller–Trumbore
