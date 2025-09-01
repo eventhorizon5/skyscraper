@@ -234,11 +234,11 @@ checkfloors:
 		returncode = sContinue;
 
 		//Global parameters
-		if (config->SectionNum == 1)
+		if (config->SectionNum == SECTION_GLOBAL)
 			returncode = globals_section->Run(LineData);
 
 		//Process floors
-		else if (config->SectionNum == 2)
+		else if (config->SectionNum == SECTION_FLOOR)
 		{
 			//create floor if not created already
 			Simcore->NewFloor(config->Current);
@@ -247,31 +247,31 @@ recalc:
 		}
 
 		//Process external buildings
-		else if (config->SectionNum == 3)
+		else if (config->SectionNum == SECTION_BUILDINGS)
 			returncode = buildings_section->Run(LineData);
 
 		//process elevators
-		else if (config->SectionNum == 4)
+		else if (config->SectionNum == SECTION_ELEVATOR)
 			returncode = elevator_section->Run(LineData);
 
 		//Process textures
-		else if (config->SectionNum == 5)
+		else if (config->SectionNum == SECTION_TEXTURE)
 			returncode = textures_section->Run(LineData);
 
 		//process elevator cars
-		else if (config->SectionNum == 6)
+		else if (config->SectionNum == SECTION_ELEVATORCAR)
 			returncode = elevatorcar_section->Run(LineData);
 
 		//process vehicles
-		else if (config->SectionNum == 7)
+		else if (config->SectionNum == SECTION_VEHICLE)
 			returncode = vehicle_section->Run(LineData);
 
 		//process controllers
-		else if (config->SectionNum == 8)
+		else if (config->SectionNum == SECTION_CONTROLLER)
 			returncode = controller_section->Run(LineData);
 
 		//process call stations
-		else if (config->SectionNum == 9)
+		else if (config->SectionNum == SECTION_CALLSTATION)
 			returncode = callstation_section->Run(LineData);
 
 		//Global commands
@@ -935,17 +935,17 @@ void ScriptProcessor::StoreCommand(Object *object)
 	object->context = config->Context;
 	std::string current;
 	current = ToString(config->Current);
-	if (config->SectionNum == 2)
+	if (config->SectionNum == SECTION_FLOOR)
 		object->context = "Floor " + current;
-	if (config->SectionNum == 4)
+	if (config->SectionNum == SECTION_ELEVATOR)
 		object->context = "Elevator " + current;
-	if (config->SectionNum == 6)
+	if (config->SectionNum == SECTION_ELEVATORCAR)
 		object->context = "Elevator " + ToString(config->CurrentOld) + " Car " + current;
-	if (config->SectionNum == 7)
+	if (config->SectionNum == SECTION_VEHICLE)
 		object->context = "Vehicle " + current;
-	if (config->SectionNum == 8)
+	if (config->SectionNum == SECTION_CONTROLLER)
 		object->context = "Controller " + current;
-	if (config->SectionNum == 9)
+	if (config->SectionNum == SECTION_CALLSTATION)
 		object->context = "Call Station " + current;
 }
 
@@ -1267,19 +1267,19 @@ int ScriptProcessor::ProcessSections()
 	//////////////////////
 	if (StartsWithNoCase(LineData, "<globals>"))
 	{
-		if (config->SectionNum > 0)
+		if (config->SectionNum != SECTION_NONE)
 		{
 			ScriptError("Already within a section");
 			return sError;
 		}
-		config->SectionNum = 1;
+		config->SectionNum = SECTION_GLOBAL;
 		config->Context = "Globals";
 		engine->Report("Processing globals...");
 		return sNextLine;
 	}
 	if (StartsWithNoCase(LineData, "<end>"))
 	{
-		config->SectionNum = 0;
+		config->SectionNum = SECTION_NONE;
 		config->Context = "None";
 		engine->Report("Exiting building script");
 		IsFinished = true;
@@ -1327,7 +1327,7 @@ int ScriptProcessor::ProcessSections()
 	{
 		//define a function
 
-		if (config->SectionNum != 0)
+		if (config->SectionNum != SECTION_NONE)
 		{
 			ScriptError("Cannot define a function within a section");
 			return sError;
@@ -1374,12 +1374,12 @@ int ScriptProcessor::ProcessSections()
 	}
 	if (StartsWithNoCase(LineData, "<textures>"))
 	{
-		if (config->SectionNum > 0)
+		if (config->SectionNum != SECTION_NONE)
 		{
 			ScriptError("Already within a section");
 			return sError;
 		}
-		config->SectionNum = 5;
+		config->SectionNum = SECTION_TEXTURE;
 		config->Context = "Textures";
 		engine->Report("Processing textures...");
 		return sNextLine;
@@ -1405,12 +1405,12 @@ int ScriptProcessor::ProcessSections()
 	}
 	if (StartsWithNoCase(LineData, "<floors"))
 	{
-		if (config->SectionNum > 0)
+		if (config->SectionNum != SECTION_NONE)
 		{
 			ScriptError("Already within a section");
 			return sError;
 		}
-		config->SectionNum = 2;
+		config->SectionNum = SECTION_FLOOR;
 		std::string linecheck = SetCaseCopy(LineData, false);
 		int loc = linecheck.find("to", 0);
 		if (loc < 0)
@@ -1438,12 +1438,12 @@ int ScriptProcessor::ProcessSections()
 	}
 	if (StartsWithNoCase(LineData, "<floor "))
 	{
-		if (config->SectionNum > 0)
+		if (config->SectionNum != SECTION_NONE)
 		{
 			ScriptError("Already within a section");
 			return sError;
 		}
-		config->SectionNum = 2;
+		config->SectionNum = SECTION_FLOOR;
 		config->RangeL = 0;
 		config->RangeH = 0;
 		std::string str = LineData.substr(7, LineData.length() - 8);
@@ -1460,12 +1460,12 @@ int ScriptProcessor::ProcessSections()
 	}
 	if (StartsWithNoCase(LineData, "<elevators"))
 	{
-		if (config->SectionNum > 0)
+		if (config->SectionNum != SECTION_NONE)
 		{
 			ScriptError("Already within a section");
 			return sError;
 		}
-		config->SectionNum = 4;
+		config->SectionNum = SECTION_ELEVATOR;
 		std::string linecheck = SetCaseCopy(LineData, false);
 		int loc = linecheck.find("to", 10);
 		if (loc < 0)
@@ -1491,12 +1491,12 @@ int ScriptProcessor::ProcessSections()
 	}
 	if (StartsWithNoCase(LineData, "<elevator "))
 	{
-		if (config->SectionNum > 0)
+		if (config->SectionNum != SECTION_NONE)
 		{
 			ScriptError("Already within a section");
 			return sError;
 		}
-		config->SectionNum = 4;
+		config->SectionNum = SECTION_ELEVATOR;
 		config->RangeL = 0;
 		config->RangeH = 0;
 		std::string str = LineData.substr(10, LineData.length() - 11);
@@ -1522,20 +1522,20 @@ int ScriptProcessor::ProcessSections()
 		if (engine->IsReloading() == true)
 			return sNextLine;
 
-		if (config->SectionNum > 0)
+		if (config->SectionNum != SECTION_NONE)
 		{
 			ScriptError("Already within a section");
 			return sError;
 		}
-		config->SectionNum = 3;
+		config->SectionNum = SECTION_BUILDINGS;
 		config->Context = "Buildings";
 		if (InRunloop() == false)
 			engine->Report("Loading other buildings...");
 		return sNextLine;
 	}
-	if (StartsWithNoCase(LineData, "<cars") && config->SectionNum == 4)
+	if (StartsWithNoCase(LineData, "<cars") && config->SectionNum == SECTION_ELEVATOR)
 	{
-		config->SectionNum = 6;
+		config->SectionNum = SECTION_ELEVATORCAR;
 		std::string linecheck = SetCaseCopy(LineData, false);
 		int loc = linecheck.find("to", 5);
 		if (loc < 0)
@@ -1575,9 +1575,9 @@ int ScriptProcessor::ProcessSections()
 			engine->Report("Processing elevator " + ToString(config->CurrentOld) + " cars " + ToString(config->RangeL) + " to " + ToString(config->RangeH) + "...");
 		return sNextLine;
 	}
-	if (StartsWithNoCase(LineData, "<car ") && config->SectionNum == 4)
+	if (StartsWithNoCase(LineData, "<car ") && config->SectionNum == SECTION_ELEVATOR)
 	{
-		config->SectionNum = 6;
+		config->SectionNum = SECTION_ELEVATORCAR;
 
 		//store previous elevator section values
 		config->CurrentOld = config->Current;
@@ -1610,12 +1610,12 @@ int ScriptProcessor::ProcessSections()
 	}
 	if (StartsWithNoCase(LineData, "<vehicles"))
 	{
-		if (config->SectionNum > 0)
+		if (config->SectionNum != SECTION_NONE)
 		{
 			ScriptError("Already within a section");
 			return sError;
 		}
-		config->SectionNum = 7;
+		config->SectionNum = SECTION_VEHICLE;
 		std::string linecheck = SetCaseCopy(LineData, false);
 		int loc = linecheck.find("to", 9);
 		if (loc < 0)
@@ -1641,12 +1641,12 @@ int ScriptProcessor::ProcessSections()
 	}
 	if (StartsWithNoCase(LineData, "<vehicle "))
 	{
-		if (config->SectionNum > 0)
+		if (config->SectionNum != SECTION_NONE)
 		{
 			ScriptError("Already within a section");
 			return sError;
 		}
-		config->SectionNum = 7;
+		config->SectionNum = SECTION_VEHICLE;
 		config->RangeL = 0;
 		config->RangeH = 0;
 		std::string str = LineData.substr(9, LineData.length() - 10);
@@ -1667,12 +1667,12 @@ int ScriptProcessor::ProcessSections()
 	}
 	if (StartsWithNoCase(LineData, "<controllers"))
 	{
-		if (config->SectionNum > 0)
+		if (config->SectionNum != SECTION_NONE)
 		{
 			ScriptError("Already within a section");
 			return sError;
 		}
-		config->SectionNum = 8;
+		config->SectionNum = SECTION_CONTROLLER;
 		std::string linecheck = SetCaseCopy(LineData, false);
 		int loc = linecheck.find("to", 12);
 		if (loc < 0)
@@ -1698,12 +1698,12 @@ int ScriptProcessor::ProcessSections()
 	}
 	if (StartsWithNoCase(LineData, "<controller "))
 	{
-		if (config->SectionNum > 0)
+		if (config->SectionNum != SECTION_NONE)
 		{
 			ScriptError("Already within a section");
 			return sError;
 		}
-		config->SectionNum = 8;
+		config->SectionNum = SECTION_CONTROLLER;
 		config->RangeL = 0;
 		config->RangeH = 0;
 		std::string str = LineData.substr(12, LineData.length() - 13);
@@ -1723,9 +1723,9 @@ int ScriptProcessor::ProcessSections()
 			engine->Report("Processing controller " + ToString(config->Current) + "...");
 		return sNextLine;
 	}
-	if (StartsWithNoCase(LineData, "<callstations") && config->SectionNum == 2)
+	if (StartsWithNoCase(LineData, "<callstations") && config->SectionNum == SECTION_FLOOR)
 	{
-		config->SectionNum = 9;
+		config->SectionNum = SECTION_CALLSTATION;
 		std::string linecheck = SetCaseCopy(LineData, false);
 		int loc = linecheck.find("to", 13);
 		if (loc < 0)
@@ -1765,9 +1765,9 @@ int ScriptProcessor::ProcessSections()
 			engine->Report("Processing floor " + ToString(config->CurrentOld) + " call stations " + ToString(config->RangeL) + " to " + ToString(config->RangeH) + "...");
 		return sNextLine;
 	}
-	if (StartsWithNoCase(LineData, "<callstation ") && config->SectionNum == 2)
+	if (StartsWithNoCase(LineData, "<callstation ") && config->SectionNum == SECTION_FLOOR)
 	{
-		config->SectionNum = 9;
+		config->SectionNum = SECTION_CALLSTATION;
 
 		//store previous elevator section values
 		config->CurrentOld = config->Current;
@@ -1817,7 +1817,7 @@ int ScriptProcessor::ProcessFloorObjects()
 			ScriptError("Syntax error");
 			return sError;
 		}
-		if (config->SectionNum == 2 && getfloordata == false)
+		if (config->SectionNum == SECTION_FLOOR && getfloordata == false)
 		{
 			//process floor-specific variables if in a floor section
 			getfloordata = true;

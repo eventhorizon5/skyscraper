@@ -158,7 +158,7 @@ int ScriptProcessor::BuildingsSection::Run(std::string &LineData)
 	//handle end of buildings section
 	if (StartsWithNoCase(LineData, "<endbuildings>"))
 	{
-		config->SectionNum = 0;
+		config->SectionNum = SECTION_NONE;
 		config->Context = "None";
 		if (parent->InRunloop() == false)
 			engine->Report("Finished loading other buildings");

@@ -56,7 +56,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 	//get car object
 	ElevatorCar *car = 0;
 	Elevator *elev = 0;
-	if (config->SectionNum == 6)
+	if (config->SectionNum == SECTION_ELEVATORCAR)
 	{
 		elev = Simcore->GetElevator(config->CurrentOld);
 		if (elev)
@@ -81,7 +81,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		return sError;
 
 	//replace variables with actual values
-	if (config->SectionNum == 6) //only run if not being called from elevator function
+	if (config->SectionNum == SECTION_ELEVATORCAR) //only run if not being called from elevator function
 	{
 		ReplaceAll(LineData, "%elevator%", ToString(config->CurrentOld));
 		ReplaceAll(LineData, "%car%", ToString(config->Current));
@@ -2383,7 +2383,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 	if (StartsWithNoCase(LineData, "<endcar>") == true && config->RangeL == config->RangeH)
 	{
 		//return to elevator section
-		config->SectionNum = 4;
+		config->SectionNum = SECTION_ELEVATOR;
 		config->Context = config->ContextOld;
 		config->Current = config->CurrentOld;
 		config->RangeL = config->RangeLOld;
@@ -2406,7 +2406,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 		}
 		else
 		{
-			config->SectionNum = 4; //break out of loop
+			config->SectionNum = SECTION_ELEVATOR; //break out of loop
 			config->Context = config->ContextOld;
 			config->RangeL = config->RangeLOld;
 			config->RangeH = config->RangeHOld;

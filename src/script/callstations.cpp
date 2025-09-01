@@ -62,7 +62,7 @@ int ScriptProcessor::CallStationSection::Run(std::string &LineData)
 		return sError;
 
 	//replace variables with actual values
-	if (config->SectionNum == 9) //only run if not being called from floor function
+	if (config->SectionNum == SECTION_CALLSTATION) //only run if not being called from floor function
 	{
 		ReplaceAll(LineData, "%floor%", ToString(config->CurrentOld));
 		ReplaceAll(LineData, "%callstation%", ToString(config->Current));
@@ -273,7 +273,7 @@ int ScriptProcessor::CallStationSection::Run(std::string &LineData)
 	if (StartsWithNoCase(LineData, "<endcallstation>") && config->RangeL == config->RangeH)
 	{
 		//return to floor section
-		config->SectionNum = 2;
+		config->SectionNum = SECTION_FLOOR;
 		config->Context = config->ContextOld;
 		config->Current = config->CurrentOld;
 		config->RangeL = config->RangeLOld;
@@ -296,7 +296,7 @@ int ScriptProcessor::CallStationSection::Run(std::string &LineData)
 		}
 		else
 		{
-			config->SectionNum = 2; //break out of loop
+			config->SectionNum = SECTION_FLOOR; //break out of loop
 			config->Context = config->ContextOld;
 			config->RangeL = config->RangeLOld;
 			config->RangeH = config->RangeHOld;

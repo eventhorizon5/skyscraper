@@ -2456,7 +2456,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 		if (floor->AltitudeSet == false)
 			return ScriptError("Floor altitude or height has not been set");
 
-		config->SectionNum = 0;
+		config->SectionNum = SECTION_NONE;
 		config->Context = "None";
 		if (parent->InRunloop() == false)
 			engine->Report("Finished floor");
@@ -2480,7 +2480,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 			}
 			else
 			{
-				config->SectionNum = 0; //break out of loop
+				config->SectionNum = SECTION_NONE; //break out of loop
 				config->Context = "None";
 				config->RangeL = 0;
 				config->RangeH = 0;
@@ -2499,7 +2499,7 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 			}
 			else
 			{
-				config->SectionNum = 0; //break out of loop
+				config->SectionNum = SECTION_NONE; //break out of loop
 				config->Context = "None";
 				config->RangeL = 0;
 				config->RangeH = 0;

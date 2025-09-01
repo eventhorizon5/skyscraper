@@ -60,6 +60,20 @@ protected:
 	std::string Calc(const std::string &expression);
 };
 
+enum SectionType
+{
+	SECTION_NONE = 0,
+	SECTION_GLOBAL = 1,
+	SECTION_FLOOR = 2,
+	SECTION_BUILDINGS = 3,
+	SECTION_ELEVATOR = 4,
+	SECTION_TEXTURE = 5,
+	SECTION_ELEVATORCAR = 6,
+	SECTION_VEHICLE = 7,
+	SECTION_CONTROLLER = 8,
+	SECTION_CALLSTATION = 9
+};
+
 class ScriptProcessor::ConfigHandler
 {
 public:
@@ -77,7 +91,7 @@ public:
 	int RangeH, RangeHOld;
 	long RangeStart, RangeStartOld;
 	int Current, CurrentOld; //current range iteration
-	int SectionNum; //current section number
+	SectionType SectionNum; //current section number
 	std::string Context, ContextOld; //section context
 	bool ReverseAxis;
 	bool InWhile;
