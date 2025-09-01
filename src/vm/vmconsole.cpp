@@ -462,6 +462,8 @@ bool VMConsole::ProcessCommand(const std::string &command, Ogre::StringVector &p
 			std::string s_runtime;
 			if (vm->GetEngine(i)->IsLoading() == true)
 				s_runtime = "Loading";
+			else if (vm->GetEngine(i)->Paused == true)
+				s_runtime = "Paused";
 			else
 				s_runtime = SBS::ToString(runtime / 1000);
 			Report(SBS::ToString(i) + ":\t" + SBS::ToString(elapsed_time * 100) + "\t\t" + s_runtime + "\t\t" + engine->GetFilename(), "green");
