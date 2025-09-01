@@ -2514,7 +2514,7 @@ void PolyMesh::SplitWithPlane(int axis, const PolyArray &orig, PolyArray &poly1,
 	}
 }
 
-void PolyMesh::SplitWithPlaneUV(int axis, const GeometryArray &orig, GeometryArray &polyLE, GeometryArray &polyGE, Real value, bool /*bias*/)
+void PolyMesh::SplitWithPlaneUV(int axis, const GeometryArray &orig, GeometryArray &polyLE, GeometryArray &polyGE, Real value, bool bias /*true => boundary to GE*/)
 {
 	//splits the given polygon into two polygons, on the desired plane (defined by the axis and value parameters)
 	//axis is 0 for X, 1 for Y, 2 for Z
@@ -2522,10 +2522,15 @@ void PolyMesh::SplitWithPlaneUV(int axis, const GeometryArray &orig, GeometryArr
 	polyLE.clear();
 	polyGE.clear();
 
-	// ---------- adaptive EPS from polygon scale ----------
+	// adaptive EPS from polygon scale
 	auto bboxOf = [&](const GeometryArray& g)
 	{
-		Vector3 mn( std::numeric_limits<Real>::max(), std::numeric_limits<Real>::max(), std::numeric_limits<Real>::max()); Vector3 mx(-std::numeric_limits<Real>::max(), -std::numeric_limits<Real>::max(), -std::numeric_limits<Real>::max());
+		Vector3 mn( std::numeric_limits<Real>::max(),
+					std::numeric_limits<Real>::max(),
+					std::numeric_limits<Real>::max());
+		Vector3 mx(-std::numeric_limits<Real>::max(),
+					-std::numeric_limits<Real>::max(),
+					-std::numeric_limits<Real>::max());
 		for (const auto& it : g)
 		{
 			mn.makeFloor(it.vertex);
@@ -2572,7 +2577,39 @@ void PolyMesh::SplitWithPlaneUV(int axis, const GeometryArray &orig, GeometryArr
 	{
 		if (poly.size() >= 2 && (poly.front().vertex - poly.back().vertex).squaredLength() <= (EPS * EPS))
 			poly.pop_back();
+		if (poly.size() < 3)
+			poly.clear();
 	};
+
+	// coplanar special case
+	// If all vertices are on the plane (|d|<=EPS), route the *entire* ring to one side.
+	bool hasPos = false, hasNeg = false, hasOn = false;
+	for (const auto& g : orig)
+	{
+		Real d = dist(g.vertex);
+		if (d >  EPS)
+			hasPos = true;
+		else if (d < -EPS)
+			hasNeg = true;
+		else
+			hasOn = true;
+		if (hasPos && hasNeg)
+			break; // not coplanar
+	}
+
+	if (!hasPos && !hasNeg && hasOn)
+	{
+		// The whole ring lies on the plane.
+		// Give ownership to the biased side, leave the other empty.
+		GeometryArray* target = bias ? &polyGE : &polyLE;
+		target->reserve(orig.size());
+		for (const auto& g : orig)
+		{
+			pushUnique(*target, g);
+		}
+		sanitize(*target);
+		return;
+	}
 
 	auto clipOne = [&](bool keepGE, GeometryArray& out)
 	{
@@ -2607,34 +2644,25 @@ void PolyMesh::SplitWithPlaneUV(int axis, const GeometryArray &orig, GeometryArr
 				// I -> O : add intersection
 				Real denom = (dA - dB);
 				Real t = (denom != 0) ? (dA / (dA - dB)) : Real(0.5);
-				if (t < Real(0))
-					t = Real(0);
-				else if (t > Real(1))
-					t = Real(1);
-				Geometry I = lerpGeom(A, B, t);
-				pushUnique(out, I);
+				t = std::clamp(t, Real(0), Real(1));
+				pushUnique(out, lerpGeom(A, B, t));
 			}
 			else if (!inA && inB)
 			{
 				// O -> I : add intersection, then B
 				Real denom = (dA - dB);
 				Real t = (denom != 0) ? (dA / (dA - dB)) : Real(0.5);
-				if (t < Real(0))
-					t = Real(0);
-				else if (t > Real(1))
-					t = Real(1);
-				Geometry I = lerpGeom(A, B, t);
-				pushUnique(out, I);
+				t = std::clamp(t, Real(0), Real(1));
+				pushUnique(out, lerpGeom(A, B, t));
 				pushUnique(out, B);
 			}
+
 			// O -> O : add nothing
 
 			A = B; dA = dB; inA = inB;
 		}
 
 		sanitize(out);
-		if (out.size() < 3)
-			out.clear();
 	};
 
 	//compute both sides independently
