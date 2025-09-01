@@ -295,6 +295,8 @@ void EngineManager::Loop()
 
 		if (engine->GetParent())
 			tParent->SetValue(SBS::ToString(engine->GetParent()->GetNumber()));
+		else
+			tParent->SetValue("None");
 		tType->SetValue(engine->GetType());
 	}
 	else
