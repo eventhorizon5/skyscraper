@@ -272,55 +272,58 @@ void VM::SetActiveEngine(int number, bool switch_engines, bool force)
 	//set an engine instance to be active
 
 	EngineContext *engine = GetEngine(number);
-
 	if (!engine)
 		return;
 
 	//don't switch if the engine is fully active (active and camera attached)
-	if (active_engine == engine && engine->IsCameraActive() == true)
+	if (active_engine == engine && engine->IsCameraActive())
 		return;
 
 	//don't switch if the camera's already active in the specified engine
-	if (engine->IsCameraActive() == true)
+	if (engine->IsCameraActive())
 		return;
 
-	//don't switch to engine if it's loading
-	if (engine->IsLoading() == true && force == false)
+	//don't switch to engine if it's loading (unless forced)
+	if (engine->IsLoading() && !force)
 		return;
 
-	CameraState state;
-	bool state_set = false;
+	//capture prior camera state if there is an active camera
+	CameraState prev_state {};
+	bool have_prev_state = false;
 
 	if (active_engine && (engine->IsSystem == false || running == true) && engine->was_reloaded == false)
 	{
-		//get previous engine's camera state
-		if (switch_engines == true)
+		if (active_engine->IsCameraActive())
 		{
-			state = active_engine->GetCameraState();
-			state_set = true;
+			prev_state = active_engine->GetCameraState(); //always capture if available
+			have_prev_state = true;
 		}
 
 		//detach camera from current engine
 		active_engine->DetachCamera(switch_engines);
 	}
 
-	//switch context to new engine instance
+	//switch context to new engine instance and attach camera
 	if (engine->IsSystem == false || running == true)
 	{
 		Report("Setting engine " + ToString(number) + " as active");
 		active_engine = engine;
+
+		//init_state sets defaults for AttachCamera,
+		//the SetCameraState command below will override it if relevant
 		bool init_state = !switch_engines;
 		if (first_attach == false)
 		{
 			first_attach = true;
 			init_state = true;
 		}
+
 		active_engine->AttachCamera(hal->mCameras, init_state);
 	}
 
 	//apply camera state to new engine
-	if (switch_engines == true && state_set == true && running == true)
-		active_engine->SetCameraState(state, false);
+	if (have_prev_state)
+		active_engine->SetCameraState(prev_state, false);
 
 	//apply camera state after reloading
 	if (engine->was_reloaded == true)
