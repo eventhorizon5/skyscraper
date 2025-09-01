@@ -493,7 +493,7 @@ AddAction FireServiceBypass, Elevator1, Fire1Bypass
 Set prev = 0
 <Function runloop>
     #this runloop prints "Hello" every second
-    Set status = %second%
+    Set status = %real_second%
     if[%status% ! %prev%] Print Hello
     Set prev = %status%
 <EndFunction>

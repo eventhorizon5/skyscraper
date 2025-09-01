@@ -195,9 +195,16 @@ bool ScriptProcessor::Run()
 		{
 			ReplaceAll(LineData, "%uptime%", ToString((int)Simcore->GetRunTime()));
 			struct tm datetime = engine->GetVM()->GetDateTime();
-			int hour = datetime.tm_hour;
-			int minute = datetime.tm_min;
-			int second = datetime.tm_sec;
+			int hour, minute, second;
+
+			hour = datetime.tm_hour;
+			minute = datetime.tm_min;
+			second = datetime.tm_sec;
+			ReplaceAll(LineData, "%real_hour%", ToString(hour));
+			ReplaceAll(LineData, "%real_minute%", ToString(minute));
+			ReplaceAll(LineData, "%real_second%", ToString(second));
+
+			engine->GetVM()->GetSkySystem()->GetTime(hour, minute, second);
 			ReplaceAll(LineData, "%hour%", ToString(hour));
 			ReplaceAll(LineData, "%minute%", ToString(minute));
 			ReplaceAll(LineData, "%second%", ToString(second));
