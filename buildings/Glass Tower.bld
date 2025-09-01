@@ -2649,7 +2649,7 @@ AddCustomFloor landscape, Glass Tower Plaza, Backing, -344.691, 234.394, 299.373
 AddCustomFloor landscape, Main, Brick, 239.985, -215.976, 232.692, -257.338, -411.372, -143.772, -404.079, -102.41, 0, 0, 0
 AddCustomFloor landscape, Mid, Brick, -68.6592, -204.202, -121.796, -505.553, -163.157, -498.259, -110.021, -196.908, 0, 0, 0
 
-Cut Landscape, -75, -1, -73.14, 130, 1, 71.9, false, true
+Cut Landscape, -75, -2, -73.14, 130, 2, 71.9, false, true
 
 <Floor 0>
     #ambient external sounds
