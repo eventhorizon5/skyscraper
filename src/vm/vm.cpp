@@ -522,6 +522,13 @@ int VM::GetEngineCount(bool loading_only)
 	return count;
 }
 
+int VM::GetEngineSlotCount()
+{
+	//return total number of engine slots
+
+	return (int)engines.size();
+}
+
 void VM::SwitchEngines()
 {
 	//if user is no longer inside the active engine, find a new engine to attach to

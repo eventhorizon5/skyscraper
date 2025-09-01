@@ -433,7 +433,7 @@ bool VMConsole::ProcessCommand(const std::string &command, Ogre::StringVector &p
 	//ps command
 	if (command == "ps")
 	{
-		int count = vm->GetEngineCount();
+		int count = vm->GetEngineSlotCount();
 		if (count == 0)
 		{
 			ReportError("No engine loaded");
@@ -450,7 +450,10 @@ bool VMConsole::ProcessCommand(const std::string &command, Ogre::StringVector &p
 		{
 			EngineContext *engine = vm->GetEngine(i);
 			if (!engine)
+			{
+				Report(SBS::ToString(i) + ":\tUnloaded", "green");
 				continue;
+			}
 
 			Real elapsed_time = 0;
 			if (vm->GetElapsedTime(i) > 0)
