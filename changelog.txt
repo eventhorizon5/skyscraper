@@ -3,6 +3,7 @@ Version 2.0.2
 -SBS: allow teleport outside of sim engine boundary
 -Frontend: fix fullscreen window positioning on MacOS
 -SBS: fix sound blacklist code (fixes issues with floor announcements)
+-VM: fix startup prompt in VMConsole
 
 Version 2.0.1
 -------------------------
