@@ -198,6 +198,30 @@ Version 2.1
 -Revert "PolyMesh: when creating the bounding box, the vertices need to be co
 nverted to Local space first"
 -PolyMesh: fixed ToLocal scaling of sim engine bounds
+-SBS: added support for Enter and Clear keypad buttons
+-SBS: fix sound blacklist code
+-GUI: make Floor Information window's text boxes read-only
+-ScriptProc: changed the Section Number to an enum type, to make it clearer
+-GUI: added a section display box to the Script Debugger
+-SBS: changed return code of the AvailableForCall() elevator function to an enum type
+-VM: fixed error reporting in VMConsole
+-GUI: Engine Manager should report "None" for parent if root engine is selected
+-VM: the VMConsole Show and Status commands need to support zero parameters, for selecting the active engine
+-VM: added GetDateTime() function
+-Rewrote the runloop code to match the new date/time fixes in the "Simple - Runloop" building
+-VM: fix startup prompt in VMConsole
+-ScriptProc: introduced the new variables real_hour, real_minute, and real_second
+-Guide: added documentation for the global variables
+-VM: show "Loading" in engine runtime column, if sim engine is loading
+-VM: show "Paused" state for engine runtime field, if engine is paused
+-VM: report "unloaded" for any engine slots that don't have a loaded engine, and fixed an engine/slot count mismatch, in VMConsole
+-Frontend: check VM object before use in wxWidgets callback functions
+-VM: fixed engine selection logic in SetActiveEngine(); this corrects startup positioning issues
+-AngelScript: fix library location on Linux/Unix
+-PolyMesh: added a somewhat fixed version of SplitWithPlaneUV()
+-PolyMesh: Fixed an issue in the SplitWithPlane() function that would cause cuts with polygons on the cut planes to not be cut properly.
+-VM: only apply camera state when switching engines
+-SBS: when using automatic engine bounds, add vertical space above and below for the camera
 
 
 Version 2.0 - July 24, 2025
