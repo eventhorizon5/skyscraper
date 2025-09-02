@@ -79,7 +79,7 @@ VM::VM()
 	version = "2.0";
 	version_rev = ToString(GIT_REV);
 	version_state = "";
-	version_full = version + ".1." + version_rev;
+	version_full = version + ".2." + version_rev;
 
 	//create HAL instance
 	hal = new HAL(this);
