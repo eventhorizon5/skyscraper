@@ -159,6 +159,7 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instan
 	power_state = true;
 	Lobby = 0;
 	MapGenerator = 0;
+	auto_bounds = true;
 
 	//create utility object
 	utility = new Utility(this);
@@ -533,7 +534,17 @@ bool SBS::Start()
 
 	//if no bounds trigger was created, set it according to generated engine bounds
 	if (!area_trigger && !bounds.isNull())
-		SetBounds(bounds.getMinimum(), bounds.getMaximum());
+	{
+		Vector3 min = bounds.getMinimum();
+		Vector3 max = bounds.getMaximum();
+		if (auto_bounds == true)
+		{
+			//if using auto bounds, leave vertical space for camera
+			min.y -= 100;
+			max.y += 100;
+		}
+		SetBounds(min, max);
+	}
 
 	//free text texture memory
 	texturemanager->FreeTextureBoxes();
@@ -2966,6 +2977,7 @@ void SBS::SetBounds(const Vector3 &area_min, const Vector3 &area_max)
 		std::vector<std::string> names;
 		names.emplace_back("Off");
 		area_trigger = new Trigger(this, "System Boundary", true, "", area_min, area_max, names);
+		auto_bounds = false;
 	}
 }
 

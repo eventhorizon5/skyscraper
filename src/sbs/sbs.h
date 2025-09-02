@@ -538,6 +538,7 @@ private:
 	//sim engine bounds state
 	Ogre::AxisAlignedBox bounds;
 	bool bounds_set;
+	bool auto_bounds;
 
 	//camera texture references
 	std::vector<CameraTexture*> camtexarray;
