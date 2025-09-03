@@ -325,7 +325,7 @@ bool Sound::Play(bool reset)
 		return false;
 
 	//blacklist certain empty sounds
-	if (Filename == "none.wav" || Filename == "beno/none.wav")
+	if (Filename == "none.wav" || Filename == "beno/none.wav" || Filename == "")
 		return true;
 
 #ifndef DISABLE_SOUND
