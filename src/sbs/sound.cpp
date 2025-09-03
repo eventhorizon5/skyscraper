@@ -539,10 +539,18 @@ void Sound::ProcessQueue()
 		Report("Processing queued sound");
 
 	//play new sound
-	Load(snd->filename);
-	SetLoopState(snd->loop);
-	Play();
-	snd->played = true;
+	bool result = Load(snd->filename);
+	if (result)
+	{
+		SetLoopState(snd->loop);
+		Play();
+		snd->played = true;
+	}
+	else
+	{
+		//dequeue sound that could not be loaded
+		queue.erase(queue.begin());
+	}
 }
 
 void Sound::Unload()
