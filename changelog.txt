@@ -222,7 +222,10 @@ nverted to Local space first"
 -PolyMesh: Fixed an issue in the SplitWithPlane() function that would cause cuts with polygons on the cut planes to not be cut properly.
 -VM: only apply camera state when switching engines
 -SBS: when using automatic engine bounds, add vertical space above and below for the camera
-
+-SBS: fixed naming of InputClear keypad function
+-SBS: add empty filenames to the sound blacklist, this prevents verbose mode console spamming in certain situations.
+-SBS: don't try to play queued sound after load failure, dequeue instead
+-PolyMesh: properly skip cuts outside of the related axis cut range
 
 Version 2.0 - July 24, 2025
 -------------------------
