@@ -2048,6 +2048,38 @@ void PolyMesh::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool c
 		return (extent >= 50.0f && yt <= Y_FLAT);
 	};
 
+	//axis-aligned bbox of a ring
+	auto ring_aabb = [&](const GeometryArray& p)
+	{
+		Vector3 mn(  std::numeric_limits<Real>::infinity());
+		Vector3 mx(- std::numeric_limits<Real>::infinity());
+		for (const auto& g : p)
+		{
+			mn.x = std::min(mn.x, g.vertex.x); mx.x = std::max(mx.x, g.vertex.x);
+			mn.y = std::min(mn.y, g.vertex.y); mx.y = std::max(mx.y, g.vertex.y);
+			mn.z = std::min(mn.z, g.vertex.z); mx.z = std::max(mx.z, g.vertex.z);
+		}
+		return std::pair<Vector3,Vector3>(mn, mx);
+	};
+
+	//1D interval overlap with tolerance
+	auto overlaps1D = [&](Real mn, Real mx, Real a, Real b, Real eps)->bool
+	{
+		if (a > b)
+			std::swap(a, b);
+		// true if [mn,mx] intersects [a,b] allowing boundary contact within eps
+		return !(mx < a - eps || mn > b + eps);
+	};
+
+	//full 3D AABB vs cut-box overlap
+	auto overlaps_cut_volume = [&](const GeometryArray& ring, const Vector3& start, const Vector3& end, Real eps)->bool
+	{
+		auto [mn, mx] = ring_aabb(ring);
+		return overlaps1D(mn.x, mx.x, start.x, end.x, eps) &&
+			   overlaps1D(mn.y, mx.y, start.y, end.y, eps) &&
+			   overlaps1D(mn.z, mx.z, start.z, end.z, eps);
+	};
+
 	int polycount = wall->GetPolygonCount();
 	for (int i = 0; i < polycount; ++i)
 	{
@@ -2087,6 +2119,13 @@ void PolyMesh::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool c
 
 			//respect cut flags
 			if ((isWall  && !cutwalls) || (isFloor && !cutfloors))
+			{
+				rebuilt.emplace_back(ring);
+				continue;
+			}
+
+			//skip if the ring's bbox doesn't intersect the cut volume at all
+			if (!overlaps_cut_volume(ring, start, end, EPS))
 			{
 				rebuilt.emplace_back(ring);
 				continue;
