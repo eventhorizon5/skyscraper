@@ -475,6 +475,9 @@ bool HAL::LoadSystem(const std::string &data_path, Ogre::RenderWindow *renderwin
 {
 	//load HAL system resources
 
+	if (!renderwindow)
+		return false;
+
 	mRenderWindow = renderwindow;
 
 	//get renderer info
@@ -948,6 +951,11 @@ Ogre::RenderWindow* HAL::CreateRenderWindow(const std::string &name, int width, 
 #if USING_OPENXR
 	if (GetConfigBool(configfile, "Skyscraper.Frontend.VR", false) == true)
 	{
+		if (DX11 == false)
+		{
+			ReportFatalError("VR mode requires the DirectX 11 renderer\nDelete ogre.cfg and re-run Skyscraper");
+			return 0;
+		}
 		Ogre::RenderWindow* win2 = Ogre::Root::getSingleton().createRenderWindow(name, width, height, false, &params);
 		mRenderWindow = CreateOpenXRRenderWindow(mRoot->getRenderSystem());
 		mRenderWindow->create(name, width, height, false, &params);
