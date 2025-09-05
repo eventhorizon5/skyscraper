@@ -2173,103 +2173,86 @@ void PolyMesh::Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool c
 				}
 			}
 
-			//orientation-aware 4-way cut
-			GeometryArray work = ring, a, b;
-			std::vector<GeometryArray> pieces;
-			pieces.reserve(4);
-			bool changed = false;
+			// 6-plane cut procedure
 
-			auto emit = [&](const GeometryArray& poly)
-			{
-				if (poly.size() > 2)
-				{
-					pieces.emplace_back(poly);
-					changed = true;
-				}
+			// planes that define the inside of the cut box
+			struct Plane { int axis; Real value; bool keepGE; };
+			// inside predicates (order doesn’t matter)
+			Plane planes[6] = {
+				{0, start.x, true },  // x >= start.x
+				{0, end.x,   false},  // x <= end.x
+				{2, start.z, true },  // z >= start.z
+				{2, end.z,   false},  // z <= end.z
+				{1, start.y, true },  // y >= start.y
+				{1, end.y,   false}   // y <= end.y
 			};
 
-			if (isFloor)
+			// seeds start with the original ring (local space)
+			std::vector<GeometryArray> seeds;
+			seeds.push_back(ring);
+
+			// where we accumulate final outside pieces
+			std::vector<GeometryArray> pieces;
+			pieces.reserve(8);
+
+			GeometryArray le, ge;
+
+			for (int p = 0; p < 6; ++p)
 			{
-				//floors/ceilings: split X then Z (ignore Y)
-				//left of start.x
-				SplitWithPlaneUV(0, work, a, b, start.x, true);
-				emit(a);
-				work.swap(b); // keep >= start.x
+				const Plane& P = planes[p];
+				std::vector<GeometryArray> next;
+				next.reserve(seeds.size());
 
-				//right of end.x
-				SplitWithPlaneUV(0, work, a, b, end.x, false);
-				emit(b);
-				work.swap(a); // keep <= end.x
-
-				//back of start.z
-				SplitWithPlaneUV(2, work, a, b, start.z, true);
-				emit(a);
-				work.swap(b); // keep >= start.z
-
-				//front of end.z
-				SplitWithPlaneUV(2, work, a, b, end.z, false);
-				emit(b);
-				work.swap(a); // keep <= end.z
-			}
-			else
-			{
-				//walls: pick major horizontal axis (X vs Z), then clip that + Y
-				Vector2 ex = extentsAxis(ring, 0);
-				Vector2 ez = extentsAxis(ring, 2);
-				const bool facesXZ = (std::abs(ex.y - ex.x) >= std::abs(ez.y - ez.x));
-
-				if (facesXZ)
+				for (auto& poly : seeds)
 				{
-					//X major (forward/back)
-					SplitWithPlaneUV(0, work, a, b, start.x, true);
-					emit(a);
-					work.swap(b);
+					if (poly.size() < 3)
+						continue;
 
-					SplitWithPlaneUV(0, work, a, b, end.x, false);
-					emit(b);
-					work.swap(a);
+					le.clear();
+					ge.clear();
+
+					//bias toward the *inside* side so shared boundaries go to inside
+					SplitWithPlaneUV(P.axis, poly, le, ge, P.value, /*bias=*/P.keepGE);
+
+					//inside satisfies the plane’s inside predicate; outside fails it
+					GeometryArray& inside  = P.keepGE ? ge : le;
+					GeometryArray& outside = P.keepGE ? le : ge;
+
+					if (outside.size() >= 3)
+						pieces.emplace_back(outside);   // emit once and done for this branch
+
+					if (inside.size() >= 3)
+						next.emplace_back(inside);      // continue trimming inside through remaining planes
 				}
-				else
+
+				seeds.swap(next);
+			}
+
+			//'pieces' holds all disjoint fragments strictly outside the AABB (to keep)
+			//'seeds' holds zero or more inside fragments (the hole)
+			if (!seeds.empty())
+			{
+				// choose the largest inside fragment (or first) for doorway extents
+				const auto& insidePoly = seeds.front();
+				if (!insidePoly.empty())
 				{
-					//Z major (left/right)
-					SplitWithPlaneUV(2, work, a, b, start.z, true);
-					emit(a);
-					work.swap(b);
-
-					SplitWithPlaneUV(2, work, a, b, end.z, false);
-					emit(b);
-					work.swap(a);
+					PolyArray hole; hole.reserve(insidePoly.size());
+					for (const auto& v : insidePoly) hole.emplace_back(v.vertex);
+						GetDoorwayExtents(wall->GetMesh(), checkwallnumber, hole);
 				}
 			}
 
-			//Y (common)
-			SplitWithPlaneUV(1, work, a, b, start.y, true);
-			emit(a);
-			work.swap(b);
-
-			SplitWithPlaneUV(1, work, a, b, end.y, false);
-			emit(b);
-			work.swap(a);
-
-			//'work' is the inside slab (hole) — drop it, but pass to doorway extents if needed
-			if (!work.empty())
+			// add kept outside pieces back
+			if (!pieces.empty())
 			{
-				PolyArray hole; hole.reserve(work.size());
-				for (const auto& v : work)
-					hole.emplace_back(v.vertex);
-				GetDoorwayExtents(wall->GetMesh(), checkwallnumber, hole);
-			}
-
-			if (changed)
-			{
-				for (const auto& p : pieces)
+				for (auto& p : pieces)
 					rebuilt.emplace_back(p);
 				touchedAny = true;
 			}
 			else
 			{
-				//nothing changed (grazing): keep original ring
-				rebuilt.emplace_back(ring);
+				// No outside survived - ring was fully inside the box: it’s removed
+				touchedAny = true;
 			}
 		}
 
