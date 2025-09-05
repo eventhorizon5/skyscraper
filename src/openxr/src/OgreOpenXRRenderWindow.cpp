@@ -718,10 +718,10 @@ void OpenXRRenderWindow::_beginUpdate()
               char s[XR_MAX_PATH_LENGTH] = {};
               uint32_t len = 0;
               xrPathToString(mXrState->GetInstanceHandle().Get(), ps.interactionProfile, XR_MAX_PATH_LENGTH, &len, s);
-              LogManager::getSingleton().logMessage("Left hand profile: " + Ogre::String(s));
+              //LogManager::getSingleton().logMessage("Left hand profile: " + Ogre::String(s));
           }
           else {
-              LogManager::getSingleton().logMessage("Left hand profile: (none) r=0x" + Ogre::StringConverter::toString(pr));
+              //LogManager::getSingleton().logMessage("Left hand profile: (none) r=0x" + Ogre::StringConverter::toString(pr));
           }
       }
   }
