@@ -951,7 +951,7 @@ Ogre::RenderWindow* HAL::CreateRenderWindow(const std::string &name, int width, 
 #if USING_OPENXR
 	if (GetConfigBool(configfile, "Skyscraper.Frontend.VR", false) == true)
 	{
-		if (DX11 == false)
+		if (mRoot->getRenderSystem()->getName() != "Direct3D11 Rendering Subsystem")
 		{
 			ReportFatalError("VR mode requires the DirectX 11 renderer\nDelete ogre.cfg and re-run Skyscraper");
 			return 0;
