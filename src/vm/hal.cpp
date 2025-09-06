@@ -487,6 +487,9 @@ bool HAL::LoadSystem(const std::string &data_path, Ogre::RenderWindow *renderwin
 	size_t loc = Renderer.find("Rendering Subsystem");
 	Renderer = Renderer.substr(0, loc - 1);
 
+	//get graphics card device information
+	GPUDevice = mRoot->getRenderSystem()->getCapabilities()->getDeviceName();
+
 	//load resource configuration
 	Ogre::ConfigFile cf;
 	try

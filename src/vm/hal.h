@@ -88,6 +88,7 @@ public:
 
 	bool RTSS;
 	std::string Renderer;
+	std::string GPUDevice;
 	bool DisableSound;
 	std::vector<Ogre::Camera*> mCameras;
 	Ogre::Root* mRoot;

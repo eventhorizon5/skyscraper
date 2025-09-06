@@ -436,6 +436,22 @@
 										<border>5</border>
 										<option>1</option>
 									</object>
+									<object class="sizeritem">
+										<object class="wxStaticText" name="ID_STATICTEXT19" variable="StaticText19" member="yes">
+											<label>GPU Device:</label>
+										</object>
+										<flag>wxLEFT|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxTextCtrl" name="ID_tGPU" variable="tGPU" member="yes">
+											<style>wxTE_READONLY|wxTE_CENTRE</style>
+										</object>
+										<flag>wxLEFT|wxEXPAND</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
 								</object>
 								<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 								<border>5</border>
