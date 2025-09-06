@@ -614,7 +614,8 @@ bool VMConsole::ProcessCommand(const std::string &command, Ogre::StringVector &p
 	if (command == "vminit")
 	{
 		EngineContext* engine = vm->Initialize(false);
-		engine->LoadDefault();
+		if (engine)
+			engine->LoadDefault();
 		consoleresult.ready = false;
 		consoleresult.threadwait = false;
 		return true;
