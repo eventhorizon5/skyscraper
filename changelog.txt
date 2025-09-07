@@ -226,6 +226,11 @@ nverted to Local space first"
 -SBS: add empty filenames to the sound blacklist, this prevents verbose mode console spamming in certain situations.
 -SBS: don't try to play queued sound after load failure, dequeue instead
 -PolyMesh: properly skip cuts outside of the related axis cut range
+-PolyMesh: replaced inner Cut procedure with a more accurate 6-plane loop
+-OpenXR: disable diagnostic output
+-HAL: report a fatal error if trying to run VR mode without the DirectX 11 renderer
+-Added a GPUDevice variable to HAL, and added a text box to the Statistics window that displays the system's GPU device
+-VMConsole: fixed a potential crash in the vminit command, if the render window fails to update
 
 Version 2.0 - July 24, 2025
 -------------------------
