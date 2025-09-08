@@ -6,6 +6,7 @@ Version 2.0.2
 -VM: fix startup prompt in VMConsole
 -SBS: add empty filenames to the sound blacklist, this prevents verbose mode console spamming in certain situations
 -SBS: don't try to play queued sound after load failure, dequeue instead
+-VMConsole: fixed a potential crash in the vminit command, if the render window fails to update
 
 Version 2.0.1
 -------------------------
