@@ -110,24 +110,30 @@ endif()
 
 if(WIN32)
 	file(GLOB FRONTEND_FILES
+		src/frontend/*.h
 		src/frontend/*.cpp
 		msvc/Skyscraper.rc
 	)
 else()
 	file(GLOB FRONTEND_FILES
+		src/frontend/*.h
                 src/frontend/*.cpp
         )
 endif()
  
 if(WIN32 AND wxWidgets_FOUND)
 	file(GLOB VM_FILES
+		src/vm/*.h
 		src/vm/*.cpp
+		src/gui/*.h
 		src/gui/*.cpp
+		src/editor/*.h
 		src/editor/*.cpp
 		msvc/VM.rc
 	)
 else()
 	file(GLOB VM_FILES
+		src/vm/*.h
 		src/vm/*.cpp
 		msvc/VM.rc
 	)
@@ -135,54 +141,73 @@ endif()
 
 if (NOT WIN32 AND wxWidgets_FOUND)
 	file(GLOB GUI_FILES
+		src/gui/*.h
 		src/gui/*.cpp
 	)
 endif ()
 
 file(GLOB EDITOR_FILES
+	src/editor/*.h
 	src/editor/*.cpp
 )
 
 file(GLOB NETWORK_FILES
+	src/net/*.h
 	src/net/*.cpp
 )
 
 file(GLOB SCRIPTPROC_FILES
+	src/script/*.h
 	src/script/*.cpp
 )
 
 file(GLOB SBS_FILES
+	src/sbs/*.h
 	src/sbs/*.cpp
+	src/sbs/polymesh/*.h
 	src/sbs/polymesh/*.cpp
+	src/sbs/controllers/*.h
 	src/sbs/controllers/*.cpp
+	src/sbs/objects/*.h
 	src/sbs/objects/*.cpp
+	src/sbs/system/*.h
 	src/sbs/system/*.cpp
 	msvc/SBS.rc
 )
  
 file(GLOB ALLOC_FILES
+	src/alloc/*.h
 	src/alloc/*.cpp
 )
 
 file(GLOB OPENXR_FILES
+	src/openxr/src/*.h
 	src/openxr/src/*.cpp
 	msvc/OpenXR.rc
 )
 
 file(GLOB OGREBULLET_COLL_FILES
+	ogrebullet/Collisions/src/*.h
 	ogrebullet/Collisions/src/*.cpp
+	ogrebullet/Collisions/src/Debug/*.h
 	ogrebullet/Collisions/src/Debug/*.cpp
+	ogrebullet/Collisions/src/Shapes/*.h
 	ogrebullet/Collisions/src/Shapes/*.cpp
+	ogrebullet/Collisions/src/Utils/*.h
 	ogrebullet/Collisions/src/Utils/*.cpp
 )
 
 file (GLOB OGREBULLET_DYN_FILES
+	ogrebullet/Dynamics/src/*.h
 	ogrebullet/Dynamics/src/*.cpp
+	ogrebullet/Dynamics/src/Constraints/*.h
 	ogrebullet/Dynamics/src/Constraints/*.cpp
+	ogrebullet/Dynamics/src/Prefab/*.h
 	ogrebullet/Dynamics/src/Prefab/*.cpp
 )
 
 file (GLOB IMGUIZMO_FILES
+	dependencies/ImGuizmo/*.h
 	dependencies/ImGuizmo/*.cpp
 )
 
