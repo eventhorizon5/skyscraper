@@ -24,7 +24,7 @@
 #define VM_H
 
 #include <thread>
-#include <vector>
+#include "globals.h"
 
 //DLL Exporting
 #ifdef _WIN32
