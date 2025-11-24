@@ -75,7 +75,7 @@ endif ()
 find_package(FMOD)
 
 if(NOT FMOD_FOUND AND NOT WIN32)
-        set (CMAKE_CXX_FLAGS "-DDISABLE_SOUND ${CMAKE_CXX_FLAGS}")
+	set (CMAKE_CXX_FLAGS "-DDISABLE_SOUND ${CMAKE_CXX_FLAGS}")
 	set (FMOD_INCLUDE_DIR "")
 	set (FMOD_LIBRARY "")
 endif()
@@ -117,8 +117,8 @@ if(WIN32)
 else()
 	file(GLOB FRONTEND_FILES
 		src/frontend/*.h
-                src/frontend/*.cpp
-        )
+		src/frontend/*.cpp
+	)
 endif()
  
 if(WIN32 AND wxWidgets_FOUND)
@@ -250,34 +250,34 @@ include_directories( ${OGRE_INCLUDE_DIRS}
 )
 else()
 include_directories( ${OGRE_INCLUDE_DIRS}
-        ${OGRE_Overlay_INCLUDE_DIRS}
-        ${OGRE_RTShaderSystem_INCLUDE_DIRS}
-        ${OGRE_Bites_INCLUDE_DIRS}
-        ${GTK3_INCLUDE_DIRS}
-        ${BULLET_INCLUDE_DIRS}
-        ${Caelum_INCLUDE_DIRS}
-        ${OpenXR_INCLUDE_DIR}
-        src/frontend
-        src/vm
-        src/net
-        src/sbs
+	${OGRE_Overlay_INCLUDE_DIRS}
+	${OGRE_RTShaderSystem_INCLUDE_DIRS}
+	${OGRE_Bites_INCLUDE_DIRS}
+	${GTK3_INCLUDE_DIRS}
+	${BULLET_INCLUDE_DIRS}
+	${Caelum_INCLUDE_DIRS}
+	${OpenXR_INCLUDE_DIR}
+	src/frontend
+	src/vm
+	src/net
+	src/sbs
 	src/sbs/polymesh
 	src/sbs/controllers
 	src/sbs/objects
 	src/sbs/system
-        src/script
-        src/gui
-        src/alloc
-        src/openxr/include
-        src/openxr
+	src/script
+	src/gui
+	src/alloc
+	src/openxr/include
+	src/openxr
 	src/editor
-        ogrebullet/Collisions/include
-        ogrebullet/Collisions/include/Debug
-        ogrebullet/Collisions/include/Shapes
-        ogrebullet/Collisions/include/Utils
-        ogrebullet/Dynamics/include
-        ogrebullet/Dynamics/include/Constraints
-        ogrebullet/Dynamics/include/Prefab
+	ogrebullet/Collisions/include
+	ogrebullet/Collisions/include/Debug
+	ogrebullet/Collisions/include/Shapes
+	ogrebullet/Collisions/include/Utils
+	ogrebullet/Dynamics/include
+	ogrebullet/Dynamics/include/Constraints
+	ogrebullet/Dynamics/include/Prefab
 	dependencies/ImGuizmo
 	dependencies/imgui
 	dependencies/angelscript/include
@@ -395,8 +395,8 @@ endif ()
 if (NOT WIN32 AND NOT wxWidgets_FOUND)
 	target_link_libraries(ScriptProc SBS ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES})
 	target_link_libraries(Editor SBS ${OGRE_LIBRARIES})
-        target_link_libraries(VM SBS Network Editor dylib ${OGRE_LIBRARIES} ${Caelum_LIBRARIES} ${FMOD_LIBRARY} ${wxWidgets_LIBRARIES})
-        target_link_libraries(skyscraper VM ScriptProc SBS ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES} ${FMOD_LIBRARY} ${GTK3_LIBRARIES} ${FRONTENDGLINC})
+	target_link_libraries(VM SBS Network Editor dylib ${OGRE_LIBRARIES} ${Caelum_LIBRARIES} ${FMOD_LIBRARY} ${wxWidgets_LIBRARIES})
+	target_link_libraries(skyscraper VM ScriptProc SBS ${OGRE_LIBRARIES} ${wxWidgets_LIBRARIES} ${FMOD_LIBRARY} ${GTK3_LIBRARIES} ${FRONTENDGLINC})
 endif ()
 
  
@@ -430,15 +430,15 @@ endif ()
 
 #if (APPLE)
 #ADD_CUSTOM_COMMAND(TARGET VM
-#                POST_BUILD
-#                COMMAND install_name_tool -change libOgreProcedural.dylib "@rpath/libOgreProcedural.dylib" libVM.dylib)
+#		POST_BUILD
+#		COMMAND install_name_tool -change libOgreProcedural.dylib "@rpath/libOgreProcedural.dylib" libVM.dylib)
 #ADD_CUSTOM_COMMAND(TARGET SBS
 #		POST_BUILD
 #		COMMAND install_name_tool -change libOgreProcedural.dylib "@rpath/libOgreProcedural.dylib" libSBS.dylib)
 
 #ADD_CUSTOM_COMMAND(TARGET ScriptProc
-#                POST_BUILD
-#                COMMAND install_name_tool -change libOgreProcedural.dylib "@rpath/libOgreProcedural.dylib" libScriptProc.dylib)
+#		POST_BUILD
+#		COMMAND install_name_tool -change libOgreProcedural.dylib "@rpath/libOgreProcedural.dylib" libScriptProc.dylib)
 
 #ADD_CUSTOM_COMMAND(TARGET skyscraper
 #		POST_BUILD
@@ -447,8 +447,8 @@ endif ()
 
 #if (APPLE AND wxWidgets_FOUND)
 #ADD_CUSTOM_COMMAND(TARGET GUI
-#                POST_BUILD
-#                COMMAND install_name_tool -change libOgreProcedural.dylib "@rpath/libOgreProcedural.dylib" libGUI.dylib)
+#		POST_BUILD
+#		COMMAND install_name_tool -change libOgreProcedural.dylib "@rpath/libOgreProcedural.dylib" libGUI.dylib)
 #endif ()
 
 if (UNIX AND NOT APPLE)
