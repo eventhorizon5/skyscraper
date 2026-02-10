@@ -24,6 +24,7 @@ Makefile
 
 # macOS App
 Skyscraper.app
+.DS_Store
 
 # Windows
 msvc/Release
