@@ -518,14 +518,16 @@ bool Shaft::OnInit()
 void Shaft::Check(Vector3 position, int current_floor)
 {
 	Elevator *elevator = sbs->GetElevator(sbs->ElevatorNumber);
+	ElevatorCar *car = 0;
+	bool moving = false;
+	bool leveling = false;
 
-	if (!elevator)
-		return;
-
-	ElevatorCar *car = elevator->GetCar(sbs->CarNumber);
-
-	if (!car)
-		return;
+	if (elevator)
+	{
+		moving = elevator->IsMoving;
+		leveling = elevator->Leveling;
+		car = elevator->GetCar(sbs->CarNumber);
+	}
 
 	SBS_PROFILE("Shaft::Check");
 
@@ -554,12 +556,13 @@ void Shaft::Check(Vector3 position, int current_floor)
 		{
 			//if user is in an elevator, show a range of the shaft at a time (while it's moving)
 			EnableRange(current_floor, sbs->ShaftDisplayRange, true, false);
-			car->ShaftDoorsEnabledRange(0, current_floor, sbs->ShaftDisplayRange);
+			if (car)
+				car->ShaftDoorsEnabledRange(0, current_floor, sbs->ShaftDisplayRange);
 		}
 
 		//turn on related floors if ShowFloors is true
 		//display a selected range of floors in the floor list if the user is in a moving elevator
-		if (InsideShaft == false && sbs->InElevator == true && elevator->IsMoving == true && elevator->Leveling == false)
+		if (InsideShaft == false && sbs->InElevator == true && moving == true && leveling == false)
 		{
 			if (ShowFloors == 1)
 				sbs->EnableFloorRange(current_floor, sbs->FloorDisplayRange, true, true, ShaftNumber);
