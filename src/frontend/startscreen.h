@@ -54,6 +54,7 @@ private:
 	};
 	buttondata *buttons;
 	int buttoncount;
+	bool right_down_last;
 
 	Ogre::Rectangle2D* background_rect;
 	Ogre::SceneNode* background_node;

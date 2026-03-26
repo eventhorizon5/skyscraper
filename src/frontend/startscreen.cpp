@@ -422,35 +422,29 @@ bool StartScreen::GetMenuInput()
 			//change button status based on mouse position and button press status
 			if (mouse_x_rel > button->x && mouse_x_rel < button->x + button->size_x && mouse_y_rel > button->y && mouse_y_rel < button->y + button->size_y)
 			{
-				if (button->drawn_selected == false && wxGetMouseState().LeftIsDown() == false)
+				if (button->drawn_pressed == true && wxGetMouseState().LeftIsDown() == false && wxGetMouseState().RightIsDown() == false)
 				{
-					if (button->drawn_pressed == true)
-					{
-						//user clicked on button
-						button->drawn_selected = true;
+					if (right_down_last == true)
 						RightClick(i);
-						return true;
-        			}
-        			button->drawn_selected = true;
-        		}
-				if (button->drawn_selected == false && wxGetMouseState().RightIsDown() == false)
-				{
-					if (button->drawn_pressed == true)
-					{
-						//user clicked on button
-						button->drawn_selected = true;
+					else
 						Click(i);
-						return true;
-					}
+
+					button->drawn_pressed = false;
+					button->drawn_selected = true;
+					return true;
+				}
+				if (wxGetMouseState().LeftIsDown() == true || wxGetMouseState().RightIsDown() == true)
+				{
+					right_down_last = wxGetMouseState().RightIsDown();
+					button->drawn_selected = false;
+					button->drawn_pressed = true;
+				}
+				else
+				{
 					button->drawn_selected = true;
 				}
-				if (button->drawn_pressed == false && (wxGetMouseState().LeftIsDown() == true || wxGetMouseState().RightIsDown() == true))
-				{
-					button->drawn_pressed = true;
-					button->drawn_selected = false;
-				}
 			}
-			else if (button->drawn_selected == true || button->drawn_pressed == true)
+			else
 			{
 				button->drawn_selected = false;
 				button->drawn_pressed = false;

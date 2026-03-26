@@ -23,9 +23,10 @@
 #ifndef SKYSCRAPER_H
 #define SKYSCRAPER_H
 
+#include "globals.h"
+
 #ifndef USING_WX
 #include <filesystem>
-#include "Ogre.h"
 #include "OgreApplicationContext.h"
 #include "OgreInput.h"
 #include "OgreRTShaderSystem.h"
