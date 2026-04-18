@@ -1,7 +1,7 @@
 /*
 	Scalable Building Simulator - Core
 	The Skyscraper Project - Version 2.1
-	Copyright (C)2004-2025 Ryan Thoryk
+	Copyright (C)2004-2026 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
 	Contact - ryan@skyscrapersim.net
@@ -593,7 +593,7 @@ void SBS::PrintBanner()
 {
 	Report("");
 	Report(" Scalable Building Simulator " + version + " " + version_state);
-	Report(" Copyright (C)2004-2025 Ryan Thoryk");
+	Report(" Copyright (C)2004-2026 Ryan Thoryk");
 	Report(" This software comes with ABSOLUTELY NO WARRANTY. This is free");
 	Report(" software, and you are welcome to redistribute it under certain");
 	Report(" conditions. For details, see the file named LICENSE\n");
