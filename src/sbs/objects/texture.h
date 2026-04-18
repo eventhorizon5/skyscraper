@@ -29,7 +29,7 @@ namespace SBS {
 class SBSIMPEXP Texture : public Object
 {
 public:
-	std::string material_name; //used if material is loaded instead of texture, as an alias
+	std::string material_name; //material lookup target, used for both script materials and unique internal materials
 	std::string filename;
 	Real widthmult;
 	Real heightmult;

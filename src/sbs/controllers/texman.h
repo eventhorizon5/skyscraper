@@ -169,6 +169,11 @@ private:
 
 	//function caching
 	std::string prev_material;
+	int material_index;
+
+	Texture* FindTextureByAlias(const std::string &name);
+	Texture* FindTextureByMaterial(const std::string &material_name);
+	std::string StripInstancePrefix(const std::string &name);
 
 	//slideshow system
 	class Timer;
