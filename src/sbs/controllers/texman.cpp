@@ -2235,16 +2235,17 @@ bool TextureManager::WriteToTexture(const std::string &str, Ogre::TexturePtr des
 				{
 					for (size_t j = 0; j < GlyphTexCoords[strindex].getWidth(); j++)
 					{
+						int targetX = cursorX + (int)j;
+						int targetY = cursorY + (int)i;
+						if (targetX < 0 || targetY < 0 || targetX >= (int)destPb.getWidth() || targetY >= (int)destPb.getHeight())
+							continue;
 						float alpha =  color.a * (fontData[(i + GlyphTexCoords[strindex].top) * fontRowPitchBytes + (j + GlyphTexCoords[strindex].left) * fontPixelSize + 1] / 255.0f);
 						float invalpha = 1.0f - alpha;
-						int offset = (i + cursorY) * destRowPitchBytes + (j + cursorX) * destPixelSize;
-						if (offset >= 0)
-						{
-							ColourValue pix;
-							PixelUtil::unpackColour(&pix, destPb.format, &destData[offset]);
-							pix = (pix * invalpha) + (color * alpha);
-							PixelUtil::packColour(pix, destPb.format, &destData[offset]);
-						}
+						int offset = targetY * destRowPitchBytes + targetX * destPixelSize;
+						ColourValue pix;
+						PixelUtil::unpackColour(&pix, destPb.format, &destData[offset]);
+						pix = (pix * invalpha) + (color * alpha);
+						PixelUtil::packColour(pix, destPb.format, &destData[offset]);
 					}
 				}
 
