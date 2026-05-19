@@ -2094,7 +2094,11 @@ bool TextureManager::WriteToTexture(const std::string &str, Ogre::TexturePtr des
 			GlyphTexCoords[i].bottom = uint32_t(glypheTexRect.bottom * fontTexture->getSrcHeight());
 
 			if (glypheTexRect.right < glypheTexRect.left || glypheTexRect.bottom < glypheTexRect.top)
+			{
+				delete [] GlyphTexCoords;
+				destBuffer->unlock();
 				return ReportError("Error processing font - invalid texture coordinates for font " + font->getName());
+			}
 
 			//get true bottom of character, since the previous routine doesn't seem to get an accurate result
 			size_t lastline = 0;
