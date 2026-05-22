@@ -492,7 +492,7 @@ bool EngineContext::Start()
 
 	//cut outside sim boundaries if specified
 	if (!IsSystem)
-		Simcore->CutOutsideBoundaries(vm->CutLandscape, vm->CutBuildings, vm->CutExternal, vm->CutFloors);
+		Simcore->CutOutsideBoundaries(true, vm->CutLandscape, vm->CutBuildings, vm->CutExternal, vm->CutFloors);
 
 	//if this has child engines, and has reloaded, cut for the child engines
 	if (children.empty() == false && reloading == true)
@@ -785,7 +785,7 @@ void EngineContext::CutForEngine(EngineContext *engine, bool child)
 
 	//cut for new bounds
 	Simcore->DeleteColliders = true;
-	Simcore->CutInsideBoundaries(newmin, newmax, vm->CutLandscape, vm->CutBuildings, vm->CutExternal, vm->CutFloors);
+	Simcore->CutInsideBoundaries(true, newmin, newmax, vm->CutLandscape, vm->CutBuildings, vm->CutExternal, vm->CutFloors);
 	Simcore->DeleteColliders = false;
 
 	if (IsRunning() == true)

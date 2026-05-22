@@ -2921,7 +2921,7 @@ bool SBS::GetBounds(Vector3 &min, Vector3 &max)
 	return false;
 }
 
-void SBS::CutOutsideBoundaries(bool landscape, bool buildings, bool external, bool floors)
+void SBS::CutOutsideBoundaries(bool is_3d, bool landscape, bool buildings, bool external, bool floors)
 {
 	//cut landscape and buildings for engine bounds if needed
 	//run this function before calling Start()
@@ -2934,35 +2934,35 @@ void SBS::CutOutsideBoundaries(bool landscape, bool buildings, bool external, bo
 	Vector3 max = area_trigger->GetMax();
 
 	if (landscape == true && Landscape)
-		Landscape->CutOutsideBounds(min, max, true, true);
+		Landscape->CutOutsideBounds(is_3d, min, max, true, true);
 	if (buildings == true && Buildings)
-		Buildings->CutOutsideBounds(min, max, true, true);
+		Buildings->CutOutsideBounds(is_3d, min, max, true, true);
 	if (external == true && External)
-		External->CutOutsideBounds(min, max, true, true);
+		External->CutOutsideBounds(is_3d, min, max, true, true);
 
 	if (floors == true)
 	{
 		for (int i = 0; i < floor_manager->GetCount(); i++)
-			floor_manager->GetIndex(i)->Level->CutOutsideBounds(min, max, true, true);
+			floor_manager->GetIndex(i)->Level->CutOutsideBounds(is_3d, min, max, true, true);
 	}
 }
 
-void SBS::CutInsideBoundaries(const Vector3 &min, const Vector3 &max, bool landscape, bool buildings, bool external, bool floors)
+void SBS::CutInsideBoundaries(bool is_3d, const Vector3 &min, const Vector3 &max, bool landscape, bool buildings, bool external, bool floors)
 {
 	//cut landscape and buildings for specified bounds
 	//run this function before calling Start()
 
 	if (landscape == true && Landscape)
-		Landscape->Cut(min, max, true, true);
+		Landscape->Cut(is_3d, min, max, true, true);
 	if (buildings == true && Buildings)
-		Buildings->Cut(min, max, true, true);
+		Buildings->Cut(is_3d, min, max, true, true);
 	if (external == true && External)
-		External->Cut(min, max, true, true);
+		External->Cut(is_3d, min, max, true, true);
 
 	if (floors == true)
 	{
 		for (int i = 0; i < floor_manager->GetCount(); i++)
-			floor_manager->GetIndex(i)->Level->Cut(min, max, true, true);
+			floor_manager->GetIndex(i)->Level->Cut(is_3d, min, max, true, true);
 	}
 }
 
