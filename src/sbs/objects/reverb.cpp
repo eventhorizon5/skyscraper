@@ -51,6 +51,10 @@ Reverb::Reverb(Object *parent, const std::string &name, std::string type, const 
 	//convert type to lowercase
 	SetCase(type, false);
 
+	//exit if no sound system available
+	if (!soundsys)
+		return;
+
 	//create reverb object
 
 #ifndef DISABLE_SOUND
