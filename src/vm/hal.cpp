@@ -907,7 +907,17 @@ Ogre::RenderWindow* HAL::CreateRenderWindow(const std::string &name, int width, 
 	}
 	else
 #endif
-		mRenderWindow = Ogre::Root::getSingleton().createRenderWindow(name, width, height, false, &params);
+	{
+		try
+		{
+			mRenderWindow = Ogre::Root::getSingleton().createRenderWindow(name, width, height, false, &params);
+		}
+		catch (Ogre::Exception &e)
+		{
+			ReportFatalError("Error creating render window:\n" + e.getDescription());
+			return 0;
+		}
+	}
 
 	mRenderWindow->setActive(true);
 	mRenderWindow->windowMovedOrResized();
