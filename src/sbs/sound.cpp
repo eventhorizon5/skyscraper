@@ -399,7 +399,7 @@ bool Sound::Load(const std::string &filename, bool force)
 
 	//exit if filename is the same
 	if (filename == Filename && force == false)
-		return false;
+		return true;
 
 	//clear current references
 	Unload();
