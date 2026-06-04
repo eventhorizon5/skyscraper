@@ -130,7 +130,7 @@ bool MovingWalkway::Enabled(bool value)
 	{
 		bool result = Steps[i]->Enabled(value);
 		if (!result)
-				status = false;
+			status = false;
 	}
 
 	if (value == false && sound->IsPlaying() == true)
@@ -266,7 +266,7 @@ void MovingWalkway::CreateSteps(const std::string &texture, const std::string &d
 
 void MovingWalkway::MoveSteps()
 {
-	if (GetPosition().distance(sbs->camera->GetPosition()) > 100)
+	if (start.distance(sbs->camera->GetPosition()) > 100 && end.distance(sbs->camera->GetPosition()) > 100)
 		return;
 
 	for (size_t i = 0; i < Steps.size(); i++)
