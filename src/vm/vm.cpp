@@ -796,7 +796,6 @@ bool VM::Load(bool clear, const std::string &filename, EngineContext *parent, co
 	delay_load.rotation = rotation;
 	delay_load.area_min = area_min;
 	delay_load.area_max = area_max;
-	delay_load.system = system;
 
 	load_queue.emplace_back(delay_load);
 
@@ -813,12 +812,6 @@ bool VM::LoadQueued()
 	for (size_t i = 0; i < load_queue.size(); i++)
 	{
 		DelayLoad &load = load_queue[i];
-
-		if (load.system == false)
-		{
-			if (engines[0]->IsRunning() == false)
-				continue;
-		}
 
 		Report("Loading engine for building file '" + load.filename + "'...");
 

@@ -204,7 +204,6 @@ private:
 		Vector3 position;
 		Vector3 rotation;
 		Vector3 area_min, area_max;
-		bool system;
 	};
 	std::vector<DelayLoad> load_queue; //delay load queue
 };
