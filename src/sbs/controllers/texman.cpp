@@ -558,7 +558,11 @@ Texture* TextureManager::FindTextureByMaterial(const std::string &material_name)
 		Texture *texture = textures[i - 1];
 		if (!texture)
 			continue;
-		if (texture->material_name == material_name && texture->material_name != "")
+
+		size_t loc = texture->material_name.find(":", 0);
+		std::string material = texture->material_name.substr(0, loc);
+
+		if (material == material_name && material != "")
 		{
 			return texture;
 		}
