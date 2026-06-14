@@ -535,7 +535,7 @@ void VM::SwitchEngines()
 		return;
 
 	//if the active engine was reloaded, try to reattach to that engine after load
-	if (active_engine->IsInside() == true && active_engine->IsCameraActive() == false && active_engine->Paused == false)
+	if (active_engine->was_reloaded == true && active_engine->IsInside() == true && active_engine->IsCameraActive() == false && active_engine->Paused == false)
 	{
 		SetActiveEngine(active_engine->GetNumber(), true);
 		return;
