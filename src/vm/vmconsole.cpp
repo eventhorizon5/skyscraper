@@ -354,7 +354,7 @@ bool VMConsole::ProcessCommand(const std::string &command, Ogre::StringVector &p
 		if (params.size() != 1)
 			ReportError("Incorrect number of parameters");
 		else
-			vm->Load(false, false, params[0]);
+			vm->Load(false, params[0]);
 		consoleresult.ready = false;
 		consoleresult.threadwait = false;
 		return true;
@@ -424,7 +424,7 @@ bool VMConsole::ProcessCommand(const std::string &command, Ogre::StringVector &p
 	//start command
 	if (command == "start")
 	{
-		vm->Load(false, false, "Ground.bld");
+		vm->Load(false, "Ground.bld");
 		consoleresult.ready = false;
 		consoleresult.threadwait = false;
 		return true;

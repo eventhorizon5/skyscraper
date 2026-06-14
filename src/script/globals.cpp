@@ -307,10 +307,6 @@ int ScriptProcessor::GlobalsSection::Run(std::string &LineData)
 			engine->type = ENGINETYPE_BUILDING;
 		else if (check == "city")
 			engine->type = ENGINETYPE_CITY;
-		else if (check == "planet")
-			engine->type = ENGINETYPE_PLANET;
-		else if (check == "solarsystem")
-			engine->type = ENGINETYPE_SOLARSYSTEM;
 		return sNextLine;
 	}
 

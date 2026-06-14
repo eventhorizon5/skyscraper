@@ -54,13 +54,11 @@ namespace Skyscraper {
 EngineContext::EngineContext(const EngineType type, EngineContext *parent, VM *vm, Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, const Vector3 &position, const Vector3 &rotation, const Vector3 &area_min, const Vector3 &area_max)
 {
 	this->fmodsystem = fmodsystem;
-	IsSystem = false;
 	Init(type, parent, vm, mSceneManager, position, rotation, area_min, area_max);
 }
 
 EngineContext::EngineContext(const EngineType type, EngineContext *parent, VM *vm, Ogre::SceneManager* mSceneManager, const Vector3 &position, const Vector3 &rotation, const Vector3 &area_min, const Vector3 &area_max)
 {
-	IsSystem = false;
 	Init(type, parent, vm, mSceneManager, position, rotation, area_min, area_max);
 }
 
@@ -491,8 +489,7 @@ bool EngineContext::Start()
 		return false;
 
 	//cut outside sim boundaries if specified
-	if (!IsSystem)
-		Simcore->CutOutsideBoundaries(true, vm->CutLandscape, vm->CutBuildings, vm->CutExternal, vm->CutFloors);
+	Simcore->CutOutsideBoundaries(false, vm->CutLandscape, vm->CutBuildings, vm->CutExternal, vm->CutFloors);
 
 	//if this has child engines, and has reloaded, cut for the child engines
 	if (children.empty() == false && reloading == true)
@@ -749,10 +746,6 @@ void EngineContext::CutForEngine(EngineContext *engine, bool child)
 	if (!Simcore)
 		return;
 
-	//limit cuts on system engines
-	//if (child == false && IsSystem == true)
-		//return;
-
 	::SBS::SBS *newsimcore = engine->GetSystem();
 
 	Vector3 min, max, a, b, c, d, newmin, newmax;
@@ -785,7 +778,7 @@ void EngineContext::CutForEngine(EngineContext *engine, bool child)
 
 	//cut for new bounds
 	Simcore->DeleteColliders = true;
-	Simcore->CutInsideBoundaries(true, newmin, newmax, vm->CutLandscape, vm->CutBuildings, vm->CutExternal, vm->CutFloors);
+	Simcore->CutInsideBoundaries(false, newmin, newmax, vm->CutLandscape, vm->CutBuildings, vm->CutExternal, vm->CutFloors);
 	Simcore->DeleteColliders = false;
 
 	if (IsRunning() == true)
@@ -981,10 +974,6 @@ std::string EngineContext::GetType()
 		typestr = "City";
 	else if (type == ENGINETYPE_GENERIC)
 		typestr = "Generic";
-	else if (type == ENGINETYPE_PLANET)
-		typestr = "Planet";
-	else if (type == ENGINETYPE_SOLARSYSTEM)
-		typestr = "Solar System";
 	else
 		typestr = "Unknown";
 	return typestr;

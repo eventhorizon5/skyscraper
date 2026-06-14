@@ -288,7 +288,7 @@ void LoadDialog::On_bLoad_Click(wxCommandEvent& event)
 	vm->CutFloors = chkCutFloors->GetValue();
 
 	Vector3 rot (0, rotation, 0);
-	vm->Load(false, false, filename, parent_engine, position, rot, min, max);
+	vm->Load(false, filename, parent_engine, position, rot, min, max);
 
 	this->Close();
 }

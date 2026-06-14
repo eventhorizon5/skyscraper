@@ -150,7 +150,7 @@ int ScriptProcessor::BuildingsSection::Run(std::string &LineData)
 		}
 
 		Vector3 rot (0, rotation, 0);
-		bool result = engine->GetVM()->Load(engine->IsSystem, false, tempdata[0], engine, position, rot, min, max);
+		bool result = engine->GetVM()->Load(false, tempdata[0], engine, position, rot, min, max);
 
 		return sNextLine;
 	}

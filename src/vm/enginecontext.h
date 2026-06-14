@@ -39,7 +39,6 @@ public:
 	bool NewEngine; //true if this is a new engine
 	unsigned long current_time, time_stat;
 	bool Paused;
-	bool IsSystem;
 	EngineType type;
 	bool was_reloaded;
 
