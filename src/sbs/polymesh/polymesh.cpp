@@ -160,7 +160,7 @@ bool PolyMesh::CreateMesh(MeshObject *mesh, Wall* ownerWall, Polygon* ownerPoly,
 	}
 
 	if (!sbs->GetTextureManager()->ComputeTextureMap(t_matrix, t_vector, converted_vertices[0], v1, v2, v3, tw2, th2))
-		return false;
+		return ReportError("PolyMesh: Invalid texture map");
 
 	return CreateMesh(mesh, ownerWall, ownerPoly, name, material, converted_vertices, t_matrix, t_vector, geometry, triangles, converted_vertices, tw2, th2, false);
 }

@@ -2701,7 +2701,7 @@ bool TextureManager::ComputeTextureSpace(Matrix3 &m, Vector3 &v, const Vector3 &
 	Real v_norm = v_axis.length();
 
 	if (u_norm < SMALL_EPSILON || v_norm < SMALL_EPSILON)
-		return false; //degenerate axes
+		return ReportError("ComputeTextureSpace: degenerate axes"); //degenerate axes
 
 	u_axis /= u_norm;
 	v_axis /= v_norm;
@@ -2714,7 +2714,7 @@ bool TextureManager::ComputeTextureSpace(Matrix3 &m, Vector3 &v, const Vector3 &
 	Vector3 w_axis = u_axis.crossProduct(v_axis);
 	Real w_norm = w_axis.length();
 	if (w_norm < SMALL_EPSILON)
-		return false; //degenerate plane
+		return ReportError("ComputeTextureSpace: degenerate plane"); //degenerate plane
 
 	w_axis /= w_norm;
 
@@ -2729,7 +2729,7 @@ bool TextureManager::ComputeTextureSpace(Matrix3 &m, Vector3 &v, const Vector3 &
 	//optionally invert matrix if needed for mapping (depends on usage)
 	Real det = m.Determinant();
 	if (std::abs(det) < SMALL_EPSILON)
-		return false; //singular matrix
+		return ReportError("ComputeTextureSpace: singular matrix"); //singular matrix
 
 	m = m.Inverse(1e-10f);
 
