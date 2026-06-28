@@ -445,7 +445,8 @@ bool Skyscraper::Loop()
 #endif
 		}
 
-		startscreen_loaded = true;
+		if (StartupRunning == true)
+			startscreen_loaded = true;
 
 		//have HAL render frame
 		return vm->GetHAL()->Render();
