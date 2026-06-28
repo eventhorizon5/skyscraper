@@ -414,7 +414,7 @@ bool Skyscraper::Loop()
 
 			window->SetClientSize(vm->GetHAL()->GetConfigInt(vm->GetHAL()->configfile, "Skyscraper.Frontend.Menu.Width", 800), vm->GetHAL()->GetConfigInt(vm->GetHAL()->configfile, "Skyscraper.Frontend.Menu.Height", 600));
 			window->Center();
-			window->SetCursor(wxNullCursor);
+			window->ResetCursor();
 #endif
 		}
 

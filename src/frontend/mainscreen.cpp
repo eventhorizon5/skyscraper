@@ -844,6 +844,15 @@ void MainScreen::EnableFreelook(bool value)
 #endif
 }
 
+void MainScreen::ResetCursor()
+{
+#if defined(__WXMSW__)
+	SetCursor(wxNullCursor);
+#else
+	wxSetCursor(wxNullCursor);
+#endif
+}
+
 #ifndef __FreeBSD__
 void MainScreen::OnJoystickEvent(wxJoystickEvent &event)
 {
