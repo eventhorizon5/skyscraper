@@ -55,6 +55,7 @@ public:
 #ifndef __FreeBSD__
 	void OnJoystickEvent(wxJoystickEvent& event);
 #endif
+	void ResetCursor();
 
 	bool Active;
 	bool InLoop;
