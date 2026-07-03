@@ -17,7 +17,7 @@
 
 <Globals>
     Name = Mushinegi Observation Tower
-    Designer = EM113
+    Designer = EM113, TG635_alt126xA
     Version = 1
     CameraFloor = 0
     CameraPosition = 0, -60
