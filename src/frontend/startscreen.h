@@ -1,6 +1,6 @@
 /*
 	Skyscraper 2.1 - Startup Screen
-	Copyright (C)2003-2025 Ryan Thoryk
+	Copyright (C)2003-2026 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
 	Contact - ryan@skyscrapersim.net
@@ -54,6 +54,7 @@ private:
 	};
 	buttondata *buttons;
 	int buttoncount;
+	bool right_down_last;
 
 	Ogre::Rectangle2D* background_rect;
 	Ogre::SceneNode* background_node;

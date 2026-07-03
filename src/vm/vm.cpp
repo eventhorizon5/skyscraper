@@ -1,6 +1,6 @@
 /*
 	Skyscraper 2.1 - Nanokernel
-	Copyright (C)2003-2025 Ryan Thoryk
+	Copyright (C)2003-2026 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
 	Contact - ryan@skyscrapersim.net
@@ -20,21 +20,22 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+#include "vm.h"
+
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
 #include <sys/sysctl.h>
 #endif
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 #include <windows.h>
+#undef LoadLibrary
 #endif
 #if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
 #include <sys/utsname.h>
 #endif
 #include <iostream>
 #include "dylib.hpp"
-#include "globals.h"
 #include "sbs.h"
 #include "polymesh.h"
-#include "vm.h"
 #include "camera.h"
 #include "scenenode.h"
 #include "soundsystem.h"
@@ -44,7 +45,6 @@
 #include "gui.h"
 #include "profiler.h"
 #include "gitrev.h"
-#include "monitor.h"
 #include "editor.h"
 #include "vmconsole.h"
 
@@ -77,8 +77,6 @@ VM::VM()
 	loadstart = false;
 	unloaded = false;
 	monitor = 0;
-	system_loaded = false;
-	system_finished = false;
 	running = false;
 	first_attach = false;
 
@@ -103,9 +101,6 @@ VM::VM()
 	gui = 0;
 #endif
 
-	//create monitor instance
-	monitor = new Monitor(this);
-
 	//create editor instance
 	editor = new Editor(this);
 
@@ -122,11 +117,6 @@ VM::~VM()
 	if (editor)
 		delete editor;
 	editor = 0;
-
-	//delete monitor instance
-	if (monitor)
-		delete monitor;
-	monitor = 0;
 
 	//delete sky system instance
 	if (skysystem)
@@ -195,8 +185,8 @@ bool VM::DeleteEngine(const EngineContext *engine)
 		if (engines[i] == engine)
 		{
 			//don't delete the primary engine if others are running
-			if (i == 0 && engines.size() > 1)
-				return ReportError("Cannot delete primary engine with children");
+			/*if (i == 0 && engines.size() > 1)
+				return ReportError("Cannot delete primary engine with children");*/
 
 			//delete the engine
 			engines[i] = 0;
@@ -235,8 +225,6 @@ void VM::DeleteEngines()
 {
 	//delete all sim emgine instances
 
-	monitor->Cleanup();
-
 	Report("Deleting all engines...");
 	for (size_t i = 0; i < engines.size(); i++)
 	{
@@ -245,8 +233,6 @@ void VM::DeleteEngines()
 	}
 	engines.clear();
 	active_engine = 0;
-	system_loaded = false;
-	system_finished = false;
 	first_attach = false;
 	running = false;
 	unloaded = true;
@@ -291,7 +277,7 @@ void VM::SetActiveEngine(int number, bool switch_engines, bool force)
 	CameraState prev_state {};
 	bool have_prev_state = false;
 
-	if (active_engine && (engine->IsSystem == false || running == true) && engine->was_reloaded == false)
+	if (active_engine && running == true && engine->was_reloaded == false)
 	{
 		if (active_engine->IsCameraActive())
 		{
@@ -304,7 +290,7 @@ void VM::SetActiveEngine(int number, bool switch_engines, bool force)
 	}
 
 	//switch context to new engine instance and attach camera
-	if (engine->IsSystem == false || running == true)
+	if (running == true)
 	{
 		Report("Setting engine " + ToString(number) + " as active");
 		active_engine = engine;
@@ -725,9 +711,6 @@ VMStatus VM::Run(std::vector<EngineContext*> &newengines)
 	unsigned long last = current_time;
 	current_time = hal->GetCurrentTime();
 
-	//run monitor
-	bool monresult = monitor->Run();
-
 	//run sim engines
 	bool result = RunEngines(newengines);
 
@@ -796,7 +779,7 @@ VMStatus VM::Run(std::vector<EngineContext*> &newengines)
 	return VMSTATUS_SUCCESS;
 }
 
-bool VM::Load(bool system, bool clear, const std::string &filename, EngineContext *parent, const Vector3 &position, const Vector3 &rotation, const Vector3 &area_min, const Vector3 &area_max)
+bool VM::Load(bool clear, const std::string &filename, EngineContext *parent, const Vector3 &position, const Vector3 &rotation, const Vector3 &area_min, const Vector3 &area_max)
 {
 	//load simulator and data file
 
@@ -813,11 +796,8 @@ bool VM::Load(bool system, bool clear, const std::string &filename, EngineContex
 	delay_load.rotation = rotation;
 	delay_load.area_min = area_min;
 	delay_load.area_max = area_max;
-	delay_load.system = system;
 
 	load_queue.emplace_back(delay_load);
-
-	monitor->CreateSim();
 
 	return true;
 }
@@ -829,54 +809,18 @@ bool VM::LoadQueued()
 	if (load_queue.size() == 0)
 		return false;
 
-	bool system_found = false;
 	for (size_t i = 0; i < load_queue.size(); i++)
 	{
 		DelayLoad &load = load_queue[i];
-		if (load.system == true)
-		{
-			system_found = true;
-			break;
-		}
-	}
-
-	if (system_found == false && system_loaded == true)
-		system_finished = true;
-
-	for (size_t i = 0; i < load_queue.size(); i++)
-	{
-		DelayLoad &load = load_queue[i];
-
-		if (load.system == false)
-		{
-			if (system_finished == false)
-				continue;
-
-			if (engines[0]->IsRunning() == false)
-				continue;
-		}
 
 		Report("Loading engine for building file '" + load.filename + "'...");
 
-		//if no parent is specified, select first planet as parent
-		if (load.parent == 0)
-		{
-			for (size_t j = 0; j < engines.size(); j++)
-			{
-				if (engines[j])
-				{
-					if (engines[j]->type == ENGINETYPE_PLANET)
-					{
-						load.parent = engines[j];
-						break;
-					}
-				}
-			}
-		}
+		//if no parent is specified, select first engine as parent
+		if (load.parent == 0 && GetEngineCount() >= 1)
+			load.parent = GetFirstValidEngine();
 
 		//boot SBS
 		EngineContext* engine = Initialize(load.clear, load.parent, load.position, load.rotation, load.area_min, load.area_max);
-		engine->IsSystem = load.system;
 
 		//exit if init failed
 		if (!engine)
@@ -892,8 +836,6 @@ bool VM::LoadQueued()
 				DeleteEngine(engine);
 		}
 
-		if (load.system == true)
-			system_loaded = true;
 		load_queue.pop_back();
 		i--;
 	}

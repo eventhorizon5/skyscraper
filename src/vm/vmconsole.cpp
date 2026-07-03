@@ -1,6 +1,6 @@
 /*
 	Skyscraper 2.1 - Virtual Manager Console
-	Copyright (C)2003-2025 Ryan Thoryk
+	Copyright (C)2003-2026 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
 	Contact - ryan@skyscrapersim.net
@@ -354,7 +354,7 @@ bool VMConsole::ProcessCommand(const std::string &command, Ogre::StringVector &p
 		if (params.size() != 1)
 			ReportError("Incorrect number of parameters");
 		else
-			vm->Load(false, false, params[0]);
+			vm->Load(false, params[0]);
 		consoleresult.ready = false;
 		consoleresult.threadwait = false;
 		return true;
@@ -424,7 +424,7 @@ bool VMConsole::ProcessCommand(const std::string &command, Ogre::StringVector &p
 	//start command
 	if (command == "start")
 	{
-		vm->Load(false, false, "Ground.bld");
+		vm->Load(false, "Ground.bld");
 		consoleresult.ready = false;
 		consoleresult.threadwait = false;
 		return true;

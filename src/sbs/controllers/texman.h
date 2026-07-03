@@ -1,7 +1,7 @@
 /*
 	Scalable Building Simulator - Texture Manager
 	The Skyscraper Project - Version 2.1
-	Copyright (C)2004-2025 Ryan Thoryk
+	Copyright (C)2004-2026 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
 	Contact - ryan@skyscrapersim.net
@@ -169,6 +169,11 @@ private:
 
 	//function caching
 	std::string prev_material;
+	int material_index;
+
+	Texture* FindTextureByAlias(const std::string &name);
+	Texture* FindTextureByMaterial(const std::string &material_name);
+	std::string StripInstancePrefix(const std::string &name);
 
 	//slideshow system
 	class Timer;

@@ -1,7 +1,7 @@
 /*
 	Scalable Building Simulator - PolyMesh Geometry Processor
 	The Skyscraper Project - Version 2.1
-	Copyright (C)2004-2025 Ryan Thoryk
+	Copyright (C)2004-2026 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
 	Contact - ryan@skyscrapersim.net
@@ -77,8 +77,8 @@ public:
 	int GetPolygonCount();
 	void ExtrudePolygon(PolyArray &polygon, Real thickness, PolygonSet &output_faces);
 	Vector2 GetExtents(PolyArray &varray, int coord, bool flip_z = false);
+	void Cut3D(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool cutfloors, int checkwallnumber = 0, bool reset_check = true);
 	void Cut(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool cutfloors, int checkwallnumber = 0, bool reset_check = true);
-	void CutOrig(Wall *wall, Vector3 start, Vector3 end, bool cutwalls, bool cutfloors, int checkwallnumber = 0, bool reset_check = true);
 	void GetDoorwayExtents(MeshObject *mesh, int checknumber, PolyArray &polygon);
 	Vector3 GetPolygonDirection(PolyArray &polygon);
 	Vector2 GetEndPoint(const Vector2 &StartPoint, Real angle, Real distance);

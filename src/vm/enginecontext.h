@@ -1,6 +1,6 @@
 /*
 	Skyscraper 2.1 - Engine Context
-	Copyright (C)2004-2025 Ryan Thoryk
+	Copyright (C)2004-2026 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
 	Contact - ryan@skyscrapersim.net
@@ -39,7 +39,6 @@ public:
 	bool NewEngine; //true if this is a new engine
 	unsigned long current_time, time_stat;
 	bool Paused;
-	bool IsSystem;
 	EngineType type;
 	bool was_reloaded;
 

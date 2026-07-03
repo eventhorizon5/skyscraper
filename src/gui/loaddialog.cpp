@@ -1,6 +1,6 @@
 /*
 	Skyscraper 2.1 - Load Building Dialog
-	Copyright (C)2003-2025 Ryan Thoryk
+	Copyright (C)2003-2026 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
 	Contact - ryan@skyscrapersim.net
@@ -288,7 +288,7 @@ void LoadDialog::On_bLoad_Click(wxCommandEvent& event)
 	vm->CutFloors = chkCutFloors->GetValue();
 
 	Vector3 rot (0, rotation, 0);
-	vm->Load(false, false, filename, parent_engine, position, rot, min, max);
+	vm->Load(false, filename, parent_engine, position, rot, min, max);
 
 	this->Close();
 }

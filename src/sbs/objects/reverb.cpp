@@ -1,7 +1,7 @@
 /*
 	Scalable Building Simulator - Reverb Object
 	The Skyscraper Project - Version 2.1
-	Copyright (C)2004-2025 Ryan Thoryk
+	Copyright (C)2004-2026 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
 	Contact - ryan@skyscrapersim.net
@@ -50,6 +50,10 @@ Reverb::Reverb(Object *parent, const std::string &name, std::string type, const 
 
 	//convert type to lowercase
 	SetCase(type, false);
+
+	//exit if no sound system available
+	if (!soundsys)
+		return;
 
 	//create reverb object
 

@@ -1,6 +1,6 @@
 /*
 	Skyscraper 2.1 - Main Screen
-	Copyright (C)2003-2025 Ryan Thoryk
+	Copyright (C)2003-2026 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
 	Contact - ryan@skyscrapersim.net
@@ -991,6 +991,15 @@ void MainScreen::EnableFreelook(bool value)
 	}
 	else
 		wxSetCursor(wxNullCursor);
+#endif
+}
+
+void MainScreen::ResetCursor()
+{
+#if defined(__WXMSW__)
+	SetCursor(wxNullCursor);
+#else
+	wxSetCursor(wxNullCursor);
 #endif
 }
 

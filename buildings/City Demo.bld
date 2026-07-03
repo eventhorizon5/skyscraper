@@ -14,7 +14,7 @@ AddGround Ground, Downtown, -158400, -158400, 158400, 158400, 0, 7920, 7920
 <Buildings>
     #load these buildings onto the map,
     #and specify their positions and rotations
-    Load Triton Center.bld, 0, 0, 0, 0
+    #Load Triton Center.bld, 0, 0, 0, 0
     Load Observation Tower.bld, -440.5, 0, 0, 0
     Load Glass Tower.bld, 0, 0, 871.5, 0
     Load Sears Tower.bld, 550, 0, 50, -90
@@ -68,6 +68,9 @@ AddGround Ground, Downtown, -158400, -158400, 158400, 158400, 0, 7920, 7920
     #Load Sears Tower.bld, 550, 0, 50, -90, -150, 0, -150, 150, 0, 150
     #Load Simple.bld, 0, 0, -630, 180, -75, 0, -75, 75, 0, 75
 <EndBuildings>
+
+#Now include the Triton Center building file, to use as the primary building
+<Include buildings/Triton Center.bld>
 
 #Override the camera's starting position for the demo
 <Globals>

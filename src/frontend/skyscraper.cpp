@@ -1,6 +1,6 @@
 /*
 	Skyscraper 2.1 - Simulation Frontend
-	Copyright (C)2003-2025 Ryan Thoryk
+	Copyright (C)2003-2026 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
 	Contact - ryan@skyscrapersim.net
@@ -416,7 +416,7 @@ bool Skyscraper::Loop()
 
 			window->SetClientSize(vm->GetHAL()->GetConfigInt(vm->GetHAL()->configfile, "Skyscraper.Frontend.Menu.Width", 800), vm->GetHAL()->GetConfigInt(vm->GetHAL()->configfile, "Skyscraper.Frontend.Menu.Height", 600));
 			window->Center();
-			window->SetCursor(wxNullCursor);
+			window->ResetCursor();
 #endif
 		}
 
@@ -445,7 +445,8 @@ bool Skyscraper::Loop()
 #endif
 		}
 
-		startscreen_loaded = true;
+		if (StartupRunning == true)
+			startscreen_loaded = true;
 
 		//have HAL render frame
 		return vm->GetHAL()->Render();
@@ -532,7 +533,7 @@ bool Skyscraper::Load(const std::string &filename, EngineContext *parent, const 
 
 	StopMenu();
 
-	bool result = vm->Load(false, true, filename, parent, position, rotation, area_min, area_max);
+	bool result = vm->Load(true, filename, parent, position, rotation, area_min, area_max);
 
 	if (result == false && vm->GetEngineCount() == 1)
 		UnloadToMenu();

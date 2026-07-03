@@ -1,7 +1,7 @@
 /*
 	Scalable Building Simulator - Dispatch Controller Object
 	The Skyscraper Project - Version 2.1
-	Copyright (C)2004-2025 Ryan Thoryk
+	Copyright (C)2004-2026 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
 	Contact - ryan@skyscrapersim.net
@@ -712,9 +712,10 @@ int DispatchController::FindClosestElevator(bool &busy, bool destination, int st
 		return -1;
 
 	//initialize values
-	int closest = 0;
 	int closest_busy = -1;
 	int closest_notbusy = -1;
+	int closest_busy_distance = 0;
+	int closest_notbusy_distance = 0;
 	bool check = false;
 	int errors = 0;
 
@@ -767,17 +768,14 @@ int DispatchController::FindClosestElevator(bool &busy, bool destination, int st
 					}
 				}
 
+				int distance = abs(car->GetFloor() - starting_floor);
+
 				//if elevator is closer than the previously checked one or we're starting the checks
-				if (abs(car->GetFloor() - starting_floor) < closest || check == false || closest_busy >= 0)
+				if (check == false || closest_notbusy < 0 || distance < closest_notbusy_distance ||
+					(closest_busy >= 0 && distance < closest_busy_distance))
 				{
 					//see if elevator is available for the call
 					ElevatorStatus result = elevator->AvailableForCall(destination, starting_floor, direction, true);
-
-					//if an elevator is not busy and available, reset closest_busy value
-					if (closest_busy >= 0 && result == STATUS_AVAILABLE)
-					{
-						closest_busy = -1;
-					}
 
 					if (result == STATUS_AVAILABLE || result == STATUS_BUSY) //available or busy
 					{
@@ -788,25 +786,29 @@ int DispatchController::FindClosestElevator(bool &busy, bool destination, int st
 						{
 							if (IsElevatorAssignedToOther(elevator->Number, destination_floor, 0) == true)
 							{
-								closest_busy = i;
+								if (closest_busy < 0 || distance < closest_busy_distance)
+								{
+									closest_busy_distance = distance;
+									closest_busy = i;
+								}
 								continue;
 							}
 						}
 
 						//mark as closest busy elevator
-						if (result == STATUS_BUSY)
+						if (result == STATUS_BUSY && (closest_busy < 0 || distance < closest_busy_distance))
 						{
 							if (sbs->Verbose && count > 1)
 								Report("Marking - closest so far as busy");
-							closest = abs(car->GetFloor() - starting_floor);
+							closest_busy_distance = distance;
 							closest_busy = i;
 						}
-						else
+						else if (result == STATUS_AVAILABLE && (closest_notbusy < 0 || distance < closest_notbusy_distance))
 						{
 							//mark as closest elevator
 							if (sbs->Verbose && count > 1)
 								Report("Marking - closest so far");
-							closest = abs(car->GetFloor() - starting_floor);
+							closest_notbusy_distance = distance;
 							closest_notbusy = i;
 						}
 						check = true;

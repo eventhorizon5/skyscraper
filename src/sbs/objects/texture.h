@@ -1,7 +1,7 @@
 /*
 	Scalable Building Simulator - Texture Object
 	The Skyscraper Project - Version 2.1
-	Copyright (C)2004-2025 Ryan Thoryk
+	Copyright (C)2004-2026 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
 	Contact - ryan@skyscrapersim.net
@@ -29,7 +29,7 @@ namespace SBS {
 class SBSIMPEXP Texture : public Object
 {
 public:
-	std::string material_name; //used if material is loaded instead of texture, as an alias
+	std::string material_name; //material lookup target, used for both script materials and unique internal materials
 	std::string filename;
 	Real widthmult;
 	Real heightmult;

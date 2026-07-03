@@ -1,6 +1,6 @@
 /*
 	Skyscraper 2.1 - Nanokernel
-	Copyright (C)2004-2025 Ryan Thoryk
+	Copyright (C)2004-2026 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
 	Contact - ryan@skyscrapersim.net
@@ -24,7 +24,7 @@
 #define VM_H
 
 #include <thread>
-#include <vector>
+#include "globals.h"
 
 //DLL Exporting
 #ifdef _WIN32
@@ -65,8 +65,6 @@ enum EngineType
 	ENGINETYPE_GENERIC,
 	ENGINETYPE_BUILDING,
 	ENGINETYPE_CITY,
-	ENGINETYPE_PLANET,
-	ENGINETYPE_SOLARSYSTEM
 };
 
 enum VMStatus
@@ -119,7 +117,7 @@ public:
 	bool StartEngine(EngineContext* engine);
 	::SBS::SBS* GetActiveSystem();
 	ScriptProcessor* GetActiveScriptProcessor();
-	bool Load(bool system, bool clear, const std::string &filename, EngineContext *parent = 0, const Vector3 &position = Vector3::ZERO, const Vector3 &rotation = Vector3::ZERO, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
+	bool Load(bool clear, const std::string &filename, EngineContext *parent = 0, const Vector3 &position = Vector3::ZERO, const Vector3 &rotation = Vector3::ZERO, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
 	void ShowPlatform();
 	wxWindow* GetParent();
 	bool UpdateProgress();
@@ -206,11 +204,8 @@ private:
 		Vector3 position;
 		Vector3 rotation;
 		Vector3 area_min, area_max;
-		bool system;
 	};
 	std::vector<DelayLoad> load_queue; //delay load queue
-	bool system_loaded; //true if system engines have started loaded
-	bool system_finished; //true if system engines are finished loading
 };
 
 }

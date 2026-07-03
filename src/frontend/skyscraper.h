@@ -1,6 +1,6 @@
 /*
 	Skyscraper 2.1 - Simulation Frontend
-	Copyright (C)2004-2025 Ryan Thoryk
+	Copyright (C)2004-2026 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
 	Contact - ryan@skyscrapersim.net
@@ -23,9 +23,10 @@
 #ifndef SKYSCRAPER_H
 #define SKYSCRAPER_H
 
+#include "globals.h"
+
 #ifndef USING_WX
 #include <filesystem>
-#include "Ogre.h"
 #include "OgreApplicationContext.h"
 #include "OgreInput.h"
 #include "OgreRTShaderSystem.h"

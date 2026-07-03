@@ -65,6 +65,7 @@
         <br>
         Example:</p>
       <p align="left"><font size="2" face="Courier New, Courier, mono">Set
+
           firstrun = true<br>
           &lt;Function runloop&gt;<br>
           &nbsp;&nbsp;&nbsp; if[%uptime% = 10 &amp; %firstrun% = true]
@@ -81,6 +82,7 @@
         with only 3 coordinates used. If specified in a floor section,
         the Y values are then relative to the floor base.<br>
         Syntax: <font size="2" face="Courier New, Courier, mono">AddTriangleWall
+
 
 
 
@@ -194,9 +196,11 @@ external,
 
 
 
+
           My Triangle, Brick, 0, 0, 0, 0, 10, 0, 0, 0, 10, 0, 0</font></p>
       <p align="left"><strong>b. AddWall</strong> - adds a textured wall<br>
         Syntax: <font size="2" face="Courier New, Courier, mono">AddWall
+
 
 
 
@@ -255,6 +259,7 @@ external,
           <em>z1</em>, <em>x2</em>, z2, <em>height1</em>, <em>height2</em>,
           <em>altitude1</em>, <em>altitude2</em>, <em>tw</em>, <em>th</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">AddWall
+
 
 
 
@@ -371,6 +376,7 @@ external,
 
 
 
+
           <em>destobject, name, texturename</em>, <em>thickness, x1</em>,
           <em>z1</em>, <em>x2</em>, <em>z2</em>, <em>altitude1</em>,
           <em>altitude2</em>, reverse_axis, texture_direction, <em>tw</em>,
@@ -381,6 +387,7 @@ external,
       <p align="left"><strong>d. AddGround</strong> - adds a tile-based
         ground<br>
         Syntax: <font size="2" face="Courier New, Courier, mono">AddGround
+
 
 
 
@@ -507,11 +514,13 @@ external,
 
 
 
+
           <em>destobject</em>, <em>name, texturename</em>, <em>x1</em>,
           <em>x2</em>, <em>z1</em>, <em>z2</em>, <em>height</em>, <em>voffset</em>,
           <em>tw</em>, <em>th, inside, outside, top, bottom </em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">CreateWallBox
 external,
+
 
 
 
@@ -632,6 +641,7 @@ external,
 
 
 
+
           <em>destobject</em>, <em>name, texturename</em>, <em>centerx</em>,
           <em>centerz</em>, <em>widthx</em>, <em>lengthz</em>, <em>height</em>,
           <em>voffset</em>, <em>tw</em>, <em>th</em></font><font
@@ -639,6 +649,7 @@ external,
             outside, top, bottom </em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">CreateWallBox2
 external,
+
 
 
 
@@ -766,6 +777,7 @@ external,
 
 
 
+
           <em>destobject, name, texturename[, RelativeY], x1, y1, z1,
             x2, y2, z2, x3, y3, z3, ..., tw, th</em></font><br>
         Example 1: <font size="2" face="Courier New, Courier, mono">AddCustomWall
@@ -824,10 +836,12 @@ external,
 
 
 
+
           My Wall, Brick, 0, 0, 0, 0, 10, 0, 10, 10, 0, 15, 5, 0, 10, 0,
           0, 0, 0</font><br>
         Example 2: <font size="2" face="Courier New, Courier, mono">AddCustomWall
 external,
+
 
 
 
@@ -943,10 +957,12 @@ external,
 
 
 
+
           <em>destobject, name, texturename, x1, z1, x2, z2, x3, z3,
             ..., altitude, tw, th</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">AddCustomFloor
 external,
+
 
 
 
@@ -1059,8 +1075,10 @@ external,
 
 
 
+
           <em>number, centerx, centerz, startfloor, endfloor</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">AddShaft
+
 
 
 
@@ -1179,8 +1197,10 @@ external,
 
 
 
+
           <em>number, centerx, centerz, startfloor, endfloor</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">CreateStairwell
+
 
 
 
@@ -1299,8 +1319,10 @@ external,
 
 
 
+
           = <em>direction</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">WallOrientation
+
 
 
 
@@ -1431,8 +1453,10 @@ external,
 
 
 
+
           = <em>direction</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">FloorOrientation
+
 
 
 
@@ -1554,9 +1578,11 @@ external,
 
 
 
+
           = <em>MainNegative, MainPositive, SideNegative, SidePositive,
             Top, Bottom</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">DrawWalls
+
 
 
 
@@ -1682,9 +1708,11 @@ external,
 
 
 
+
           <em>Flat, FlipX, FlipY, FlipZ, Rotate</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">SetPlanarMapping
 false,
+
 
 
 
@@ -1828,8 +1856,10 @@ false,
 
 
 
+
           <em>vertex1, u1, v1, vertex2, u2, v2, vertex3, u3, v3</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">SetTextureMapping
+
 
 
 
@@ -1964,6 +1994,7 @@ false,
 
 
 
+
           0, 0.25, 0.25, 1, 0.75, 0.25, 2, 0.75, 0.75</font></p>
       <p align="left">Here's an easier way to see the example above:</p>
       <p align="left"><font size="2" face="Courier New, Courier, mono">0
@@ -2035,10 +2066,12 @@ false,
 
 
 
+
           <em>v1x, v1y, v1z, u1, v1, v2x, v2y, v2z, u2, v2, v3x, v3y,
             v3z, u3, v3</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">SetTextureMapping2
 x0,
+
 
 
 
@@ -2164,6 +2197,7 @@ x0,
 
 
 
+
           y0, z0 -&gt; 0, 0<br>
           x1, y1, z1 -&gt; 1, 0<br>
           x2, y2, z2 -&gt; 1, 1</font></p>
@@ -2225,8 +2259,10 @@ x0,
 
 
 
+
           = <em>default</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">ResetTextureMapping
+
 
 
 
@@ -2350,6 +2386,7 @@ x0,
 
 
 
+
           = <em>value</em></font></p>
       <p align="left"><strong>s. ShaftCut</strong> - used in conjunction
         with a shaft object - performs a vertical box cut on all floor
@@ -2410,9 +2447,11 @@ x0,
 
 
 
+
           <em>number, startx, startz, endx, endz, start_voffset,
             end_voffset</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">ShaftCut
+
 
 
 
@@ -2542,6 +2581,7 @@ x0,
 
 
 
+
           1, -4, -3.5, 4, 3.5, 0, 5</font></p>
       <p align="left"><strong>u. Isect</strong> - the Isect function
         calculates the position that a line intersects with a certain
@@ -2603,9 +2643,11 @@ objectname,
 
 
 
+
             startx, starty, startz, endx, endy, endz</em>)</font><br>
         Example: <font size="2" face="Courier New, Courier, mono">isect(external,
 wall1,
+
 
 
 
@@ -2736,8 +2778,10 @@ wall1,
 
 
 
+
           = <em>AutoWidth, AutoHeight </em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">SetAutoSize
+
 
 
 
@@ -2868,11 +2912,13 @@ wall1,
 
 
 
+
           <em>MainNegativeTex, MainPositiveTex, SideNegativeTex,
             SidePositiveTex, TopTex, Bottom</em></font><font size="2"
           face="Courier New, Courier, mono"><em>Tex</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">TextureOverride
 Metal1,
+
 
 
 
@@ -2991,6 +3037,7 @@ Metal1,
 
 
 
+
           <em>ShaftNumber</em> = <em>range/list[, full]</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">ShaftShowFloors
 
@@ -3047,8 +3094,10 @@ Metal1,
 
 
 
+
           1 = 1 - 10</font><br>
         Example 2: <font size="2" face="Courier New, Courier, mono">ShaftShowFloors
+
 
 
 
@@ -3181,8 +3230,10 @@ Metal1,
 
 
 
+
           <em>ShaftNumber</em> = <em>range/list</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">ShaftShowInterfloors
+
 
 
 
@@ -3297,8 +3348,10 @@ Metal1,
 
 
 
+
           <em>ShaftNumber</em> = <em>range/list</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">ShaftShowOutside
+
 
 
 
@@ -3424,6 +3477,7 @@ Metal1,
 
 
 
+
           <em>ShaftNumber</em> = <em>value</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">ShowFullShaft
 
@@ -3480,8 +3534,10 @@ Metal1,
 
 
 
+
           1 = true</font></p>
       <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>ab.
+
 
 
 
@@ -3593,8 +3649,10 @@ Metal1,
 
 
 
+
           <em>StairwellNumber</em> = <em>range/list</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">StairsShowFloors
+
 
 
 
@@ -3711,6 +3769,7 @@ Metal1,
 
 
 
+
           ShowFullStairs</strong> - determines if an entire stairwell
         should be shown. If set to "true" or "inside", the full
         stairwell is shown only when the user is inside the stairwell.
@@ -3772,8 +3831,10 @@ Metal1,
 
 
 
+
           <em>StairwellNumber</em> = <em>value</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">ShowFullStairs
+
 
 
 
@@ -3889,9 +3950,11 @@ Metal1,
 
 
 
+
           <em>MainNegative, MainPositive, SideNegative, SidePositive,
             Top, Bottom</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">TextureFlip
+
 
 
 
@@ -3953,10 +4016,11 @@ Metal1,
         one. In the above example, the Main Positive and Main Negative
         sides of the object will have their textures flipped
         horizontally.</p>
-      <p align="left"><strong>ae. Cut</strong> - performs a manual box
-        cut on an object<br>
+      <p align="left"><strong>ae. Cut</strong> - performs a 2d manual
+        box cut on an object<br>
         Syntax: <font size="2" face="Courier New, Courier, mono">Cut <em>destobject,
 x1,
+
 
 
 
@@ -4018,7 +4082,22 @@ x1,
         values specify the start and end coordinates of the box cut. If
         <em>cutwalls</em> is true, the function will cut walls; if <em>cutfloors</em>
         is true, it'll cut floors.</p>
-      <p align="left"><strong>af. Mount</strong> - mounts a zip file in
+      <p align="left"><strong>af. Cut3d</strong> - performs a 3d manual
+        box cut on an object<br>
+        Syntax: <font size="2" face="Courier New, Courier, mono">Cut3d
+          <em>destobject,
+            x1, y1, z1, x2, y2, z2, cutwalls, cutfloors</em><br>
+        </font>Example: <font size="2" face="Courier New, Courier,
+          mono">Cut3d external, -5, -5, -5, 5, 5, 5, false, true</font></p>
+      <p align="left">The <em>x</em>, <em>y</em> and <em>z</em>
+        values specify the start and end coordinates of the box cut. If
+        <em>cutwalls</em> is true, the function will cut walls; if <em>cutfloors</em>
+        is true, it'll cut floors.<br>
+        The regular Cut command cuts most objects fine, but the 3D cut
+        is capable of cutting 3d objects such as spheres.<br>
+      </p>
+      <strong></strong>
+      <p align="left"><strong>ag. Mount</strong> - mounts a zip file in
         the data directory into a virtual path.<br>
         Syntax: <font size="2" face="Courier New, Courier, mono">Mount
           <em>filename</em>, <em>path</em></font><br>
@@ -4028,10 +4107,11 @@ x1,
         Skyscraper's data directory will be mounted as "mydirectory",
         and so a file such as test.jpg inside that zip file will appear
         as "mydirectory/test.jpg".</p>
-      <p align="left"><strong>ag. AddFloorAutoArea</strong> - defines an
+      <p align="left"><strong>ah. AddFloorAutoArea</strong> - defines an
         area that will automatically enable and disable floors when the
         user moves within it, similar to a stairwell<br>
         Syntax: <font size="2" face="Courier New, Courier, mono">AddFloorAutoArea
+
 
 
 
@@ -4143,10 +4223,12 @@ x1,
 
 
 
+
           0, -100, 100, 100, 100</font></p>
-      <p align="left"><strong>ah. AddSound</strong> - creates a
+      <p align="left"><strong>ai. AddSound</strong> - creates a
         user-defined sound at the specified position<br>
         Syntax: <font size="2" face="Courier New, Courier, mono">AddSound
+
 
 
 
@@ -4260,6 +4342,7 @@ x1,
 
 
 
+
           MySound, sound.wav, 10, 100, 5, true<br>
         </font>Example 2: <font size="2" face="Courier New, Courier,
           mono">AddSound MySound, ambient.ogg, 10, 100, 5, true, 1, 100,
@@ -4285,9 +4368,10 @@ x1,
         is the volume level of the sound outside (0.0 to 1.0, default
         1.0)<em>. Direction_x</em>, <em>direction_y</em> and <em>direction_z</em>
         specify the direction of the sound cone.</p>
-      <p align="left"><strong>ai. AddReverb</strong> - creates a reverb
+      <p align="left"><strong>aj. AddReverb</strong> - creates a reverb
         object at the specified position<br>
         Syntax: <font size="2" face="Courier New, Courier, mono">AddReverb
+
 
 
 
@@ -4361,6 +4445,7 @@ x1,
 
 
 
+
           MyReverb, ConcertHall, 0, 0, 0, 0, 100<br>
         </font><br>
         Reverb objects apply a certain type of reverb in a sphere.&nbsp;
@@ -4393,12 +4478,13 @@ x1,
           SewerPipe<br>
           Underwater<br>
         </i></p>
-      <p align="left"><strong>aj. GetWallExtents</strong> - the
+      <p align="left"><strong>ak. GetWallExtents</strong> - the
         GetWallExtents command returns the X and Z extents (minimum and
         maximum values) of a wall, at the specified altitude. The
         command will return the results in the MinX, MinZ, MaxX and MaxZ
         variables.<br>
         Syntax:<font size="2" face="Courier New, Courier, mono">&nbsp;GetWallExtents
+
 
 
 
@@ -4510,6 +4596,7 @@ external,
 
 
 
+
           wall1:front, 10</font></p>
       <p align="left">Then to use the values:<br>
         Example: <font size="2" face="Courier New, Courier, mono">Set 2
@@ -4530,7 +4617,8 @@ external,
         the results in the MinX, MinZ, MaxX and MaxZ variables, which
         can be used anywhere in the script - to get the minimum X
         result, you'd use %minx%.</p>
-      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>ak.
+      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>al.
+
 
 
 
@@ -4642,9 +4730,11 @@ external,
 
 
 
+
           <em>name, parent_object, command[, parameters</em></font><em>]<br>
         </em>Example:<font size="2" face="Courier New, Courier, mono">&nbsp;AddAction
 MyAction,
+
 
 
 
@@ -4756,6 +4846,7 @@ MySoundAction,
 
 
 
+
           Floor 2, PlaySound, Sound1, false</font><br>
       </p>
       <p style="text-align:left;margin-left:0;margin-right:auto;">This
@@ -4771,6 +4862,7 @@ MySoundAction,
         0:Call Panel 1", and can also be specified as a range of
         objects, such as "Floors 3 to 8".</p>
       <p style="text-align:left;margin-left:0;margin-right:auto;">Commands
+
 
 
 
@@ -4923,11 +5015,13 @@ example,
 
 
 
+
         to open elevator 1's shaft doors on floor 2:</p>
       <p style="text-align:left;margin-left:0;margin-right:auto;"><font
           size="2" face="Courier New, Courier, mono">AddAction
           MyDoorOpen, Elevator 1, OpenShaftDoor, 0, 2</font></p>
       <p style="text-align:left;margin-left:0;margin-right:auto;">PlaySound
+
 
 
 
@@ -5002,6 +5096,7 @@ example,
       <p style="text-align:left;margin-left:0;margin-right:auto;">Actions
 
 
+
         can be performed on the TextureManager system too.&nbsp; To
         change the filename of a loaded texture for example, do
         something like this:<br>
@@ -5013,7 +5108,8 @@ example,
           <br>
         </font></p>
       <p style="text-align:left;margin-left:0;margin-right:auto;"> </p>
-      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>al.
+      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>am.
+
 
 
 
@@ -5125,6 +5221,7 @@ example,
 
 
 
+
           <em>name, sound, direction, centerx, centerz, width, height,
             voffset, selection_position, action_name(s), texture_name(s)<br>
           </em></font>Example: <font size="2" face="Courier New,
@@ -5145,7 +5242,8 @@ example,
         (front, left, right, back). Leave the sound field blank for no
         sound to be played. <em>Selection_position</em> is the
         selection position to start at, which is normally 1.</p>
-      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>am.
+      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>an.
+
 
 
 
@@ -5258,6 +5356,7 @@ example,
 
 
 
+
           <em>name, sound, start_x, start_y, start_z, end_x, end_y,
             end_z, action_names(s)<br>
           </em></font>Example:<font size="2" face="Courier New, Courier,
@@ -5273,7 +5372,8 @@ example,
         <em>Y</em> and <em>Z</em> parameters specify the 3D box that
         defines the trigger area. Leave the <em>sound</em> field blank
         for no sound to be played.</p>
-      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>an.
+      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>ao.
+
 
 
 
@@ -5393,6 +5493,7 @@ filename,
 
 
 
+
             center, CenterX, CenterY, CenterZ, RotationX, RotationY,
             RotationZ, MaxRenderDistance, ScaleMultiplier,
             EnablePhysics, Restitution, Friction, Mass</em><em><br>
@@ -5400,6 +5501,7 @@ filename,
           Courier, mono">&nbsp;AddModel MyModel, cube.mesh, true, 0, 0,
           0, 0, 0, 0, 0, 1, false, 0, 0, 0</font><br>
         Example 2:<font size="2" face="Courier New, Courier, mono">&nbsp;AddModel
+
 
 
 
@@ -5511,6 +5613,7 @@ filename,
 
 
 
+
           MyModel, , false, 0, 0, 0, 0, 0, 0, 0, 1, true, 0.1, 0.5, 0.1</font></p>
       <p></p>
       <p align="left">The <em>Center</em> value is either true or
@@ -5528,7 +5631,8 @@ filename,
         provide a collider mesh), and <em>Restitution</em>, <em>Friction</em>
         and <em>Mass</em> determine the physical properties of the
         object.</p>
-      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>ao.
+      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>ap.
+
 
 
 
@@ -5643,6 +5747,7 @@ filename,
 
 
 
+
           <em>destobject, name</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">CreateWallObject
 
@@ -5699,8 +5804,10 @@ filename,
 
 
 
+
           landscape, mywall</font></p>
-      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>ap.
+      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>aq.
+
 
 
 
@@ -5819,6 +5926,7 @@ filename,
 
 
 
+
           <em>destobject, wallname, texturename, x1, y1, z1, x2, y2, z2,
             x3, y3, z3, ..., tw, th</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">AddPolygon
@@ -5877,8 +5985,10 @@ landscape,
 
 
 
+
           mywall, Brick, 0, 0, 0, 0, 10, 0, 10, 10, 0, 10, 0, 10, 0, 0</font></p>
-      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>aq.
+      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>ar.
+
 
 
 
@@ -5909,6 +6019,7 @@ landscape,
 
 
 
+
           side_texture, thickness, tw, th<em></em></font><br>
         Example: <br>
         <font size="2"><font face="Courier New, Courier, mono">DrawWalls
@@ -5918,7 +6029,8 @@ landscape,
           AddCustomWall...<br>
           EndExtrude<br>
         </font></p>
-      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>ar.
+      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>as.
+
 
 
 
@@ -5986,7 +6098,8 @@ landscape,
           size="2" face="Courier New, Courier, mono"> landscape, mywall,
           Brick, 0, 0, 0, 5, 16, 16, 1, 1, false<br>
         </font></p>
-      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>as.
+      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>at.
+
 
 
 
@@ -6054,7 +6167,8 @@ landscape,
         </font></p>
       <p style="text-align:left;margin-left:0;margin-right:auto;"><font
           size="2" face="Courier New, Courier, mono"> </font></p>
-      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>at.
+      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>au.
+
 
 
 
@@ -6118,6 +6232,7 @@ landscape,
           face="Courier New, Courier, mono"><em><font size="2"
               face="Courier New, Courier, mono"><em>x, y, z, </em></font>radius,
 
+
             height, slices, tw, th</em></font><font size="2"
           face="Courier New, Courier, mono"><em>, inside</em></font><br>
         Example: <font size="2"><font face="Courier New, Courier, mono">AddCylinder</font></font><font
@@ -6127,7 +6242,8 @@ landscape,
       <p style="text-align:left;margin-left:0;margin-right:auto;"><font
           size="2" face="Courier New, Courier, mono"> </font></p>
       <strong></strong>
-      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>au.
+      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>av.
+
 
 
 
@@ -6191,6 +6307,7 @@ landscape,
           face="Courier New, Courier, mono"><em><font size="2"
               face="Courier New, Courier, mono"><em>x, y, z, </em></font>radius,
 
+
             height, slices, tw, th</em></font><font size="2"
           face="Courier New, Courier, mono"><em>, inside</em></font><br>
         Example: <font size="2"><font face="Courier New, Courier, mono">AddCone</font></font><font
@@ -6200,7 +6317,8 @@ landscape,
       <p style="text-align:left;margin-left:0;margin-right:auto;"><font
           size="2" face="Courier New, Courier, mono"> </font></p>
       <strong></strong>
-      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>av.
+      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>aw.
+
 
 
 
@@ -6264,6 +6382,7 @@ landscape,
           face="Courier New, Courier, mono"><em><font size="2"
               face="Courier New, Courier, mono"><em>x, y, z, </em></font>radius,
 
+
             height, latSteps, lonSteps, tw, th</em></font><font size="2"
           face="Courier New, Courier, mono"><em>, inside</em></font><br>
         Example: <font size="2"><font face="Courier New, Courier, mono">AddCapsule</font></font><font
@@ -6273,7 +6392,8 @@ landscape,
       <p style="text-align:left;margin-left:0;margin-right:auto;"><font
           size="2" face="Courier New, Courier, mono"> </font></p>
       <strong></strong>
-      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>aw.
+      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>ax.
+
 
 
 
@@ -6337,6 +6457,7 @@ landscape,
           face="Courier New, Courier, mono"><em><font size="2"
               face="Courier New, Courier, mono"><em>x, y, z, </em></font>width,
 
+
             depth, x_segments, z_segments, tw, th</em></font><font
           size="2" face="Courier New, Courier, mono"><em>, inside</em></font><br>
         Example: <font size="2"><font face="Courier New, Courier, mono">AddPlane</font></font><font
@@ -6346,7 +6467,8 @@ landscape,
       <p style="text-align:left;margin-left:0;margin-right:auto;"><font
           size="2" face="Courier New, Courier, mono"> </font></p>
       <strong></strong>
-      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>ax.
+      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>ay.
+
 
 
 
@@ -6410,6 +6532,7 @@ landscape,
           face="Courier New, Courier, mono"><em><font size="2"
               face="Courier New, Courier, mono"><em>x, y, z, </em></font>radius,
 
+
             slices, tw, th</em></font><font size="2" face="Courier New,
           Courier, mono"><em>, inside</em></font><br>
         Example: <font size="2"><font face="Courier New, Courier, mono">AddCircle</font></font><font
@@ -6419,7 +6542,8 @@ landscape,
       <p style="text-align:left;margin-left:0;margin-right:auto;"><font
           size="2" face="Courier New, Courier, mono"> </font></p>
       <strong></strong>
-      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>ay.
+      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>az.
+
 
 
 
@@ -6484,6 +6608,7 @@ landscape,
               face="Courier New, Courier, mono"><em>x, y, z, </em></font>majorRadius,
 
 
+
             minorRadius, radialSteps, tubeSteps, tw, th</em></font><font
           size="2" face="Courier New, Courier, mono"><em>, inside</em></font><br>
         Example: <font size="2"><font face="Courier New, Courier, mono">AddTorus</font></font><font
@@ -6493,7 +6618,8 @@ landscape,
       <p style="text-align:left;margin-left:0;margin-right:auto;"><font
           size="2" face="Courier New, Courier, mono"> </font></p>
       <strong></strong>
-      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>az.
+      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>ba.
+
 
 
 
@@ -6557,6 +6683,7 @@ landscape,
           face="Courier New, Courier, mono"><em><font size="2"
               face="Courier New, Courier, mono"><em>x, y, z, </em></font>radius,
 
+
             latSteps, lonSteps, tw, th</em></font><font size="2"
           face="Courier New, Courier, mono"><em>, inside</em></font><br>
         Example: <font size="2"><font face="Courier New, Courier, mono">AddDome</font></font><font
@@ -6566,7 +6693,8 @@ landscape,
       <p style="text-align:left;margin-left:0;margin-right:auto;"><font
           size="2" face="Courier New, Courier, mono"> </font></p>
       <strong></strong>
-      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>ba.
+      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>bb.
+
 
 
 
@@ -6630,6 +6758,7 @@ landscape,
           face="Courier New, Courier, mono"><em><font size="2"
               face="Courier New, Courier, mono"><em>x, y, z, </em></font>width,
 
+
             depth, height, tw, th</em></font><font size="2"
           face="Courier New, Courier, mono"><em>, inside</em></font><br>
         Example: <font size="2"><font face="Courier New, Courier, mono">AddPyramid</font></font><font
@@ -6639,7 +6768,8 @@ landscape,
       <p style="text-align:left;margin-left:0;margin-right:auto;"><font
           size="2" face="Courier New, Courier, mono"> </font></p>
       <strong></strong>
-      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>bb.
+      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>bc.
+
 
 
 
@@ -6708,7 +6838,8 @@ landscape,
       <p style="text-align:left;margin-left:0;margin-right:auto;"><font
           size="2" face="Courier New, Courier, mono"> </font></p>
       <strong></strong>
-      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>bc.
+      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>bd.
+
 
 
 
@@ -6777,7 +6908,8 @@ landscape,
       <p style="text-align:left;margin-left:0;margin-right:auto;"><font
           size="2" face="Courier New, Courier, mono"> </font></p>
       <strong></strong>
-      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>bd.
+      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>be.
+
 
 
 
@@ -6849,7 +6981,8 @@ landscape,
       <p style="text-align:left;margin-left:0;margin-right:auto;"><font
           size="2" face="Courier New, Courier, mono"> </font></p>
       <strong></strong>
-      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>be.
+      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>bf.
+
 
 
 
@@ -6921,7 +7054,8 @@ landscape,
       <p style="text-align:left;margin-left:0;margin-right:auto;"><font
           size="2" face="Courier New, Courier, mono"> </font></p>
       <strong></strong>
-      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>bf.
+      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>bg.
+
 
 
 
@@ -6993,7 +7127,8 @@ landscape,
       <p style="text-align:left;margin-left:0;margin-right:auto;"><font
           size="2" face="Courier New, Courier, mono"> </font></p>
       <strong></strong>
-      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>bg.
+      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>bh.
+
 
 
 
@@ -7108,6 +7243,7 @@ landscape,
 
 
 
+
           <em>keyid</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">SetKey
 
@@ -7164,8 +7300,10 @@ landscape,
 
 
 
+
           1</font></p>
-      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>bh.
+      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>bi.
+
 
 
 
@@ -7278,8 +7416,10 @@ landscape,
 
 
 
+
           <em>locked</em>, <em>keyid</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">SetLock
+
 
 
 
@@ -7353,7 +7493,8 @@ landscape,
         needed to lock or unlock. To reset to the defaults, use 0 for
         the <em>locked</em> setting and 0 for <em>keyid</em>.<br>
       </p>
-      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>bi.
+      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>bj.
+
 
 
 
@@ -7416,7 +7557,8 @@ landscape,
         Example: <font size="2" face="Courier New, Courier, mono">Print
           1+1</font></p>
       <p style="text-align:left;margin-left:0;margin-right:auto;"></p>
-      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>bj.
+      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>bk.
+
 
 
 
@@ -7530,9 +7672,11 @@ landscape,
 
 
 
+
           12</font></p>
       <p style="text-align:left;margin-left:0;margin-right:auto;"></p>
-      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>bk.
+      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>bl.
+
 
 
 
@@ -7644,6 +7788,7 @@ landscape,
 
 
 
+
           <em>name</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">RunAction
 
@@ -7700,9 +7845,11 @@ landscape,
 
 
 
+
           myaction</font></p>
       <p style="text-align:left;margin-left:0;margin-right:auto;"></p>
-      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>bl.
+      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>bm.
+
 
 
 
@@ -7814,9 +7961,11 @@ landscape,
 
 
 
+
           <em>name, object</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">AddActionParent
 myaction,
+
 
 
 
@@ -7928,9 +8077,11 @@ myaction,
 
 
 
+
           Floors 2 to 5</font></p>
       <p style="text-align:left;margin-left:0;margin-right:auto;"></p>
-      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>bm.
+      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>bn.
+
 
 
 
@@ -8044,9 +8195,11 @@ myaction,
 
 
 
+
           <em>name, object</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">RemoveActionParent
 myaction,
+
 
 
 
@@ -8158,9 +8311,11 @@ myaction,
 
 
 
+
           Floors 2 to 5</font></p>
       <p style="text-align:left;margin-left:0;margin-right:auto;"></p>
-      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>bn.
+      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>bo.
+
 
 
 
@@ -8272,6 +8427,7 @@ myaction,
 
 
 
+
           <em>floor</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">GotoFloor
 
@@ -8328,13 +8484,15 @@ myaction,
 
 
 
+
           3</font></p>
       <p style="text-align:left;margin-left:0;margin-right:auto;"></p>
-      <p align="left"><strong>bo. EndPoint</strong> - the EndPoint
+      <p align="left"><strong>bp. EndPoint</strong> - the EndPoint
         function calculates endpoint coordinates given a starting point,
         direction (angle in degrees), and distance.<br>
         Syntax:<font size="2" face="Courier New, Courier, mono">&nbsp;endpoint(<em>startx,
 starty,
+
 
 
 
@@ -8445,11 +8603,13 @@ starty,
 
 
 
+
           150, 180, 20)</font><br>
         Result: <font size="2" face="Courier New, Courier, mono">-150,
           130</font></p>
       <p style="text-align:left;margin-left:0;margin-right:auto;"></p>
-      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>bp.
+      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>bq.
+
 
 
 
@@ -8561,6 +8721,7 @@ starty,
 
 
 
+
           <em>[number]</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">FloorInfo
 
@@ -8617,9 +8778,11 @@ starty,
 
 
 
+
           3</font></p>
       <p style="text-align:left;margin-left:0;margin-right:auto;"></p>
-      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>bq.
+      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>br.
+
 
 
 
@@ -8678,7 +8841,8 @@ starty,
         (materials) and filenames<br>
       </p>
       <p style="text-align:left;margin-left:0;margin-right:auto;"></p>
-      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>br.
+      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>bs.
+
 
 
 
@@ -8737,7 +8901,8 @@ starty,
         visible by the camera<br>
       </p>
       <p style="text-align:left;margin-left:0;margin-right:auto;"></p>
-      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>bs.
+      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>bt.
+
 
 
 
@@ -8797,7 +8962,8 @@ starty,
         for each one<br>
       </p>
       <p style="text-align:left;margin-left:0;margin-right:auto;"></p>
-      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>bt.
+      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>bu.
+
 
 
 
@@ -8857,7 +9023,8 @@ starty,
         playing sound objects<br>
       </p>
       <p style="text-align:left;margin-left:0;margin-right:auto;"></p>
-      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>bu.
+      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>bv.
+
 
 
 
@@ -8969,6 +9136,7 @@ starty,
 
 
 
+
           <em>X, Y, Z</em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">Teleport
 
@@ -9025,9 +9193,11 @@ starty,
 
 
 
+
           3, 5, 10<br>
         </font></p>
-      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>bv.
+      <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>bw.
+
 
 
           SetTexture</strong> - sets the texture filename of the given
@@ -9038,9 +9208,11 @@ starty,
         Syntax: <font size="2"><font face="Courier New, Courier, mono">SetTexture
 
 
+
             name, filename</font></font><font size="2" face="Courier
           New, Courier, mono"><em></em></font><br>
         Example: <font size="2" face="Courier New, Courier, mono">SetTexture
+
 
 
           Brick, data/cutston.jpg<br>

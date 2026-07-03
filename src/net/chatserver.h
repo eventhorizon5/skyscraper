@@ -1,6 +1,6 @@
 /*
 	Skyscraper 2.1 - Chat Server
-	Copyright (C)2025 Ryan Thoryk
+	Copyright (C)2025-2026 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
 	Contact - ryan@skyscrapersim.net

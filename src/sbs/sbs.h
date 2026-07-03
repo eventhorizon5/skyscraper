@@ -1,7 +1,7 @@
 /*
 	Scalable Building Simulator - Core
 	The Skyscraper Project - Version 2.1
-	Copyright (C)2004-2025 Ryan Thoryk
+	Copyright (C)2004-2026 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
 	Contact - ryan@skyscrapersim.net
@@ -345,8 +345,8 @@ public:
 	bool IsInside();
 	bool GetBounds(Vector3 &min, Vector3 &max);
 	bool IsInside(const Vector3 &position);
-	void CutOutsideBoundaries(bool landscape = true, bool buildings = true, bool external = false, bool floors = false);
-	void CutInsideBoundaries(const Vector3 &min, const Vector3 &max, bool landscape = true, bool buildings = true, bool external = false, bool floors = false);
+	void CutOutsideBoundaries(bool is_3d, bool landscape = true, bool buildings = true, bool external = false, bool floors = false);
+	void CutInsideBoundaries(bool is_3d, const Vector3 &min, const Vector3 &max, bool landscape = true, bool buildings = true, bool external = false, bool floors = false);
 	void SetBounds(const Vector3 &area_min, const Vector3 &area_max);
 	bool HasBounds();
 	void ResetState();

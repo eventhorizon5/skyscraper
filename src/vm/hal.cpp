@@ -1,6 +1,6 @@
 /*
 	Skyscraper 2.1 - Hardware Abstraction Layer
-	Copyright (C)2004-2025 Ryan Thoryk
+	Copyright (C)2004-2026 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
 	Contact - ryan@skyscrapersim.net
@@ -965,7 +965,17 @@ Ogre::RenderWindow* HAL::CreateRenderWindow(const std::string &name, int width, 
 	}
 	else
 #endif
-		mRenderWindow = Ogre::Root::getSingleton().createRenderWindow(name, width, height, false, &params);
+	{
+		try
+		{
+			mRenderWindow = Ogre::Root::getSingleton().createRenderWindow(name, width, height, false, &params);
+		}
+		catch (Ogre::Exception &e)
+		{
+			ReportFatalError("Error creating render window:\n" + e.getDescription());
+			return 0;
+		}
+	}
 
 	mRenderWindow->setActive(true);
 	mRenderWindow->windowMovedOrResized();

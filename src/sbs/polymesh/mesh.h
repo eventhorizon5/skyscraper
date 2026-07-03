@@ -1,7 +1,7 @@
 /*
 	Scalable Building Simulator - Mesh Object
 	The Skyscraper Project - Version 2.1
-	Copyright (C)2004-2025 Ryan Thoryk
+	Copyright (C)2004-2026 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
 	Contact - ryan@skyscrapersim.net
@@ -68,8 +68,8 @@ public:
 	bool IsVisible(Ogre::Camera *camera);
 	bool IsPhysical();
 	Vector3 GetOffset();
-	void Cut(Vector3 start, Vector3 end, bool cutwalls, bool cutfloors, int checkwallnumber = 0, bool reset_check = true);
-	void CutOutsideBounds(Vector3 start, Vector3 end, bool cutwalls, bool cutfloors);
+	void Cut(bool is_3d, Vector3 start, Vector3 end, bool cutwalls, bool cutfloors, int checkwallnumber = 0, bool reset_check = true);
+	void CutOutsideBounds(bool is_3d, Vector3 start, Vector3 end, bool cutwalls, bool cutfloors);
 	bool UsingDynamicBuffers();
 	void GetBounds();
 	void ChangeHeight(Real newheight);

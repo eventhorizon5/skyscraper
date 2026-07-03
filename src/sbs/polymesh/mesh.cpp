@@ -1,7 +1,7 @@
 /*
 	Scalable Building Simulator - Mesh Object
 	The Skyscraper Project - Version 2.1
-	Copyright (C)2004-2025 Ryan Thoryk
+	Copyright (C)2004-2026 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
 	Contact - ryan@skyscrapersim.net
@@ -481,7 +481,7 @@ Vector3 MeshObject::GetOffset()
 	return sbs->ToLocal(offset);
 }
 
-void MeshObject::Cut(Vector3 start, Vector3 end, bool cutwalls, bool cutfloors, int checkwallnumber, bool reset_check)
+void MeshObject::Cut(bool is_3d, Vector3 start, Vector3 end, bool cutwalls, bool cutfloors, int checkwallnumber, bool reset_check)
 {
 	//cut all walls in this mesh object
 
@@ -490,11 +490,14 @@ void MeshObject::Cut(Vector3 start, Vector3 end, bool cutwalls, bool cutfloors, 
 		if (!Walls[i])
 			continue;
 
-		sbs->GetPolyMesh()->Cut(Walls[i], start, end, cutwalls, cutfloors, checkwallnumber, reset_check);
+		if (is_3d == false)
+			sbs->GetPolyMesh()->Cut(Walls[i], start, end, cutwalls, cutfloors, checkwallnumber, reset_check);
+		else
+			sbs->GetPolyMesh()->Cut3D(Walls[i], start, end, cutwalls, cutfloors, checkwallnumber, reset_check);
 	}
 }
 
-void MeshObject::CutOutsideBounds(Vector3 start, Vector3 end, bool cutwalls, bool cutfloors)
+void MeshObject::CutOutsideBounds(bool is_3d, Vector3 start, Vector3 end, bool cutwalls, bool cutfloors)
 {
 	Real limit = 1000000;
 
@@ -507,10 +510,10 @@ void MeshObject::CutOutsideBounds(Vector3 start, Vector3 end, bool cutwalls, boo
 	Vector3 back_min (-limit, -limit, end.z);
 	Vector3 back_max (limit, limit, limit);
 
-	Cut(left_min, left_max, cutwalls, cutfloors);
-	Cut(right_min, right_max, cutwalls, cutfloors);
-	Cut(front_min, front_max, cutwalls, cutfloors);
-	Cut(back_min, back_max, cutwalls, cutfloors);
+	Cut(is_3d, left_min, left_max, cutwalls, cutfloors);
+	Cut(is_3d, right_min, right_max, cutwalls, cutfloors);
+	Cut(is_3d, front_min, front_max, cutwalls, cutfloors);
+	Cut(is_3d, back_min, back_max, cutwalls, cutfloors);
 }
 
 bool MeshObject::LoadFromFile(const std::string &filename)

@@ -1,7 +1,7 @@
 /*
 	Scalable Building Simulator - Escalator Object
 	The Skyscraper Project - Version 2.1
-	Copyright (C)2004-2025 Ryan Thoryk
+	Copyright (C)2004-2026 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
 	Contact - ryan@skyscrapersim.net
@@ -377,7 +377,7 @@ void Escalator::CreateSteps(const std::string &riser_texture, const std::string 
 
 void Escalator::MoveSteps()
 {
-	if (GetPosition().distance(sbs->camera->GetPosition()) > 100)
+	if (start.distance(sbs->camera->GetPosition()) > 100 && end.distance(sbs->camera->GetPosition()) > 100)
 		return;
 
 	for (size_t i = 0; i < Steps.size(); i++)

@@ -49,7 +49,7 @@ BEGIN
             VALUE "FileDescription", "Virtual Manager\0"
             VALUE "FileVersion", "2.1.0.0\0"
             VALUE "InternalName", "VM\0"
-            VALUE "LegalCopyright", "©2005-2025 Ryan Thoryk, released under the GPL\0"
+            VALUE "LegalCopyright", "©2005-2026 Ryan Thoryk, released under the GPL\0"
             VALUE "OriginalFilename", "VM.dll\0"
             VALUE "ProductName", "Virtual Manager\0"
             VALUE "ProductVersion", "2.1.0.0\0"

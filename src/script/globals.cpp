@@ -1,6 +1,6 @@
 /*
 	Skyscraper 2.1 - Script Processor - Globals Section
-	Copyright (C)2003-2025 Ryan Thoryk
+	Copyright (C)2003-2026 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
 	Contact - ryan@skyscrapersim.net
@@ -307,10 +307,6 @@ int ScriptProcessor::GlobalsSection::Run(std::string &LineData)
 			engine->type = ENGINETYPE_BUILDING;
 		else if (check == "city")
 			engine->type = ENGINETYPE_CITY;
-		else if (check == "planet")
-			engine->type = ENGINETYPE_PLANET;
-		else if (check == "solarsystem")
-			engine->type = ENGINETYPE_SOLARSYSTEM;
 		return sNextLine;
 	}
 

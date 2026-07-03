@@ -1,7 +1,7 @@
 /*
 	Scalable Building Simulator - Camera Texture Object
 	The Skyscraper Project - Version 2.1
-	Copyright (C)2004-2025 Ryan Thoryk
+	Copyright (C)2004-2026 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
 	Contact - ryan@skyscrapersim.net
@@ -109,7 +109,7 @@ CameraTexture::CameraTexture(Object *parent, const std::string &name, int qualit
 		material->setLightingEnabled(false);
 
 		//add texture multipliers
-		sbs->GetTextureManager()->RegisterTexture(name, "", "", 1.0f, 1.0f, false, false, texture->getSize(), material->getSize());
+		sbs->GetTextureManager()->RegisterTexture(name, name, "", 1.0f, 1.0f, false, false, texture->getSize(), material->getSize());
 
 		//register with system
 		sbs->RegisterCameraTexture(this);

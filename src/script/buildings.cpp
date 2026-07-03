@@ -1,6 +1,6 @@
 /*
 	Skyscraper 2.1 - Script Processor - Buildings Section
-	Copyright (C)2003-2025 Ryan Thoryk
+	Copyright (C)2003-2026 Ryan Thoryk
 	https://www.skyscrapersim.net
 	https://sourceforge.net/projects/skyscraper/
 	Contact - ryan@skyscrapersim.net
@@ -150,7 +150,7 @@ int ScriptProcessor::BuildingsSection::Run(std::string &LineData)
 		}
 
 		Vector3 rot (0, rotation, 0);
-		bool result = engine->GetVM()->Load(engine->IsSystem, false, tempdata[0], engine, position, rot, min, max);
+		bool result = engine->GetVM()->Load(false, tempdata[0], engine, position, rot, min, max);
 
 		return sNextLine;
 	}
