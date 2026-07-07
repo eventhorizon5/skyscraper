@@ -46,7 +46,7 @@ public:
 	void StoreCommand(SBS::Object *object);
 	int MathFunctions(std::string &LineData);
 	::SBS::MeshObject* GetMeshObject(std::string name);
-	bool GetElevatorCar(std::string &value, int floor, int &elevator, int &car);
+	int GetElevatorCar(std::string &value, int floor, int &elevator, int &car);
 	void GetDirectionStrings(int direction, std::string &face_direction, std::string &open_direction);
 
 protected:

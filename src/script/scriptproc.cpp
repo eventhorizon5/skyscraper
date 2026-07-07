@@ -1315,10 +1315,7 @@ int ScriptProcessor::ProcessSections()
 		int endloc = LineData.find(">");
 
 		if (endloc == -1)
-		{
-			ScriptError("Syntax error");
-			return sError;
-		}
+			return ScriptError("Syntax error");
 
 		std::string includefile = LineData.substr(9, endloc - 9);
 		TrimString(includefile);
@@ -1433,7 +1430,6 @@ int ScriptProcessor::ProcessSections()
 		{
 			ScriptError("Syntax error");
 			return sError;
-
 		}
 		//get low and high range markers
 		std::string str1 = LineData.substr(8, loc - 9);
@@ -1829,10 +1825,8 @@ int ScriptProcessor::ProcessFloorObjects()
 		int loc1 = LineData.find("(", exists);
 		int loc2 = LineData.find(")", exists);
 		if (loc2 < 0)
-		{
-			ScriptError("Syntax error");
-			return sError;
-		}
+			return ScriptError("Syntax error");
+
 		if (config->SectionNum == SECTION_FLOOR && getfloordata == false)
 		{
 			//process floor-specific variables if in a floor section
@@ -1846,15 +1840,10 @@ int ScriptProcessor::ProcessFloorObjects()
 
 		int floor = 0;
 		if (!IsNumeric(tempdata, floor))
-		{
-			ScriptError("Invalid floor " + tempdata);
-			return sError;
-		}
+			return ScriptError("Invalid floor " + tempdata);
+
 		if (Simcore->IsValidFloor(floor) == false)
-		{
-			ScriptError("Invalid floor " + tempdata);
-			return sError;
-		}
+			return ScriptError("Invalid floor " + tempdata);
 
 		//fullheight parameter
 		std::string buffer = ToString(floor);
