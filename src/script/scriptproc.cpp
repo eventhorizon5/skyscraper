@@ -552,15 +552,22 @@ int ScriptProcessor::ScriptError(std::string message, bool warning)
 
 	engine->ReportError(error);
 
+	bool cancel = false;
+
 	//show error dialog
 	if (warning == false)
 	{
 #ifdef USING_WX
-		wxMessageDialog dialog (0, error, "Skyscraper", wxOK | wxICON_ERROR);
-		dialog.ShowModal();
+		wxMessageDialog dialog (0, error, "Skyscraper", wxOK | wxCANCEL | wxICON_ERROR);
+
+		if (dialog.ShowModal() == wxID_CANCEL)
+			cancel = true;
 #endif
 	}
-	return sError;
+
+	if (cancel == true)
+		return sError;
+	return sNextLine;
 }
 
 void ScriptProcessor::GetLineInformation(bool CheckFunctionCall, int &LineNumber, std::string &FunctionName, int &FunctionLine, bool &IsInclude, std::string &IncludeFile, bool &IsIncludeFunction, std::string &IncludeFunctionFile)
