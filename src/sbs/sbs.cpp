@@ -2042,7 +2042,8 @@ void SBS::ShowColliders(bool value)
 	{
 		if (mWorld)
 			mWorld->setShowDebugShapes(value);
-		camera->ShowDebugShape(value);
+		if (camera)
+			camera->ShowDebugShape(value);
 	}
 	catch (Ogre::Exception &e)
 	{
