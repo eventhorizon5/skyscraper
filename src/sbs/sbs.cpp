@@ -4777,4 +4777,15 @@ Vector3 SBS::GetCenter()
 	return area_trigger->GetBounds().getCenter();
 }
 
+unsigned int SBS::GetTimeMS()
+{
+	//get current time in milliseconds
+
+	return static_cast<unsigned int>(
+		std::chrono::duration_cast<std::chrono::milliseconds>(
+			std::chrono::steady_clock::now().time_since_epoch()
+		).count()
+	);
+}
+
 }

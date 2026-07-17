@@ -418,6 +418,7 @@ public:
 	int GetTextureCount();
 	Trigger* GetAreaTrigger();
 	Vector3 GetCenter();
+	unsigned int GetTimeMS();
 
 	//Meshes
 	MeshObject* Buildings;
