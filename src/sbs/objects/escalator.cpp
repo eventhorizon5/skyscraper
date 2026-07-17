@@ -82,8 +82,8 @@ Escalator::Escalator(Object *parent, const std::string &name, int run, Real spee
 	RandomFrequency = sbs->GetConfigFloat("Skyscraper.SBS.Escalator.RandomFrequency", 5);
 
 	//initialize random number generators
-	rnd_time = new RandomGen((unsigned int)(time(0) + GetNumber()));
-	rnd_type = new RandomGen((unsigned int)(time(0) + GetNumber() + 1));
+	rnd_time = new RandomGen((unsigned int)(sbs->GetTimeMS() + GetNumber()));
+	rnd_type = new RandomGen((unsigned int)(sbs->GetTimeMS() + GetNumber() + 1));
 
 	//create sound object
 	sound = new Sound(this, name, true);

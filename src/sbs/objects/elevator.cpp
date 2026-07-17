@@ -191,8 +191,8 @@ Elevator::Elevator(Object *parent, int number) : Object(parent)
 	route_controller = new RouteController(this);
 
 	//initialize random number generators
-	rnd_time = new RandomGen((unsigned int)(time(0) + GetNumber()));
-	rnd_type = new RandomGen((unsigned int)(time(0) + GetNumber() + 1));
+	rnd_time = new RandomGen((unsigned int)(sbs->GetTimeMS() + GetNumber()));
+	rnd_type = new RandomGen((unsigned int)(sbs->GetTimeMS() + GetNumber() + 1));
 
 	//create timers
 	parking_timer = new Timer("Parking Timer", this, 0);

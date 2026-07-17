@@ -395,6 +395,7 @@ public:
 	Vector3 GetCenter();
 	Shape* CreateShape(Wall *wall);
 	void MergeBounds(Ogre::AxisAlignedBox &box);
+	unsigned int GetTimeMS();
 
 	//Meshes
 	MeshObject* Buildings;
