@@ -43,13 +43,13 @@ namespace Skyscraper {
 
 unsigned int GetTimeMS()
 {
-    using namespace std::chrono;
+	using namespace std::chrono;
 
-    return static_cast<unsigned int>(
-        std::chrono::duration_cast<std::chrono::milliseconds>(
-            std::chrono::steady_clock::now().time_since_epoch()
-        ).count()
-    );
+	return static_cast<unsigned int>(
+		std::chrono::duration_cast<std::chrono::milliseconds>(
+			std::chrono::steady_clock::now().time_since_epoch()
+		).count()
+	);
 }
 
 ScriptProcessor::Section::Section(ScriptProcessor *parent)
