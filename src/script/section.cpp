@@ -20,6 +20,8 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+#include <chrono>
+
 #include "globals.h"
 #include "sbs.h"
 #include "vm.h"
@@ -38,6 +40,17 @@
 using namespace SBS;
 
 namespace Skyscraper {
+
+unsigned int GetTimeMS()
+{
+    using namespace std::chrono;
+
+    return static_cast<unsigned int>(
+        std::chrono::duration_cast<std::chrono::milliseconds>(
+            std::chrono::steady_clock::now().time_since_epoch()
+        ).count()
+    );
+}
 
 ScriptProcessor::Section::Section(ScriptProcessor *parent)
 {
@@ -973,7 +986,7 @@ int ScriptProcessor::Section::MathFunctions(std::string &LineData)
 		if (value <= 0)
 			return ScriptError("Invalid value: " + tempdata);
 
-		RandomGen rnd(time(0));
+		RandomGen rnd(GetTimeMS());
 		result = rnd.Get(value);
 		LineData = LineData.substr(0, start) + ToString(result) + LineData.substr(last + 1);
 	}
