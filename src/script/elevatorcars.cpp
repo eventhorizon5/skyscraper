@@ -71,14 +71,20 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 	}
 
 	if (!elev)
+	{
+		ScriptError("Invalid elevator");
 		return sError;
+	}
 
 	//create car if not created already
 	if (!car)
 		car = elev->AddCar();
 
 	if (!car)
+	{
+		ScriptError("Invalid elevator car");
 		return sError;
+	}
 
 	//replace variables with actual values
 	if (config->SectionNum == SECTION_ELEVATORCAR) //only run if not being called from elevator function

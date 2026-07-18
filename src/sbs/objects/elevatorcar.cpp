@@ -2792,10 +2792,14 @@ bool ElevatorCar::PlayFloorBeep()
 	//change the asterisk into the current floor number
 	ReplaceAll(newsound, "*", ToString(GetFloor()));
 	TrimString(newsound);
-	floorbeep->Stop();
-	floorbeep->Load(newsound);
-	floorbeep->SetLoopState(false);
-	floorbeep->Play();
+
+	if (floorbeep)
+	{
+		floorbeep->Stop();
+		floorbeep->Load(newsound);
+		floorbeep->SetLoopState(false);
+		floorbeep->Play();
+	}
 	return true;
 }
 
@@ -2817,7 +2821,8 @@ bool ElevatorCar::PlayFloorSound()
 	//change the asterisk into the current floor number
 	ReplaceAll(newsound, "*", ToString(parent->GotoFloor));
 	TrimString(newsound);
-	announcesnd->PlayQueued(newsound, false, false);
+	if (announcesnd)
+		announcesnd->PlayQueued(newsound, false, false);
 	return true;
 }
 
@@ -2921,13 +2926,17 @@ bool ElevatorCar::PlayMessageSound(bool type)
 	//change the asterisk into the current floor number
 	ReplaceAll(newsound, "*", ToString(GetFloor()));
 	TrimString(newsound);
-	announcesnd->PlayQueued(newsound, false, false);
+	if (announcesnd)
+		announcesnd->PlayQueued(newsound, false, false);
 	return true;
 }
 
 void ElevatorCar::PlayStartingSounds()
 {
 	//play car starting sounds
+
+	if (!carsound)
+		return;
 
 	carsound->Stop();
 	if (parent->Direction == 1 && UpStartSound.empty() == false && UpStartSound != "")
@@ -2990,6 +2999,9 @@ void ElevatorCar::PlayStoppingSounds(bool emergency)
 		}
 	}
 
+	if (!carsound)
+		return;
+
 	carsound->Stop();
 
 	if (play == true)
@@ -3016,6 +3028,9 @@ void ElevatorCar::PlayMovingSounds()
 {
 	//play car movement sounds
 
+	if (!carsound)
+		return;
+
 	if (carsound->IsPlaying() == false)
 	{
 		if (parent->Direction == 1 && UpMoveSound.empty() == false && UpMoveSound != "")
@@ -3041,6 +3056,12 @@ void ElevatorCar::PlayMovingSounds()
 
 Real ElevatorCar::SetHeight()
 {
+	if (Created == false)
+	{
+		ReportError("Car not created yet");
+		return 0.0;
+	}
+
 	//make sure height value is set
 	if (HeightSet == false)
 	{
@@ -3164,7 +3185,8 @@ void ElevatorCar::StopCarSound()
 {
 	//stop car sound
 
-	carsound->Stop();
+	if (carsound)
+		carsound->Stop();
 }
 
 int ElevatorCar::GetFloor()
@@ -3605,7 +3627,8 @@ bool ElevatorCar::Input(const std::string& text)
 	int MinCount = std::count(InputCache.begin(), InputCache.end(), '-');
 	if ((StarCount > 1 || MinCount > 1) && InputCache.length() > 1)
 	{
-		keypad_timer->Stop();
+		if (keypad_timer)
+			keypad_timer->Stop();
 		InputCache = "";
 		KeypadError(1);
 		return true;
@@ -3614,8 +3637,11 @@ bool ElevatorCar::Input(const std::string& text)
 		UpdateKeypadIndicator(InputCache, false);
 
 		//start timeout timer
-		keypad_timer->Stop();
-		keypad_timer->Start(TimerDelay * 1000.0f, true);
+		if (keypad_timer)
+		{
+			keypad_timer->Stop();
+			keypad_timer->Start(TimerDelay * 1000.0f, true);
+		}
 
 		return true;
 	}
@@ -3635,8 +3661,11 @@ bool ElevatorCar::Input(const std::string& text)
 	}*/
 
 	//start timeout timer
-	keypad_timer->Stop();
-	keypad_timer->Start(TimerDelay * 1000.0f, true);
+	if (keypad_timer)
+	{
+		keypad_timer->Stop();
+		keypad_timer->Start(TimerDelay * 1000.0f, true);
+	}
 
 	return true;
 }
@@ -3705,7 +3734,8 @@ bool ElevatorCar::KeypadEnter()
 {
 	//keypad enter key
 
-	keypad_timer->Stop();
+	if (keypad_timer)
+		keypad_timer->Stop();
 	ProcessCache();
 	return true;
 }
@@ -3714,7 +3744,8 @@ bool ElevatorCar::KeypadClear()
 {
 	//keypad cancel key
 
-	keypad_timer->Stop();
+	if (keypad_timer)
+		keypad_timer->Stop();
 	InputCache = "";
 
 	//update indicator display

@@ -2042,7 +2042,8 @@ void SBS::ShowColliders(bool value)
 	{
 		if (mWorld)
 			mWorld->setShowDebugShapes(value);
-		camera->ShowDebugShape(value);
+		if (camera)
+			camera->ShowDebugShape(value);
 	}
 	catch (Ogre::Exception &e)
 	{
@@ -3365,6 +3366,17 @@ void SBS::MergeBounds(Ogre::AxisAlignedBox &box)
 	else
 		bounds = box;
 	bounds_set = true;
+}
+
+unsigned int SBS::GetTimeMS()
+{
+	//get current time in milliseconds
+
+	return static_cast<unsigned int>(
+		std::chrono::duration_cast<std::chrono::milliseconds>(
+			std::chrono::steady_clock::now().time_since_epoch()
+		).count()
+	);
 }
 
 }
