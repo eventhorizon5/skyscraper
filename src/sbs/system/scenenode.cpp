@@ -25,7 +25,6 @@
 #include <OgreSceneNode.h>
 #include "globals.h"
 #include "sbs.h"
-#include "profiler.h"
 #include "utility.h"
 #include "trigger.h"
 #include "scenenode.h"
@@ -200,8 +199,6 @@ void SceneNode::Update()
 	//sync positioning
 	//this mainly needs to be called on child scenenodes of a parent that has moved/rotated,
 	//to recalculate offsets
-
-	SBS_PROFILE("SceneNode::Update");
 
 	if (node)
 		node->needUpdate();
