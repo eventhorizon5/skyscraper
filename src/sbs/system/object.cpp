@@ -382,6 +382,8 @@ void Object::NotifyMove(bool parent)
 	//notify about a move
 	//if parent is true, this function was called from a parent object
 
+	SBS_PROFILE("Object::NotifyMove");
+
 	if (!node)
 		return;
 
@@ -397,6 +399,8 @@ void Object::NotifyRotate(bool parent)
 {
 	//notify about a rotate
 	//if parent is true, this function was called from a parent object
+
+	SBS_PROFILE("Object::NotifyRotate");
 
 	if (!node)
 		return;
