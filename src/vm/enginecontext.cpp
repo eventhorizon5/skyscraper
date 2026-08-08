@@ -402,7 +402,7 @@ void EngineContext::StartSim(const Vector3 &position, const Vector3 &rotation)
 	//Create simulator object
 	if (!Simcore)
 	{
-		Simcore = new ::SBS::SBS(mSceneManager, fmodsystem, instance, area_min, area_max);
+		Simcore = new ::SBS::SBS(mSceneManager, instance, area_min, area_max);
 
 		//move and rotate sim engine
 		Vector3 pos = position + offset;
@@ -440,6 +440,9 @@ void EngineContext::StartSim(const Vector3 &position, const Vector3 &rotation)
 		sleep(2);
 #endif
 	}
+
+	//initialize simulator instance sound system
+	Simcore->InitializeSoundSystem(fmodsystem);
 }
 
 void EngineContext::UnloadSim()

@@ -70,7 +70,7 @@
 
 namespace SBS {
 
-SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instance_number, const Vector3 &area_min, const Vector3 &area_max) : Object(0)
+SBS::SBS(Ogre::SceneManager* mSceneManager, int instance_number, const Vector3 &area_min, const Vector3 &area_max) : Object(0)
 {
 	sbs = this;
 	this->mSceneManager = mSceneManager;
@@ -201,7 +201,10 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instan
 	SetBounds(area_min, area_max);
 	bounds = Ogre::AxisAlignedBox::BOX_NULL;
 	bounds_set = false;
+}
 
+void SBS::InitializeSoundSystem(FMOD::System *fmodsystem)
+{
 	//create sound system object if sound is enabled
 	if (fmodsystem)
 		soundsystem = new SoundSystem(this, fmodsystem);
