@@ -122,6 +122,7 @@ public:
 	bool HoistwayAccessHold; //if true, the user needs to hold the mouse button on the control, in Hoistway Access mode
 	Vector3 RopePosition; //position of rope
 	std::string RopeTexture; //texture for rope
+	Real RopeOffset; //vertical offset of rope
 	std::string CounterweightStartSound; //counterweight starting sound
 	std::string CounterweightMoveSound; //counterweight moving sound
 	std::string CounterweightStopSound; //counterweight stopping sound

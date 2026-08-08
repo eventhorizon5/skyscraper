@@ -183,6 +183,7 @@ Elevator::Elevator(Object *parent, int number) : Object(parent)
 	WeightMesh = 0;
 	WeightRopeMesh = 0;
 	RopeMesh = 0;
+	RopeOffset = 0.0;
 	Error = false;
 	RandomProbability = sbs->GetConfigInt("Skyscraper.SBS.Elevator.RandomProbability", 20);
 	RandomFrequency = sbs->GetConfigFloat("Skyscraper.SBS.Elevator.RandomFrequency", 5);
@@ -494,7 +495,7 @@ Wall* Elevator::CreateCounterweight(const std::string &frame_texture, const std:
 	else
 		c_rope = polymesh->AddWall(WeightRopeMesh, "Counterweight Rope", RopeTexture, 0, 0, -size.z / 4, 0, size.z / 4, counterweight_rope_height, counterweight_rope_height, 0, 0, 1, 1);
 
-	Real rope_height = MotorPosition.y - RopeMesh->GetPosition().y;
+	Real rope_height = (MotorPosition.y + RopeOffset) - RopeMesh->GetPosition().y;
 	Wall *rope;
 	if (size.x > size.z)
 		rope = polymesh->AddWall(RopeMesh, "Rope", RopeTexture, 0, -size.x / 4, 0, size.x / 4, 0, rope_height, rope_height, 0, 0, 1, 1);
@@ -1480,7 +1481,7 @@ void Elevator::MoveObjects(Real offset)
 		Floor *topfloor = sbs->GetFloor(GetTopFloor());
 		Real counterweight_rope_height = MotorPosition.y - (WeightMesh->GetPosition().y + (weight_size.y - 0.5));
 		WeightRopeMesh->ChangeHeight(counterweight_rope_height);
-		Real rope_height = MotorPosition.y - RopeMesh->GetPosition().y;
+		Real rope_height = (MotorPosition.y + RopeOffset) - RopeMesh->GetPosition().y;
 		RopeMesh->ChangeHeight(rope_height);
 	}
 

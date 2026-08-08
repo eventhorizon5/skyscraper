@@ -633,6 +633,15 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 		elev->RopeTexture = value;
 		return sNextLine;
 	}
+	//RopeOffset parameter
+	if (StartsWithNoCase(LineData, "ropeoffset"))
+	{
+		if (equals == false)
+			return ScriptError("Syntax error");
+
+		elev->RopeOffset = ToFloat(value);
+		return sNextLine;
+	}
 	//CounterweightStartSound parameter
 	if (StartsWithNoCase(LineData, "counterweightstartsound"))
 	{
