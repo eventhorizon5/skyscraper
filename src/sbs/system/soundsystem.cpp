@@ -53,6 +53,9 @@ SoundSystem::SoundSystem(Object *parent, FMOD::System *fmodsystem) : Object(pare
 #ifndef DISABLE_SOUND
 	//set up sound options (mainly to set sound distance factor to feet instead of meters)
 	soundsys->set3DSettings(1.0f, 3.28f, 1.0f);
+	int channels = sbs->GetConfigInt("Skyscraper.SBS.SoundSystem.Channels", 256);
+	soundsys->setSoftwareChannels(channels);
+	Report("Sound System initialized with " + ToString(channels) + " software channels");
 #endif
 }
 
