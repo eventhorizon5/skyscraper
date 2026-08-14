@@ -638,8 +638,9 @@ int ScriptProcessor::ElevatorSection::Run(std::string &LineData)
 	{
 		if (equals == false)
 			return ScriptError("Syntax error");
-
-		elev->RopeOffset = ToFloat(value);
+		std::string str = Calc(value);
+		if (!IsNumeric(str, elev->RopeOffset))
+			return ScriptError("Invalid value");
 		return sNextLine;
 	}
 	//CounterweightStartSound parameter
