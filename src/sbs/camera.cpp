@@ -122,6 +122,7 @@ Camera::Camera(Object *parent) : Object(parent)
 	vehicle = 0;
 	old_freelook_mode = false;
 	BinocularsState = false;
+	delta = 0.0;
 
 	//set up collider character
 	Real width = cfg_legs_width / 2;
@@ -783,7 +784,7 @@ void Camera::Loop()
 		timing = sbs->GetAverageTime();
 	else
 		timing = sbs->GetElapsedTime();
-	Real delta = timing / 1000.0;
+	delta = timing / 1000.0;
 
 	//reset collisions if needed
 	if (collision_reset == true && EnableBullet == true)

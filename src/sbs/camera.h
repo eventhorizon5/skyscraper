@@ -93,6 +93,7 @@ public:
 	bool FirstAttach;
 	bool inside_vehicle; //is user inside a vehicle?
 	Vehicle *vehicle; //vehicle object, if user is inside
+	Real delta; //camera movement delta value
 
 	//mouse coordinates
 	int mouse_x, mouse_y;
