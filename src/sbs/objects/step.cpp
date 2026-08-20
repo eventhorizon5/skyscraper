@@ -48,7 +48,10 @@ void Step::OnHit()
 {
 	//move camera along with step, when user is on it
 
-	sbs->camera->MovePosition(vector * 1.675, speed);
+	if (!sbs->camera)
+		return;
+
+	sbs->camera->MovePosition(vector * (sbs->camera->delta * 100), speed);
 }
 
 }
