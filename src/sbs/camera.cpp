@@ -122,7 +122,7 @@ Camera::Camera(Object *parent) : Object(parent)
 	vehicle = 0;
 	old_freelook_mode = false;
 	BinocularsState = false;
-	delta = 0.0;
+	delta = 0.01;
 
 	//set up collider character
 	Real width = cfg_legs_width / 2;
