@@ -4271,16 +4271,23 @@ void Elevator::SameFloorArrival(int floor, int direction)
 		}
 	}
 
-	//notify on arrival
-	if (NotifyEarly >= 0)
-		car->NotifyArrival(floor, false, direction);
+	//only notify arrival if Parking Mode is off
+	if (Parking == false)
+	{
+		//notify on arrival
+		if (NotifyEarly >= 0)
+			car->NotifyArrival(floor, false, direction);
 
-	//store call direction for NotifyLate feature
-	if (NotifyLate == true)
-		car->LateDirection = direction;
+		//store call direction for NotifyLate feature
+		if (NotifyLate == true)
+			car->LateDirection = direction;
 
-	//open elevator if it's on the same floor
-	car->OpenDoors();
+		//open elevator if it's on the same floor
+		car->OpenDoors();
+	}
+
+	//reset parking mode
+	Parking = false;
 }
 
 void Elevator::AddController(int controller)
