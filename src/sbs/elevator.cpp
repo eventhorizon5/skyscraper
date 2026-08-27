@@ -1985,7 +1985,7 @@ finish:
 		EmergencyStop = 0; //make sure emergency stop status is cleared
 
 	//dequeue floor route
-	if (EmergencyStop == 0 && IsManuallyStopped() == false)
+	if (EmergencyStop == 0 && IsManuallyStopped() == false && FireServicePhase1 != 1)
 		DeleteActiveRoute();
 
 	//reset cars' GotoFloor states
