@@ -1900,7 +1900,7 @@ void Elevator::GoToRecallFloor()
 	//reset queues (this will also stop the elevator)
 	route_controller->ResetQueue(true, true);
 
-	if (OnRecallFloor() == true)
+	if (OnRecallFloor() == true && IsLeveled() == true)
 	{
 		if (RecallUnavailable == false)
 			Report("On recall floor");
