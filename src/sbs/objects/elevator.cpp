@@ -1620,6 +1620,7 @@ void Elevator::FinishMove()
 		if (FireServicePhase2 != 1 || OnRecallFloor() == true)
 		{
 			if (Parking == false)
+			{
 				if (AutoDoors == true)
 				{
 					if (FireServicePhase2 == 1)
@@ -1641,6 +1642,7 @@ void Elevator::FinishMove()
 						}
 					}
 				}
+			}
 		}
 	}
 	else
