@@ -1988,6 +1988,10 @@ finish:
 	if (EmergencyStop == 0 && IsManuallyStopped() == false && FireServicePhase1 != 1)
 		DeleteActiveRoute();
 
+	//dequeue floor route in Fire Phase 2 'on' mode
+	if (FireServicePhase1 == 1 && FireServicePhase2 == 1)
+		route_controller->DeleteActiveRoute();
+
 	//reset cars' GotoFloor states
 	for (int i = 1; i <= GetCarCount(); i++)
 	{
