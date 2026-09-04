@@ -882,7 +882,7 @@ void Camera::Jump()
 	//desired_velocity.y = 0.0;
 	if (EnableBullet == true)
 	{
-		if (mCharacter->getGravity() != 0)
+		if (mCharacter->getGravity() != Ogre::Vector3::ZERO)
 			mCharacter->jump();
 	}
 }
@@ -958,7 +958,9 @@ void Camera::SetGravity(Real gravity, bool save_value)
 	if (EnableBullet == true && !Cameras.empty())
 	{
 		sbs->mWorld->setGravity(Vector3(0, sbs->ToRemote(-gravity), 0));
-		mCharacter->setGravity(sbs->ToRemote(gravity));
+		Ogre::Vector3 gravity_full (0, -gravity, 0);
+
+		mCharacter->setGravity(sbs->ToRemote(gravity_full));
 	}
 }
 

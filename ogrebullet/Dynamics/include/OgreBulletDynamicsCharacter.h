@@ -73,8 +73,8 @@ namespace OgreBulletDynamics
 		void setMaxJumpHeight(Ogre::Real height);
 		void jump();
 		bool canJump();
-		void setGravity(Ogre::Real gravity);
-		Ogre::Real getGravity();
+		void setGravity(const Ogre::Vector3 &gravity);
+		Ogre::Vector3 getGravity();
 		void setMaxSlope(Ogre::Real radians);
 		Ogre::Real getMaxSlope();
 		bool onGround();

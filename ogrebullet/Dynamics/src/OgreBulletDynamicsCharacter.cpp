@@ -152,13 +152,17 @@ namespace OgreBulletDynamics
     {
     	return m_character->canJump();
     }
-    void CharacterController::setGravity(Ogre::Real gravity)
+    void CharacterController::setGravity(const Ogre::Vector3 &gravity)
     {
-	m_character->setGravity(btVector3(0, -gravity, 0));
+	m_character->setGravity(btVector3(gravity.x, gravity.y, gravity.z));
     }
-    Ogre::Real CharacterController::getGravity()
+    Ogre::Vector3 CharacterController::getGravity()
     {
-	return -m_character->getGravity().length();
+		Ogre::Vector3 gravity;
+		gravity.x = m_character->getGravity().x();
+		gravity.y = m_character->getGravity().y();
+		gravity.z = m_character->getGravity().z();
+		return gravity;
     }
     void CharacterController::setMaxSlope(Ogre::Real radians)
     {
