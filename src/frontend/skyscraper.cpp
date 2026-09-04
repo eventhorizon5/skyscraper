@@ -50,6 +50,7 @@
 #include "sky.h"
 #include "enginecontext.h"
 #include "scriptproc.h"
+#include "random.h"
 #ifdef USING_WX
 #include "mainscreen.h"
 #endif
@@ -493,8 +494,35 @@ void Skyscraper::StartSound()
 		return;
 #endif
 
-	std::string filename = vm->GetHAL()->GetConfigString(vm->GetHAL()->configfile, "Skyscraper.Frontend.IntroMusicFile", "intro.ogg");
-	std::string filename_full = "data/" + filename;
+	std::string filename1 = vm->GetHAL()->GetConfigString(vm->GetHAL()->configfile, "Skyscraper.Frontend.IntroMusicFile1", "intro.ogg");
+	std::string filename2 = vm->GetHAL()->GetConfigString(vm->GetHAL()->configfile, "Skyscraper.Frontend.IntroMusicFile2", "intro2.ogg");
+	std::string filename3 = vm->GetHAL()->GetConfigString(vm->GetHAL()->configfile, "Skyscraper.Frontend.IntroMusicFile3", "");
+	std::string filename1_full = "data/" + filename1;
+	std::string filename2_full = "data/" + filename2;
+	std::string filename3_full = "data/" + filename3;
+
+	std::vector<std::string> filenames;
+	if (filename1 != "")
+		filenames.push_back(filename1_full);
+	if (filename2 != "")
+		filenames.push_back(filename2_full);
+	if (filename3 != "")
+		filenames.push_back(filename3_full);
+
+	//initialize random number generator
+	unsigned int timeval = static_cast<unsigned int>(
+		std::chrono::duration_cast<std::chrono::milliseconds>(
+			std::chrono::steady_clock::now().time_since_epoch()
+		).count());
+
+	RandomGen *rnd = new RandomGen(timeval);
+
+	size_t result = rnd->Get(filenames.size());
+
+	delete rnd;
+	rnd = 0;
+
+	std::string filename_full = filenames[result];
 
 #ifdef USING_WX
 	//check for an intro sound file in the data path location instead
