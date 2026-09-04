@@ -383,7 +383,10 @@ void Object::NotifyMove(bool parent)
 	//if parent is true, this function was called from a parent object
 
 	if (!node)
+	{
+		NotifyChildren(true, false);
 		return;
+	}
 
 	//sync positioning, for child scene nodes
 	if (parent == true)
@@ -399,7 +402,10 @@ void Object::NotifyRotate(bool parent)
 	//if parent is true, this function was called from a parent object
 
 	if (!node)
+	{
+		NotifyChildren(false, true);
 		return;
+	}
 
 	//sync positioning, for child scene nodes
 	if (parent == true)
