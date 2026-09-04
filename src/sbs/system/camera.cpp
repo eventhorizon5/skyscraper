@@ -958,8 +958,9 @@ void Camera::SetGravity(Real gravity, bool save_value)
 	if (EnableBullet == true && !Cameras.empty())
 	{
 		Ogre::Vector3 gravity_full (0, -gravity, 0);
-		sbs->mWorld->setGravity(sbs->ToRemote(gravity_full));
-		mCharacter->setGravity(sbs->ToRemote(gravity_full));
+		Ogre::Vector3 gravity_remote = sbs->ToRemote(gravity_full);
+		sbs->mWorld->setGravity(gravity_remote);
+		mCharacter->setGravity(gravity_remote);
 	}
 }
 
