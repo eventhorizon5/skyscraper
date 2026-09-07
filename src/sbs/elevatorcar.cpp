@@ -1296,8 +1296,8 @@ bool ElevatorCar::OpenDoors(int number, int whichdoors, int floor, bool manual, 
 	if (sbs->GetPower() == false && manual == false)
 		return false;
 
-	//require open button to be held for fire service phase 2 if not on recall floor
-	if (FirePhase2Active() == 1 && parent->OnRecallFloor() == false && manual == false)
+	//require open button to be held for fire service phase 2
+	if (FirePhase2Active() == 1 && manual == false)
 		hold = true;
 
 	if (parent->Interlocks == true)
