@@ -2154,30 +2154,24 @@ void Elevator::FinishMove()
 
 		//open doors
 		//do not automatically open doors if fire service phase 2 is on
-		if (FireServicePhase2 != 1 || OnRecallFloor() == true)
+		if (FireServicePhase2 != 1)
 		{
 			if (Parking == false)
+			{
 				if (AutoDoors == true)
 				{
-					if (FireServicePhase2 == 1)
-					{
-						if (GetCar(FireServicePhase2Car))
-							GetCar(FireServicePhase2Car)->OpenDoors();
-					}
+					if ((OnRecallFloor() == true && FireServicePhase1 == 1) || OnPeakFloor() == true)
+						OpenDoors(); //automatically open doors in Fire Phase 1 and Peak modes
 					else
 					{
-						if ((OnRecallFloor() == true && FireServicePhase1 == 1) || OnPeakFloor() == true)
-							OpenDoors(); //automatically open doors in Fire Phase 1 and Peak modes
-						else
+						for (int i = 1; i <= GetCarCount(); i++)
 						{
-							for (int i = 1; i <= GetCarCount(); i++)
-							{
-								if (GetCar(i)->GotoFloor == true)
-									GetCar(i)->OpenDoors();
-							}
+							if (GetCar(i)->GotoFloor == true)
+								GetCar(i)->OpenDoors();
 						}
 					}
 				}
+			}
 		}
 	}
 	else
