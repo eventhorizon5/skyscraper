@@ -195,7 +195,9 @@ void MeshControl::Loop()
 	if (!Simcore)
 		return;
 
-	SBS::Floor *floor = Simcore->GetFloor(Simcore->camera->CurrentFloor);
+	SBS::Floor *floor = 0;
+	if (Simcore->camera)
+		floor = Simcore->GetFloor(Simcore->camera->CurrentFloor);
 	if (floor)
 	{
 		chkFloor->SetValue(floor->IsEnabled());
