@@ -37,22 +37,25 @@
 namespace Skyscraper {
 
 //(*IdInit(MeshControl)
-const long MeshControl::ID_chkExternal = wxNewId();
-const long MeshControl::ID_chkBuildings = wxNewId();
-const long MeshControl::ID_chkLandscape = wxNewId();
-const long MeshControl::ID_chkSky = wxNewId();
-const long MeshControl::ID_chkElevators = wxNewId();
-const long MeshControl::ID_chkFloor = wxNewId();
-const long MeshControl::ID_chkShafts = wxNewId();
-const long MeshControl::ID_chkStairs = wxNewId();
-const long MeshControl::ID_chkInterfloor = wxNewId();
-const long MeshControl::ID_chkColumnFrame = wxNewId();
-const long MeshControl::ID_chkAllFloors = wxNewId();
-const long MeshControl::ID_chkAllShafts = wxNewId();
-const long MeshControl::ID_chkAllStairs = wxNewId();
-const long MeshControl::ID_chkAllInterfloors = wxNewId();
-const long MeshControl::ID_chkAllColumnFrames = wxNewId();
-const long MeshControl::ID_bOk = wxNewId();
+const wxWindowID MeshControl::ID_chkExternal = wxNewId();
+const wxWindowID MeshControl::ID_chkBuildings = wxNewId();
+const wxWindowID MeshControl::ID_chkLandscape = wxNewId();
+const wxWindowID MeshControl::ID_chkSky = wxNewId();
+const wxWindowID MeshControl::ID_chkElevators = wxNewId();
+const wxWindowID MeshControl::ID_chkAutoFloors = wxNewId();
+const wxWindowID MeshControl::ID_chkAutoShafts = wxNewId();
+const wxWindowID MeshControl::ID_chkAutoStairs = wxNewId();
+const wxWindowID MeshControl::ID_chkFloor = wxNewId();
+const wxWindowID MeshControl::ID_chkShafts = wxNewId();
+const wxWindowID MeshControl::ID_chkStairs = wxNewId();
+const wxWindowID MeshControl::ID_chkInterfloor = wxNewId();
+const wxWindowID MeshControl::ID_chkColumnFrame = wxNewId();
+const wxWindowID MeshControl::ID_chkAllFloors = wxNewId();
+const wxWindowID MeshControl::ID_chkAllShafts = wxNewId();
+const wxWindowID MeshControl::ID_chkAllStairs = wxNewId();
+const wxWindowID MeshControl::ID_chkAllInterfloors = wxNewId();
+const wxWindowID MeshControl::ID_chkAllColumnFrames = wxNewId();
+const wxWindowID MeshControl::ID_bOk = wxNewId();
 //*)
 
 BEGIN_EVENT_TABLE(MeshControl,wxDialog)
@@ -64,13 +67,16 @@ MeshControl::MeshControl(DebugPanel* parent,wxWindowID id)
 {
 	//(*Initialize(MeshControl)
 	wxBoxSizer* BoxSizer3;
+	wxBoxSizer* BoxSizer4;
 	wxStaticBoxSizer* StaticBoxSizer1;
 	wxStaticBoxSizer* StaticBoxSizer2;
 	wxStaticBoxSizer* StaticBoxSizer3;
+	wxStaticBoxSizer* StaticBoxSizer4;
 
 	Create(parent, wxID_ANY, _("Realtime Object Control"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE, _T("wxID_ANY"));
 	BoxSizer1 = new wxBoxSizer(wxVERTICAL);
 	BoxSizer2 = new wxBoxSizer(wxHORIZONTAL);
+	BoxSizer4 = new wxBoxSizer(wxVERTICAL);
 	StaticBoxSizer1 = new wxStaticBoxSizer(wxVERTICAL, this, _("Global Objects"));
 	chkExternal = new wxCheckBox(this, ID_chkExternal, _("External"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_chkExternal"));
 	chkExternal->SetValue(false);
@@ -87,7 +93,19 @@ MeshControl::MeshControl(DebugPanel* parent,wxWindowID id)
 	chkElevators = new wxCheckBox(this, ID_chkElevators, _("Elevators"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_chkElevators"));
 	chkElevators->SetValue(false);
 	StaticBoxSizer1->Add(chkElevators, 1, wxBOTTOM|wxALIGN_LEFT, 5);
-	BoxSizer2->Add(StaticBoxSizer1, 1, wxALIGN_TOP, 5);
+	BoxSizer4->Add(StaticBoxSizer1, 1, wxEXPAND, 5);
+	StaticBoxSizer4 = new wxStaticBoxSizer(wxVERTICAL, this, _("Automatic Objects:"));
+	chkAutoFloors = new wxCheckBox(this, ID_chkAutoFloors, _("Floors (noclip only)"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_chkAutoFloors"));
+	chkAutoFloors->SetValue(false);
+	StaticBoxSizer4->Add(chkAutoFloors, 1, wxTOP|wxBOTTOM|wxALIGN_LEFT, 5);
+	chkAutoShafts = new wxCheckBox(this, ID_chkAutoShafts, _("Shafts"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_chkAutoShafts"));
+	chkAutoShafts->SetValue(false);
+	StaticBoxSizer4->Add(chkAutoShafts, 1, wxBOTTOM|wxALIGN_LEFT, 5);
+	chkAutoStairs = new wxCheckBox(this, ID_chkAutoStairs, _("Stairwells"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_chkAutoStairs"));
+	chkAutoStairs->SetValue(false);
+	StaticBoxSizer4->Add(chkAutoStairs, 1, wxBOTTOM|wxALIGN_LEFT, 5);
+	BoxSizer4->Add(StaticBoxSizer4, 1, wxEXPAND, 5);
+	BoxSizer2->Add(BoxSizer4, 1, wxALL|wxALIGN_TOP, 5);
 	BoxSizer3 = new wxBoxSizer(wxVERTICAL);
 	StaticBoxSizer2 = new wxStaticBoxSizer(wxVERTICAL, this, _("Per-Floor Objects"));
 	chkFloor = new wxCheckBox(this, ID_chkFloor, _("Level"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_chkFloor"));
@@ -128,26 +146,28 @@ MeshControl::MeshControl(DebugPanel* parent,wxWindowID id)
 	bOk = new wxButton(this, ID_bOk, _("OK"), wxPoint(75,145), wxDefaultSize, 0, wxDefaultValidator, _T("ID_bOk"));
 	BoxSizer1->Add(bOk, 0, wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 10);
 	SetSizer(BoxSizer1);
-	BoxSizer1->Fit(this);
 	BoxSizer1->SetSizeHints(this);
 	Center();
 
-	Connect(ID_chkExternal,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&MeshControl::On_chkExternal_Click);
-	Connect(ID_chkBuildings,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&MeshControl::On_chkBuildings_Click);
-	Connect(ID_chkLandscape,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&MeshControl::On_chkLandscape_Click);
-	Connect(ID_chkSky,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&MeshControl::On_chkSky_Click);
-	Connect(ID_chkElevators,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&MeshControl::On_chkElevators_Click);
-	Connect(ID_chkFloor,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&MeshControl::On_chkFloor_Click);
-	Connect(ID_chkShafts,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&MeshControl::On_chkShafts_Click);
-	Connect(ID_chkStairs,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&MeshControl::On_chkStairs_Click);
-	Connect(ID_chkInterfloor,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&MeshControl::On_chkInterfloor_Click);
-	Connect(ID_chkColumnFrame,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&MeshControl::On_chkColumnFrame_Click);
-	Connect(ID_chkAllFloors,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&MeshControl::On_chkAllFloors_Click);
-	Connect(ID_chkAllShafts,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&MeshControl::On_chkAllShafts_Click);
-	Connect(ID_chkAllStairs,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&MeshControl::On_chkAllStairs_Click);
-	Connect(ID_chkAllInterfloors,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&MeshControl::On_chkAllInterfloors_Click);
-	Connect(ID_chkAllColumnFrames,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&MeshControl::On_chkAllColumnFrames_Click);
-	Connect(ID_bOk,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&MeshControl::On_bOk_Click);
+	Connect(ID_chkExternal, wxEVT_COMMAND_CHECKBOX_CLICKED, (wxObjectEventFunction)&MeshControl::On_chkExternal_Click);
+	Connect(ID_chkBuildings, wxEVT_COMMAND_CHECKBOX_CLICKED, (wxObjectEventFunction)&MeshControl::On_chkBuildings_Click);
+	Connect(ID_chkLandscape, wxEVT_COMMAND_CHECKBOX_CLICKED, (wxObjectEventFunction)&MeshControl::On_chkLandscape_Click);
+	Connect(ID_chkSky, wxEVT_COMMAND_CHECKBOX_CLICKED, (wxObjectEventFunction)&MeshControl::On_chkSky_Click);
+	Connect(ID_chkElevators, wxEVT_COMMAND_CHECKBOX_CLICKED, (wxObjectEventFunction)&MeshControl::On_chkElevators_Click);
+	Connect(ID_chkAutoFloors, wxEVT_COMMAND_CHECKBOX_CLICKED, (wxObjectEventFunction)&MeshControl::On_chkAutoFloors_Click);
+	Connect(ID_chkAutoShafts, wxEVT_COMMAND_CHECKBOX_CLICKED, (wxObjectEventFunction)&MeshControl::On_chkAutoShafts_Click);
+	Connect(ID_chkAutoStairs, wxEVT_COMMAND_CHECKBOX_CLICKED, (wxObjectEventFunction)&MeshControl::On_chkAutoStairs_Click);
+	Connect(ID_chkFloor, wxEVT_COMMAND_CHECKBOX_CLICKED, (wxObjectEventFunction)&MeshControl::On_chkFloor_Click);
+	Connect(ID_chkShafts, wxEVT_COMMAND_CHECKBOX_CLICKED, (wxObjectEventFunction)&MeshControl::On_chkShafts_Click);
+	Connect(ID_chkStairs, wxEVT_COMMAND_CHECKBOX_CLICKED, (wxObjectEventFunction)&MeshControl::On_chkStairs_Click);
+	Connect(ID_chkInterfloor, wxEVT_COMMAND_CHECKBOX_CLICKED, (wxObjectEventFunction)&MeshControl::On_chkInterfloor_Click);
+	Connect(ID_chkColumnFrame, wxEVT_COMMAND_CHECKBOX_CLICKED, (wxObjectEventFunction)&MeshControl::On_chkColumnFrame_Click);
+	Connect(ID_chkAllFloors, wxEVT_COMMAND_CHECKBOX_CLICKED, (wxObjectEventFunction)&MeshControl::On_chkAllFloors_Click);
+	Connect(ID_chkAllShafts, wxEVT_COMMAND_CHECKBOX_CLICKED, (wxObjectEventFunction)&MeshControl::On_chkAllShafts_Click);
+	Connect(ID_chkAllStairs, wxEVT_COMMAND_CHECKBOX_CLICKED, (wxObjectEventFunction)&MeshControl::On_chkAllStairs_Click);
+	Connect(ID_chkAllInterfloors, wxEVT_COMMAND_CHECKBOX_CLICKED, (wxObjectEventFunction)&MeshControl::On_chkAllInterfloors_Click);
+	Connect(ID_chkAllColumnFrames, wxEVT_COMMAND_CHECKBOX_CLICKED, (wxObjectEventFunction)&MeshControl::On_chkAllColumnFrames_Click);
+	Connect(ID_bOk, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&MeshControl::On_bOk_Click);
 	//*)
 	Simcore = 0;
 	panel = parent;
@@ -186,6 +206,11 @@ void MeshControl::Loop()
 	chkLandscape->SetValue(Simcore->IsLandscapeEnabled);
 	chkBuildings->SetValue(Simcore->IsBuildingsEnabled);
 	chkExternal->SetValue(Simcore->IsExternalEnabled);
+	chkAutoShafts->SetValue(Simcore->AutoShafts);
+	chkAutoStairs->SetValue(Simcore->AutoStairs);
+	
+	if (Simcore->camera)
+		chkAutoFloors->SetValue(Simcore->camera->AutoFloors);
 }
 
 void MeshControl::On_bOk_Click(wxCommandEvent& event)
@@ -309,6 +334,27 @@ void MeshControl::On_chkAllInterfloors_Click(wxCommandEvent& event)
 		if (Simcore->GetFloor(i))
 			Simcore->GetFloor(i)->EnableInterfloor(chkAllInterfloors->GetValue());
 	}
+}
+
+void MeshControl::On_chkAutoFloors_Click(wxCommandEvent& event)
+{
+	if (Simcore)
+	{
+		if (Simcore->camera)
+			Simcore->camera->AutoFloors = chkAutoFloors->GetValue();
+	}
+}
+
+void MeshControl::On_chkAutoShafts_Click(wxCommandEvent& event)
+{
+	if (Simcore)
+		Simcore->AutoShafts = chkAutoShafts->GetValue();
+}
+
+void MeshControl::On_chkAutoStairs_Click(wxCommandEvent& event)
+{
+	if (Simcore)
+		Simcore->AutoStairs = chkAutoStairs->GetValue();
 }
 
 }

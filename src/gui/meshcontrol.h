@@ -40,22 +40,25 @@ class MeshControl: public wxDialog
 		virtual ~MeshControl();
 
 		//(*Identifiers(MeshControl)
-		static const long ID_chkExternal;
-		static const long ID_chkBuildings;
-		static const long ID_chkLandscape;
-		static const long ID_chkSky;
-		static const long ID_chkElevators;
-		static const long ID_chkFloor;
-		static const long ID_chkShafts;
-		static const long ID_chkStairs;
-		static const long ID_chkInterfloor;
-		static const long ID_chkColumnFrame;
-		static const long ID_chkAllFloors;
-		static const long ID_chkAllShafts;
-		static const long ID_chkAllStairs;
-		static const long ID_chkAllInterfloors;
-		static const long ID_chkAllColumnFrames;
-		static const long ID_bOk;
+		static const wxWindowID ID_chkExternal;
+		static const wxWindowID ID_chkBuildings;
+		static const wxWindowID ID_chkLandscape;
+		static const wxWindowID ID_chkSky;
+		static const wxWindowID ID_chkElevators;
+		static const wxWindowID ID_chkAutoFloors;
+		static const wxWindowID ID_chkAutoShafts;
+		static const wxWindowID ID_chkAutoStairs;
+		static const wxWindowID ID_chkFloor;
+		static const wxWindowID ID_chkShafts;
+		static const wxWindowID ID_chkStairs;
+		static const wxWindowID ID_chkInterfloor;
+		static const wxWindowID ID_chkColumnFrame;
+		static const wxWindowID ID_chkAllFloors;
+		static const wxWindowID ID_chkAllShafts;
+		static const wxWindowID ID_chkAllStairs;
+		static const wxWindowID ID_chkAllInterfloors;
+		static const wxWindowID ID_chkAllColumnFrames;
+		static const wxWindowID ID_bOk;
 		//*)
 		void Loop();
 
@@ -78,6 +81,9 @@ class MeshControl: public wxDialog
 		void On_chkAllColumnFrames_Click(wxCommandEvent& event);
 		void On_chkInterfloor_Click(wxCommandEvent& event);
 		void On_chkAllInterfloors_Click(wxCommandEvent& event);
+		void On_chkAutoFloors_Click(wxCommandEvent& event);
+		void On_chkAutoShafts_Click(wxCommandEvent& event);
+		void On_chkAutoStairs_Click(wxCommandEvent& event);
 		//*)
 		void OnInit();
 
@@ -90,6 +96,9 @@ class MeshControl: public wxDialog
 		wxCheckBox* chkAllInterfloors;
 		wxCheckBox* chkAllShafts;
 		wxCheckBox* chkAllStairs;
+		wxCheckBox* chkAutoFloors;
+		wxCheckBox* chkAutoShafts;
+		wxCheckBox* chkAutoStairs;
 		wxCheckBox* chkBuildings;
 		wxCheckBox* chkColumnFrame;
 		wxCheckBox* chkElevators;
