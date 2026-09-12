@@ -123,6 +123,7 @@ Camera::Camera(Object *parent) : Object(parent)
 	old_freelook_mode = false;
 	BinocularsState = false;
 	delta = 0.01;
+	AutoFloors = true;
 
 	//set up collider character
 	Real width = cfg_legs_width / 2;
@@ -307,6 +308,12 @@ void Camera::UpdateCameraFloor()
 	//if camera moved to a different floor, update floor indicators
 	if ((lastfloor != newlastfloor) && sbs->GetFloor(newlastfloor))
 		sbs->GetFloor(newlastfloor)->UpdateFloorIndicators();
+
+	//turn on and off floors automatically in noclip mode if AutoFloors is on
+	if (Collisions == false && AutoFloors == true)
+	{
+		sbs->EnableFloorRange(newlastfloor, 1, true, true);
+	}
 
 	lastfloor = newlastfloor;
 	lastfloorset = true;
