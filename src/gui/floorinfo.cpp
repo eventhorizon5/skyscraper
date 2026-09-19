@@ -202,7 +202,7 @@ void FloorInfo::BuildList(bool restore_selection)
 		{
 			::SBS::Floor *floor = Simcore->GetFloorManager()->GetIndex(i);
 			if (floor)
-				lstFloors->Append(SBS::ToString(floor->Number) + wxT(": ") + floor->Name);
+				lstFloors->Append(wxString(SBS::ToString(floor->Number)) + wxT(": ") + floor->Name);
 		}
 
 		if (count > 0)

@@ -111,8 +111,8 @@ std::string GUI::SelectBuilding(const std::string &data_path)
 	//get listing of building files
 	wxArrayString filelist;
 	wxArrayString filelist2;
-	wxDir::GetAllFiles(_("buildings/"), &filelist, _("*.bld"), wxDIR_FILES);
-	wxDir::GetAllFiles(_(data_path + "buildings/"), &filelist2, _("*.bld"), wxDIR_FILES);
+	wxDir::GetAllFiles(wxT("buildings/"), &filelist, wxT("*.bld"), wxDIR_FILES);
+	wxDir::GetAllFiles(wxString(data_path) + wxT("buildings/"), &filelist2, wxT("*.bld"), wxDIR_FILES);
 
 	//strip directory name and extension from entries
 	for (size_t i = 0; i < filelist.size(); i++)

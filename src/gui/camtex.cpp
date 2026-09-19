@@ -261,7 +261,7 @@ void CameraTextureControl::BuildList(bool restore_selection)
 		for (int i = 0; i < count; i++)
 		{
 			::SBS::CameraTexture *cam = Simcore->GetCameraTexture(i);
-			CameraList->Append(SBS::ToString(i + 1) + wxT(": ") + cam->GetName() + wxT(" (") + cam->GetParent()->GetName() + wxT(")"));
+			CameraList->Append(wxString(SBS::ToString(i + 1)) + wxT(": ") + cam->GetName() + wxT(" (") + cam->GetParent()->GetName() + wxT(")"));
 		}
 
 		if (count > 0)

@@ -380,7 +380,7 @@ void ControllerEditor::BuildList(bool restore_selection)
         {
             ::SBS::DispatchController* controller = Simcore->GetController(i + 1);
             if (controller)
-                lControllers->Append(SBS::ToString(i + 1) + wxT(": ") + controller->GetName());
+                lControllers->Append(wxString(SBS::ToString(i + 1)) + wxT(": ") + controller->GetName());
         }
 
         if (count > 0)
@@ -423,7 +423,7 @@ void ControllerEditor::BuildElevatorList(bool restore_selection)
         {
             ::SBS::Elevator* elevator = Simcore->GetElevator(controller->GetElevator(i));
             if (elevator)
-                lElevators->Append(SBS::ToString(i + 1) + wxT(": ") + elevator->GetName());
+                lElevators->Append(wxString(SBS::ToString(i + 1)) + wxT(": ") + elevator->GetName());
         }
 
         if (count > 0)
@@ -457,7 +457,7 @@ void ControllerEditor::BuildStationList(bool restore_selection)
         {
             ::SBS::CallStation* station = controller->GetCallStation(i);
             if (station)
-                lCallStations->Append(SBS::ToString(i + 1) + wxT(": ") + station->GetName());
+                lCallStations->Append(wxString(SBS::ToString(i + 1)) + wxT(": ") + station->GetName());
         }
 
         if (count > 0)

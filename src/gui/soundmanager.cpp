@@ -363,7 +363,7 @@ void SoundManager::BuildSoundList()
 		SoundList->Clear();
 
 		for (int i = 0; i < count; i++)
-			SoundList->Append(SBS::ToString(i + 1) + wxT(": ") + Simcore->GetSoundSystem()->GetSoundData(i)->filename);
+			SoundList->Append(wxString(SBS::ToString(i + 1)) + wxT(": ") + Simcore->GetSoundSystem()->GetSoundData(i)->filename);
 
 		if (count > 0)
 		{
@@ -410,7 +410,7 @@ void SoundManager::BuildHandleList()
 				name = sound->handles[i]->GetName();
 			else
 				name = "(error)";
-			HandleList->Append(SBS::ToString(i + 1) + wxT(": ") + name);
+			HandleList->Append(wxString(SBS::ToString(i + 1)) + wxT(": ") + name);
 		}
 
 		if (count > 0)

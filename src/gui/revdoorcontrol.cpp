@@ -170,7 +170,7 @@ void RevolvingDoorControl::BuildList(bool restore_selection)
 		{
 			::SBS::RevolvingDoor *dr = Simcore->GetRevolvingDoor(i);
 			if (dr)
-				ListBox1->Append(SBS::ToString(i + 1) + wxT(": ") + dr->GetName());
+				ListBox1->Append(wxString(SBS::ToString(i + 1)) + wxT(": ") + dr->GetName());
 		}
 
 		if (count > 0)

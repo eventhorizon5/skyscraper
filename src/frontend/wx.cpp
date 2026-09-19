@@ -98,21 +98,21 @@ bool Skyscraper::SetCWD()
 	if (!wxDirExists(vm->data_path))
 		wxMkdir(vm->data_path);
 
-	if (!wxDirExists(vm->data_path + wxT("buildings")))
-		wxMkdir(vm->data_path + wxT("buildings"));
-	if (!wxDirExists(vm->data_path + wxT("data")))
-		wxMkdir(vm->data_path + wxT("data"));
-	if (!wxDirExists(vm->data_path + wxT("screenshots")))
-		wxMkdir(vm->data_path + wxT("screenshots"));
+	if (!wxDirExists(wxString(vm->data_path) + wxT("buildings")))
+		wxMkdir(wxString(vm->data_path) + wxT("buildings"));
+	if (!wxDirExists(wxString(vm->data_path) + wxT("data")))
+		wxMkdir(wxString(vm->data_path) + wxT("data"));
+	if (!wxDirExists(wxString(vm->data_path) + wxT("screenshots")))
+		wxMkdir(wxString(vm->data_path) + wxT("screenshots"));
 
 	wxSetWorkingDirectory(app_path + wxT("/../Resources")); //set working directory to resources folder on Mac
 
-	if (!wxFileExists(vm->data_path + wxT("skyscraper.ini")))
-		wxCopyFile("skyscraper.ini", vm->data_path + wxT("skyscraper.ini"));
-	if (!wxFileExists(vm->data_path + wxT("keyboard.ini")))
-		wxCopyFile("keyboard.ini", vm->data_path + wxT("keyboard.ini"));
-	if (!wxFileExists(vm->data_path + wxT("joystick.ini")))
-		wxCopyFile("joystick.ini", vm->data_path + wxT("joystick.ini"));
+	if (!wxFileExists(wxString(vm->data_path) + wxT("skyscraper.ini")))
+		wxCopyFile("skyscraper.ini", wxString(vm->data_path) + wxT("skyscraper.ini"));
+	if (!wxFileExists(wxString(vm->data_path) + wxT("keyboard.ini")))
+		wxCopyFile("keyboard.ini", wxString(vm->data_path) + wxT("keyboard.ini"));
+	if (!wxFileExists(wxString(vm->data_path) + wxT("joystick.ini")))
+		wxCopyFile("joystick.ini", wxString(vm->data_path) + wxT("joystick.ini"));
 
 #elif defined (__WXGTK__)
 	wxSetWorkingDirectory(app_path + wxT("/../")); //set working directory parent directory

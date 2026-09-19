@@ -220,7 +220,7 @@ void TextureManager::Loop()
 		{
 			SBS::Texture *texture = manager->GetTextureObject(i);
 			if (texture)
-				TextureList->Append(SBS::ToString(i + 1) + wxT(" - ") + texture->GetName());
+				TextureList->Append(wxString(SBS::ToString(i + 1)) + wxT(" - ") + texture->GetName());
 		}
 	}
 }

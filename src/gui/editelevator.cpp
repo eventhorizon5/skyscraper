@@ -1401,14 +1401,14 @@ void editelevator::Loop()
 		sNumber->SetScrollbar(0, 1, Simcore->GetElevatorCount(), 1);
 	}
 
-	tElevator->SetLabel(wxT("Number " + ToString(sNumber->GetThumbPosition() + 1)));
+	tElevator->SetLabel(wxT("Number " + wxString(ToString(sNumber->GetThumbPosition() + 1))));
 	floor_number = car->GetServicedFloor(sFloor->GetThumbPosition());
 	wxString floor_name;
 	if (Simcore->GetFloor(floor_number))
 		floor_name = Simcore->GetFloor(floor_number)->ID;
-	tFloor->SetLabel(wxT("Floor ") + ToString(floor_number) + wxT(" (" + floor_name) + wxT(")"));
-	tCar->SetLabel(wxT("Car " + ToString(sCar->GetThumbPosition() + 1)));
-	tDoor->SetLabel(wxT("Door " + ToString(sDoor->GetThumbPosition()) + wxT(" (0 = all)")));
+	tFloor->SetLabel(wxT("Floor ") + wxString(ToString(floor_number)) + wxT(" (" + floor_name) + wxT(")"));
+	tCar->SetLabel(wxT("Car " + wxString(ToString(sCar->GetThumbPosition() + 1))));
+	tDoor->SetLabel(wxT("Door " + wxString(ToString(sDoor->GetThumbPosition())) + wxT(" (0 = all)")));
 	txtBrakes->SetValue(BoolToString(elevator->GetBrakeStatus()));
 	txtDestFloor->SetValue(ToString(elevator->GotoFloor));
 	txtDestination->SetValue(TruncateNumber(elevator->GetDestination(), 2));

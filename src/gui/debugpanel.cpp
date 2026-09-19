@@ -514,7 +514,7 @@ void DebugPanel::Loop()
 	t_camerap->SetLabel(TruncateNumber(Simcore->camera->GetPosition().x, 2) + wxT(", ") + TruncateNumber(Simcore->camera->GetPosition().y, 2) + wxT(", ") + TruncateNumber(Simcore->camera->GetPosition().z, 2));
 	t_rotation->SetLabel(TruncateNumber(Simcore->camera->GetRotation().x, 2) + wxT(", ") + TruncateNumber(Simcore->camera->GetRotation().y, 2) + wxT(", ") + TruncateNumber(Simcore->camera->GetRotation().z, 2));
 	t_global->SetLabel(TruncateNumber(globalpos.x, 2) + wxT(", ") + TruncateNumber(globalpos.y, 2) + wxT(", ") + TruncateNumber(globalpos.z, 2));
-	t_camerafloor->SetLabel(SBS::ToString(Simcore->camera->CurrentFloor) + wxT(" (") + Simcore->camera->CurrentFloorID + wxT(")"));
+	t_camerafloor->SetLabel(wxString(SBS::ToString(Simcore->camera->CurrentFloor)) + wxT(" (") + Simcore->camera->CurrentFloorID + wxT(")"));
 	t_object->SetLabel(Simcore->camera->GetClickedMeshName());
 	t_framerate->SetLabel(TruncateNumber(Simcore->FPS, 2));
 	t_collision->SetLabel(Simcore->camera->LastHitMesh);

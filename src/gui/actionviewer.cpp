@@ -155,7 +155,7 @@ void ActionViewer::Loop()
 		tParameters->Clear();
 
 		for (int i = 0; i < Simcore->GetActionCount(); i++)
-			ActionList->Append(ToString(i + 1) + wxT(" - ") + Simcore->GetAction(i)->GetName());
+			ActionList->Append(wxString(ToString(i + 1)) + wxT(" - ") + Simcore->GetAction(i)->GetName());
 	}
 }
 
@@ -195,7 +195,7 @@ void ActionViewer::On_ActionList_Select(wxCommandEvent& event)
 
 		tParameters->Clear();
 		for (int i = 0; i < action->GetParameterCount(); i++)
-			tParameters->AppendText(action->GetParameter(i) + wxT("\n"));
+			tParameters->AppendText(wxString(action->GetParameter(i)) + wxT("\n"));
 	}
 }
 

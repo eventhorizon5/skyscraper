@@ -314,7 +314,7 @@ void PeopleManager::BuildList(bool restore_selection)
 		PersonList->Clear();
 
 		for (int i = 0; i < count; i++)
-			PersonList->Append(SBS::ToString(i + 1) + wxT(": ") + Simcore->GetPerson(i)->GetName());
+			PersonList->Append(wxString(SBS::ToString(i + 1)) + wxT(": ") + Simcore->GetPerson(i)->GetName());
 
 		if (count > 0)
 		{

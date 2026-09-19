@@ -160,7 +160,7 @@ void WalkwayControl::BuildList(bool restore_selection)
 		{
 			::SBS::MovingWalkway *mw = Simcore->GetMovingWalkway(i);
 			if (mw)
-				ListBox1->Append(SBS::ToString(i + 1) + wxT(": ") + mw->GetName());
+				ListBox1->Append(wxString(SBS::ToString(i + 1)) + wxT(": ") + mw->GetName());
 		}
 
 		if (count > 0)

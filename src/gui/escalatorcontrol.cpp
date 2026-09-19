@@ -160,7 +160,7 @@ void EscalatorControl::BuildList(bool restore_selection)
 		{
 			::SBS::Escalator *esc = Simcore->GetEscalator(i);
 			if (esc)
-				ListBox1->Append(SBS::ToString(i + 1) + wxT(": ") + esc->GetName());
+				ListBox1->Append(wxString(SBS::ToString(i + 1)) + wxT(": ") + esc->GetName());
 		}
 
 		if (count > 0)

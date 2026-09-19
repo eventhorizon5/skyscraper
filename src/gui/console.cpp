@@ -151,7 +151,7 @@ void Console::Write(const std::string &message, const std::string &color)
 		tConsole->SetDefaultStyle(wxTextAttr(*wxRED));
 	else if (color == "white")
 		tConsole->SetDefaultStyle(wxTextAttr(*wxWHITE));
-	tConsole->AppendText(message + wxT("\n"));
+	tConsole->AppendText(wxString(message) + wxT("\n"));
 	tConsole->SetInsertionPointEnd();
 	mtx.unlock();
 }

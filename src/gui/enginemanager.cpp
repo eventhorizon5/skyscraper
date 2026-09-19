@@ -241,7 +241,7 @@ void EngineManager::Loop()
 			if (engine)
 				filename = engine->GetFilename();
 
-			EngineList->Append(SBS::ToString(i) + wxT(" - ") + filename);
+			EngineList->Append(wxString(SBS::ToString(i)) + wxT(" - ") + filename);
 		}
 
 		if (selection == -1)
