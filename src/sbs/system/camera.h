@@ -94,6 +94,7 @@ public:
 	bool inside_vehicle; //is user inside a vehicle?
 	Vehicle *vehicle; //vehicle object, if user is inside
 	Real delta; //camera movement delta value
+	bool AutoFloors; //turn on and off floors automatically in noclip (no collisions) mode
 
 	//mouse coordinates
 	int mouse_x, mouse_y;

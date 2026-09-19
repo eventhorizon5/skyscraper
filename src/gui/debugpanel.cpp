@@ -62,61 +62,59 @@
 namespace Skyscraper {
 
 //(*IdInit(DebugPanel)
-const long DebugPanel::ID_STATICTEXT1 = wxNewId();
-const long DebugPanel::ID_STATICTEXT12 = wxNewId();
-const long DebugPanel::ID_STATICTEXT2 = wxNewId();
-const long DebugPanel::ID_STATICTEXT8 = wxNewId();
-const long DebugPanel::ID_STATICTEXT13 = wxNewId();
-const long DebugPanel::ID_STATICTEXT3 = wxNewId();
-const long DebugPanel::ID_STATICTEXT4 = wxNewId();
-const long DebugPanel::ID_STATICTEXT5 = wxNewId();
-const long DebugPanel::ID_STATICTEXT10 = wxNewId();
-const long DebugPanel::ID_STATICTEXT9 = wxNewId();
-const long DebugPanel::ID_STATICTEXT6 = wxNewId();
-const long DebugPanel::ID_t_camerafloor = wxNewId();
-const long DebugPanel::ID_t_floorname = wxNewId();
-const long DebugPanel::ID_t_camerap = wxNewId();
-const long DebugPanel::ID_t_rotation = wxNewId();
-const long DebugPanel::ID_t_global = wxNewId();
-const long DebugPanel::ID_t_elevnumber = wxNewId();
-const long DebugPanel::ID_t_elevfloor = wxNewId();
-const long DebugPanel::ID_t_object = wxNewId();
-const long DebugPanel::ID_t_clickposition = wxNewId();
-const long DebugPanel::ID_t_collision = wxNewId();
-const long DebugPanel::ID_STATICTEXT7 = wxNewId();
-const long DebugPanel::ID_STATICTEXT11 = wxNewId();
-const long DebugPanel::ID_chkCollisionDetection = wxNewId();
-const long DebugPanel::ID_chkGravity = wxNewId();
-const long DebugPanel::ID_chkProcessElevators = wxNewId();
-const long DebugPanel::ID_chkAutoShafts = wxNewId();
-const long DebugPanel::ID_chkAutoStairs = wxNewId();
-const long DebugPanel::ID_chkRandom = wxNewId();
-const long DebugPanel::ID_chkMalfunctions = wxNewId();
-const long DebugPanel::ID_chkPower = wxNewId();
-const long DebugPanel::ID_CHECKBOX1 = wxNewId();
-const long DebugPanel::ID_bFloorList = wxNewId();
-const long DebugPanel::ID_bMeshControl = wxNewId();
-const long DebugPanel::ID_bCameraControl = wxNewId();
-const long DebugPanel::ID_bEditElevator = wxNewId();
-const long DebugPanel::ID_bControlReference = wxNewId();
-const long DebugPanel::ID_bStats = wxNewId();
-const long DebugPanel::ID_bEngineManager = wxNewId();
-const long DebugPanel::ID_bConsole = wxNewId();
-const long DebugPanel::ID_bCameraTexture = wxNewId();
-const long DebugPanel::ID_bEscalator = wxNewId();
-const long DebugPanel::ID_bRevolvingDoor = wxNewId();
-const long DebugPanel::ID_bObjectInfo = wxNewId();
-const long DebugPanel::ID_bActionViewer = wxNewId();
-const long DebugPanel::ID_bPeopleManager = wxNewId();
-const long DebugPanel::ID_bSkyControl = wxNewId();
-const long DebugPanel::ID_bProfiler = wxNewId();
-const long DebugPanel::ID_bKeys = wxNewId();
-const long DebugPanel::ID_bTextures = wxNewId();
-const long DebugPanel::ID_bFloorInfo = wxNewId();
-const long DebugPanel::ID_bSoundManager = wxNewId();
-const long DebugPanel::ID_bMovingWalkway = wxNewId();
-const long DebugPanel::ID_bControllerEditor = wxNewId();
-const long DebugPanel::ID_PANEL1 = wxNewId();
+const wxWindowID DebugPanel::ID_STATICTEXT1 = wxNewId();
+const wxWindowID DebugPanel::ID_STATICTEXT12 = wxNewId();
+const wxWindowID DebugPanel::ID_STATICTEXT2 = wxNewId();
+const wxWindowID DebugPanel::ID_STATICTEXT8 = wxNewId();
+const wxWindowID DebugPanel::ID_STATICTEXT13 = wxNewId();
+const wxWindowID DebugPanel::ID_STATICTEXT3 = wxNewId();
+const wxWindowID DebugPanel::ID_STATICTEXT4 = wxNewId();
+const wxWindowID DebugPanel::ID_STATICTEXT5 = wxNewId();
+const wxWindowID DebugPanel::ID_STATICTEXT10 = wxNewId();
+const wxWindowID DebugPanel::ID_STATICTEXT9 = wxNewId();
+const wxWindowID DebugPanel::ID_STATICTEXT6 = wxNewId();
+const wxWindowID DebugPanel::ID_t_camerafloor = wxNewId();
+const wxWindowID DebugPanel::ID_t_floorname = wxNewId();
+const wxWindowID DebugPanel::ID_t_camerap = wxNewId();
+const wxWindowID DebugPanel::ID_t_rotation = wxNewId();
+const wxWindowID DebugPanel::ID_t_global = wxNewId();
+const wxWindowID DebugPanel::ID_t_elevnumber = wxNewId();
+const wxWindowID DebugPanel::ID_t_elevfloor = wxNewId();
+const wxWindowID DebugPanel::ID_t_object = wxNewId();
+const wxWindowID DebugPanel::ID_t_clickposition = wxNewId();
+const wxWindowID DebugPanel::ID_t_collision = wxNewId();
+const wxWindowID DebugPanel::ID_STATICTEXT7 = wxNewId();
+const wxWindowID DebugPanel::ID_STATICTEXT11 = wxNewId();
+const wxWindowID DebugPanel::ID_chkCollisionDetection = wxNewId();
+const wxWindowID DebugPanel::ID_chkGravity = wxNewId();
+const wxWindowID DebugPanel::ID_chkProcessElevators = wxNewId();
+const wxWindowID DebugPanel::ID_chkRandom = wxNewId();
+const wxWindowID DebugPanel::ID_chkMalfunctions = wxNewId();
+const wxWindowID DebugPanel::ID_chkPower = wxNewId();
+const wxWindowID DebugPanel::ID_CHECKBOX1 = wxNewId();
+const wxWindowID DebugPanel::ID_bFloorList = wxNewId();
+const wxWindowID DebugPanel::ID_bMeshControl = wxNewId();
+const wxWindowID DebugPanel::ID_bCameraControl = wxNewId();
+const wxWindowID DebugPanel::ID_bEditElevator = wxNewId();
+const wxWindowID DebugPanel::ID_bControlReference = wxNewId();
+const wxWindowID DebugPanel::ID_bStats = wxNewId();
+const wxWindowID DebugPanel::ID_bEngineManager = wxNewId();
+const wxWindowID DebugPanel::ID_bConsole = wxNewId();
+const wxWindowID DebugPanel::ID_bCameraTexture = wxNewId();
+const wxWindowID DebugPanel::ID_bEscalator = wxNewId();
+const wxWindowID DebugPanel::ID_bRevolvingDoor = wxNewId();
+const wxWindowID DebugPanel::ID_bObjectInfo = wxNewId();
+const wxWindowID DebugPanel::ID_bActionViewer = wxNewId();
+const wxWindowID DebugPanel::ID_bPeopleManager = wxNewId();
+const wxWindowID DebugPanel::ID_bSkyControl = wxNewId();
+const wxWindowID DebugPanel::ID_bProfiler = wxNewId();
+const wxWindowID DebugPanel::ID_bKeys = wxNewId();
+const wxWindowID DebugPanel::ID_bTextures = wxNewId();
+const wxWindowID DebugPanel::ID_bFloorInfo = wxNewId();
+const wxWindowID DebugPanel::ID_bSoundManager = wxNewId();
+const wxWindowID DebugPanel::ID_bMovingWalkway = wxNewId();
+const wxWindowID DebugPanel::ID_bControllerEditor = wxNewId();
+const wxWindowID DebugPanel::ID_PANEL1 = wxNewId();
 //*)
 
 BEGIN_EVENT_TABLE(DebugPanel,wxFrame)
@@ -200,12 +198,6 @@ DebugPanel::DebugPanel(VM *root, wxWindow* parent,wxWindowID id)
 	chkProcessElevators = new wxCheckBox(Panel1, ID_chkProcessElevators, _("Process Elevators"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_chkProcessElevators"));
 	chkProcessElevators->SetValue(false);
 	BoxSizer5->Add(chkProcessElevators, 0, wxBOTTOM|wxALIGN_LEFT, 5);
-	chkAutoShafts = new wxCheckBox(Panel1, ID_chkAutoShafts, _("Automatic Shafts"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_chkAutoShafts"));
-	chkAutoShafts->SetValue(false);
-	BoxSizer5->Add(chkAutoShafts, 0, wxBOTTOM|wxALIGN_LEFT, 5);
-	chkAutoStairs = new wxCheckBox(Panel1, ID_chkAutoStairs, _("Automatic Stairs"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_chkAutoStairs"));
-	chkAutoStairs->SetValue(false);
-	BoxSizer5->Add(chkAutoStairs, 1, wxBOTTOM|wxALIGN_LEFT, 5);
 	chkRandom = new wxCheckBox(Panel1, ID_chkRandom, _("Random Activity"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_chkRandom"));
 	chkRandom->SetValue(false);
 	BoxSizer5->Add(chkRandom, 1, wxBOTTOM|wxALIGN_LEFT, 5);
@@ -275,37 +267,35 @@ DebugPanel::DebugPanel(VM *root, wxWindow* parent,wxWindowID id)
 	SetSizer(BoxSizer1);
 	BoxSizer1->SetSizeHints(this);
 
-	Connect(ID_chkCollisionDetection,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&DebugPanel::On_chkCollisionDetection_Click);
-	Connect(ID_chkGravity,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&DebugPanel::On_chkGravity_Click);
-	Connect(ID_chkProcessElevators,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&DebugPanel::On_chkProcessElevators_Click);
-	Connect(ID_chkAutoShafts,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&DebugPanel::On_chkAutoShafts_Click);
-	Connect(ID_chkAutoStairs,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&DebugPanel::On_chkAutoStairs_Click);
-	Connect(ID_chkRandom,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&DebugPanel::On_chkRandom_Click);
-	Connect(ID_chkMalfunctions,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&DebugPanel::On_chkMalfunctions_Click);
-	Connect(ID_chkPower,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&DebugPanel::On_chkPower_Click);
-	Connect(ID_CHECKBOX1,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&DebugPanel::On_chkVerbose_Click);
-	Connect(ID_bFloorList,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bFloorList_Click);
-	Connect(ID_bMeshControl,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bMeshControl_Click);
-	Connect(ID_bCameraControl,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bCameraControl_Click);
-	Connect(ID_bEditElevator,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bEditElevator_Click);
-	Connect(ID_bControlReference,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bControlReference_Click);
-	Connect(ID_bStats,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bStats_Click);
-	Connect(ID_bEngineManager,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bEngineManager_Click);
-	Connect(ID_bConsole,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bConsole_Click);
-	Connect(ID_bCameraTexture,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bCameraTexture_Click);
-	Connect(ID_bEscalator,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bEscalator_Click);
-	Connect(ID_bRevolvingDoor,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bRevolvingDoor_Click);
-	Connect(ID_bObjectInfo,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bObjectInfo_Click);
-	Connect(ID_bActionViewer,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bActionViewer_Click);
-	Connect(ID_bPeopleManager,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bPeopleManager_Click);
-	Connect(ID_bSkyControl,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bSkyControl_Click);
-	Connect(ID_bProfiler,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bProfiler_Click);
-	Connect(ID_bKeys,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bKeys_Click);
-	Connect(ID_bTextures,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bTextures_Click);
-	Connect(ID_bFloorInfo,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bFloorInfo_Click);
-	Connect(ID_bSoundManager,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bSoundManager_Click);
-	Connect(ID_bMovingWalkway,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bMovingWalkway_Click);
-	Connect(ID_bControllerEditor,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bControllerEditor_Click);
+	Connect(ID_chkCollisionDetection, wxEVT_COMMAND_CHECKBOX_CLICKED, (wxObjectEventFunction)&DebugPanel::On_chkCollisionDetection_Click);
+	Connect(ID_chkGravity, wxEVT_COMMAND_CHECKBOX_CLICKED, (wxObjectEventFunction)&DebugPanel::On_chkGravity_Click);
+	Connect(ID_chkProcessElevators, wxEVT_COMMAND_CHECKBOX_CLICKED, (wxObjectEventFunction)&DebugPanel::On_chkProcessElevators_Click);
+	Connect(ID_chkRandom, wxEVT_COMMAND_CHECKBOX_CLICKED, (wxObjectEventFunction)&DebugPanel::On_chkRandom_Click);
+	Connect(ID_chkMalfunctions, wxEVT_COMMAND_CHECKBOX_CLICKED, (wxObjectEventFunction)&DebugPanel::On_chkMalfunctions_Click);
+	Connect(ID_chkPower, wxEVT_COMMAND_CHECKBOX_CLICKED, (wxObjectEventFunction)&DebugPanel::On_chkPower_Click);
+	Connect(ID_CHECKBOX1, wxEVT_COMMAND_CHECKBOX_CLICKED, (wxObjectEventFunction)&DebugPanel::On_chkVerbose_Click);
+	Connect(ID_bFloorList, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&DebugPanel::On_bFloorList_Click);
+	Connect(ID_bMeshControl, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&DebugPanel::On_bMeshControl_Click);
+	Connect(ID_bCameraControl, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&DebugPanel::On_bCameraControl_Click);
+	Connect(ID_bEditElevator, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&DebugPanel::On_bEditElevator_Click);
+	Connect(ID_bControlReference, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&DebugPanel::On_bControlReference_Click);
+	Connect(ID_bStats, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&DebugPanel::On_bStats_Click);
+	Connect(ID_bEngineManager, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&DebugPanel::On_bEngineManager_Click);
+	Connect(ID_bConsole, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&DebugPanel::On_bConsole_Click);
+	Connect(ID_bCameraTexture, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&DebugPanel::On_bCameraTexture_Click);
+	Connect(ID_bEscalator, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&DebugPanel::On_bEscalator_Click);
+	Connect(ID_bRevolvingDoor, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&DebugPanel::On_bRevolvingDoor_Click);
+	Connect(ID_bObjectInfo, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&DebugPanel::On_bObjectInfo_Click);
+	Connect(ID_bActionViewer, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&DebugPanel::On_bActionViewer_Click);
+	Connect(ID_bPeopleManager, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&DebugPanel::On_bPeopleManager_Click);
+	Connect(ID_bSkyControl, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&DebugPanel::On_bSkyControl_Click);
+	Connect(ID_bProfiler, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&DebugPanel::On_bProfiler_Click);
+	Connect(ID_bKeys, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&DebugPanel::On_bKeys_Click);
+	Connect(ID_bTextures, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&DebugPanel::On_bTextures_Click);
+	Connect(ID_bFloorInfo, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&DebugPanel::On_bFloorInfo_Click);
+	Connect(ID_bSoundManager, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&DebugPanel::On_bSoundManager_Click);
+	Connect(ID_bMovingWalkway, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&DebugPanel::On_bMovingWalkway_Click);
+	Connect(ID_bControllerEditor, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&DebugPanel::On_bControllerEditor_Click);
 	//*)
 	Simcore = 0;
 	vm = root;
@@ -416,12 +406,6 @@ void DebugPanel::On_chkProcessElevators_Click(wxCommandEvent& event)
 		Simcore->ProcessElevators = chkProcessElevators->GetValue();
 }
 
-void DebugPanel::On_chkAutoShafts_Click(wxCommandEvent& event)
-{
-	if (Simcore)
-		Simcore->AutoShafts = chkAutoShafts->GetValue();
-}
-
 void DebugPanel::On_bFloorList_Click(wxCommandEvent& event)
 {
 	if (!info)
@@ -464,8 +448,6 @@ void DebugPanel::OnInit()
 	chkCollisionDetection->SetValue(Simcore->camera->CollisionsEnabled());
 	chkGravity->SetValue(Simcore->camera->GetGravityStatus());
 	chkProcessElevators->SetValue(Simcore->ProcessElevators);
-	chkAutoShafts->SetValue(Simcore->AutoShafts);
-	chkAutoStairs->SetValue(Simcore->AutoStairs);
 	chkVerbose->SetValue(Simcore->Verbose);
 	chkRandom->SetValue(Simcore->RandomActivity);
 	chkMalfunctions->SetValue(Simcore->Malfunctions);
@@ -652,12 +634,6 @@ void DebugPanel::On_chkGravity_Click(wxCommandEvent& event)
 	//enables or disables gravity
 	if (Simcore)
 		Simcore->camera->EnableGravity(chkGravity->GetValue());
-}
-
-void DebugPanel::On_chkAutoStairs_Click(wxCommandEvent& event)
-{
-	if (Simcore)
-		Simcore->AutoStairs = chkAutoStairs->GetValue();
 }
 
 void DebugPanel::On_bCameraControl_Click(wxCommandEvent& event)
