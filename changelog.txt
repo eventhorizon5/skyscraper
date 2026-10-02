@@ -1,3 +1,23 @@
+Version 2.0.4
+-------------------------
+-SBS: fixed an issue where shafts would not be displayed if no elevators/cars existed
+-Don't run reverb code if sound is disabled in INI file
+-Catch exceptions on render window creation, this detects issues with creating the OpenGL context on Wayland systems
+-SBS: when loading a sound for a second time, return with 'true' if sound is already loaded instead of returning with false
+-SBS: Escalator and Moving Walkway extents (start and end vectors) should be used to determine the maximum camera distance that the steps should be moved with, instead of the center of the object
+-Frontend: reset the mouse cursor properly when exiting to the main menu; this fixes an issue where the cursor wouldn't reset when exiting to the main menu while in Freelook mode.
+-ScriptProcessor: calculate random numbers with a random seed of millisecond time instead of second time, this fixes the random number generator in For loops
+-SBS: have random activity use millsecond time seed, for better random number generation
+-SBS: fixed escalator/moving walkway camera motion, adjusted it and locked it in with the camera's delta factor to prevent FPS differences in motion
+-SBS: adjust starting camera delta factor
+-SBS: handle Parking Mode properly in SameFloorArrival()
+-SBS: only open doors without an AddRoute() in GoToRecallFloor() if leveled on the recall floor
+-SBS: don't automatically delete the active floor route after an emergency stop if in Fire Phase 1 mode
+-SBS: automatically dequeue floor routes when Fire Service Phase 1 is on, when Fire Service Phase 2 is also on.
+-SBS: if an object doesn't have a scenenode, make sure to check children before exiting.
+-SBS: don't automatically open doors while in Fire Service Phase 2 mode
+-SBS: elevator door hold mode should always be enabled while in Fire Service Phase 2 mode, even while on recall floor
+
 Version 2.0.3
 -------------------------
 -When loading a texture, don't exit if a material is already loaded with that name
