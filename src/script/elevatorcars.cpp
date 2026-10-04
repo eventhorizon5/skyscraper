@@ -1623,7 +1623,7 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 	if (StartsWithNoCase(LineData, "addfloorindicator "))
 	{
 		//get data
-		int params = SplitData(LineData, 19);
+		int params = SplitData(LineData, 18);
 
 		if (params < 6 && params > 8)
 			return ScriptError("Incorrect number of parameters");
