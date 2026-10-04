@@ -1620,10 +1620,10 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 	}
 
 	//AddFloorIndicator command
-	if (StartsWithNoCase(LineData, "addfloorindicator"))
+	if (StartsWithNoCase(LineData, "addfloorindicator "))
 	{
 		//get data
-		int params = SplitData(LineData, 18);
+		int params = SplitData(LineData, 19);
 
 		if (params < 6 && params > 8)
 			return ScriptError("Incorrect number of parameters");
@@ -1738,6 +1738,30 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 			car->AddDirectionalIndicators(ToBool(tempdata[0]), ToBool(tempdata[1]), ToBool(tempdata[2]), ToBool(tempdata[3]), tempdata[4], tempdata[5], tempdata[6], tempdata[7], tempdata[8], ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), tempdata[12], ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToBool(tempdata[15]), ToFloat(tempdata[16]), ToFloat(tempdata[17]));
 		else
 			car->AddDirectionalIndicators(ToBool(tempdata[0]), false, ToBool(tempdata[1]), ToBool(tempdata[2]), tempdata[3], tempdata[4], tempdata[5], tempdata[6], tempdata[7], ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), tempdata[11], ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToBool(tempdata[14]), ToFloat(tempdata[15]), ToFloat(tempdata[16]));
+		return sNextLine;
+	}
+
+	//AddFloorIndicators command
+	if (StartsWithNoCase(LineData, "addfloorindicators"))
+	{
+		//get data
+		int params = SplitData(LineData, 19);
+
+		if (params != 9)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 4; i <= 8; i++)
+		{
+			if (!IsNumeric(tempdata[i]))
+				return ScriptError("Invalid value: " + tempdata[i]);
+		}
+
+		//stop here if in Check mode
+		if (config->CheckScript == true)
+			return sNextLine;
+
+		car->AddFloorIndicators(ToBool(tempdata[0]), tempdata[1], tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]));
 		return sNextLine;
 	}
 

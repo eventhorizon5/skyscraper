@@ -512,6 +512,18 @@ FloorIndicator* ElevatorCar::AddFloorIndicator(const std::string &texture_prefix
 	return indicator;
 }
 
+void ElevatorCar::AddFloorIndicators(bool relative, const std::string &texture_prefix, const std::string &blank_texture, const std::string &direction, Real CenterX, Real CenterZ, Real width, Real height, Real voffset)
+{
+	if (sbs->Verbose)
+		Report("adding floor indicators");
+
+	for (size_t i = 0; i < ServicedFloors.size(); i++)
+	{
+		if (sbs->GetFloor(ServicedFloors[i]))
+			sbs->GetFloor(ServicedFloors[i])->AddFloorIndicator(parent->Number, Number, relative, texture_prefix, blank_texture, direction, CenterX, CenterZ, width, height, voffset);
+	}
+
+}
 ButtonPanel* ElevatorCar::CreateButtonPanel(const std::string &texture, int rows, int columns, const std::string &direction, Real CenterX, Real CenterZ, Real buttonwidth, Real buttonheight, Real spacingX, Real spacingY, Real voffset, Real tw, Real th)
 {
 	//create a new button panel object and store the pointer
