@@ -55,6 +55,7 @@
 #include "reverb.h"
 
 #include <time.h>
+#include "cardreader.h"
 
 namespace SBS {
 
@@ -1029,6 +1030,14 @@ bool ElevatorCar::Enabled(bool value)
 
 	EnableDoors(value);
 	IsEnabled = value;
+
+	//card readers mounted in the car
+	for (int i = 0; i < GetChildrenCount(); i++)
+	{
+		Object *child = GetChild(i);
+		if (child && child->GetType() == "CardReader")
+			static_cast<CardReader*>(child)->Enabled(value);
+	}
 
 	//floor indicators
 	for (size_t i = 0; i < FloorIndicatorArray.size(); i++)

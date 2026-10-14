@@ -3803,6 +3803,10 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		if (door)
 			door->SetLocked(config->lockvalue, config->keyvalue);
 
+		//attach to access point, if set with SetAccessPoint
+		if (door && config->accesspoint != "")
+			AttachDoorToAccessPoint(door);
+
 		StoreCommand(door);
 		return sNextLine;
 	}
@@ -3879,6 +3883,10 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 
 		if (door)
 			door->SetLocked(config->lockvalue, config->keyvalue);
+
+		//attach to access point, if set with SetAccessPoint
+		if (door && config->accesspoint != "")
+			AttachDoorToAccessPoint(door);
 
 		StoreCommand(door);
 		return sNextLine;
@@ -4087,6 +4095,10 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 		door->FinishDoor(ToBool(tempdata[2]));
 
 		door->SetLocked(config->lockvalue, config->keyvalue);
+
+		//attach to access point, if set with SetAccessPoint
+		if (config->accesspoint != "")
+			AttachDoorToAccessPoint(door);
 
 		return sNextLine;
 	}
@@ -5423,6 +5435,13 @@ int ScriptProcessor::CommandsSection::Run(std::string &LineData)
 
 		texturemanager->SetTexture(tempdata[0], tempdata[1]);
 		return sNextLine;
+	}
+
+	//access control commands
+	{
+		int result = AccessCommands(LineData);
+		if (result != sContinue)
+			return result;
 	}
 
 	//SetKey command

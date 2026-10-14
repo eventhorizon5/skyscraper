@@ -48,6 +48,7 @@ public:
 	::SBS::MeshObject* GetMeshObject(std::string name);
 	int GetElevatorCar(std::string &value, int floor, int &elevator, int &car);
 	void GetDirectionStrings(int direction, std::string &face_direction, std::string &open_direction);
+	void AttachDoorToAccessPoint(::SBS::Door *door); //access control (script/access.cpp)
 
 protected:
 	ScriptProcessor *parent;
@@ -71,7 +72,8 @@ enum SectionType
 	SECTION_ELEVATORCAR = 6,
 	SECTION_VEHICLE = 7,
 	SECTION_CONTROLLER = 8,
-	SECTION_CALLSTATION = 9
+	SECTION_CALLSTATION = 9,
+	SECTION_ACCESS = 10
 };
 
 class ScriptProcessor::ConfigHandler
@@ -85,6 +87,11 @@ public:
 	bool setkey;
 	int keyvalue;
 	int lockvalue;
+	std::string accesspoint; //access point for new doors (SetAccessPoint), empty for none
+	int accesspoint_unlock; //unlock time in milliseconds
+	int accesspoint_held; //door-held alarm time in milliseconds
+	bool accesspoint_autoopen; //open doors automatically on grant
+	int accesspoint_autoclose; //auto-close time in milliseconds, -1 = access controller default
 	Vector3 MinExtent;
 	Vector3 MaxExtent;
 	int RangeL, RangeLOld;
@@ -133,6 +140,15 @@ class ScriptProcessor::CommandsSection : public ScriptProcessor::Section
 public:
 	explicit CommandsSection(ScriptProcessor* parent);
 	~CommandsSection() override {}
+	int Run(std::string &LineData) override;
+	int AccessCommands(std::string &LineData); //access control commands (script/access.cpp)
+};
+
+class ScriptProcessor::AccessSection : public ScriptProcessor::Section
+{
+public:
+	explicit AccessSection(ScriptProcessor* parent);
+	~AccessSection() override {}
 	int Run(std::string &LineData) override;
 };
 

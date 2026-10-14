@@ -44,6 +44,7 @@ public:
 	class VehicleSection;
 	class ControllerSection;
 	class CallStationSection;
+	class AccessSection;
 
 	struct FunctionInfo
 	{
@@ -114,6 +115,7 @@ private:
 	VehicleSection *vehicle_section;
 	ControllerSection *controller_section;
 	CallStationSection *callstation_section;
+	AccessSection *access_section;
 
 	struct FunctionData
 	{

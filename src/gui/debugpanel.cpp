@@ -50,6 +50,8 @@
 #include "moveengine.h"
 #include "enginemanager.h"
 #include "peoplemanager.h"
+#include "access.h"
+#include "accesscontrol.h"
 #include "camtex.h"
 #include "soundmanager.h"
 #include "texturemanager.h"
@@ -106,6 +108,7 @@ const wxWindowID DebugPanel::ID_bRevolvingDoor = wxNewId();
 const wxWindowID DebugPanel::ID_bObjectInfo = wxNewId();
 const wxWindowID DebugPanel::ID_bActionViewer = wxNewId();
 const wxWindowID DebugPanel::ID_bPeopleManager = wxNewId();
+const wxWindowID DebugPanel::ID_bAccessControl = wxNewId();
 const wxWindowID DebugPanel::ID_bSkyControl = wxNewId();
 const wxWindowID DebugPanel::ID_bProfiler = wxNewId();
 const wxWindowID DebugPanel::ID_bKeys = wxNewId();
@@ -244,6 +247,8 @@ DebugPanel::DebugPanel(VM *root, wxWindow* parent,wxWindowID id)
 	BoxSizer10->Add(bActionViewer, 1, wxEXPAND, 5);
 	bPeopleManager = new wxButton(Panel1, ID_bPeopleManager, _("People Manager"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bPeopleManager"));
 	BoxSizer10->Add(bPeopleManager, 1, wxEXPAND, 5);
+	bAccessControl = new wxButton(Panel1, ID_bAccessControl, _("Access Control"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bAccessControl"));
+	BoxSizer10->Add(bAccessControl, 1, wxEXPAND, 5);
 	bSkyControl = new wxButton(Panel1, ID_bSkyControl, _("Sky Control"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bSkyControl"));
 	BoxSizer10->Add(bSkyControl, 1, wxEXPAND, 5);
 	bProfiler = new wxButton(Panel1, ID_bProfiler, _("Profiler"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bProfiler"));
@@ -288,6 +293,7 @@ DebugPanel::DebugPanel(VM *root, wxWindow* parent,wxWindowID id)
 	Connect(ID_bObjectInfo, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&DebugPanel::On_bObjectInfo_Click);
 	Connect(ID_bActionViewer, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&DebugPanel::On_bActionViewer_Click);
 	Connect(ID_bPeopleManager, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&DebugPanel::On_bPeopleManager_Click);
+	Connect(ID_bAccessControl, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&DebugPanel::On_bAccessControl_Click);
 	Connect(ID_bSkyControl, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&DebugPanel::On_bSkyControl_Click);
 	Connect(ID_bProfiler, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&DebugPanel::On_bProfiler_Click);
 	Connect(ID_bKeys, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&DebugPanel::On_bKeys_Click);
@@ -311,6 +317,7 @@ DebugPanel::DebugPanel(VM *root, wxWindow* parent,wxWindowID id)
 	skycontrol = 0;
 	emanager = 0;
 	pmanager = 0;
+	accesscontrol = 0;
 	camtex = 0;
 	timer = 0;
 	smanager = 0;
@@ -368,6 +375,9 @@ DebugPanel::~DebugPanel()
 	if (pmanager)
 		pmanager->Destroy();
 	pmanager = 0;
+	if (accesscontrol)
+		accesscontrol->Destroy();
+	accesscontrol = 0;
 	if (camtex)
 		camtex->Destroy();
 	camtex = 0;
@@ -577,6 +587,12 @@ void DebugPanel::Loop()
 			pmanager->Loop();
 	}
 
+	if (accesscontrol)
+	{
+		if (accesscontrol->IsShown() == true)
+			accesscontrol->Loop();
+	}
+
 	if (camtex)
 	{
 		if (camtex->IsShown() == true)
@@ -768,6 +784,17 @@ void DebugPanel::On_bPeopleManager_Click(wxCommandEvent& event)
 	pmanager->CenterOnScreen();
 	pmanager->Show();
 	pmanager->Raise();
+}
+
+void DebugPanel::On_bAccessControl_Click(wxCommandEvent& event)
+{
+	if (!accesscontrol)
+		accesscontrol = new AccessControlWindow(this, -1);
+
+	accesscontrol->CenterOnScreen();
+	accesscontrol->Show();
+	accesscontrol->Raise();
+	accesscontrol->Loop();
 }
 
 void DebugPanel::EnableTimer(bool value)

@@ -35,6 +35,7 @@
 #include "profiler.h"
 #include "utility.h"
 #include "elevator.h"
+#include "access.h"
 
 namespace SBS {
 
@@ -192,6 +193,14 @@ bool CallStation::SelectFloor(int floor)
 	//check lock state
 	if (IsLocked() == true)
 		return ReportError("Call station is locked");
+
+	//access control: secured destinations need a badge tap at this station first
+	AccessController *access = sbs->GetAccessController();
+	if (access && access->CheckStationFloor(this, floor) == false)
+	{
+		Error(1);
+		return ReportError("Floor " + ToString(floor) + " is secured - present a badge");
+	}
 
 	Report("Selecting floor " + ToString(floor));
 

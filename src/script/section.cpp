@@ -1303,6 +1303,11 @@ void ScriptProcessor::ConfigHandler::Reset()
 	setkey = false;
 	keyvalue = 0;
 	lockvalue = 0;
+	accesspoint = "";
+	accesspoint_unlock = 5000;
+	accesspoint_held = 30000;
+	accesspoint_autoopen = false;
+	accesspoint_autoclose = -1;
 	MinExtent = Vector3::ZERO;
 	MaxExtent = Vector3::ZERO;
 	RangeL = 0;

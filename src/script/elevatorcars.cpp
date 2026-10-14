@@ -2191,7 +2191,10 @@ int ScriptProcessor::ElevatorCarSection::Run(std::string &LineData)
 			door = car->AddDoor("", tempdata[0], tempdata[1], ToBool(tempdata[2]), tempdata[3], tempdata[3], ToFloat(tempdata[4]), face_direction, open_direction, true, ToFloat(tempdata[6]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), 0, 0);
 
 		if (door)
+		{
 			door->SetLocked(config->lockvalue, config->keyvalue);
+			AttachDoorToAccessPoint(door); //access control
+		}
 
 		StoreCommand(door);
 		return sNextLine;

@@ -32,6 +32,7 @@
 #include "globals.h"
 #include "sbs.h"
 #include "camera.h"
+#include "access.h"
 #include "debugpanel.h"
 #include "skyscraper.h"
 #include "vm.h"
@@ -149,6 +150,7 @@ MainScreen::MainScreen(Skyscraper *parent, int width, int height) : wxFrame(0, -
 	key_pickup = hal->GetConfigString(hal->keyconfigfile, "Skyscraper.Frontend.Keyboard.PickUp", "C")[0];
 	key_load = hal->GetConfigString(hal->keyconfigfile, "Skyscraper.Frontend.Keyboard.Load", ";")[0];
 	key_enter = hal->GetConfigString(hal->keyconfigfile, "Skyscraper.Frontend.Keyboard.Enter", "E")[0];
+	key_badge = hal->GetConfigString(hal->keyconfigfile, "Skyscraper.Frontend.Keyboard.Badge", "G")[0];
 
 #ifndef __FreeBSD__
 	joy_click = hal->GetConfigInt(hal->joyconfigfile, "Skyscraper.Frontend.Joystick.Click", 0);
@@ -517,6 +519,14 @@ void MainScreen::OnKeyDown(wxKeyEvent& event)
 				camera->PickUpModel();
 			else
 				camera->DropModel();
+		}
+
+		//switch to the next access control badge in the wallet
+		if (key == (wxKeyCode)key_badge)
+		{
+			::SBS::AccessController *access = Simcore->GetAccessController(false);
+			if (access)
+				access->NextBadge();
 		}
 
 		//load a new additional building

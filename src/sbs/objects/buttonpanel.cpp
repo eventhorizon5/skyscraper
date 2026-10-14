@@ -31,6 +31,7 @@
 #include "control.h"
 #include "callstation.h"
 #include "buttonpanel.h"
+#include "cardreader.h"
 
 namespace SBS {
 
@@ -101,6 +102,24 @@ ButtonPanel::ButtonPanel(Object *parent, int index, const std::string &texture, 
 
 ButtonPanel::~ButtonPanel()
 {
+	//delete card readers mounted on this panel (they unregister from the access controller);
+	//on engine shutdown the access controller has already deleted them
+	if (sbs->FastDelete == false)
+	{
+		std::vector<Object*> readers;
+		for (int i = 0; i < GetChildrenCount(); i++)
+		{
+			Object *child = GetChild(i);
+			if (child && child->GetType() == "CardReader")
+				readers.emplace_back(child);
+		}
+		for (size_t i = 0; i < readers.size(); i++)
+		{
+			readers[i]->parent_deleting = true;
+			delete readers[i];
+		}
+	}
+
 	//delete controls
 	for (size_t i = 0; i < controls.size(); i++)
 	{
@@ -170,9 +189,9 @@ Control* ButtonPanel::AddButton(const std::string &sound, const std::string &tex
 	return AddControl(sound, row, column, width, height, hoffset, voffset, 1, names, textures);
 }
 
-Control* ButtonPanel::AddControl(const std::string &sound, int row, int column, Real bwidth, Real bheight, Real hoffset, Real voffset, int selection_position, std::vector<std::string> &action_names, std::vector<std::string> &textures)
+Vector3 ButtonPanel::GetGridPosition(int row, int column, Real bwidth, Real bheight, Real hoffset, Real voffset)
 {
-	//create an elevator control (button, switch, knob)
+	//get the position of a grid cell on this panel, for controls and other panel items
 
 	Vector3 position = Vector3::ZERO;
 
@@ -217,6 +236,22 @@ Control* ButtonPanel::AddControl(const std::string &sound, int row, int column, 
 		position.z = (-Width / 2) + (SpacingX * column) + (ButtonWidth * (column - 1)) - ((ButtonWidth * (bwidth - 1)) / 2);
 		position.z += hoffset * ButtonWidth;
 	}
+
+	return position;
+}
+
+Control* ButtonPanel::AddControl(const std::string &sound, int row, int column, Real bwidth, Real bheight, Real hoffset, Real voffset, int selection_position, std::vector<std::string> &action_names, std::vector<std::string> &textures)
+{
+	//create an elevator control (button, switch, knob)
+
+	//set to default if value is 0
+	if (bwidth == 0)
+		bwidth = 1;
+
+	if (bheight == 0)
+		bheight = 1;
+
+	Vector3 position = GetGridPosition(row, column, bwidth, bheight, hoffset, voffset);
 
 	//create control object
 	controls.resize(controls.size() + 1);
@@ -272,6 +307,15 @@ bool ButtonPanel::Enabled(bool value)
 		if (!result)
 			status = false;
 	}
+
+	//card readers mounted on this panel
+	for (int i = 0; i < GetChildrenCount(); i++)
+	{
+		Object *child = GetChild(i);
+		if (child && child->GetType() == "CardReader")
+			static_cast<CardReader*>(child)->Enabled(value);
+	}
+
 	is_enabled = value;
 
 	return status;

@@ -1001,7 +1001,10 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 			door = floor->AddDoor(tempdata[16], tempdata[0], tempdata[1], ToBool(tempdata[2]), tempdata[3], tempdata[3], ToFloat(tempdata[4]), face_direction, open_direction, true, ToFloat(tempdata[6]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToFloat(tempdata[15]));
 
 		if (door)
+		{
 			door->SetLocked(config->lockvalue, config->keyvalue);
+			AttachDoorToAccessPoint(door); //access control
+		}
 
 		StoreCommand(door);
 		return sNextLine;
@@ -1124,7 +1127,10 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 				door = level->AddDoor(tempdata[17], tempdata[1], tempdata[2], ToBool(tempdata[3]), tempdata[4], tempdata[4], ToFloat(tempdata[5]), face_direction, open_direction, true, ToFloat(tempdata[7]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToFloat(tempdata[15]), ToFloat(tempdata[16]));
 
 			if (door)
+			{
 				door->SetLocked(config->lockvalue, config->keyvalue);
+				AttachDoorToAccessPoint(door); //access control
+			}
 
 			StoreCommand(door);
 		}
@@ -1183,7 +1189,10 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 				door = level->AddDoor(tempdata[17], tempdata[1], tempdata[2], ToBool(tempdata[3]), tempdata[4], tempdata[4], ToFloat(tempdata[5]), face_direction, open_direction, true, ToFloat(tempdata[7]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToFloat(tempdata[15]), ToFloat(tempdata[16]));
 
 			if (door)
+			{
 				door->SetLocked(config->lockvalue, config->keyvalue);
+				AttachDoorToAccessPoint(door); //access control
+			}
 
 			StoreCommand(door);
 		}
@@ -1241,7 +1250,10 @@ int ScriptProcessor::FloorSection::Run(std::string &LineData)
 			door = floor->AddDoor(tempdata[16], tempdata[0], tempdata[1], ToBool(tempdata[2]), tempdata[3], tempdata[3], ToFloat(tempdata[4]), face_direction, open_direction, true, ToFloat(tempdata[6]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToFloat(tempdata[15]), true);
 
 		if (door)
+		{
 			door->SetLocked(config->lockvalue, config->keyvalue);
+			AttachDoorToAccessPoint(door); //access control
+		}
 
 		StoreCommand(door);
 		return sNextLine;

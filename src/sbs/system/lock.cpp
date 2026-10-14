@@ -23,6 +23,8 @@
 
 #include "globals.h"
 #include "sbs.h"
+#include "door.h"
+#include "access.h"
 #include "lock.h"
 
 namespace SBS {
@@ -81,6 +83,15 @@ DoorLock::DoorLock(Object *parent)
 	Locked = false;
 	KeyID = 0;
 	this->Parent = parent;
+	access_point = 0;
+}
+
+DoorLock::~DoorLock()
+{
+	//detach from the access point
+	if (access_point)
+		access_point->RemoveDoor(static_cast<Door*>(Parent));
+	access_point = 0;
 }
 
 void DoorLock::SetDirection(bool direction)
@@ -109,6 +120,10 @@ bool DoorLock::ToggleLock(const Vector3 &position, bool force)
 	//if force is true, bypass key check
 
 	bool replocked = false;
+
+	//doors under access control are locked and unlocked by the access controller
+	if (access_point && force == false)
+		return Parent->ReportError("Controlled by access point " + access_point->GetName());
 
 	//quit if user doesn't have key, if force is false
 	if (KeyID != 0)
@@ -177,7 +192,21 @@ bool DoorLock::GetSide(const Vector3 &position)
 
 bool DoorLock::IsLocked(const Vector3 &position)
 {
-	//returns if the door's side (in relation to the given position) is locked or not
+	//returns if the door's side (in relation to the given position) is locked or not,
+	//taking a released (card-granted) access point into account
+
+	if (access_point)
+	{
+		if (access_point->IsReleased() == true)
+			return false;
+	}
+
+	return IsLockedRaw(position);
+}
+
+bool DoorLock::IsLockedRaw(const Vector3 &position)
+{
+	//returns the mechanical lock state of the door's side, ignoring access control
 
 	if (Locked == 0)
 		return false;
@@ -195,6 +224,14 @@ bool DoorLock::IsLocked(const Vector3 &position)
 int DoorLock::GetKeyID()
 {
 	return KeyID;
+}
+
+void DoorLock::NotifyAccessOpen(const Vector3 &position, bool forced)
+{
+	//tell the access point that the door is opening, for alarm tracking
+
+	if (access_point)
+		access_point->OnDoorOpened(static_cast<Door*>(Parent), IsLockedRaw(position), forced);
 }
 
 }

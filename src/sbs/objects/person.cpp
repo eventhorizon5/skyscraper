@@ -33,6 +33,7 @@
 #include "timer.h"
 #include "profiler.h"
 #include "person.h"
+#include "access.h"
 
 namespace SBS {
 
@@ -228,6 +229,15 @@ void Person::ProcessRoute()
 		{
 			Report("Pressing " + ToString(floor_selection) + " on call station for elevator " + ToString(elevator->Number));
 
+			//access control: tap this person's badge if the destination is secured
+			AccessController *access = sbs->GetAccessController();
+			if (access && access->PersonRequestStationFloor(this, station, floor_selection) == false)
+			{
+				Report("No access to floor " + ToString(floor_selection) + " at call station");
+				Stop();
+				return;
+			}
+
 			result = station->SelectFloor(floor_selection);
 			route[0].floor_selected = true;
 
@@ -294,6 +304,15 @@ void Person::ProcessRoute()
 						if (car->AreDoorsOpen() == true)
 						{
 							Report("Pressing elevator button for floor " + floor->ID);
+
+							//access control: tap this person's badge if the floor is secured
+							AccessController *access = sbs->GetAccessController();
+							if (access && access->PersonRequestElevatorFloor(this, elevator->Number, floor_selection) == false)
+							{
+								Report("No access to floor " + floor->ID);
+								Stop();
+								return;
+							}
 
 							Control *control = car->GetFloorButton(floor_selection);
 

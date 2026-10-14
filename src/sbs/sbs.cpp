@@ -56,6 +56,7 @@
 #include "timer.h"
 #include "profiler.h"
 #include "controller.h"
+#include "access.h"
 #include "callstation.h"
 #include "doorsystem.h"
 #include "gitrev.h"
@@ -190,6 +191,7 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, int instance_number, const Vector3 &
 	vehicle_manager = 0;
 	controller_manager = 0;
 	teleporter_manager = 0;
+	access_controller = 0;
 
 	//Print SBS banner
 	PrintBanner();
@@ -267,6 +269,14 @@ SBS::~SBS()
 	Report("Deleting simulator objects...");
 
 	FastDelete = true;
+
+	//delete access controller first, so doors and readers detach from it before they're deleted
+	if (access_controller)
+	{
+		access_controller->parent_deleting = true;
+		delete access_controller;
+	}
+	access_controller = 0;
 
 	//delete people
 	for (size_t i = 0; i < PersonArray.size(); i++)
@@ -1596,6 +1606,8 @@ bool SBS::DeleteObject(Object *object)
 	else if (type == "Model")
 		deleted = true;
 	else if (type == "Control")
+		deleted = true;
+	else if (type == "CardReader")
 		deleted = true;
 	else if (type == "Trigger")
 		deleted = true;
@@ -3149,6 +3161,17 @@ VehicleManager* SBS::GetVehicleManager()
 ControllerManager* SBS::GetControllerManager()
 {
 	return controller_manager;
+}
+
+AccessController* SBS::GetAccessController(bool create)
+{
+	//get the access control system, optionally creating it
+	//buildings that never use access control never create it
+
+	if (!access_controller && create == true)
+		access_controller = new AccessController(this);
+
+	return access_controller;
 }
 
 TeleporterManager* SBS::GetTeleporterManager()

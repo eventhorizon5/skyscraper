@@ -68,6 +68,7 @@ ScriptProcessor::ScriptProcessor(EngineContext *instance)
 	vehicle_section = new VehicleSection(this);
 	controller_section = new ControllerSection(this);
 	callstation_section = new CallStationSection(this);
+	access_section = new AccessSection(this);
 
 	NoModels = false;
 	Reset();
@@ -97,6 +98,8 @@ ScriptProcessor::~ScriptProcessor()
 		delete controller_section;
 	if (callstation_section)
 		delete callstation_section;
+	if (access_section)
+		delete access_section;
 }
 
 void ScriptProcessor::Reset(bool full)
@@ -145,6 +148,7 @@ void ScriptProcessor::Reset(bool full)
 	vehicle_section->Reset();
 	controller_section->Reset();
 	callstation_section->Reset();
+	access_section->Reset();
 }
 
 bool ScriptProcessor::Run()
@@ -282,6 +286,10 @@ recalc:
 		//process call stations
 		else if (config->SectionNum == SECTION_CALLSTATION)
 			returncode = callstation_section->Run(LineData);
+
+		//process access control
+		else if (config->SectionNum == SECTION_ACCESS)
+			returncode = access_section->Run(LineData);
 
 		//Global commands
 		if (returncode == sContinue)
@@ -1383,6 +1391,19 @@ int ScriptProcessor::ProcessSections()
 
 		if (defined == false)
 			engine->Report("Defined function " + function);
+		return sNextLine;
+	}
+	if (StartsWithNoCase(LineData, "<access>"))
+	{
+		if (config->SectionNum != SECTION_NONE)
+		{
+			ScriptError("Already within a section");
+			return sError;
+		}
+		config->SectionNum = SECTION_ACCESS;
+		config->Context = "Access";
+		if (InRunloop() == false)
+			engine->Report("Processing access control...");
 		return sNextLine;
 	}
 	if (StartsWithNoCase(LineData, "<textures>"))

@@ -53,6 +53,7 @@ class ActionViewer;
 class SkyControl;
 class EngineManager;
 class PeopleManager;
+class AccessControlWindow;
 class ParameterViewer;
 class CreateObject;
 class MoveObject;
@@ -120,6 +121,7 @@ class DebugPanel: public wxFrame
 		static const wxWindowID ID_bObjectInfo;
 		static const wxWindowID ID_bActionViewer;
 		static const wxWindowID ID_bPeopleManager;
+		static const wxWindowID ID_bAccessControl;
 		static const wxWindowID ID_bSkyControl;
 		static const wxWindowID ID_bProfiler;
 		static const wxWindowID ID_bKeys;
@@ -175,6 +177,7 @@ class DebugPanel: public wxFrame
 		void On_bSkyControl_Click(wxCommandEvent& event);
 		void On_bEngineManager_Click(wxCommandEvent& event);
 		void On_bPeopleManager_Click(wxCommandEvent& event);
+		void On_bAccessControl_Click(wxCommandEvent& event);
 		void On_bCameraTexture_Click(wxCommandEvent& event);
 		void On_bLightControl_Click(wxCommandEvent& event);
 		void On_bSoundManager_Click(wxCommandEvent& event);
@@ -210,6 +213,7 @@ class DebugPanel: public wxFrame
 		wxButton* bMovingWalkway;
 		wxButton* bObjectInfo;
 		wxButton* bPeopleManager;
+		wxButton* bAccessControl;
 		wxButton* bProfiler;
 		wxButton* bRevolvingDoor;
 		wxButton* bSkyControl;
@@ -262,6 +266,7 @@ class DebugPanel: public wxFrame
 		SkyControl *skycontrol;
 		EngineManager *emanager;
 		PeopleManager *pmanager;
+		AccessControlWindow *accesscontrol;
 		CameraTextureControl *camtex;
 		SoundManager *smanager;
 		TextureManager *tmanager;

@@ -26,6 +26,8 @@
 
 namespace SBS {
 
+class AccessPoint;
+
 class SBSIMPEXP Lock
 {
 public:
@@ -46,19 +48,27 @@ class SBSIMPEXP DoorLock
 {
 public:
 	DoorLock(Object *parent);
-	virtual ~DoorLock() {}
+	virtual ~DoorLock();
 	void SetDirection(bool direction);
 	void SetLocked(int side, int keyid);
 	bool GetSide(const Vector3 &position);
 	bool IsLocked(const Vector3 &position);
+	bool IsLockedRaw(const Vector3 &position);
 	bool ToggleLock(const Vector3 &position, bool force = false);
 	int GetKeyID();
+	int GetLockSides() { return Locked; }
+
+	//access control
+	void SetAccessPoint(AccessPoint *point) { access_point = point; }
+	AccessPoint* GetAccessPoint() { return access_point; }
+	void NotifyAccessOpen(const Vector3 &position, bool forced);
 
 private:
 	bool Direction;
 	int Locked;
 	int KeyID;
 	Object *Parent; //parent object
+	AccessPoint *access_point; //access control point, if any
 };
 
 }

@@ -41,6 +41,7 @@
 #include "elevator.h"
 
 #include <time.h>
+#include "access.h"
 
 namespace SBS {
 
@@ -3180,6 +3181,15 @@ bool Elevator::SelectFloor(int floor)
 	ElevatorCar *car = GetCarForFloor(floor);
 	if (!car)
 		return ReportError("Floor " + ToString(floor) + " not a serviced floor");
+
+	//access control: secured floors need a badge, except in service modes
+	//(independent service, fire service phase 2), which always override floor lockout
+	AccessController *access = sbs->GetAccessController();
+	if (access && InServiceMode() == false)
+	{
+		if (access->CheckElevatorFloor(Number, floor) == false)
+			return ReportError("Floor " + ToString(floor) + " is secured - present a badge");
+	}
 
 	//SelectFloor won't work if Destination Dispatch is enabled, if set
 	if (Controllers.size() > 0)

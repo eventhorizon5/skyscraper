@@ -121,6 +121,9 @@ namespace SBS {
 	class Shape;
 	class Teleporter;
 	class TeleporterManager;
+	class AccessController;
+	class AccessPoint;
+	class CardReader;
 
 	typedef std::vector<Vector3> PolyArray;
 	typedef std::vector<PolyArray> PolygonSet;
@@ -361,6 +364,7 @@ public:
 	StairwellManager* GetStairwellManager();
 	DoorManager* GetDoorManager();
 	ControllerManager* GetControllerManager();
+	AccessController* GetAccessController(bool create = false);
 	TeleporterManager* GetTeleporterManager();
 	void RegisterDynamicMesh(DynamicMesh *dynmesh);
 	void UnregisterDynamicMesh(DynamicMesh *dynmesh);
@@ -428,6 +432,7 @@ private:
 	DoorManager* door_manager;
 	VehicleManager* vehicle_manager;
 	ControllerManager* controller_manager;
+	AccessController* access_controller; //access control system, created on first use
 	TeleporterManager* teleporter_manager;
 
 	//dynamic meshes

@@ -145,6 +145,9 @@ bool Door::Open(Vector3 &position, bool playsound, bool force)
 			return ReportError("Is locked");
 	}
 
+	//notify access control, if this door is on an access point
+	NotifyAccessOpen(position, force);
+
 	OpenDoor = true;
 
 	if (playsound == true && sound)
