@@ -36,6 +36,7 @@ This source file is not LGPL, it's public source code that you can reuse.
 
 #include <OgreBulletDynamicsRigidBody.h>
 #include <OgreBulletDynamicsRaycastVehicle.h>
+#include <OgreBulletDynamicsWorld.h>
 #include <OgreBulletCollisionsBoxShape.h>
 #include <OgreBulletCollisionsCompoundShape.h>
 #include "globals.h"
@@ -51,12 +52,51 @@ This source file is not LGPL, it's public source code that you can reuse.
 
 namespace SBS {
 
+// Capture the real wheel hit before Bullet substitutes its fixed ground body.
+class SupportRayCaster : public btDefaultVehicleRaycaster
+{
+public:
+	SupportRayCaster(SBS *sbs, std::vector<int> &supports) :
+		btDefaultVehicleRaycaster(sbs->mWorld->getBulletDynamicsWorld()),
+		sbs(sbs), supports(supports), wheel(0) {}
+
+	void Reset() { wheel = 0; }
+
+	void* castRay(const btVector3 &from, const btVector3 &to,
+		btVehicleRaycasterResult &result) override
+	{
+		void *hit = btDefaultVehicleRaycaster::castRay(from, to, result);
+		if (!supports.empty())
+		{
+			int number = -1;
+			if (hit)
+			{
+				btRigidBody *body = static_cast<btRigidBody*>(hit);
+				auto *object = static_cast<OgreBulletCollisions::Object*>(body->getUserPointer());
+				MeshObject *mesh = object ? sbs->FindMeshObject(object->getName()) : 0;
+				if (mesh && mesh->mBody && mesh->mBody->getBulletRigidBody() == body)
+					number = mesh->GetNumber();
+			}
+			supports[wheel] = number;
+			wheel = (wheel + 1) % supports.size();
+		}
+		return hit;
+	}
+
+private:
+	SBS *sbs;
+	std::vector<int> &supports;
+	size_t wheel;
+};
+
 Vehicle::Vehicle(Object *parent, const int number) : Object(parent)
 {
 	//set up SBS object
 	SetValues("Vehicle", "", false);
 	Number = number;
-	Enabled(true);
+	is_enabled = true;
+	physics_enabled = false;
+	EnableLoop(true);
 
 	//initialize main values
 	mCarChassis = 0;
@@ -152,6 +192,8 @@ bool Vehicle::Create(const Vector3 &position)
 	Move(position);
 
 	Created = true;
+	RefreshSupportContacts();
+	UpdateSupport();
 
 	return true;
 }
@@ -192,8 +234,9 @@ bool Vehicle::CreateChassis(Real restitution, Real friction, Real mass, Real lin
 										MaxSuspensionTravelCm,
 										FrictionSlip);
 
-	mVehicleRayCaster = new OgreBulletDynamics::VehicleRayCaster(sbs->mWorld);
+	mVehicleRayCaster = new OgreBulletDynamics::VehicleRayCaster(sbs->mWorld, new SupportRayCaster(sbs, wheel_supports));
 	mVehicle = new OgreBulletDynamics::RaycastVehicle(mCarChassis, mTuning, mVehicleRayCaster);
+	physics_enabled = true;
 
 	int rightIndex = 0;
 	int upIndex = 1;
@@ -214,6 +257,7 @@ bool Vehicle::AddWheel(bool engine, bool steerable, bool IsFrontWheel, Real radi
 	if (steerable == true)
 		mWheelsSteerable.emplace_back(WheelCount);
 	WheelCount++;
+	wheel_supports.emplace_back(-1);
 
 	MeshObject *mesh = new MeshObject(this, GetName() + " Wheel " + ToString(WheelCount), 0, WheelMesh, "", 0.0, WheelScale, false);
 	mWheels.emplace_back(mesh);
@@ -228,6 +272,8 @@ bool Vehicle::AddWheel(bool engine, bool steerable, bool IsFrontWheel, Real radi
 		IsFrontWheel, WheelFriction, RollInfluence);
 
 	//mVehicle->setWheelsAttached();
+	if (Created)
+		RefreshSupportContacts();
 
 	return true;
 }
@@ -306,6 +352,7 @@ bool Vehicle::Enabled(bool value)
 {
 	is_enabled = value;
 	EnableLoop(value);
+	UpdateSupport();
 	return true;
 }
 
@@ -314,10 +361,70 @@ bool Vehicle::IsEnabled()
 	return is_enabled;
 }
 
+void Vehicle::UpdateSupport(bool refresh)
+{
+	if (!Created || !mCarChassis || !mVehicle || !vehicle)
+		return;
+
+	if (refresh)
+		RefreshSupportContacts();
+
+	bool active = is_enabled;
+	for (size_t i = 0; i < wheel_supports.size(); i++)
+	{
+		if (wheel_supports[i] < 0)
+			continue;
+
+		// Object numbers remain safe to look up after a support is deleted.
+		MeshObject *mesh = dynamic_cast<MeshObject*>(sbs->GetObject(wheel_supports[i]));
+		if (!mesh)
+		{
+			wheel_supports[i] = -1;
+			continue;
+		}
+		if (!mesh->mBody || !mesh->mBody->isInWorld() ||
+			mesh->mBody->getBulletRigidBody()->getBroadphaseProxy()->m_collisionFilterMask == 0)
+			active = false;
+	}
+	EnableLoop(active);
+
+	if (active == physics_enabled)
+		return;
+
+	if (active)
+	{
+		// All recorded wheel supports are available again.
+		mCarChassis->addToWorld();
+		sbs->mWorld->addVehicle(mVehicle);
+	}
+	else
+	{
+		// Removing both leaves the transform and velocities intact for resuming.
+		sbs->mWorld->removeVehicle(mVehicle);
+		mCarChassis->removeFromWorld();
+	}
+	physics_enabled = active;
+
+	mChassis->Enabled(active);
+	for (size_t i = 0; i < mWheels.size(); i++)
+		mWheels[i]->Enabled(active);
+}
+
+void Vehicle::RefreshSupportContacts()
+{
+	if (!Created || !mVehicle)
+		return;
+
+	static_cast<SupportRayCaster*>(mVehicleRayCaster->getBulletVehicleRayCaster())->Reset();
+	for (int i = 0; i < mVehicle->getBulletVehicle()->getNumWheels(); i++)
+		mVehicle->getBulletVehicle()->rayCast(mVehicle->getBulletVehicle()->getWheelInfo(i));
+}
+
 void Vehicle::OnMove(bool parent)
 {
 	if (mCarChassis)
 		mCarChassis->updateTransform(true, true, true);
+	RefreshSupportContacts();
 }
 
 void Vehicle::AttachCamera(bool value)

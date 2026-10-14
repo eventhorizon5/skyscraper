@@ -40,9 +40,9 @@ using namespace Ogre;
 namespace OgreBulletDynamics
 {
     // -------------------------------------------------------------------------
-    VehicleRayCaster::VehicleRayCaster(DynamicsWorld *world)
+    VehicleRayCaster::VehicleRayCaster(DynamicsWorld *world, btVehicleRaycaster *caster)
     {
-        mBulletVehicleRayCaster = new btDefaultVehicleRaycaster(world->getBulletDynamicsWorld ());
+        mBulletVehicleRayCaster = caster ? caster : new btDefaultVehicleRaycaster(world->getBulletDynamicsWorld ());
     }
     // -------------------------------------------------------------------------
     VehicleRayCaster::~VehicleRayCaster()

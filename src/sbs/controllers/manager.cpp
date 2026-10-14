@@ -1020,6 +1020,16 @@ bool VehicleManager::Loop()
 	return LoopChildren();
 }
 
+void VehicleManager::UpdateSupports(bool refresh)
+{
+	// Suspended vehicles do not run their loops, but still need to detect re-enabling.
+	for (size_t i = 0; i < Array.size(); i++)
+	{
+		if (Array[i].object)
+			Array[i].object->UpdateSupport(refresh);
+	}
+}
+
 ControllerManager::ControllerManager(Object* parent) : Manager(parent)
 {
 	//set up SBS object

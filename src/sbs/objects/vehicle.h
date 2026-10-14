@@ -68,6 +68,7 @@ public:
 	bool Loop();
 	bool Enabled(bool value);
 	bool IsEnabled();
+	void UpdateSupport(bool refresh = false);
 	bool Create(const Vector3 &position);
 	void OnMove(bool parent);
 	void AttachCamera(bool value);
@@ -100,6 +101,9 @@ private:
 	bool camera_attached;
 
 	bool is_enabled;
+	bool physics_enabled;
+	std::vector<int> wheel_supports; //mesh object number for each wheel, or -1 if airborne
+	void RefreshSupportContacts();
 };
 
 }

@@ -547,6 +547,10 @@ bool SBS::Start()
 	//prepare 3D geometry for use
 	Prepare();
 
+	// Script-created vehicles precede procedural colliders. Record their wheel
+	// supports now, before ResetState removes the initial interior colliders.
+	vehicle_manager->UpdateSupports(true);
+
 	//if no bounds trigger was created, set it according to generated engine bounds
 	if (!area_trigger && !bounds.isNull())
 	{
@@ -646,6 +650,9 @@ bool SBS::Loop(bool loading, bool isready)
 	//move camera or update character movement
 	camera->Loop();
 	camera->MoveCharacter(physics_step);
+
+	// Suspend vehicles whose recorded wheel supports were disabled before stepping physics.
+	vehicle_manager->UpdateSupports();
 
 	//update physics
 	if (camera->EnableBullet == true)

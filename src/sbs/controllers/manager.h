@@ -197,6 +197,7 @@ public:
 	Vehicle* Get(int number);
 	Vehicle* GetIndex(int index);
 	void Remove(Vehicle *elevator);
+	void UpdateSupports(bool refresh = false);
 	bool Loop() override;
 
 private:

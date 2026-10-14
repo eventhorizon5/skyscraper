@@ -43,14 +43,14 @@ namespace OgreBulletDynamics
     class _OgreBulletExport VehicleRayCaster
     {
     public:
-        VehicleRayCaster(DynamicsWorld *world);
+        VehicleRayCaster(DynamicsWorld *world, btVehicleRaycaster *caster = 0);
         virtual ~VehicleRayCaster();
 
         btVehicleRaycaster *getBulletVehicleRayCaster()
         {return static_cast <btVehicleRaycaster*> (mBulletVehicleRayCaster);};
 
     private:
-        btDefaultVehicleRaycaster *mBulletVehicleRayCaster;
+        btVehicleRaycaster *mBulletVehicleRayCaster; //owned by this wrapper
     };
     // -------------------------------------------------------------------------
     // VehicleTuning  class
