@@ -158,9 +158,14 @@ bool Model::Loop()
 
 	SBS_PROFILE("Model::Loop");
 
+	//only movable, physics-enabled models need automatic parent switching
+	if (IsPhysical() == false)
+		return true;
+
 	Floor *floor = GetParent()->ConvertTo<Floor>();
-	Elevator *elevator = GetParent()->ConvertTo<Elevator>();
+	ElevatorCar *car = GetParent()->ConvertTo<ElevatorCar>();
 	::SBS::SBS *root = GetParent()->ConvertTo<SBS>();
+	Vector3 position = GetPosition();
 
 	//if model is a child of a floor or a global object, and is in an elevator, switch parent to elevator
 	if (floor || root)
@@ -171,7 +176,7 @@ bool Model::Loop()
 
 			if (elev)
 			{
-				ElevatorCar *car = elev->IsInElevator(GetPosition());
+				ElevatorCar *car = elev->IsInElevator(position);
 				if (car)
 				{
 					RemoveFromParent();
@@ -184,14 +189,14 @@ bool Model::Loop()
 	}
 
 	//if model is a child of an elevator, and is moved outside to a floor, switch parent to floor (or make it global)
-	else if (elevator)
+	else if (car)
 	{
-		if (elevator->IsInElevator(GetPosition()) == 0)
+		if (car->IsInCar(position) == false)
 		{
 			if (global == false)
 			{
 				//switch parent back to floor object
-				int floornum = sbs->GetFloorNumber(GetPosition().y);
+				int floornum = sbs->GetFloorNumber(position.y);
 				Floor *floor = sbs->GetFloor(floornum);
 
 				if (floor)
