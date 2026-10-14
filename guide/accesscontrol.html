@@ -1,0 +1,828 @@
+<html><head><style>body {
+   color: black;
+}
+</style></head><body><h1 id="skyscraper-access-control-module">Skyscraper Access Control Module</h1>
+<p>HID-style card access control for <a href="https://www.skyscrapersim.net">Skyscraper</a>: badges, card readers, door strikes, elevator floor lockout, badge-driven destination dispatch, secured zones with anti-passback, time profiles and access levels, an event log, and an Access Control window to manage it all.</p>
+<p>Built against <code>eventhorizon5/skyscraper</code> master at commit <code>385d53af</code> (September 19, 2026). Licensed under the GNU GPL v2 or later, like Skyscraper itself.</p>
+<h2 id="contents">Contents</h2>
+<ul>
+<li><a href="#features">Features</a></li>
+<li><a href="#files">Files</a></li>
+<li><a href="#installing-and-building">Installing and building</a></li>
+<li><a href="#sample-buildings">Sample buildings</a></li>
+<li><a href="#how-access-is-decided">How access is decided</a></li>
+<li><a href="#floor-labels">Floor labels</a></li>
+<li><a href="#script-reference">Script reference</a></li>
+<li><a href="#doors">Doors</a></li>
+<li><a href="#card-readers">Card readers</a></li>
+<li><a href="#elevator-floor-lockout">Elevator floor lockout</a></li>
+<li><a href="#destination-dispatch-call-stations">Destination dispatch call stations</a></li>
+<li><a href="#secured-zones-and-anti-passback">Secured zones and anti-passback</a></li>
+<li><a href="#virtual-people">Virtual people</a></li>
+<li><a href="#access-control-window">Access Control window</a></li>
+<li><a href="#console-commands">Console commands</a></li>
+<li><a href="#the-event-log-and-deny-reasons">The event log and deny reasons</a></li>
+<li><a href="#testing-status">Testing status</a></li>
+<li><a href="#known-limits">Known limits</a></li>
+</ul>
+<h2 id="features">Features</h2>
+<table>
+<thead>
+<tr>
+<th>Area</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Doors</strong></td>
+<td>Doors join an access point. A valid badge releases the lock for a set time, then it relocks. Free egress from one side, auto-close, held-open and forced-open alarms.</td>
+</tr>
+<tr>
+<td><strong>Card readers</strong></td>
+<td>Wall readers, and readers built into elevator and call station button panels. The light shows the lock state: red is locked, green is unlocked, and it alternates red and green for an invalid badge.</td>
+</tr>
+<tr>
+<td><strong>Elevators</strong></td>
+<td>Secured floors need a badge tapped at the in-car reader. Service modes (independent, fire, inspection) override lockout. Optional auto-select.</td>
+</tr>
+<tr>
+<td><strong>Destination dispatch</strong></td>
+<td>Tap at a lobby call station and a car is called to your home floor. Secured destinations typed on the keypad need a badge first.</td>
+</tr>
+<tr>
+<td><strong>Zones</strong></td>
+<td>Areas such as a tenant floor or server room. Tracks who&#39;s inside, raises an alarm for unbadged entry, and enforces hard or soft anti-passback.</td>
+</tr>
+<tr>
+<td><strong>People</strong></td>
+<td>Virtual people carry badges in chosen access levels and obey the rules.</td>
+</tr>
+<tr>
+<td><strong>Access model</strong></td>
+<td>Time profiles (schedules), access levels (groups) and their rules, cards, lockdown, and override levels.</td>
+</tr>
+<tr>
+<td><strong>Management</strong></td>
+<td>Access Control window (F12): cards, access levels, time profiles, live status, live log, access checks, USB badge reader input, and export back to script.</td>
+</tr>
+<tr>
+<td><strong>Badges</strong></td>
+<td>Your wallet of badges. Press G or right-click a reader to switch the active badge.</td>
+</tr>
+<tr>
+<td><strong>Log</strong></td>
+<td>Every grant, denial, alarm and change, with the reason, exportable to CSV.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="files">Files</h2>
+<table>
+<thead>
+<tr>
+<th>Path</th>
+<th>Status</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>src/sbs/controllers/accesscore.h/.cpp</code></td>
+<td>New</td>
+<td>Decision logic with no Ogre dependency: cards, access levels and rules, time profiles, floor label matching, 26-bit Wiegand, event log.</td>
+</tr>
+<tr>
+<td><code>src/sbs/controllers/access.h/.cpp</code></td>
+<td>New</td>
+<td><code>AccessController</code> (one per sim engine): access points and door strikes, readers, elevator lockout, call stations, zones, virtual people&#39;s badges, export.</td>
+</tr>
+<tr>
+<td><code>src/sbs/objects/cardreader.h/.cpp</code></td>
+<td>New</td>
+<td>The clickable card reader and its lights.</td>
+</tr>
+<tr>
+<td><code>src/script/access.cpp</code></td>
+<td>New</td>
+<td>The <code>&lt;Access&gt;</code> section and all access script and console commands.</td>
+</tr>
+<tr>
+<td><code>src/gui/accesscontrol.h/.cpp</code></td>
+<td>New</td>
+<td>The Access Control window.</td>
+</tr>
+<tr>
+<td><code>src/sbs/system/lock.h/.cpp</code></td>
+<td>Changed</td>
+<td><code>DoorLock</code> can belong to an access point.</td>
+</tr>
+<tr>
+<td><code>src/sbs/objects/door.cpp</code></td>
+<td>Changed</td>
+<td>Opening a door notifies its access point.</td>
+</tr>
+<tr>
+<td><code>src/sbs/objects/elevator.cpp</code></td>
+<td>Changed</td>
+<td><code>SelectFloor</code> checks secured floors.</td>
+</tr>
+<tr>
+<td><code>src/sbs/objects/elevatorcar.cpp</code></td>
+<td>Changed</td>
+<td>Readers in a car hide and show with it.</td>
+</tr>
+<tr>
+<td><code>src/sbs/objects/buttonpanel.h/.cpp</code></td>
+<td>Changed</td>
+<td>Grid positions for panel readers; panel readers hide with and are deleted with their panel.</td>
+</tr>
+<tr>
+<td><code>src/sbs/objects/callstation.cpp</code></td>
+<td>Changed</td>
+<td>Secured destinations need a badge at the station.</td>
+</tr>
+<tr>
+<td><code>src/sbs/objects/person.cpp</code></td>
+<td>Changed</td>
+<td>Virtual people tap badges for secured floors.</td>
+</tr>
+<tr>
+<td><code>src/sbs/sbs.h/.cpp</code></td>
+<td>Changed</td>
+<td>Owns the access controller; creates it on first use and deletes it first on shutdown.</td>
+</tr>
+<tr>
+<td><code>src/script/section.h/.cpp</code>, <code>scriptproc.h/.cpp</code></td>
+<td>Changed</td>
+<td>Registers the <code>&lt;Access&gt;</code> section and new settings.</td>
+</tr>
+<tr>
+<td><code>src/script/commands.cpp</code>, <code>floors.cpp</code>, <code>elevatorcars.cpp</code></td>
+<td>Changed</td>
+<td>Every door-creation command honors <code>SetAccessPoint</code>.</td>
+</tr>
+<tr>
+<td><code>src/gui/debugpanel.h/.cpp</code></td>
+<td>Changed</td>
+<td>Adds the <strong>Access Control</strong> button to the control panel.</td>
+</tr>
+<tr>
+<td><code>src/frontend/mainscreen.h/.cpp</code>, <code>keyboard.ini</code></td>
+<td>Changed</td>
+<td>The <strong>G</strong> key switches badges.</td>
+</tr>
+<tr>
+<td><code>buildings/Simple - Access Control.bld</code></td>
+<td>New</td>
+<td>Sample: secured stair doors, secured elevator floors, a secured zone with an alarm.</td>
+</tr>
+<tr>
+<td><code>buildings/Simple - Access Control DD.bld</code></td>
+<td>New</td>
+<td>Sample: destination dispatch with badge readers on every call station and in the car.</td>
+</tr>
+<tr>
+<td><code>data/reader_*.png</code>, <code>data/reader_panel_*.png</code></td>
+<td>New</td>
+<td>Reader textures: portrait for walls, landscape for button panels.</td>
+</tr>
+<tr>
+<td><code>tools/accesstest/accesstest.cpp</code></td>
+<td>New</td>
+<td>Unit tests for the decision logic.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="installing-and-building">Installing and building</h2>
+<h3 id="get-the-files-in">Get the files in</h3>
+<p>Use either method:</p>
+<ul>
+<li><strong>Patch:</strong> from the root of a Skyscraper checkout at commit <code>385d53af</code>, run <code>git apply --3way skyscraper-access-control.patch</code>.</li>
+<li><strong>Copy:</strong> unzip <code>skyscraper-access-control-files.zip</code> over the checkout. It contains every new and changed file in place. On Windows, choose <strong>Replace</strong> when asked; on macOS, merge folders rather than replacing them.</li>
+</ul>
+<p>Copying whole files over a <strong>newer</strong> Skyscraper version can undo the maintainer&#39;s later changes to the 13 changed files, so start from commit <code>385d53af</code>, or use the patch with <code>--3way</code>.</p>
+<h3 id="build">Build</h3>
+<p>Follow Skyscraper&#39;s <code>Compiling.md</code>. Two things are specific to this module:</p>
+<ul>
+<li><strong>Re-run CMake (Configure, then Generate) after adding the files.</strong> The build finds source files with CMake&#39;s file globbing, so new <code>.cpp</code> files are only picked up when CMake runs. No <code>CMakeLists.txt</code> change is needed.</li>
+<li>The module adds nothing new to link against.</li>
+</ul>
+<h3 id="windows-notes-visual-studio-2026-">Windows notes (Visual Studio 2026)</h3>
+<p>These came up while building on Windows with Visual Studio 18 (2026). None of them are caused by this module, but they&#39;re needed to build Skyscraper there.</p>
+<table>
+<thead>
+<tr>
+<th>Problem</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>&quot;Visual Studio 18 2026&quot; isn&#39;t in CMake&#39;s generator list</td>
+<td>Update CMake to 4.2 or later. Choose platform <strong>x64</strong>.</td>
+</tr>
+<tr>
+<td><code>CMAKE_INSTALL_PREFIX</code> shows <code>Program Files (x86)</code></td>
+<td>Check the build is set up for <strong>x64</strong>, not Win32. If not, use File → Delete Cache and configure again.</td>
+</tr>
+<tr>
+<td><code>Cannot open include file: &#39;btBulletCollisionCommon.h&#39;</code></td>
+<td>Point <code>BULLET_INCLUDE_DIR</code> at the folder that actually contains that file, often <code>C:/bullet/include/bullet</code>.</td>
+</tr>
+<tr>
+<td>Bullet libraries</td>
+<td>Use <code>BulletCollision_RelWithDebugInfo.lib</code> (not <code>Bullet3Collision</code>), <code>BulletDynamics_...</code>, <code>LinearMath_...</code> and <code>BulletSoftBody_...</code>. Point to the files, not the folder. Leave the <code>_DEBUG</code> entries as NOTFOUND.</td>
+</tr>
+<tr>
+<td><code>Cannot open include file: &#39;fmod.hpp&#39;</code></td>
+<td>Set <code>FMOD_INCLUDE_DIR</code> to the FMOD Engine&#39;s <code>api/core/inc</code> folder, and <code>FMOD_LIBRARY</code> to <code>api/core/lib/x64/fmod_vc.lib</code>.</td>
+</tr>
+<tr>
+<td><code>STL1011 ... experimental/coroutine</code> errors in the OpenXR project</td>
+<td>Add <code>/D_SILENCE_EXPERIMENTAL_COROUTINE_DEPRECATION_WARNINGS</code> to the end of <code>CMAKE_CXX_FLAGS</code> (tick Advanced to see it).</td>
+</tr>
+<tr>
+<td>Linker errors mixing Debug with the prebuilt libraries</td>
+<td>Build <strong>RelWithDebInfo</strong>, which matches the prebuilt dependencies.</td>
+</tr>
+<tr>
+<td>&quot;Entry Point Not Found ... FMOD ... SBS.dll&quot; when starting</td>
+<td>Copy <code>fmod.dll</code> from the FMOD Engine&#39;s <code>api/core/lib/x64</code> folder into the Skyscraper folder, replacing the older one from <code>skyscraper_dlls.zip</code>.</td>
+</tr>
+<tr>
+<td>F5 tries to run ALL_BUILD</td>
+<td>Right-click the <strong>skyscraper</strong> project and choose <strong>Set as Startup Project</strong>, or run <code>skyscraper.exe</code> directly.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="unit-tests">Unit tests</h3>
+<p>The decision logic can be tested without building Skyscraper:</p>
+<pre><code>cd tools/accesstest
+g++ -std=c++<span class="hljs-number">17</span> -DACCESSCORE_STANDALONE -I../../src/sbs/controllers accesstest.cpp ../../src/sbs/controllers/accesscore.cpp -o accesstest
+./accesstest
+</code></pre><h2 id="sample-buildings">Sample buildings</h2>
+<p>Load these from the main menu with <strong>Other Building</strong>.</p>
+<h3 id="simple-access-control">Simple - Access Control</h3>
+<ul>
+<li><strong>Stair doors (floors labeled 2–10):</strong> locked from the stairwell side, with free egress from the floor side. To get back onto a floor from the stairs, badge at the reader beside the door. The top stair door also keeps its original key lock.</li>
+<li><strong>Elevator 1:</strong> floors labeled <strong>6–9</strong> are secured. Badge at the reader in the bottom row of the button panel, then press your floor within 10 seconds.</li>
+<li><strong>Floor labeled 6:</strong> a secured zone with hard anti-passback. Arriving without a badge, for example on independent service, rings an alarm bell until you leave.</li>
+<li><strong>Doors</strong> auto-close 8 seconds after opening.</li>
+<li><strong>Virtual people</strong> get Staff badges.</li>
+</ul>
+<h3 id="simple-access-control-dd">Simple - Access Control DD</h3>
+<ul>
+<li>Every floor&#39;s destination dispatch call station has a reader under its keypad. Elevator 1&#39;s floors labeled 6–9 are secured.</li>
+<li><strong>Jane&#39;s</strong> tap calls a car to her home floor, 6. <strong>Bob&#39;s</strong> calls one to 4.</li>
+<li>The <strong>night guard&#39;s</strong> tap unlocks every secured floor for 10 seconds, to choose on the keypad.</li>
+<li>The <strong>Visitor</strong> badge is refused.</li>
+<li>Typing <strong>7</strong> without a badge shows <code>??</code>.</li>
+</ul>
+<h3 id="badges-in-both-samples">Badges in both samples</h3>
+<table>
+<thead>
+<tr>
+<th>Badge</th>
+<th>Holder</th>
+<th>Access</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>42:10001</td>
+<td>Jane Smith</td>
+<td>Staff (07:00 to 19:00), plus floor 6 and its stair door at any time; home floor 6</td>
+</tr>
+<tr>
+<td>42:10002</td>
+<td>Bob Lee</td>
+<td>Staff (07:00 to 19:00); home floor 4</td>
+</tr>
+<tr>
+<td>42:10050</td>
+<td>Visitor (DD sample only)</td>
+<td>No access</td>
+</tr>
+<tr>
+<td>42:10099</td>
+<td>Night Guard</td>
+<td>Security override: everywhere, any time, even in lockdown; home floor 1</td>
+</tr>
+</tbody>
+</table>
+<p>Use the sky time (F12 → Sky Control) to test the business-hours schedule.</p>
+<h2 id="how-access-is-decided">How access is decided</h2>
+<p>Access is built from four things:</p>
+<ol>
+<li><strong>Time profiles</strong> (schedules) say <em>when</em>. Each is one or more windows of days plus a start and end time.</li>
+<li><strong>Access levels</strong> (groups) contain <strong>rules</strong>. Each rule pairs a <em>place</em> with a time profile. A place is a door access point name, or elevator floors such as <code>Elevator 1:Floors 6-9</code>.</li>
+<li><strong>Cards</strong> belong to one or more access levels. A card gets everything any of its levels allow.</li>
+<li>An <strong>override</strong> level opens everything at any time, including during lockdown and despite anti-passback.</li>
+</ol>
+<p>When a badge is presented, the checks run in this order:</p>
+<ol>
+<li>Is the card enrolled? If not, <code>UnknownCard</code>.</li>
+<li>Is it enabled? If not, <code>Disabled</code>.</li>
+<li>Does it have an override level? If so, it&#39;s granted.</li>
+<li>Is the building in lockdown? If so, <code>Lockdown</code>.</li>
+<li>Does a rule cover this place? If not, <code>NoRule</code>.</li>
+<li>Is that rule&#39;s time profile active now? If not, <code>Schedule</code>.</li>
+<li>Would entry break anti-passback? If so, <code>Passback</code>.</li>
+</ol>
+<p>The clock is the sky system&#39;s virtual date and time, the same clock as the <code>%hour%</code> and <code>%minute%</code> script variables. Without a running sky, the system clock is used.</p>
+<p>Names of time profiles, access levels and places ignore case and spaces.</p>
+<h2 id="floor-labels">Floor labels</h2>
+<p>Wherever floors appear in access control (<code>SecureFloors</code>, elevator rules, <code>ZoneEntry</code>, home floors, the log), they&#39;re written as <strong>the labels on the buttons and keypads</strong>, not Skyscraper&#39;s internal floor numbers. In the samples, internal floor 0 (the lobby) is labeled 1, so the floors labeled 6–9 are internal floors 5–8.</p>
+<table>
+<thead>
+<tr>
+<th>Written as</th>
+<th>Matches</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>6</code>, <code>6-9</code>, <code>-2 to -1</code></td>
+<td>Floors whose label is that number, or a number in that range. A floor&#39;s ID and its keypad NumberID both count.</td>
+</tr>
+<tr>
+<td><code>R</code>, <code>L</code>, <code>B2</code></td>
+<td>That text label exactly, ignoring case.</td>
+</tr>
+<tr>
+<td>`6-9\</td>
+<td>R`</td>
+<td>Several items joined with `\</td>
+<td>`.</td>
+</tr>
+<tr>
+<td><code>@5-8</code></td>
+<td>Internal floor numbers, as used by <code>ServicedFloors</code> and floor sections.</td>
+</tr>
+</tbody>
+</table>
+<p>Labels are matched when they&#39;re used, so the <code>&lt;Access&gt;</code> section can come before the floors are created. <code>access elevators</code> shows which floors each list matched.</p>
+<h2 id="script-reference">Script reference</h2>
+<h3 id="the-access-section">The <code>&lt;Access&gt;</code> section</h3>
+<pre><code><span class="hljs-tag">&lt;Access&gt;</span>
+    AutoClose <span class="hljs-number">8</span>                                        <span class="hljs-comment">#close access-controlled doors after 8 s (0 = off)</span>
+    StationUnlock <span class="hljs-number">10</span>                                   <span class="hljs-comment">#seconds a call-station tap allows keypad entry</span>
+
+    <span class="hljs-comment">#time profiles</span>
+    Schedule Business Hours, Mon-Fri, <span class="hljs-number">07</span>:<span class="hljs-number">00</span>, <span class="hljs-number">19</span>:<span class="hljs-number">00</span>
+    Schedule Business Hours, Sat, <span class="hljs-number">09</span>:<span class="hljs-number">00</span>, <span class="hljs-number">13</span>:<span class="hljs-number">00</span>         <span class="hljs-comment">#repeat a name to add a window</span>
+    Schedule Night Shift, Daily, <span class="hljs-number">22</span>:<span class="hljs-number">00</span>, <span class="hljs-number">06</span>:<span class="hljs-number">00</span>          <span class="hljs-comment">#overnight is fine</span>
+
+    <span class="hljs-comment">#elevator floor lockout</span>
+    SecureFloors <span class="hljs-number">1</span>, <span class="hljs-number">6</span>-<span class="hljs-number">9</span>, <span class="hljs-number">10</span>                            <span class="hljs-comment">#elevator, floors, unlock seconds[, autoselect]</span>
+
+    <span class="hljs-comment">#access levels and rules</span>
+    <span class="hljs-keyword">Group</span> <span class="hljs-title">Staff</span>
+    GroupRule Staff, Lobby Door, Business Hours
+    GroupRule Staff, Elevator <span class="hljs-number">1</span>:Floors <span class="hljs-number">7</span>-<span class="hljs-number">9</span>, Business Hours
+    <span class="hljs-keyword">Group</span> <span class="hljs-title">Security</span>, override
+
+    <span class="hljs-comment">#virtual people</span>
+    PeopleAccess Staff
+    ServicePeopleAccess Staff|Security
+
+    <span class="hljs-comment">#cards and the player's wallet</span>
+    Card <span class="hljs-number">42</span>, <span class="hljs-number">10001</span>, Jane Smith, Staff, <span class="hljs-number">6</span>               <span class="hljs-comment">#facility, number, holder, levels, home floor</span>
+    WalletAdd <span class="hljs-number">42</span>, <span class="hljs-number">10001</span>
+<span class="hljs-tag">&lt;EndAccess&gt;</span>
+</code></pre><table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Syntax</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Schedule</code></td>
+<td><code>name, days, start, end</code></td>
+<td>Days: <code>Mon-Fri</code>, <code>Sat,Sun</code> or `Sat\</td>
+<td>Sun<code>,</code>Fri-Mon<code>(wraps),</code>Daily<code>,</code>Weekdays<code>,</code>Weekends<code>. Times: 24-hour</code>HH:MM<code>;</code>24:00<code>is allowed as an end time.</code>Always<code>and</code>Never` are built in.</td>
+</tr>
+<tr>
+<td><code>Group</code></td>
+<td><code>name[, override]</code></td>
+<td>An access level. <code>override</code> opens everything at any time.</td>
+</tr>
+<tr>
+<td><code>GroupRule</code></td>
+<td><code>level, place[, schedule]</code></td>
+<td>Place is a door access point name or <code>Elevator N:Floors &lt;labels&gt;</code>. The schedule defaults to <code>Always</code>.</td>
+</tr>
+<tr>
+<td><code>Card</code></td>
+<td><code>facility, number, holder, levels[, home_floor]</code></td>
+<td>Facility 0–255, number 0–65535. Levels are separated by `\</td>
+<td><code>. The home floor is a label (or</code>@N`).</td>
+</tr>
+<tr>
+<td><code>WalletAdd</code></td>
+<td><code>facility, number</code></td>
+<td>Gives the player this badge.</td>
+</tr>
+<tr>
+<td><code>SecureFloors</code></td>
+<td><code>elevator, floors[, unlock_seconds[, autoselect]]</code></td>
+<td>Default unlock 10 s. Repeat to add floors.</td>
+</tr>
+<tr>
+<td><code>StationUnlock</code></td>
+<td><code>seconds</code></td>
+<td>Default 10.</td>
+</tr>
+<tr>
+<td><code>AutoClose</code></td>
+<td><code>seconds</code></td>
+<td>Default auto-close for all access-controlled doors; 0 = off.</td>
+</tr>
+<tr>
+<td><code>PeopleAccess</code></td>
+<td><code>levels</code></td>
+<td>Access levels for virtual people&#39;s badges.</td>
+</tr>
+<tr>
+<td><code>ServicePeopleAccess</code></td>
+<td><code>levels</code></td>
+<td>The same, for service-access people.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="placement-commands-usable-in-any-section-">Placement commands (usable in any section)</h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Syntax</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SetAccessPoint</code></td>
+<td><code>name, unlock_seconds[, held_seconds[, autoopen[, autoclose_seconds]]]</code> or <code>none</code></td>
+<td>Doors created after it join this access point. Held default 30 s (0 = no held-open alarm). <code>autoopen</code> opens the door on grant. <code>autoclose_seconds</code> overrides <code>AutoClose</code> for this point (0 = off).</td>
+</tr>
+<tr>
+<td><code>AddCardReader</code></td>
+<td><code>place, grant_sound, deny_sound, idle_tex, green_tex, red_tex, direction, centerx, centerz, width, height, voffset</code></td>
+<td>A wall reader. In a Floor section, voffset is from the floor base. In an Elevator or Car section, the position is relative to the car (use <code>Elevator N</code> as the place). Use <code>CallStation F:N</code> to make a station reader.</td>
+</tr>
+<tr>
+<td><code>AddPanelReader</code></td>
+<td><code>panel, grant_sound, deny_sound, idle_tex, green_tex, red_tex, row, column, width, height[, hoffset, voffset]</code></td>
+<td>A reader in a button panel, placed like <code>AddButton</code> (sizes in buttons). Use it after <code>CreatePanel</code> in an Elevator, Car or CallStation section; in a CallStation section the panel number is ignored.</td>
+</tr>
+<tr>
+<td><code>AddAccessZone</code></td>
+<td><code>name, x1, y1, z1, x2, y2, z2, passback[, alarm_on_action, alarm_off_action]</code></td>
+<td>Passback is <code>Off</code>, <code>Soft</code> or <code>Hard</code>. In a Floor section, y is from the floor base.</td>
+</tr>
+<tr>
+<td><code>ZoneEntry</code></td>
+<td><code>zone, entry</code></td>
+<td>Entry is a door access point name, or <code>Floor &lt;labels&gt;</code> for elevator and call station arrivals. Use it after <code>AddAccessZone</code>.</td>
+</tr>
+</tbody>
+</table>
+<p>Example: a stair door that&#39;s free from the floor side and badge-controlled from the stairwell side, with a reader:</p>
+<pre><code>&lt;Floor <span class="hljs-number">3</span>&gt;
+    SetLock <span class="hljs-number">2</span>, <span class="hljs-number">0</span>                          #lock only the stairwell side
+    SetAccessPoint Stair Reentry <span class="hljs-number">3</span>, <span class="hljs-number">5</span>, <span class="hljs-number">30</span>
+    AddStairsDoor ...                     #any door command
+    SetAccessPoint none
+    SetLock <span class="hljs-number">0</span>, <span class="hljs-number">0</span>
+    AddCardReader Stair Reentry <span class="hljs-number">3</span>, beep1.wav, buzz.wav, ReaderIdle, ReaderGranted, ReaderDenied, right, <span class="hljs-number">1.7</span>, <span class="hljs-number">17.3</span>, <span class="hljs-number">0.35</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">4</span>
+&lt;EndFloor&gt;
+</code></pre><h2 id="doors">Doors</h2>
+<ul>
+<li><strong>Locking:</strong> a door on an access point must be locked. If <code>SetLock</code> wasn&#39;t used before it, both sides are locked. Use <code>SetLock 1</code> or <code>SetLock 2</code> first to leave one side as free egress.</li>
+<li><strong>Grant:</strong> a valid badge releases the lock for the unlock time. Open the door within that window, or it opens by itself with <code>autoopen</code>. When the window ends, the lock applies again; an open door can still be closed.</li>
+<li><strong>Controller unlock:</strong> <strong>Hold Unlocked</strong> (Access Control window, or <code>access unlock</code>) keeps a door unlocked until <strong>Return to Normal</strong>. In lockdown, held-unlocked doors lock again.</li>
+<li><strong>Auto-close:</strong> an access-controlled door closes itself that many seconds after it starts opening. Reopening restarts the timer. Like Skyscraper&#39;s own door timers, it doesn&#39;t detect someone standing in the doorway.</li>
+<li><strong>Alarms:</strong><ul>
+<li><code>HeldOpen</code>: a door is left open past the held time.</li>
+<li><code>ForcedOpen</code>: a door is opened without a grant, for example by a script action. Opening from a free-egress side isn&#39;t an alarm.</li>
+</ul>
+</li>
+<li><strong>Keys:</strong> Ctrl+Shift-click can&#39;t change the lock of a door on an access point; the access controller decides.</li>
+<li>Existing doors without access points behave exactly as before.</li>
+</ul>
+<h2 id="card-readers">Card readers</h2>
+<ul>
+<li><strong>Click</strong> a reader to present your active badge. <strong>Right-click</strong> it, or press <strong>G</strong> anywhere, to switch badges.</li>
+<li><strong>Lights</strong> show the lock state, rechecked ten times a second:</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Light</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Solid red</td>
+<td>Locked</td>
+</tr>
+<tr>
+<td>Solid green</td>
+<td>Unlocked by a valid badge, or held unlocked by the controller. For elevator and call station readers, secured floors are released by a badge tap, or the car is in a service mode that ignores lockout.</td>
+</tr>
+<tr>
+<td>Alternating red and green (2 s)</td>
+<td>An invalid badge (unknown, disabled, no rule, wrong time, lockdown, anti-passback), or a secured floor pressed or typed without a badge</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Textures:</strong> the reader commands take three textures. The <strong>green</strong> one is the unlocked light and the <strong>red</strong> one the locked light. The <strong>idle</strong> one only shows if the reader&#39;s place doesn&#39;t exist, which usually means a typo.</li>
+<li><strong>Sounds:</strong> the grant sound plays for a valid badge, the deny sound for an invalid one.</li>
+<li><strong>Panel readers</strong> take the panel&#39;s facing direction, ride with the car, and hide with the panel. Wall readers in a car ride with the car.</li>
+</ul>
+<h2 id="elevator-floor-lockout">Elevator floor lockout</h2>
+<ul>
+<li><code>SecureFloors</code> lists the floors in an elevator that need a badge. Other floors work as before.</li>
+<li><strong>Pressing a secured floor</strong> without a badge does nothing (the button doesn&#39;t light), and the car&#39;s readers flash red and green.</li>
+<li><strong>Tapping a badge</strong> at the car&#39;s reader releases every secured floor that badge allows, for the unlock time. Selecting one uses up the release, so each tap is good for one floor.</li>
+<li><strong>Autoselect:</strong> with <code>autoselect</code> set, a badge that allows exactly one secured floor selects it automatically.</li>
+<li><strong>Service modes</strong> override lockout: independent service, fire service phases 1 and 2, and inspection.</li>
+<li><strong>Keypad elevators</strong> use the same check.</li>
+<li><strong>Lockdown</strong> refuses secured floors to everyone except override levels.</li>
+<li><strong>Not yet covered:</strong> hall call buttons on secured floors. Skyscraper&#39;s existing <code>SetLock</code> with a key still works on them.</li>
+</ul>
+<h2 id="destination-dispatch-call-stations">Destination dispatch call stations</h2>
+<ul>
+<li><strong>Station readers:</strong> put one on a call station with <code>AddPanelReader</code> in its CallStation section. The station&#39;s place name is <code>CallStation F:N</code> (internal floor, station number).</li>
+<li><strong>Home floor:</strong> a badge with a home floor it may use calls a car there straight away, and the station shows which elevator to take.</li>
+<li><strong>No usable home floor</strong> (none set, it&#39;s the current floor, or not allowed): a tap releases the badge&#39;s allowed secured floors for <code>StationUnlock</code> seconds, to type on the keypad. One selection per tap.</li>
+<li><strong>Which destinations are secured:</strong> any secured floor of any elevator the station&#39;s dispatch controller uses. A badge may choose it if allowed on any of those elevators.</li>
+<li><strong>Refusals:</strong><ul>
+<li>Typing a secured destination without a badge shows <code>??</code> and flashes the station reader.</li>
+<li>Unknown, disabled or no-access badges show <code>XX</code>.</li>
+</ul>
+</li>
+<li><strong>No second tap:</strong> cars sent by destination dispatch don&#39;t need an in-car badge for that trip, since the station already checked, as in real systems.</li>
+</ul>
+<h2 id="secured-zones-and-anti-passback">Secured zones and anti-passback</h2>
+<p>A zone is a box-shaped area, such as a tenant floor or server room, with badge-controlled ways in.</p>
+<pre><code>&lt;Floor <span class="hljs-number">5</span>&gt;
+    AddSound ZoneAlarm, bell1.wav, <span class="hljs-number">0</span>, <span class="hljs-number">8</span>, <span class="hljs-number">0</span>, false
+    AddAccessZone Tenant Floor <span class="hljs-number">6</span>, <span class="hljs-number">-20</span>, <span class="hljs-number">0</span>, <span class="hljs-number">-20</span>, <span class="hljs-number">20</span>, <span class="hljs-number">10</span>, <span class="hljs-number">20</span>, Hard, ZoneAlarmOn, ZoneAlarmOff
+    ZoneEntry Tenant Floor <span class="hljs-number">6</span>, Stair Reentry <span class="hljs-number">5</span>
+    ZoneEntry Tenant Floor <span class="hljs-number">6</span>, Floor <span class="hljs-number">6</span>
+&lt;EndFloor&gt;
+AddAction ZoneAlarmOn, Floor <span class="hljs-number">5</span>, PlaySound, ZoneAlarm, true
+AddAction ZoneAlarmOff, Floor <span class="hljs-number">5</span>, StopSound, ZoneAlarm
+</code></pre><ul>
+<li><strong>Badged entry:</strong><ul>
+<li>A badge granted at one of the zone&#39;s entries counts for 60 seconds. An entry is its door, or a secured floor reached with a badge.</li>
+<li>Walking in within that time logs <code>ENTER</code> with that badge.</li>
+<li>Only badges you carry count for you.</li>
+</ul>
+</li>
+<li><strong>Unbadged entry:</strong><ul>
+<li>Walking in any other way logs <code>UnbadgedEntry</code>, raises the zone alarm and runs the alarm-on action. Examples are tailgating, a propped door, or independent service.</li>
+<li>The alarm clears and runs the alarm-off action when you leave, or with <strong>Reset Zone</strong> or <code>access resetzone</code>.</li>
+</ul>
+</li>
+<li><strong>Inside</strong> means within the box, but not riding an elevator or in a stairwell that passes through it.</li>
+<li><strong>Anti-passback:</strong> once a badge enters, it can&#39;t enter again until its holder leaves.<ul>
+<li><code>Hard</code> refuses the badge (<code>Passback</code>). For elevators and stations, floors leading into the zone are removed from that badge&#39;s choices.</li>
+<li><code>Soft</code> allows it but logs an alarm.</li>
+<li>A grant that&#39;s never followed by walking in lapses after 60 seconds.</li>
+<li>Override levels are exempt.</li>
+</ul>
+</li>
+<li><strong>Occupancy</strong> shows in <code>access zones</code> and in the Access Control window.</li>
+<li><strong>Starting position:</strong> don&#39;t put the starting camera inside a zone, or the unbadged-entry alarm goes off at load.</li>
+</ul>
+<h2 id="virtual-people">Virtual people</h2>
+<ul>
+<li><strong>Getting badges:</strong> with <code>PeopleAccess</code> (and optionally <code>ServicePeopleAccess</code>) set, each virtual person gets a badge the first time they need one. It has facility code 0, is numbered from 1, carries the person&#39;s name, and is in the listed access levels.</li>
+<li><strong>Using them:</strong> people tap automatically at call stations and in cars when going to a secured floor. Their taps show in the log, and they give up a trip they aren&#39;t allowed to make.</li>
+<li><strong>Without badges:</strong> people without badges also give up trips to secured floors, rather than getting stuck.</li>
+<li><strong>Zones:</strong> virtual people don&#39;t have positions within a floor, so they don&#39;t count toward zone occupancy or set off zone alarms.</li>
+</ul>
+<h2 id="access-control-window">Access Control window</h2>
+<p>Open the control panel (<strong>F12</strong>) and click <strong>Access Control</strong>.</p>
+<ul>
+<li>The window follows the active building and refreshes about twice a second.</li>
+<li>It&#39;s greyed out for buildings without an <code>&lt;Access&gt;</code> section.</li>
+<li>The top line shows the building, your active badge, and lockdown.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Tab</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Cards</strong></td>
+<td>Every card with holder, access levels, home floor, status and wallet. Select a card to edit holder, home floor, and its <strong>access levels as a tick list</strong>. <strong>Add / Update Card</strong>, <strong>Enable</strong>, <strong>Disable (lost badge)</strong>, <strong>Give Me This Badge</strong>, <strong>Take Badge Back</strong>, <strong>Use This Badge</strong>. <strong>Export as Script</strong> writes the whole <code>&lt;Access&gt;</code> section.</td>
+</tr>
+<tr>
+<td><strong>Access Levels</strong></td>
+<td>Create and delete levels; switch <strong>override</strong> on or off. Select a level to see its rules, and add rules (choose a place and a time profile; elevator places can be edited, such as <code>Elevator 1:Floors 7-9</code>) or remove them. A rule for a new door name creates that access point. <strong>Check access right now</strong> tells you whether a card would get into a place at the current sky time and why, without unlocking anything or logging.</td>
+</tr>
+<tr>
+<td><strong>Time Profiles</strong></td>
+<td>Create and delete profiles; add a time window by ticking days and entering start and end times, or remove one. Overnight windows are fine. A profile still used by a rule can&#39;t be deleted.</td>
+</tr>
+<tr>
+<td><strong>Doors, Elevators and Zones</strong></td>
+<td>Live status of every door (locked, released, held open, forced open, auto-close), secured elevator and zone. <strong>Momentary Unlock</strong>, <strong>Hold Unlocked</strong>, <strong>Return to Normal</strong>, auto-close for all doors, <strong>Reset Zone</strong>, and <strong>building lockdown</strong>.</td>
+</tr>
+<tr>
+<td><strong>Live Log</strong></td>
+<td>Every event, newest first; granted is green, denied red, alarms orange. Filter by any text. <strong>Export CSV</strong>.</td>
+</tr>
+<tr>
+<td><strong>Badge Reader Input</strong></td>
+<td>Present badges by typing, or with a <strong>USB badge reader</strong> in keyboard-emulation mode. Choose where to present and the reader&#39;s format: <code>facility:card</code>, card number only (with a default facility), or a raw 26-bit Wiegand value in decimal or hex (parity is checked). An unknown badge is logged with its number, so to enroll a real badge, tap it once and add that number on the Cards tab.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Keeping changes:</strong> changes made in the window last until the building is reloaded. To keep them, use <strong>Export as Script</strong> on the Cards tab and replace the building&#39;s <code>&lt;Access&gt;</code> section with the exported one. Zones, door access points and readers stay in the building file and aren&#39;t part of the export.</p>
+<p><strong>Switching badges:</strong> press <strong>G</strong>, or change the key with <code>Skyscraper.Frontend.Keyboard.Badge</code> in <code>keyboard.ini</code>.</p>
+<h2 id="console-commands">Console commands</h2>
+<p>Type these in the console (F12 → Console), or use them in scripts.</p>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>access help</code></td>
+<td>List commands</td>
+</tr>
+<tr>
+<td><code>access cards</code> / <code>points</code> / <code>elevators</code> / <code>zones</code> / <code>wallet</code></td>
+<td>List cards, doors with status, secured elevators, zones, or your badges</td>
+</tr>
+<tr>
+<td><code>access next</code></td>
+<td>Switch to the next badge</td>
+</tr>
+<tr>
+<td><code>access tap place</code></td>
+<td>Present your active badge at a place (a door, <code>Elevator N</code>, or <code>CallStation F:N</code>)</td>
+</tr>
+<tr>
+<td><code>access present place, facility, number</code></td>
+<td>Present any card</td>
+</tr>
+<tr>
+<td><code>access addbadge facility, number</code></td>
+<td>Add a badge to your wallet</td>
+</tr>
+<tr>
+<td><code>access disable facility, number</code> / <code>enable</code></td>
+<td>Revoke or restore a card</td>
+</tr>
+<tr>
+<td><code>access grant door</code> / <code>exit door</code></td>
+<td>Momentary release (guard button, request to exit)</td>
+</tr>
+<tr>
+<td><code>access unlock door</code> / <code>lock door</code></td>
+<td>Hold unlocked, or return to normal</td>
+</tr>
+<tr>
+<td><code>access lockdown on</code> / <code>off</code></td>
+<td>Building lockdown</td>
+</tr>
+<tr>
+<td><code>access autoclose seconds</code></td>
+<td>Auto-close for all doors (0 = off)</td>
+</tr>
+<tr>
+<td><code>access autoclose door, seconds</code></td>
+<td>One door; <code>default</code> follows the global setting</td>
+</tr>
+<tr>
+<td><code>access resetzone zone</code> / <code>all</code></td>
+<td>Clear zone alarms and anti-passback</td>
+</tr>
+<tr>
+<td><code>access log [count]</code></td>
+<td>Recent events (default 20)</td>
+</tr>
+<tr>
+<td><code>access export filename</code></td>
+<td>Write the log to CSV</td>
+</tr>
+</tbody>
+</table>
+<h2 id="the-event-log-and-deny-reasons">The event log and deny reasons</h2>
+<p>Every event records the sky time, the event type, where it happened, the card, the holder and a detail. Event types are <code>GRANTED</code>, <code>DENIED</code>, <code>ALARM</code>, <code>ENTER</code>, <code>EXIT</code> and <code>INFO</code>. The log keeps the last 5,000 events.</p>
+<table>
+<thead>
+<tr>
+<th>Deny reason</th>
+<th>Meaning</th>
+<th>What to change</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>UnknownCard</code></td>
+<td>The card isn&#39;t enrolled</td>
+<td>Add it (Cards tab, or a <code>Card</code> line)</td>
+</tr>
+<tr>
+<td><code>Disabled</code></td>
+<td>The card was revoked</td>
+<td><strong>Enable</strong> it</td>
+</tr>
+<tr>
+<td><code>NoRule</code></td>
+<td>None of the card&#39;s access levels covers this place</td>
+<td>Add a rule, or give the card another level</td>
+</tr>
+<tr>
+<td><code>Schedule</code></td>
+<td>A rule exists, but its time profile isn&#39;t active now</td>
+<td>Check the profile and the sky time</td>
+</tr>
+<tr>
+<td><code>Lockdown</code></td>
+<td>The building is in lockdown</td>
+<td>Turn lockdown off, or use an override level</td>
+</tr>
+<tr>
+<td><code>Passback</code></td>
+<td>Anti-passback: the badge already entered and hasn&#39;t left</td>
+<td>Leave the zone, or <strong>Reset Zone</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Other details you&#39;ll see:</p>
+<table>
+<thead>
+<tr>
+<th>Detail</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>BadgeRequired Floor 7</code></td>
+<td>A secured floor was typed at a call station without a badge</td>
+</tr>
+<tr>
+<td><code>FloorSelected 7</code></td>
+<td>A released secured floor was selected</td>
+</tr>
+<tr>
+<td><code>HomeFloor 6</code></td>
+<td>A station tap called a car to the home floor</td>
+</tr>
+<tr>
+<td><code>UnbadgedEntry</code>, <code>HeldOpen</code>, <code>ForcedOpen</code>, <code>Passback at ...</code></td>
+<td>Alarms</td>
+</tr>
+</tbody>
+</table>
+<h2 id="testing-status">Testing status</h2>
+<ul>
+<li><strong>Unit tests:</strong> the decision logic passes its unit tests. They cover time windows including overnight, day parsing and formatting, every deny reason, lockdown and override, floor label matching, elevator rules, call station names, editing profiles, levels and rules, 26-bit Wiegand encoding and parity, and log capacity and CSV export.</li>
+<li><strong>Compile check:</strong> every new and changed <code>.cpp</code> passes a compile check with the project&#39;s include paths, against OGRE 1.12, wxWidgets 3.2 and Bullet headers.</li>
+<li><strong>Windows build:</strong> the full module builds and runs on Windows with Visual Studio 2026, OGRE 14.3.4 and the prebuilt dependencies.</li>
+<li><strong>Confirmed in the simulator:</strong><ul>
+<li>doors and readers, auto-close, and the console commands</li>
+<li>elevator floor lockout, with readers on the wall and in the button panel</li>
+<li>destination dispatch badge readers, home floors, and <code>??</code> and <code>XX</code> refusals</li>
+</ul>
+</li>
+<li><strong>Built but not yet confirmed in the simulator:</strong><ul>
+<li>floor labels</li>
+<li>zones and anti-passback</li>
+<li>virtual people&#39;s badges</li>
+<li>the Access Control window and its tabs</li>
+<li>the G key and USB reader input</li>
+<li>the red, green and alternating reader lights</li>
+</ul>
+</li>
+</ul>
+<h2 id="known-limits">Known limits</h2>
+<ul>
+<li><strong>On-screen indicator:</strong> there isn&#39;t one for the active badge in the 3D view. It shows in the console and the Access Control window.</li>
+<li><strong>Badge models:</strong> there are no badges to pick up in the world; badges come from <code>WalletAdd</code> or the Access Control window.</li>
+<li><strong>Hall call buttons:</strong> those on secured floors aren&#39;t badge-controlled yet; use <code>SetLock</code> with a key.</li>
+<li><strong>Actions:</strong> access points aren&#39;t <code>AddAction</code> parents yet, so an exit button uses a script command (<code>access exit door</code>) rather than an action.</li>
+<li><strong>Placement:</strong> zones, door access points and readers are placed in the building file, not the Access Control window.</li>
+<li><strong>Per building:</strong> each building in a city has its own cards and settings; cities don&#39;t share them.</li>
+<li><strong>Virtual people</strong> don&#39;t have positions within a floor, so zone occupancy only counts you.</li>
+</ul>
+</body></html>
