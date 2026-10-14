@@ -136,6 +136,8 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, int instance_number, const Vector3 &
 	current_time = 0;
 	current_virtual_time = 0;
 	elapsed_time = 0;
+	frame_timestamp = 0;
+	frame_time = 0;
 	average_time = 0;
 	timer = new Ogre::Timer();
 	AmbientR = 1;
@@ -628,17 +630,9 @@ bool SBS::Loop(bool loading, bool isready)
 	if (loading == true)
 		return true;
 
-	//This makes sure all timer steps are the same size, in order to prevent the physics from changing
-	//depending on frame rate
-
-	unsigned long timing;
-
-	if (SmoothFrames > 0)
-		timing = GetAverageTime();
-	else
-		timing = GetElapsedTime();
-
-	Real elapsed = Real(timing) / 1000.0;
+	// Integrate physics against real elapsed time; a rolling average changes
+	// simulation speed when the rendering frame rate changes.
+	Real elapsed = GetFrameTime() / 1000.0;
 
 	//calculate start and running time
 	if (start_time == 0)
@@ -646,6 +640,7 @@ bool SBS::Loop(bool loading, bool isready)
 	running_time = (GetRunTime() / 1000.0) - start_time;
 
 	//move camera or update character movement
+	camera->Loop();
 	camera->MoveCharacter();
 
 	//update physics
@@ -702,9 +697,6 @@ bool SBS::Loop(bool loading, bool isready)
 		area_trigger->Loop();
 
 	ProfileManager::Stop_Profile();
-
-	//process camera loop
-	camera->Loop();
 
 	return status;
 }
@@ -1983,6 +1975,10 @@ Real SBS::GetConfigFloat(const std::string &key, Real default_value)
 void SBS::AdvanceClock()
 {
 	//advance the clock
+	unsigned long timestamp = timer->getMicroseconds();
+	// Unsigned subtraction also handles timer wraparound.
+	frame_time = current_time == 0 ? 0 : Real(timestamp - frame_timestamp) / 1000.0;
+	frame_timestamp = timestamp;
 
 	unsigned long last = current_time;
 
@@ -2018,7 +2014,13 @@ unsigned long SBS::GetElapsedTime()
 	return elapsed_time;
 }
 
-unsigned long SBS::GetAverageTime()
+Real SBS::GetFrameTime()
+{
+	// Actual elapsed milliseconds, retaining sub-millisecond precision.
+	return frame_time;
+}
+
+Real SBS::GetAverageTime()
 {
 	//returns the average elapsed time between frames
 	return average_time;
@@ -2048,7 +2050,8 @@ void SBS::CalculateAverageTime()
 	frame_times.erase(frame_times.begin(), it);
 
 	//calculate average time
-	average_time = (frame_times.back() - frame_times.front()) / ((unsigned long)frame_times.size() - 1);
+	// Preserve fractional milliseconds, including frame times below one millisecond.
+	average_time = Real(frame_times.back() - frame_times.front()) / Real(frame_times.size() - 1);
 }
 
 void SBS::ShowColliders(bool value)

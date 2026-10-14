@@ -786,13 +786,8 @@ bool Camera::Loop()
 	if (Cameras.empty())
 		return true;
 
-	//get delta value
-	unsigned long timing;
-	if (sbs->SmoothFrames > 0)
-		timing = sbs->GetAverageTime();
-	else
-		timing = sbs->GetElapsedTime();
-	delta = timing / 1000.0;
+	// Use the same current-frame interval as physics, without smoothing lag.
+	delta = sbs->GetFrameTime() / 1000.0;
 
 	//reset collisions if needed
 	if (collision_reset == true && EnableBullet == true)
@@ -914,8 +909,9 @@ void Camera::Spin(Real speed)
 
 void Camera::FreelookMove(const Vector3 &rotation)
 {
-	desired_angle_velocity = rotation * Freelook_speed;
-	angle_velocity = desired_angle_velocity;
+	// Mouse input is displacement, not angular velocity. Apply it once,
+	// preserving the sensitivity at 60 FPS without frame-time scaling.
+	RotateLocal(rotation, Freelook_speed * speed / 60.0);
 }
 
 void Camera::InterpolateMovement(Real delta)

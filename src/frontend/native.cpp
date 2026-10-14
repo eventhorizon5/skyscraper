@@ -391,9 +391,6 @@ bool Skyscraper::mouseMoved(const OgreBites::MouseMotionEvent &evt)
 			rotational.y = -((width / 2) - (Real)camera->mouse_x) / (width * 2);
 			rotational.z = 0;
 
-			Real fps_adjust = Simcore->FPS / 60;
-			rotational *= fps_adjust;
-
 			//apply freelook rotation
 			camera->FreelookMove(rotational);
 		}

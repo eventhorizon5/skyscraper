@@ -300,7 +300,8 @@ public:
 	unsigned long GetCurrentTime();
 	unsigned long GetRunTime();
 	unsigned long GetElapsedTime();
-	unsigned long GetAverageTime();
+	Real GetFrameTime();
+	Real GetAverageTime();
 	void ShowColliders(bool value);
 	void SetLighting(Real red = 1.0, Real green = 1.0, Real blue = 1.0);
 	void ResetLighting();
@@ -520,7 +521,9 @@ private:
 	unsigned long current_time;
 	unsigned long current_virtual_time;
 	unsigned long elapsed_time;
-	unsigned long average_time;
+	unsigned long frame_timestamp;
+	Real frame_time;
+	Real average_time;
 	std::deque<unsigned long> frame_times;
 	Ogre::Timer *timer;
 

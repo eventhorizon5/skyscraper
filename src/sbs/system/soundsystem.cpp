@@ -119,7 +119,7 @@ void SoundSystem::SetListenerPosition(const Vector3 &position)
 
 #ifndef DISABLE_SOUND
 
-	unsigned int timing;
+	Real timing;
 	if (sbs->SmoothFrames > 0)
 		timing = sbs->GetAverageTime();
 	else
