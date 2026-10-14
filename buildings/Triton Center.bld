@@ -9514,3 +9514,29 @@ AddFloorAutoArea -76.5, Floor(-7).Altitude, 100, -16, 0, 220
 #set zoom of Map camera
 SetCameraZoom MapGenerator, MapCamera, 1.5
 
+<Vehicle 1>
+    Name = Car
+
+    Set WheelWidth = 1.067
+    Set WheelRadius = 1.333
+    Set ConnectionHeight = 1.8667
+    Set ChassisHalfWidth = 2.667
+    Set ChassisHalfLength = 5.333
+
+    ChassisShift = 0, %WheelRadius% * 2, 0
+    ChassisMesh = ogrebullet/models/chassis.mesh
+    WheelMesh = ogrebullet/models/wheel.mesh
+    ChassisScale = 2.667
+    WheelScale = 2.667
+
+    CreateChassis 0.6, 0.6, 800, 0.2, 0.2
+
+    AddWheel true, true, true, %WheelRadius%, %ChassisHalfWidth% - (0.3 * %WheelWidth%), %ConnectionHeight%, -%ChassisHalfLength% + %WheelRadius%
+    AddWheel true, true, true, %WheelRadius%, -%ChassisHalfWidth% + (0.3 * %WheelWidth%), %ConnectionHeight%, -%ChassisHalfLength% + %WheelRadius%
+    AddWheel false, false, false, %WheelRadius%, -%ChassisHalfWidth% + (0.3 * %WheelWidth%), %ConnectionHeight%, %ChassisHalfLength% - %WheelRadius%
+    AddWheel false, false, false, %WheelRadius%, %ChassisHalfWidth% - (0.3 * %WheelWidth%), %ConnectionHeight%, %ChassisHalfLength% - %WheelRadius%
+
+    CreateVehicle 37, -37.46 + 2.24, -66
+
+<EndVehicle>
+
