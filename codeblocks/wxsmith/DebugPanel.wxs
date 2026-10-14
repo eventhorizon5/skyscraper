@@ -399,6 +399,15 @@
 											<border>5</border>
 											<option>1</option>
 										</object>
+										<object class="sizeritem">
+											<object class="wxButton" name="ID_bAccessControl" variable="bAccessControl" member="yes">
+												<label>Access Control</label>
+												<handler function="On_bAccessControl_Click" entry="EVT_BUTTON" />
+											</object>
+											<flag>wxEXPAND</flag>
+											<border>5</border>
+											<option>1</option>
+										</object>
 									</object>
 									<flag>wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 									<border>5</border>
@@ -502,6 +511,11 @@
 												<label>Controller Editor</label>
 												<handler function="On_bControllerEditor_Click" entry="EVT_BUTTON" />
 											</object>
+											<flag>wxEXPAND</flag>
+											<border>5</border>
+											<option>1</option>
+										</object>
+										<object class="spacer">
 											<flag>wxEXPAND</flag>
 											<border>5</border>
 											<option>1</option>
