@@ -157,7 +157,7 @@ public:
 	void SetMaxRenderDistance(Real value);
 	Real GetMaxRenderDistance();
 	void ShowDebugShape(bool value);
-	void MoveCharacter();
+	void MoveCharacter(Real physics_step);
 	void ResetCollisions();
 	void GotoFloor(int floor, bool disable_current = true);
 	void Binoculars(bool value);

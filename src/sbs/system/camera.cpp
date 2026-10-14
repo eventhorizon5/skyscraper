@@ -1145,7 +1145,7 @@ void Camera::ShowDebugShape(bool value)
 		mCharacter->showDebugShape(value);
 }
 
-void Camera::MoveCharacter()
+void Camera::MoveCharacter(Real physics_step)
 {
 	if (Cameras.empty())
 		return;
@@ -1153,7 +1153,15 @@ void Camera::MoveCharacter()
 	SBS_PROFILE_MAIN("MoveCharacter");
 
 	if (EnableBullet == true)
-		mCharacter->setWalkDirection(accum_movement, 1);
+	{
+		// Bullet's walk direction is displacement per physics substep, not
+		// per rendered frame. It may be applied zero or several times here.
+		Real frame_seconds = sbs->GetFrameTime() / 1000.0;
+		if (frame_seconds > 0)
+			mCharacter->setWalkDirection(accum_movement, physics_step / frame_seconds);
+		else
+			mCharacter->setWalkDirection(Vector3::ZERO, 1);
+	}
 	else
 	{
 		for (size_t i = 0; i < Cameras.size(); i++)

@@ -633,6 +633,10 @@ bool SBS::Loop(bool loading, bool isready)
 	// Integrate physics against real elapsed time; a rolling average changes
 	// simulation speed when the rendering frame rate changes.
 	Real elapsed = GetFrameTime() / 1000.0;
+	// Bound catch-up after a stall, including the physics update.
+	if (elapsed > .5)
+		elapsed = .5;
+	const Real physics_step = 1.0 / 120.0;
 
 	//calculate start and running time
 	if (start_time == 0)
@@ -641,7 +645,7 @@ bool SBS::Loop(bool loading, bool isready)
 
 	//move camera or update character movement
 	camera->Loop();
-	camera->MoveCharacter();
+	camera->MoveCharacter(physics_step);
 
 	//update physics
 	if (camera->EnableBullet == true)
@@ -650,7 +654,8 @@ bool SBS::Loop(bool loading, bool isready)
 			ProfileManager::Start_Profile("Collisions/Physics");
 		else
 			ProfileManager::Start_Profile("Bullet");
-		mWorld->stepSimulation(elapsed, 0);
+		// Accumulate real time and solve contacts at a stable frequency.
+		mWorld->stepSimulation(elapsed, 60, physics_step);
 		ProfileManager::Stop_Profile();
 	}
 
