@@ -71,6 +71,7 @@ public:
 	bool Create(const Vector3 &position);
 	void OnMove(bool parent);
 	void AttachCamera(bool value);
+	void SyncCamera();
 	Real GetWidth();
 	void Report(const std::string &message);
 	bool ReportError(const std::string &message);

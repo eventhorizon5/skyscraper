@@ -1095,7 +1095,9 @@ void Camera::Sync()
 
 	SBS_PROFILE_MAIN("Camera Sync");
 
-	if (EnableBullet == true)
+	if (inside_vehicle && vehicle)
+		vehicle->SyncCamera();
+	else if (EnableBullet == true)
 		mCharacter->sync();
 
 	//notify on movement or rotation
@@ -1584,6 +1586,9 @@ void Camera::AttachToVehicle(bool value)
 		inside_vehicle = false;
 		vehicle->AttachCamera(false);
 		vehicle = 0;
+		// Discard falling velocity accumulated by the walking controller while seated.
+		if (EnableBullet == true)
+			mCharacter->reset();
 		EnableCollisions(true);
 		for (size_t i = 0; i < Cameras.size(); i++)
 		{

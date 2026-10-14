@@ -297,11 +297,7 @@ bool Vehicle::Loop()
 	}
 
 	//if camera is attached, sync it's position to this vehicle
-	if (camera_attached == true)
-	{
-		sbs->camera->SetPosition(GetPosition() + CameraPoint);
-		sbs->camera->SetOrientation(GetOrientation());
-	}
+	SyncCamera();
 
 	return true;
 }
@@ -336,6 +332,17 @@ void Vehicle::AttachCamera(bool value)
 		Report("Camera attached");
 	else
 		Report("Camera detached");
+}
+
+void Vehicle::SyncCamera()
+{
+	if (!camera_attached || !vehicle)
+		return;
+
+	// Bullet moves the chassis node, independently of the vehicle's parent node.
+	Quaternion orientation = vehicle->GetOrientation();
+	sbs->camera->SetPosition(vehicle->GetPosition() + orientation * CameraPoint);
+	sbs->camera->SetOrientation(orientation);
 }
 
 Real Vehicle::GetWidth()
