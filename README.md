@@ -165,6 +165,8 @@ C - Pick up object (physics-enabled models)
 
 X - Crouch
 
+G - switch to the next access control badge in the wallet
+
 ; - (semicolon) - Load an additional building
 
 1 to 0 - (number keys) - Switch active camera to engine instance number (ex. 2 for building engine 2)
