@@ -159,7 +159,8 @@ bool ScriptProcessor::Run()
 	int returncode = sContinue;
 	IsFinished = false;
 
-	if (engine->IsRunning() == true && processed_runloop == false)
+	//finish pending script commands before starting another runloop iteration
+	if (engine->IsRunning() == true && processed_runloop == false && line == (int)BuildingData.size())
 		ProcessRunloop();
 
 	//wait until end of script before processing runloop again
