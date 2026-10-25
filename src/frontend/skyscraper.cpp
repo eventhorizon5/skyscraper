@@ -212,6 +212,9 @@ bool showconsole = true;
 		return false;
 	}
 
+	if (parser->Found(wxT("help")) == true)
+		return false;
+
 	//set verbose mode if specified
 	if (parser->Found(wxT("verbose")) == true)
 		vm->Verbose = true;
