@@ -52,7 +52,7 @@ int main (int argc, char* argv[])
 		result = skyscraper->Loop();
 		//std::this_thread::sleep_for(std::chrono::milliseconds(1));
 	}
-	skyscraper->closeApp();
+	//skyscraper->closeApp();
 	return 0;
 #endif
 }
