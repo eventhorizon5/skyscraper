@@ -475,7 +475,11 @@ bool Skyscraper::Loop()
 	}
 
 	if (status == VMSTATUS_UNLOAD ||  status == VMSTATUS_FATAL)
+#ifdef USING_WX
 		UnloadToMenu();
+#else
+		return false;
+#endif
 
 	//ProfileManager::dumpAll();
 

@@ -46,9 +46,10 @@ int main (int argc, char* argv[])
 #else
 	::Skyscraper::Skyscraper *skyscraper = new ::Skyscraper::Skyscraper();
 	skyscraper->initApp();
-	while (true)
+	bool result = true;
+	while (result)
 	{
-		skyscraper->Loop();
+		result = skyscraper->Loop();
 		//std::this_thread::sleep_for(std::chrono::milliseconds(1));
 	}
 	skyscraper->closeApp();

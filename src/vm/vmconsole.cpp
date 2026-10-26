@@ -794,6 +794,17 @@ bool VMConsole::ProcessCommand(const std::string &command, Ogre::StringVector &p
 		return true;
 	}
 
+	//quit command
+	if (command == "quit")
+	{
+		Report("Shutting down...");
+
+		vm->Shutdown = true;
+		consoleresult.ready = false;
+		consoleresult.threadwait = false;
+		return true;
+	}
+
 	//help command
 	if (command == "help" || command == "?")
 	{
@@ -821,6 +832,7 @@ bool VMConsole::ProcessCommand(const std::string &command, Ogre::StringVector &p
 			Report("resume [engine_number] - resume a simulator engine");
 			Report("show [engine_number] - show information of the specified engine");
 			Report("status [engine_number] - show status of the specified engine");
+			Report("quit - exit Skyscraper");
 			Report("help - print this help guide\n");
 			Report("All other commands will be passed to the active simulator engine, if available");
 #ifdef USING_WX
