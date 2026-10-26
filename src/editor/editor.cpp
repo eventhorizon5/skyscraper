@@ -75,6 +75,7 @@ bool Editor::Initialize()
 {
 	HAL *hal = vm->GetHAL();
 
+#ifdef USING_WX
 	//initialize ImGui Overlay
 	if (vm->GetHAL()->IsVREnabled() == false)
 	{
@@ -91,6 +92,7 @@ bool Editor::Initialize()
 		}
 		initialized = true;
 	}
+#endif
 
 	return true;
 }
@@ -102,6 +104,7 @@ bool Editor::Run()
 	if (!imgui || !initialized)
 		return false;
 
+#ifdef USING_WX
 	Ogre::ImGuiOverlay::NewFrame();
 	//ImGuizmo::BeginFrame();
 
@@ -109,6 +112,7 @@ bool Editor::Run()
 		return true;
 
 	Process();
+#endif
 
 	return true;
 }
@@ -117,8 +121,10 @@ void Editor::Process()
 {
 	//process ImGui
 
+#ifdef USING_WX
 	//ImGui::ShowDemoWindow();
 	ShowTransformGizmoWindow();
+#endif
 }
 
 void Editor::Unload()
@@ -128,9 +134,11 @@ void Editor::Unload()
 	if (!imgui || !initialized)
 		return;
 
+#ifdef USING_WX
 	imgui->hide();
 	Ogre::OverlayManager::getSingleton().destroy(imgui);
 	//delete imgui;
+#endif
 	imgui = 0;
 	initialized = false;
 }
