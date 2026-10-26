@@ -24,6 +24,10 @@
 
 #include <filesystem>
 
+#ifdef __APPLE__
+#include <SDL.h>
+#endif
+
 #ifdef _WIN32
 #include <windows.h>
 #elif __APPLE__
@@ -373,25 +377,49 @@ bool Skyscraper::mouseMoved(const OgreBites::MouseMotionEvent &evt)
 			//reset values to prevent movement from getting stuck
 			turn_right = 0;
 			turn_left = 0;
-		}
 
-		freelook = true;
+			setWindowGrab(true);
+#ifdef __APPLE__
+			int window_width, window_height;
+			SDL_GetWindowSize(mWindows[0].native, &window_width, &window_height);
+			SDL_WarpMouseInWindow(mWindows[0].native, window_width / 2, window_height / 2);
+#endif
+			camera->mouse_x = mRenderWindow->getWidth() / 2;
+			camera->mouse_y = mRenderWindow->getHeight() / 2;
+			freelook = true;
+			//Discard the event that entered Freelook (before capture/recentering).
+			return true;
+		}
 
 		//get window dimensions
 		Real width = mRenderWindow->getWidth();
 		Real height = mRenderWindow->getHeight();
 
-		//if mouse coordinates changed, and we're in freelook mode, rotate camera
-		if (old_mouse_x != camera->mouse_x || old_mouse_y != camera->mouse_y)
+		Real delta_x = evt.xrel;
+		Real delta_y = evt.yrel;
+#ifdef __APPLE__
+		//Ogre disables SDL relative mode on macOS. Recenter explicitly instead.
+		int window_width, window_height;
+		SDL_GetWindowSize(mWindows[0].native, &window_width, &window_height);
+		//Ogre scales absolute macOS events to pixels; SDL warps in window points.
+		//Use the same conversion (including integer truncation) as Ogre so a
+		//synthetic center event is exactly zero, including on Retina displays.
+		float view_scale = mRenderWindow->getViewPointToPixelScale();
+		width = window_width * view_scale;
+		height = window_height * view_scale;
+		delta_x = evt.x - static_cast<int>((window_width / 2) * view_scale);
+		delta_y = evt.y - static_cast<int>((window_height / 2) * view_scale);
+		if (delta_x != 0 || delta_y != 0)
+			SDL_WarpMouseInWindow(mWindows[0].native, window_width / 2, window_height / 2);
+#endif
+		//Keep interaction rays aligned with the center of the view.
+		camera->mouse_x = mRenderWindow->getWidth() / 2;
+		camera->mouse_y = mRenderWindow->getHeight() / 2;
+
+		//Center-warp events have zero displacement and must not rotate the view.
+		if ((delta_x != 0 || delta_y != 0) && width > 0 && height > 0)
 		{
-			//WarpPointer(width * 0.5, height * 0.5);
-
-			Vector3 rotational;
-			rotational.x = -(((Real)camera->mouse_y - (height / 2))) / (height * 2);
-			rotational.y = -((width / 2) - (Real)camera->mouse_x) / (width * 2);
-			rotational.z = 0;
-
-			//apply freelook rotation
+			Vector3 rotational(-delta_y / (height * 2), delta_x / (width * 2), 0);
 			camera->FreelookMove(rotational);
 		}
 		else
@@ -404,6 +432,7 @@ bool Skyscraper::mouseMoved(const OgreBites::MouseMotionEvent &evt)
 	{
 		if (freelook == true)
 		{
+			setWindowGrab(false);
 			//reset values to prevent movement from getting stuck
 			strafe_right = 0;
 			strafe_left = 0;
@@ -711,6 +740,7 @@ void Skyscraper::EnableFreelook(bool value)
 		return;
 
 	camera->Freelook = value;
+	setWindowGrab(value);
 }
 
 void Skyscraper::HandleMouseMovement()

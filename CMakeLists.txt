@@ -334,6 +334,11 @@ if (WIN32)
 endif ()
 add_executable(skyscraper WIN32 ${FRONTEND_FILES})
 
+# Native macOS Freelook uses SDL cursor warping (Ogre disables relative mode).
+if(APPLE AND NOT wxWidgets_FOUND)
+	find_package(SDL2 REQUIRED CONFIG)
+	target_link_libraries(skyscraper SDL2::SDL2)
+endif()
 
 if (NOT WIN32)
 	add_library(VM SHARED ${VM_FILES})
