@@ -205,7 +205,7 @@ public:
 	int Lobby; //lobby level (used or random activity)
 
 	//public functions
-	SBS(Ogre::SceneManager* mSceneManager, int instance_number, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO);
+	SBS(Ogre::SceneManager* mSceneManager, int instance_number, const Vector3 &area_min = Vector3::ZERO, const Vector3 &area_max = Vector3::ZERO, const std::string &config_path = "skyscraper.ini");
 	~SBS();
 	void InitializeSoundSystem(FMOD::System *fmodsystem);
 	void Initialize();

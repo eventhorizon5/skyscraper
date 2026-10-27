@@ -27,6 +27,9 @@
 #include <OgreMesh.h>
 #include <OgreEntity.h>
 #include <OgreCamera.h>
+#include <OgreLight.h>
+#include <OgreSubEntity.h>
+#include <OgreSceneNode.h>
 #include "globals.h"
 #include "sbs.h"
 #include "mesh.h"
@@ -38,6 +41,8 @@
 #include "scenenode.h"
 #include "profiler.h"
 #include "dynamicmesh.h"
+#include "spatialbatch.h"
+#include "locallights.h"
 
 //this file includes function implementations of the low-level SBS geometry and mesh code
 
@@ -156,6 +161,7 @@ bool DynamicMesh::Enabled(bool value, MeshObject *client)
 
 		if (index >= 0)
 		{
+			client_enable[index] = value;
 			bool result = meshes[index]->Enabled(value);
 			if (!result)
 				status = false;
@@ -280,9 +286,13 @@ void DynamicMesh::Prepare(MeshObject *client)
 			}
 
 			bool combined = false;
+			// With local lighting, preserve each client's visibility and transform
+			// boundary (including moving doors). Static clients are subdivided below.
+			bool spatial_lighting = sbs->GetConfigBool("Skyscraper.SBS.Lighting", false) &&
+				sbs->GetConfigBool("Skyscraper.SBS.Lighting.SpatialBatching", true);
 
 			//if combined submesh/material count is less than three separate meshes
-			if (((total < separate_total || total <= 10) && auto_combine == true) || force_combine == true)
+			if (!spatial_lighting && (((total < separate_total || total <= 10) && auto_combine == true) || force_combine == true))
 			{
 				meshes_to_create = 1; //create a single combined mesh for all clients
 				combined = true;
@@ -322,6 +332,8 @@ void DynamicMesh::Prepare(MeshObject *client)
 				mesh = new Mesh(this, clients[i]->GetName(), clients[i]->GetSceneNode(), render_distance);
 
 			meshes.emplace_back(mesh);
+			if (meshes_to_create > 1)
+				mesh->Enabled(client_enable[i]);
 		}
 	}
 
@@ -363,6 +375,13 @@ void DynamicMesh::RemoveClient(MeshObject *mesh)
 	{
 		if (clients[i] == mesh)
 		{
+			// Per-client render meshes must follow the client table when a
+			// floor/door is deleted; otherwise subsequent indices refer to it.
+			if (meshes.size() == clients.size())
+			{
+				delete meshes[i];
+				meshes.erase(meshes.begin() + i);
+			}
 			clients.erase(clients.begin() + i);
 			client_enable.erase(client_enable.begin() + i);
 			return;
@@ -581,12 +600,11 @@ void DynamicMesh::UpdateVertices(MeshObject *client, const std::string &material
 
 void DynamicMesh::DetachClient(MeshObject *client)
 {
-	if (meshes.size() > 1)
+	// Also detach the last remaining per-client mesh before its node is deleted.
+	for (auto *mesh : meshes)
 	{
-		int index = GetClientIndex(client);
-
-		if (index >= 0)
-			meshes[index]->Detach();
+		if (mesh->node == client->GetSceneNode())
+			mesh->Detach();
 	}
 }
 
@@ -655,6 +673,14 @@ DynamicMesh::Mesh::Mesh(DynamicMesh *parent, const std::string &name, SceneNode 
 	Movable = 0;
 	auto_shadows = true;
 	parent_deleting = false;
+	light_selector = 0;
+	debug_view = false;
+	bool lighting = sbs->GetConfigBool("Skyscraper.SBS.Lighting", false);
+	light_budget = lighting ? std::max(0, std::min(64, sbs->GetConfigInt("Skyscraper.SBS.Lighting.MaxLights", 8))) : 0;
+	batch_size = 0;
+	if (lighting && !Parent->UseDynamicBuffers() && filename.empty() && meshname.empty() &&
+		sbs->GetConfigBool("Skyscraper.SBS.Lighting.SpatialBatching", true))
+		batch_size = sbs->ToRemote(std::max(Real(1), sbs->GetConfigFloat("Skyscraper.SBS.Lighting.CellSize", 32)));
 
 	if (!node)
 	{
@@ -704,6 +730,11 @@ DynamicMesh::Mesh::Mesh(DynamicMesh *parent, const std::string &name, SceneNode 
 
 	//create and enable movable
 	Movable = sbs->mSceneManager->createEntity(node->GetNameBase() + name, MeshWrapper);
+	if (light_budget > 0)
+	{
+		light_selector = new LocalLightSelector(sbs->mSceneManager, light_budget);
+		Movable->setListener(light_selector);
+	}
 	Enabled(true);
 
 	//set maximum render distance
@@ -713,6 +744,7 @@ DynamicMesh::Mesh::Mesh(DynamicMesh *parent, const std::string &name, SceneNode 
 DynamicMesh::Mesh::~Mesh()
 {
 	Detach();
+	delete light_selector;
 
 	for (size_t i = 0; i < client_entries.size(); i++)
 	{
@@ -749,6 +781,15 @@ bool DynamicMesh::Mesh::Enabled(bool value)
 
 	if (auto_shadows == true)
 		Movable->setCastShadows(value);
+	for (auto &batch : lighting_batches)
+	{
+		if (value)
+			batch.node->attachObject(batch.entity);
+		else
+			batch.node->detachObject(batch.entity);
+		if (auto_shadows)
+			batch.entity->setCastShadows(value);
+	}
 
 	enabled = value;
 	return true;
@@ -797,6 +838,15 @@ bool DynamicMesh::Mesh::ChangeTexture(const std::string &old_texture, const std:
 
 	//set material if valid
 	Submeshes[submesh].object->setMaterialName(ToString(sbs->InstanceNumber) + ":" + new_texture);
+	for (auto &batch : lighting_batches)
+	{
+		for (unsigned int i = 0; i < batch.entity->getNumSubEntities(); i++)
+		{
+			Ogre::SubEntity *part = batch.entity->getSubEntity(i);
+			if (part->getMaterialName() == ToString(sbs->InstanceNumber) + ":" + old_texture)
+				part->setMaterial(newmat);
+		}
+	}
 
 	//apply changes (refresh mesh state)
 	MeshWrapper->_dirtyState();
@@ -931,6 +981,11 @@ void DynamicMesh::Mesh::Prepare(bool process_vertices, int client)
 	if (prepared == true || !node)
 		return;
 
+	// Rebuilt from the canonical geometry, never by reading write-only GPU buffers.
+	std::vector<float> lighting_vertices;
+	std::map<std::string, std::vector<unsigned int>> lighting_indices;
+	ClearLightingBatches();
+
 	unsigned int vertex_count = Parent->GetVertexCount("", client);
 
 	std::vector<std::string> materials;
@@ -944,10 +999,8 @@ void DynamicMesh::Mesh::Prepare(bool process_vertices, int client)
 		MeshWrapper->sharedVertexData = new Ogre::VertexData();
 
 		//delete any existing submeshes
-		for (size_t i = 0; i < Submeshes.size(); i++)
-		{
-			DeleteSubMesh(-1, (int)i);
-		}
+		while (!Submeshes.empty())
+			DeleteSubMesh(-1, 0);
 
 		return;
 	}
@@ -1085,6 +1138,8 @@ void DynamicMesh::Mesh::Prepare(bool process_vertices, int client)
 			vbuffer = Ogre::HardwareBufferManager::getSingleton().createVertexBuffer(decl->getVertexSize(0), vertex_count, Ogre::HardwareBuffer::HBU_DYNAMIC_WRITE_ONLY);
 
 		vbuffer->writeData(0, vbuffer->getSizeInBytes(), mVertexElements, true);
+		if (batch_size > 0)
+			lighting_vertices.assign(mVertexElements, mVertexElements + vertex_count * 8);
 		delete [] mVertexElements;
 
 		//bind vertex data to mesh
@@ -1195,6 +1250,8 @@ void DynamicMesh::Mesh::Prepare(bool process_vertices, int client)
 
 			//write data to index buffer
 			ibuffer->writeData(0, ibuffer->getSizeInBytes(), mIndices, true);
+			if (batch_size > 0)
+				lighting_indices[submesh->object->getMaterialName()].assign(mIndices, mIndices + isize);
 			delete [] mIndices;
 		}
 		else
@@ -1253,6 +1310,8 @@ void DynamicMesh::Mesh::Prepare(bool process_vertices, int client)
 
 			//write data to index buffer
 			ibuffer->writeData(0, ibuffer->getSizeInBytes(), mIndices, true);
+			if (batch_size > 0)
+				lighting_indices[submesh->object->getMaterialName()].assign(mIndices, mIndices + isize);
 			delete [] mIndices;
 		}
 
@@ -1286,19 +1345,127 @@ void DynamicMesh::Mesh::Prepare(bool process_vertices, int client)
 		}
 	}
 
+	if (!lighting_vertices.empty())
+		BuildLightingBatches(lighting_vertices, lighting_indices);
 	prepared = true;
+}
+
+void DynamicMesh::Mesh::ClearLightingBatches()
+{
+	for (auto &batch : lighting_batches)
+	{
+		// Destroy the entity before its listener and referenced mesh buffers.
+		sbs->mSceneManager->destroyEntity(batch.entity);
+		delete batch.selector;
+		sbs->mSceneManager->destroySceneNode(batch.node);
+		Ogre::MeshManager::getSingleton().remove(batch.mesh->getHandle());
+	}
+	lighting_batches.clear();
+	if (Movable)
+		Movable->setVisible(true);
+}
+
+void DynamicMesh::Mesh::BuildLightingBatches(const std::vector<float> &vertices,
+	const std::map<std::string, std::vector<unsigned int>> &indices)
+{
+	SpatialBatch::Batches cells;
+	for (const auto &material : indices)
+	{
+		for (size_t i = 0; i + 2 < material.second.size(); i += 3)
+		{
+			std::vector<SpatialBatch::Vertex> triangle(3);
+			for (int j = 0; j < 3; j++)
+				std::copy_n(vertices.begin() + material.second[i + j] * 8, 8, triangle[j].begin());
+			SpatialBatch::Partition(triangle, material.first, batch_size, cells);
+		}
+	}
+
+	for (const auto &cell : cells)
+	{
+		std::string batch_name = MeshWrapper->getName() + ":lighting:" + ToString(lighting_batches.size());
+		LightingBatch batch;
+		batch.mesh = Ogre::MeshManager::getSingleton().createManual(batch_name, Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
+		Ogre::AxisAlignedBox bounds;
+		for (const auto &material : cell.second)
+		{
+			for (const auto &vertex : material.second)
+				bounds.merge(Vector3(vertex[0], vertex[1], vertex[2]));
+		}
+		Vector3 center = bounds.getCenter();
+		Real radius = 0;
+		for (const auto &material : cell.second)
+		{
+			Ogre::SubMesh *part = batch.mesh->createSubMesh();
+			part->useSharedVertices = false;
+			part->setMaterialName(material.first);
+			part->vertexData = new Ogre::VertexData();
+			part->vertexData->vertexCount = material.second.size();
+			auto *decl = part->vertexData->vertexDeclaration;
+			decl->addElement(0, 0, Ogre::VET_FLOAT3, Ogre::VES_POSITION);
+			decl->addElement(0, 3 * sizeof(float), Ogre::VET_FLOAT3, Ogre::VES_NORMAL);
+			decl->addElement(0, 6 * sizeof(float), Ogre::VET_FLOAT2, Ogre::VES_TEXTURE_COORDINATES);
+			std::vector<float> data;
+			data.reserve(material.second.size() * 8);
+			for (auto vertex : material.second)
+			{
+				Vector3 position = Vector3(vertex[0], vertex[1], vertex[2]) - center;
+				radius = std::max(radius, position.length());
+				vertex[0] = position.x;
+				vertex[1] = position.y;
+				vertex[2] = position.z;
+				data.insert(data.end(), vertex.begin(), vertex.end());
+			}
+			auto buffer = Ogre::HardwareBufferManager::getSingleton().createVertexBuffer(8 * sizeof(float), material.second.size(), Ogre::HardwareBuffer::HBU_STATIC_WRITE_ONLY);
+			buffer->writeData(0, buffer->getSizeInBytes(), data.data(), true);
+			part->vertexData->vertexBufferBinding->setBinding(0, buffer);
+			// Keep explicit triangle indices for OGRE's stencil-shadow edge builder.
+			std::vector<unsigned int> triangle_indices(material.second.size());
+			for (size_t i = 0; i < triangle_indices.size(); i++)
+				triangle_indices[i] = static_cast<unsigned int>(i);
+			auto index_buffer = Ogre::HardwareBufferManager::getSingleton().createIndexBuffer(
+				Ogre::HardwareIndexBuffer::IT_32BIT, triangle_indices.size(), Ogre::HardwareBuffer::HBU_STATIC_WRITE_ONLY);
+			index_buffer->writeData(0, index_buffer->getSizeInBytes(), triangle_indices.data(), true);
+			part->indexData->indexBuffer = index_buffer;
+			part->indexData->indexCount = triangle_indices.size();
+		}
+		batch.mesh->_setBounds(Ogre::AxisAlignedBox(bounds.getMinimum() - center, bounds.getMaximum() - center));
+		batch.mesh->_setBoundingSphereRadius(radius);
+		batch.mesh->load();
+		batch.entity = sbs->mSceneManager->createEntity(batch_name, batch.mesh);
+		batch.selector = light_budget > 0 ? new LocalLightSelector(sbs->mSceneManager, light_budget) : 0;
+		batch.entity->setListener(batch.selector);
+		batch.entity->setRenderingDistance(Movable->getRenderingDistance());
+		batch.entity->setCastShadows(Movable->getCastShadows());
+		batch.entity->setDebugDisplayEnabled(debug_view);
+		batch.node = node->GetRawSceneNode()->createChildSceneNode(batch_name, center);
+		if (enabled)
+			batch.node->attachObject(batch.entity);
+		lighting_batches.push_back(batch);
+	}
+	// Keep the canonical entity for mesh bookkeeping; only the cells render.
+	Movable->setVisible(lighting_batches.empty());
 }
 
 void DynamicMesh::Mesh::EnableDebugView(bool value)
 {
 	//enable or disable debug view of mesh
 	Movable->setDebugDisplayEnabled(value);
+	debug_view = value;
+	for (auto &batch : lighting_batches)
+		batch.entity->setDebugDisplayEnabled(value);
 }
 
 bool DynamicMesh::Mesh::IsVisible()
 {
 	//returns true if this mesh is currently visible (enabled, and within the rendering distance)
-	return Movable->isVisible();
+	if (lighting_batches.empty())
+		return Movable->isVisible();
+	for (auto &batch : lighting_batches)
+	{
+		if (batch.entity->isVisible())
+			return true;
+	}
+	return false;
 }
 
 bool DynamicMesh::Mesh::IsVisible(Ogre::Camera *camera)
@@ -1482,6 +1649,7 @@ void DynamicMesh::Mesh::UpdateVertices(int client, const std::string &material, 
 void DynamicMesh::Mesh::Detach()
 {
 	//detach entity and scene node from this mesh object
+	ClearLightingBatches();
 
 	if (Movable)
 	{
@@ -1535,6 +1703,8 @@ void DynamicMesh::Mesh::EnableShadows(bool value)
 
 	auto_shadows = false;
 	Movable->setCastShadows(value);
+	for (auto &batch : lighting_batches)
+		batch.entity->setCastShadows(value);
 }
 
 void DynamicMesh::Mesh::SetMaterial(const std::string& material)
@@ -1550,6 +1720,11 @@ void DynamicMesh::Mesh::SetMaterial(const std::string& material)
 		//set to default material if the specified one is not found
 		mat = sbs->GetTextureManager()->GetMaterialByName("Default");
 		Movable->setMaterial(mat);
+	}
+	if (mat)
+	{
+		for (auto &batch : lighting_batches)
+			batch.entity->setMaterial(mat);
 	}
 }
 

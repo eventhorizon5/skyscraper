@@ -24,7 +24,11 @@
 #ifndef _SBS_DYNAMICMESH_H
 #define _SBS_DYNAMICMESH_H
 
+#include <map>
+
 namespace SBS {
+
+struct LocalLightSelector;
 
 class SBSIMPEXP DynamicMesh : public ObjectBase
 {
@@ -89,6 +93,21 @@ private:
 		void UpdateBoundingBox();
 		void EnableShadows(bool value);
 		void SetMaterial(const std::string& material);
+		void ClearLightingBatches();
+		void BuildLightingBatches(const std::vector<float> &vertices, const std::map<std::string, std::vector<unsigned int>> &indices);
+
+		struct LightingBatch
+		{
+			Ogre::MeshPtr mesh;
+			Ogre::Entity *entity;
+			Ogre::SceneNode *node;
+			LocalLightSelector *selector;
+		};
+		std::vector<LightingBatch> lighting_batches;
+		LocalLightSelector *light_selector;
+		Real batch_size;
+		int light_budget;
+		bool debug_view;
 
 		struct ClientEntry
 		{

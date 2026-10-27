@@ -567,6 +567,12 @@ bool HAL::LoadSystem(const std::string &data_path, Ogre::RenderWindow *renderwin
 	if (renderer != "Direct3D9 Rendering Subsystem" && renderer != "OpenGL Rendering Subsystem" && renderer != "Metal Rendering Subsystem")
 		RTSS = true;
 
+	// Legacy OpenGL otherwise uses vertex lighting, producing triangular
+	// brightness bands on large walls/floors, including clipped spatial cells.
+	// Its GLSL support can run RTSS per-pixel lighting without switching to GL3+.
+	if (renderer == "OpenGL Rendering Subsystem" && GetConfigBool(configfile, "Skyscraper.SBS.Lighting", false))
+		RTSS = true;
+
 	if (RTSS == true)
 	{
 		//Enable the RT Shader System
@@ -574,6 +580,20 @@ bool HAL::LoadSystem(const std::string &data_path, Ogre::RenderWindow *renderwin
 		{
 			Ogre::RTShader::ShaderGenerator* shaderGenerator = Ogre::RTShader::ShaderGenerator::getSingletonPtr();
 			shaderGenerator->addSceneManager(mSceneMgr);
+			Report("RTShader per-pixel lighting enabled for " + renderer);
+
+			if (GetConfigBool(configfile, "Skyscraper.SBS.Lighting", false))
+			{
+				int budget = std::max(0, std::min(64, GetConfigInt(configfile, "Skyscraper.SBS.Lighting.MaxLights", 8)));
+				if (budget > 0)
+				{
+					// Compile a fixed number of light slots, independent of the total
+					// fixtures in view. DynamicMesh supplies a local list per entity.
+					auto *state = shaderGenerator->getRenderState(Ogre::RTShader::ShaderGenerator::DEFAULT_SCHEME_NAME);
+					state->setLightCount(budget);
+					state->setLightCountAutoUpdate(false);
+				}
+			}
 
 			// forward scheme not found events to the RTSS
 			OgreBites::SGTechniqueResolverListener* schemeNotFoundHandler = new OgreBites::SGTechniqueResolverListener(shaderGenerator);

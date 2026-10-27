@@ -71,7 +71,7 @@
 
 namespace SBS {
 
-SBS::SBS(Ogre::SceneManager* mSceneManager, int instance_number, const Vector3 &area_min, const Vector3 &area_max) : Object(0)
+SBS::SBS(Ogre::SceneManager* mSceneManager, int instance_number, const Vector3 &area_min, const Vector3 &area_max, const std::string &config_path) : Object(0)
 {
 	sbs = this;
 	this->mSceneManager = mSceneManager;
@@ -89,9 +89,10 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, int instance_number, const Vector3 &
 
 	mRoot = Ogre::Root::getSingletonPtr();
 
-	//load config file
+	// Use the frontend's selected file; on macOS the user configuration lives
+	// outside the working directory containing the bundled defaults.
 	configfile = new Ogre::ConfigFile();
-	configfile->load("skyscraper.ini");
+	configfile->load(config_path);
 
 	//initialize variables
 	BuildingName = "";
