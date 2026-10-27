@@ -64,6 +64,7 @@ DynamicMesh::DynamicMesh(Object* parent, SceneNode *node, const std::string &nam
 	this->dynamic_buffers = dynamic_buffers;
 	force_combine = false;
 	auto_combine = sbs->GetConfigBool("Skyscraper.SBS.DynamicMesh.AutoCombine", true);
+	spatial_batching = sbs->GetConfigBool("Skyscraper.SBS.Lighting.SpatialBatching", true);
 	sbs->RegisterDynamicMesh(this);
 }
 
@@ -289,7 +290,7 @@ void DynamicMesh::Prepare(MeshObject *client)
 			// With local lighting, preserve each client's visibility and transform
 			// boundary (including moving doors). Static clients are subdivided below.
 			bool spatial_lighting = sbs->GetConfigBool("Skyscraper.SBS.Lighting", false) &&
-				sbs->GetConfigBool("Skyscraper.SBS.Lighting.SpatialBatching", true);
+				spatial_batching;
 
 			//if combined submesh/material count is less than three separate meshes
 			if (!spatial_lighting && (((total < separate_total || total <= 10) && auto_combine == true) || force_combine == true))
@@ -679,7 +680,7 @@ DynamicMesh::Mesh::Mesh(DynamicMesh *parent, const std::string &name, SceneNode 
 	light_budget = lighting ? std::max(0, std::min(64, sbs->GetConfigInt("Skyscraper.SBS.Lighting.MaxLights", 8))) : 0;
 	batch_size = 0;
 	if (lighting && !Parent->UseDynamicBuffers() && filename.empty() && meshname.empty() &&
-		sbs->GetConfigBool("Skyscraper.SBS.Lighting.SpatialBatching", true))
+		Parent->spatial_batching)
 		batch_size = sbs->ToRemote(std::max(Real(1), sbs->GetConfigFloat("Skyscraper.SBS.Lighting.CellSize", 32)));
 
 	if (!node)
@@ -1369,6 +1370,7 @@ void DynamicMesh::Mesh::BuildLightingBatches(const std::vector<float> &vertices,
 	const std::map<std::string, std::vector<unsigned int>> &indices)
 {
 	SpatialBatch::Batches cells;
+	SpatialBatch::Budget budget;
 	for (const auto &material : indices)
 	{
 		for (size_t i = 0; i + 2 < material.second.size(); i += 3)
@@ -1376,7 +1378,13 @@ void DynamicMesh::Mesh::BuildLightingBatches(const std::vector<float> &vertices,
 			std::vector<SpatialBatch::Vertex> triangle(3);
 			for (int j = 0; j < 3; j++)
 				std::copy_n(vertices.begin() + material.second[i + j] * 8, 8, triangle[j].begin());
-			SpatialBatch::Partition(triangle, material.first, batch_size, cells);
+			if (!SpatialBatch::Partition(triangle, material.first, batch_size, cells, budget))
+			{
+				// The canonical entity is still visible. Do not render a partial
+				// partition or spend unbounded startup time on distant scenery.
+				sbs->Report("Spatial batching limit reached for '" + name + "'; using original mesh");
+				return;
+			}
 		}
 	}
 

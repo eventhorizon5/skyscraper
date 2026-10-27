@@ -19,6 +19,15 @@ using Vertex = std::array<float, 8>;
 using Cell = std::array<long long, 3>;
 using Batches = std::map<Cell, std::map<std::string, std::vector<Vertex>>>;
 
+// Shared across every triangle of a mesh. Reaching a limit tells the caller to
+// discard the partial result and render the original mesh instead.
+struct Budget
+{
+	size_t splits = 65536;
+	size_t vertices = 1048576;
+	size_t cells = 4096;
+};
+
 inline Vertex Interpolate(const Vertex &a, const Vertex &b, float t)
 {
 	Vertex result;
@@ -27,10 +36,12 @@ inline Vertex Interpolate(const Vertex &a, const Vertex &b, float t)
 	return result;
 }
 
-inline void Partition(const std::vector<Vertex> &polygon, const std::string &material, float size, Batches &batches)
+inline bool Partition(const std::vector<Vertex> &polygon, const std::string &material, float size, Batches &batches, Budget &budget)
 {
 	if (polygon.size() < 3)
-		return;
+		return true;
+	if (!std::isfinite(size) || size <= 0)
+		return false;
 
 	// Bisect at a grid plane, choosing the longest span to keep recursion shallow.
 	int axis = -1;
@@ -41,12 +52,17 @@ inline void Partition(const std::vector<Vertex> &polygon, const std::string &mat
 		float low = polygon[0][i], high = low;
 		for (const auto &v : polygon)
 		{
+			// Reject invalid/unrepresentable grid coordinates before converting
+			// to integers. Double division also avoids float overflow here.
+			double coordinate = double(v[i]) / size;
+			if (!std::isfinite(coordinate) || std::abs(coordinate) > 1e15)
+				return false;
 			low = std::min(low, v[i]);
 			high = std::max(high, v[i]);
 		}
-		long long first = static_cast<long long>(std::floor(low / size));
+		long long first = static_cast<long long>(std::floor(double(low) / size));
 		// A vertex exactly on the upper plane belongs to the cell below it.
-		long long last = static_cast<long long>(std::ceil(high / size)) - 1;
+		long long last = static_cast<long long>(std::ceil(double(high) / size)) - 1;
 		if (last - first > span)
 		{
 			float split = static_cast<float>(first + (last - first + 1) / 2) * size;
@@ -61,6 +77,9 @@ inline void Partition(const std::vector<Vertex> &polygon, const std::string &mat
 
 	if (axis != -1)
 	{
+		if (budget.splits == 0)
+			return false;
+		budget.splits--;
 		std::vector<Vertex> lower, upper;
 		Vertex a = polygon.back();
 		for (const auto &b : polygon)
@@ -78,9 +97,8 @@ inline void Partition(const std::vector<Vertex> &polygon, const std::string &mat
 				upper.push_back(b);
 			a = b;
 		}
-		Partition(lower, material, size, batches);
-		Partition(upper, material, size, batches);
-		return;
+		return Partition(lower, material, size, batches, budget) &&
+			Partition(upper, material, size, batches, budget);
 	}
 
 	Cell cell;
@@ -91,6 +109,10 @@ inline void Partition(const std::vector<Vertex> &polygon, const std::string &mat
 			center += v[i];
 		cell[i] = static_cast<long long>(std::floor(center / polygon.size() / size));
 	}
+	size_t vertex_count = (polygon.size() - 2) * 3;
+	if (vertex_count > budget.vertices || (batches.find(cell) == batches.end() && batches.size() >= budget.cells))
+		return false;
+	budget.vertices -= vertex_count;
 	auto &vertices = batches[cell][material];
 	for (size_t i = 1; i + 1 < polygon.size(); i++)
 	{
@@ -98,6 +120,13 @@ inline void Partition(const std::vector<Vertex> &polygon, const std::string &mat
 		vertices.push_back(polygon[i]);
 		vertices.push_back(polygon[i + 1]);
 	}
+	return true;
+}
+
+inline bool Partition(const std::vector<Vertex> &polygon, const std::string &material, float size, Batches &batches)
+{
+	Budget budget;
+	return Partition(polygon, material, size, batches, budget);
 }
 
 }

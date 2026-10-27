@@ -35,6 +35,7 @@ class SBSIMPEXP DynamicMesh : public ObjectBase
 public:
 
 	bool force_combine; //if set to true, forces combined meshes
+	bool spatial_batching; //set before Prepare; disable for sky/distant scenery
 
 	DynamicMesh(Object *parent, SceneNode *node, const std::string &name, Real max_render_distance = 0, bool dynamic_buffers = false);
 	~DynamicMesh();

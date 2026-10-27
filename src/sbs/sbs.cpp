@@ -791,6 +791,9 @@ void SBS::CreateSky()
 	//create a mesh for the skybox
 	SkyBox = new MeshObject(this, "SkyBox");
 	SkyBox->create_collider = false; //disable collisions on skybox
+	// The fallback sky spans miles, not rooms; a local-light grid would produce
+	// millions of cells per face. Keep it as a single scenery mesh.
+	SkyBox->GetDynamicMesh()->spatial_batching = false;
 
 	//create a skybox size that extends by default 30 miles (30 * 5280 ft) in each direction
 	Real skysize = GetConfigInt("Skyscraper.SBS.HorizonDistance", 30) * 5280.0;
