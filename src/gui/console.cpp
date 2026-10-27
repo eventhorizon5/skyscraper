@@ -37,6 +37,29 @@
 
 namespace Skyscraper {
 
+namespace {
+
+class ConsoleTextCtrl : public wxTextCtrl
+{
+public:
+
+	using wxTextCtrl::wxTextCtrl;
+
+#ifdef __WXOSX_COCOA__
+protected:
+
+	void DoEnable(bool) override
+	{
+		// Cocoa's multiline text control replaces all text colors on enable
+		// changes (including those caused by modal dialogs). Keep this
+		// read-only output's native state unchanged to preserve its colors.
+		// wxWidgets still tracks the logical enabled state of the window.
+	}
+#endif
+};
+
+}
+
 //(*IdInit(Console)
 const long Console::ID_tConsole = wxNewId();
 const long Console::ID_tCommand = wxNewId();
@@ -71,7 +94,7 @@ Console::Console(VM *root, wxWindow* parent,wxWindowID id,const wxPoint& pos,con
 	FlexGridSizer3 = new wxFlexGridSizer(2, 1, 0, 0);
 	FlexGridSizer3->AddGrowableCol(0);
 	FlexGridSizer3->AddGrowableRow(0);
-	tConsole = new wxTextCtrl(Panel1, ID_tConsole, wxEmptyString, wxDefaultPosition, wxSize(600,400), wxTE_MULTILINE|wxTE_READONLY|wxTE_DONTWRAP|wxVSCROLL|wxHSCROLL, wxDefaultValidator, _T("ID_tConsole"));
+	tConsole = new ConsoleTextCtrl(Panel1, ID_tConsole, wxEmptyString, wxDefaultPosition, wxSize(600,400), wxTE_MULTILINE|wxTE_READONLY|wxTE_DONTWRAP|wxVSCROLL|wxHSCROLL, wxDefaultValidator, _T("ID_tConsole"));
 	tConsole->SetForegroundColour(wxColour(255,255,255));
 	tConsole->SetBackgroundColour(wxColour(0,0,0));
 	FlexGridSizer3->Add(tConsole, 1, wxALL|wxEXPAND, 5);
