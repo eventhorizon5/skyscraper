@@ -1061,6 +1061,13 @@ void DispatchController::AssignElevator(int number, int destination_floor, int d
 
 			if (direction == 0) //destination dispatch mode
 			{
+				//multiple requests for a floor share the same assignment
+				for (size_t j = 0; j < Elevators[i].assigned_destination.size(); j++)
+				{
+					if (Elevators[i].assigned_destination[j] == destination_floor)
+						return;
+				}
+
 				//add floor to assignment list
 				Elevators[i].assigned_destination.emplace_back(destination_floor);
 			}
