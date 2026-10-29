@@ -406,6 +406,7 @@ void Person::ProcessRoute()
 			{
 				//otherwise exit at current floor and try another elevator
 				current_floor = car->GetFloor();
+				route[0].in_elevator = false;
 				route[0].floor_selected = false;
 				route[0].call_made = 0;
 			}
